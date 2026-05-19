@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="sk">
+<head>
+<meta charset="UTF-8">
+<title>Mockupy</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: -apple-system, BlinkMacSystemFont, sans-serif; background: #0a0f1e; color: #fff; }
+  .mockup { margin-bottom: 60px; }
+  .label { padding: 24px 40px 12px; font-size: 22px; font-weight: 800; color: #3db6e8; }
+  .label small { display: block; font-size: 14px; font-weight: 500; color: #94a3b8; margin-top: 4px; }
+  .frame { width: 100%; }
+
+  /* Shared orange section base */
+  .orange-base { color: #fff; }
+  .row { max-width: 1200px; margin: 0 auto; padding: 0 24px; display: grid; grid-template-columns: 1fr 1fr 1fr; align-items: center; }
+  .cell { display: flex; align-items: center; gap: 20px; padding: 16px 24px; border-right: 1px solid rgba(255,255,255,0.25); }
+  .cell:last-child { border-right: none; }
+  .icon-box { flex-shrink: 0; width: 64px; height: 64px; border-radius: 12px; background: rgba(255,255,255,0.15); border: 1px solid rgba(255,255,255,0.2); display: flex; align-items: center; justify-content: center; }
+  .icon-box svg { width: 32px; height: 32px; stroke: #fff; fill: none; stroke-width: 1.75; }
+  .title { font-size: 20px; font-weight: 800; line-height: 1.2; }
+  .desc { margin-top: 6px; font-size: 16px; font-weight: 600; color: #fbe1c4; line-height: 1.3; }
+
+  /* ===== VARIANT 1: Just taller orange ===== */
+  .v1 .bar { background: linear-gradient(180deg, #c0581c 0%, #b0511d 50%, #9a4818 100%); padding: 80px 0 160px; }
+
+  /* ===== VARIANT 2: Orange + gradient fade to dark navy ===== */
+  .v2 .bar { background: linear-gradient(180deg, #c0581c 0%, #9a4818 40%, #4a2510 70%, #0a0f1e 100%); padding: 60px 0 200px; }
+
+  /* ===== VARIANT 3: Two-tier — icons row + big stats row ===== */
+  .v3 .bar { background: linear-gradient(180deg, #c0581c 0%, #9a4818 100%); padding: 50px 0 60px; }
+  .v3 .stats { background: #7a3812; padding: 50px 0; border-top: 1px solid rgba(255,255,255,0.15); }
+  .v3 .stats-row { max-width: 1200px; margin: 0 auto; padding: 0 24px; display: grid; grid-template-columns: repeat(4, 1fr); gap: 24px; text-align: center; }
+  .v3 .stat-num { font-size: 56px; font-weight: 900; color: #fff; line-height: 1; }
+  .v3 .stat-label { margin-top: 12px; font-size: 15px; font-weight: 600; color: #fbe1c4; letter-spacing: 0.04em; text-transform: uppercase; }
+
+  /* ===== VARIANT 4: Icons + CTA banner ===== */
+  .v4 .bar { background: linear-gradient(180deg, #c0581c 0%, #9a4818 100%); padding: 50px 0 30px; }
+  .v4 .cta-banner { background: #9a4818; padding: 50px 24px 70px; text-align: center; }
+  .v4 .cta-h2 { font-size: 38px; font-weight: 900; color: #fff; line-height: 1.1; }
+  .v4 .cta-h2 span { color: #3db6e8; }
+  .v4 .cta-sub { margin-top: 14px; font-size: 18px; color: #fbe1c4; font-weight: 500; }
+  .v4 .cta-btns { margin-top: 28px; display: flex; gap: 14px; justify-content: center; flex-wrap: wrap; }
+  .v4 .btn { padding: 14px 28px; border-radius: 10px; font-weight: 700; font-size: 16px; text-decoration: none; }
+  .v4 .btn-primary { background: #f97316; color: #fff; box-shadow: 0 6px 20px rgba(249,115,22,0.4); }
+  .v4 .btn-outline { background: rgba(255,255,255,0.1); color: #fff; border: 1px solid rgba(255,255,255,0.3); }
+
+</style>
+</head>
+<body>
+
+<!-- VARIANT 1 -->
+<div class="mockup v1">
+  <div class="label">VARIANT 1 — Iba zväčšiť oranžový pruh<small>Rovnaký gradient, len výrazne viac vertikálneho padding-u — pruh proste vyplní viac plochy.</small></div>
+  <div class="frame">
+    <div class="bar orange-base">
+      <div class="row">
+        <div class="cell"><div class="icon-box"><svg viewBox="0 0 24 24"><path d="M3 9.5L12 3l9 6.5V21H3z"/><path d="M9 21V12h6v9"/></svg></div><div><div class="title">Priemysel, Domy, Garáže</div><div class="desc">Vhodné do každého priestoru.</div></div></div>
+        <div class="cell"><div class="icon-box"><svg viewBox="0 0 24 24"><path d="M9.06 11.9l8.07-8.06a2.85 2.85 0 014.04 4.04l-8.06 8.07"/><path d="M7.07 14.94c-1.66 0-3 1.34-3 3 0 1.07-.65 1.94-1.5 2.16C3.55 21.27 5.07 22 6.57 22a4.5 4.5 0 003.5-7.06"/></svg></div><div><div class="title">Originálny dizajn na mieru</div><div class="desc">Každá podlaha je unikát.</div></div></div>
+        <div class="cell"><div class="icon-box"><svg viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg></div><div><div class="title">Bezšpárový a bezúdržbový</div><div class="desc">Odolný povrch bez škár a starostí.</div></div></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- VARIANT 2 -->
+<div class="mockup v2">
+  <div class="label">VARIANT 2 — Oranžová s gradientom späť do navy<small>Oranžová pomaly prechádza dole do tmavej navy — vyplní celý priestor a plynule sa napojí na ďalšiu sekciu.</small></div>
+  <div class="frame">
+    <div class="bar orange-base">
+      <div class="row">
+        <div class="cell"><div class="icon-box"><svg viewBox="0 0 24 24"><path d="M3 9.5L12 3l9 6.5V21H3z"/><path d="M9 21V12h6v9"/></svg></div><div><div class="title">Priemysel, Domy, Garáže</div><div class="desc">Vhodné do každého priestoru.</div></div></div>
+        <div class="cell"><div class="icon-box"><svg viewBox="0 0 24 24"><path d="M9.06 11.9l8.07-8.06a2.85 2.85 0 014.04 4.04l-8.06 8.07"/><path d="M7.07 14.94c-1.66 0-3 1.34-3 3 0 1.07-.65 1.94-1.5 2.16C3.55 21.27 5.07 22 6.57 22a4.5 4.5 0 003.5-7.06"/></svg></div><div><div class="title">Originálny dizajn na mieru</div><div class="desc">Každá podlaha je unikát.</div></div></div>
+        <div class="cell"><div class="icon-box"><svg viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg></div><div><div class="title">Bezšpárový a bezúdržbový</div><div class="desc">Odolný povrch bez škár a starostí.</div></div></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- VARIANT 3 -->
+<div class="mockup v3">
+  <div class="label">VARIANT 3 — Ikony hore + štatistiky dole<small>Oranžový pruh s ikonami, pod ním druhý pruh (tmavšia oranžová) s veľkými číslami: 200+ realizácií, roky skúseností...</small></div>
+  <div class="frame">
+    <div class="bar orange-base">
+      <div class="row">
+        <div class="cell"><div class="icon-box"><svg viewBox="0 0 24 24"><path d="M3 9.5L12 3l9 6.5V21H3z"/><path d="M9 21V12h6v9"/></svg></div><div><div class="title">Priemysel, Domy, Garáže</div><div class="desc">Vhodné do každého priestoru.</div></div></div>
+        <div class="cell"><div class="icon-box"><svg viewBox="0 0 24 24"><path d="M9.06 11.9l8.07-8.06a2.85 2.85 0 014.04 4.04l-8.06 8.07"/><path d="M7.07 14.94c-1.66 0-3 1.34-3 3 0 1.07-.65 1.94-1.5 2.16C3.55 21.27 5.07 22 6.57 22a4.5 4.5 0 003.5-7.06"/></svg></div><div><div class="title">Originálny dizajn na mieru</div><div class="desc">Každá podlaha je unikát.</div></div></div>
+        <div class="cell"><div class="icon-box"><svg viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg></div><div><div class="title">Bezšpárový a bezúdržbový</div><div class="desc">Odolný povrch bez škár a starostí.</div></div></div>
+      </div>
+    </div>
+    <div class="stats">
+      <div class="stats-row">
+        <div><div class="stat-num">200+</div><div class="stat-label">Realizácií</div></div>
+        <div><div class="stat-num">10</div><div class="stat-label">Rokov skúseností</div></div>
+        <div><div class="stat-num">28</div><div class="stat-label">Spokojných zákazníkov</div></div>
+        <div><div class="stat-num">100%</div><div class="stat-label">Záruka kvality</div></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- VARIANT 4 -->
+<div class="mockup v4">
+  <div class="label">VARIANT 4 — Ikony + veľký CTA banner<small>Oranžový pruh s ikonami, pod ním veľký nadpis + tlačidlá v rovnakej oranžovej — pôsobí ako jeden súvislý orange blok.</small></div>
+  <div class="frame">
+    <div class="bar orange-base">
+      <div class="row">
+        <div class="cell"><div class="icon-box"><svg viewBox="0 0 24 24"><path d="M3 9.5L12 3l9 6.5V21H3z"/><path d="M9 21V12h6v9"/></svg></div><div><div class="title">Priemysel, Domy, Garáže</div><div class="desc">Vhodné do každého priestoru.</div></div></div>
+        <div class="cell"><div class="icon-box"><svg viewBox="0 0 24 24"><path d="M9.06 11.9l8.07-8.06a2.85 2.85 0 014.04 4.04l-8.06 8.07"/><path d="M7.07 14.94c-1.66 0-3 1.34-3 3 0 1.07-.65 1.94-1.5 2.16C3.55 21.27 5.07 22 6.57 22a4.5 4.5 0 003.5-7.06"/></svg></div><div><div class="title">Originálny dizajn na mieru</div><div class="desc">Každá podlaha je unikát.</div></div></div>
+        <div class="cell"><div class="icon-box"><svg viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg></div><div><div class="title">Bezšpárový a bezúdržbový</div><div class="desc">Odolný povrch bez škár a starostí.</div></div></div>
+      </div>
+    </div>
+    <div class="cta-banner">
+      <h2 class="cta-h2">Pripravený na <span>novú podlahu?</span></h2>
+      <p class="cta-sub">Bezplatná obhliadka a cenová ponuka do 24 hodín.</p>
+      <div class="cta-btns">
+        <a class="btn btn-primary">Vyžiadať cenovú ponuku</a>
+        <a class="btn btn-outline">Zavolať +421 948 143 981</a>
+      </div>
+    </div>
+  </div>
+</div>
+
+</body>
+</html>

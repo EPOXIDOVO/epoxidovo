@@ -1,7 +1,13 @@
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
-  /* config options here */
+  images: {
+    // Povolené quality hodnoty pre next/image (Next.js 16 vyžaduje explicit allowlist).
+    // 92 je high-quality pre hero fotky, 75 default.
+    qualities: [75, 85, 92],
+    // Moderné formáty — Next pošle AVIF / WebP keď ich browser podporuje.
+    formats: ["image/avif", "image/webp"],
+  },
 };
 
 export default nextConfig;

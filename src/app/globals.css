@@ -1,26 +1,362 @@
 @import "tailwindcss";
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
+/* ============================================
+   EPOXIDOVO Design System — 1:1 podľa pôvodného webu
+   Paleta: oranžovo-hnedá (sekcia 2) + tmavo-modrá (recenzie) + modrá akcent (CTA)
+   ============================================ */
+
+@theme {
+  /* Base */
+  --color-bg: #ffffff;
+  --color-bg-soft: #fafafa;
+  --color-fg: #0e1a3b; /* tmavomodrá pre nadpisy na bielom */
+  --color-fg-muted: #4a5478;
+  --color-fg-subtle: #6b7390;
+  --color-border: #e4e4e7;
+  --color-border-strong: #d4d4d8;
+
+  /* BRAND — svetlomodrá z loga (cyan-blue) */
+  --color-brand: #3db6e8;
+  --color-brand-soft: #6fcded;
+  --color-brand-deep: #1a8cc4; /* hover/deeper */
+  --color-brand-bg: #1f5e82; /* tmavá modrá — pozadie recenzií */
+
+  /* COPPER — oranžovo-hnedá (sekcia 2 background) */
+  --color-copper: #b0511d;
+  --color-copper-soft: #c0581c;
+  --color-copper-light: #d4663a;
+
+  /* BROWN — tmavo-hnedá (karty, footer) */
+  --color-brown: #5c2c18;
+  --color-brown-soft: #6b3520;
+  --color-brown-dark: #3a1c0e;
+
+  /* Semantic */
+  --color-success: #16a34a;
+  --color-warning: #f59e0b;
+  --color-error: #dc2626;
+
+  /* Typography */
+  --font-sans: var(--font-sans-display), -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  --font-mono: var(--font-geist-mono), "SF Mono", Menlo, monospace;
+
+  /* Radius */
+  --radius-xs: 0.25rem;
+  --radius-sm: 0.5rem;
+  --radius-md: 0.75rem;
+  --radius-lg: 1rem;
+  --radius-xl: 1.5rem;
+  --radius-2xl: 2rem;
+  --radius-pill: 9999px;
+
+  /* Motion */
+  --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
+  --ease-in-out-quart: cubic-bezier(0.76, 0, 0.24, 1);
+
+  /* Shadows */
+  --shadow-soft: 0 1px 2px rgba(0, 0, 0, 0.04), 0 4px 16px rgba(0, 0, 0, 0.04);
+  --shadow-card: 0 4px 12px rgba(14, 26, 59, 0.08);
+  --shadow-card-hover: 0 8px 24px rgba(14, 26, 59, 0.16);
+  --shadow-cta: 0 6px 20px rgba(30, 115, 190, 0.4);
 }
 
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-}
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+/* ============================================
+   Base
+   ============================================ */
+html {
+  scroll-behavior: smooth;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
 }
 
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  background: var(--color-bg);
+  color: var(--color-fg);
+  font-family: var(--font-sans);
+  line-height: 1.6;
+}
+
+h1, h2, h3, h4 {
+  letter-spacing: -0.02em;
+  line-height: 1.1;
+  font-weight: 700;
+  /* Žiadny color tu — komponenty si nastavujú farbu samy cez Tailwind */
+}
+
+h1 {
+  font-weight: 800;
+  letter-spacing: -0.03em;
+}
+
+/* Brand highlight — pre modré akcenty z Docs briefu (slovo na ktoré ma byt highlight) */
+.brand-highlight {
+  color: var(--color-brand);
+}
+
+/* Eyebrow (• ČO VŠETKO VIEME VYČAROVAŤ) */
+.eyebrow {
+  font-size: 0.75rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.18em;
+  color: var(--color-brand);
+  display: inline-flex;
+  align-items: center;
+  gap: 0.625rem;
+}
+.eyebrow::before {
+  content: "";
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--color-brand);
+  display: inline-block;
+}
+
+/* Eyebrow biele varianty */
+.eyebrow-white {
+  color: white;
+}
+.eyebrow-white::before {
+  background: white;
+}
+
+/* Focus */
+:focus-visible {
+  outline: 2px solid var(--color-brand);
+  outline-offset: 2px;
+  border-radius: var(--radius-xs);
+}
+
+::selection {
+  background: var(--color-brand);
+  color: white;
+}
+
+/* Container */
+.container-app {
+  width: 100%;
+  margin-inline: auto;
+  padding-inline: 1.25rem;
+  max-width: 1280px;
+}
+@media (min-width: 768px) {
+  .container-app {
+    padding-inline: 2rem;
+  }
+}
+@media (min-width: 1280px) {
+  .container-app {
+    padding-inline: 2.5rem;
+  }
+}
+
+/* Section padding */
+.section-pad {
+  padding-block: 4rem;
+}
+@media (min-width: 768px) {
+  .section-pad { padding-block: 6rem; }
+}
+@media (min-width: 1280px) {
+  .section-pad { padding-block: 8rem; }
+}
+
+/* ============================================
+   Premium Button Styles
+   - Gradient + multi-layer shadow
+   - Inner highlight (top border light reflex)
+   - Smooth scale + translate na hover
+   - Icon shift na hover
+   ============================================ */
+
+.btn {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  padding: 0.875rem 1.75rem;
+  border-radius: 9999px;
+  font-weight: 600;
+  font-size: 0.875rem;
+  letter-spacing: -0.01em;
+  white-space: nowrap;
+  cursor: pointer;
+  user-select: none;
+  transition:
+    transform 350ms cubic-bezier(0.16, 1, 0.3, 1),
+    box-shadow 350ms cubic-bezier(0.16, 1, 0.3, 1),
+    background-color 250ms ease;
+  isolation: isolate;
+  border: 1px solid transparent;
+}
+
+.btn:active {
+  transform: translateY(1px) scale(0.985);
+}
+
+.btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  pointer-events: none;
+}
+
+.btn > * {
+  position: relative;
+  z-index: 1;
+}
+
+/* === Primary — výrazná oranžová CTA, jednotná hore/dole === */
+.btn-primary {
+  color: white;
+  background: #f97316;
+  box-shadow:
+    0 0 0 1px rgba(249, 115, 22, 0.5),
+    0 4px 14px rgba(249, 115, 22, 0.4),
+    0 14px 36px rgba(249, 115, 22, 0.5);
+}
+.btn-primary:hover {
+  transform: translateY(-2px);
+  background: #ea580c;
+  box-shadow:
+    0 0 0 1px rgba(249, 115, 22, 0.6),
+    0 6px 18px rgba(249, 115, 22, 0.55),
+    0 20px 44px rgba(249, 115, 22, 0.7);
+}
+
+/* === Secondary — biela na tmavom === */
+.btn-secondary {
+  color: #0e1320;
+  background: linear-gradient(180deg, #ffffff 0%, #f5f6f8 100%);
+  box-shadow:
+    0 1px 0 rgba(255, 255, 255, 1) inset,
+    0 0 0 1px rgba(0, 0, 0, 0.06),
+    0 4px 12px rgba(0, 0, 0, 0.08),
+    0 12px 32px rgba(0, 0, 0, 0.12);
+}
+.btn-secondary:hover {
+  transform: translateY(-2px);
+  background: linear-gradient(180deg, #ffffff 0%, #ebedf2 100%);
+  box-shadow:
+    0 1px 0 rgba(255, 255, 255, 1) inset,
+    0 0 0 1px rgba(0, 0, 0, 0.08),
+    0 6px 16px rgba(0, 0, 0, 0.12),
+    0 18px 40px rgba(0, 0, 0, 0.18);
+}
+
+/* === Outline (CTA secondary) — modré solid (#3db6e8), jednotné s brand modrou === */
+.btn-outline {
+  color: #ffffff;
+  background: #3db6e8;
+  box-shadow:
+    0 0 0 1px rgba(61, 182, 232, 0.5),
+    0 4px 14px rgba(61, 182, 232, 0.35),
+    0 14px 36px rgba(61, 182, 232, 0.45);
+}
+.btn-outline:hover {
+  transform: translateY(-2px);
+  background: #1a8cc4;
+  box-shadow:
+    0 0 0 1px rgba(61, 182, 232, 0.6),
+    0 6px 18px rgba(61, 182, 232, 0.5),
+    0 20px 44px rgba(61, 182, 232, 0.65);
+}
+
+/* === On copper bg (oranžová sekcia) — biela s extra shadow === */
+.btn-on-copper {
+  color: #b0511d;
+  background: linear-gradient(180deg, #ffffff 0%, #fdf8f3 100%);
+  box-shadow:
+    0 1px 0 rgba(255, 255, 255, 1) inset,
+    0 0 0 1px rgba(0, 0, 0, 0.06),
+    0 6px 16px rgba(0, 0, 0, 0.18),
+    0 16px 40px rgba(0, 0, 0, 0.28);
+}
+.btn-on-copper:hover {
+  transform: translateY(-2px);
+  background: linear-gradient(180deg, #ffffff 0%, #f5edd8 100%);
+  box-shadow:
+    0 1px 0 rgba(255, 255, 255, 1) inset,
+    0 0 0 1px rgba(0, 0, 0, 0.08),
+    0 8px 20px rgba(0, 0, 0, 0.22),
+    0 22px 50px rgba(0, 0, 0, 0.36);
+}
+
+/* === Icon animation v buttonoch === */
+.btn .btn-icon {
+  transition: transform 300ms cubic-bezier(0.16, 1, 0.3, 1);
+}
+.btn:hover .btn-icon {
+  transform: translateX(2px);
+}
+
+/* Sizes */
+.btn-md {
+  padding: 0.75rem 1.5rem;
+  font-size: 0.875rem;
+}
+.btn-lg {
+  padding: 0.95rem 1.875rem;
+  font-size: 0.9375rem;
+}
+
+/* Animations */
+@keyframes fade-up {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes fade-in {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes slide-in-left {
+  from { opacity: 0; transform: translateX(-40px); }
+  to { opacity: 1; transform: translateX(0); }
+}
+
+@keyframes slide-in-right {
+  from { opacity: 0; transform: translateX(40px); }
+  to { opacity: 1; transform: translateX(0); }
+}
+
+.animate-fade-up { animation: fade-up 0.8s var(--ease-out-expo) both; }
+.animate-fade-in { animation: fade-in 1s var(--ease-out-expo) both; }
+.animate-slide-left { animation: slide-in-left 1s var(--ease-out-expo) both; }
+.animate-slide-right { animation: slide-in-right 1s var(--ease-out-expo) both; }
+
+@keyframes badge-in {
+  from { opacity: 0; transform: translateY(8px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+.animate-badge-in { animation: badge-in 0.5s var(--ease-out-expo) both; }
+
+/* Stats sekcia — marquee pohyb vzorov podláh (right → left) */
+@keyframes stats-marquee {
+  from { transform: translateX(0); }
+  to   { transform: translateX(-33.3333%); }
+}
+.animate-stats-marquee {
+  animation: stats-marquee 40s linear infinite;
+  will-change: transform;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+/* Hide scrollbar */
+.scrollbar-hide {
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+.scrollbar-hide::-webkit-scrollbar {
+  display: none;
 }
