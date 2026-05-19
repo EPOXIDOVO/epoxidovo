@@ -218,7 +218,7 @@ export function Hero() {
                       </h3>
                       {"badges" in f ? (
                         <div className="mt-2 flex flex-wrap gap-2">
-                          {f.badges.map((b) => (
+                          {f.badges?.map((b) => (
                             <span
                               key={b}
                               className="inline-flex items-center gap-1.5 whitespace-nowrap rounded-full bg-black/40 px-3 py-1 text-sm md:text-base font-semibold text-white ring-1 ring-white/30 hover:bg-black/60 hover:ring-white/55 transition-colors"
