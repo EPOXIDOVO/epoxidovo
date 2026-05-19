@@ -32,25 +32,34 @@ export async function sendLeadEmails(lead: LeadNotifyArgs) {
     return { skipped: true };
   }
 
-  const fromAddress = `EPOXIDOVO <noreply@${SITE.domain}>`;
+  const fromAddress =
+    process.env.EMAIL_FROM ?? `EPOXIDOVO <noreply@${SITE.domain}>`;
 
   // ===== 1) Email adminovi =====
-  await resend.emails.send({
-    from: fromAddress,
-    to: [SITE.contact.email],
-    replyTo: lead.email,
-    subject: `🆕 Nový dopyt: ${lead.name}${lead.service ? ` — ${lead.service}` : ""}`,
-    html: adminEmailHtml(lead),
-  });
+  try {
+    await resend.emails.send({
+      from: fromAddress,
+      to: [SITE.contact.email],
+      replyTo: lead.email,
+      subject: `🆕 Nový dopyt: ${lead.name}${lead.service ? ` — ${lead.service}` : ""}`,
+      html: adminEmailHtml(lead),
+    });
+  } catch (err) {
+    console.error("[email] admin notification failed:", err);
+  }
 
   // ===== 2) Auto-confirm zákazníkovi =====
-  await resend.emails.send({
-    from: fromAddress,
-    to: [lead.email],
-    replyTo: SITE.contact.email,
-    subject: `Dostali sme tvoj dopyt — ${SITE.name}`,
-    html: customerEmailHtml(lead),
-  });
+  try {
+    await resend.emails.send({
+      from: fromAddress,
+      to: [lead.email],
+      replyTo: SITE.contact.email,
+      subject: `Dostali sme tvoj dopyt — ${SITE.name}`,
+      html: customerEmailHtml(lead),
+    });
+  } catch (err) {
+    console.error("[email] customer auto-confirm failed:", err);
+  }
 
   return { sent: true };
 }
