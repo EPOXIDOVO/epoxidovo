@@ -58,13 +58,21 @@ function ReviewCard({ review }: { review: Review }) {
 export function Reviews() {
   const [offset, setOffset] = React.useState(0);
   const [withTransition, setWithTransition] = React.useState(true);
+  const [visibleCount, setVisibleCount] = React.useState(3);
 
   const total = REVIEWS.length;
-  const visibleCount = 3;
+
+  React.useEffect(() => {
+    const mq = window.matchMedia("(min-width: 768px)");
+    const update = () => setVisibleCount(mq.matches ? 3 : 1);
+    update();
+    mq.addEventListener("change", update);
+    return () => mq.removeEventListener("change", update);
+  }, []);
 
   // Duplicate posledných N reviews dopredu — pre seamless wrap
   const trackItems = React.useMemo(
-    () => [...REVIEWS, ...REVIEWS.slice(0, visibleCount)],
+    () => [...REVIEWS, ...REVIEWS.slice(0, 3)],
     [],
   );
 

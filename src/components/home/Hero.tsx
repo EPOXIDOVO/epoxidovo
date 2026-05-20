@@ -44,9 +44,24 @@ const CHIPS = [
   {
     tag: "PRIEMYSEL",
     description: "Haly, nemocnice, výroba, sklady, parkovacie domy",
+    image: "/images/hero/hala.jpg",
+    href: "/realizacie?priestor=hala-firma",
+    objectPosition: "center 65%",
   },
-  { tag: "BÝVANIE", description: "Domy, byty, interiéry" },
-  { tag: "GARÁŽ", description: "Garáže, dielne" },
+  {
+    tag: "BÝVANIE",
+    description: "Domy, byty, interiéry",
+    image: "/images/hero/byvanie-kitchen.jpg",
+    href: "/realizacie?priestor=dom",
+    objectPosition: "center 75%",
+  },
+  {
+    tag: "GARÁŽ",
+    description: "Garáže, dielne",
+    image: "/images/hero/garaz.webp",
+    href: "/realizacie?priestor=garaz",
+    objectPosition: "center center",
+  },
 ];
 
 export function Hero() {
@@ -57,7 +72,7 @@ export function Hero() {
       <section
         id="uvod"
         aria-labelledby="hero-title"
-        className="relative isolate overflow-hidden bg-[#0a0f1e] text-white h-screen flex flex-col"
+        className="relative isolate overflow-hidden bg-[#0a0f1e] text-white min-h-screen md:h-screen flex flex-col"
       >
         {/* Pozadie: grid + radial glow + 3 veľké faded ikony (placeholder za fotky) */}
         <div className="absolute inset-0 -z-10" aria-hidden>
@@ -168,8 +183,45 @@ export function Hero() {
 
         </Container>
 
-        {/* 3 tag-chips zarovnané na stred každej 1/3 fotky pozadia */}
-        <div className="relative mt-10 md:mt-14 pb-10 md:pb-14 grid grid-cols-1 sm:grid-cols-3 gap-3 md:gap-0">
+        {/* MOBILE — 3 image-background karty pod sebou (klikateľné).
+            Pozadie použité identicky z desktop hero. */}
+        <div className="relative md:hidden px-5 mt-6 pb-8 flex flex-col gap-3">
+          {CHIPS.map(({ tag, description, image, href, objectPosition }) => (
+            <Link
+              key={tag}
+              href={href}
+              aria-label={`${tag} — ${description}`}
+              className="relative block w-full h-[240px] rounded-2xl overflow-hidden shadow-[0_10px_30px_rgba(0,0,0,0.35)] active:scale-[0.99] transition-transform"
+            >
+              <Image
+                src={image}
+                alt=""
+                fill
+                sizes="100vw"
+                quality={85}
+                className="object-cover"
+                style={{ objectPosition }}
+              />
+              {/* Gradient overlay pre čitateľnosť textu dole */}
+              <div className="absolute inset-0 bg-gradient-to-b from-black/20 via-black/30 to-black/75" />
+              {/* Obsah dole na strede */}
+              <div className="absolute inset-x-0 bottom-5 text-center px-4">
+                <span className="inline-block px-5 py-2 rounded-full bg-[#f97316] text-white text-sm font-black tracking-[0.16em] shadow-[0_4px_14px_rgba(249,115,22,0.55)]">
+                  {tag}
+                </span>
+                <p
+                  className="mt-3 text-[15px] font-bold text-white leading-snug"
+                  style={{ textShadow: "0 2px 8px rgba(0,0,0,0.6)" }}
+                >
+                  {description}
+                </p>
+              </div>
+            </Link>
+          ))}
+        </div>
+
+        {/* DESKTOP — 3 tag-chips zarovnané na stred každej 1/3 fotky pozadia */}
+        <div className="relative hidden md:grid mt-10 md:mt-14 pb-10 md:pb-14 grid-cols-3 gap-0">
           {CHIPS.map(({ tag, description }) => (
             <div key={tag} className="text-center px-3">
               <span className="inline-block px-4 py-2 rounded-md bg-[#f97316] text-white text-sm md:text-base font-black tracking-[0.16em] shadow-[0_4px_14px_rgba(249,115,22,0.45)]">

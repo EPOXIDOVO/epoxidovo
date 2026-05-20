@@ -19,12 +19,24 @@ import { SITE } from "@/lib/site";
 export function StickyMobileCta() {
   const pathname = usePathname();
   const [visible, setVisible] = React.useState(false);
+  const [footerInView, setFooterInView] = React.useState(false);
 
   React.useEffect(() => {
     const onScroll = () => setVisible(window.scrollY > 500);
     onScroll();
     window.addEventListener("scroll", onScroll, { passive: true });
     return () => window.removeEventListener("scroll", onScroll);
+  }, []);
+
+  React.useEffect(() => {
+    const footer = document.querySelector("footer");
+    if (!footer) return;
+    const io = new IntersectionObserver(
+      ([entry]) => setFooterInView(entry.isIntersecting),
+      { rootMargin: "0px 0px -40px 0px" },
+    );
+    io.observe(footer);
+    return () => io.disconnect();
   }, []);
 
   // Skryť na admin / kontakt / login
@@ -35,6 +47,8 @@ export function StickyMobileCta() {
 
   if (hidden) return null;
 
+  const showBar = visible && !footerInView;
+
   const waNumber = SITE.contact.phoneRaw.replace(/\D/g, "");
   const waMessage = encodeURIComponent(
     "Dobrý deň, mám záujem o cenovú ponuku na epoxidovú podlahu.",
@@ -42,12 +56,12 @@ export function StickyMobileCta() {
 
   return (
     <div
-      className={`md:hidden fixed bottom-3 inset-x-3 z-40 transition-all duration-500 ease-out ${
-        visible
+      className={`md:hidden fixed bottom-3 left-3 right-[80px] z-40 transition-all duration-500 ease-out ${
+        showBar
           ? "opacity-100 translate-y-0 pointer-events-auto"
           : "opacity-0 translate-y-3 pointer-events-none"
       }`}
-      aria-hidden={!visible}
+      aria-hidden={!showBar}
     >
       <div className="flex gap-2">
         <a
