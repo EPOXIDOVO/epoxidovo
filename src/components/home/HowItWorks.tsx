@@ -56,7 +56,7 @@ const STEPS: Step[] = [
 export function HowItWorks() {
   return (
     <section className="relative bg-[var(--color-copper)] text-white overflow-hidden">
-      <Container size="xl" className="py-16 md:py-20 lg:py-24">
+      <Container size="xl" className="py-10 md:py-20 lg:py-24">
         {/* Header */}
         <motion.div
           initial={{ opacity: 1 }}
@@ -81,7 +81,7 @@ export function HowItWorks() {
         </motion.div>
 
         {/* Grid 2×2 */}
-        <div className="mt-10 md:mt-14 grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-5 max-w-4xl mx-auto">
+        <div className="mt-6 md:mt-14 grid grid-cols-1 md:grid-cols-2 gap-3 md:gap-5 max-w-4xl mx-auto">
           {STEPS.map((step, idx) => {
             const isFinal = idx === STEPS.length - 1;
             return (
@@ -97,8 +97,8 @@ export function HowItWorks() {
                 }}
                 className={
                   isFinal
-                    ? "relative rounded-2xl border-l-4 border-[var(--color-copper)] bg-[#0e1a3b] p-6 md:p-7 overflow-hidden"
-                    : "relative rounded-2xl border-l-4 border-[var(--color-copper)] bg-[#f5efe9] p-6 md:p-7 overflow-hidden"
+                    ? "relative rounded-2xl border-l-4 border-[var(--color-copper)] bg-[#0e1a3b] p-5 md:p-7 overflow-hidden"
+                    : "relative rounded-2xl border-l-4 border-[var(--color-copper)] bg-[#f5efe9] p-5 md:p-7 overflow-hidden"
                 }
               >
                 {/* Veľké faded číslo vpravo hore */}
@@ -156,7 +156,7 @@ export function HowItWorks() {
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, margin: "-40px" }}
           transition={{ duration: 0.6, delay: 0.3, ease: [0.16, 1, 0.3, 1] }}
-          className="mt-10 md:mt-12 flex justify-center"
+          className="mt-8 md:mt-12 flex justify-center"
         >
           <Link
             href="/kontakt#cenova-ponuka"

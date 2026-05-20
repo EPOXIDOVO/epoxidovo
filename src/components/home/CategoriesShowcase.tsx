@@ -48,7 +48,7 @@ export function CategoriesShowcase() {
         id="kategorie"
         className="relative bg-[var(--color-copper)] text-white overflow-hidden"
       >
-        <Container size="xl" className="py-20 md:py-28 lg:py-32">
+        <Container size="xl" className="py-12 md:py-28 lg:py-32">
           {/* Header sekcie */}
           <div className="max-w-4xl">
             <span className="inline-flex items-center gap-2 px-4 py-2 rounded-full border border-white/20 bg-white/10 backdrop-blur-sm text-[0.7rem] md:text-xs font-extrabold uppercase tracking-[0.18em] text-white">
@@ -63,18 +63,18 @@ export function CategoriesShowcase() {
           </div>
 
           {/* Karty s kategóriami */}
-          <div className="mt-14 md:mt-16 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4 md:gap-5">
+          <div className="mt-8 md:mt-16 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-3 md:gap-5">
             {CATEGORIES.map((cat, idx) => (
               <div
                 key={cat.slug}
                 className="group relative flex flex-col rounded-2xl overflow-hidden bg-[#5c2c18] text-left"
               >
                 {/* Horný blok — kocka + nadpis. Pevná výška. */}
-                <div className="p-6 md:p-7 pb-4 h-[180px] flex flex-col">
-                  <div className="w-10 h-10 mb-5 rounded-md bg-white text-[#5c2c18] group-hover:text-[#3db6e8] flex items-center justify-center p-1.5 transition-colors duration-700 shrink-0">
+                <div className="px-5 pt-4 pb-3 md:p-7 md:pb-4 h-[110px] md:h-[180px] flex flex-col">
+                  <div className="w-8 h-8 md:w-10 md:h-10 mb-2 md:mb-5 rounded-md bg-white text-[#5c2c18] group-hover:text-[#3db6e8] flex items-center justify-center p-1.5 transition-colors duration-700 shrink-0">
                     <DiceIcon pips={(idx + 1) as 1 | 2 | 3 | 4 | 5} />
                   </div>
-                  <h3 className="text-xl md:text-2xl lg:text-[28px] font-black text-white tracking-tight leading-[1.05]">
+                  <h3 className="text-lg md:text-2xl lg:text-[28px] font-black text-white tracking-tight leading-[1.05]">
                     {cat.name === "Jednofarebné"
                       ? "Hladké jednofarebné"
                       : cat.name}
@@ -82,7 +82,7 @@ export function CategoriesShowcase() {
                 </div>
 
                 {/* Fotka */}
-                <div className="relative aspect-[4/3] overflow-hidden">
+                <div className="relative aspect-[16/10] md:aspect-[4/3] overflow-hidden">
                   <Image
                     src={
                       cat.slug === "jednofarebne"
