@@ -22,7 +22,7 @@ export default function RealizaciePage() {
               ● Naše práce
             </p>
             <h1 className="mt-4 text-4xl md:text-5xl lg:text-6xl font-bold tracking-tight text-white md:whitespace-nowrap">
-              Realizácie{" "}
+              REALIZUJEME{" "}
               <span className="text-[#3db6e8]">po celom Slovensku</span>.
             </h1>
           </div>
