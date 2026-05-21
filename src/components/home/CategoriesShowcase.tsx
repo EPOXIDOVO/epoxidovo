@@ -51,10 +51,17 @@ export function CategoriesShowcase() {
       >
         <Container size="xl" className="py-12 md:py-28 lg:py-32">
           {/* Header sekcie */}
-          <div className="max-w-4xl">
-            <h2 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-extrabold tracking-tight leading-[1.1] text-[#3db6e8]">
+          <div className="max-w-3xl mx-auto text-center">
+            <span className="inline-flex items-center gap-2 px-4 py-2 rounded-full border border-white/20 bg-white/10 backdrop-blur-sm text-[0.7rem] md:text-xs font-extrabold uppercase tracking-[0.18em] text-white">
+              <span className="inline-block w-1.5 h-1.5 rounded-full bg-white" aria-hidden />
+              NAŠE PORTFÓLIO
+            </span>
+            <h2 className="mt-5 text-3xl sm:text-4xl md:text-4xl lg:text-5xl font-extrabold tracking-tight leading-[1.1] text-[#3db6e8]">
               Čo všetko vieme vyčarovať
             </h2>
+            <p className="mt-4 text-base md:text-lg font-medium text-white/90 leading-relaxed">
+              Päť systémov pre domácnosti, garáže, prevádzky aj priemysel.
+            </p>
           </div>
 
           {/* Karty s kategóriami */}
