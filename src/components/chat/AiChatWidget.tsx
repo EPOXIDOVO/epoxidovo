@@ -217,8 +217,8 @@ export function AiChatWidget() {
             </div>
             <div>
               <div className="font-bold text-sm">Napíš nám</div>
-              <div className="text-[10px] uppercase tracking-[0.18em] text-white/75">
-                Odpovieme do 12 hodín
+              <div className="text-[11px] text-white/85 leading-tight">
+                Máte otázky? Neváhajte nás kontaktovať 💬
               </div>
             </div>
           </div>
