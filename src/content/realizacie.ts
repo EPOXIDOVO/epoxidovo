@@ -15,7 +15,6 @@ export interface Realizacia {
 export const REALIZACIE: Realizacia[] = [
   { id: 16, src: "/images/realizacie/r-16.jpg", category: "jednofarebne", space: "hala-firma", alt: "Jednofarebná podlaha v priemyselnej hale", labels: ["⚡ Antistatika (ESD)", "💥 ATEX", "👣 Protišmyková úprava"] },
   { id: 1, src: "/images/realizacie/r-01.jpg", category: "jednofarebne", space: "garaz", alt: "Jednofarebná podlaha v garáži" },
-  { id: 2, src: "/images/realizacie/r-02-v2.jpg", category: "jednofarebne", space: "dom", alt: "Jednofarebná podlaha v bývaní" },
   { id: 3, src: "/images/realizacie/r-03.jpg", category: "jednofarebne", space: "dom", alt: "Jednofarebná podlaha v bývaní" },
   { id: 4, src: "/images/realizacie/r-04.jpg", category: "jednofarebne", space: "dom", alt: "Jednofarebná podlaha v bývaní" },
   { id: 5, src: "/images/realizacie/r-05.jpg", category: "jednofarebne", space: "dom", alt: "Jednofarebná podlaha v bývaní" },
