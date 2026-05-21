@@ -120,7 +120,7 @@ export default function RealizaciePage() {
 
             {/* Desktop bublina — absolute na pravej strane (preč od chips),
                 tail diagonálne smerom vľavo-dole na chip area. */}
-            <div className="hidden md:block absolute top-0 right-0 w-[240px] lg:w-[260px] z-20">
+            <div className="hidden md:block absolute top-0 right-[10%] lg:right-[14%] w-[240px] lg:w-[260px] z-20">
               <div className="relative bg-white text-[var(--color-fg)] rounded-2xl px-5 py-3.5 shadow-[0_12px_30px_rgba(0,0,0,0.22)] ring-1 ring-black/5">
                 <p className="text-sm leading-snug font-medium">
                   Filtruj podľa{" "}
