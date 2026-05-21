@@ -3,6 +3,7 @@
 import * as React from "react";
 import Link from "next/link";
 import { CheckCircle2 } from "lucide-react";
+import { trackEvent } from "@/components/analytics/Analytics";
 
 interface State {
   name: string;
@@ -92,6 +93,7 @@ export function ContactMessageForm() {
       }
       setSending(false);
       setSuccess(true);
+      trackEvent("contact_message", { source: "kontakt_message_form" });
     } catch {
       setError("Nepodarilo sa odoslať. Skús to prosím znova.");
       setSending(false);

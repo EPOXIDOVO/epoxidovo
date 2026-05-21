@@ -2,9 +2,12 @@ import type { MetadataRoute } from "next";
 import { SITE } from "@/lib/site";
 
 export default function robots(): MetadataRoute.Robots {
-  const isProd = process.env.VERCEL_ENV === "production";
+  // Prod = Netlify CONTEXT=production OR Vercel VERCEL_ENV=production OR NODE_ENV=production
+  const isProd =
+    process.env.CONTEXT === "production" ||
+    process.env.VERCEL_ENV === "production" ||
+    (process.env.NODE_ENV === "production" && !process.env.NEXT_PUBLIC_BLOCK_ROBOTS);
 
-  // Staging / preview blokujeme úplne
   if (!isProd) {
     return {
       rules: { userAgent: "*", disallow: "/" },
@@ -17,7 +20,7 @@ export default function robots(): MetadataRoute.Robots {
       {
         userAgent: "*",
         allow: "/",
-        disallow: ["/admin", "/admin/*", "/api/*"],
+        disallow: ["/admin", "/admin/*", "/api/*", "/auth/*"],
       },
     ],
     sitemap: `${SITE.url}/sitemap.xml`,

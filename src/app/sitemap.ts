@@ -10,6 +10,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
     { url: `${SITE.url}/sluzby`, lastModified: now, changeFrequency: "monthly", priority: 0.9 },
     { url: `${SITE.url}/realizacie`, lastModified: now, changeFrequency: "weekly", priority: 0.9 },
     { url: `${SITE.url}/kontakt`, lastModified: now, changeFrequency: "yearly", priority: 0.8 },
+    { url: `${SITE.url}/cenova-ponuka`, lastModified: now, changeFrequency: "monthly", priority: 0.95 },
     { url: `${SITE.url}/o-nas`, lastModified: now, changeFrequency: "yearly", priority: 0.6 },
     { url: `${SITE.url}/ochrana-sukromia`, lastModified: now, changeFrequency: "yearly", priority: 0.3 },
     { url: `${SITE.url}/cookies`, lastModified: now, changeFrequency: "yearly", priority: 0.3 },

@@ -8,6 +8,7 @@ import { CookieBanner } from "@/components/cookies/CookieBanner";
 import { InitialPreloader } from "@/components/layout/InitialPreloader";
 import { AiChatWidget } from "@/components/chat/AiChatWidget";
 import { JsonLd } from "@/components/seo/JsonLd";
+import { Analytics } from "@/components/analytics/Analytics";
 import { getDefaultConsentScript } from "@/lib/consent";
 
 const sansFont = Manrope({
@@ -122,6 +123,7 @@ export default function RootLayout({
         <CookieBanner />
         <AiChatWidget />
         <JsonLd />
+        <Analytics />
       </body>
     </html>
   );

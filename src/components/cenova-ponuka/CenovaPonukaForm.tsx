@@ -3,6 +3,7 @@
 import * as React from "react";
 import Link from "next/link";
 import { CheckCircle2 } from "lucide-react";
+import { trackEvent } from "@/components/analytics/Analytics";
 
 interface FormState {
   name: string;
@@ -143,6 +144,11 @@ export function CenovaPonukaForm() {
 
       setSending(false);
       setSuccess(true);
+      trackEvent("lead_submit", {
+        source: "cenova_ponuka_form",
+        area: areaNum,
+      });
+      trackEvent("generate_lead", { value: 1, currency: "EUR" });
     } catch {
       setError("Nepodarilo sa odoslať. Skús to prosím znova.");
       setSending(false);

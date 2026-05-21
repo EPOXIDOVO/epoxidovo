@@ -125,6 +125,62 @@ export function JsonLd() {
     },
   };
 
+  // FAQ schema — pomáha pri rich snippets v Google
+  const faq = {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    mainEntity: [
+      {
+        "@type": "Question",
+        name: "Ako dlho trvá realizácia epoxidovej podlahy?",
+        acceptedAnswer: {
+          "@type": "Answer",
+          text: "Bežná podlaha do 50 m² trvá 3–5 dní vrátane prípravy podkladu, aplikácie a vytvrdnutia. Komplikovanejšie projekty (mramorové, metalické s viacerými vrstvami) môžu trvať 5–10 dní.",
+        },
+      },
+      {
+        "@type": "Question",
+        name: "Aká je životnosť epoxidovej podlahy?",
+        acceptedAnswer: {
+          "@type": "Answer",
+          text: "Pri správnej realizácii a údržbe je životnosť epoxidovej podlahy 20+ rokov. Odoláva oderom, chemikáliám, oleju aj záťaži.",
+        },
+      },
+      {
+        "@type": "Question",
+        name: "Koľko stojí epoxidová podlaha?",
+        acceptedAnswer: {
+          "@type": "Answer",
+          text: "Hladká jednofarebná od 70 €/m², chipsová od 50 €/m², mramorová od 70 €/m², metalická od 120 €/m². Priemyselné a polyuretánové podlahy cena na dopyt. Presnú kalkuláciu pripravíme po obhliadke.",
+        },
+      },
+      {
+        "@type": "Question",
+        name: "Realizujete po celom Slovensku?",
+        acceptedAnswer: {
+          "@type": "Answer",
+          text: "Áno, realizujeme epoxidové a polyuretánové podlahy po celom Slovensku — od Bratislavy po Košice. Sídlo máme v Ružomberku.",
+        },
+      },
+      {
+        "@type": "Question",
+        name: "Aký podklad treba pre epoxidovú podlahu?",
+        acceptedAnswer: {
+          "@type": "Answer",
+          text: "Najvhodnejší je nový betón vyzretý aspoň 28 dní. Starý betón treba prebrúsiť a otestovať. Existujúcu podlahu (dlažba, vinyl) zvyčajne treba odstrániť. Stav posúdime pri obhliadke.",
+        },
+      },
+      {
+        "@type": "Question",
+        name: "Sú epoxidové podlahy vhodné do kuchyne?",
+        acceptedAnswer: {
+          "@type": "Answer",
+          text: "Áno, bez špár, hygienicky čisté, ľahko sa udržiavajú (mokrý mop). Sú vhodné aj do kúpeľní (s anti-slip variantom), kuchýň aj gastro prevádzok.",
+        },
+      },
+    ],
+  };
+
   return (
     <>
       <script
@@ -134,6 +190,10 @@ export function JsonLd() {
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(services) }}
+      />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(faq) }}
       />
     </>
   );
