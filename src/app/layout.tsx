@@ -5,7 +5,6 @@ import "./globals.css";
 import { SITE } from "@/lib/site";
 import { SiteChrome } from "@/components/layout/SiteChrome";
 import { CookieBanner } from "@/components/cookies/CookieBanner";
-import { StickyMobileCta } from "@/components/layout/StickyMobileCta";
 import { InitialPreloader } from "@/components/layout/InitialPreloader";
 import { AiChatWidget } from "@/components/chat/AiChatWidget";
 import { JsonLd } from "@/components/seo/JsonLd";
@@ -121,7 +120,6 @@ export default function RootLayout({
         <InitialPreloader />
         <SiteChrome>{children}</SiteChrome>
         <CookieBanner />
-        <StickyMobileCta />
         <AiChatWidget />
         <JsonLd />
       </body>

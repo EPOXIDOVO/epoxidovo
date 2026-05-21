@@ -295,15 +295,18 @@ export function Hero() {
         >
           <Container size="xl" className="py-6 md:py-8 lg:py-8">
             <div
-              className="grid grid-cols-1 md:grid-cols-3 gap-6 md:gap-0 divide-y md:divide-y-0 md:divide-x divide-white/25"
+              className="grid grid-cols-2 md:grid-cols-3 gap-3 md:gap-0 md:divide-y-0 md:divide-x divide-white/25"
               aria-label="Hlavné výhody"
             >
-              {FEATURES.map((f) => {
+              {FEATURES.map((f, idx) => {
                 const Icon = f.icon;
+                const isLast = idx === FEATURES.length - 1;
                 return (
                   <div
                     key={f.title}
-                    className="flex items-start gap-4 px-3 md:px-4 py-4"
+                    className={`flex flex-col md:flex-row items-center md:items-start text-center md:text-left gap-3 md:gap-4 px-3 md:px-4 py-5 md:py-4 ${
+                      isLast ? "col-span-2 md:col-span-1" : ""
+                    }`}
                   >
                     <div className="shrink-0 inline-flex items-center justify-center w-16 h-16 md:w-20 md:h-20 lg:w-24 lg:h-24 rounded-2xl bg-white/15 ring-1 ring-white/20 backdrop-blur-sm">
                       <Icon
@@ -312,29 +315,26 @@ export function Hero() {
                         aria-hidden
                       />
                     </div>
-                    <div className="text-left min-w-0">
+                    <div className="min-w-0">
                       <h3
-                        className="text-base md:text-lg lg:text-xl tracking-tight text-white leading-tight"
+                        className="text-lg md:text-lg lg:text-xl tracking-tight text-white leading-tight"
                         style={{ fontWeight: 800 }}
                       >
                         {f.title}
                       </h3>
                       {"badges" in f ? (
-                        <div className="mt-2 flex flex-wrap gap-2">
+                        <div className="mt-2 flex flex-wrap justify-center md:justify-start gap-1.5 md:gap-2">
                           {f.badges?.map((b) => (
                             <span
                               key={b}
-                              className="inline-flex items-center gap-1.5 whitespace-nowrap rounded-full bg-black/40 px-3 py-1 text-sm md:text-base font-semibold text-white ring-1 ring-white/30 hover:bg-black/60 hover:ring-white/55 transition-colors"
+                              className="inline-flex items-center gap-1 whitespace-nowrap rounded-full bg-black/40 px-2.5 md:px-3 py-1 text-[11px] md:text-base font-medium md:font-semibold text-white ring-1 ring-white/30 hover:bg-black/60 hover:ring-white/55 transition-colors"
                             >
                               {b}
                             </span>
                           ))}
                         </div>
                       ) : (
-                        <p
-                          className="mt-1 md:mt-1.5 text-sm md:text-base text-[#fbe1c4] leading-snug"
-                          style={{ fontWeight: 600 }}
-                        >
+                        <p className="mt-1.5 md:mt-1.5 text-xs md:text-base font-medium md:font-semibold text-[#fbe1c4] leading-snug">
                           {f.description}
                         </p>
                       )}
