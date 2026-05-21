@@ -144,13 +144,6 @@ export function Header({ transparentOnTop = false }: HeaderProps) {
             >
               Cenová ponuka
             </Link>
-            <Link
-              href="/kontakt"
-              onClick={() => setOpen(false)}
-              className="inline-flex items-center justify-center gap-2 px-6 py-4 rounded-full border-2 border-[var(--color-fg)] text-[var(--color-fg)] font-semibold hover:bg-[var(--color-fg)] hover:text-white transition-colors"
-            >
-              Kontakt
-            </Link>
             <a
               href={`tel:${SITE.contact.phoneRaw}`}
               onClick={() => setOpen(false)}

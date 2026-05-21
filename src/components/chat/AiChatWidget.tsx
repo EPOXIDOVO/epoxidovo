@@ -71,9 +71,7 @@ export function AiChatWidget() {
     const update = () => {
       const path = window.location.pathname;
       setShouldHide(
-        path.startsWith("/admin") ||
-          path.startsWith("/auth") ||
-          path === "/kontakt",
+        path.startsWith("/admin") || path.startsWith("/auth"),
       );
     };
     update();

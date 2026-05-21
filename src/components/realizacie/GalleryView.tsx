@@ -154,30 +154,51 @@ export function GalleryView({ categories, spaceTypes }: GalleryViewProps) {
           aria-modal="true"
           className="fixed inset-0 z-[100] bg-black/95 flex items-center justify-center p-4"
           onClick={() => setLightboxIdx(null)}
+          onTouchStart={(e) => {
+            // @ts-expect-error mutable
+            e.currentTarget._touchX = e.touches[0].clientX;
+          }}
+          onTouchEnd={(e) => {
+            // @ts-expect-error mutable
+            const startX = e.currentTarget._touchX as number | undefined;
+            if (typeof startX !== "number") return;
+            const endX = e.changedTouches[0].clientX;
+            const dx = endX - startX;
+            if (Math.abs(dx) < 50) return; // ignore taps
+            e.stopPropagation();
+            if (dx > 0) {
+              setLightboxIdx((lightboxIdx - 1 + filtered.length) % filtered.length);
+            } else {
+              setLightboxIdx((lightboxIdx + 1) % filtered.length);
+            }
+          }}
         >
           <button
             type="button"
             aria-label="Zavrieť"
             onClick={() => setLightboxIdx(null)}
-            className="absolute top-6 right-6 inline-flex items-center justify-center w-12 h-12 rounded-full bg-white/10 hover:bg-white/20 text-white transition-colors z-10"
+            className="absolute top-6 right-6 inline-flex items-center justify-center w-14 h-14 rounded-full bg-white/15 hover:bg-white/25 active:bg-white/30 text-white transition-colors z-10"
+            style={{ touchAction: "manipulation" }}
           >
-            <X className="w-5 h-5" aria-hidden />
+            <X className="w-6 h-6" aria-hidden />
           </button>
           <button
             type="button"
             aria-label="Predchádzajúca"
             onClick={(e) => { e.stopPropagation(); setLightboxIdx((lightboxIdx - 1 + filtered.length) % filtered.length); }}
-            className="absolute left-4 md:left-8 top-1/2 -translate-y-1/2 inline-flex items-center justify-center w-12 h-12 rounded-full bg-white/10 hover:bg-white/20 text-white transition-colors z-10"
+            className="absolute left-3 md:left-8 top-1/2 -translate-y-1/2 inline-flex items-center justify-center w-14 h-14 md:w-12 md:h-12 rounded-full bg-white/15 hover:bg-white/25 active:bg-white/30 text-white transition-colors z-10"
+            style={{ touchAction: "manipulation" }}
           >
-            <ChevronLeft className="w-6 h-6" aria-hidden />
+            <ChevronLeft className="w-7 h-7 md:w-6 md:h-6" aria-hidden />
           </button>
           <button
             type="button"
             aria-label="Ďalšia"
             onClick={(e) => { e.stopPropagation(); setLightboxIdx((lightboxIdx + 1) % filtered.length); }}
-            className="absolute right-4 md:right-8 top-1/2 -translate-y-1/2 inline-flex items-center justify-center w-12 h-12 rounded-full bg-white/10 hover:bg-white/20 text-white transition-colors z-10"
+            className="absolute right-3 md:right-8 top-1/2 -translate-y-1/2 inline-flex items-center justify-center w-14 h-14 md:w-12 md:h-12 rounded-full bg-white/15 hover:bg-white/25 active:bg-white/30 text-white transition-colors z-10"
+            style={{ touchAction: "manipulation" }}
           >
-            <ChevronRight className="w-6 h-6" aria-hidden />
+            <ChevronRight className="w-7 h-7 md:w-6 md:h-6" aria-hidden />
           </button>
           <div
             className="relative max-w-6xl w-full max-h-[85vh] aspect-[4/3]"
@@ -192,6 +213,10 @@ export function GalleryView({ categories, spaceTypes }: GalleryViewProps) {
               className="object-contain"
               priority
             />
+          </div>
+          {/* Pager + swipe hint */}
+          <div className="absolute bottom-6 left-1/2 -translate-x-1/2 text-white/80 text-xs font-medium z-10 pointer-events-none">
+            {lightboxIdx + 1} / {filtered.length} <span className="md:hidden ml-2 opacity-60">← swipe →</span>
           </div>
         </div>
       )}
@@ -218,11 +243,12 @@ function FilterRow({ label, active, options, onChange }: FilterRowProps) {
             key={opt.value}
             type="button"
             onClick={() => onChange(opt.value)}
+            style={{ touchAction: "manipulation" }}
             className={cn(
-              "px-5 py-2.5 rounded-full text-base font-semibold transition-all duration-300",
+              "px-5 py-2.5 rounded-full text-base font-semibold transition-all duration-300 select-none cursor-pointer",
               active === opt.value
                 ? "bg-[var(--color-fg)] text-white shadow-[0_6px_18px_rgba(0,0,0,0.25)]"
-                : "bg-white text-[var(--color-fg)] hover:bg-white/90",
+                : "bg-white text-[var(--color-fg)] hover:bg-white/90 active:bg-white/80",
             )}
             aria-pressed={active === opt.value}
           >
