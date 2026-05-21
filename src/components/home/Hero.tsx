@@ -8,6 +8,8 @@ import {
   Brush,
   Shield,
   ShieldCheck,
+  ChevronLeft,
+  ChevronRight,
 } from "lucide-react";
 import { Container } from "@/components/ui/Container";
 import { SamplePicker } from "./SamplePicker";
@@ -84,14 +86,14 @@ export function Hero() {
     el.scrollTo({ left: i * el.clientWidth, behavior: "smooth" });
   };
 
-  // Auto-rotácia každých 1.5s (mobile carousel — desktop nemá scroll)
+  // Auto-rotácia každé 2s (mobile carousel — desktop nemá scroll)
   React.useEffect(() => {
     const id = window.setInterval(() => {
       const el = scrollRef.current;
       if (!el || el.clientWidth === 0) return;
       const next = (activeIndexRef.current + 1) % CHIPS.length;
       el.scrollTo({ left: next * el.clientWidth, behavior: "smooth" });
-    }, 1500);
+    }, 2000);
     return () => window.clearInterval(id);
   }, []);
 
@@ -263,9 +265,34 @@ export function Hero() {
 
         </Container>
 
-        {/* MOBILE — horizontálny carousel 3 kariet (swipe ←/→) + dot indikátory.
+        {/* MOBILE — horizontálny carousel 3 kariet (swipe ←/→) + šípky + dot indikátory.
             Pozadie použité identicky z desktop hero. */}
         <div className="relative md:hidden mt-6 pb-8">
+          {/* Šípky pre manuálnu navigáciu */}
+          <button
+            type="button"
+            aria-label="Predchádzajúca karta"
+            onClick={() =>
+              scrollToIndex(
+                (activeIndexRef.current - 1 + CHIPS.length) % CHIPS.length,
+              )
+            }
+            style={{ touchAction: "manipulation" }}
+            className="absolute left-2 top-[160px] -translate-y-1/2 z-20 inline-flex items-center justify-center w-10 h-10 rounded-full bg-black/55 active:bg-black/75 backdrop-blur-sm text-white shadow-[0_4px_14px_rgba(0,0,0,0.4)] ring-1 ring-white/25 transition-colors"
+          >
+            <ChevronLeft className="w-5 h-5" aria-hidden />
+          </button>
+          <button
+            type="button"
+            aria-label="Ďalšia karta"
+            onClick={() =>
+              scrollToIndex((activeIndexRef.current + 1) % CHIPS.length)
+            }
+            style={{ touchAction: "manipulation" }}
+            className="absolute right-2 top-[160px] -translate-y-1/2 z-20 inline-flex items-center justify-center w-10 h-10 rounded-full bg-black/55 active:bg-black/75 backdrop-blur-sm text-white shadow-[0_4px_14px_rgba(0,0,0,0.4)] ring-1 ring-white/25 transition-colors"
+          >
+            <ChevronRight className="w-5 h-5" aria-hidden />
+          </button>
           <div
             ref={scrollRef}
             onScroll={handleScroll}
