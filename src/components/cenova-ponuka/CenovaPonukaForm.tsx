@@ -41,7 +41,7 @@ const PRIESTOR_OPTIONS: { value: string; label: string }[] = [
   { value: "", label: "Vyberte priestor…" },
   { value: "garaz", label: "Garáž / dielňa" },
   { value: "dom", label: "Byt / dom (interiér)" },
-  { value: "hala-firma", label: "Hala / sklad / firma" },
+  { value: "hala-firma", label: "Priemysel" },
   { value: "ine", label: "Iné" },
 ];
 
