@@ -382,12 +382,20 @@ export function Hero() {
               className="grid grid-cols-3 divide-x divide-white/25"
               aria-label="Hlavné výhody"
             >
-              {FEATURES.map((f) => {
+              {FEATURES.map((f, idx) => {
                 const Icon = f.icon;
+                // Na mobile: ľavá karta zarovnaná vľavo, stredná na stred,
+                // pravá karta vpravo — využiť priestor po krajoch namiesto centrovania.
+                const mobileAlign =
+                  idx === 0
+                    ? "items-start text-left"
+                    : idx === FEATURES.length - 1
+                    ? "items-end text-right"
+                    : "items-center text-center";
                 return (
                   <div
                     key={f.title}
-                    className="flex flex-col md:flex-row items-center md:items-start text-center md:text-left gap-2 md:gap-4 px-2.5 md:px-4 py-3 md:py-4"
+                    className={`flex flex-col md:flex-row ${mobileAlign} md:items-start md:text-left gap-2 md:gap-4 px-2.5 md:px-4 py-3 md:py-4`}
                   >
                     <div className="shrink-0 inline-flex items-center justify-center w-11 h-11 md:w-20 md:h-20 lg:w-24 lg:h-24 rounded-2xl bg-white/15 ring-1 ring-white/20 backdrop-blur-sm">
                       <Icon
@@ -404,7 +412,7 @@ export function Hero() {
                         {f.title}
                       </h3>
                       {"badges" in f ? (
-                        <div className="mt-1.5 md:mt-2 grid grid-cols-2 md:flex md:flex-wrap md:justify-start gap-1 md:gap-2 justify-items-center md:justify-items-stretch">
+                        <div className="mt-1.5 md:mt-2 grid grid-cols-2 md:flex md:flex-wrap md:justify-start gap-1 md:gap-2 justify-items-start md:justify-items-stretch">
                           {f.badges?.map((b) => (
                             <span
                               key={b}
