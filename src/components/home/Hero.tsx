@@ -168,9 +168,9 @@ export function Hero() {
               sizes="(max-width: 768px) 100vw, 60vw"
               quality={92}
               className="object-cover group-hover:scale-[1.06] transition-transform duration-700 ease-out"
-              style={{ objectPosition: "center 75%" }}
+              style={{ objectPosition: "center 65%" }}
             />
-            <div className="absolute inset-0 bg-gradient-to-b from-[#0a0f1e]/25 via-[#0a0f1e]/15 to-[#0a0f1e]/45 group-hover:from-[#0a0f1e]/10 group-hover:via-transparent group-hover:to-[#0a0f1e]/30 transition-colors duration-500" />
+            <div className="absolute inset-0 bg-gradient-to-b from-[#0a0f1e]/10 via-transparent to-[#0a0f1e]/15 group-hover:from-transparent group-hover:via-transparent group-hover:to-[#0a0f1e]/5 transition-colors duration-500" />
             <div className="absolute inset-0 ring-0 group-hover:ring-[3px] ring-inset ring-[#3db6e8]/0 group-hover:ring-[#3db6e8]/70 transition-all duration-300" />
             <span className="absolute bottom-6 left-1/2 -translate-x-1/2 inline-flex items-center gap-2 px-4 py-2 rounded-full bg-[#3db6e8] text-white text-xs font-bold uppercase tracking-[0.14em] shadow-[0_8px_24px_rgba(61,182,232,0.5)] opacity-0 translate-y-3 group-hover:opacity-100 group-hover:translate-y-0 transition-all duration-300">
               Pozrieť realizácie →
