@@ -3,6 +3,7 @@ import { Container } from "@/components/ui/Container";
 import { Section } from "@/components/ui/Section";
 import { ContactHero } from "@/components/contact/ContactHero";
 import { ContactCards } from "@/components/contact/ContactCards";
+import { ContactMessageForm } from "@/components/contact/ContactMessageForm";
 import { SITE } from "@/lib/site";
 
 export const metadata: Metadata = {
@@ -23,6 +24,23 @@ export default function KontaktPage() {
       >
         <Container size="xl" className="py-10 md:py-14">
           <ContactCards />
+
+          <div className="mt-10 md:mt-14">
+            <ContactMessageForm />
+          </div>
+
+          {/* Firemné údaje */}
+          <div className="mt-12 md:mt-16 text-center text-white/90 text-sm md:text-base leading-relaxed">
+            <p className="font-bold tracking-tight text-base md:text-lg">
+              EPOXIDOVO s.r.o.
+            </p>
+            <p className="mt-1.5">
+              IČO: <span className="font-semibold">56 966 237</span>
+              <span className="mx-2 text-white/40">·</span>
+              DIČ: <span className="font-semibold">2122519135</span>
+            </p>
+            <p className="mt-1">Plavisko 1956/35, 034 01 Ružomberok</p>
+          </div>
         </Container>
       </Section>
     </>
