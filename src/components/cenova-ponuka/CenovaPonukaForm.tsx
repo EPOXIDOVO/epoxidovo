@@ -9,11 +9,9 @@ interface FormState {
   phone: string;
   email: string;
   area: string;
-  service: string;
   city: string;
   termin: string;
   priestor: string;
-  podklad: string;
   message: string;
   website: string; // honeypot
 }
@@ -23,25 +21,12 @@ const EMPTY: FormState = {
   phone: "",
   email: "",
   area: "",
-  service: "",
   city: "",
   termin: "",
   priestor: "",
-  podklad: "",
   message: "",
   website: "",
 };
-
-const SERVICE_OPTIONS: { value: string; label: string }[] = [
-  { value: "", label: "Vyberte typ…" },
-  { value: "jednofarebne", label: "Hladká jednofarebná (od 70 €/m²)" },
-  { value: "chipsove", label: "Chipsová (od 50 €/m²)" },
-  { value: "mramorove", label: "Mramorová (od 70 €/m²)" },
-  { value: "metalicke", label: "Metalická (od 120 €/m²)" },
-  { value: "priemyselne", label: "Priemyselná (cena na dopyt)" },
-  { value: "polyuretan", label: "Polyuretánová (cena na dopyt)" },
-  { value: "neviem", label: "Neviem / poradíte" },
-];
 
 const TERMIN_OPTIONS: { value: string; label: string }[] = [
   { value: "", label: "Vyberte termín…" },
@@ -56,18 +41,8 @@ const PRIESTOR_OPTIONS: { value: string; label: string }[] = [
   { value: "", label: "Vyberte priestor…" },
   { value: "garaz", label: "Garáž / dielňa" },
   { value: "dom", label: "Byt / dom (interiér)" },
-  { value: "sklad", label: "Sklad / hala" },
-  { value: "prevadzka", label: "Prevádzka / obchod" },
-  { value: "priemysel", label: "Priemyselná hala" },
+  { value: "hala-firma", label: "Hala / sklad / firma" },
   { value: "ine", label: "Iné" },
-];
-
-const PODKLAD_OPTIONS: { value: string; label: string }[] = [
-  { value: "", label: "Vyberte stav…" },
-  { value: "novy", label: "Nový betón" },
-  { value: "stary", label: "Starý betón" },
-  { value: "ina-podlaha", label: "Iná podlaha (treba odstrániť)" },
-  { value: "neviem", label: "Neviem" },
 ];
 
 export function CenovaPonukaForm() {
@@ -99,11 +74,6 @@ export function CenovaPonukaForm() {
         `Typ priestoru: ${labelFromOptions(PRIESTOR_OPTIONS, values.priestor)}`,
       );
     }
-    if (values.podklad) {
-      lines.push(
-        `Stav podkladu: ${labelFromOptions(PODKLAD_OPTIONS, values.podklad)}`,
-      );
-    }
     if (values.message.trim()) {
       lines.push("", "Doplňujúce informácie:", values.message.trim());
     }
@@ -132,10 +102,6 @@ export function CenovaPonukaForm() {
       setError("Zadaj plochu v m².");
       return;
     }
-    if (!values.service) {
-      setError("Vyber typ podlahy.");
-      return;
-    }
     if (values.city.trim().length < 2) {
       setError("Zadaj mesto alebo lokalitu.");
       return;
@@ -144,22 +110,10 @@ export function CenovaPonukaForm() {
     setSending(true);
     setError(null);
 
-    // Mapovanie service na existujúcu LeadInputSchema enum
-    const mapService = (v: string): string | undefined => {
-      const allowed = [
-        "jednofarebne",
-        "chipsove",
-        "mramorove",
-        "metalicke",
-        "neviem",
-      ];
-      return allowed.includes(v) ? v : undefined;
-    };
     const mapPriestor = (v: string): string | undefined => {
       if (v === "dom") return "dom";
       if (v === "garaz") return "garaz";
-      if (v === "sklad" || v === "priemysel" || v === "prevadzka")
-        return "hala-firma";
+      if (v === "hala-firma") return "hala-firma";
       if (v === "ine") return "ine";
       return undefined;
     };
@@ -173,7 +127,6 @@ export function CenovaPonukaForm() {
           email: values.email.trim(),
           phone: values.phone.trim(),
           area: areaNum,
-          service: mapService(values.service),
           spaceType: mapPriestor(values.priestor),
           message: buildLeadMessage(),
           consent: true,
@@ -288,21 +241,6 @@ export function CenovaPonukaForm() {
             className={inputCls}
           />
         </FieldWrap>
-        <FieldWrap label="Typ podlahy *" id="cp-service">
-          <select
-            id="cp-service"
-            required
-            value={values.service}
-            onChange={(e) => set("service", e.target.value)}
-            className={inputCls}
-          >
-            {SERVICE_OPTIONS.map((o) => (
-              <option key={o.value} value={o.value}>
-                {o.label}
-              </option>
-            ))}
-          </select>
-        </FieldWrap>
         <FieldWrap label="Mesto / lokalita *" id="cp-city">
           <input
             id="cp-city"
@@ -328,7 +266,11 @@ export function CenovaPonukaForm() {
             ))}
           </select>
         </FieldWrap>
-        <FieldWrap label="Typ priestoru" id="cp-priestor">
+        <FieldWrap
+          label="Typ priestoru"
+          id="cp-priestor"
+          className="md:col-span-2"
+        >
           <select
             id="cp-priestor"
             value={values.priestor}
@@ -336,24 +278,6 @@ export function CenovaPonukaForm() {
             className={inputCls}
           >
             {PRIESTOR_OPTIONS.map((o) => (
-              <option key={o.value} value={o.value}>
-                {o.label}
-              </option>
-            ))}
-          </select>
-        </FieldWrap>
-        <FieldWrap
-          label="Stav podkladu"
-          id="cp-podklad"
-          className="md:col-span-2"
-        >
-          <select
-            id="cp-podklad"
-            value={values.podklad}
-            onChange={(e) => set("podklad", e.target.value)}
-            className={inputCls}
-          >
-            {PODKLAD_OPTIONS.map((o) => (
               <option key={o.value} value={o.value}>
                 {o.label}
               </option>
