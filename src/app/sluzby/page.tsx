@@ -73,7 +73,7 @@ export default function SluzbyPage() {
           </div>
 
           <div className="mt-16 text-center">
-            <Button href="/kontakt" variant="primary" size="lg">
+            <Button href="/cenova-ponuka" variant="primary" size="lg">
               Nezáväzná cenová ponuka
               <ArrowRight className="w-4 h-4" aria-hidden />
             </Button>

@@ -159,7 +159,7 @@ export function HowItWorks() {
           className="mt-8 md:mt-12 flex justify-center"
         >
           <Link
-            href="/kontakt"
+            href="/cenova-ponuka"
             className="inline-flex items-center gap-2 px-8 py-4 rounded-full bg-[#3db6e8] hover:bg-[#1a8cc4] text-white text-base md:text-lg font-extrabold ring-2 ring-white/20 hover:ring-white/40 shadow-[0_12px_36px_rgba(61,182,232,0.5)] hover:shadow-[0_16px_44px_rgba(61,182,232,0.7)] hover:-translate-y-0.5 transition-all duration-300"
           >
             Chcem cenovú ponuku

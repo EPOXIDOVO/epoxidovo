@@ -62,10 +62,13 @@ export function ContactHero() {
               Kontaktujte nás
             </h1>
           </div>
+          <p className="mt-5 md:mt-6 text-base md:text-lg lg:text-xl text-white/90 max-w-2xl mx-auto leading-relaxed font-medium">
+            Zavolaj, napíš alebo otvor chat — odpovieme rýchlo.
+          </p>
           {/* Breadcrumb pod bublinou */}
           <nav
             aria-label="Breadcrumb"
-            className="mt-5 md:mt-6 text-base md:text-lg text-white/90"
+            className="mt-4 md:mt-5 text-sm md:text-base text-white/80"
           >
             <ol className="inline-flex items-center gap-2.5">
               <li>
@@ -79,10 +82,10 @@ export function ContactHero() {
               <li className="text-white/40" aria-hidden>/</li>
               <li>
                 <Link
-                  href="/realizacie"
+                  href="/cenova-ponuka"
                   className="text-[#3db6e8] hover:text-white transition-colors font-semibold"
                 >
-                  Ukážky realizácií
+                  Cenová ponuka
                 </Link>
               </li>
             </ol>

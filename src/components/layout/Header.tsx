@@ -68,18 +68,16 @@ export function Header({ transparentOnTop = false }: HeaderProps) {
             />
           </Link>
 
-          {/* Desktop CTA — Telefón + Cenová ponuka + Ukážky realizácií.
-              Telefón nad záhybom → zvyšuje konverziu pri service biznise. */}
+          {/* Desktop CTA — Kontakt (zelená pill) + Cenová ponuka + Ukážky realizácií. */}
           <div className="hidden md:flex items-center gap-4 ml-auto">
-            <a
-              href={`tel:${SITE.contact.phoneRaw}`}
-              aria-label={`Zavolať ${SITE.contact.phone}`}
+            <Link
+              href="/kontakt"
               className="inline-flex items-center gap-2 px-4 lg:px-5 py-2.5 rounded-full bg-[#16a34a] text-white font-semibold text-sm lg:text-base shadow-[0_6px_20px_rgba(22,163,74,0.4)] hover:bg-[#15803d] hover:shadow-[0_8px_24px_rgba(21,128,61,0.55)] hover:-translate-y-0.5 transition-all duration-300"
             >
               <Phone className="w-4 h-4" aria-hidden />
-              <span className="whitespace-nowrap">{SITE.contact.phone}</span>
-            </a>
-            <Link href="/kontakt" className="btn btn-primary btn-md">
+              <span className="whitespace-nowrap">Kontakt</span>
+            </Link>
+            <Link href="/cenova-ponuka" className="btn btn-primary btn-md">
               Cenová ponuka
             </Link>
             <button
@@ -138,20 +136,20 @@ export function Header({ transparentOnTop = false }: HeaderProps) {
               Ukážky realizácií
             </button>
             <Link
-              href="/kontakt"
+              href="/cenova-ponuka"
               onClick={() => setOpen(false)}
               className="inline-flex items-center justify-center px-6 py-4 rounded-full bg-[#f97316] text-white font-semibold hover:bg-[#ea580c] shadow-[0_8px_24px_rgba(249,115,22,0.5)] transition-colors"
             >
               Cenová ponuka
             </Link>
-            <a
-              href={`tel:${SITE.contact.phoneRaw}`}
+            <Link
+              href="/kontakt"
               onClick={() => setOpen(false)}
               className="inline-flex items-center justify-center gap-2 px-6 py-4 rounded-full bg-[#16a34a] text-white font-semibold hover:bg-[#15803d] shadow-[0_8px_24px_rgba(22,163,74,0.4)] transition-colors"
             >
               <Phone className="w-4 h-4" aria-hidden />
-              {SITE.contact.phone}
-            </a>
+              Kontakt
+            </Link>
           </nav>
         </div>
       </header>

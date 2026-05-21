@@ -245,7 +245,7 @@ export function Hero() {
 
             <div className="mt-4 md:mt-8 flex flex-wrap justify-center gap-2 md:gap-3">
               <Link
-                href="/kontakt"
+                href="/cenova-ponuka"
                 className="btn btn-primary btn-lg max-md:!px-4 max-md:!py-2.5 max-md:!text-[13px]"
               >
                 Cenová ponuka

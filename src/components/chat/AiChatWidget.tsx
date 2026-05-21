@@ -86,6 +86,13 @@ export function AiChatWidget() {
     }
   }, [open, success]);
 
+  // Externý event 'epoxidovo:open-chat' (z /kontakt karty)
+  React.useEffect(() => {
+    const onOpen = () => setOpen(true);
+    window.addEventListener("epoxidovo:open-chat", onOpen);
+    return () => window.removeEventListener("epoxidovo:open-chat", onOpen);
+  }, []);
+
   const set = <K extends keyof FormValues>(key: K, val: FormValues[K]) => {
     setValues((prev) => ({ ...prev, [key]: val }));
     if (error) setError(null);

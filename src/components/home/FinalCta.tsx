@@ -46,7 +46,7 @@ export function FinalCta() {
             </p>
 
             <div className="mt-9 flex flex-col sm:flex-row flex-wrap gap-3">
-              <Button href="/kontakt" variant="brand" size="lg">
+              <Button href="/cenova-ponuka" variant="brand" size="lg">
                 Mám záujem
                 <ArrowRight className="w-4 h-4" aria-hidden />
               </Button>
