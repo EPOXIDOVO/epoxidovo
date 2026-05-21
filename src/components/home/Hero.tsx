@@ -66,6 +66,20 @@ const CHIPS = [
 
 export function Hero() {
   const [pickerOpen, setPickerOpen] = React.useState(false);
+  const [activeIndex, setActiveIndex] = React.useState(0);
+  const scrollRef = React.useRef<HTMLDivElement | null>(null);
+
+  const handleScroll = (e: React.UIEvent<HTMLDivElement>) => {
+    const el = e.currentTarget;
+    const i = Math.round(el.scrollLeft / el.clientWidth);
+    setActiveIndex((prev) => (prev !== i ? i : prev));
+  };
+
+  const scrollToIndex = (i: number) => {
+    const el = scrollRef.current;
+    if (!el) return;
+    el.scrollTo({ left: i * el.clientWidth, behavior: "smooth" });
+  };
 
   return (
     <>
@@ -183,41 +197,63 @@ export function Hero() {
 
         </Container>
 
-        {/* MOBILE — 3 image-background karty pod sebou (klikateľné).
+        {/* MOBILE — horizontálny carousel 3 kariet (swipe ←/→) + dot indikátory.
             Pozadie použité identicky z desktop hero. */}
-        <div className="relative md:hidden px-5 mt-6 pb-8 flex flex-col gap-3">
-          {CHIPS.map(({ tag, description, image, href, objectPosition }) => (
-            <Link
-              key={tag}
-              href={href}
-              aria-label={`${tag} — ${description}`}
-              className="relative block w-full h-[240px] rounded-2xl overflow-hidden shadow-[0_10px_30px_rgba(0,0,0,0.35)] active:scale-[0.99] transition-transform"
-            >
-              <Image
-                src={image}
-                alt=""
-                fill
-                sizes="100vw"
-                quality={85}
-                className="object-cover"
-                style={{ objectPosition }}
-              />
-              {/* Gradient overlay pre čitateľnosť textu dole */}
-              <div className="absolute inset-0 bg-gradient-to-b from-black/20 via-black/30 to-black/75" />
-              {/* Obsah dole na strede */}
-              <div className="absolute inset-x-0 bottom-5 text-center px-4">
-                <span className="inline-block px-5 py-2 rounded-full bg-[#f97316] text-white text-sm font-black tracking-[0.16em] shadow-[0_4px_14px_rgba(249,115,22,0.55)]">
-                  {tag}
-                </span>
-                <p
-                  className="mt-3 text-[15px] font-bold text-white leading-snug"
-                  style={{ textShadow: "0 2px 8px rgba(0,0,0,0.6)" }}
+        <div className="relative md:hidden mt-6 pb-8">
+          <div
+            ref={scrollRef}
+            onScroll={handleScroll}
+            className="flex overflow-x-auto snap-x snap-mandatory scroll-smooth [&::-webkit-scrollbar]:hidden"
+            style={{ scrollbarWidth: "none", msOverflowStyle: "none" } as React.CSSProperties}
+          >
+            {CHIPS.map(({ tag, description, image, href, objectPosition }) => (
+              <div key={tag} className="snap-center shrink-0 w-full px-5">
+                <Link
+                  href={href}
+                  aria-label={`${tag} — ${description}`}
+                  className="relative block w-full h-[320px] rounded-2xl overflow-hidden shadow-[0_10px_30px_rgba(0,0,0,0.35)] active:scale-[0.99] transition-transform"
                 >
-                  {description}
-                </p>
+                  <Image
+                    src={image}
+                    alt=""
+                    fill
+                    sizes="100vw"
+                    quality={85}
+                    className="object-cover"
+                    style={{ objectPosition }}
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-b from-black/20 via-black/30 to-black/75" />
+                  <div className="absolute inset-x-0 bottom-5 text-center px-4">
+                    <span className="inline-block px-5 py-2 rounded-full bg-[#f97316] text-white text-sm font-black tracking-[0.16em] shadow-[0_4px_14px_rgba(249,115,22,0.55)]">
+                      {tag}
+                    </span>
+                    <p
+                      className="mt-3 text-[15px] font-bold text-white leading-snug"
+                      style={{ textShadow: "0 2px 8px rgba(0,0,0,0.6)" }}
+                    >
+                      {description}
+                    </p>
+                  </div>
+                </Link>
               </div>
-            </Link>
-          ))}
+            ))}
+          </div>
+          {/* Dot indikátory */}
+          <div className="mt-4 flex justify-center gap-2" role="tablist" aria-label="Navigácia kariet">
+            {CHIPS.map((c, i) => (
+              <button
+                key={c.tag}
+                type="button"
+                role="tab"
+                aria-selected={i === activeIndex}
+                aria-label={`Karta ${i + 1}: ${c.tag}`}
+                onClick={() => scrollToIndex(i)}
+                className={`h-2 rounded-full transition-all duration-300 ${
+                  i === activeIndex ? "w-8 bg-[#f97316]" : "w-2 bg-white/40"
+                }`}
+              />
+            ))}
+          </div>
         </div>
 
         {/* DESKTOP — 3 tag-chips zarovnané na stred každej 1/3 fotky pozadia */}
