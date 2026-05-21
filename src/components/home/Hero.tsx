@@ -68,11 +68,15 @@ export function Hero() {
   const [pickerOpen, setPickerOpen] = React.useState(false);
   const [activeIndex, setActiveIndex] = React.useState(0);
   const scrollRef = React.useRef<HTMLDivElement | null>(null);
+  const activeIndexRef = React.useRef(0);
 
   const handleScroll = (e: React.UIEvent<HTMLDivElement>) => {
     const el = e.currentTarget;
     const i = Math.round(el.scrollLeft / el.clientWidth);
-    setActiveIndex((prev) => (prev !== i ? i : prev));
+    if (i !== activeIndexRef.current) {
+      activeIndexRef.current = i;
+      setActiveIndex(i);
+    }
   };
 
   const scrollToIndex = (i: number) => {
@@ -80,6 +84,17 @@ export function Hero() {
     if (!el) return;
     el.scrollTo({ left: i * el.clientWidth, behavior: "smooth" });
   };
+
+  // Auto-rotácia každé 3s (mobile carousel — desktop nemá scroll)
+  React.useEffect(() => {
+    const id = window.setInterval(() => {
+      const el = scrollRef.current;
+      if (!el || el.clientWidth === 0) return;
+      const next = (activeIndexRef.current + 1) % CHIPS.length;
+      el.scrollTo({ left: next * el.clientWidth, behavior: "smooth" });
+    }, 3000);
+    return () => window.clearInterval(id);
+  }, []);
 
   return (
     <>

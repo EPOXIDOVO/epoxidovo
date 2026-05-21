@@ -55,6 +55,73 @@ function ReviewCard({ review }: { review: Review }) {
   );
 }
 
+function MobileReviewsCarousel({ reviews }: { reviews: Review[] }) {
+  const scrollRef = React.useRef<HTMLDivElement | null>(null);
+  const activeIndexRef = React.useRef(0);
+  const [activeIndex, setActiveIndex] = React.useState(0);
+
+  const handleScroll = (e: React.UIEvent<HTMLDivElement>) => {
+    const el = e.currentTarget;
+    const i = Math.round(el.scrollLeft / el.clientWidth);
+    if (i !== activeIndexRef.current) {
+      activeIndexRef.current = i;
+      setActiveIndex(i);
+    }
+  };
+
+  const scrollToIndex = (i: number) => {
+    const el = scrollRef.current;
+    if (!el) return;
+    el.scrollTo({ left: i * el.clientWidth, behavior: "smooth" });
+  };
+
+  React.useEffect(() => {
+    const id = window.setInterval(() => {
+      const el = scrollRef.current;
+      if (!el) return;
+      const next = (activeIndexRef.current + 1) % reviews.length;
+      el.scrollTo({ left: next * el.clientWidth, behavior: "smooth" });
+    }, ROTATE_INTERVAL_MS);
+    return () => window.clearInterval(id);
+  }, [reviews.length]);
+
+  return (
+    <div className="md:hidden">
+      <div
+        ref={scrollRef}
+        onScroll={handleScroll}
+        className="flex overflow-x-auto snap-x snap-mandatory scroll-smooth -mx-3 [&::-webkit-scrollbar]:hidden"
+        style={{ scrollbarWidth: "none" } as React.CSSProperties}
+      >
+        {reviews.map((review) => (
+          <div key={review.id} className="snap-center shrink-0 w-full">
+            <ReviewCard review={review} />
+          </div>
+        ))}
+      </div>
+      <div
+        className="mt-5 flex justify-center items-center gap-1 px-3 flex-wrap max-w-full"
+        role="tablist"
+        aria-label="Navigácia recenzií"
+      >
+        {reviews.map((r, i) => (
+          <button
+            key={r.id}
+            type="button"
+            role="tab"
+            aria-selected={i === activeIndex}
+            aria-label={`Recenzia ${i + 1}: ${r.name}`}
+            onClick={() => scrollToIndex(i)}
+            className={`h-1.5 rounded-full transition-all duration-300 ${
+              i === activeIndex ? "w-6 bg-[#3db6e8]" : "w-1.5 bg-white/40"
+            }`}
+          />
+        ))}
+      </div>
+    </div>
+  );
+}
+
 export function Reviews() {
   const [offset, setOffset] = React.useState(0);
   const [withTransition, setWithTransition] = React.useState(true);
@@ -120,8 +187,8 @@ export function Reviews() {
           </h2>
         </div>
 
-        {/* Sliding carousel — overflow-hidden + track translateX */}
-        <div className="overflow-hidden -mx-3 md:-mx-4">
+        {/* DESKTOP — sliding carousel s translateX */}
+        <div className="hidden md:block overflow-hidden -mx-4">
           <div
             className="flex"
             style={{
@@ -141,6 +208,9 @@ export function Reviews() {
             ))}
           </div>
         </div>
+
+        {/* MOBILE — natívny scroll-snap carousel + dot indikátory + auto-rotation */}
+        <MobileReviewsCarousel reviews={REVIEWS} />
       </div>
     </section>
   );
