@@ -3,7 +3,7 @@
 import * as React from "react";
 import Link from "next/link";
 import Image from "next/image";
-import { Menu, X, Images, Phone, MessageCircle } from "lucide-react";
+import { Menu, X, Images, Phone } from "lucide-react";
 import { Container } from "@/components/ui/Container";
 import { SamplePicker } from "@/components/home/SamplePicker";
 import { SITE } from "@/lib/site";
@@ -92,17 +92,7 @@ export function Header({ transparentOnTop = false }: HeaderProps) {
             </button>
           </div>
 
-          {/* Mobile: zelený pill button s telefónom (klik = zavolaj) */}
-          <a
-            href={`tel:${SITE.contact.phoneRaw}`}
-            aria-label={`Zavolať ${SITE.contact.phone}`}
-            className="md:hidden ml-auto inline-flex items-center gap-1.5 px-3 py-2 rounded-full bg-[#16a34a] text-white font-semibold text-xs shadow-[0_4px_14px_rgba(22,163,74,0.4)] active:bg-[#15803d] active:scale-95 transition-all duration-200"
-          >
-            <Phone className="w-4 h-4 shrink-0" aria-hidden />
-            <span className="whitespace-nowrap">{SITE.contact.phone}</span>
-          </a>
-
-          {/* Mobile toggle */}
+          {/* Mobile hamburger — výrazne vpravo hore */}
           <button
             type="button"
             onClick={() => setOpen((v) => !v)}
@@ -110,14 +100,16 @@ export function Header({ transparentOnTop = false }: HeaderProps) {
             aria-label={open ? "Zavrieť menu" : "Otvoriť menu"}
             aria-controls="mobile-menu"
             className={cn(
-              "md:hidden inline-flex items-center justify-center w-11 h-11 rounded-md hover:bg-black/5 transition-colors",
-              isTransparent ? "text-white" : "text-[var(--color-fg)]",
+              "md:hidden ml-auto inline-flex items-center justify-center w-12 h-12 rounded-xl border-2 transition-colors",
+              isTransparent
+                ? "text-white border-white/40 hover:bg-white/10"
+                : "text-[var(--color-fg)] border-[var(--color-border)] hover:bg-black/5",
             )}
           >
             {open ? (
-              <X className="w-6 h-6" aria-hidden />
+              <X className="w-7 h-7" aria-hidden />
             ) : (
-              <Menu className="w-6 h-6" aria-hidden />
+              <Menu className="w-7 h-7" aria-hidden strokeWidth={2.5} />
             )}
           </button>
         </Container>
@@ -126,38 +118,20 @@ export function Header({ transparentOnTop = false }: HeaderProps) {
         <div
           id="mobile-menu"
           className={cn(
-            "md:hidden fixed inset-x-0 top-20 bottom-0 bg-white text-[var(--color-fg)] z-40",
+            "md:hidden fixed inset-x-0 top-20 h-[calc(100dvh-5rem)] bg-white text-[var(--color-fg)] z-40 overflow-y-auto",
             "transition-all duration-500 ease-[cubic-bezier(0.16,1,0.3,1)]",
             open
               ? "opacity-100 translate-y-0 pointer-events-auto"
               : "opacity-0 -translate-y-2 pointer-events-none",
           )}
         >
-          <nav className="flex flex-col px-6 pt-8 pb-12 gap-1">
-            <a
-              href={`tel:${SITE.contact.phoneRaw}`}
-              onClick={() => setOpen(false)}
-              className="inline-flex items-center justify-center gap-2 px-6 py-4 rounded-full bg-[#f97316] text-white font-semibold hover:bg-[#ea580c] shadow-[0_8px_24px_rgba(249,115,22,0.5)] transition-colors"
-            >
-              <Phone className="w-4 h-4" aria-hidden />
-              {SITE.contact.phone}
-            </a>
-            <a
-              href={`https://wa.me/${SITE.contact.phoneRaw.replace(/\D/g, "")}?text=${encodeURIComponent("Dobrý deň, mám záujem o cenovú ponuku na epoxidovú podlahu.")}`}
-              target="_blank"
-              rel="noopener noreferrer"
-              onClick={() => setOpen(false)}
-              className="mt-2 inline-flex items-center justify-center gap-2 px-6 py-4 rounded-full bg-[#25d366] text-white font-semibold hover:bg-[#1ea54f] shadow-[0_8px_24px_rgba(37,211,102,0.4)] transition-colors"
-            >
-              <MessageCircle className="w-4 h-4" aria-hidden />
-              WhatsApp
-            </a>
+          <nav className="flex flex-col px-6 pt-8 pb-12 gap-3">
             <Link
               href="/kontakt"
               onClick={() => setOpen(false)}
-              className="mt-2 inline-flex items-center justify-center px-6 py-4 rounded-full bg-[#3db6e8] text-white font-semibold hover:bg-[#1a8cc4] shadow-[0_8px_24px_rgba(61,182,232,0.45)] transition-colors"
+              className="inline-flex items-center justify-center gap-2 px-6 py-4 rounded-full border-2 border-[var(--color-fg)] text-[var(--color-fg)] font-semibold hover:bg-[var(--color-fg)] hover:text-white transition-colors"
             >
-              Cenová ponuka
+              Kontakt
             </Link>
             <button
               type="button"
@@ -165,11 +139,26 @@ export function Header({ transparentOnTop = false }: HeaderProps) {
                 setOpen(false);
                 setPickerOpen(true);
               }}
-              className="mt-2 inline-flex items-center justify-center gap-2 px-6 py-4 rounded-full border-2 border-[#3db6e8] text-[#3db6e8] font-semibold hover:bg-[#3db6e8] hover:text-white transition-colors"
+              className="inline-flex items-center justify-center gap-2 px-6 py-4 rounded-full border-2 border-[#3db6e8] text-[#3db6e8] font-semibold hover:bg-[#3db6e8] hover:text-white transition-colors"
             >
               <Images className="w-4 h-4" aria-hidden />
               Ukážky realizácií
             </button>
+            <a
+              href={`tel:${SITE.contact.phoneRaw}`}
+              onClick={() => setOpen(false)}
+              className="inline-flex items-center justify-center gap-2 px-6 py-4 rounded-full bg-[#16a34a] text-white font-semibold hover:bg-[#15803d] shadow-[0_8px_24px_rgba(22,163,74,0.4)] transition-colors"
+            >
+              <Phone className="w-4 h-4" aria-hidden />
+              {SITE.contact.phone}
+            </a>
+            <Link
+              href="/kontakt"
+              onClick={() => setOpen(false)}
+              className="inline-flex items-center justify-center px-6 py-4 rounded-full bg-[#f97316] text-white font-semibold hover:bg-[#ea580c] shadow-[0_8px_24px_rgba(249,115,22,0.5)] transition-colors"
+            >
+              Cenová ponuka
+            </Link>
           </nav>
         </div>
       </header>
