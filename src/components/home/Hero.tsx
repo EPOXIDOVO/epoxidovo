@@ -201,7 +201,8 @@ export function Hero() {
               priority
               sizes="(max-width: 768px) 100vw, 60vw"
               quality={92}
-              className="object-cover group-hover:scale-[1.06] transition-transform duration-700 ease-out"
+              className="object-cover scale-[1.45] origin-bottom group-hover:scale-[1.55] transition-transform duration-700 ease-out"
+              style={{ objectPosition: "center bottom" }}
             />
             <div className="absolute inset-0 bg-gradient-to-b from-[#0a0f1e]/10 via-transparent to-[#0a0f1e]/15 group-hover:from-transparent group-hover:via-transparent group-hover:to-[#0a0f1e]/5 transition-colors duration-500" />
             <div className="absolute inset-0 ring-0 group-hover:ring-[3px] ring-inset ring-[#3db6e8]/0 group-hover:ring-[#3db6e8]/70 transition-all duration-300" />
