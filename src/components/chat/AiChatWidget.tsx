@@ -39,17 +39,29 @@ export function AiChatWidget() {
   const [success, setSuccess] = React.useState(false);
   const [shouldHide, setShouldHide] = React.useState(false);
   const [hintHidden, setHintHidden] = React.useState(false);
+  const [hintReady, setHintReady] = React.useState(false);
+  const [isMobile, setIsMobile] = React.useState(false);
   const firstFieldRef = React.useRef<HTMLInputElement>(null);
 
-  // Hint bublina sa skryje po 5s alebo pri prvom scroll (neruší obsah)
+  // Hint bublina:
+  // Desktop: show at 1.5s, hide at 5s alebo scroll > 50 (zachovaný pôvodný behavior)
+  // Mobile: show at 15s, hide at 17s (2s visible okno) alebo scroll > 50
   React.useEffect(() => {
-    const timer = setTimeout(() => setHintHidden(true), 5000);
+    const mobile = window.matchMedia("(max-width: 767px)").matches;
+    setIsMobile(mobile);
+
+    const showDelay = mobile ? 15000 : 1500;
+    const hideDelay = mobile ? 17000 : 5000;
+
+    const showTimer = setTimeout(() => setHintReady(true), showDelay);
+    const hideTimer = setTimeout(() => setHintHidden(true), hideDelay);
     const onScroll = () => {
       if (window.scrollY > 50) setHintHidden(true);
     };
     window.addEventListener("scroll", onScroll, { passive: true });
     return () => {
-      clearTimeout(timer);
+      clearTimeout(showTimer);
+      clearTimeout(hideTimer);
       window.removeEventListener("scroll", onScroll);
     };
   }, []);
@@ -172,14 +184,14 @@ export function AiChatWidget() {
         )}
       </button>
 
-      {/* Hint bublina — zobrazí sa 1.5s po loade, skryje po 5s alebo pri scrolle */}
-      {!open && !hintHidden && (
+      {/* Hint bublina — desktop 1.5s→5s, mobile 15s→17s (delay via JS, no animation-delay) */}
+      {!open && !hintHidden && hintReady && (
         <div
           className="fixed bottom-24 right-5 md:bottom-28 md:right-7 z-[79] pointer-events-none animate-fade-up transition-opacity duration-500"
-          style={{ animationDelay: "1.5s", animationFillMode: "both" }}
+          style={{ animationFillMode: "both" }}
         >
           <div className="px-4 py-2.5 rounded-2xl rounded-br-sm bg-white shadow-[0_8px_24px_rgba(0,0,0,0.15)] text-sm text-[var(--color-fg)] font-medium max-w-[220px]">
-            Opýtaj sa nás čokoľvek 👇
+            {isMobile ? "Spýtajte sa nás na čokoľvek" : "Opýtaj sa nás čokoľvek 👇"}
           </div>
         </div>
       )}
