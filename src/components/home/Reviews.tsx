@@ -13,7 +13,7 @@ import { REVIEWS, type Review } from "@/content/reviews";
  * Auto-rotation každých 4 sekúnd.
  */
 
-const ROTATE_INTERVAL_MS = 4000;
+const ROTATE_INTERVAL_MS = 3000;
 const TRANSITION_MS = 800;
 
 function ReviewCard({ review }: { review: Review }) {

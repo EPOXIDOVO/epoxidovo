@@ -288,22 +288,10 @@ const PATTERNS = [
 export function Stats() {
   return (
     <section className="relative bg-[#0e1320] text-white py-20 md:py-20 border-y border-white/5 overflow-hidden">
-      {/* MOBILE — statická fotka podlahy + tmavý overlay (cinematický look) */}
-      <div aria-hidden className="md:hidden pointer-events-none absolute inset-0">
-        <Image
-          src="/images/realizacie/r-32.jpg"
-          alt=""
-          fill
-          sizes="100vw"
-          className="object-cover"
-        />
-        <div className="absolute inset-0 bg-gradient-to-b from-[#0e1320]/90 via-[#0e1320]/70 to-[#0e1320]/90" />
-      </div>
-
-      {/* DESKTOP — pohyblivé SVG vzory podláh v pozadí (right → left) */}
+      {/* Mobile + desktop — pohyblivé fotky vzorov podláh v pozadí (right → left) */}
       <div
         aria-hidden
-        className="hidden md:flex pointer-events-none absolute inset-0 w-max animate-stats-marquee"
+        className="flex pointer-events-none absolute inset-0 w-max animate-stats-marquee"
       >
         {[...PATTERNS, ...PATTERNS, ...PATTERNS].map(({ key, Component }, i) => (
           <div
@@ -314,10 +302,10 @@ export function Stats() {
           </div>
         ))}
       </div>
-      {/* Veľmi jemný globálny gradient — len pre základ (desktop) */}
+      {/* Tmavý overlay — na mobile silnejší kvôli čitateľnosti čísel */}
       <div
         aria-hidden
-        className="hidden md:block pointer-events-none absolute inset-0 bg-[#0e1320]/15"
+        className="pointer-events-none absolute inset-0 bg-[#0e1320]/70 md:bg-[#0e1320]/15"
       />
 
       <Container size="xl" className="relative">
