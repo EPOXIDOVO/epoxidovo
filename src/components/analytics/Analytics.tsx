@@ -17,8 +17,11 @@ import Script from "next/script";
  *   NEXT_PUBLIC_META_PIXEL_ID="1234567890"    — Meta (Facebook) Pixel
  *   NEXT_PUBLIC_GTM_ID="GTM-XXXXXXX"          — Google Tag Manager (alternative)
  */
+// Fallback GA4 ID — funguje aj bez Netlify env. Toto ID je verejné (Measurement ID).
+const FALLBACK_GA_ID = "G-NRLVXHFNSC";
+
 export function Analytics() {
-  const gaId = process.env.NEXT_PUBLIC_GA_ID;
+  const gaId = process.env.NEXT_PUBLIC_GA_ID || FALLBACK_GA_ID;
   const adsId = process.env.NEXT_PUBLIC_GOOGLE_ADS_ID;
   const pixelId = process.env.NEXT_PUBLIC_META_PIXEL_ID;
   const gtmId = process.env.NEXT_PUBLIC_GTM_ID;
