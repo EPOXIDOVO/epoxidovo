@@ -1,6 +1,7 @@
 import type { MetadataRoute } from "next";
 import { SITE } from "@/lib/site";
 import { CATEGORIES } from "@/content/categories";
+import { CITIES } from "@/content/cities";
 
 export default function sitemap(): MetadataRoute.Sitemap {
   const now = new Date();
@@ -24,5 +25,13 @@ export default function sitemap(): MetadataRoute.Sitemap {
     priority: 0.8,
   }));
 
-  return [...staticPages, ...servicePages];
+  // Local SEO city landing pages
+  const cityPages: MetadataRoute.Sitemap = CITIES.map((c) => ({
+    url: `${SITE.url}/epoxidove-podlahy-${c.slug}`,
+    lastModified: now,
+    changeFrequency: "monthly" as const,
+    priority: 0.85,
+  }));
+
+  return [...staticPages, ...servicePages, ...cityPages];
 }
