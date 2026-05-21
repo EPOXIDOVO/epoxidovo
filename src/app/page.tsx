@@ -2,6 +2,7 @@ import { Hero } from "@/components/home/Hero";
 import { Stats } from "@/components/home/Stats";
 import { CategoriesShowcase } from "@/components/home/CategoriesShowcase";
 import { HowItWorks } from "@/components/home/HowItWorks";
+import { QuoteFormSection } from "@/components/home/QuoteFormSection";
 import { Reviews } from "@/components/home/Reviews";
 
 /**
@@ -26,6 +27,7 @@ export default function HomePage() {
       <CategoriesShowcase />
       <Stats />
       <HowItWorks />
+      <QuoteFormSection />
       <Reviews />
     </>
   );
