@@ -233,19 +233,23 @@ interface FilterRowProps {
 
 function FilterRow({ label, active, options, onChange }: FilterRowProps) {
   return (
-    <div>
+    <div className="relative z-10">
       <div className="text-sm md:text-base font-bold uppercase tracking-[0.18em] text-white mb-3">
         {label}
       </div>
-      <div className="flex flex-wrap gap-2">
+      <div className="flex flex-wrap gap-3 md:gap-2">
         {options.map((opt) => (
           <button
             key={opt.value}
             type="button"
-            onClick={() => onChange(opt.value)}
+            onClick={(e) => {
+              e.preventDefault();
+              e.stopPropagation();
+              onChange(opt.value);
+            }}
             style={{ touchAction: "manipulation" }}
             className={cn(
-              "px-5 py-2.5 rounded-full text-base font-semibold transition-all duration-300 select-none cursor-pointer",
+              "min-h-[44px] px-5 py-3 md:py-2.5 rounded-full text-base font-semibold transition-all duration-300 select-none cursor-pointer",
               active === opt.value
                 ? "bg-[var(--color-fg)] text-white shadow-[0_6px_18px_rgba(0,0,0,0.25)]"
                 : "bg-white text-[var(--color-fg)] hover:bg-white/90 active:bg-white/80",
