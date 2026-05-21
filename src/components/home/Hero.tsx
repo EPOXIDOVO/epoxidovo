@@ -353,46 +353,43 @@ export function Hero() {
         >
           <Container size="xl" className="py-6 md:py-8 lg:py-8">
             <div
-              className="grid grid-cols-2 md:grid-cols-3 gap-3 md:gap-0 md:divide-y-0 md:divide-x divide-white/25"
+              className="grid grid-cols-3 gap-1.5 md:gap-0 md:divide-y-0 md:divide-x divide-white/25"
               aria-label="Hlavné výhody"
             >
-              {FEATURES.map((f, idx) => {
+              {FEATURES.map((f) => {
                 const Icon = f.icon;
-                const isLast = idx === FEATURES.length - 1;
                 return (
                   <div
                     key={f.title}
-                    className={`flex flex-col md:flex-row items-center md:items-start text-center md:text-left gap-3 md:gap-4 px-3 md:px-4 py-5 md:py-4 ${
-                      isLast ? "col-span-2 md:col-span-1" : ""
-                    }`}
+                    className="flex flex-col md:flex-row items-center md:items-start text-center md:text-left gap-2 md:gap-4 px-1.5 md:px-4 py-3 md:py-4"
                   >
-                    <div className="shrink-0 inline-flex items-center justify-center w-16 h-16 md:w-20 md:h-20 lg:w-24 lg:h-24 rounded-2xl bg-white/15 ring-1 ring-white/20 backdrop-blur-sm">
+                    <div className="shrink-0 inline-flex items-center justify-center w-11 h-11 md:w-20 md:h-20 lg:w-24 lg:h-24 rounded-2xl bg-white/15 ring-1 ring-white/20 backdrop-blur-sm">
                       <Icon
-                        className="w-8 h-8 md:w-10 md:h-10 lg:w-12 lg:h-12 text-white"
+                        className="w-5 h-5 md:w-10 md:h-10 lg:w-12 lg:h-12 text-white"
                         strokeWidth={1.75}
                         aria-hidden
                       />
                     </div>
                     <div className="min-w-0">
                       <h3
-                        className="text-lg md:text-lg lg:text-xl tracking-tight text-white leading-tight"
+                        className="text-[11px] md:text-lg lg:text-xl tracking-tight text-white leading-tight"
                         style={{ fontWeight: 800 }}
                       >
                         {f.title}
                       </h3>
                       {"badges" in f ? (
-                        <div className="mt-2 flex flex-wrap justify-center md:justify-start gap-1.5 md:gap-2">
+                        <div className="mt-1.5 md:mt-2 flex flex-wrap justify-center md:justify-start gap-1 md:gap-2">
                           {f.badges?.map((b) => (
                             <span
                               key={b}
-                              className="inline-flex items-center gap-1 whitespace-nowrap rounded-full bg-black/40 px-2.5 md:px-3 py-1 text-[11px] md:text-base font-medium md:font-semibold text-white ring-1 ring-white/30 hover:bg-black/60 hover:ring-white/55 transition-colors"
+                              className="inline-flex items-center gap-0.5 whitespace-nowrap rounded-full bg-black/40 px-1.5 md:px-3 py-0.5 md:py-1 text-[9px] md:text-base font-medium md:font-semibold text-white ring-1 ring-white/30 hover:bg-black/60 hover:ring-white/55 transition-colors"
                             >
                               {b}
                             </span>
                           ))}
                         </div>
                       ) : (
-                        <p className="mt-1.5 md:mt-1.5 text-xs md:text-base font-medium md:font-semibold text-[#fbe1c4] leading-snug">
+                        <p className="mt-1 md:mt-1.5 text-[10px] md:text-base font-medium md:font-semibold text-[#fbe1c4] leading-snug">
                           {f.description}
                         </p>
                       )}
