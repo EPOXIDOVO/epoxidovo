@@ -90,7 +90,7 @@ export function CategoriesShowcase() {
                       cat.slug === "jednofarebne"
                         ? "/images/hero/byvanie-v2.webp"
                         : cat.slug === "priemyselne"
-                        ? "/images/realizacie/r-22.jpg"
+                        ? "/images/hero/hala.webp"
                         : `/images/categories/${cat.slug}.jpg`
                     }
                     alt={`${cat.name} epoxidová podlaha`}

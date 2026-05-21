@@ -13,6 +13,7 @@ export interface Realizacia {
 }
 
 export const REALIZACIE: Realizacia[] = [
+  { id: 16, src: "/images/realizacie/r-16.jpg", category: "jednofarebne", space: "hala-firma", alt: "Jednofarebná podlaha v priemyselnej hale", labels: ["⚡ Antistatika (ESD)", "💥 ATEX", "👣 Protišmyková úprava"] },
   { id: 1, src: "/images/realizacie/r-01.jpg", category: "jednofarebne", space: "garaz", alt: "Jednofarebná podlaha v garáži" },
   { id: 2, src: "/images/realizacie/r-02-v2.jpg", category: "jednofarebne", space: "dom", alt: "Jednofarebná podlaha v bývaní" },
   { id: 3, src: "/images/realizacie/r-03.jpg", category: "jednofarebne", space: "dom", alt: "Jednofarebná podlaha v bývaní" },
@@ -28,7 +29,6 @@ export const REALIZACIE: Realizacia[] = [
   { id: 13, src: "/images/realizacie/r-13.jpg", category: "jednofarebne", space: "dom", alt: "Jednofarebná podlaha v bývaní" },
   { id: 14, src: "/images/realizacie/r-14.jpg", category: "jednofarebne", space: "garaz", alt: "Jednofarebná podlaha v garáži" },
   { id: 15, src: "/images/realizacie/r-15.jpg", category: "jednofarebne", space: "hala-firma", alt: "Jednofarebná podlaha v priemyselnej hale", labels: ["⚡ Antistatika (ESD)", "👣 Protišmyková úprava"] },
-  { id: 16, src: "/images/realizacie/r-16.jpg", category: "jednofarebne", space: "hala-firma", alt: "Jednofarebná podlaha v priemyselnej hale", labels: ["⚡ Antistatika (ESD)", "💥 ATEX", "👣 Protišmyková úprava"] },
   { id: 17, src: "/images/realizacie/r-17.jpg", category: "jednofarebne", space: "hala-firma", alt: "Jednofarebná podlaha v priemyselnej hale", labels: ["⚡ Antistatika (ESD)"] },
   { id: 18, src: "/images/realizacie/r-18.jpg", category: "jednofarebne", space: "hala-firma", alt: "Jednofarebná podlaha v priemyselnej hale" },
   { id: 19, src: "/images/realizacie/r-19.jpg", category: "jednofarebne", space: "hala-firma", alt: "Jednofarebná podlaha v priemyselnej hale" },
