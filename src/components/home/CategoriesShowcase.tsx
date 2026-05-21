@@ -59,9 +59,6 @@ export function CategoriesShowcase() {
             <h2 className="mt-5 text-3xl sm:text-4xl md:text-4xl lg:text-5xl font-extrabold tracking-tight leading-[1.1] text-[#3db6e8]">
               Čo všetko vieme vyčarovať
             </h2>
-            <p className="mt-4 text-base md:text-lg font-medium text-white/90 leading-relaxed">
-              Päť systémov pre domácnosti, garáže, prevádzky aj priemysel.
-            </p>
           </div>
 
           {/* Karty s kategóriami */}

@@ -130,8 +130,8 @@ h1 {
 }
 
 ::selection {
-  background: var(--color-brand);
-  color: white;
+  background: rgba(61, 182, 232, 0.25);
+  color: inherit;
 }
 
 /* Container */
