@@ -76,11 +76,11 @@ export function GalleryView({ categories, spaceTypes }: GalleryViewProps) {
           ]}
         />
         <FilterRow
-          label="Kategória podlahy"
+          label="Vzor podlahy"
           active={activeCategory}
           onChange={(v) => setFilter("kategoria", v)}
           options={[
-            { value: "all", label: "Všetky kategórie" },
+            { value: "all", label: "Všetky vzory" },
             ...categories
               .filter((c) => {
                 // "priemyselne" je iba display kategoria v homepage karty — nepouziva sa pre realizacie filter

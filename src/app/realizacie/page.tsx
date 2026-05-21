@@ -105,7 +105,7 @@ export default function RealizaciePage() {
                   Filtruj podľa{" "}
                   <span className="text-[#3db6e8] font-semibold">typu priestoru</span>{" "}
                   alebo{" "}
-                  <span className="text-[#3db6e8] font-semibold">kategórie podlahy</span>
+                  <span className="text-[#3db6e8] font-semibold">vzoru podlahy</span>
                   . Klikni na fotku pre detail.
                 </p>
               </div>
@@ -118,26 +118,24 @@ export default function RealizaciePage() {
               </svg>
             </div>
 
-            {/* Desktop bublina — absolute, posunutá doľava aby tail mieril
-                na medzeru medzi chips "Garáž" a "Metalické" (cca 38% sprava).
-                Nepushuje gallery dole — prvé 2 rady mriežky vidno hneď. */}
-            <div className="hidden md:block absolute top-0 right-[34%] lg:right-[36%] w-[260px] lg:w-[280px] z-20">
+            {/* Desktop bublina — absolute na pravej strane (preč od chips),
+                tail diagonálne smerom vľavo-dole na chip area. */}
+            <div className="hidden md:block absolute top-0 right-0 w-[240px] lg:w-[260px] z-20">
               <div className="relative bg-white text-[var(--color-fg)] rounded-2xl px-5 py-3.5 shadow-[0_12px_30px_rgba(0,0,0,0.22)] ring-1 ring-black/5">
                 <p className="text-sm leading-snug font-medium">
                   Filtruj podľa{" "}
                   <span className="text-[#3db6e8] font-semibold">typu priestoru</span>{" "}
                   alebo{" "}
-                  <span className="text-[#3db6e8] font-semibold">kategórie podlahy</span>
+                  <span className="text-[#3db6e8] font-semibold">vzoru podlahy</span>
                   . Klikni na fotku pre detail.
                 </p>
-                {/* Tail — diagonálne zo spodku-vľavo, dlhšia (h-5) aby vizuálne
-                    siahala na chip Garáž / medzeru pred Metalické. */}
+                {/* Tail — z bottom-left, krátky diagonál smerom dole-vľavo */}
                 <svg
-                  className="absolute -bottom-5 left-4 w-7 h-5 drop-shadow-[0_4px_4px_rgba(0,0,0,0.12)]"
-                  viewBox="0 0 28 20"
+                  className="absolute -bottom-3 left-6 w-7 h-4 drop-shadow-[0_4px_4px_rgba(0,0,0,0.1)]"
+                  viewBox="0 0 28 16"
                   aria-hidden
                 >
-                  <polygon points="0,0 28,0 0,20" fill="white" />
+                  <polygon points="0,0 28,0 0,16" fill="white" />
                 </svg>
               </div>
             </div>
