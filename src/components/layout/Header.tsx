@@ -126,13 +126,6 @@ export function Header({ transparentOnTop = false }: HeaderProps) {
           )}
         >
           <nav className="flex flex-col px-6 pt-8 pb-12 gap-3">
-            <Link
-              href="/kontakt"
-              onClick={() => setOpen(false)}
-              className="inline-flex items-center justify-center gap-2 px-6 py-4 rounded-full border-2 border-[var(--color-fg)] text-[var(--color-fg)] font-semibold hover:bg-[var(--color-fg)] hover:text-white transition-colors"
-            >
-              Kontakt
-            </Link>
             <button
               type="button"
               onClick={() => {
@@ -144,6 +137,20 @@ export function Header({ transparentOnTop = false }: HeaderProps) {
               <Images className="w-4 h-4" aria-hidden />
               Ukážky realizácií
             </button>
+            <Link
+              href="/kontakt"
+              onClick={() => setOpen(false)}
+              className="inline-flex items-center justify-center px-6 py-4 rounded-full bg-[#f97316] text-white font-semibold hover:bg-[#ea580c] shadow-[0_8px_24px_rgba(249,115,22,0.5)] transition-colors"
+            >
+              Cenová ponuka
+            </Link>
+            <Link
+              href="/kontakt"
+              onClick={() => setOpen(false)}
+              className="inline-flex items-center justify-center gap-2 px-6 py-4 rounded-full border-2 border-[var(--color-fg)] text-[var(--color-fg)] font-semibold hover:bg-[var(--color-fg)] hover:text-white transition-colors"
+            >
+              Kontakt
+            </Link>
             <a
               href={`tel:${SITE.contact.phoneRaw}`}
               onClick={() => setOpen(false)}
@@ -152,13 +159,6 @@ export function Header({ transparentOnTop = false }: HeaderProps) {
               <Phone className="w-4 h-4" aria-hidden />
               {SITE.contact.phone}
             </a>
-            <Link
-              href="/kontakt"
-              onClick={() => setOpen(false)}
-              className="inline-flex items-center justify-center px-6 py-4 rounded-full bg-[#f97316] text-white font-semibold hover:bg-[#ea580c] shadow-[0_8px_24px_rgba(249,115,22,0.5)] transition-colors"
-            >
-              Cenová ponuka
-            </Link>
           </nav>
         </div>
       </header>
