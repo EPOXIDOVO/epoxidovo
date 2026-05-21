@@ -232,7 +232,7 @@ export function Hero() {
           className="pt-[120px] md:pt-[150px] lg:pt-[170px] pb-10 md:pb-14 relative flex-1 flex flex-col justify-center md:pointer-events-none"
         >
           {/* Centrovaný obsah — v "bubline" pre čitateľnosť na fotkách */}
-          <div className="text-center max-w-3xl mx-auto rounded-3xl bg-[#0a0f1e]/80 backdrop-blur-md ring-1 ring-white/10 px-6 md:px-10 py-8 md:py-10 shadow-[0_20px_60px_rgba(0,0,0,0.4)] md:pointer-events-auto">
+          <div className="text-center max-w-3xl mx-auto rounded-3xl bg-[#0a0f1e]/80 backdrop-blur-md ring-1 ring-white/10 px-5 md:px-10 py-5 md:py-10 shadow-[0_20px_60px_rgba(0,0,0,0.4)] md:pointer-events-auto">
             <h1
               id="hero-title"
               className="text-white text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-extrabold leading-[1.1] tracking-tight"
@@ -243,19 +243,19 @@ export function Hero() {
               podlahy na mieru
             </h1>
 
-            <div className="mt-8 flex flex-wrap justify-center gap-3">
+            <div className="mt-4 md:mt-8 flex flex-wrap justify-center gap-2 md:gap-3">
               <Link
                 href="/kontakt"
-                className="btn btn-primary btn-lg"
+                className="btn btn-primary btn-lg max-md:!px-4 max-md:!py-2.5 max-md:!text-[13px]"
               >
                 Cenová ponuka
               </Link>
               <button
                 type="button"
                 onClick={() => setPickerOpen(true)}
-                className="btn btn-outline btn-lg"
+                className="btn btn-outline btn-lg max-md:!px-4 max-md:!py-2.5 max-md:!text-[13px]"
               >
-                <Images className="w-4 h-4" aria-hidden />
+                <Images className="w-3.5 h-3.5 md:w-4 md:h-4" aria-hidden />
                 Ukážky realizácií
               </button>
             </div>
