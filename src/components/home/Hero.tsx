@@ -353,7 +353,7 @@ export function Hero() {
         >
           <Container size="xl" className="py-6 md:py-8 lg:py-8">
             <div
-              className="grid grid-cols-3 gap-1.5 md:gap-0 md:divide-y-0 md:divide-x divide-white/25"
+              className="grid grid-cols-3 divide-x divide-white/25"
               aria-label="Hlavné výhody"
             >
               {FEATURES.map((f) => {
