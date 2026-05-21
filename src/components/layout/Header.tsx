@@ -3,7 +3,7 @@
 import * as React from "react";
 import Link from "next/link";
 import Image from "next/image";
-import { Menu, X, Images, Phone } from "lucide-react";
+import { Menu, X, Images, Phone, MessageCircle } from "lucide-react";
 import { Container } from "@/components/ui/Container";
 import { SamplePicker } from "@/components/home/SamplePicker";
 import { SITE } from "@/lib/site";
@@ -147,6 +147,16 @@ export function Header({ transparentOnTop = false }: HeaderProps) {
             >
               <Phone className="w-4 h-4" aria-hidden />
               {SITE.contact.phone}
+            </a>
+            <a
+              href={`https://wa.me/${SITE.contact.phoneRaw.replace(/\D/g, "")}?text=${encodeURIComponent("Dobrý deň, mám záujem o cenovú ponuku na epoxidovú podlahu.")}`}
+              target="_blank"
+              rel="noopener noreferrer"
+              onClick={() => setOpen(false)}
+              className="mt-2 inline-flex items-center justify-center gap-2 px-6 py-4 rounded-full bg-[#25d366] text-white font-semibold hover:bg-[#1ea54f] shadow-[0_8px_24px_rgba(37,211,102,0.4)] transition-colors"
+            >
+              <MessageCircle className="w-4 h-4" aria-hidden />
+              WhatsApp
             </a>
             <Link
               href="/kontakt#cenova-ponuka"
