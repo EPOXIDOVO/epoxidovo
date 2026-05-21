@@ -196,7 +196,7 @@ export function Hero() {
               sizes="(max-width: 768px) 100vw, 60vw"
               quality={92}
               className="object-cover group-hover:scale-[1.06] transition-transform duration-700 ease-out"
-              style={{ objectPosition: "25% 65%" }}
+              style={{ objectPosition: "75% 65%" }}
             />
             <div className="absolute inset-0 bg-gradient-to-b from-[#0a0f1e]/10 via-transparent to-[#0a0f1e]/15 group-hover:from-transparent group-hover:via-transparent group-hover:to-[#0a0f1e]/5 transition-colors duration-500" />
             <div className="absolute inset-0 ring-0 group-hover:ring-[3px] ring-inset ring-[#3db6e8]/0 group-hover:ring-[#3db6e8]/70 transition-all duration-300" />
@@ -384,18 +384,18 @@ export function Hero() {
             >
               {FEATURES.map((f, idx) => {
                 const Icon = f.icon;
-                // Na mobile: ľavá karta zarovnaná vľavo, stredná na stred,
-                // pravá karta vpravo — využiť priestor po krajoch namiesto centrovania.
-                const mobileAlign =
+                // Na mobile: obsah ostáva centrovaný, ale ľavá/pravá karta sa
+                // posunie smerom k svojej hrane (lepšie využitie šírky).
+                const mobileShift =
                   idx === 0
-                    ? "items-start text-left"
+                    ? "-translate-x-2 md:translate-x-0"
                     : idx === FEATURES.length - 1
-                    ? "items-end text-right"
-                    : "items-center text-center";
+                    ? "translate-x-2 md:translate-x-0"
+                    : "";
                 return (
                   <div
                     key={f.title}
-                    className={`flex flex-col md:flex-row ${mobileAlign} md:items-start md:text-left gap-2 md:gap-4 px-2.5 md:px-4 py-3 md:py-4`}
+                    className={`flex flex-col md:flex-row items-center md:items-start text-center md:text-left gap-2 md:gap-4 px-2.5 md:px-4 py-3 md:py-4 ${mobileShift}`}
                   >
                     <div className="shrink-0 inline-flex items-center justify-center w-11 h-11 md:w-20 md:h-20 lg:w-24 lg:h-24 rounded-2xl bg-white/15 ring-1 ring-white/20 backdrop-blur-sm">
                       <Icon
@@ -412,7 +412,7 @@ export function Hero() {
                         {f.title}
                       </h3>
                       {"badges" in f ? (
-                        <div className="mt-1.5 md:mt-2 grid grid-cols-2 md:flex md:flex-wrap md:justify-start gap-1 md:gap-2 justify-items-start md:justify-items-stretch">
+                        <div className="mt-1.5 md:mt-2 grid grid-cols-2 md:flex md:flex-wrap md:justify-start gap-1 md:gap-2 justify-items-center md:justify-items-stretch">
                           {f.badges?.map((b) => (
                             <span
                               key={b}
