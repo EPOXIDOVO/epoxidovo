@@ -11,32 +11,36 @@ import { Container } from "@/components/ui/Container";
 
 const FAQ_ITEMS = [
   {
-    q: "Ako dlho trvá realizácia epoxidovej podlahy?",
-    a: "Bežná podlaha do 50 m² je hotová za 3–5 dní. Najprv pripravujeme podklad (1–2 dni), potom nanášame epoxid (1 deň) a finálnu vrstvu (1 deň). Pri väčších priestoroch sa časový plán dohodne pri obhliadke.",
+    q: "Ako dlho schne epoxidová podlaha?",
+    a: "Epoxidová podlaha je pochôdzna po 24 hodinách, plne zaťažiteľná po 7 dňoch. Presné časy závisia od teploty a vlhkosti priestoru.",
+  },
+  {
+    q: "Aká je životnosť epoxidovej podlahy?",
+    a: "Kvalitne realizovaná epoxidová podlaha vydrží 20+ rokov pri bežnom používaní. V priemyselných prevádzkach závisí od záťaže.",
   },
   {
     q: "Koľko stojí epoxidová podlaha?",
-    a: "Cena závisí od typu podlahy a stavu podkladu. Orientačne: jednofarebná od 35 €/m², chipsová od 42 €/m², mramorová od 65 €/m², metalická od 75 €/m². Presnú ponuku ti pošleme po obhliadke priestoru.",
+    a: "Ceny začínajú od 50 €/m² s DPH za chipsovú podlahu. Presná cena závisí od typu podlahy, plochy, stavu podkladu a doplnkov.",
   },
   {
-    q: "Je epoxidová podlaha vhodná do kuchyne aj kúpeľne?",
-    a: "Áno. Epoxid je vodotesný, hygienicky čistý a neabsorbuje pachy ani škvrny. V kúpeľni odporúčame anti-slip variantu pre bezpečnosť. V kuchyni je ideálny — bez špár, ľahká údržba.",
+    q: "Aký podklad potrebujem?",
+    a: "Najlepší je betónový podklad s vlhkosťou max. 4 %. Pri starých podlahách robíme prípravu (brúsenie, sanácia trhlín).",
   },
   {
-    q: "Ako sa o podlahu starať?",
-    a: "Stačí mokrý mop a štandardný čistič na podlahy. Bez voskovania, leštenia, špár ktoré treba čistiť. Pri väčšej záťaži (garáž, dielňa) odporúčame raz ročne aplikovať tenkú údržbovú vrstvu.",
+    q: "Robíte aj v zime?",
+    a: "Áno, v interiéri pri teplote nad 15 °C. Garáže a haly s kúrením sa dajú robiť celoročne.",
   },
   {
-    q: "Môžem ju mať aj v starom byte / dome?",
-    a: "Áno, ak je podklad kvalitný (nie popraskaný, nevlhký). Pri obhliadke skontrolujeme podklad — väčšinou stačí povrchová úprava. V krajnom prípade brúsenie a vyrovnávacia vrstva.",
+    q: "Ako sa epoxidová podlaha čistí?",
+    a: "Stačí bežné metenie a vlhká utierka. Žiadne fugy, žiadna údržba. Pri náročnejších priestoroch odporúčame neutrálne čistiace prostriedky.",
   },
   {
-    q: "Aká je životnosť?",
-    a: "Pri správnej realizácii a bežnej domácej záťaži 20+ rokov. V priemyselnom prostredí 10–15 rokov v závislosti od záťaže. Drobné poškodenia sa dajú lokálne opraviť.",
+    q: "Aký je rozdiel medzi epoxidom a polyuretánom?",
+    a: "Epoxid je tvrdší, odolnejší voči chemikáliám, lacnejší. Polyuretán je pružnejší, odolnejší voči UV a teplotným zmenám, používa sa pre športové podlahy a vonkajšie priestory.",
   },
   {
-    q: "Robíte aj v iných regiónoch než Žilinský kraj?",
-    a: "Áno, realizujeme po celom Slovensku. Sídlime v Ružomberku, ale väčšina projektov je mimo nášho mesta. Pri väčších realizáciách vieme prísť kdekoľvek.",
+    q: "Koľko trvá realizácia?",
+    a: "Garáž (do 50 m²) — 2 dni. Byt/prevádzka (100–200 m²) — 3–4 dni. Hala (500+ m²) — 5–10 dní podľa systému.",
   },
 ];
 
