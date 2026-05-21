@@ -17,12 +17,15 @@ import Script from "next/script";
  *   NEXT_PUBLIC_META_PIXEL_ID="1234567890"    — Meta (Facebook) Pixel
  *   NEXT_PUBLIC_GTM_ID="GTM-XXXXXXX"          — Google Tag Manager (alternative)
  */
-// Fallback GA4 ID — funguje aj bez Netlify env. Toto ID je verejné (Measurement ID).
+// Fallback IDs — funguje aj bez Netlify env. Tieto ID sú verejné (gtag IDs).
 const FALLBACK_GA_ID = "G-NRLVXHFNSC";
+const FALLBACK_ADS_ID = "AW-18114450604";
+// Conversion send_to — gtag conversion label for 'Přihlášení k odběru' / lead submit
+const ADS_LEAD_CONVERSION_LABEL = "3H0uCLzYqbEcEKyp0r1D";
 
 export function Analytics() {
   const gaId = process.env.NEXT_PUBLIC_GA_ID || FALLBACK_GA_ID;
-  const adsId = process.env.NEXT_PUBLIC_GOOGLE_ADS_ID;
+  const adsId = process.env.NEXT_PUBLIC_GOOGLE_ADS_ID || FALLBACK_ADS_ID;
   const pixelId = process.env.NEXT_PUBLIC_META_PIXEL_ID;
   const gtmId = process.env.NEXT_PUBLIC_GTM_ID;
 
@@ -108,17 +111,31 @@ fbq('track', 'PageView');`}
 /**
  * Helper pre custom conversion eventy z formulárov.
  * Použitie: trackEvent('lead_submit', { source: 'cenova_ponuka' })
+ *
+ * Pre 'generate_lead' (submit cenovej ponuky) automaticky fire-uje aj
+ * Google Ads conversion event so správnym send_to (AW-ID/LABEL) — to je
+ * to čo Google Ads ráta ako konverziu pre optimalizáciu kampaní.
  */
 export function trackEvent(
   name: string,
   params?: Record<string, string | number | boolean>,
 ) {
   if (typeof window === "undefined") return;
-  // GA4 + Google Ads
+  // GA4 + Google Ads (štandardný event)
   // @ts-expect-error gtag from script
   if (typeof window.gtag === "function") {
     // @ts-expect-error gtag from script
     window.gtag("event", name, params || {});
+
+    // Google Ads conversion fire — len pre lead submit eventy
+    if (name === "generate_lead" || name === "lead_submit") {
+      // @ts-expect-error gtag from script
+      window.gtag("event", "conversion", {
+        send_to: `${FALLBACK_ADS_ID}/${ADS_LEAD_CONVERSION_LABEL}`,
+        value: typeof params?.value === "number" ? params.value : 1.0,
+        currency: "EUR",
+      });
+    }
   }
   // Meta Pixel
   // @ts-expect-error fbq from script
