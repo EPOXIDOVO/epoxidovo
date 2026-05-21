@@ -102,7 +102,7 @@ export function Hero() {
       <section
         id="uvod"
         aria-labelledby="hero-title"
-        className="relative isolate overflow-hidden bg-[#0a0f1e] text-white min-h-screen md:h-screen flex flex-col"
+        className="relative isolate overflow-hidden bg-[#0a0f1e] text-white min-h-screen flex flex-col"
       >
         {/* Pozadie: grid + radial glow + 3 veľké faded ikony (placeholder za fotky) */}
         <div className="absolute inset-0 -z-10" aria-hidden>
