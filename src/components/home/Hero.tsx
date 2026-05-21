@@ -378,11 +378,11 @@ export function Hero() {
                         {f.title}
                       </h3>
                       {"badges" in f ? (
-                        <div className="mt-1.5 md:mt-2 flex flex-wrap justify-center md:justify-start gap-1 md:gap-2">
+                        <div className="mt-1.5 md:mt-2 grid grid-cols-2 md:flex md:flex-wrap md:justify-start gap-1 md:gap-2 justify-items-center md:justify-items-stretch">
                           {f.badges?.map((b) => (
                             <span
                               key={b}
-                              className="inline-flex items-center gap-0.5 whitespace-nowrap rounded-full bg-black/40 px-1.5 md:px-3 py-0.5 md:py-1 text-[9px] md:text-base font-medium md:font-semibold text-white ring-1 ring-white/30 hover:bg-black/60 hover:ring-white/55 transition-colors"
+                              className="inline-flex items-center justify-center gap-0.5 whitespace-nowrap rounded-full bg-black/40 px-1.5 md:px-3 py-0.5 md:py-1 text-[9px] md:text-base font-medium md:font-semibold text-white ring-1 ring-white/30 hover:bg-black/60 hover:ring-white/55 transition-colors"
                             >
                               {b}
                             </span>
