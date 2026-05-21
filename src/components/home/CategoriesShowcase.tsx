@@ -2,6 +2,7 @@
 
 import * as React from "react";
 import Image from "next/image";
+import Link from "next/link";
 import { Container } from "@/components/ui/Container";
 import { CATEGORIES } from "@/content/categories";
 
@@ -65,9 +66,15 @@ export function CategoriesShowcase() {
           {/* Karty s kategóriami */}
           <div className="mt-8 md:mt-16 grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-5 gap-2.5 md:gap-5">
             {CATEGORIES.map((cat, idx) => (
-              <div
+              <Link
                 key={cat.slug}
-                className={`group relative flex flex-col rounded-2xl overflow-hidden bg-[#5c2c18] text-left ${
+                href={
+                  cat.slug === "priemyselne"
+                    ? "/realizacie?priestor=hala-firma"
+                    : `/realizacie?kategoria=${cat.slug}`
+                }
+                aria-label={`Pozrieť realizácie — ${cat.name}`}
+                className={`group relative flex flex-col rounded-2xl overflow-hidden bg-[#5c2c18] text-left hover:shadow-[0_18px_40px_rgba(0,0,0,0.35)] hover:-translate-y-1 transition-all duration-500 focus:outline-none focus-visible:ring-2 focus-visible:ring-[#3db6e8] ${
                   idx === 4 ? "col-span-2 md:col-span-1" : ""
                 }`}
               >
@@ -116,7 +123,7 @@ export function CategoriesShowcase() {
                     )}
                   </span>
                 </div>
-              </div>
+              </Link>
             ))}
           </div>
         </Container>
