@@ -241,7 +241,7 @@ export function AiChatWidget() {
             <div className="font-bold text-base mb-1">Odoslané, ďakujeme!</div>
             <p className="text-sm text-[var(--color-fg-subtle)] leading-relaxed">
               Tvoja správa došla na <strong>{SITE.contact.email}</strong>.
-              Ozveme sa ti najneskôr do 12 hodín.
+              Čoskoro sa ti ozveme.
             </p>
             <button
               type="button"
@@ -337,7 +337,7 @@ export function AiChatWidget() {
                 rows={3}
                 value={values.message}
                 onChange={(e) => set("message", e.target.value)}
-                placeholder="Napíš nám čo ťa zaujíma, odpovieme ti do 12 hodín"
+                placeholder="Napíš nám čo ťa zaujíma — radi ti poradíme 💬"
                 className="w-full px-3 py-2.5 rounded-xl bg-white border border-[var(--color-border)] focus:border-[#3db6e8] focus:outline-none text-sm resize-none"
               />
             </div>
