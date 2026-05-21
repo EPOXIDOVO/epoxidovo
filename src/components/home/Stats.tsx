@@ -287,7 +287,7 @@ const PATTERNS = [
 
 export function Stats() {
   return (
-    <section className="relative bg-[#0e1320] text-white py-20 md:py-20 border-y border-white/5 overflow-hidden">
+    <section className="relative bg-[#0e1320] text-white py-10 md:py-20 border-y border-white/5 overflow-hidden">
       {/* Mobile + desktop — pohyblivé fotky vzorov podláh v pozadí (right → left) */}
       <div
         aria-hidden
@@ -309,19 +309,19 @@ export function Stats() {
       />
 
       <Container size="xl" className="relative">
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-y-12 md:gap-y-10 gap-x-12 text-center max-w-4xl mx-auto divide-y divide-white/10 md:divide-y-0">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-y-5 md:gap-y-10 gap-x-12 text-center max-w-4xl mx-auto divide-y divide-white/10 md:divide-y-0">
           {STATS.map((s) => (
-            <div key={s.label} className="relative isolate pt-8 first:pt-0 md:pt-0">
+            <div key={s.label} className="relative isolate pt-4 first:pt-0 md:pt-0">
               {/* Lokálne radial halo — len za textom, vzory mimo zostávajú jasné */}
               <div
                 aria-hidden
                 className="hidden md:block absolute inset-x-[-15%] inset-y-[-20%] -z-10 rounded-full bg-[radial-gradient(ellipse_at_center,_rgba(14,19,32,0.85)_0%,_rgba(14,19,32,0.55)_45%,_rgba(14,19,32,0)_75%)] blur-md"
               />
-              <div className="text-6xl md:text-5xl lg:text-6xl font-extrabold tracking-tight text-white h-[4.5rem] md:h-[3rem] lg:h-[3.75rem] flex items-center justify-center leading-none [text-shadow:0_2px_12px_rgba(0,0,0,0.9),_0_0_4px_rgba(0,0,0,0.7)]">
+              <div className="text-4xl md:text-5xl lg:text-6xl font-extrabold tracking-tight text-white h-[3rem] md:h-[3rem] lg:h-[3.75rem] flex items-center justify-center leading-none [text-shadow:0_2px_12px_rgba(0,0,0,0.9),_0_0_4px_rgba(0,0,0,0.7)]">
                 {s.isStatic ? (
                   s.value === "∞" ? (
                     <InfinityIcon
-                      className="w-20 h-20 md:w-14 md:h-14 lg:w-16 lg:h-16 stroke-[2.75] drop-shadow-[0_2px_12px_rgba(0,0,0,0.9)]"
+                      className="w-12 h-12 md:w-14 md:h-14 lg:w-16 lg:h-16 stroke-[2.75] drop-shadow-[0_2px_12px_rgba(0,0,0,0.9)]"
                       aria-label="nekonečno"
                     />
                   ) : (
@@ -334,11 +334,11 @@ export function Stats() {
                   <CountUp to={s.value as number} suffix={s.suffix ?? ""} />
                 )}
               </div>
-              <div className="mt-4 md:mt-3 text-[11px] md:text-sm font-bold text-zinc-100 uppercase tracking-[0.18em] md:tracking-[0.12em] leading-snug [text-shadow:0_1px_6px_rgba(0,0,0,0.95),_0_0_2px_rgba(0,0,0,0.8)]">
+              <div className="mt-2 md:mt-3 text-[10px] md:text-sm font-bold text-zinc-100 uppercase tracking-[0.18em] md:tracking-[0.12em] leading-snug [text-shadow:0_1px_6px_rgba(0,0,0,0.95),_0_0_2px_rgba(0,0,0,0.8)]">
                 {s.label}
               </div>
               {/* Akcentová oranžová linka pod popisom — len mobile */}
-              <div className="md:hidden mt-3 mx-auto h-[3px] w-10 rounded-full bg-[#f97316]" aria-hidden />
+              <div className="md:hidden mt-2 mx-auto h-[2px] w-8 rounded-full bg-[#f97316]" aria-hidden />
             </div>
           ))}
         </div>
