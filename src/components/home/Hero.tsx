@@ -361,7 +361,7 @@ export function Hero() {
                 return (
                   <div
                     key={f.title}
-                    className="flex flex-col md:flex-row items-center md:items-start text-center md:text-left gap-2 md:gap-4 px-1.5 md:px-4 py-3 md:py-4"
+                    className="flex flex-col md:flex-row items-center md:items-start text-center md:text-left gap-2 md:gap-4 px-2.5 md:px-4 py-3 md:py-4"
                   >
                     <div className="shrink-0 inline-flex items-center justify-center w-11 h-11 md:w-20 md:h-20 lg:w-24 lg:h-24 rounded-2xl bg-white/15 ring-1 ring-white/20 backdrop-blur-sm">
                       <Icon
@@ -378,18 +378,22 @@ export function Hero() {
                         {f.title}
                       </h3>
                       {"badges" in f ? (
-                        <div className="mt-1.5 md:mt-2 grid grid-cols-2 md:flex md:flex-wrap md:justify-start gap-1 md:gap-2 justify-items-center md:justify-items-stretch">
-                          {f.badges?.map((b) => (
-                            <span
-                              key={b}
-                              className="inline-flex items-center justify-center gap-0.5 whitespace-nowrap rounded-full bg-black/40 px-1.5 md:px-3 py-0.5 md:py-1 text-[9px] md:text-base font-medium md:font-semibold text-white ring-1 ring-white/30 hover:bg-black/60 hover:ring-white/55 transition-colors"
-                            >
-                              {b}
-                            </span>
-                          ))}
+                        <div className="mt-1.5 md:mt-2">
+                          <span aria-hidden className="md:hidden block text-white/70 text-[10px] leading-none mb-1 text-left">●</span>
+                          <div className="grid grid-cols-2 md:flex md:flex-wrap md:justify-start gap-1 md:gap-2 justify-items-center md:justify-items-stretch">
+                            {f.badges?.map((b) => (
+                              <span
+                                key={b}
+                                className="inline-flex items-center justify-center gap-0.5 whitespace-nowrap rounded-full bg-black/40 px-1 md:px-3 py-0.5 md:py-1 text-[9px] md:text-base font-medium md:font-semibold text-white ring-1 ring-white/30 hover:bg-black/60 hover:ring-white/55 transition-colors"
+                              >
+                                {b}
+                              </span>
+                            ))}
+                          </div>
                         </div>
                       ) : (
                         <p className="mt-1 md:mt-1.5 text-[10px] md:text-base font-medium md:font-semibold text-[#fbe1c4] leading-snug">
+                          <span aria-hidden className="md:hidden text-white/70 mr-1">●</span>
                           {f.description}
                         </p>
                       )}
