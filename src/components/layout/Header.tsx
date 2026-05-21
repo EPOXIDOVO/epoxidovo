@@ -5,7 +5,6 @@ import Link from "next/link";
 import Image from "next/image";
 import { Menu, X, Images, Phone, MessageCircle } from "lucide-react";
 import { Container } from "@/components/ui/Container";
-import { SamplePicker } from "@/components/home/SamplePicker";
 import { SITE } from "@/lib/site";
 import { cn } from "@/lib/utils";
 
@@ -26,7 +25,6 @@ interface HeaderProps {
 export function Header({ transparentOnTop = false }: HeaderProps) {
   const [scrolled, setScrolled] = React.useState(!transparentOnTop);
   const [open, setOpen] = React.useState(false);
-  const [pickerOpen, setPickerOpen] = React.useState(false);
 
   React.useEffect(() => {
     if (!transparentOnTop) return;
@@ -86,14 +84,10 @@ export function Header({ transparentOnTop = false }: HeaderProps) {
             <Link href="/kontakt#cenova-ponuka" className="btn btn-primary btn-md">
               Cenová ponuka
             </Link>
-            <button
-              type="button"
-              onClick={() => setPickerOpen(true)}
-              className="btn btn-md btn-outline"
-            >
+            <Link href="/realizacie" className="btn btn-md btn-outline">
               <Images className="w-4 h-4" aria-hidden />
               Ukážky realizácií
-            </button>
+            </Link>
           </div>
 
           {/* Mobile: phone icon (klik = zavolaj) vedľa hamburgeru */}
@@ -165,23 +159,17 @@ export function Header({ transparentOnTop = false }: HeaderProps) {
             >
               Cenová ponuka
             </Link>
-            <button
-              type="button"
-              onClick={() => {
-                setOpen(false);
-                setPickerOpen(true);
-              }}
+            <Link
+              href="/realizacie"
+              onClick={() => setOpen(false)}
               className="mt-2 inline-flex items-center justify-center gap-2 px-6 py-4 rounded-full border-2 border-[#3db6e8] text-[#3db6e8] font-semibold hover:bg-[#3db6e8] hover:text-white transition-colors"
             >
               <Images className="w-4 h-4" aria-hidden />
               Ukážky realizácií
-            </button>
+            </Link>
           </nav>
         </div>
       </header>
-
-      {/* SamplePicker modal — otvára z headera aj z hero "Ukážky realizácií" */}
-      <SamplePicker open={pickerOpen} onClose={() => setPickerOpen(false)} />
     </>
   );
 }
