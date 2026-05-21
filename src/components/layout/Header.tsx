@@ -73,12 +73,8 @@ export function Header({ transparentOnTop = false }: HeaderProps) {
           <div className="hidden md:flex items-center gap-4 ml-auto">
             <a
               href={`tel:${SITE.contact.phoneRaw}`}
-              className={cn(
-                "inline-flex items-center gap-2 font-semibold text-sm lg:text-base transition-colors",
-                isTransparent
-                  ? "text-white hover:text-[#f97316]"
-                  : "text-[var(--color-fg)] hover:text-[#f97316]",
-              )}
+              aria-label={`Zavolať ${SITE.contact.phone}`}
+              className="inline-flex items-center gap-2 px-4 lg:px-5 py-2.5 rounded-full bg-[#128c7e] text-white font-semibold text-sm lg:text-base shadow-[0_6px_20px_rgba(18,140,126,0.35)] hover:bg-[#0e6b5e] hover:shadow-[0_8px_24px_rgba(14,107,94,0.5)] hover:-translate-y-0.5 transition-all duration-300"
             >
               <Phone className="w-4 h-4" aria-hidden />
               <span className="whitespace-nowrap">{SITE.contact.phone}</span>
@@ -96,16 +92,14 @@ export function Header({ transparentOnTop = false }: HeaderProps) {
             </button>
           </div>
 
-          {/* Mobile: phone icon (klik = zavolaj) vedľa hamburgeru */}
+          {/* Mobile: zelený pill button s telefónom (klik = zavolaj) */}
           <a
             href={`tel:${SITE.contact.phoneRaw}`}
             aria-label={`Zavolať ${SITE.contact.phone}`}
-            className={cn(
-              "md:hidden ml-auto inline-flex items-center justify-center w-11 h-11 rounded-md hover:bg-black/5 transition-colors",
-              isTransparent ? "text-white" : "text-[#f97316]",
-            )}
+            className="md:hidden ml-auto inline-flex items-center gap-1.5 px-3 py-2 rounded-full bg-[#128c7e] text-white font-semibold text-xs shadow-[0_4px_14px_rgba(18,140,126,0.35)] active:bg-[#0e6b5e] active:scale-95 transition-all duration-200"
           >
-            <Phone className="w-5 h-5" aria-hidden />
+            <Phone className="w-4 h-4 shrink-0" aria-hidden />
+            <span className="whitespace-nowrap">{SITE.contact.phone}</span>
           </a>
 
           {/* Mobile toggle */}
