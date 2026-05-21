@@ -26,7 +26,7 @@ const FEATURES = [
   {
     icon: ShieldCheck,
     title: "Certifikované riešenia",
-    badges: ["⚡ ESD", "🔥 ATEX", "🛡 Protišmyk", "🥗 HACCP"],
+    badges: ["⚡ ESD", "🥗 HACCP", "🔥 ATEX", "🛡 Protišmyk"],
   },
   {
     icon: Brush,
@@ -120,51 +120,6 @@ export function Hero() {
                 "radial-gradient(60% 60% at 50% 0%, rgba(61,182,232,0.18), transparent 70%)",
             }}
           />
-          {/* 3 stĺpce pozadia: 1/3 priemyselná hala (fotka) + 2/3 placeholdere */}
-          <div className="absolute inset-0 hidden md:grid grid-cols-3">
-            {/* Priemysel — reálna fotka haly */}
-            <div className="relative overflow-hidden">
-              <Image
-                src="/images/hero/hala.jpg"
-                alt=""
-                fill
-                priority
-                sizes="(max-width: 768px) 100vw, 60vw"
-                quality={92}
-                className="object-cover scale-[1.12] origin-bottom"
-                style={{ objectPosition: "center 65%" }}
-              />
-              {/* jemný overlay len pre lepšiu nadväznosť */}
-              <div className="absolute inset-0 bg-gradient-to-r from-[#0a0f1e]/25 via-[#0a0f1e]/15 to-[#0a0f1e]/45" />
-            </div>
-            {/* Bývanie — placeholder (1920×1920) kým klient nepošle finálnu fotku */}
-            <div className="relative overflow-hidden">
-              <Image
-                src="/images/hero/byvanie-kitchen.jpg"
-                alt=""
-                fill
-                priority
-                sizes="(max-width: 768px) 100vw, 60vw"
-                quality={92}
-                className="object-cover"
-                style={{ objectPosition: "center 75%" }}
-              />
-              <div className="absolute inset-0 bg-gradient-to-b from-[#0a0f1e]/25 via-[#0a0f1e]/15 to-[#0a0f1e]/45" />
-            </div>
-            {/* Garáž — reálna fotka epoxidovej garáže */}
-            <div className="relative overflow-hidden">
-              <Image
-                src="/images/hero/garaz.webp"
-                alt=""
-                fill
-                priority
-                sizes="(max-width: 768px) 100vw, 60vw"
-                quality={92}
-                className="object-cover"
-              />
-              <div className="absolute inset-0 bg-gradient-to-l from-[#0a0f1e]/25 via-[#0a0f1e]/15 to-[#0a0f1e]/45" />
-            </div>
-          </div>
           {/* Na mobile: jedna centrálna faded ikona */}
           <div className="absolute inset-0 flex items-center justify-center md:hidden">
             <House
@@ -175,12 +130,80 @@ export function Hero() {
           </div>
         </div>
 
+        {/* Desktop — 3 klikateľné stĺpce s fotkami (Priemysel / Bývanie / Garáž).
+            pointer-events-none na wrapperi, pointer-events-auto na Linkoch,
+            aby Container (hero bubble) nad nimi ostal interaktívny. */}
+        <div className="absolute inset-0 hidden md:grid grid-cols-3 pointer-events-none">
+          <Link
+            href="/realizacie?priestor=hala-firma"
+            aria-label="Pozrieť realizácie — Priemysel"
+            className="pointer-events-auto relative overflow-hidden group focus:outline-none focus-visible:ring-2 focus-visible:ring-[#3db6e8] focus-visible:ring-inset"
+          >
+            <Image
+              src="/images/hero/hala.jpg"
+              alt=""
+              fill
+              priority
+              sizes="(max-width: 768px) 100vw, 60vw"
+              quality={92}
+              className="object-cover scale-[1.12] origin-bottom group-hover:scale-[1.18] transition-transform duration-700 ease-out"
+              style={{ objectPosition: "center 65%" }}
+            />
+            <div className="absolute inset-0 bg-gradient-to-r from-[#0a0f1e]/25 via-[#0a0f1e]/15 to-[#0a0f1e]/45 group-hover:from-[#0a0f1e]/10 group-hover:via-transparent group-hover:to-[#0a0f1e]/30 transition-colors duration-500" />
+            <div className="absolute inset-0 ring-0 group-hover:ring-[3px] ring-inset ring-[#3db6e8]/0 group-hover:ring-[#3db6e8]/70 transition-all duration-300" />
+            <span className="absolute bottom-6 left-1/2 -translate-x-1/2 inline-flex items-center gap-2 px-4 py-2 rounded-full bg-[#3db6e8] text-white text-xs font-bold uppercase tracking-[0.14em] shadow-[0_8px_24px_rgba(61,182,232,0.5)] opacity-0 translate-y-3 group-hover:opacity-100 group-hover:translate-y-0 transition-all duration-300">
+              Pozrieť realizácie →
+            </span>
+          </Link>
+          <Link
+            href="/realizacie?priestor=dom"
+            aria-label="Pozrieť realizácie — Bývanie"
+            className="pointer-events-auto relative overflow-hidden group focus:outline-none focus-visible:ring-2 focus-visible:ring-[#3db6e8] focus-visible:ring-inset"
+          >
+            <Image
+              src="/images/hero/byvanie-kitchen.jpg"
+              alt=""
+              fill
+              priority
+              sizes="(max-width: 768px) 100vw, 60vw"
+              quality={92}
+              className="object-cover group-hover:scale-[1.06] transition-transform duration-700 ease-out"
+              style={{ objectPosition: "center 75%" }}
+            />
+            <div className="absolute inset-0 bg-gradient-to-b from-[#0a0f1e]/25 via-[#0a0f1e]/15 to-[#0a0f1e]/45 group-hover:from-[#0a0f1e]/10 group-hover:via-transparent group-hover:to-[#0a0f1e]/30 transition-colors duration-500" />
+            <div className="absolute inset-0 ring-0 group-hover:ring-[3px] ring-inset ring-[#3db6e8]/0 group-hover:ring-[#3db6e8]/70 transition-all duration-300" />
+            <span className="absolute bottom-6 left-1/2 -translate-x-1/2 inline-flex items-center gap-2 px-4 py-2 rounded-full bg-[#3db6e8] text-white text-xs font-bold uppercase tracking-[0.14em] shadow-[0_8px_24px_rgba(61,182,232,0.5)] opacity-0 translate-y-3 group-hover:opacity-100 group-hover:translate-y-0 transition-all duration-300">
+              Pozrieť realizácie →
+            </span>
+          </Link>
+          <Link
+            href="/realizacie?priestor=garaz"
+            aria-label="Pozrieť realizácie — Garáž"
+            className="pointer-events-auto relative overflow-hidden group focus:outline-none focus-visible:ring-2 focus-visible:ring-[#3db6e8] focus-visible:ring-inset"
+          >
+            <Image
+              src="/images/hero/garaz.webp"
+              alt=""
+              fill
+              priority
+              sizes="(max-width: 768px) 100vw, 60vw"
+              quality={92}
+              className="object-cover group-hover:scale-[1.06] transition-transform duration-700 ease-out"
+            />
+            <div className="absolute inset-0 bg-gradient-to-l from-[#0a0f1e]/25 via-[#0a0f1e]/15 to-[#0a0f1e]/45 group-hover:from-[#0a0f1e]/10 group-hover:via-transparent group-hover:to-[#0a0f1e]/30 transition-colors duration-500" />
+            <div className="absolute inset-0 ring-0 group-hover:ring-[3px] ring-inset ring-[#3db6e8]/0 group-hover:ring-[#3db6e8]/70 transition-all duration-300" />
+            <span className="absolute bottom-6 left-1/2 -translate-x-1/2 inline-flex items-center gap-2 px-4 py-2 rounded-full bg-[#3db6e8] text-white text-xs font-bold uppercase tracking-[0.14em] shadow-[0_8px_24px_rgba(61,182,232,0.5)] opacity-0 translate-y-3 group-hover:opacity-100 group-hover:translate-y-0 transition-all duration-300">
+              Pozrieť realizácie →
+            </span>
+          </Link>
+        </div>
+
         <Container
           size="xl"
-          className="pt-[120px] md:pt-[150px] lg:pt-[170px] pb-10 md:pb-14 relative flex-1 flex flex-col justify-center"
+          className="pt-[120px] md:pt-[150px] lg:pt-[170px] pb-10 md:pb-14 relative flex-1 flex flex-col justify-center md:pointer-events-none"
         >
           {/* Centrovaný obsah — v "bubline" pre čitateľnosť na fotkách */}
-          <div className="text-center max-w-3xl mx-auto rounded-3xl bg-[#0a0f1e]/80 backdrop-blur-md ring-1 ring-white/10 px-6 md:px-10 py-8 md:py-10 shadow-[0_20px_60px_rgba(0,0,0,0.4)]">
+          <div className="text-center max-w-3xl mx-auto rounded-3xl bg-[#0a0f1e]/80 backdrop-blur-md ring-1 ring-white/10 px-6 md:px-10 py-8 md:py-10 shadow-[0_20px_60px_rgba(0,0,0,0.4)] md:pointer-events-auto">
             <h1
               id="hero-title"
               className="text-white text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-extrabold leading-[1.1] tracking-tight"
@@ -271,17 +294,23 @@ export function Hero() {
           </div>
         </div>
 
-        {/* DESKTOP — 3 tag-chips zarovnané na stred každej 1/3 fotky pozadia */}
+        {/* DESKTOP — 3 tag-chips zarovnané na stred každej 1/3 fotky pozadia.
+            Každý chip je klikateľný Link na /realizacie?priestor=X. */}
         <div className="relative hidden md:grid mt-10 md:mt-14 pb-10 md:pb-14 grid-cols-3 gap-0">
-          {CHIPS.map(({ tag, description }) => (
-            <div key={tag} className="text-center px-3">
-              <span className="inline-block px-4 py-2 rounded-md bg-[#f97316] text-white text-sm md:text-base font-black tracking-[0.16em] shadow-[0_4px_14px_rgba(249,115,22,0.45)]">
+          {CHIPS.map(({ tag, description, href }) => (
+            <Link
+              key={tag}
+              href={href}
+              aria-label={`Pozrieť realizácie — ${tag}`}
+              className="group text-center px-3 focus:outline-none focus-visible:ring-2 focus-visible:ring-[#3db6e8] rounded-lg"
+            >
+              <span className="inline-block px-4 py-2 rounded-md bg-[#f97316] text-white text-sm md:text-base font-black tracking-[0.16em] shadow-[0_4px_14px_rgba(249,115,22,0.45)] group-hover:bg-[#3db6e8] group-hover:shadow-[0_6px_20px_rgba(61,182,232,0.55)] group-hover:-translate-y-0.5 transition-all duration-300">
                 {tag}
               </span>
-              <p className="mt-3 text-base md:text-lg font-bold text-white leading-snug">
+              <p className="mt-3 text-base md:text-lg font-bold text-white leading-snug group-hover:text-[#3db6e8] transition-colors duration-300">
                 {description}
               </p>
-            </div>
+            </Link>
           ))}
         </div>
 
