@@ -53,12 +53,12 @@ export function CategoriesShowcase() {
           <div className="max-w-4xl">
             <span className="inline-flex items-center gap-2 px-4 py-2 rounded-full border border-white/20 bg-white/10 backdrop-blur-sm text-[0.7rem] md:text-xs font-extrabold uppercase tracking-[0.18em] text-white">
               <span className="inline-block w-1.5 h-1.5 rounded-full bg-white" aria-hidden />
-              ČO VŠETKO VIEME VYČAROVAŤ
+              NAŠE TYPY PODLÁH
             </span>
             <h2 className="mt-5 text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-extrabold tracking-tight leading-[1.1] text-white">
-              <span className="text-[#3db6e8]">Túto podlahu potrebuješ.</span>
+              <span className="text-[#3db6e8]">Vyber si štýl,</span>
               <br />
-              Aj keď si myslíš, že nie!
+              ktorý ti sedí
             </h2>
           </div>
 
