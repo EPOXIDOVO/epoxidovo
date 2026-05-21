@@ -29,7 +29,6 @@ export const LeadInputSchema = z.object({
       "chipsove",
       "mramorove",
       "metalicke",
-      "priemyselne",
       "neviem",
     ])
     .optional(),

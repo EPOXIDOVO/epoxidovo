@@ -2,12 +2,13 @@ import type { Metadata } from "next";
 import { Suspense } from "react";
 import { Container } from "@/components/ui/Container";
 import { Section } from "@/components/ui/Section";
-import { ProjectsView } from "@/components/realizacie/ProjectsView";
+import { GalleryView } from "@/components/realizacie/GalleryView";
+import { CATEGORIES, SPACE_TYPES } from "@/content/categories";
 
 export const metadata: Metadata = {
   title: "Realizácie — naše práce",
   description:
-    "Prehliadnite si fotky našich realizácií. Filtruj podľa kategórie podlahy (jednofarebné, chipsové, mramorové, metalické, priemyselné).",
+    "Prehliadnite si fotky našich realizácií. Filtruj podľa typu priestoru (dom, garáž, hala) alebo kategórie podlahy (jednofarebné, chipsové, mramorové, metalické).",
   alternates: { canonical: "/realizacie" },
 };
 
@@ -24,8 +25,8 @@ export default function RealizaciePage() {
               Realizácie po celom Slovensku.
             </h1>
             <p className="mt-6 text-lg md:text-xl text-white leading-relaxed font-medium">
-              Pozri si výber našich projektov. Filtruj podľa typu podlahy,
-              klikni na kartu pre detail a viac fotiek.
+              Filtruj podľa typu priestoru alebo kategórie podlahy. Klikni na
+              fotku pre detail — väčšina realizácií má aj video.
             </p>
           </div>
         </Container>
@@ -40,7 +41,7 @@ export default function RealizaciePage() {
               </div>
             }
           >
-            <ProjectsView />
+            <GalleryView categories={CATEGORIES} spaceTypes={SPACE_TYPES} />
           </Suspense>
         </Container>
       </Section>
