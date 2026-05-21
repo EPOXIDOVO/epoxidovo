@@ -88,21 +88,22 @@ export function SamplePicker({ open, onClose }: SamplePickerProps) {
 
         <div className="px-6 md:px-10 pt-10 md:pt-12 pb-10">
           <div className="text-center max-w-lg mx-auto">
-            <p className="text-[0.7rem] md:text-xs font-extrabold uppercase tracking-[0.22em] text-[var(--color-brand)]">
+            {/* Eyebrow v bubline */}
+            <span className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full border border-[var(--color-border)] bg-[var(--color-bg-muted)] text-[0.7rem] md:text-xs font-black uppercase tracking-[0.2em] text-[var(--color-brand)]">
+              <span className="inline-block w-1.5 h-1.5 rounded-full bg-[var(--color-brand)]" aria-hidden />
               Ukážky realizácií
-            </p>
+            </span>
             <h2
               id="sample-picker-title"
-              className="mt-3 text-3xl md:text-4xl font-extrabold tracking-tight text-[var(--color-fg)] leading-tight"
+              className="mt-4 text-3xl md:text-4xl lg:text-5xl font-black tracking-tight text-[var(--color-fg)] leading-[1.05]"
             >
               O aký typ priestoru ide?
             </h2>
-            <p className="mt-4 text-base md:text-lg font-bold text-[var(--color-fg)] leading-snug">
+            <p className="mt-4 text-lg md:text-xl font-bold text-[var(--color-fg)] leading-snug">
               Vyber kde plánuješ podlahu.
-              <br />
-              <span className="font-semibold text-[var(--color-fg)]/80">
-                Ukážeme ti realizácie z danej kategórie.
-              </span>
+            </p>
+            <p className="mt-1 text-base md:text-lg font-semibold text-[var(--color-fg)]/75 leading-snug">
+              Ukážeme ti realizácie z danej kategórie.
             </p>
           </div>
 
