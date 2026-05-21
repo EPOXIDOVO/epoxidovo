@@ -228,7 +228,7 @@ export function Hero() {
 
         <Container
           size="xl"
-          className="pt-[120px] md:pt-[150px] lg:pt-[170px] pb-10 md:pb-14 relative flex-1 flex flex-col justify-center md:pointer-events-none"
+          className="pt-[120px] md:pt-[120px] lg:pt-[130px] pb-6 md:pb-8 relative flex-1 flex flex-col justify-center md:pointer-events-none"
         >
           {/* Centrovaný obsah — v "bubline" pre čitateľnosť na fotkách */}
           <div className="text-center max-w-3xl mx-auto rounded-3xl bg-[#0a0f1e]/80 backdrop-blur-md ring-1 ring-white/10 px-5 md:px-10 py-5 md:py-10 shadow-[0_20px_60px_rgba(0,0,0,0.4)] md:pointer-events-auto">
@@ -351,7 +351,7 @@ export function Hero() {
 
         {/* DESKTOP — 3 tag-chips zarovnané na stred každej 1/3 fotky pozadia.
             Každý chip je klikateľný Link na /realizacie?priestor=X. */}
-        <div className="relative hidden md:grid mt-10 md:mt-14 pb-10 md:pb-14 grid-cols-3 gap-0">
+        <div className="relative hidden md:grid mt-6 md:mt-8 pb-6 md:pb-8 grid-cols-3 gap-0">
           {CHIPS.map(({ tag, description, href }) => (
             <Link
               key={tag}
@@ -377,7 +377,7 @@ export function Hero() {
               "linear-gradient(180deg, #c0581c 0%, #b0511d 50%, #9a4818 100%)",
           }}
         >
-          <Container size="xl" className="py-6 md:py-8 lg:py-8">
+          <Container size="xl" className="py-5 md:py-6 lg:py-6">
             <div
               className="grid grid-cols-3 divide-x divide-white/25"
               aria-label="Hlavné výhody"
