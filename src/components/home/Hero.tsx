@@ -84,14 +84,14 @@ export function Hero() {
     el.scrollTo({ left: i * el.clientWidth, behavior: "smooth" });
   };
 
-  // Auto-rotácia každé 3s (mobile carousel — desktop nemá scroll)
+  // Auto-rotácia každých 1.5s (mobile carousel — desktop nemá scroll)
   React.useEffect(() => {
     const id = window.setInterval(() => {
       const el = scrollRef.current;
       if (!el || el.clientWidth === 0) return;
       const next = (activeIndexRef.current + 1) % CHIPS.length;
       el.scrollTo({ left: next * el.clientWidth, behavior: "smooth" });
-    }, 3000);
+    }, 1500);
     return () => window.clearInterval(id);
   }, []);
 
