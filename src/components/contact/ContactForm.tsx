@@ -191,7 +191,7 @@ export function ContactForm() {
           {...register("message", {
             maxLength: { value: 2000, message: "Max 2000 znakov" },
           })}
-          className="w-full px-4 py-3 rounded-xl border border-[var(--color-border-strong)] focus:outline-none focus:ring-2 focus:ring-[#3db6e8] focus:border-transparent text-sm text-zinc-900 placeholder:text-zinc-400 caret-zinc-900 resize-none"
+          className="block w-full appearance-none px-4 py-3 rounded-xl border border-[var(--color-border-strong)] bg-white focus:outline-none focus:ring-2 focus:ring-[#3db6e8] focus:border-transparent text-sm text-zinc-900 placeholder:text-zinc-400 caret-zinc-900 resize-none"
         />
         {errors.message && (
           <p className="mt-1.5 text-xs text-red-600">
@@ -270,7 +270,7 @@ const Field = React.forwardRef<HTMLInputElement, FieldProps>(function Field(
       <input
         ref={ref}
         id={inputId}
-        className="w-full px-4 py-3 rounded-xl border border-[var(--color-border-strong)] focus:outline-none focus:ring-2 focus:ring-[#3db6e8] focus:border-transparent text-sm text-zinc-900 placeholder:text-zinc-400 caret-zinc-900"
+        className="block w-full appearance-none px-4 py-3 rounded-xl border border-[var(--color-border-strong)] bg-white focus:outline-none focus:ring-2 focus:ring-[#3db6e8] focus:border-transparent text-sm text-zinc-900 placeholder:text-zinc-400 caret-zinc-900"
         {...rest}
       />
       {error && <p className="mt-1.5 text-xs text-red-600">{error}</p>}
