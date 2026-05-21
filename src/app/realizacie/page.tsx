@@ -101,8 +101,11 @@ export default function RealizaciePage() {
           <div className="relative inline-block max-w-md md:max-w-xl mb-8 md:mb-10">
             <div className="bg-white text-[var(--color-fg)] rounded-2xl px-5 md:px-6 py-4 md:py-5 shadow-[0_10px_30px_rgba(0,0,0,0.18)] ring-1 ring-black/5">
               <p className="text-base md:text-lg leading-snug font-medium">
-                Filtruj podľa typu priestoru alebo kategórie podlahy. Klikni na
-                fotku pre detail.
+                Filtruj podľa{" "}
+                <span className="text-[#3db6e8] font-semibold">typu priestoru</span>{" "}
+                alebo{" "}
+                <span className="text-[#3db6e8] font-semibold">kategórie podlahy</span>
+                . Klikni na fotku pre detail.
               </p>
             </div>
             <svg

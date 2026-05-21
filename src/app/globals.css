@@ -134,6 +134,21 @@ h1 {
   color: inherit;
 }
 
+/* Disable user text selection globally (UI shouldn't look "selected").
+   Form inputs, textareas, and content-editable areas keep selection on. */
+body {
+  -webkit-user-select: none;
+  user-select: none;
+}
+input,
+textarea,
+select,
+[contenteditable="true"],
+[contenteditable=""] {
+  -webkit-user-select: text;
+  user-select: text;
+}
+
 /* Container */
 .container-app {
   width: 100%;
