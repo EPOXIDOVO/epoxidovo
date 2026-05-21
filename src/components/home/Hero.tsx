@@ -119,26 +119,23 @@ export function Hero() {
                 "radial-gradient(60% 60% at 50% 0%, rgba(61,182,232,0.18), transparent 70%)",
             }}
           />
-          {/* Mobile — pohyblivý marquee fotiek podláh + tmavý overlay
-              (nahrádza pôvodnú faded House ikonu) */}
+          {/* Mobile — pohyblivý marquee close-up fotiek mramoru/metaliku
+              + tmavý overlay (vzor podlahy je dominantný) */}
           <div className="md:hidden absolute inset-0 overflow-hidden">
             <div className="absolute inset-0 flex w-max animate-stats-marquee">
               {[
-                "/images/realizacie/r-19.jpg",
                 "/images/realizacie/r-35.jpg",
                 "/images/realizacie/r-32.jpg",
-                "/images/realizacie/r-37.webp",
-                "/images/realizacie/r-40.jpg",
-                "/images/realizacie/r-19.jpg",
+                "/images/realizacie/r-33.jpg",
+                "/images/realizacie/r-11.jpg",
                 "/images/realizacie/r-35.jpg",
                 "/images/realizacie/r-32.jpg",
-                "/images/realizacie/r-37.webp",
-                "/images/realizacie/r-40.jpg",
-                "/images/realizacie/r-19.jpg",
+                "/images/realizacie/r-33.jpg",
+                "/images/realizacie/r-11.jpg",
                 "/images/realizacie/r-35.jpg",
                 "/images/realizacie/r-32.jpg",
-                "/images/realizacie/r-37.webp",
-                "/images/realizacie/r-40.jpg",
+                "/images/realizacie/r-33.jpg",
+                "/images/realizacie/r-11.jpg",
               ].map((src, i) => (
                 <div
                   key={`${src}-${i}`}
