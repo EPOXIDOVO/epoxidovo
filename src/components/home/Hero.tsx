@@ -70,6 +70,9 @@ export function Hero() {
   const [activeIndex, setActiveIndex] = React.useState(0);
   const scrollRef = React.useRef<HTMLDivElement | null>(null);
   const activeIndexRef = React.useRef(0);
+  // Timestamp poslednej manuálnej interakcie (klik na šípku) — auto-rotácia
+  // sa pozdrží 5s aby používateľ stihol pozrieť čo si vybral.
+  const lastManualRef = React.useRef(0);
 
   const handleScroll = (e: React.UIEvent<HTMLDivElement>) => {
     const el = e.currentTarget;
@@ -80,17 +83,20 @@ export function Hero() {
     }
   };
 
-  const scrollToIndex = (i: number) => {
+  const scrollToIndex = (i: number, manual = false) => {
     const el = scrollRef.current;
     if (!el) return;
+    if (manual) lastManualRef.current = Date.now();
     el.scrollTo({ left: i * el.clientWidth, behavior: "smooth" });
   };
 
-  // Auto-rotácia každé 2s (mobile carousel — desktop nemá scroll)
+  // Auto-rotácia každé 2s (mobile carousel — desktop nemá scroll).
+  // Ak používateľ nedávno klikol na šípku (< 5s) → preskočíme tento tick.
   React.useEffect(() => {
     const id = window.setInterval(() => {
       const el = scrollRef.current;
       if (!el || el.clientWidth === 0) return;
+      if (Date.now() - lastManualRef.current < 5000) return;
       const next = (activeIndexRef.current + 1) % CHIPS.length;
       el.scrollTo({ left: next * el.clientWidth, behavior: "smooth" });
     }, 2000);
@@ -274,6 +280,7 @@ export function Hero() {
             onClick={() =>
               scrollToIndex(
                 (activeIndexRef.current - 1 + CHIPS.length) % CHIPS.length,
+                true,
               )
             }
             style={{ touchAction: "manipulation" }}
@@ -285,7 +292,7 @@ export function Hero() {
             type="button"
             aria-label="Ďalšia karta"
             onClick={() =>
-              scrollToIndex((activeIndexRef.current + 1) % CHIPS.length)
+              scrollToIndex((activeIndexRef.current + 1) % CHIPS.length, true)
             }
             style={{ touchAction: "manipulation" }}
             className="absolute right-2 top-[160px] -translate-y-1/2 z-20 inline-flex items-center justify-center w-10 h-10 rounded-full bg-black/55 active:bg-black/75 backdrop-blur-sm text-white shadow-[0_4px_14px_rgba(0,0,0,0.4)] ring-1 ring-white/25 transition-colors"
