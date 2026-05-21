@@ -7,7 +7,6 @@ import {
   Images,
   Brush,
   Shield,
-  House,
   ShieldCheck,
 } from "lucide-react";
 import { Container } from "@/components/ui/Container";
@@ -120,13 +119,43 @@ export function Hero() {
                 "radial-gradient(60% 60% at 50% 0%, rgba(61,182,232,0.18), transparent 70%)",
             }}
           />
-          {/* Na mobile: jedna centrálna faded ikona */}
-          <div className="absolute inset-0 flex items-center justify-center md:hidden">
-            <House
-              className="w-[260px] h-[260px] text-white/[0.05]"
-              strokeWidth={1}
-              aria-hidden
-            />
+          {/* Mobile — pohyblivý marquee fotiek podláh + tmavý overlay
+              (nahrádza pôvodnú faded House ikonu) */}
+          <div className="md:hidden absolute inset-0 overflow-hidden">
+            <div className="absolute inset-0 flex w-max animate-stats-marquee">
+              {[
+                "/images/realizacie/r-19.jpg",
+                "/images/realizacie/r-35.jpg",
+                "/images/realizacie/r-32.jpg",
+                "/images/realizacie/r-37.webp",
+                "/images/realizacie/r-40.jpg",
+                "/images/realizacie/r-19.jpg",
+                "/images/realizacie/r-35.jpg",
+                "/images/realizacie/r-32.jpg",
+                "/images/realizacie/r-37.webp",
+                "/images/realizacie/r-40.jpg",
+                "/images/realizacie/r-19.jpg",
+                "/images/realizacie/r-35.jpg",
+                "/images/realizacie/r-32.jpg",
+                "/images/realizacie/r-37.webp",
+                "/images/realizacie/r-40.jpg",
+              ].map((src, i) => (
+                <div
+                  key={`${src}-${i}`}
+                  className="relative h-full w-[80vw] shrink-0"
+                >
+                  <Image
+                    src={src}
+                    alt=""
+                    fill
+                    sizes="80vw"
+                    className="object-cover"
+                    priority={i < 3}
+                  />
+                </div>
+              ))}
+            </div>
+            <div className="absolute inset-0 bg-[#0a0f1e]/70" />
           </div>
         </div>
 
