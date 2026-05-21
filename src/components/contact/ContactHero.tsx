@@ -29,16 +29,20 @@ export function ContactHero() {
         />
       </div>
 
-      <Container size="xl" className="pt-[110px] md:pt-[120px] pb-8 md:pb-10 relative">
+      <Container size="xl" className="pt-[120px] md:pt-[140px] pb-10 md:pb-14 relative">
         <div className="text-center text-white">
-          <h1 className="text-2xl sm:text-3xl md:text-4xl font-extrabold tracking-tight leading-tight drop-shadow-[0_4px_24px_rgba(0,0,0,0.5)]">
-            Kontaktujte nás
-          </h1>
+          {/* Bublina s nadpisom */}
+          <div className="inline-block px-8 md:px-14 py-5 md:py-7 rounded-3xl bg-white/[0.06] backdrop-blur-md border border-white/15 shadow-[0_20px_60px_rgba(0,0,0,0.35)]">
+            <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-extrabold tracking-tight leading-tight">
+              Kontaktujte nás
+            </h1>
+          </div>
+          {/* Breadcrumb pod bublinou */}
           <nav
             aria-label="Breadcrumb"
-            className="mt-2 md:mt-3 text-sm md:text-base text-white/90"
+            className="mt-5 md:mt-6 text-base md:text-lg text-white/90"
           >
-            <ol className="inline-flex items-center gap-2">
+            <ol className="inline-flex items-center gap-2.5">
               <li>
                 <Link
                   href="/"
@@ -47,8 +51,15 @@ export function ContactHero() {
                   Domovská stránka
                 </Link>
               </li>
-              <li aria-hidden>/</li>
-              <li className="text-[#3db6e8]">Kontakty</li>
+              <li className="text-white/40" aria-hidden>/</li>
+              <li>
+                <Link
+                  href="/realizacie"
+                  className="text-[#3db6e8] hover:text-white transition-colors font-semibold"
+                >
+                  Ukážky realizácií
+                </Link>
+              </li>
             </ol>
           </nav>
         </div>

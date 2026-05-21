@@ -216,7 +216,7 @@ export function Hero() {
 
             <div className="mt-8 flex flex-wrap justify-center gap-3">
               <Link
-                href="/kontakt#cenova-ponuka"
+                href="/kontakt"
                 className="btn btn-primary btn-lg"
               >
                 Cenová ponuka

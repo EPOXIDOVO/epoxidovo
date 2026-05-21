@@ -79,7 +79,7 @@ export function Header({ transparentOnTop = false }: HeaderProps) {
               <Phone className="w-4 h-4" aria-hidden />
               <span className="whitespace-nowrap">{SITE.contact.phone}</span>
             </a>
-            <Link href="/kontakt#cenova-ponuka" className="btn btn-primary btn-md">
+            <Link href="/kontakt" className="btn btn-primary btn-md">
               Cenová ponuka
             </Link>
             <button
@@ -153,7 +153,7 @@ export function Header({ transparentOnTop = false }: HeaderProps) {
               WhatsApp
             </a>
             <Link
-              href="/kontakt#cenova-ponuka"
+              href="/kontakt"
               onClick={() => setOpen(false)}
               className="mt-2 inline-flex items-center justify-center px-6 py-4 rounded-full bg-[#3db6e8] text-white font-semibold hover:bg-[#1a8cc4] shadow-[0_8px_24px_rgba(61,182,232,0.45)] transition-colors"
             >
