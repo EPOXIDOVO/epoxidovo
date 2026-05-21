@@ -95,7 +95,7 @@ export function SamplePicker({ open, onClose }: SamplePickerProps) {
             </span>
             <h2
               id="sample-picker-title"
-              className="mt-4 text-3xl md:text-4xl lg:text-5xl font-black tracking-tight text-[var(--color-fg)] leading-[1.05]"
+              className="mt-4 text-2xl md:text-3xl lg:text-4xl font-black tracking-tight text-[var(--color-fg)] leading-[1.05] md:whitespace-nowrap"
             >
               O aký typ priestoru ide?
             </h2>
@@ -125,10 +125,10 @@ export function SamplePicker({ open, onClose }: SamplePickerProps) {
                     "focus-visible:border-[var(--color-fg)]",
                   )}
                 >
-                  <div className="flex items-center justify-center w-14 h-14 rounded-2xl bg-[var(--color-bg-muted)] group-hover:bg-[var(--color-fg)] group-hover:text-white transition-colors duration-300">
-                    <Icon className="w-7 h-7" aria-hidden />
+                  <div className="flex items-center justify-center w-16 h-16 rounded-full bg-[var(--color-fg)] text-white group-hover:bg-[var(--color-brand)] transition-colors duration-300 shadow-[0_8px_20px_rgba(10,15,30,0.18)]">
+                    <Icon className="w-8 h-8" aria-hidden />
                   </div>
-                  <h3 className="mt-4 font-extrabold text-lg md:text-xl text-[var(--color-fg)] tracking-tight">
+                  <h3 className="mt-4 font-black text-xl md:text-2xl text-[var(--color-fg)] tracking-tight">
                     {space.name}
                   </h3>
                   <p className="mt-2 text-sm md:text-base font-semibold text-[var(--color-fg)]/85 leading-snug">

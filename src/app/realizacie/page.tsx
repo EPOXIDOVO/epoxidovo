@@ -97,35 +97,61 @@ export default function RealizaciePage() {
 
       <Section tone="default" size="md" className="!bg-transparent !text-white">
         <Container size="xl">
-          {/* Grafická bublina — popis nad filtrami s chvostíkom smerujúcim dolu na filter chips */}
-          <div className="relative inline-block max-w-md md:max-w-xl mb-8 md:mb-10">
-            <div className="bg-white text-[var(--color-fg)] rounded-2xl px-5 md:px-6 py-4 md:py-5 shadow-[0_10px_30px_rgba(0,0,0,0.18)] ring-1 ring-black/5">
-              <p className="text-base md:text-lg leading-snug font-medium">
-                Filtruj podľa{" "}
-                <span className="text-[#3db6e8] font-semibold">typu priestoru</span>{" "}
-                alebo{" "}
-                <span className="text-[#3db6e8] font-semibold">kategórie podlahy</span>
-                . Klikni na fotku pre detail.
-              </p>
-            </div>
-            <svg
-              className="absolute -bottom-[11px] left-10 md:left-14 w-7 h-3.5 drop-shadow-[0_4px_4px_rgba(0,0,0,0.08)]"
-              viewBox="0 0 28 14"
-              aria-hidden
-            >
-              <polygon points="0,0 28,0 14,14" fill="white" />
-            </svg>
-          </div>
-
-          <Suspense
-            fallback={
-              <div className="py-20 text-center text-white/70 text-sm">
-                Načítavam galériu…
+          <div className="relative">
+            {/* Mobile bublina — nad filtrami (tail dole) */}
+            <div className="md:hidden relative inline-block max-w-md mb-6">
+              <div className="bg-white text-[var(--color-fg)] rounded-2xl px-5 py-4 shadow-[0_10px_30px_rgba(0,0,0,0.18)] ring-1 ring-black/5">
+                <p className="text-base leading-snug font-medium">
+                  Filtruj podľa{" "}
+                  <span className="text-[#3db6e8] font-semibold">typu priestoru</span>{" "}
+                  alebo{" "}
+                  <span className="text-[#3db6e8] font-semibold">kategórie podlahy</span>
+                  . Klikni na fotku pre detail.
+                </p>
               </div>
-            }
-          >
-            <GalleryView categories={CATEGORIES} spaceTypes={SPACE_TYPES} />
-          </Suspense>
+              <svg
+                className="absolute -bottom-[11px] left-10 w-7 h-3.5 drop-shadow-[0_4px_4px_rgba(0,0,0,0.08)]"
+                viewBox="0 0 28 14"
+                aria-hidden
+              >
+                <polygon points="0,0 28,0 14,14" fill="white" />
+              </svg>
+            </div>
+
+            {/* Desktop bublina — absolute, posunutá doľava aby tail mieril
+                na medzeru medzi chips "Garáž" a "Metalické" (cca 38% sprava).
+                Nepushuje gallery dole — prvé 2 rady mriežky vidno hneď. */}
+            <div className="hidden md:block absolute top-0 right-[34%] lg:right-[36%] w-[260px] lg:w-[280px] z-20">
+              <div className="relative bg-white text-[var(--color-fg)] rounded-2xl px-5 py-3.5 shadow-[0_12px_30px_rgba(0,0,0,0.22)] ring-1 ring-black/5">
+                <p className="text-sm leading-snug font-medium">
+                  Filtruj podľa{" "}
+                  <span className="text-[#3db6e8] font-semibold">typu priestoru</span>{" "}
+                  alebo{" "}
+                  <span className="text-[#3db6e8] font-semibold">kategórie podlahy</span>
+                  . Klikni na fotku pre detail.
+                </p>
+                {/* Tail — diagonálne zo spodku-vľavo, dlhšia (h-5) aby vizuálne
+                    siahala na chip Garáž / medzeru pred Metalické. */}
+                <svg
+                  className="absolute -bottom-5 left-4 w-7 h-5 drop-shadow-[0_4px_4px_rgba(0,0,0,0.12)]"
+                  viewBox="0 0 28 20"
+                  aria-hidden
+                >
+                  <polygon points="0,0 28,0 0,20" fill="white" />
+                </svg>
+              </div>
+            </div>
+
+            <Suspense
+              fallback={
+                <div className="py-20 text-center text-white/70 text-sm">
+                  Načítavam galériu…
+                </div>
+              }
+            >
+              <GalleryView categories={CATEGORIES} spaceTypes={SPACE_TYPES} />
+            </Suspense>
+          </div>
         </Container>
       </Section>
     </div>
