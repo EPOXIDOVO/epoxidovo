@@ -95,12 +95,17 @@ export function CategoriesShowcase() {
                       cat.slug === "jednofarebne"
                         ? "/images/hero/byvanie-v2.webp"
                         : cat.slug === "priemyselne"
-                        ? "/images/hero/hala.webp"
+                        ? "/images/hero/hala.jpg"
                         : `/images/categories/${cat.slug}.jpg`
                     }
                     alt={`${cat.name} epoxidová podlaha`}
                     fill
-                    sizes="(max-width: 768px) 50vw, 25vw"
+                    sizes={
+                      idx === 4
+                        ? "(max-width: 768px) 100vw, 25vw"
+                        : "(max-width: 768px) 50vw, 25vw"
+                    }
+                    quality={85}
                     className="object-cover group-hover:scale-105 transition-transform duration-700"
                   />
 
