@@ -237,7 +237,7 @@ function FilterRow({ label, active, options, onChange }: FilterRowProps) {
       <div className="text-[11px] md:text-base font-bold uppercase tracking-[0.16em] md:tracking-[0.18em] text-white mb-1.5 md:mb-3">
         {label}
       </div>
-      <div className="flex flex-nowrap md:flex-wrap gap-1 md:gap-2 overflow-x-auto md:overflow-visible -mx-1 px-1 md:mx-0 md:px-0 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
+      <div className="flex flex-nowrap md:flex-wrap gap-0.5 md:gap-2 overflow-x-auto md:overflow-visible md:mx-0 md:px-0 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
         {options.map((opt) => (
           <button
             key={opt.value}
@@ -249,7 +249,7 @@ function FilterRow({ label, active, options, onChange }: FilterRowProps) {
             }}
             style={{ touchAction: "manipulation" }}
             className={cn(
-              "shrink-0 whitespace-nowrap min-h-[30px] md:min-h-[44px] px-1.5 md:px-5 py-1 md:py-2.5 rounded-full text-[10.5px] md:text-base font-semibold transition-all duration-300 select-none cursor-pointer",
+              "shrink-0 whitespace-nowrap min-h-[34px] md:min-h-[44px] px-1.5 md:px-5 py-1.5 md:py-2.5 rounded-full text-[11.5px] md:text-base font-semibold transition-all duration-300 select-none cursor-pointer",
               active === opt.value
                 ? "bg-[var(--color-fg)] text-white shadow-[0_6px_18px_rgba(0,0,0,0.25)]"
                 : "bg-white text-[var(--color-fg)] hover:bg-white/90 active:bg-white/80",
