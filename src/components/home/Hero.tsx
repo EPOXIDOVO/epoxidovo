@@ -91,16 +91,23 @@ export function Hero() {
   };
 
   // Auto-rotácia každé 2s (mobile carousel — desktop nemá scroll).
-  // Ak používateľ nedávno klikol na šípku (< 5s) → preskočíme tento tick.
+  // Ak používateľ nedávno klikol na šípku / dotkol sa carouselu (< 6s)
+  // → preskočíme tento tick aby sa nezačal sám pretáčať pod prstom.
   React.useEffect(() => {
     const id = window.setInterval(() => {
       const el = scrollRef.current;
       if (!el || el.clientWidth === 0) return;
-      if (Date.now() - lastManualRef.current < 5000) return;
+      if (Date.now() - lastManualRef.current < 6000) return;
       const next = (activeIndexRef.current + 1) % CHIPS.length;
       el.scrollTo({ left: next * el.clientWidth, behavior: "smooth" });
     }, 2000);
     return () => window.clearInterval(id);
+  }, []);
+
+  // Pri akomkoľvek dotyku na carousel → pauzni auto-rotáciu. Touch events
+  // chytíme len pri reálnom user touch (programatický scrollTo ich netriggeruje).
+  const pauseAutoRotate = React.useCallback(() => {
+    lastManualRef.current = Date.now();
   }, []);
 
   return (
@@ -301,6 +308,10 @@ export function Hero() {
           <div
             ref={scrollRef}
             onScroll={handleScroll}
+            onTouchStart={pauseAutoRotate}
+            onTouchMove={pauseAutoRotate}
+            onTouchEnd={pauseAutoRotate}
+            onPointerDown={pauseAutoRotate}
             className="flex overflow-x-auto snap-x snap-mandatory scroll-smooth [&::-webkit-scrollbar]:hidden"
             style={{ scrollbarWidth: "none", msOverflowStyle: "none" } as React.CSSProperties}
           >
