@@ -65,7 +65,7 @@ export function GalleryView({ categories, spaceTypes }: GalleryViewProps) {
   return (
     <div>
       {/* Filtre */}
-      <div className="space-y-4 mb-10">
+      <div className="space-y-2.5 md:space-y-4 mb-5 md:mb-10">
         <FilterRow
           label="Typ priestoru"
           active={activeSpace}
@@ -94,7 +94,7 @@ export function GalleryView({ categories, spaceTypes }: GalleryViewProps) {
         />
       </div>
 
-      <p className="text-base md:text-lg font-semibold text-white mb-6">
+      <p className="text-sm md:text-lg font-semibold text-white mb-3 md:mb-6">
         <span className="font-bold">{filtered.length}</span>{" "}
         {filtered.length === 1
           ? "realizácia"
@@ -234,10 +234,10 @@ interface FilterRowProps {
 function FilterRow({ label, active, options, onChange }: FilterRowProps) {
   return (
     <div className="relative z-10">
-      <div className="text-sm md:text-base font-bold uppercase tracking-[0.18em] text-white mb-3">
+      <div className="text-[11px] md:text-base font-bold uppercase tracking-[0.16em] md:tracking-[0.18em] text-white mb-1.5 md:mb-3">
         {label}
       </div>
-      <div className="flex flex-wrap gap-3 md:gap-2">
+      <div className="flex flex-wrap gap-1.5 md:gap-2">
         {options.map((opt) => (
           <button
             key={opt.value}
@@ -249,7 +249,7 @@ function FilterRow({ label, active, options, onChange }: FilterRowProps) {
             }}
             style={{ touchAction: "manipulation" }}
             className={cn(
-              "min-h-[44px] px-5 py-3 md:py-2.5 rounded-full text-base font-semibold transition-all duration-300 select-none cursor-pointer",
+              "min-h-[36px] md:min-h-[44px] px-3 md:px-5 py-1.5 md:py-2.5 rounded-full text-[13px] md:text-base font-semibold transition-all duration-300 select-none cursor-pointer",
               active === opt.value
                 ? "bg-[var(--color-fg)] text-white shadow-[0_6px_18px_rgba(0,0,0,0.25)]"
                 : "bg-white text-[var(--color-fg)] hover:bg-white/90 active:bg-white/80",

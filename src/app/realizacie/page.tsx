@@ -106,19 +106,19 @@ export default function RealizaciePage() {
               "radial-gradient(60% 60% at 50% 0%, rgba(61,182,232,0.18), transparent 75%)",
           }}
         />
-        <Container size="xl" className="pt-[120px] md:pt-[140px] pb-10 md:pb-14 relative z-10">
+        <Container size="xl" className="pt-[80px] md:pt-[140px] pb-4 md:pb-14 relative z-10">
           <div className="text-center text-white">
-            <div className="inline-block px-8 md:px-14 py-5 md:py-7 rounded-3xl bg-white/[0.06] backdrop-blur-md border border-white/15 shadow-[0_20px_60px_rgba(0,0,0,0.35)]">
-              <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-extrabold tracking-tight leading-tight md:whitespace-nowrap">
+            <div className="inline-block px-5 md:px-14 py-3 md:py-7 rounded-2xl md:rounded-3xl bg-white/[0.06] backdrop-blur-md border border-white/15 shadow-[0_20px_60px_rgba(0,0,0,0.35)]">
+              <h1 className="text-2xl sm:text-3xl md:text-5xl lg:text-6xl font-extrabold tracking-tight leading-tight md:whitespace-nowrap">
                 Realizujeme{" "}
                 <span className="text-[#3db6e8]">po celom Slovensku</span>
               </h1>
             </div>
             <nav
               aria-label="Breadcrumb"
-              className="mt-5 md:mt-6 text-base md:text-lg text-white/90"
+              className="mt-3 md:mt-6 text-xs md:text-lg text-white/90"
             >
-              <ol className="inline-flex items-center gap-2.5">
+              <ol className="inline-flex items-center gap-1.5 md:gap-2.5">
                 <li>
                   <Link
                     href="/"
@@ -142,31 +142,12 @@ export default function RealizaciePage() {
         </Container>
       </section>
 
-      <Section tone="default" size="md" className="!bg-transparent !text-white">
+      <Section tone="default" size="md" className="!bg-transparent !text-white max-md:!py-4">
         <Container size="xl">
           <div className="relative">
-            {/* Mobile bublina — nad filtrami (tail dole) */}
-            <div className="md:hidden relative inline-block max-w-md mb-6">
-              <div className="bg-white text-[var(--color-fg)] rounded-2xl px-5 py-4 shadow-[0_10px_30px_rgba(0,0,0,0.18)] ring-1 ring-black/5">
-                <p className="text-base leading-snug font-medium">
-                  Filtruj podľa{" "}
-                  <span className="text-[#3db6e8] font-semibold">typu priestoru</span>{" "}
-                  alebo{" "}
-                  <span className="text-[#3db6e8] font-semibold">vzoru podlahy</span>
-                  . Klikni na fotku pre detail.
-                </p>
-              </div>
-              <svg
-                className="absolute -bottom-[11px] left-10 w-7 h-3.5 drop-shadow-[0_4px_4px_rgba(0,0,0,0.08)]"
-                viewBox="0 0 28 14"
-                aria-hidden
-              >
-                <polygon points="0,0 28,0 14,14" fill="white" />
-              </svg>
-            </div>
-
             {/* Desktop bublina — absolute na pravej strane (preč od chips),
-                tail diagonálne smerom vľavo-dole na chip area. */}
+                tail diagonálne smerom vľavo-dole na chip area.
+                Mobil bez bubliny — filtre sa vysvetlia sami. */}
             <div className="hidden md:block absolute top-0 right-[22%] lg:right-[26%] w-[240px] lg:w-[260px] z-20">
               <div className="relative bg-white text-[var(--color-fg)] rounded-2xl px-5 py-3.5 shadow-[0_12px_30px_rgba(0,0,0,0.22)] ring-1 ring-black/5">
                 <p className="text-sm leading-snug font-medium">
