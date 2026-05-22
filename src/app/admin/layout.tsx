@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import { Inbox, LayoutDashboard, LogOut, Settings } from "lucide-react";
+import { redirect } from "next/navigation";
+import { Inbox, LayoutDashboard, LogOut, Settings, Users, PhoneCall } from "lucide-react";
 import { auth, signOut } from "@/lib/auth";
 import { SITE } from "@/lib/site";
 
@@ -12,6 +13,8 @@ export const metadata: Metadata = {
 const NAV = [
   { href: "/admin", label: "Prehľad", icon: LayoutDashboard },
   { href: "/admin/leads", label: "Leady", icon: Inbox },
+  { href: "/admin/agents", label: "Agenti", icon: Users },
+  { href: "/leady", label: "Lead Software ↗", icon: PhoneCall },
   { href: "/admin/nastavenia", label: "Nastavenia", icon: Settings },
 ];
 
@@ -25,6 +28,13 @@ export default async function AdminLayout({
   // Login page má vlastný layout — nie sidebar
   if (!session?.user) {
     return <>{children}</>;
+  }
+
+  // /admin je len pre ADMIN rolu. AGENT preposlaný do /leady.
+  // @ts-expect-error session.user.role rozšírené v auth.ts
+  const role: string | undefined = session.user.role;
+  if (role !== "ADMIN") {
+    redirect("/leady");
   }
 
   return (

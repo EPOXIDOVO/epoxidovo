@@ -12,6 +12,7 @@ datasource db {
 }
 
 /// Dopyt z formulára na webe (kontaktný form, cenová ponuka, sample picker)
+/// Plus leady z Meta Lead Ads a Google Lead Form (po napojení webhookov).
 model Lead {
   id          String   @id @default(cuid())
   createdAt   DateTime @default(now())
@@ -29,44 +30,59 @@ model Lead {
   message     String?  @db.Text
 
   // Tracking
-  source      String   @default("contact_form") // contact_form | callback | sample_picker | service_page
+  source      String   @default("web") // web | meta | google | callback | sample_picker
   utmSource   String?
   utmMedium   String?
   utmCampaign String?
   referrer    String?
   userAgent   String?
 
-  // Stav
-  status      LeadStatus @default(NEW)
-  notes       String?    @db.Text  // interné poznámky pre admina
+  // Stav + workflow
+  status              LeadStatus @default(NEW)
+  notes               String?    @db.Text // interné poznámky agenta
+  failedCallCount     Int        @default(0)
+  lastStatusChangeAt  DateTime?  // kedy bol naposledy zmenený status (pre cron drip)
+  followupSentAt      DateTime?  // kedy sa poslal auto-followup (aby sa neposlal 2×)
+  reviewRequestSentAt DateTime?  // kedy sa poslal review request po realizácii
 
   @@index([createdAt])
   @@index([status])
   @@index([email])
+  @@index([source])
 }
 
 enum LeadStatus {
-  NEW
-  CONTACTED
-  QUOTED
-  WON
-  LOST
+  NEW              // čerstvý lead, nezvolaný
+  CALLED_NO_ANSWER // volal som, nedovolal som sa
+  CONTACTED        // volal som, má záujem, ďalšie kroky
+  QUOTED           // ponuka odoslaná
+  WON              // podpísaná zmluva
+  REALIZED         // hotová realizácia (podlaha položená)
+  NOT_INTERESTED   // zákazník nemá záujem
+  LOST             // stratený / unreachable po viacerých pokusoch
 }
 
-/// NextAuth users (admin, kto môže vidieť leady)
+/// Používateľ s prístupom do /admin alebo /leady.
+/// Rola riadi kam môže ísť:
+///   - ADMIN  → /admin (full) + /leady
+///   - AGENT  → iba /leady (call agent)
+///   - VIEWER → iba čítanie (rezervované pre budúce použitie)
 model User {
   id            String    @id @default(cuid())
   name          String?
   email         String    @unique
   emailVerified DateTime?
   image         String?
-  role          UserRole  @default(VIEWER)
+  role          UserRole  @default(AGENT) // default pri vytvorení adminom je AGENT
+  active        Boolean   @default(true)  // dá sa deaktivovať bez zmazania
+  createdAt     DateTime  @default(now())
   accounts      Account[]
   sessions      Session[]
 }
 
 enum UserRole {
   ADMIN
+  AGENT
   VIEWER
 }
 

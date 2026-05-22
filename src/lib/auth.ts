@@ -7,24 +7,24 @@ import { SITE } from "@/lib/site";
 
 /**
  * NextAuth v5 — Resend OTP (6-digit code) namiesto magic linku.
- * Iba povolené emaily (env: ADMIN_EMAILS) môžu prihlásiť do /admin.
  *
- * Flow:
- *   1) Užívateľ zadá email na /admin/login
- *   2) NextAuth vygeneruje 6-ciferný kód, uloží hash do DB (VerificationToken)
- *   3) Resend pošle email s prominentným kódom
- *   4) Užívateľ zadá kód na /admin/login?check=email
- *   5) Form redirectne na /api/auth/callback/resend?token=KOD&email=EMAIL
- *   6) NextAuth overí kód → vytvorí session
+ * Authorization model:
+ *   - Email v ADMIN_EMAILS env premennej  → automaticky ADMIN role (bootstrap)
+ *   - Iný email                            → musí existovať v User tabuľke s active=true
+ *
+ * Roles:
+ *   - ADMIN  → /admin (full) + /leady
+ *   - AGENT  → iba /leady (call agent dashboard)
+ *   - VIEWER → readonly (rezervované)
  *
  * Required env:
  *   AUTH_SECRET      - random 32+ char string
  *   AUTH_RESEND_KEY  - Resend API kľúč
- *   ADMIN_EMAILS     - comma-separated list
+ *   ADMIN_EMAILS     - comma-separated list of bootstrap admin emails
  *   DATABASE_URL     - Postgres connection string
  */
 
-const allowedEmails = (process.env.ADMIN_EMAILS ?? SITE.contact.email)
+const adminEmails = (process.env.ADMIN_EMAILS ?? SITE.contact.email)
   .split(",")
   .map((e) => e.trim().toLowerCase())
   .filter(Boolean);
@@ -32,9 +32,8 @@ const allowedEmails = (process.env.ADMIN_EMAILS ?? SITE.contact.email)
 const FROM_ADDRESS =
   process.env.EMAIL_FROM ?? `EPOXIDOVO Lead Software <noreply@${SITE.domain}>`;
 
-/** Vygeneruje 6-ciferný OTP kód (cryptographically safe-ish — Math.random je OK pre OTP s 10min TTL) */
+/** 6-ciferný OTP kód (100000-999999) */
 function generateOtpCode(): string {
-  // 100000-999999 inclusive
   return Math.floor(100000 + Math.random() * 900000).toString();
 }
 
@@ -84,11 +83,8 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
     Resend({
       apiKey: process.env.AUTH_RESEND_KEY,
       from: FROM_ADDRESS,
-      // OTP TTL — 10 minút (defaultný magic link mal 24h, pre kód treba menej)
       maxAge: 10 * 60,
-      // Generuje 6-ciferný kód namiesto dlhého random tokenu
       generateVerificationToken: generateOtpCode,
-      // Custom email s prominentným kódom
       sendVerificationRequest: async ({ identifier: email, token, provider }) => {
         const apiKey = (provider as { apiKey?: string }).apiKey;
         if (!apiKey) {
@@ -106,20 +102,54 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
     }),
   ],
   pages: {
-    signIn: "/admin/login",
-    verifyRequest: "/admin/login?check=email",
-    error: "/admin/login?error=auth",
+    signIn: "/leady/login", // default sign-in stránka (agent flow)
+    verifyRequest: "/leady/login?check=email",
+    error: "/leady/login?error=auth",
   },
   session: { strategy: "database" },
   callbacks: {
+    /**
+     * Authorization check:
+     *  - Bootstrap admin emails (ADMIN_EMAILS env) → vždy prejdú, ich rola sa automaticky nastaví na ADMIN
+     *  - Inak: musia existovať v User tabuľke s active=true
+     */
     async signIn({ user }) {
-      // Allow only configured admin emails
       const email = (user.email ?? "").toLowerCase();
-      return allowedEmails.includes(email);
+      if (!email) return false;
+
+      // Bootstrap admin: email v ADMIN_EMAILS → vždy povolený
+      if (adminEmails.includes(email)) {
+        // Zabezpeč že má rolu ADMIN aj v DB (one-time setup pri prvom logine)
+        try {
+          await prisma.user.upsert({
+            where: { email },
+            create: { email, role: "ADMIN", active: true },
+            update: { role: "ADMIN", active: true },
+          });
+        } catch (e) {
+          console.error("[auth] bootstrap admin upsert failed:", e);
+        }
+        return true;
+      }
+
+      // Iné emaily: musia byť v User tabuľke a active=true
+      try {
+        const dbUser = await prisma.user.findUnique({ where: { email } });
+        if (!dbUser) return false; // neexistuje → odmietnuť
+        if (!dbUser.active) return false; // deaktivovaný → odmietnuť
+        return true;
+      } catch (e) {
+        console.error("[auth] signIn lookup failed:", e);
+        return false;
+      }
     },
+
     async session({ session, user }) {
       if (session.user) {
         session.user.id = user.id;
+        // Pridáme rolu do session (pre route guards)
+        // @ts-expect-error rozšírenie session.user
+        session.user.role = user.role;
       }
       return session;
     },
