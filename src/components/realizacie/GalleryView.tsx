@@ -71,7 +71,7 @@ export function GalleryView({ categories, spaceTypes }: GalleryViewProps) {
           active={activeSpace}
           onChange={(v) => setFilter("priestor", v)}
           options={[
-            { value: "all", label: "Všetky priestory" },
+            { value: "all", label: "Všetky priestory", shortLabel: "Všetky" },
             ...spaceTypes.map((s) => ({ value: s.slug, label: s.name })),
           ]}
         />
@@ -80,7 +80,7 @@ export function GalleryView({ categories, spaceTypes }: GalleryViewProps) {
           active={activeCategory}
           onChange={(v) => setFilter("kategoria", v)}
           options={[
-            { value: "all", label: "Všetky vzory" },
+            { value: "all", label: "Všetky vzory", shortLabel: "Všetky" },
             ...categories
               .filter((c) => {
                 // "priemyselne" je iba display kategoria v homepage karty — nepouziva sa pre realizacie filter
@@ -227,7 +227,7 @@ export function GalleryView({ categories, spaceTypes }: GalleryViewProps) {
 interface FilterRowProps {
   label: string;
   active: string;
-  options: { value: string; label: string }[];
+  options: { value: string; label: string; shortLabel?: string }[];
   onChange: (value: string) => void;
 }
 
@@ -237,7 +237,7 @@ function FilterRow({ label, active, options, onChange }: FilterRowProps) {
       <div className="text-[11px] md:text-base font-bold uppercase tracking-[0.16em] md:tracking-[0.18em] text-white mb-1.5 md:mb-3">
         {label}
       </div>
-      <div className="flex flex-wrap gap-1.5 md:gap-2">
+      <div className="flex flex-nowrap md:flex-wrap gap-1 md:gap-2 overflow-x-auto md:overflow-visible -mx-1 px-1 md:mx-0 md:px-0 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
         {options.map((opt) => (
           <button
             key={opt.value}
@@ -249,14 +249,21 @@ function FilterRow({ label, active, options, onChange }: FilterRowProps) {
             }}
             style={{ touchAction: "manipulation" }}
             className={cn(
-              "min-h-[36px] md:min-h-[44px] px-3 md:px-5 py-1.5 md:py-2.5 rounded-full text-[13px] md:text-base font-semibold transition-all duration-300 select-none cursor-pointer",
+              "shrink-0 whitespace-nowrap min-h-[30px] md:min-h-[44px] px-1.5 md:px-5 py-1 md:py-2.5 rounded-full text-[10.5px] md:text-base font-semibold transition-all duration-300 select-none cursor-pointer",
               active === opt.value
                 ? "bg-[var(--color-fg)] text-white shadow-[0_6px_18px_rgba(0,0,0,0.25)]"
                 : "bg-white text-[var(--color-fg)] hover:bg-white/90 active:bg-white/80",
             )}
             aria-pressed={active === opt.value}
           >
-            {opt.label}
+            {opt.shortLabel ? (
+              <>
+                <span className="md:hidden">{opt.shortLabel}</span>
+                <span className="hidden md:inline">{opt.label}</span>
+              </>
+            ) : (
+              opt.label
+            )}
           </button>
         ))}
       </div>
