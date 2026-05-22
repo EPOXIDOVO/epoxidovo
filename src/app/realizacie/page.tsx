@@ -6,6 +6,8 @@ import { Container } from "@/components/ui/Container";
 import { Section } from "@/components/ui/Section";
 import { GalleryView } from "@/components/realizacie/GalleryView";
 import { CATEGORIES, SPACE_TYPES } from "@/content/categories";
+import { REALIZACIE } from "@/content/realizacie";
+import { SITE } from "@/lib/site";
 
 const MARQUEE_PHOTOS = [
   "/images/realizacie/r-19.jpg",
@@ -23,8 +25,46 @@ export const metadata: Metadata = {
 };
 
 export default function RealizaciePage() {
+  // ItemList JSON-LD schema — pomáha Google Images discover-ovať realizácie
+  const itemListSchema = {
+    "@context": "https://schema.org",
+    "@type": "ItemList",
+    "@id": `${SITE.url}/realizacie/#itemlist`,
+    name: "Realizácie epoxidových podláh — EPOXIDOVO",
+    description:
+      "Fotogaléria realizovaných epoxidových a polyuretánových podláh — domy, garáže, priemyselné haly.",
+    numberOfItems: REALIZACIE.length,
+    itemListElement: REALIZACIE.slice(0, 50).map((r, i) => ({
+      "@type": "ListItem",
+      position: i + 1,
+      item: {
+        "@type": "ImageObject",
+        "@id": `${SITE.url}/realizacie/#r-${r.id}`,
+        contentUrl: `${SITE.url}${r.src}`,
+        url: `${SITE.url}${r.src}`,
+        name: r.alt,
+        description: r.alt,
+        creditText: SITE.legalName,
+        creator: {
+          "@type": "Organization",
+          name: SITE.legalName,
+          url: SITE.url,
+        },
+        copyrightNotice: `© ${new Date().getFullYear()} ${SITE.legalName}`,
+        license: `${SITE.url}/podmienky`,
+        acquireLicensePage: `${SITE.url}/kontakt`,
+      },
+    })),
+  };
+
   return (
     <div className="bg-[var(--color-copper)] text-white realizacie-theme">
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify(itemListSchema),
+        }}
+      />
       {/* Dark hero — rovnaký formát ako /kontakt: marquee fotiek + overlay + bublina */}
       <section className="relative isolate overflow-hidden bg-[#0a0f1e]">
         <div

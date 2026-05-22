@@ -52,7 +52,7 @@ const CHIPS = [
   {
     tag: "BÝVANIE",
     description: "Domy, byty, interiéry",
-    image: "/images/hero/byvanie-kitchen.jpg",
+    image: "/images/hero/byvanie-new.jpg",
     href: "/realizacie?priestor=dom",
     objectPosition: "center 75%",
   },
@@ -195,14 +195,14 @@ export function Hero() {
             className="pointer-events-auto relative overflow-hidden group focus:outline-none focus-visible:ring-2 focus-visible:ring-[#3db6e8] focus-visible:ring-inset"
           >
             <Image
-              src="/images/hero/byvanie-kitchen.jpg"
+              src="/images/hero/byvanie-new.jpg"
               alt=""
               fill
               priority
               sizes="(max-width: 768px) 100vw, 60vw"
               quality={92}
-              className="object-cover scale-[2.1] origin-bottom group-hover:scale-[2.2] transition-transform duration-700 ease-out"
-              style={{ objectPosition: "center bottom" }}
+              className="object-cover scale-[1] group-hover:scale-[1.05] transition-transform duration-700 ease-out"
+              style={{ objectPosition: "center center" }}
             />
             <div className="absolute inset-0 bg-gradient-to-b from-[#0a0f1e]/10 via-transparent to-[#0a0f1e]/15 group-hover:from-transparent group-hover:via-transparent group-hover:to-[#0a0f1e]/5 transition-colors duration-500" />
             <div className="absolute inset-0 ring-0 group-hover:ring-[3px] ring-inset ring-[#3db6e8]/0 group-hover:ring-[#3db6e8]/70 transition-all duration-300" />

@@ -1,152 +1,100 @@
 "use client";
 
-import * as React from "react";
 import Script from "next/script";
 
 /**
- * Analytics + marketing pixels — všetko consent-gated cez Google Consent Mode v2.
+ * GOOGLE TAG MANAGER ONLY setup.
  *
- * Pixely sa LOADUJÚ vždy, ale event/identity sa posielajú len ak má užívateľ
- * povolený analytics/ad_storage (cez gtag('consent','update', …)).
- * Default consent ('denied') je nastavený inline v <head> v layout.tsx
- * pred týmto skriptom.
+ * Všetky tracking pixely (GA4, Meta Pixel, Google Ads conversion) sa konfigurujú
+ * v GTM admine — nie tu v kóde. Tento súbor LEN nasadí GTM container.
  *
- * ENV vars:
- *   NEXT_PUBLIC_GA_ID="G-XXXXXXXXXX"          — Google Analytics 4
- *   NEXT_PUBLIC_GOOGLE_ADS_ID="AW-XXXXXXXXX"  — Google Ads conversion
- *   NEXT_PUBLIC_META_PIXEL_ID="1234567890"    — Meta (Facebook) Pixel
- *   NEXT_PUBLIC_GTM_ID="GTM-XXXXXXX"          — Google Tag Manager (alternative)
+ * Custom eventy (form submit, lead) sa pushujú do `window.dataLayer` cez
+ * `trackEvent()` helper — GTM si ich odchytí a forward-uje do GA/Meta/Ads.
+ *
+ * ENV var (voliteľná, ak nie je → použije sa hardcoded fallback):
+ *   NEXT_PUBLIC_GTM_ID="GTM-5Q39NMMG"
+ *
+ * ----------------------------------------------------------------------------
+ * STOPO — POVINNÉ TAGY V GTM (inak žiadny tracking nepôjde):
+ *
+ *   1. GA4 Configuration tag
+ *      Measurement ID: G-NRLVXHFNSC
+ *      Trigger: All Pages
+ *
+ *   2. GA4 Event tag
+ *      Event name: generate_lead
+ *      Trigger: Custom Event = "generate_lead"
+ *
+ *   3. Meta Pixel base code
+ *      Pixel ID: 1867705137276185
+ *      Trigger: All Pages
+ *
+ *   4. Meta Pixel "Lead" event
+ *      Trigger: Custom Event = "generate_lead"
+ *
+ *   5. Google Ads Conversion tracking
+ *      Conversion ID: AW-18114450604
+ *      Conversion Label: 3H0uCLzYqbEcEKyp0r1D
+ *      Trigger: Custom Event = "generate_lead"
+ *
+ *   6. Google Consent Mode v2 (default DENIED → update na ALLOW po consent banner)
+ *
+ * ----------------------------------------------------------------------------
  */
-// Fallback IDs — funguje aj bez Netlify env. Tieto ID sú verejné (gtag IDs).
-const FALLBACK_GA_ID = "G-NRLVXHFNSC";
-const FALLBACK_ADS_ID = "AW-18114450604";
-// Conversion send_to — gtag conversion label for 'Přihlášení k odběru' / lead submit
-const ADS_LEAD_CONVERSION_LABEL = "3H0uCLzYqbEcEKyp0r1D";
+
+// Hardcoded fallback — funguje aj bez Netlify env premennej.
+const FALLBACK_GTM_ID = "GTM-5Q39NMMG";
 
 export function Analytics() {
-  const gaId = process.env.NEXT_PUBLIC_GA_ID || FALLBACK_GA_ID;
-  const adsId = process.env.NEXT_PUBLIC_GOOGLE_ADS_ID || FALLBACK_ADS_ID;
-  const pixelId = process.env.NEXT_PUBLIC_META_PIXEL_ID;
-  const gtmId = process.env.NEXT_PUBLIC_GTM_ID;
+  const gtmId = process.env.NEXT_PUBLIC_GTM_ID || FALLBACK_GTM_ID;
+
+  if (!gtmId) return null;
 
   return (
     <>
-      {/* Google Tag Manager (ak nasadený) */}
-      {gtmId && (
-        <Script id="gtm-loader" strategy="afterInteractive">
-          {`(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+      {/* GTM head script — async loader */}
+      <Script id="gtm-loader" strategy="afterInteractive">
+        {`(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
 new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
 j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
 })(window,document,'script','dataLayer','${gtmId}');`}
-        </Script>
-      )}
-
-      {/* GA4 — gtag.js */}
-      {gaId && (
-        <>
-          <Script
-            src={`https://www.googletagmanager.com/gtag/js?id=${gaId}`}
-            strategy="afterInteractive"
-          />
-          <Script id="ga4-init" strategy="afterInteractive">
-            {`window.dataLayer = window.dataLayer || [];
-function gtag(){dataLayer.push(arguments);}
-window.gtag = window.gtag || gtag;
-gtag('js', new Date());
-gtag('config', '${gaId}', { anonymize_ip: true });
-${
-  adsId
-    ? `gtag('config', '${adsId}');`
-    : ""
-}`}
-          </Script>
-        </>
-      )}
-
-      {/* Meta (Facebook) Pixel */}
-      {pixelId && (
-        <Script id="fb-pixel" strategy="afterInteractive">
-          {`!function(f,b,e,v,n,t,s)
-{if(f.fbq)return;n=f.fbq=function(){n.callMethod?
-n.callMethod.apply(n,arguments):n.queue.push(arguments)};
-if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';
-n.queue=[];t=b.createElement(e);t.async=!0;
-t.src=v;s=b.getElementsByTagName(e)[0];
-s.parentNode.insertBefore(t,s)}(window, document,'script',
-'https://connect.facebook.net/en_US/fbevents.js');
-fbq('init', '${pixelId}');
-fbq('track', 'PageView');`}
-        </Script>
-      )}
+      </Script>
 
       {/* GTM noscript fallback (pre používateľov bez JS) */}
-      {gtmId && (
-        <noscript>
-          <iframe
-            src={`https://www.googletagmanager.com/ns.html?id=${gtmId}`}
-            height="0"
-            width="0"
-            style={{ display: "none", visibility: "hidden" }}
-            title="Google Tag Manager (noscript)"
-          />
-        </noscript>
-      )}
-      {pixelId && (
-        // eslint-disable-next-line @next/next/no-img-element
-        <noscript>
-          <img
-            height="1"
-            width="1"
-            style={{ display: "none" }}
-            src={`https://www.facebook.com/tr?id=${pixelId}&ev=PageView&noscript=1`}
-            alt=""
-          />
-        </noscript>
-      )}
+      <noscript>
+        <iframe
+          src={`https://www.googletagmanager.com/ns.html?id=${gtmId}`}
+          height="0"
+          width="0"
+          style={{ display: "none", visibility: "hidden" }}
+          title="Google Tag Manager (noscript)"
+        />
+      </noscript>
     </>
   );
 }
 
 /**
- * Helper pre custom conversion eventy z formulárov.
- * Použitie: trackEvent('lead_submit', { source: 'cenova_ponuka' })
+ * Helper pre custom eventy z formulárov.
  *
- * Pre 'generate_lead' (submit cenovej ponuky) automaticky fire-uje aj
- * Google Ads conversion event so správnym send_to (AW-ID/LABEL) — to je
- * to čo Google Ads ráta ako konverziu pre optimalizáciu kampaní.
+ * Použitie: trackEvent('generate_lead', { source: 'cenova_ponuka' })
+ *
+ * Pusha event do window.dataLayer — GTM si ho zachytí a podľa konfigurácie
+ * v GTM admine forward-uje do GA4, Meta Pixelu a Google Ads ako konverziu.
  */
 export function trackEvent(
   name: string,
   params?: Record<string, string | number | boolean>,
 ) {
   if (typeof window === "undefined") return;
-  // GA4 + Google Ads (štandardný event)
-  // @ts-expect-error gtag from script
-  if (typeof window.gtag === "function") {
-    // @ts-expect-error gtag from script
-    window.gtag("event", name, params || {});
 
-    // Google Ads conversion fire — len pre lead submit eventy
-    if (name === "generate_lead" || name === "lead_submit") {
-      // @ts-expect-error gtag from script
-      window.gtag("event", "conversion", {
-        send_to: `${FALLBACK_ADS_ID}/${ADS_LEAD_CONVERSION_LABEL}`,
-        value: typeof params?.value === "number" ? params.value : 1.0,
-        currency: "EUR",
-      });
-    }
-  }
-  // Meta Pixel
-  // @ts-expect-error fbq from script
-  if (typeof window.fbq === "function") {
-    // @ts-expect-error fbq from script
-    window.fbq("trackCustom", name, params || {});
-  }
-  // GTM dataLayer
-  // @ts-expect-error dataLayer from script
-  if (Array.isArray(window.dataLayer)) {
-    // @ts-expect-error dataLayer from script
-    window.dataLayer.push({ event: name, ...(params || {}) });
-  }
+  // Init dataLayer ak ešte neexistuje (GTM ho vytvorí, ale poistka)
+  // @ts-expect-error dataLayer from GTM
+  window.dataLayer = window.dataLayer || [];
+  // @ts-expect-error dataLayer from GTM
+  window.dataLayer.push({
+    event: name,
+    ...(params || {}),
+  });
 }
