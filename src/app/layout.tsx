@@ -1,15 +1,21 @@
 import type { Metadata, Viewport } from "next";
 import Script from "next/script";
+import dynamic from "next/dynamic";
 import { Manrope, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import { SITE } from "@/lib/site";
 import { SiteChrome } from "@/components/layout/SiteChrome";
 import { CookieBanner } from "@/components/cookies/CookieBanner";
 import { InitialPreloader } from "@/components/layout/InitialPreloader";
-import { AiChatWidget } from "@/components/chat/AiChatWidget";
 import { JsonLd } from "@/components/seo/JsonLd";
 import { Analytics } from "@/components/analytics/Analytics";
 import { getDefaultConsentScript } from "@/lib/consent";
+
+// AiChatWidget je heavy (421 lines, lucide ikony, formulár) — lazy-load
+// kvôli Core Web Vitals (TBT, INP). Bundle sa rozsplitne do vlastného chunku.
+const AiChatWidget = dynamic(
+  () => import("@/components/chat/AiChatWidget").then((m) => m.AiChatWidget),
+);
 
 const sansFont = Manrope({
   variable: "--font-sans-display",

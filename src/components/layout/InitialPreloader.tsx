@@ -4,16 +4,19 @@ import * as React from "react";
 import Image from "next/image";
 
 /**
- * Initial preloader — zobrazí sa pri prvej návšteve webu na ~800ms.
+ * Initial preloader — zobrazí sa pri prvej návšteve webu na ~500ms.
  * Pri ďalších navigáciách (client-side) sa nezobrazí.
  * Page transitions už handluje Next.js loading.tsx.
+ *
+ * NOTE: Skrátené z 900ms → 500ms kvôli LCP / Core Web Vitals.
+ * Dlhší overlay zhoršuje skóre v PageSpeed Insights.
  */
 export function InitialPreloader() {
   const [visible, setVisible] = React.useState(true);
 
   React.useEffect(() => {
-    // Hide po krátkom čase + po DOM ready
-    const t = window.setTimeout(() => setVisible(false), 900);
+    // Hide čo najskôr po hydratácii — krátky cover len pre vizuálnu kontinuitu.
+    const t = window.setTimeout(() => setVisible(false), 500);
     return () => window.clearTimeout(t);
   }, []);
 
@@ -24,7 +27,7 @@ export function InitialPreloader() {
       role="status"
       aria-label="Načítavam"
       className="fixed inset-0 z-[200] flex items-center justify-center bg-[#1f3a8a] animate-fade-out"
-      style={{ animationDelay: "700ms", animationFillMode: "forwards" }}
+      style={{ animationDelay: "350ms", animationFillMode: "forwards" }}
     >
       <style>{`
         @keyframes fade-out {

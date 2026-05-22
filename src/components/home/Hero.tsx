@@ -198,7 +198,6 @@ export function Hero() {
               src="/images/hero/byvanie-new.jpg"
               alt=""
               fill
-              priority
               sizes="(max-width: 768px) 100vw, 60vw"
               quality={92}
               className="object-cover scale-[1] group-hover:scale-[1.05] transition-transform duration-700 ease-out"
@@ -219,7 +218,6 @@ export function Hero() {
               src="/images/hero/garaz.webp"
               alt=""
               fill
-              priority
               sizes="(max-width: 768px) 100vw, 60vw"
               quality={92}
               className="object-cover group-hover:scale-[1.06] transition-transform duration-700 ease-out"
