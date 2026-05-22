@@ -29,13 +29,10 @@ export function GalleryView({ categories, spaceTypes }: GalleryViewProps) {
     const next = new URLSearchParams(params.toString());
     if (value === "all") next.delete(key);
     else next.set(key, value);
-    // Reset kategoria if new priestor restricts it
+    // Pri zmene priestoru vždy resetuj kategóriu na "Všetky" — používateľ chce
+    // čistý štart, nie si manuálne pamätať či kombinácia má fotky.
     if (key === "priestor") {
-      const cat = next.get("kategoria");
-      if (cat) {
-        if (value === "hala-firma" && cat !== "jednofarebne") next.delete("kategoria");
-        if (value === "dom" && cat === "chipsove") next.delete("kategoria");
-      }
+      next.delete("kategoria");
     }
     router.replace(`/realizacie?${next.toString()}`, { scroll: false });
   };
@@ -249,7 +246,7 @@ function FilterRow({ label, active, options, onChange }: FilterRowProps) {
             }}
             style={{ touchAction: "manipulation" }}
             className={cn(
-              "whitespace-nowrap min-h-[36px] md:min-h-[44px] px-1.5 md:px-5 py-1.5 md:py-2.5 rounded-full text-[11px] md:text-base font-semibold transition-all duration-300 select-none cursor-pointer",
+              "whitespace-nowrap min-h-[52px] md:min-h-[44px] px-1.5 md:px-5 py-3.5 md:py-2.5 rounded-full text-[11px] md:text-base font-semibold transition-all duration-300 select-none cursor-pointer",
               active === opt.value
                 ? "bg-[var(--color-fg)] text-white shadow-[0_6px_18px_rgba(0,0,0,0.25)]"
                 : "bg-white text-[var(--color-fg)] hover:bg-white/90 active:bg-white/80",
