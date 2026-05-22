@@ -1,7 +1,6 @@
 "use client";
 
 import * as React from "react";
-import Link from "next/link";
 import { MessageCircle, X, Send, Loader2, CheckCircle2 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { SITE } from "@/lib/site";
@@ -396,19 +395,10 @@ export function AiChatWidget() {
             </button>
 
             <p className="text-[10px] text-center text-[var(--color-fg-subtle)] pt-1">
-              Pre detailnú cenovú ponuku použite{" "}
-              <Link
-                href="/cenova-ponuka"
-                className="text-[#f97316] underline font-semibold"
-                onClick={() => setOpen(false)}
-              >
-                formulár
-              </Link>
-              <br />
-              alebo zavolaj na{" "}
+              Stačí zavolať na{" "}
               <a
                 href={`tel:${SITE.contact.phoneRaw}`}
-                className="text-[#3db6e8] underline"
+                className="text-[#3db6e8] underline font-semibold"
               >
                 {SITE.contact.phone}
               </a>
