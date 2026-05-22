@@ -395,7 +395,7 @@ export function AiChatWidget() {
             </button>
 
             <p className="text-[10px] text-center text-[var(--color-fg-subtle)] pt-1">
-              Stačí zavolať na{" "}
+              Alebo nás kontaktujte telefonicky na{" "}
               <a
                 href={`tel:${SITE.contact.phoneRaw}`}
                 className="text-[#3db6e8] underline font-semibold"
