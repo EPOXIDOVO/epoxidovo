@@ -94,7 +94,7 @@ function adminEmailHtml(lead: LeadNotifyArgs): string {
   }
 
   <p style="margin-top: 24px;">
-    <a href="${SITE.url}/admin/leads" style="display: inline-block; background: #0a0a0a; color: white; padding: 12px 20px; border-radius: 8px; text-decoration: none; font-weight: 600;">Otvoriť v admin paneli</a>
+    <a href="${SITE.url}/admin/leads" style="display: inline-block; background: #0a0a0a; color: white; padding: 12px 20px; border-radius: 8px; text-decoration: none; font-weight: 600;">Otvoriť v Lead Software</a>
   </p>
 
   <p style="margin-top: 32px; font-size: 12px; color: #a1a1aa;">

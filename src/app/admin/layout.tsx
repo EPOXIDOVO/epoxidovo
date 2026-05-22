@@ -37,7 +37,7 @@ export default async function AdminLayout({
               EPOXIDOVO<span className="text-[#3db6e8]">.</span>
             </div>
             <div className="mt-1 text-[10px] uppercase tracking-[0.2em] text-zinc-500">
-              Admin Panel
+              Lead Software
             </div>
           </Link>
         </div>

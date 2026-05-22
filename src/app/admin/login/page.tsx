@@ -1,21 +1,23 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import { Mail, ArrowLeft, CheckCircle2, AlertCircle } from "lucide-react";
+import { redirect } from "next/navigation";
+import { Mail, KeyRound, ArrowLeft, AlertCircle } from "lucide-react";
 import { signIn } from "@/lib/auth";
 
 export const metadata: Metadata = {
-  title: "Prihlásenie",
+  title: "Prihlásenie · Lead Software",
   robots: { index: false, follow: false },
 };
 
 interface LoginPageProps {
-  searchParams: Promise<{ check?: string; error?: string }>;
+  searchParams: Promise<{ check?: string; error?: string; for?: string }>;
 }
 
 export default async function AdminLoginPage({ searchParams }: LoginPageProps) {
   const params = await searchParams;
   const isCheckEmail = params.check === "email";
   const hasError = params.error === "auth";
+  const emailForCode = params.for ?? "";
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-[var(--color-bg-soft)] p-6">
@@ -34,41 +36,108 @@ export default async function AdminLoginPage({ searchParams }: LoginPageProps) {
               EPOXIDOVO<span className="text-[#3db6e8]">.</span>
             </div>
             <div className="mt-1 text-[10px] uppercase tracking-[0.2em] text-[var(--color-fg-subtle)]">
-              Admin Panel
+              Lead Software
             </div>
           </div>
 
           {isCheckEmail ? (
-            <div className="text-center py-6">
-              <div className="inline-flex items-center justify-center w-12 h-12 rounded-full bg-emerald-50 text-emerald-600 mb-4">
-                <CheckCircle2 className="w-6 h-6" aria-hidden />
+            // ===== STEP 2: enter the OTP code =====
+            <>
+              <div className="inline-flex items-center justify-center w-12 h-12 rounded-full bg-[#3db6e8]/10 text-[#3db6e8] mb-4">
+                <KeyRound className="w-6 h-6" aria-hidden />
               </div>
               <h1 className="text-xl font-bold tracking-tight">
-                Skontroluj svoj email
+                Zadaj prihlasovací kód
               </h1>
               <p className="mt-2 text-sm text-[var(--color-fg-muted)] leading-relaxed">
-                Poslali sme ti prihlasovací odkaz. Klikni naňho v emaili pre
-                vstup do admin panela.
+                Poslali sme 6-ciferný kód na{" "}
+                <strong className="text-[var(--color-fg)]">
+                  {emailForCode || "tvoj email"}
+                </strong>
+                . Kód platí 10 minút.
               </p>
-              <p className="mt-4 text-xs text-[var(--color-fg-subtle)]">
-                Email môže prísť do spamu. Odkaz platí 24 hodín.
+
+              {hasError && (
+                <div className="mt-4 p-3 rounded-lg bg-red-50 border border-red-100 text-sm text-red-700 flex items-start gap-2">
+                  <AlertCircle className="w-4 h-4 shrink-0 mt-0.5" aria-hidden />
+                  <span>Kód je nesprávny alebo vypršal. Skús znovu.</span>
+                </div>
+              )}
+
+              <form
+                action={async (formData) => {
+                  "use server";
+                  const code = (formData.get("code")?.toString() || "").trim();
+                  const email = (formData.get("email")?.toString() || "").trim();
+                  if (!code || !email) {
+                    redirect(
+                      `/admin/login?check=email&for=${encodeURIComponent(email)}&error=auth`,
+                    );
+                  }
+                  // NextAuth callback URL pre Resend provider — sám overí token v DB
+                  redirect(
+                    `/api/auth/callback/resend?token=${encodeURIComponent(code)}&email=${encodeURIComponent(email)}`,
+                  );
+                }}
+                className="mt-6 space-y-4"
+              >
+                <input type="hidden" name="email" value={emailForCode} />
+                <div>
+                  <label
+                    htmlFor="code"
+                    className="block text-sm font-medium text-[var(--color-fg)] mb-1.5"
+                  >
+                    Kód z emailu
+                  </label>
+                  <input
+                    id="code"
+                    name="code"
+                    type="text"
+                    required
+                    inputMode="numeric"
+                    pattern="[0-9]{6}"
+                    maxLength={6}
+                    autoComplete="one-time-code"
+                    autoFocus
+                    placeholder="123456"
+                    className="w-full px-4 py-3 rounded-lg border border-[var(--color-border-strong)] focus:outline-none focus:ring-2 focus:ring-[#3db6e8] focus:border-transparent text-2xl font-mono tracking-[0.4em] text-center"
+                  />
+                </div>
+
+                <button
+                  type="submit"
+                  className="w-full inline-flex items-center justify-center px-5 py-3 rounded-full bg-[#3db6e8] text-white font-semibold text-sm hover:bg-[#1a8cc4] transition-colors"
+                >
+                  Prihlásiť sa
+                </button>
+              </form>
+
+              <p className="mt-6 text-xs text-[var(--color-fg-subtle)] text-center">
+                Email neprišiel?{" "}
+                <Link
+                  href="/admin/login"
+                  className="text-[#3db6e8] hover:underline"
+                >
+                  Skús znovu
+                </Link>
               </p>
-            </div>
+            </>
           ) : (
+            // ===== STEP 1: enter email =====
             <>
               <h1 className="text-xl font-bold tracking-tight">
-                Prihlásenie do admin panela
+                Prihlásenie do Lead Software
               </h1>
               <p className="mt-2 text-sm text-[var(--color-fg-muted)]">
-                Zadaj svoj email a pošleme ti prihlasovací odkaz.
+                Zadaj svoj email — pošleme ti 6-ciferný kód na prihlásenie.
               </p>
 
               {hasError && (
                 <div className="mt-4 p-3 rounded-lg bg-red-50 border border-red-100 text-sm text-red-700 flex items-start gap-2">
                   <AlertCircle className="w-4 h-4 shrink-0 mt-0.5" aria-hidden />
                   <span>
-                    Prihlásenie zlyhalo. Tento email nemá oprávnenie alebo
-                    odkaz vypršal.
+                    Prihlásenie zlyhalo. Tento email nemá oprávnenie alebo kód
+                    vypršal.
                   </span>
                 </div>
               )}
@@ -76,7 +145,17 @@ export default async function AdminLoginPage({ searchParams }: LoginPageProps) {
               <form
                 action={async (formData) => {
                   "use server";
-                  await signIn("resend", formData);
+                  const email = (
+                    formData.get("email")?.toString() || ""
+                  ).trim();
+                  if (!email) return;
+                  await signIn("resend", {
+                    email,
+                    redirect: false,
+                  });
+                  redirect(
+                    `/admin/login?check=email&for=${encodeURIComponent(email)}`,
+                  );
                 }}
                 className="mt-6 space-y-4"
               >
@@ -108,7 +187,7 @@ export default async function AdminLoginPage({ searchParams }: LoginPageProps) {
                   type="submit"
                   className="w-full inline-flex items-center justify-center px-5 py-3 rounded-full bg-[#3db6e8] text-white font-semibold text-sm hover:bg-[#1a8cc4] transition-colors"
                 >
-                  Poslať prihlasovací odkaz
+                  Poslať kód
                 </button>
               </form>
 
