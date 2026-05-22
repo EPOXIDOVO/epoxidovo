@@ -5,6 +5,7 @@ import { Suspense } from "react";
 import { Container } from "@/components/ui/Container";
 import { Section } from "@/components/ui/Section";
 import { GalleryView } from "@/components/realizacie/GalleryView";
+import { BreadcrumbsJsonLd } from "@/components/seo/BreadcrumbsJsonLd";
 import { CATEGORIES, SPACE_TYPES } from "@/content/categories";
 import { REALIZACIE } from "@/content/realizacie";
 import { SITE } from "@/lib/site";
@@ -64,6 +65,12 @@ export default function RealizaciePage() {
         dangerouslySetInnerHTML={{
           __html: JSON.stringify(itemListSchema),
         }}
+      />
+      <BreadcrumbsJsonLd
+        items={[
+          { name: "Domov", path: "/" },
+          { name: "Realizácie", path: "/realizacie" },
+        ]}
       />
       {/* Dark hero — rovnaký formát ako /kontakt: marquee fotiek + overlay + bublina */}
       <section className="relative isolate overflow-hidden bg-[#0a0f1e]">

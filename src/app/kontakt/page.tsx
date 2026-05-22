@@ -5,6 +5,7 @@ import { ContactHero } from "@/components/contact/ContactHero";
 import { ContactCards } from "@/components/contact/ContactCards";
 import { ContactMessageForm } from "@/components/contact/ContactMessageForm";
 import { MapEmbed } from "@/components/contact/MapEmbed";
+import { BreadcrumbsJsonLd } from "@/components/seo/BreadcrumbsJsonLd";
 import { SITE } from "@/lib/site";
 
 export const metadata: Metadata = {
@@ -16,6 +17,12 @@ export const metadata: Metadata = {
 export default function KontaktPage() {
   return (
     <>
+      <BreadcrumbsJsonLd
+        items={[
+          { name: "Domov", path: "/" },
+          { name: "Kontakt", path: "/kontakt" },
+        ]}
+      />
       <ContactHero />
 
       <Section

@@ -9,6 +9,7 @@ import { Reviews } from "@/components/home/Reviews";
 import { HowItWorks } from "@/components/home/HowItWorks";
 import { Stats } from "@/components/home/Stats";
 import { CITIES, findCity } from "@/content/cities";
+import { BreadcrumbsJsonLd } from "@/components/seo/BreadcrumbsJsonLd";
 import { SITE } from "@/lib/site";
 
 const MARQUEE_PHOTOS = [
@@ -108,6 +109,15 @@ export default async function CityPage({ params }: RouteContext) {
         dangerouslySetInnerHTML={{
           __html: JSON.stringify(localBusinessSchema),
         }}
+      />
+      <BreadcrumbsJsonLd
+        items={[
+          { name: "Domov", path: "/" },
+          {
+            name: `Epoxidové podlahy ${city.name}`,
+            path: `/epoxidove-podlahy-${city.slug}`,
+          },
+        ]}
       />
 
       {/* Hero — marquee + tmavý overlay + bublina s nadpisom mesta */}

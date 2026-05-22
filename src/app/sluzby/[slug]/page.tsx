@@ -5,8 +5,10 @@ import { ArrowRight, Check } from "lucide-react";
 import { Container } from "@/components/ui/Container";
 import { Section } from "@/components/ui/Section";
 import { Button } from "@/components/ui/Button";
+import { BreadcrumbsJsonLd } from "@/components/seo/BreadcrumbsJsonLd";
 import { CATEGORIES } from "@/content/categories";
 import { SERVICE_DETAILS } from "@/content/serviceDetails";
+import { SITE } from "@/lib/site";
 
 interface PageProps {
   params: Promise<{ slug: string }>;
@@ -45,8 +47,48 @@ export default async function SluzbaDetailPage({ params }: PageProps) {
   const prev = CATEGORIES[(idx - 1 + CATEGORIES.length) % CATEGORIES.length];
   const next = CATEGORIES[(idx + 1) % CATEGORIES.length];
 
+  // Service JSON-LD — každá kategória ako samostatná služba s providerom
+  const serviceSchema = {
+    "@context": "https://schema.org",
+    "@type": "Service",
+    "@id": `${SITE.url}/sluzby/${slug}/#service`,
+    serviceType: `${cat.name} epoxidová podlaha`,
+    name: `${cat.name} epoxidové podlahy`,
+    description: detail.intro,
+    provider: {
+      "@type": "LocalBusiness",
+      "@id": `${SITE.url}/#business`,
+      name: SITE.legalName,
+      url: SITE.url,
+    },
+    areaServed: { "@type": "Country", name: "Slovensko" },
+    url: `${SITE.url}/sluzby/${slug}`,
+    category: "Stavebné práce — podlahy",
+    offers: {
+      "@type": "Offer",
+      availability: "https://schema.org/InStock",
+      priceCurrency: "EUR",
+      priceSpecification: {
+        "@type": "PriceSpecification",
+        priceCurrency: "EUR",
+        description: "Cena podľa rozsahu a typu povrchu — bezplatná kalkulácia",
+      },
+    },
+  };
+
   return (
     <>
+      <BreadcrumbsJsonLd
+        items={[
+          { name: "Domov", path: "/" },
+          { name: "Služby", path: "/sluzby" },
+          { name: cat.name, path: `/sluzby/${slug}` },
+        ]}
+      />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(serviceSchema) }}
+      />
       {/* Hero */}
       <Section tone="ink" size="lg">
         <Container size="xl">

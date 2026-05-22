@@ -4,6 +4,7 @@ import { ArrowRight } from "lucide-react";
 import { Container } from "@/components/ui/Container";
 import { Section } from "@/components/ui/Section";
 import { Button } from "@/components/ui/Button";
+import { BreadcrumbsJsonLd } from "@/components/seo/BreadcrumbsJsonLd";
 import { CATEGORIES } from "@/content/categories";
 
 export const metadata: Metadata = {
@@ -16,6 +17,12 @@ export const metadata: Metadata = {
 export default function SluzbyPage() {
   return (
     <>
+      <BreadcrumbsJsonLd
+        items={[
+          { name: "Domov", path: "/" },
+          { name: "Služby", path: "/sluzby" },
+        ]}
+      />
       <Section tone="default" size="md">
         <Container size="xl">
           <div className="max-w-3xl">

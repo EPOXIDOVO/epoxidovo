@@ -4,6 +4,7 @@ import Link from "next/link";
 import { Container } from "@/components/ui/Container";
 import { Section } from "@/components/ui/Section";
 import { CenovaPonukaForm } from "@/components/cenova-ponuka/CenovaPonukaForm";
+import { BreadcrumbsJsonLd } from "@/components/seo/BreadcrumbsJsonLd";
 import { SITE } from "@/lib/site";
 
 export const metadata: Metadata = {
@@ -22,6 +23,12 @@ const MARQUEE_PHOTOS = [
 export default function CenovaPonukaPage() {
   return (
     <>
+      <BreadcrumbsJsonLd
+        items={[
+          { name: "Domov", path: "/" },
+          { name: "Cenová ponuka", path: "/cenova-ponuka" },
+        ]}
+      />
       {/* Hero — pohyblivý marquee fotiek podláh + tmavý overlay + bublina */}
       <section className="relative isolate overflow-hidden bg-[#0a0f1e]">
         <div
