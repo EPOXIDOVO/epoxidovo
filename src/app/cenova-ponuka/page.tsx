@@ -67,24 +67,24 @@ export default function CenovaPonukaPage() {
         />
         <Container
           size="xl"
-          className="pt-[120px] md:pt-[140px] pb-10 md:pb-14 relative z-10"
+          className="pt-[80px] md:pt-[140px] pb-4 md:pb-14 relative z-10"
         >
           <div className="text-center text-white">
-            <div className="inline-block px-6 md:px-12 py-5 md:py-7 rounded-3xl bg-white/[0.06] backdrop-blur-md border border-white/15 shadow-[0_20px_60px_rgba(0,0,0,0.35)]">
-              <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-extrabold tracking-tight leading-tight">
+            <div className="inline-block px-5 md:px-12 py-3 md:py-7 rounded-2xl md:rounded-3xl bg-white/[0.06] backdrop-blur-md border border-white/15 shadow-[0_20px_60px_rgba(0,0,0,0.35)]">
+              <h1 className="text-2xl sm:text-3xl md:text-5xl lg:text-6xl font-extrabold tracking-tight leading-tight">
                 Nezáväzná{" "}
                 <span className="text-[#3db6e8]">cenová ponuka</span>
               </h1>
             </div>
-            <p className="mt-5 md:mt-6 text-base md:text-lg lg:text-xl text-white/90 max-w-2xl mx-auto leading-relaxed font-medium">
+            <p className="mt-2 md:mt-6 text-xs md:text-lg lg:text-xl text-white/90 max-w-2xl mx-auto leading-snug md:leading-relaxed font-medium">
               Vyplň formulár a do <strong>24 hodín</strong> ti pošleme cenovú
               kalkuláciu na mieru.
             </p>
             <nav
               aria-label="Breadcrumb"
-              className="mt-5 md:mt-6 text-sm md:text-base text-white/80"
+              className="mt-2 md:mt-6 text-xs md:text-base text-white/80"
             >
-              <ol className="inline-flex items-center gap-2.5">
+              <ol className="inline-flex items-center gap-1.5 md:gap-2.5">
                 <li>
                   <Link
                     href="/"
@@ -113,9 +113,9 @@ export default function CenovaPonukaPage() {
       <Section
         tone="default"
         size="md"
-        className="bg-[var(--color-copper)] !text-white"
+        className="bg-[var(--color-copper)] !text-white max-md:!py-4"
       >
-        <Container size="xl" className="py-8 md:py-12">
+        <Container size="xl" className="py-4 md:py-12">
           <CenovaPonukaForm />
         </Container>
       </Section>
