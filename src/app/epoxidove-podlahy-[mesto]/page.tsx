@@ -57,14 +57,8 @@ export async function generateMetadata({ params }: RouteContext): Promise<Metada
       siteName: "EPOXIDOVO",
       title,
       description,
-      images: [
-        {
-          url: "/opengraph-image",
-          width: 1200,
-          height: 630,
-          alt: `Epoxidové podlahy ${city.inCity}`,
-        },
-      ],
+      // OG image sa generuje dynamicky cez opengraph-image.tsx v tomto routte
+      // (s názvom mesta) — Next.js to auto-detekuje, nemusíme tu špecifikovať.
     },
   };
 }
