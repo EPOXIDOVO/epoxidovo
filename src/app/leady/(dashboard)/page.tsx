@@ -117,7 +117,7 @@ export default async function LeadyDashboard({ searchParams }: PageProps) {
       {/* Tabs */}
       <div className="mb-6 flex flex-wrap gap-2">
         {[
-          { v: "novy", label: "🔴 Nové", count: novyCount, color: "red" },
+          { v: "novy", label: "🟢 Nové", count: novyCount, color: "emerald" },
           {
             v: "nedovolany",
             label: "🟡 Nedovolané",

@@ -37,16 +37,17 @@ export async function POST(
     }
 
     const newCount = existing.failedCallCount + 1;
-    let nextCallAt: Date | null = null;
+    let nextCallAt: Date | null;
     if (newCount === 1) {
-      // +6 hodín
+      // 1× nedvíha → volať znova o 6 hodín
       nextCallAt = new Date(now.getTime() + 6 * 60 * 60 * 1000);
     } else if (newCount === 2) {
-      // +24 hodín
+      // 2× nedvíha → volať znova o 24 hodín
       nextCallAt = new Date(now.getTime() + 24 * 60 * 60 * 1000);
     } else {
-      // 3+ → žiadne ďalšie volania, follow-up cron pošle email
-      nextCallAt = null;
+      // 3+ nedvíha → ešte +24h na "3. deň", potom cron pošle follow-up email.
+      // (Krátka pauza pred poslaním auto-mailu, aby sa stihla manuálna intervencia.)
+      nextCallAt = new Date(now.getTime() + 24 * 60 * 60 * 1000);
     }
 
     const updated = await prisma.lead.update({

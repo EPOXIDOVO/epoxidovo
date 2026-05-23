@@ -30,11 +30,16 @@ export default async (req: Request) => {
     process.env.EMAIL_FROM ?? "EPOXIDOVO <noreply@epoxidovo.sk>";
 
   try {
+    const now = new Date();
     const leads = await prisma.lead.findMany({
       where: {
         failedCallCount: { gte: 3 },
         followupSentAt: null,
         status: "CALLED_NO_ANSWER",
+        // Posielame iba ak uplynul 24h timer po 3. nedovolaní.
+        // Tým agent má ešte deň na manuálnu intervenciu predtým ako odíde
+        // auto-mail.
+        nextCallAt: { lte: now },
       },
       take: 50,
     });
