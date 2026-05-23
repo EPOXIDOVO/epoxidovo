@@ -76,19 +76,50 @@ const SOURCE_LABELS: Record<string, string> = {
   sample_picker: "🎨 Sample picker",
 };
 
+/**
+ * Slovenský "pred X" formát presný na minútu:
+ *   "práve teraz"
+ *   "pred 1 minútou" / "pred 23 minútami"
+ *   "pred 1 hodinou" / "pred 2 hodinami a 15 minútami"
+ *   "pred 1 dňom" / "pred 3 dňami a 4 hodinami"
+ *   pre staršie ako 30 dní vráti dátum.
+ */
 function timeAgo(d: Date | string): string {
-  const seconds = Math.floor((Date.now() - new Date(d).getTime()) / 1000);
-  if (seconds < 60) return "pred chvíľou";
-  const minutes = Math.floor(seconds / 60);
-  if (minutes < 60) return `pred ${minutes} min`;
-  const hours = Math.floor(minutes / 60);
-  const remainMin = minutes % 60;
-  if (hours < 24)
-    return remainMin > 0
-      ? `pred ${hours}h ${remainMin}min`
-      : `pred ${hours}h`;
-  const days = Math.floor(hours / 24);
-  if (days < 30) return `pred ${days}d`;
+  const totalSeconds = Math.floor((Date.now() - new Date(d).getTime()) / 1000);
+  if (totalSeconds < 60) return "práve teraz";
+
+  const totalMinutes = Math.floor(totalSeconds / 60);
+
+  // < 1 hodina — len minúty
+  if (totalMinutes < 60) {
+    return totalMinutes === 1
+      ? "pred 1 minútou"
+      : `pred ${totalMinutes} minútami`;
+  }
+
+  const totalHours = Math.floor(totalMinutes / 60);
+  const remainMin = totalMinutes % 60;
+
+  // < 24 hodín — hodiny [+ minúty]
+  if (totalHours < 24) {
+    const h = totalHours === 1 ? "1 hodinou" : `${totalHours} hodinami`;
+    if (remainMin === 0) return `pred ${h}`;
+    const m = remainMin === 1 ? "1 minútou" : `${remainMin} minútami`;
+    return `pred ${h} a ${m}`;
+  }
+
+  const totalDays = Math.floor(totalHours / 24);
+  const remainHrs = totalHours % 24;
+
+  // < 30 dní — dni [+ hodiny]
+  if (totalDays < 30) {
+    const dStr = totalDays === 1 ? "1 dňom" : `${totalDays} dňami`;
+    if (remainHrs === 0) return `pred ${dStr}`;
+    const hStr = remainHrs === 1 ? "1 hodinou" : `${remainHrs} hodinami`;
+    return `pred ${dStr} a ${hStr}`;
+  }
+
+  // staršie ako mesiac — dátum
   return new Intl.DateTimeFormat("sk-SK", {
     day: "2-digit",
     month: "2-digit",
@@ -97,9 +128,8 @@ function timeAgo(d: Date | string): string {
 }
 
 /**
- * Formátuje koľko zostáva do daného času.
- * Vráti { text, isDue, totalMinutes }
- *   - isDue = true ak čas už uplynul (treba volať teraz)
+ * Slovenský "o X" countdown presný na minútu.
+ * Vráti { text, isDue, totalMinutes } — isDue = true ak čas uplynul.
  */
 function timeUntil(
   d: Date | string,
@@ -107,30 +137,34 @@ function timeUntil(
   const totalSeconds = Math.floor(
     (new Date(d).getTime() - Date.now()) / 1000,
   );
-  const totalMinutes = Math.floor(totalSeconds / 60);
   if (totalSeconds <= 0) {
     return { text: "TERAZ", isDue: true, totalMinutes: 0 };
   }
-  if (totalSeconds < 60) {
-    return { text: "za chvíľu", isDue: false, totalMinutes: 0 };
+  const totalMinutes = Math.floor(totalSeconds / 60);
+  if (totalMinutes < 1) {
+    return { text: "o chvíľu", isDue: false, totalMinutes: 0 };
   }
-  const minutes = Math.floor(totalSeconds / 60);
-  if (minutes < 60) return { text: `o ${minutes} min`, isDue: false, totalMinutes };
-  const hours = Math.floor(minutes / 60);
-  const remainMin = minutes % 60;
-  if (hours < 24)
-    return {
-      text: remainMin > 0 ? `o ${hours}h ${remainMin}min` : `o ${hours}h`,
-      isDue: false,
-      totalMinutes,
-    };
-  const days = Math.floor(hours / 24);
-  const remainH = hours % 24;
-  return {
-    text: remainH > 0 ? `o ${days}d ${remainH}h` : `o ${days}d`,
-    isDue: false,
-    totalMinutes,
-  };
+  if (totalMinutes < 60) {
+    const text =
+      totalMinutes === 1 ? "o 1 minútu" : `o ${totalMinutes} minút`;
+    return { text, isDue: false, totalMinutes };
+  }
+  const totalHours = Math.floor(totalMinutes / 60);
+  const remainMin = totalMinutes % 60;
+  if (totalHours < 24) {
+    const h = totalHours === 1 ? "1 hodinu" : `${totalHours} hodín`;
+    if (remainMin === 0)
+      return { text: `o ${h}`, isDue: false, totalMinutes };
+    const m = remainMin === 1 ? "1 minútu" : `${remainMin} minút`;
+    return { text: `o ${h} a ${m}`, isDue: false, totalMinutes };
+  }
+  const totalDays = Math.floor(totalHours / 24);
+  const remainHrs = totalHours % 24;
+  const d2 = totalDays === 1 ? "1 deň" : `${totalDays} dní`;
+  if (remainHrs === 0)
+    return { text: `o ${d2}`, isDue: false, totalMinutes };
+  const h = remainHrs === 1 ? "1 hodinu" : `${remainHrs} hodín`;
+  return { text: `o ${d2} a ${h}`, isDue: false, totalMinutes };
 }
 
 function formatDateTime(d: Date | string | null): string {
