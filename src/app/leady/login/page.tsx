@@ -64,27 +64,16 @@ export default async function LeadyLoginPage({ searchParams }: LoginPageProps) {
                 </div>
               )}
 
+              {/* Form submituje GET priamo na NextAuth callback URL.
+                  Žiadny server action — browser ide rovno na /api/auth/callback/resend
+                  s token + email + callbackUrl ako query params. */}
               <form
-                action={async (formData) => {
-                  "use server";
-                  const code = (formData.get("code")?.toString() || "").trim();
-                  const email = (
-                    formData.get("email")?.toString() || ""
-                  ).trim();
-                  if (!code || !email) {
-                    redirect(
-                      `/leady/login?check=email&for=${encodeURIComponent(email)}&error=auth`,
-                    );
-                  }
-                  // Pridáme callbackUrl=/leady aby NextAuth po overeni
-                  // redirectol na dashboard a nie na home stránku.
-                  redirect(
-                    `/api/auth/callback/resend?token=${encodeURIComponent(code)}&email=${encodeURIComponent(email)}&callbackUrl=${encodeURIComponent("/leady")}`,
-                  );
-                }}
+                method="GET"
+                action="/api/auth/callback/resend"
                 className="mt-6 space-y-4"
               >
                 <input type="hidden" name="email" value={emailForCode} />
+                <input type="hidden" name="callbackUrl" value="/leady" />
                 <div>
                   <label
                     htmlFor="code"
@@ -94,7 +83,7 @@ export default async function LeadyLoginPage({ searchParams }: LoginPageProps) {
                   </label>
                   <input
                     id="code"
-                    name="code"
+                    name="token"
                     type="text"
                     required
                     inputMode="numeric"
@@ -107,7 +96,12 @@ export default async function LeadyLoginPage({ searchParams }: LoginPageProps) {
                   />
                 </div>
 
-                <SubmitButton label="Prihlásiť sa" loadingLabel="Overujem…" />
+                <button
+                  type="submit"
+                  className="w-full inline-flex items-center justify-center px-5 py-3 rounded-full bg-[#3db6e8] text-white font-semibold text-sm hover:bg-[#1a8cc4] transition-colors"
+                >
+                  Prihlásiť sa
+                </button>
               </form>
 
               <p className="mt-6 text-xs text-[var(--color-fg-subtle)] text-center">
