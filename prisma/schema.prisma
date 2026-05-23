@@ -42,7 +42,9 @@ model Lead {
   notes               String?    @db.Text // interné poznámky agenta
   failedCallCount     Int        @default(0)
   lastStatusChangeAt  DateTime?  // kedy bol naposledy zmenený status (pre cron drip)
-  followupSentAt      DateTime?  // kedy sa poslal auto-followup (aby sa neposlal 2×)
+  lastCallAt          DateTime?  // kedy sa naposledy volalo (úspešne aj neúspešne)
+  nextCallAt          DateTime?  // kedy zavolat znova (po nedvihnuti, 6h alebo 24h, alebo manualne planovany termin)
+  followupSentAt      DateTime?  // kedy sa poslal auto-followup mail (po 3 zlyhaních alebo cold-lead)
   reviewRequestSentAt DateTime?  // kedy sa poslal review request po realizácii
 
   @@index([createdAt])

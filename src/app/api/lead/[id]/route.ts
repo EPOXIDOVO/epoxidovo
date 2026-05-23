@@ -42,6 +42,8 @@ export async function PATCH(
     status?: string;
     notes?: string;
     failedCallCount?: number;
+    nextCallAt?: string | null;
+    lastCallAt?: string | null;
   };
   try {
     body = await req.json();
@@ -54,6 +56,8 @@ export async function PATCH(
     notes?: string | null;
     failedCallCount?: number;
     lastStatusChangeAt?: Date;
+    nextCallAt?: Date | null;
+    lastCallAt?: Date | null;
   } = {};
 
   if (body.status !== undefined) {
@@ -62,12 +66,28 @@ export async function PATCH(
     }
     data.status = body.status as LeadStatus;
     data.lastStatusChangeAt = new Date();
+    // Pri zmene statusu na CONTACTED/QUOTED/WON/REALIZED/NOT_INTERESTED/LOST
+    // už nemá zmysel zachovávať nextCallAt — resetujeme. Pokiaľ klient explicitne
+    // posiela vlastné nextCallAt, použije sa to (handled nižšie).
+    if (
+      body.nextCallAt === undefined &&
+      data.status !== "NEW" &&
+      data.status !== "CALLED_NO_ANSWER"
+    ) {
+      data.nextCallAt = null;
+    }
   }
   if (body.notes !== undefined) {
     data.notes = body.notes.trim() || null;
   }
   if (typeof body.failedCallCount === "number") {
     data.failedCallCount = Math.max(0, Math.floor(body.failedCallCount));
+  }
+  if (body.nextCallAt !== undefined) {
+    data.nextCallAt = body.nextCallAt ? new Date(body.nextCallAt) : null;
+  }
+  if (body.lastCallAt !== undefined) {
+    data.lastCallAt = body.lastCallAt ? new Date(body.lastCallAt) : null;
   }
 
   try {
