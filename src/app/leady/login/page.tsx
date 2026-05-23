@@ -3,6 +3,7 @@ import Link from "next/link";
 import { redirect } from "next/navigation";
 import { Mail, KeyRound, ArrowLeft, AlertCircle } from "lucide-react";
 import { signIn } from "@/lib/auth";
+import { SubmitButton } from "@/components/leady/LoginButtons";
 
 export const metadata: Metadata = {
   title: "Prihlásenie · Lead Software",
@@ -75,8 +76,10 @@ export default async function LeadyLoginPage({ searchParams }: LoginPageProps) {
                       `/leady/login?check=email&for=${encodeURIComponent(email)}&error=auth`,
                     );
                   }
+                  // Pridáme callbackUrl=/leady aby NextAuth po overeni
+                  // redirectol na dashboard a nie na home stránku.
                   redirect(
-                    `/api/auth/callback/resend?token=${encodeURIComponent(code)}&email=${encodeURIComponent(email)}`,
+                    `/api/auth/callback/resend?token=${encodeURIComponent(code)}&email=${encodeURIComponent(email)}&callbackUrl=${encodeURIComponent("/leady")}`,
                   );
                 }}
                 className="mt-6 space-y-4"
@@ -104,12 +107,7 @@ export default async function LeadyLoginPage({ searchParams }: LoginPageProps) {
                   />
                 </div>
 
-                <button
-                  type="submit"
-                  className="w-full inline-flex items-center justify-center px-5 py-3 rounded-full bg-[#3db6e8] text-white font-semibold text-sm hover:bg-[#1a8cc4] transition-colors"
-                >
-                  Prihlásiť sa
-                </button>
+                <SubmitButton label="Prihlásiť sa" loadingLabel="Overujem…" />
               </form>
 
               <p className="mt-6 text-xs text-[var(--color-fg-subtle)] text-center">
@@ -153,6 +151,7 @@ export default async function LeadyLoginPage({ searchParams }: LoginPageProps) {
                   await signIn("resend", {
                     email,
                     redirect: false,
+                    redirectTo: "/leady",
                   });
                   redirect(
                     `/leady/login?check=email&for=${encodeURIComponent(email)}`,
@@ -184,12 +183,7 @@ export default async function LeadyLoginPage({ searchParams }: LoginPageProps) {
                   </div>
                 </div>
 
-                <button
-                  type="submit"
-                  className="w-full inline-flex items-center justify-center px-5 py-3 rounded-full bg-[#3db6e8] text-white font-semibold text-sm hover:bg-[#1a8cc4] transition-colors"
-                >
-                  Poslať kód
-                </button>
+                <SubmitButton label="Poslať kód" loadingLabel="Odosielam…" />
               </form>
 
               <p className="mt-6 text-xs text-[var(--color-fg-subtle)] text-center leading-relaxed">
