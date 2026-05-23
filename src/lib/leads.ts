@@ -101,16 +101,22 @@ export async function getLeadById(id: string): Promise<Lead | null> {
 
 export const STATUS_LABELS: Record<LeadStatus, string> = {
   NEW: "Nový",
-  CONTACTED: "Kontaktovaný",
+  CALLED_NO_ANSWER: "Nedovolal som sa",
+  CONTACTED: "Kontaktovaný / záujem",
   QUOTED: "Ponuka odoslaná",
   WON: "Vyhraný",
+  REALIZED: "Hotová realizácia",
+  NOT_INTERESTED: "Nezáujem",
   LOST: "Stratený",
 };
 
 export const STATUS_COLORS: Record<LeadStatus, string> = {
   NEW: "bg-blue-100 text-blue-800",
-  CONTACTED: "bg-amber-100 text-amber-800",
-  QUOTED: "bg-purple-100 text-purple-800",
-  WON: "bg-emerald-100 text-emerald-800",
-  LOST: "bg-zinc-100 text-zinc-600",
+  CALLED_NO_ANSWER: "bg-amber-100 text-amber-800",
+  CONTACTED: "bg-emerald-100 text-emerald-800",
+  QUOTED: "bg-violet-100 text-violet-800",
+  WON: "bg-green-100 text-green-800",
+  REALIZED: "bg-teal-100 text-teal-800",
+  NOT_INTERESTED: "bg-zinc-200 text-zinc-700",
+  LOST: "bg-red-100 text-red-800",
 };
