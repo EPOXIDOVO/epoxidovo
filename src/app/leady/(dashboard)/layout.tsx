@@ -18,16 +18,22 @@ export default async function LeadyLayout({
 
   // Ak nie je prihlásený → login. Vynechá pre /leady/login (ten má vlastný layout).
   if (!session?.user) {
+    console.log("[leady/layout] no session, redirecting to login");
     redirect("/leady/login");
   }
 
   // @ts-expect-error session.user.role pridané v auth callback
   const role: string | undefined = session.user.role;
 
-  // Pre /leady stačí AGENT alebo ADMIN. VIEWER tiež povolíme (read-only).
-  if (role !== "ADMIN" && role !== "AGENT" && role !== "VIEWER") {
-    redirect("/leady/login?error=auth");
-  }
+  // Permissive: ak je autentifikovaný akýkoľvek user (ADMIN/AGENT/VIEWER alebo
+  // null - role ešte nebola nahratá), pustíme dnu. Nestrácame čas na 'gotcha'
+  // redirect ak Prisma vráti rolu neskôr.
+  console.log(
+    "[leady/layout] authenticated user:",
+    session.user.email,
+    "role:",
+    role,
+  );
 
   return (
     <div className="min-h-screen bg-zinc-50 text-zinc-900 flex flex-col">

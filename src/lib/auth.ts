@@ -115,19 +115,24 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
      */
     async signIn({ user }) {
       const email = (user.email ?? "").toLowerCase();
-      if (!email) return false;
+      console.log("[auth.signIn] attempt for email:", email);
+      if (!email) {
+        console.log("[auth.signIn] no email, rejecting");
+        return false;
+      }
 
       // Bootstrap admin: email v ADMIN_EMAILS → vždy povolený
       if (adminEmails.includes(email)) {
-        // Zabezpeč že má rolu ADMIN aj v DB (one-time setup pri prvom logine)
+        console.log("[auth.signIn] admin bootstrap match for:", email);
         try {
           await prisma.user.upsert({
             where: { email },
             create: { email, role: "ADMIN", active: true },
             update: { role: "ADMIN", active: true },
           });
+          console.log("[auth.signIn] admin upsert OK");
         } catch (e) {
-          console.error("[auth] bootstrap admin upsert failed:", e);
+          console.error("[auth.signIn] bootstrap admin upsert failed:", e);
         }
         return true;
       }
@@ -135,11 +140,18 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
       // Iné emaily: musia byť v User tabuľke a active=true
       try {
         const dbUser = await prisma.user.findUnique({ where: { email } });
-        if (!dbUser) return false; // neexistuje → odmietnuť
-        if (!dbUser.active) return false; // deaktivovaný → odmietnuť
+        if (!dbUser) {
+          console.log("[auth.signIn] user not in DB:", email);
+          return false;
+        }
+        if (!dbUser.active) {
+          console.log("[auth.signIn] user inactive:", email);
+          return false;
+        }
+        console.log("[auth.signIn] DB user found, role:", dbUser.role);
         return true;
       } catch (e) {
-        console.error("[auth] signIn lookup failed:", e);
+        console.error("[auth.signIn] DB lookup failed:", e);
         return false;
       }
     },
@@ -147,9 +159,14 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
     async session({ session, user }) {
       if (session.user) {
         session.user.id = user.id;
-        // Pridáme rolu do session (pre route guards)
         // @ts-expect-error rozšírenie session.user
         session.user.role = user.role;
+        console.log(
+          "[auth.session] session for:",
+          user.email,
+          "role:",
+          user.role,
+        );
       }
       return session;
     },
