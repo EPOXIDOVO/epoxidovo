@@ -159,13 +159,16 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
     async session({ session, user }) {
       if (session.user) {
         session.user.id = user.id;
-        // @ts-expect-error rozšírenie session.user
-        session.user.role = user.role;
+        // NextAuth's AdapterUser type nemá `role` field, ale Prisma User áno.
+        // Načítame z DB priamo, alebo cast cez `any`.
+        const dbUser = user as unknown as { role?: string; email?: string };
+        // @ts-expect-error rozšírenie session.user.role
+        session.user.role = dbUser.role;
         console.log(
           "[auth.session] session for:",
-          user.email,
+          dbUser.email,
           "role:",
-          user.role,
+          dbUser.role,
         );
       }
       return session;
