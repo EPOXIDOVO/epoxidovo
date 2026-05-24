@@ -1,0 +1,21 @@
+name = "epoxidovo"
+compatibility_date = "2026-05-24"
+compatibility_flags = ["nodejs_compat"]
+pages_build_output_dir = ".vercel/output/static"
+
+# ENV PREMENNÉ — sú nastavené v Cloudflare Pages dashboarde (Settings → Environment Variables).
+# Tu len pre referenciu, neukladáme tajomstvá do gitu.
+#
+# Vyžadované:
+#   DATABASE_URL                  - Neon Postgres pooler URL
+#   AUTH_SECRET                   - 32+ random string
+#   AUTH_URL                      - https://epoxidovo.sk
+#   AUTH_RESEND_KEY               - Resend API key
+#   RESEND_API_KEY                - Resend API key (rovnaký)
+#   EMAIL_FROM                    - Sender adresa
+#   ADMIN_EMAILS                  - Comma-separated allowlist
+#   NEXT_PUBLIC_META_PIXEL_ID     - Meta pixel ID (verejný)
+
+# Daily cron pre lead follow-up emaily — beží o 09:00 UTC
+[[triggers.crons]]
+cron = "0 9 * * *"
