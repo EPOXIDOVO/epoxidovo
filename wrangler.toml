@@ -1,11 +1,9 @@
-name = "epoxidovo"
+name = "epoxidovoweb"
 compatibility_date = "2026-05-24"
 compatibility_flags = ["nodejs_compat"]
 pages_build_output_dir = ".vercel/output/static"
 
-# ENV PREMENNÉ — sú nastavené v Cloudflare Pages dashboarde (Settings → Environment Variables).
-# Tu len pre referenciu, neukladáme tajomstvá do gitu.
-#
+# ENV PREMENNÉ — nastav v Cloudflare dashboarde (Settings → Environment Variables).
 # Vyžadované:
 #   DATABASE_URL                  - Neon Postgres pooler URL
 #   AUTH_SECRET                   - 32+ random string
@@ -17,7 +15,5 @@ pages_build_output_dir = ".vercel/output/static"
 #   NEXT_PUBLIC_META_PIXEL_ID     - Meta pixel ID (verejný)
 
 # POZNÁMKA o cron joboch:
-# Cloudflare Pages projects nepodporujú "[[triggers.crons]]" v wrangler.toml.
-# Lead follow-up cron job (denne 09:00 UTC) sa nasadí ako separátny Cloudflare
-# Worker po prvom úspešnom Pages deploy. Bude volať internú API route
-# /api/cron/lead-followup s autorizačným tokenom.
+# Pages projects nepodporujú "[[triggers.crons]]". Lead follow-up cron
+# bude separátny Cloudflare Worker po prvom úspešnom deploy.
