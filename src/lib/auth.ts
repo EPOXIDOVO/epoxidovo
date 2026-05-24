@@ -223,8 +223,48 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
         session.user.id = token.id as string | undefined;
         // @ts-expect-error rozšírenie session.user.role
         session.user.role = token.role as string | undefined;
+        console.log(
+          "[auth.session] for:",
+          session.user.email,
+          "role:",
+          token.role,
+        );
       }
       return session;
+    },
+
+    /**
+     * Redirect callback — nuti VŠETKY redirecty na epoxidovo.sk doménu
+     * (defaultne NextAuth môže vrátiť netlify subdoménu cez X-Forwarded-Host).
+     * Tým session cookie zostáva platný a používateľ pristane na správnej doméne.
+     */
+    async redirect({ url, baseUrl }) {
+      const canonicalBase =
+        process.env.AUTH_URL ?? SITE.url ?? baseUrl;
+      console.log(
+        "[auth.redirect] url:",
+        url,
+        "baseUrl:",
+        baseUrl,
+        "canonical:",
+        canonicalBase,
+      );
+      // Relatívny URL → prefixneme canonical base
+      if (url.startsWith("/")) {
+        return `${canonicalBase}${url}`;
+      }
+      // Same-origin URL (epoxidovo.sk) → akceptujeme
+      if (url.startsWith(canonicalBase)) {
+        return url;
+      }
+      // Akýkoľvek iný URL (napr. netlify.app deploy preview) → prepíšeme
+      // na canonical base. Tým zabránime cookie domain mismatch.
+      try {
+        const parsed = new URL(url);
+        return `${canonicalBase}${parsed.pathname}${parsed.search}`;
+      } catch {
+        return `${canonicalBase}/leady`;
+      }
     },
   },
   trustHost: true,
