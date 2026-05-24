@@ -3,7 +3,7 @@
 import * as React from "react";
 import Link from "next/link";
 import Image from "next/image";
-import { Menu, X, Images, Phone } from "lucide-react";
+import { Menu, X, Images, Phone, Home } from "lucide-react";
 import { Container } from "@/components/ui/Container";
 import { SamplePicker } from "@/components/home/SamplePicker";
 import { SITE } from "@/lib/site";
@@ -128,6 +128,14 @@ export function Header({ transparentOnTop = false }: HeaderProps) {
           )}
         >
           <nav className="flex flex-col px-6 pt-8 pb-12 gap-3">
+            <Link
+              href="/"
+              onClick={() => setOpen(false)}
+              className="inline-flex items-center justify-center gap-2 px-6 py-4 rounded-full border-2 border-zinc-300 text-zinc-700 font-semibold hover:bg-zinc-100 transition-colors"
+            >
+              <Home className="w-4 h-4" aria-hidden />
+              Domovská stránka
+            </Link>
             <button
               type="button"
               onClick={() => {
