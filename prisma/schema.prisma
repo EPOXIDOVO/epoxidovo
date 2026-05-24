@@ -51,6 +51,48 @@ model Lead {
   @@index([status])
   @@index([email])
   @@index([source])
+
+  invoices Invoice[]
+}
+
+/// Faktúra prepojená (voliteľne) s leadom. Admin manuálne pridáva.
+model Invoice {
+  id          String   @id @default(cuid())
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  // Voliteľné prepojenie na lead — faktúra môže existovať aj bez leadu
+  leadId      String?
+  lead        Lead?    @relation(fields: [leadId], references: [id], onDelete: SetNull)
+
+  // Identifikácia
+  number      String?  // číslo faktúry napr. "2026-001"
+  customerName String   // meno/firma na faktúre (môže sa líšiť od leadu)
+  customerEmail String?
+
+  // Suma + popis
+  amount      Decimal  @db.Decimal(10, 2)
+  currency    String   @default("EUR")
+  description String?  @db.Text
+
+  // Stav + termíny
+  status      InvoiceStatus @default(UNPAID)
+  issuedAt    DateTime      @default(now())
+  dueAt       DateTime?
+  paidAt      DateTime?
+
+  notes       String?  @db.Text // interná poznámka admina
+
+  @@index([leadId])
+  @@index([status])
+  @@index([issuedAt])
+}
+
+enum InvoiceStatus {
+  UNPAID    // čaká na úhradu
+  PAID      // uhradená
+  OVERDUE   // po splatnosti
+  CANCELLED // stornovaná
 }
 
 enum LeadStatus {

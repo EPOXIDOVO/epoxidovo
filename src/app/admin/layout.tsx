@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { redirect } from "next/navigation";
-import { Inbox, LayoutDashboard, LogOut, Settings, Users, PhoneCall } from "lucide-react";
+import { Inbox, LayoutDashboard, LogOut, Settings, Users, PhoneCall, Receipt } from "lucide-react";
 import { auth, signOut } from "@/lib/auth";
 import { SITE } from "@/lib/site";
 
@@ -13,6 +13,7 @@ export const metadata: Metadata = {
 const NAV = [
   { href: "/admin", label: "Prehľad", icon: LayoutDashboard },
   { href: "/admin/leads", label: "Leady", icon: Inbox },
+  { href: "/admin/faktury", label: "Faktúry", icon: Receipt },
   { href: "/admin/agents", label: "Agenti", icon: Users },
   { href: "/leady", label: "Lead Software ↗", icon: PhoneCall },
   { href: "/admin/nastavenia", label: "Nastavenia", icon: Settings },
