@@ -56,8 +56,12 @@ export function Header({ transparentOnTop = false }: HeaderProps) {
         )}
       >
         <Container size="xl" className="flex items-center h-20 md:h-24 gap-6">
-          {/* Logo */}
-          <Link href="/" aria-label="EPOXIDOVO — domov" className="shrink-0">
+          {/* Logo — vždy klikateľné, vedie na home */}
+          <Link
+            href="/"
+            aria-label="EPOXIDOVO — domov"
+            className="shrink-0 relative z-20 touch-manipulation active:opacity-70 transition-opacity"
+          >
             <Image
               src="/images/site/logo.png"
               alt="EPOXIDOVO"

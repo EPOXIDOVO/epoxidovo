@@ -37,15 +37,27 @@ export default async function LeadyLayout({
 
   return (
     <div className="min-h-screen bg-zinc-50 text-zinc-900 flex flex-col">
-      <header className="bg-white border-b border-zinc-200 px-6 py-3 flex items-center justify-between sticky top-0 z-10">
-        <div>
-          <Link href="/leady" className="block">
+      <header className="bg-white border-b border-zinc-200 px-4 sm:px-6 py-3 flex items-center justify-between sticky top-0 z-10 gap-3">
+        <div className="flex items-center gap-2">
+          {/* Logo → späť na hlavnú stránku epoxidovo.sk */}
+          <Link
+            href="/"
+            className="block hover:opacity-80 active:opacity-60 transition-opacity touch-manipulation"
+            aria-label="Späť na epoxidovo.sk"
+          >
             <div className="text-lg font-bold tracking-tight">
               EPOXIDOVO<span className="text-[#3db6e8]">.</span>
             </div>
             <div className="text-[10px] uppercase tracking-[0.2em] text-zinc-500">
               Lead Software
             </div>
+          </Link>
+          {/* Druhé "leady" tlačidlo ktoré ostane na dashboarde */}
+          <Link
+            href="/leady"
+            className="hidden sm:inline-flex items-center gap-1 ml-3 text-xs font-semibold text-zinc-500 hover:text-zinc-900 px-2 py-1 rounded hover:bg-zinc-100"
+          >
+            ↻ Leady
           </Link>
         </div>
 
