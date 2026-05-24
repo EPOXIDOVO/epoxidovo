@@ -16,6 +16,8 @@ pages_build_output_dir = ".vercel/output/static"
 #   ADMIN_EMAILS                  - Comma-separated allowlist
 #   NEXT_PUBLIC_META_PIXEL_ID     - Meta pixel ID (verejný)
 
-# Daily cron pre lead follow-up emaily — beží o 09:00 UTC
-[[triggers.crons]]
-cron = "0 9 * * *"
+# POZNÁMKA o cron joboch:
+# Cloudflare Pages projects nepodporujú "[[triggers.crons]]" v wrangler.toml.
+# Lead follow-up cron job (denne 09:00 UTC) sa nasadí ako separátny Cloudflare
+# Worker po prvom úspešnom Pages deploy. Bude volať internú API route
+# /api/cron/lead-followup s autorizačným tokenom.
