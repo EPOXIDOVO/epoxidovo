@@ -246,10 +246,15 @@ function FilterRow({ label, active, options, onChange }: FilterRowProps) {
             }}
             style={{ touchAction: "manipulation" }}
             className={cn(
-              "whitespace-nowrap min-h-[52px] md:min-h-[44px] px-1.5 md:px-5 py-3.5 md:py-2.5 rounded-full text-[11px] md:text-base font-semibold transition-all duration-300 select-none cursor-pointer",
+              "whitespace-nowrap min-h-[52px] md:min-h-[44px] px-1.5 md:px-5 py-3.5 md:py-2.5 rounded-full text-[11px] md:text-base transition-all duration-300 select-none cursor-pointer",
               active === opt.value
-                ? "bg-[var(--color-fg)] text-white shadow-[0_6px_18px_rgba(0,0,0,0.25)]"
-                : "bg-white text-[var(--color-fg)] hover:bg-white/90 active:bg-white/80",
+                // ACTIVE pill on mobile uses the bright "logo blue"
+                // (#3db6e8 — same hex as the "po celom Slovensku" accent
+                // on the realizacie hero) with WHITE BOLD text for max
+                // readability. Desktop keeps the original navy fill so
+                // the locked desktop layout stays untouched.
+                ? "bg-[#3db6e8] md:bg-[var(--color-fg)] text-white font-extrabold md:font-semibold shadow-[0_6px_18px_rgba(61,182,232,0.35)] md:shadow-[0_6px_18px_rgba(0,0,0,0.25)]"
+                : "bg-white text-[var(--color-fg)] font-semibold hover:bg-white/90 active:bg-white/80",
             )}
             aria-pressed={active === opt.value}
           >
