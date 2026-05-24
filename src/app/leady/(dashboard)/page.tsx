@@ -1,3 +1,5 @@
+export const runtime = "edge";
+
 import { prisma } from "@/lib/prisma";
 import { LeadCard } from "@/components/leady/LeadCard";
 import type { LeadStatus, Prisma } from "@prisma/client";
