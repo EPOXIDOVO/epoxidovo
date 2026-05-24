@@ -6,20 +6,24 @@ import { prisma } from "@/lib/prisma";
 import { SITE } from "@/lib/site";
 
 /**
- * NextAuth v5 — Resend OTP (6-digit code) namiesto magic linku.
+ * NextAuth v5 — Resend OTP (6-ciferný kód) namiesto magic linku.
  *
- * Authorization model:
- *   - Email v ADMIN_EMAILS env premennej  → automaticky ADMIN role (bootstrap)
- *   - Iný email                            → musí existovať v User tabuľke s active=true
+ * Bezpečný + jednoduchý setup:
+ *   - PrismaAdapter sa stará o ukladanie User + VerificationToken
+ *   - Session strategy = JWT (cookie, stateless) — eliminuje problémy
+ *     s databázovou session pri Netlify edge proxy / deploy preview URL
+ *   - Cookie config explicitne `secure: true, sameSite: lax, path: /`
+ *     aby fungoval konzistentne medzi epoxidovo.sk a netlify subdoménou
  *
- * Roles:
- *   - ADMIN  → /admin (full) + /leady
- *   - AGENT  → iba /leady (call agent dashboard)
- *   - VIEWER → readonly (rezervované)
+ * Authorization:
+ *   - Email v ADMIN_EMAILS env  → automaticky ADMIN role + upsert
+ *   - Iný email                  → musí existovať v User tabuľke s active=true
  *
  * Required env:
- *   AUTH_SECRET      - random 32+ char string
+ *   AUTH_SECRET      - random 32+ char string (povinné pre JWT signing)
  *   AUTH_RESEND_KEY  - Resend API kľúč
+ *   AUTH_URL         - https://epoxidovo.sk (povinné, inak NextAuth použije
+ *                       netlify subdoménu a cookie sa nepošle na epoxidovo.sk)
  *   ADMIN_EMAILS     - comma-separated list of bootstrap admin emails
  *   DATABASE_URL     - Postgres connection string
  */
@@ -31,6 +35,9 @@ const adminEmails = (process.env.ADMIN_EMAILS ?? SITE.contact.email)
 
 const FROM_ADDRESS =
   process.env.EMAIL_FROM ?? `EPOXIDOVO Lead Software <noreply@${SITE.domain}>`;
+
+const useSecureCookies = process.env.NODE_ENV === "production";
+const cookiePrefix = useSecureCookies ? "__Secure-" : "";
 
 /** 6-ciferný OTP kód (100000-999999) */
 function generateOtpCode(): string {
@@ -102,28 +109,56 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
     }),
   ],
   pages: {
-    signIn: "/leady/login", // default sign-in stránka (agent flow)
+    signIn: "/leady/login",
     verifyRequest: "/leady/login?check=email",
     error: "/leady/login?error=auth",
   },
-  session: { strategy: "database" },
+  // JWT — stateless session cez podpísané cookie. Žiadne race conditions
+  // s DB session tabuľkou + funguje konzistentne medzi epoxidovo.sk
+  // a netlify deploy preview subdoménou.
+  session: { strategy: "jwt", maxAge: 30 * 24 * 60 * 60 }, // 30 dní
+  // Explicitný cookie config — secure + sameSite lax + path /. Tým session cookie
+  // pristane na epoxidovo.sk doméne (aj keď NextAuth redirectne cez netlify subdoménu).
+  cookies: {
+    sessionToken: {
+      name: `${cookiePrefix}authjs.session-token`,
+      options: {
+        httpOnly: true,
+        sameSite: "lax",
+        path: "/",
+        secure: useSecureCookies,
+      },
+    },
+    callbackUrl: {
+      name: `${cookiePrefix}authjs.callback-url`,
+      options: {
+        sameSite: "lax",
+        path: "/",
+        secure: useSecureCookies,
+      },
+    },
+    csrfToken: {
+      name: `${useSecureCookies ? "__Host-" : ""}authjs.csrf-token`,
+      options: {
+        httpOnly: true,
+        sameSite: "lax",
+        path: "/",
+        secure: useSecureCookies,
+      },
+    },
+  },
   callbacks: {
     /**
-     * Authorization check:
-     *  - Bootstrap admin emails (ADMIN_EMAILS env) → vždy prejdú, ich rola sa automaticky nastaví na ADMIN
-     *  - Inak: musia existovať v User tabuľke s active=true
+     * Authorization check pri signIn:
+     *  - Bootstrap admin emails → upsert v DB + povoľ
+     *  - Inak: musí existovať User row s active=true
      */
     async signIn({ user }) {
       const email = (user.email ?? "").toLowerCase();
       console.log("[auth.signIn] attempt for email:", email);
-      if (!email) {
-        console.log("[auth.signIn] no email, rejecting");
-        return false;
-      }
+      if (!email) return false;
 
-      // Bootstrap admin: email v ADMIN_EMAILS → vždy povolený
       if (adminEmails.includes(email)) {
-        console.log("[auth.signIn] admin bootstrap match for:", email);
         try {
           await prisma.user.upsert({
             where: { email },
@@ -132,23 +167,17 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
           });
           console.log("[auth.signIn] admin upsert OK");
         } catch (e) {
-          console.error("[auth.signIn] bootstrap admin upsert failed:", e);
+          console.error("[auth.signIn] bootstrap upsert failed:", e);
         }
         return true;
       }
 
-      // Iné emaily: musia byť v User tabuľke a active=true
       try {
         const dbUser = await prisma.user.findUnique({ where: { email } });
-        if (!dbUser) {
-          console.log("[auth.signIn] user not in DB:", email);
+        if (!dbUser || !dbUser.active) {
+          console.log("[auth.signIn] rejected:", email);
           return false;
         }
-        if (!dbUser.active) {
-          console.log("[auth.signIn] user inactive:", email);
-          return false;
-        }
-        console.log("[auth.signIn] DB user found, role:", dbUser.role);
         return true;
       } catch (e) {
         console.error("[auth.signIn] DB lookup failed:", e);
@@ -156,20 +185,44 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
       }
     },
 
-    async session({ session, user }) {
-      if (session.user) {
-        session.user.id = user.id;
-        // NextAuth's AdapterUser type nemá `role` field, ale Prisma User áno.
-        // Načítame z DB priamo, alebo cast cez `any`.
-        const dbUser = user as unknown as { role?: string; email?: string };
+    /**
+     * JWT callback — beží pri každom token refresh.
+     * Sem si "vlepíme" rolu z DB do tokenu, aby ju mali všetky budúce sessiony.
+     */
+    async jwt({ token, user }) {
+      // Pri prvom login `user` parameter prichádza z adaptera (DB User row).
+      if (user) {
+        const dbUser = user as unknown as { id?: string; role?: string };
+        token.id = dbUser.id;
+        token.role = dbUser.role;
+      }
+      // Pri ďalších requestoch user je null. Token uchová ID a role.
+      // Pre istotu ak token nemá role (napr. starý token), načítame z DB.
+      if (!token.role && token.email) {
+        try {
+          const dbUser = await prisma.user.findUnique({
+            where: { email: token.email as string },
+          });
+          if (dbUser) {
+            token.id = dbUser.id;
+            token.role = dbUser.role;
+          }
+        } catch (e) {
+          console.error("[auth.jwt] refresh role lookup failed:", e);
+        }
+      }
+      return token;
+    },
+
+    /**
+     * Session callback — z tokenu (JWT) preposiela id + role do session.user
+     */
+    async session({ session, token }) {
+      if (session.user && token) {
+        // @ts-expect-error rozšírenie session.user.id
+        session.user.id = token.id as string | undefined;
         // @ts-expect-error rozšírenie session.user.role
-        session.user.role = dbUser.role;
-        console.log(
-          "[auth.session] session for:",
-          dbUser.email,
-          "role:",
-          dbUser.role,
-        );
+        session.user.role = token.role as string | undefined;
       }
       return session;
     },
