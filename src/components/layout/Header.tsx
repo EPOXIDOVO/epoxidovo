@@ -65,12 +65,12 @@ export function Header({ transparentOnTop = false }: HeaderProps) {
           >
             <span
               className={cn(
-                "block text-3xl md:text-4xl font-extrabold tracking-tight leading-none transition-colors duration-300",
+                "block text-4xl md:text-5xl font-extrabold tracking-tight leading-none transition-colors duration-300",
                 isTransparent ? "text-white" : "text-[#0a0f1e]",
               )}
               style={{ textShadow: isTransparent ? "0 2px 8px rgba(0,0,0,0.4)" : "none" }}
             >
-              <span className="text-[#3db6e8]">EPOXID</span>OVO<span aria-hidden className="inline-block w-2 h-2 md:w-2.5 md:h-2.5 rounded-full bg-[#3db6e8] mx-1 align-baseline mb-1"></span>SK
+              <span className="text-[#3db6e8]">EPOXID</span>OVO<span aria-hidden className="inline-block w-2.5 h-2.5 md:w-3 md:h-3 rounded-full bg-[#3db6e8] mx-1 align-baseline mb-1"></span>SK
             </span>
           </Link>
 
