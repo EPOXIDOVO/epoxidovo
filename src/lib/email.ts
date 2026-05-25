@@ -277,14 +277,14 @@ function customerEmailHtml(lead: LeadNotifyArgs): string {
       <td align="center">
         <table role="presentation" cellpadding="0" cellspacing="0" border="0" width="600" style="max-width:600px;background:#ffffff;border-radius:16px;overflow:hidden;box-shadow:0 4px 24px rgba(10,15,30,0.08);">
 
-          <!-- ═══ HLAVIČKA — oranžový banner s logom ═══ -->
+          <!-- ═══ HLAVIČKA — oranžový banner s wordmarkom rovnakým ako na webe ═══ -->
           <tr>
             <td style="background:linear-gradient(135deg,${BRAND_ORANGE} 0%,${BRAND_ORANGE_DARK} 100%);padding:36px 32px;text-align:center;">
-              <div style="color:#ffffff;font-size:32px;font-weight:900;letter-spacing:-0.02em;line-height:1;text-shadow:0 2px 8px rgba(0,0,0,0.25);">
-                EPOXIDOVO<span style="color:#ffe9d4;">·</span>SK
+              <div style="color:#ffffff;font-size:34px;font-weight:900;letter-spacing:-0.02em;line-height:1;text-shadow:0 2px 8px rgba(0,0,0,0.3);">
+                <span style="color:${BRAND_BLUE};">EPOXID</span>OVO<span style="display:inline-block;width:8px;height:8px;border-radius:50%;background:${BRAND_BLUE};vertical-align:middle;margin:0 6px 4px;"></span>SK
               </div>
-              <div style="margin-top:8px;color:rgba(255,255,255,0.9);font-size:12px;font-weight:700;letter-spacing:0.18em;text-transform:uppercase;">
-                Liate podlahy s dušou
+              <div style="margin-top:10px;color:rgba(255,255,255,0.92);font-size:13px;font-weight:700;letter-spacing:0.14em;text-transform:uppercase;">
+                Epoxidové a polyuretánové podlahy na mieru
               </div>
             </td>
           </tr>
@@ -296,7 +296,7 @@ function customerEmailHtml(lead: LeadNotifyArgs): string {
                 Ahoj ${escapeHtml(firstName)}! 👋
               </h1>
               <p style="margin:0;font-size:16px;line-height:1.65;color:${TEXT};">
-                Ďakujeme za tvoj záujem o <strong>liate podlahy od EPOXIDOVO</strong>. Tvoj dopyt sme úspešne prijali a ozveme sa ti najneskôr <strong>do 24 hodín</strong> s cenovou ponukou alebo doplňujúcimi otázkami.
+                Ďakujeme za tvoj záujem o <strong>liatu podlahu od Epoxidovo</strong>. Tvoj dopyt sme úspešne prijali a ozveme sa ti najneskôr <strong>do 24 hodín</strong> s cenovou ponukou alebo doplňujúcimi otázkami.
               </p>
             </td>
           </tr>
@@ -334,22 +334,27 @@ function customerEmailHtml(lead: LeadNotifyArgs): string {
               : ""
           }
 
-          <!-- ═══ CTA TLAČIDLÁ ═══ -->
+          <!-- ═══ CTA TLAČIDLÁ — Tel + WhatsApp + Email ═══ -->
           <tr>
             <td style="padding:32px 32px 8px;text-align:center;">
-              <div style="font-size:18px;font-weight:700;color:${TEXT};margin-bottom:14px;">
-                ⏰ Nemôžeš čakať 24 hodín?
+              <div style="font-size:17px;font-weight:700;color:${TEXT};margin-bottom:14px;line-height:1.45;">
+                V prípade otázok nám môžeš zavolať<br>alebo napísať na WhatsApp / Email
               </div>
               <table role="presentation" cellpadding="0" cellspacing="0" border="0" width="100%">
                 <tr>
-                  <td width="50%" style="padding-right:6px;">
-                    <a href="tel:${SITE.contact.phoneRaw}" style="display:block;background:#16a34a;color:#ffffff;text-decoration:none;text-align:center;padding:16px 12px;border-radius:12px;font-size:15px;font-weight:700;box-shadow:0 4px 14px rgba(22,163,74,0.35);">
-                      📞 Zavolaj nám
+                  <td width="33.33%" style="padding-right:4px;">
+                    <a href="tel:${SITE.contact.phoneRaw}" style="display:block;background:#16a34a;color:#ffffff;text-decoration:none;text-align:center;padding:14px 8px;border-radius:12px;font-size:14px;font-weight:700;box-shadow:0 4px 14px rgba(22,163,74,0.35);">
+                      📞 Zavolať
                     </a>
                   </td>
-                  <td width="50%" style="padding-left:6px;">
-                    <a href="https://wa.me/${whatsappNumber}" style="display:block;background:#25D366;color:#ffffff;text-decoration:none;text-align:center;padding:16px 12px;border-radius:12px;font-size:15px;font-weight:700;box-shadow:0 4px 14px rgba(37,211,102,0.35);">
+                  <td width="33.33%" style="padding:0 4px;">
+                    <a href="https://wa.me/${whatsappNumber}" style="display:block;background:#25D366;color:#ffffff;text-decoration:none;text-align:center;padding:14px 8px;border-radius:12px;font-size:14px;font-weight:700;box-shadow:0 4px 14px rgba(37,211,102,0.35);">
                       💬 WhatsApp
+                    </a>
+                  </td>
+                  <td width="33.33%" style="padding-left:4px;">
+                    <a href="mailto:${SITE.contact.email}" style="display:block;background:${BRAND_BLUE};color:#ffffff;text-decoration:none;text-align:center;padding:14px 8px;border-radius:12px;font-size:14px;font-weight:700;box-shadow:0 4px 14px rgba(61,182,232,0.4);">
+                      ✉️ Email
                     </a>
                   </td>
                 </tr>
@@ -364,7 +369,7 @@ function customerEmailHtml(lead: LeadNotifyArgs): string {
           <tr>
             <td style="padding:36px 32px 8px;text-align:center;">
               <div style="font-size:18px;font-weight:700;color:${TEXT};margin-bottom:18px;">
-                📸 Pozri si naše realizácie
+                📸 Inšpiruj sa realizáciami
               </div>
               <table role="presentation" cellpadding="0" cellspacing="0" border="0" width="100%">
                 <tr>
