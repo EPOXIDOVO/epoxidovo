@@ -4,6 +4,7 @@ import * as React from "react";
 import { MessageCircle, X, Send, Loader2, CheckCircle2 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { SITE } from "@/lib/site";
+import { trackEvent } from "@/components/analytics/Analytics";
 
 /**
  * Floating contact form — bottom-right.
@@ -146,6 +147,11 @@ export function AiChatWidget() {
 
       setSuccess(true);
       setValues(EMPTY);
+      trackEvent("generate_lead", {
+        source: "floating_form",
+        value: 1,
+        currency: "EUR",
+      });
     } catch {
       setError("Nepodarilo sa pripojiť. Skús znovu o chvíľu.");
     } finally {

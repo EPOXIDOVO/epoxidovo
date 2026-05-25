@@ -5,6 +5,7 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { CheckCircle2, AlertCircle, Loader2 } from "lucide-react";
 import { LeadInputSchema, type LeadInput } from "@/lib/leadSchema";
+import { trackEvent } from "@/components/analytics/Analytics";
 
 /**
  * Kontaktný formulár — 1:1 podľa pôvodného webu:
@@ -83,6 +84,11 @@ export function ContactForm() {
 
       reset();
       setStatus("success");
+      trackEvent("generate_lead", {
+        source: "contact_form",
+        value: 1,
+        currency: "EUR",
+      });
     } catch {
       setServerError("Nepodarilo sa odoslať. Skontroluj internet a skús znovu.");
       setStatus("error");

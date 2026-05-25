@@ -9,6 +9,7 @@ import { CookieBanner } from "@/components/cookies/CookieBanner";
 import { InitialPreloader } from "@/components/layout/InitialPreloader";
 import { JsonLd } from "@/components/seo/JsonLd";
 import { Analytics } from "@/components/analytics/Analytics";
+import { GlobalClickTracker } from "@/components/analytics/GlobalClickTracker";
 import { getDefaultConsentScript } from "@/lib/consent";
 
 // AiChatWidget je heavy (421 lines, lucide ikony, formulár) — lazy-load
@@ -147,6 +148,7 @@ export default function RootLayout({
         <AiChatWidget />
         <JsonLd />
         <Analytics />
+        <GlobalClickTracker />
       </body>
     </html>
   );

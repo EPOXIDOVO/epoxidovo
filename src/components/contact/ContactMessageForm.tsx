@@ -94,6 +94,11 @@ export function ContactMessageForm() {
       setSending(false);
       setSuccess(true);
       trackEvent("contact_message", { source: "kontakt_message_form" });
+      trackEvent("generate_lead", {
+        source: "kontakt_message_form",
+        value: 1,
+        currency: "EUR",
+      });
     } catch {
       setError("Nepodarilo sa odoslať. Skús to prosím znova.");
       setSending(false);
