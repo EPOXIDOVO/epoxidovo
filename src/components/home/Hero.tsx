@@ -241,11 +241,14 @@ export function Hero() {
           size="xl"
           className="pt-[120px] md:pt-[120px] lg:pt-[130px] pb-6 md:pb-8 relative flex-1 flex flex-col justify-center md:pointer-events-none"
         >
-          {/* Centrovaný obsah — v "bubline" pre čitateľnosť na fotkách */}
-          <div className="text-center max-w-3xl mx-auto rounded-3xl bg-[#0a0f1e]/80 backdrop-blur-md ring-1 ring-white/10 px-5 md:px-10 py-5 md:py-10 shadow-[0_20px_60px_rgba(0,0,0,0.4)] md:pointer-events-auto">
+          {/* Centrovaný obsah — v "bubline" pre čitateľnosť na fotkách.
+              Mobile (locked) nedotknuté. Desktop bublina zmenšená 3xl→2xl
+              a text 5/6xl→4/5xl aby na MacBook viewport (1280-1440) viac
+              odkryla hero fotky pozadia. */}
+          <div className="text-center max-w-md sm:max-w-lg md:max-w-xl lg:max-w-2xl mx-auto rounded-3xl bg-[#0a0f1e]/80 backdrop-blur-md ring-1 ring-white/10 px-5 md:px-8 py-5 md:py-8 shadow-[0_20px_60px_rgba(0,0,0,0.4)] md:pointer-events-auto">
             <h1
               id="hero-title"
-              className="text-white text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-extrabold leading-[1.1] tracking-tight"
+              className="text-white text-3xl sm:text-4xl md:text-4xl lg:text-5xl font-extrabold leading-[1.1] tracking-tight"
               style={{ textShadow: "0 2px 8px rgba(0,0,0,0.6)" }}
             >
               <span className="text-[#3db6e8]">Epoxidové</span>{" "}
