@@ -336,28 +336,30 @@ function customerEmailHtml(lead: LeadNotifyArgs): string {
                    na iOS Mail + Gmail Android + Apple Mail. -->
               <table role="presentation" cellpadding="0" cellspacing="0" border="0" width="100%" style="table-layout:fixed;width:100%;">
                 <tr>
-                  <td width="33.33%" align="center" valign="middle" height="56" bgcolor="#16a34a" style="width:33.33%;background:#16a34a;border-radius:12px;box-shadow:0 4px 14px rgba(22,163,74,0.35);">
-                    <a href="tel:${SITE.contact.phoneRaw}" style="display:block;width:100%;padding:18px 4px;color:#ffffff;text-decoration:none;font-family:${FONT_STACK};font-size:14px;font-weight:700;line-height:1;border-radius:12px;text-align:center;">
-                      📞&nbsp;Zavolať
+                  <td width="33.33%" align="center" valign="middle" height="64" bgcolor="#16a34a" style="width:33.33%;background:#16a34a;border-radius:12px;box-shadow:0 4px 14px rgba(22,163,74,0.35);">
+                    <a href="tel:${SITE.contact.phoneRaw}" style="display:block;width:100%;padding:20px 4px;color:#ffffff;text-decoration:none;font-family:${FONT_STACK};font-size:15px;font-weight:700;line-height:1;border-radius:12px;text-align:center;">
+                      <span style="font-size:20px;vertical-align:middle;">📞</span>&nbsp;Zavolať
                     </a>
                   </td>
                   <td width="8" style="width:8px;font-size:1px;line-height:1px;">&nbsp;</td>
-                  <td width="33.33%" align="center" valign="middle" height="56" bgcolor="#25D366" style="width:33.33%;background:#25D366;border-radius:12px;box-shadow:0 4px 14px rgba(37,211,102,0.35);">
-                    <a href="https://wa.me/${whatsappNumber}" style="display:block;width:100%;padding:18px 4px;color:#ffffff;text-decoration:none;font-family:${FONT_STACK};font-size:14px;font-weight:700;line-height:1;border-radius:12px;text-align:center;">
-                      💬&nbsp;WhatsApp
+                  <td width="33.33%" align="center" valign="middle" height="64" bgcolor="#25D366" style="width:33.33%;background:#25D366;border-radius:12px;box-shadow:0 4px 14px rgba(37,211,102,0.35);">
+                    <a href="https://wa.me/${whatsappNumber}" style="display:block;width:100%;padding:20px 4px;color:#ffffff;text-decoration:none;font-family:${FONT_STACK};font-size:15px;font-weight:700;line-height:1;border-radius:12px;text-align:center;">
+                      <span style="font-size:20px;vertical-align:middle;">💬</span>&nbsp;WhatsApp
                     </a>
                   </td>
                   <td width="8" style="width:8px;font-size:1px;line-height:1px;">&nbsp;</td>
-                  <td width="33.33%" align="center" valign="middle" height="56" bgcolor="${BRAND_BLUE}" style="width:33.33%;background:${BRAND_BLUE};border-radius:12px;box-shadow:0 4px 14px rgba(61,182,232,0.4);">
-                    <a href="mailto:${SITE.contact.email}" style="display:block;width:100%;padding:18px 4px;color:#ffffff;text-decoration:none;font-family:${FONT_STACK};font-size:14px;font-weight:700;line-height:1;border-radius:12px;text-align:center;">
-                      ✉️&nbsp;Email
+                  <td width="33.33%" align="center" valign="middle" height="64" bgcolor="${BRAND_BLUE}" style="width:33.33%;background:${BRAND_BLUE};border-radius:12px;box-shadow:0 4px 14px rgba(61,182,232,0.4);">
+                    <a href="mailto:${SITE.contact.email}" style="display:block;width:100%;padding:20px 4px;color:#ffffff;text-decoration:none;font-family:${FONT_STACK};font-size:15px;font-weight:700;line-height:1;border-radius:12px;text-align:center;">
+                      <span style="font-size:20px;vertical-align:middle;">✉️</span>&nbsp;Email
                     </a>
                   </td>
                 </tr>
               </table>
-              <div style="margin-top:16px;font-size:14px;color:${TEXT};font-weight:600;">
-                <a href="tel:${SITE.contact.phoneRaw}" style="color:${BRAND_ORANGE_DARK};text-decoration:none;font-weight:700;">${SITE.contact.phone}</a>
-                <span style="color:${TEXT_MUTED};font-weight:400;"> · Po-Pi 8:00 – 17:00</span>
+              <div style="margin-top:18px;text-align:center;">
+                <a href="tel:${SITE.contact.phoneRaw}" style="display:inline-block;font-size:18px;color:${BRAND_ORANGE_DARK};text-decoration:none;font-weight:800;letter-spacing:0.02em;">
+                  📱 ${SITE.contact.phone}
+                </a>
+                <div style="margin-top:4px;font-size:12px;color:${TEXT_MUTED};font-weight:600;">Po-Pi 8:00 – 17:00</div>
               </div>
             </td>
           </tr>
@@ -456,15 +458,16 @@ function customerEmailHtml(lead: LeadNotifyArgs): string {
             </td>
           </tr>
 
-          <!-- Kontakty -->
+          <!-- Kontakty — neclickable, jasne pod sebou -->
           <tr>
             <td style="padding:0 24px 24px;text-align:center;">
+              <div style="color:#ffffff;font-size:15px;font-weight:700;margin-bottom:4px;">
+                ${SITE.legalName}
+              </div>
               <div style="color:${FOOTER_TEXT};font-size:13px;line-height:1.7;">
-                <strong style="color:#ffffff;">${SITE.legalName}</strong> · IČO ${SITE.business.ico}<br>
-                ${SITE.address.street}, ${SITE.address.postalCode} ${SITE.address.city}<br>
-                <a href="${SITE.url}" style="color:#ffffff;text-decoration:none;font-weight:600;">www.${SITE.domain}</a>
-                ·
-                <a href="tel:${SITE.contact.phoneRaw}" style="color:#ffffff;text-decoration:none;font-weight:600;">${SITE.contact.phone}</a>
+                IČO ${SITE.business.ico}<br>
+                ${SITE.address.street}<br>
+                ${SITE.address.postalCode} ${SITE.address.city}
               </div>
             </td>
           </tr>
