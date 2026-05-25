@@ -221,11 +221,11 @@ const SOFT_GRAY = "#f3f4f6";
 
 // Fixed gallery — 3 reprezentatívne fotky, vždy rovnaké poradie
 // (priemyselná, metalická, hladká biela jednofarebná).
-// Absolutné URL pre email klientov.
+// Hero fotky pre Priemysel + Bývanie aby vyzerali ako na webe.
 const GALLERY_3 = [
-  { src: "/images/realizacie/r-22.jpg", alt: "Priemyselná podlaha v hale — EPOXIDOVO" },
-  { src: "/images/realizacie/r-32.jpg", alt: "Metalická podlaha v bývaní — EPOXIDOVO" },
-  { src: "/images/realizacie/r-03.jpg", alt: "Hladká biela jednofarebná podlaha — EPOXIDOVO" },
+  { src: "/images/hero/hala.jpg", alt: "Priemyselná podlaha v hale — EPOXIDOVO" },
+  { src: "/images/realizacie/r-32.jpg", alt: "Metalická podlaha — EPOXIDOVO" },
+  { src: "/images/hero/byvanie-new.jpg", alt: "Hladká biela podlaha v bývaní — EPOXIDOVO" },
 ];
 
 function customerEmailHtml(lead: LeadNotifyArgs): string {
@@ -264,11 +264,14 @@ function customerEmailHtml(lead: LeadNotifyArgs): string {
       <td align="center">
         <table role="presentation" cellpadding="0" cellspacing="0" border="0" width="600" style="max-width:600px;background:#ffffff;border-radius:16px;overflow:hidden;box-shadow:0 4px 24px rgba(10,15,30,0.08);">
 
-          <!-- ═══ HLAVIČKA — oranžový banner s wordmarkom rovnakým ako na webe ═══ -->
+          <!-- ═══ HLAVIČKA — oranžový banner s wordmarkom rovnakým ako na webe.
+               EPOXID a bodka používajú jasnejšiu cyan #5BC8F2 aby vyzerali
+               ako #3db6e8 na webe — color perception sa mení na oranžovom
+               podklade vs. dark navy hero. Plus white glow text-shadow. ═══ -->
           <tr>
             <td style="background:linear-gradient(135deg,${BRAND_ORANGE} 0%,${BRAND_ORANGE_DARK} 100%);padding:36px 32px;text-align:center;">
-              <div style="color:#ffffff;font-size:34px;font-weight:900;letter-spacing:-0.02em;line-height:1;text-shadow:0 2px 8px rgba(0,0,0,0.3);">
-                <span style="color:${BRAND_BLUE};">EPOXID</span>OVO<span style="display:inline-block;width:8px;height:8px;border-radius:50%;background:${BRAND_BLUE};vertical-align:middle;margin:0 6px 4px;"></span>SK
+              <div style="color:#ffffff;font-size:34px;font-weight:900;letter-spacing:-0.02em;line-height:1;text-shadow:0 2px 8px rgba(0,0,0,0.35);">
+                <span style="color:#5BC8F2;text-shadow:0 0 18px rgba(91,200,242,0.7),0 2px 4px rgba(0,0,0,0.3);">EPOXID</span>OVO<span style="display:inline-block;width:9px;height:9px;border-radius:50%;background:#5BC8F2;vertical-align:middle;margin:0 6px 5px;box-shadow:0 0 12px rgba(91,200,242,0.8);"></span>SK
               </div>
               <div style="margin-top:10px;color:rgba(255,255,255,0.92);font-size:13px;font-weight:700;letter-spacing:0.14em;text-transform:uppercase;">
                 Epoxidové a polyuretánové podlahy na mieru
@@ -327,43 +330,28 @@ function customerEmailHtml(lead: LeadNotifyArgs): string {
               <div style="font-size:17px;font-weight:700;color:${TEXT};margin-bottom:18px;line-height:1.45;">
                 V prípade otázok nám môžeš zavolať<br>alebo napísať na WhatsApp / Email
               </div>
-              <table role="presentation" cellpadding="0" cellspacing="0" border="0" width="100%">
+              <!-- 3 tlačidlá rovnakej šírky (table-layout:fixed) + jednotná
+                   výška cez fixnú výšku riadku. Celý <a> je tappovateľný
+                   (display:block + height:100%) pre spoľahlivé tel:/mailto:/wa
+                   na iOS Mail + Gmail Android + Apple Mail. -->
+              <table role="presentation" cellpadding="0" cellspacing="0" border="0" width="100%" style="table-layout:fixed;width:100%;">
                 <tr>
-                  <!-- Telefón button -->
-                  <td width="33.33%" align="center" valign="middle" style="padding-right:4px;">
-                    <table role="presentation" cellpadding="0" cellspacing="0" border="0" style="width:100%;">
-                      <tr>
-                        <td align="center" valign="middle" bgcolor="#16a34a" style="background:#16a34a;border-radius:12px;box-shadow:0 4px 14px rgba(22,163,74,0.35);">
-                          <a href="tel:${SITE.contact.phoneRaw}" style="display:block;padding:16px 8px;color:#ffffff;text-decoration:none;font-family:${FONT_STACK};font-size:14px;font-weight:700;line-height:1;border-radius:12px;mso-padding-alt:0;">
-                            📞&nbsp;Zavolať
-                          </a>
-                        </td>
-                      </tr>
-                    </table>
+                  <td width="33.33%" align="center" valign="middle" height="56" bgcolor="#16a34a" style="width:33.33%;background:#16a34a;border-radius:12px;box-shadow:0 4px 14px rgba(22,163,74,0.35);">
+                    <a href="tel:${SITE.contact.phoneRaw}" style="display:block;width:100%;padding:18px 4px;color:#ffffff;text-decoration:none;font-family:${FONT_STACK};font-size:14px;font-weight:700;line-height:1;border-radius:12px;text-align:center;">
+                      📞&nbsp;Zavolať
+                    </a>
                   </td>
-                  <!-- WhatsApp button -->
-                  <td width="33.33%" align="center" valign="middle" style="padding:0 4px;">
-                    <table role="presentation" cellpadding="0" cellspacing="0" border="0" style="width:100%;">
-                      <tr>
-                        <td align="center" valign="middle" bgcolor="#25D366" style="background:#25D366;border-radius:12px;box-shadow:0 4px 14px rgba(37,211,102,0.35);">
-                          <a href="https://wa.me/${whatsappNumber}" style="display:block;padding:16px 8px;color:#ffffff;text-decoration:none;font-family:${FONT_STACK};font-size:14px;font-weight:700;line-height:1;border-radius:12px;mso-padding-alt:0;">
-                            💬&nbsp;WhatsApp
-                          </a>
-                        </td>
-                      </tr>
-                    </table>
+                  <td width="8" style="width:8px;font-size:1px;line-height:1px;">&nbsp;</td>
+                  <td width="33.33%" align="center" valign="middle" height="56" bgcolor="#25D366" style="width:33.33%;background:#25D366;border-radius:12px;box-shadow:0 4px 14px rgba(37,211,102,0.35);">
+                    <a href="https://wa.me/${whatsappNumber}" style="display:block;width:100%;padding:18px 4px;color:#ffffff;text-decoration:none;font-family:${FONT_STACK};font-size:14px;font-weight:700;line-height:1;border-radius:12px;text-align:center;">
+                      💬&nbsp;WhatsApp
+                    </a>
                   </td>
-                  <!-- Email button -->
-                  <td width="33.33%" align="center" valign="middle" style="padding-left:4px;">
-                    <table role="presentation" cellpadding="0" cellspacing="0" border="0" style="width:100%;">
-                      <tr>
-                        <td align="center" valign="middle" bgcolor="${BRAND_BLUE}" style="background:${BRAND_BLUE};border-radius:12px;box-shadow:0 4px 14px rgba(61,182,232,0.4);">
-                          <a href="mailto:${SITE.contact.email}" style="display:block;padding:16px 8px;color:#ffffff;text-decoration:none;font-family:${FONT_STACK};font-size:14px;font-weight:700;line-height:1;border-radius:12px;mso-padding-alt:0;">
-                            ✉️&nbsp;Email
-                          </a>
-                        </td>
-                      </tr>
-                    </table>
+                  <td width="8" style="width:8px;font-size:1px;line-height:1px;">&nbsp;</td>
+                  <td width="33.33%" align="center" valign="middle" height="56" bgcolor="${BRAND_BLUE}" style="width:33.33%;background:${BRAND_BLUE};border-radius:12px;box-shadow:0 4px 14px rgba(61,182,232,0.4);">
+                    <a href="mailto:${SITE.contact.email}" style="display:block;width:100%;padding:18px 4px;color:#ffffff;text-decoration:none;font-family:${FONT_STACK};font-size:14px;font-weight:700;line-height:1;border-radius:12px;text-align:center;">
+                      ✉️&nbsp;Email
+                    </a>
                   </td>
                 </tr>
               </table>
@@ -384,9 +372,10 @@ function customerEmailHtml(lead: LeadNotifyArgs): string {
                 <tr>
                   ${realizacie
                     .map(
-                      (item, i) => `<td width="33.33%" style="padding:${i === 0 ? "0 4px 0 0" : i === 1 ? "0 2px" : "0 0 0 4px"};">
+                      (item, i) => `<td width="33.33%" valign="top" style="width:33.33%;padding:${i === 0 ? "0 4px 0 0" : i === 1 ? "0 2px" : "0 0 0 4px"};">
                     <a href="${SITE.url}/realizacie" style="display:block;text-decoration:none;">
-                      <img src="${SITE.url}${item.src}" alt="${escapeHtml(item.alt)}" width="100%" style="display:block;width:100%;max-width:200px;height:auto;border-radius:10px;border:0;outline:none;">
+                      <!-- Rovnaký 4:3 crop pre všetky 3 obrázky aby boli identicky veľké -->
+                      <img src="${SITE.url}${item.src}" alt="${escapeHtml(item.alt)}" width="170" height="128" style="display:block;width:100%;max-width:170px;height:128px;object-fit:cover;border-radius:10px;border:0;outline:none;">
                     </a>
                   </td>`,
                     )
@@ -442,12 +431,11 @@ function customerEmailHtml(lead: LeadNotifyArgs): string {
         <!-- ═══ TMAVÁ PÄTIČKA ═══ -->
         <table role="presentation" cellpadding="0" cellspacing="0" border="0" width="600" style="max-width:600px;margin-top:18px;background:${FOOTER_BG};border-radius:16px;overflow:hidden;">
 
-          <!-- Logo medvedík v päte -->
+          <!-- Wordmark v päte (medvedík odstránený lebo bol rozmazaný) -->
           <tr>
-            <td style="padding:32px 24px 16px;text-align:center;">
-              <img src="${bearLogoUrl}" alt="EPOXIDOVO" width="56" height="56" style="display:inline-block;width:56px;height:56px;border:0;outline:none;">
-              <div style="margin-top:10px;color:#ffffff;font-size:18px;font-weight:800;letter-spacing:-0.01em;">
-                EPOXIDOVO<span style="color:${BRAND_ORANGE};">·</span>SK
+            <td style="padding:32px 24px 12px;text-align:center;">
+              <div style="color:#ffffff;font-size:22px;font-weight:900;letter-spacing:-0.01em;">
+                <span style="color:#5BC8F2;">EPOXID</span>OVO<span style="display:inline-block;width:7px;height:7px;border-radius:50%;background:#5BC8F2;vertical-align:middle;margin:0 5px 3px;"></span>SK
               </div>
             </td>
           </tr>
