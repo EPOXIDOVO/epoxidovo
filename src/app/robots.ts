@@ -2,10 +2,10 @@ import type { MetadataRoute } from "next";
 import { SITE } from "@/lib/site";
 
 export default function robots(): MetadataRoute.Robots {
-  // Prod = Netlify CONTEXT=production OR Vercel VERCEL_ENV=production OR NODE_ENV=production
+  // Prod detection — Cloudflare Pages (CF_PAGES_BRANCH=main) alebo generic NODE_ENV.
+  // NEXT_PUBLIC_BLOCK_ROBOTS umožňuje force-block aj na produkcii (napr. staging).
   const isProd =
-    process.env.CONTEXT === "production" ||
-    process.env.VERCEL_ENV === "production" ||
+    process.env.CF_PAGES_BRANCH === "main" ||
     (process.env.NODE_ENV === "production" && !process.env.NEXT_PUBLIC_BLOCK_ROBOTS);
 
   if (!isProd) {

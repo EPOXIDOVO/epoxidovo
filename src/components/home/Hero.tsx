@@ -439,7 +439,7 @@ export function Hero() {
                           ))}
                         </div>
                       ) : (
-                        <p className="mt-4 md:mt-1.5 text-[10px] md:text-base font-bold text-[#fbe1c4] leading-snug">
+                        <p className="mt-4 md:mt-1.5 text-[10px] md:text-base font-bold text-white leading-snug">
                           {f.description}
                         </p>
                       )}
