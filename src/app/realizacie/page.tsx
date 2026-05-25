@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
 import { Suspense } from "react";
+import { X } from "lucide-react";
 import { Container } from "@/components/ui/Container";
 import { Section } from "@/components/ui/Section";
 import { GalleryView } from "@/components/realizacie/GalleryView";
@@ -72,6 +73,15 @@ export default function RealizaciePage() {
           { name: "Realizácie", path: "/realizacie" },
         ]}
       />
+      {/* Floating close X — "modal-style" zavretie, vráti na home stránku.
+          Sticky, vždy viditeľné aj pri scrolle. */}
+      <Link
+        href="/"
+        aria-label="Zavrieť — späť na domovskú stránku"
+        className="fixed top-3 right-3 md:top-5 md:right-5 z-[60] inline-flex items-center justify-center w-12 h-12 md:w-14 md:h-14 rounded-full bg-white/95 backdrop-blur-md text-zinc-900 shadow-[0_8px_24px_rgba(0,0,0,0.35)] ring-1 ring-black/10 hover:bg-white hover:scale-105 active:scale-95 transition-all duration-200"
+      >
+        <X className="w-6 h-6 md:w-7 md:h-7" strokeWidth={2.5} aria-hidden />
+      </Link>
       {/* Dark hero — rovnaký formát ako /kontakt: marquee fotiek + overlay + bublina */}
       <section className="relative isolate overflow-hidden bg-[#0a0f1e]">
         <div
