@@ -68,9 +68,17 @@ export function Header({ transparentOnTop = false }: HeaderProps) {
                 "block text-4xl md:text-5xl font-extrabold tracking-tight leading-none transition-colors duration-300",
                 isTransparent ? "text-white" : "text-[#0a0f1e]",
               )}
-              style={{ textShadow: isTransparent ? "0 2px 8px rgba(0,0,0,0.4)" : "none" }}
+              style={{
+                WebkitTextStroke: isTransparent
+                  ? "1px rgba(0,0,0,0.85)"
+                  : "0.5px rgba(0,0,0,0.4)",
+                paintOrder: "stroke fill",
+                textShadow: isTransparent
+                  ? "0 3px 8px rgba(0,0,0,0.55), 0 1px 2px rgba(0,0,0,0.9)"
+                  : "0 2px 4px rgba(0,0,0,0.18), 0 1px 0 rgba(255,255,255,0.5)",
+              }}
             >
-              <span className="text-[#3db6e8]">EPOXID</span>OVO<span aria-hidden className="inline-block w-2.5 h-2.5 md:w-3 md:h-3 rounded-full bg-[#3db6e8] mx-1 align-baseline mb-1"></span>SK
+              <span className="text-[#3db6e8]">EPOXID</span>OVO<span aria-hidden className="inline-block w-2.5 h-2.5 md:w-3 md:h-3 rounded-full bg-[#3db6e8] mx-1 align-baseline mb-1 shadow-[0_2px_4px_rgba(0,0,0,0.4)]"></span>SK
             </span>
           </Link>
 
