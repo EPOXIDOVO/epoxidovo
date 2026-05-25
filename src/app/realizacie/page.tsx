@@ -73,17 +73,13 @@ export default function RealizaciePage() {
           { name: "Realizácie", path: "/realizacie" },
         ]}
       />
-      {/* Floating close — "modal-style" zavretie, vráti na home stránku.
-          Pozícia POD headerom (top-24/28), brand-modré aby nesplývalo s
-          bielym scroll-headerom ani sa neprekrývalo s hamburger menu.
-          Bublina s tieňom + ring + press feedback (scale-down + shadow-shrink). */}
+      {/* Floating close — biela bublina s X, neutrálna a kompaktná. */}
       <Link
         href="/"
         aria-label="Zavrieť — späť na domovskú stránku"
-        className="group fixed top-[88px] right-3 md:top-[104px] md:right-6 z-[60] inline-flex items-center gap-2 pl-3 pr-4 md:pl-4 md:pr-5 py-3 md:py-3.5 rounded-full bg-[#3db6e8] text-white font-bold text-sm md:text-base shadow-[0_10px_30px_rgba(61,182,232,0.55),0_0_0_4px_rgba(255,255,255,0.85),0_0_0_5px_rgba(61,182,232,0.4)] hover:bg-[#1a8cc4] hover:shadow-[0_14px_38px_rgba(26,140,196,0.7),0_0_0_4px_rgba(255,255,255,0.95),0_0_0_6px_rgba(26,140,196,0.5)] hover:-translate-y-0.5 active:translate-y-0 active:scale-90 active:shadow-[0_4px_12px_rgba(61,182,232,0.45),0_0_0_3px_rgba(255,255,255,0.75),0_0_0_4px_rgba(61,182,232,0.3)] transition-all duration-150 ease-out focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-[#3db6e8]/40 will-change-transform animate-[pulse-ring_2.5s_ease-in-out_infinite] motion-reduce:animate-none"
+        className="group fixed top-[88px] right-3 md:top-[104px] md:right-6 z-[60] inline-flex items-center justify-center w-11 h-11 md:w-12 md:h-12 rounded-full bg-white text-zinc-900 shadow-[0_8px_22px_rgba(0,0,0,0.25)] ring-1 ring-black/10 hover:shadow-[0_12px_30px_rgba(0,0,0,0.35)] hover:-translate-y-0.5 hover:bg-zinc-50 active:translate-y-0 active:scale-90 active:shadow-[0_3px_10px_rgba(0,0,0,0.2)] transition-all duration-150 ease-out focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-[#3db6e8]/50"
       >
-        <X className="w-5 h-5 md:w-6 md:h-6 group-active:rotate-90 transition-transform duration-200" strokeWidth={3} aria-hidden />
-        <span>Zavrieť</span>
+        <X className="w-5 h-5 md:w-6 md:h-6 group-active:rotate-90 transition-transform duration-200" strokeWidth={2.5} aria-hidden />
       </Link>
       {/* Dark hero — rovnaký formát ako /kontakt: marquee fotiek + overlay + bublina */}
       <section className="relative isolate overflow-hidden bg-[#0a0f1e]">
