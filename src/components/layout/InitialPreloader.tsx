@@ -46,14 +46,14 @@ export function InitialPreloader() {
           style={{ animation: "spin 3s linear infinite reverse" }}
           aria-hidden
         />
-        <div className="relative w-20 h-20 md:w-24 md:h-24 rounded-full overflow-hidden flex items-center justify-center">
+        <div className="relative w-32 h-32 md:w-40 md:h-40 flex items-center justify-center">
           <Image
             src="/images/site/logo_v2.png"
             alt="EPOXIDOVO"
-            width={120}
-            height={120}
+            width={200}
+            height={200}
             priority
-            className="w-full h-full object-contain"
+            className="w-full h-full object-contain drop-shadow-[0_4px_12px_rgba(0,0,0,0.35)]"
           />
         </div>
       </div>
