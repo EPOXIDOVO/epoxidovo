@@ -241,25 +241,12 @@ export function Hero() {
           size="xl"
           className="pt-[120px] md:pt-[120px] lg:pt-[130px] pb-6 md:pb-8 relative flex-1 flex flex-col justify-center md:pointer-events-none"
         >
-          {/* Centrovaný obsah — v "bubline" pre čitateľnosť na fotkách.
-              max-w + paddingy škálujú fluid-pixelmi pre veľké monitory. */}
-          <div
-            className="text-center mx-auto rounded-3xl bg-[#0a0f1e]/80 backdrop-blur-md ring-1 ring-white/10 px-5 md:px-10 py-5 md:py-10 shadow-[0_20px_60px_rgba(0,0,0,0.4)] md:pointer-events-auto"
-            style={{
-              maxWidth: "clamp(48rem, 70vw, 96rem)",
-              paddingLeft: "clamp(1.25rem, 3vw, 4rem)",
-              paddingRight: "clamp(1.25rem, 3vw, 4rem)",
-              paddingTop: "clamp(1.25rem, 3vw, 3.5rem)",
-              paddingBottom: "clamp(1.25rem, 3vw, 3.5rem)",
-            }}
-          >
+          {/* Centrovaný obsah — v "bubline" pre čitateľnosť na fotkách */}
+          <div className="text-center max-w-3xl mx-auto rounded-3xl bg-[#0a0f1e]/80 backdrop-blur-md ring-1 ring-white/10 px-5 md:px-10 py-5 md:py-10 shadow-[0_20px_60px_rgba(0,0,0,0.4)] md:pointer-events-auto">
             <h1
               id="hero-title"
-              className="text-white font-extrabold leading-[1.1] tracking-tight text-3xl sm:text-4xl md:text-5xl lg:text-6xl xl:text-7xl 2xl:text-8xl"
-              style={{
-                textShadow: "0 2px 8px rgba(0,0,0,0.6)",
-                fontSize: "clamp(1.875rem, 4.5vw, 7rem)",
-              }}
+              className="text-white text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-extrabold leading-[1.1] tracking-tight"
+              style={{ textShadow: "0 2px 8px rgba(0,0,0,0.6)" }}
             >
               <span className="text-[#3db6e8]">Epoxidové</span>{" "}
               <span className="text-white">a</span>{" "}
