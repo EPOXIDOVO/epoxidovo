@@ -60,7 +60,7 @@ export function HeroFeatures() {
                 <h3 className="mt-4 text-base md:text-lg font-bold tracking-tight text-white max-w-[14rem] leading-tight">
                   {feature.title}
                 </h3>
-                <p className="mt-2 text-sm text-zinc-400 leading-relaxed max-w-[14rem]">
+                <p className="mt-2 text-sm font-bold text-zinc-300 leading-relaxed max-w-[14rem]">
                   {feature.description}
                 </p>
               </div>

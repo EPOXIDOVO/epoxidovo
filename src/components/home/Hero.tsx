@@ -432,7 +432,7 @@ export function Hero() {
                           {f.badges?.map((b) => (
                             <span
                               key={b}
-                              className="inline-flex items-center justify-center gap-0.5 whitespace-nowrap rounded-full bg-black/40 px-1 md:px-3 py-0.5 md:py-1 text-[9px] md:text-base font-medium md:font-semibold text-white ring-1 ring-white/30 hover:bg-black/60 hover:ring-white/55 transition-colors"
+                              className="inline-flex items-center justify-center gap-0.5 whitespace-nowrap rounded-full bg-black/40 px-1 md:px-3 py-0.5 md:py-1 text-[9px] md:text-base font-bold md:font-semibold text-white ring-1 ring-white/30 hover:bg-black/60 hover:ring-white/55 transition-colors"
                             >
                               {b}
                             </span>
