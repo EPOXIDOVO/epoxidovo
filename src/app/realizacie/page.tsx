@@ -73,14 +73,16 @@ export default function RealizaciePage() {
           { name: "Realizácie", path: "/realizacie" },
         ]}
       />
-      {/* Floating close X — "modal-style" zavretie, vráti na home stránku.
-          Sticky, vždy viditeľné aj pri scrolle. */}
+      {/* Floating close — "modal-style" zavretie, vráti na home stránku.
+          Pozícia POD headerom (top-24/28), brand-modré aby nesplývalo s
+          bielym scroll-headerom ani sa neprekrývalo s hamburger menu. */}
       <Link
         href="/"
         aria-label="Zavrieť — späť na domovskú stránku"
-        className="fixed top-3 right-3 md:top-5 md:right-5 z-[60] inline-flex items-center justify-center w-12 h-12 md:w-14 md:h-14 rounded-full bg-white/95 backdrop-blur-md text-zinc-900 shadow-[0_8px_24px_rgba(0,0,0,0.35)] ring-1 ring-black/10 hover:bg-white hover:scale-105 active:scale-95 transition-all duration-200"
+        className="fixed top-[88px] right-3 md:top-[104px] md:right-6 z-[60] inline-flex items-center gap-2 pl-3 pr-4 md:pl-4 md:pr-5 py-3 md:py-3.5 rounded-full bg-[#3db6e8] text-white font-bold text-sm md:text-base shadow-[0_8px_28px_rgba(61,182,232,0.55)] ring-2 ring-white/40 hover:bg-[#1a8cc4] hover:scale-105 active:scale-95 transition-all duration-200"
       >
-        <X className="w-6 h-6 md:w-7 md:h-7" strokeWidth={2.5} aria-hidden />
+        <X className="w-5 h-5 md:w-6 md:h-6" strokeWidth={3} aria-hidden />
+        <span>Zavrieť</span>
       </Link>
       {/* Dark hero — rovnaký formát ako /kontakt: marquee fotiek + overlay + bublina */}
       <section className="relative isolate overflow-hidden bg-[#0a0f1e]">
