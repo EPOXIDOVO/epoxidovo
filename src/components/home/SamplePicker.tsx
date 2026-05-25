@@ -65,25 +65,28 @@ export function SamplePicker({ open, onClose }: SamplePickerProps) {
         tabIndex={open ? 0 : -1}
       />
 
-      {/* Panel */}
+      {/* Panel — max-h-[90vh] aby obsah neprerástol viewport (inak X navrchu
+          mizne na mobile keď je modal items-end). Inner content scrolluje. */}
       <div
         className={cn(
           "relative w-full md:max-w-2xl mx-auto",
           "bg-white text-[var(--color-fg)]",
           "rounded-t-3xl md:rounded-3xl",
           "shadow-2xl",
+          "max-h-[90vh] flex flex-col",
           "transition-all duration-500 ease-[cubic-bezier(0.16,1,0.3,1)]",
           open ? "translate-y-0 scale-100" : "translate-y-8 scale-95",
         )}
       >
-        {/* Close — 3D biela bublina s X. Radial gradient + inset highlights
-            dávajú pop-out look, hover scale 110% + tieň-up signalizuje
-            interaktivitu, active scale 90% + X rotácia = jasný press feedback. */}
+        {/* Close — 3D biela bublina s X. Sticky aby ostalo viditeľné aj pri
+            scrolle obsahu modalu. Radial gradient + inset highlights = pop-out
+            look, hover scale 110% + tieň-up signalizuje interaktivitu, active
+            scale 90% + X rotácia = jasný press feedback. */}
         <button
           type="button"
           onClick={onClose}
           aria-label="Zavrieť okno"
-          className="group absolute top-4 right-4 inline-flex items-center justify-center w-11 h-11 md:w-12 md:h-12 rounded-full text-zinc-900 ring-2 ring-black/15 transition-all duration-200 ease-out hover:scale-110 active:scale-90 focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-[#3db6e8]/60"
+          className="group absolute top-4 right-4 z-10 inline-flex items-center justify-center w-12 h-12 md:w-12 md:h-12 rounded-full text-zinc-900 ring-2 ring-black/15 transition-all duration-200 ease-out hover:scale-110 active:scale-90 focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-[#3db6e8]/60"
           style={{
             background: "radial-gradient(120% 120% at 30% 25%, #ffffff 0%, #f4f4f5 70%, #e4e4e7 100%)",
             boxShadow:
@@ -97,7 +100,7 @@ export function SamplePicker({ open, onClose }: SamplePickerProps) {
           />
         </button>
 
-        <div className="px-6 md:px-10 pt-10 md:pt-12 pb-10">
+        <div className="px-6 md:px-10 pt-10 md:pt-12 pb-10 overflow-y-auto">
           <div className="text-center max-w-lg mx-auto">
             {/* Eyebrow v bubline */}
             <span className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full border border-[var(--color-border)] bg-[var(--color-bg-muted)] text-[0.7rem] md:text-xs font-black uppercase tracking-[0.2em] text-[var(--color-brand)]">
