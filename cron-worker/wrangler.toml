@@ -1,0 +1,14 @@
+name = "epoxidovo-cron"
+main = "src/index.ts"
+compatibility_date = "2026-05-24"
+compatibility_flags = ["nodejs_compat"]
+
+# Cron triggers: každý deň o 8:00 UTC = 10:00 SK leto / 9:00 SK zima
+# (https://crontab.guru/#0_8_*_*_*)
+[triggers]
+crons = ["0 8 * * *"]
+
+# Env premenné — non-secret. CRON_SECRET sa setuje cez:
+#   wrangler secret put CRON_SECRET --name epoxidovo-cron
+[vars]
+CRON_TARGET_URL = "https://epoxidovo.sk/api/cron/lead-followup"
