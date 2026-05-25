@@ -359,6 +359,12 @@ select,
   will-change: transform;
 }
 
+/* WhatsApp hint bublina — pop-up animácia */
+@keyframes fadeInUp {
+  from { opacity: 0; transform: translateY(8px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
 /* Pulsing ring — pre close buttons. Jemný "dýchajúci" outer ring +
    subtle shadow oscillation aby ho user všimol. */
 @keyframes pulse-ring {

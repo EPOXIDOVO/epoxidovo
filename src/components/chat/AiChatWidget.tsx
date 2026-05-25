@@ -1,59 +1,46 @@
 "use client";
 
 import * as React from "react";
-import { MessageCircle, X, Send, Loader2, CheckCircle2 } from "lucide-react";
-import { cn } from "@/lib/utils";
 import { SITE } from "@/lib/site";
-import { trackEvent } from "@/components/analytics/Analytics";
 
 /**
- * Floating contact form — bottom-right.
- * Klik na FAB otvorí panel s krátkym formulárom (meno, email, telefón, správa).
- * Submit → POST /api/lead → email na info@epoxidovo.sk.
+ * Floating WhatsApp button — bottom-right corner.
  *
- * Skryté na /admin a /kontakt (kde už je plný form).
+ * Klik otvorí WhatsApp s pred-vyplnenou SK správou. Tracking event
+ * whatsapp_click sa pushne automaticky cez GlobalClickTracker (chytá
+ * wa.me/ patterny v document click delegate).
+ *
+ * Skryté na /admin, /auth, /leady.
+ *
+ * (Súbor sa naďalej volá AiChatWidget kvôli existujúcim importom
+ * v layout.tsx — komponent vnútri je už ale WhatsApp button.)
  */
 
-interface FormValues {
-  name: string;
-  email: string;
-  phone: string;
-  message: string;
-  consent: boolean;
-  website: string; // honeypot
+const WHATSAPP_NUMBER = SITE.contact.phoneRaw.replace(/[^0-9]/g, "");
+const WHATSAPP_MSG = encodeURIComponent(
+  "Dobrý deň, mám záujem o epoxidovú podlahu. Mohli by ste mi prosím poradiť?",
+);
+const WHATSAPP_URL = `https://wa.me/${WHATSAPP_NUMBER}?text=${WHATSAPP_MSG}`;
+
+function WhatsAppIcon({ className }: { className?: string }) {
+  return (
+    <svg viewBox="0 0 24 24" fill="currentColor" className={className} aria-hidden>
+      <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z" />
+    </svg>
+  );
 }
 
-const EMPTY: FormValues = {
-  name: "",
-  email: "",
-  phone: "",
-  message: "",
-  consent: false,
-  website: "",
-};
-
 export function AiChatWidget() {
-  const [open, setOpen] = React.useState(false);
-  const [values, setValues] = React.useState<FormValues>(EMPTY);
-  const [sending, setSending] = React.useState(false);
-  const [error, setError] = React.useState<string | null>(null);
-  const [success, setSuccess] = React.useState(false);
   const [shouldHide, setShouldHide] = React.useState(false);
-  const [hintHidden, setHintHidden] = React.useState(false);
   const [hintReady, setHintReady] = React.useState(false);
-  const [isMobile, setIsMobile] = React.useState(false);
-  const firstFieldRef = React.useRef<HTMLInputElement>(null);
+  const [hintHidden, setHintHidden] = React.useState(false);
 
-  // Hint bublina:
-  // Desktop: show at 1.5s, hide at 5s alebo scroll > 50 (zachovaný pôvodný behavior)
-  // Mobile: show at 15s, hide at 17s (2s visible okno) alebo scroll > 50
+  // Hint bublina — "Napíšte nám na WhatsApp" sa zobrazí cca 1.5s po
+  // load, zmizne pri scrolle alebo po 5s.
   React.useEffect(() => {
     const mobile = window.matchMedia("(max-width: 767px)").matches;
-    setIsMobile(mobile);
-
     const showDelay = mobile ? 15000 : 1500;
     const hideDelay = mobile ? 17000 : 5000;
-
     const showTimer = setTimeout(() => setHintReady(true), showDelay);
     const hideTimer = setTimeout(() => setHintHidden(true), hideDelay);
     const onScroll = () => {
@@ -67,12 +54,14 @@ export function AiChatWidget() {
     };
   }, []);
 
-  // Skryť widget na admin / kontakt / auth
+  // Skryť na /admin, /auth, /leady
   React.useEffect(() => {
     const update = () => {
       const path = window.location.pathname;
       setShouldHide(
-        path.startsWith("/admin") || path.startsWith("/auth"),
+        path.startsWith("/admin") ||
+          path.startsWith("/auth") ||
+          path.startsWith("/leady"),
       );
     };
     update();
@@ -80,338 +69,36 @@ export function AiChatWidget() {
     return () => window.removeEventListener("popstate", update);
   }, []);
 
-  // Focus pri otvorení
-  React.useEffect(() => {
-    if (open && !success) {
-      setTimeout(() => firstFieldRef.current?.focus(), 200);
-    }
-  }, [open, success]);
-
-  // Externý event 'epoxidovo:open-chat' (z /kontakt karty)
-  React.useEffect(() => {
-    const onOpen = () => setOpen(true);
-    window.addEventListener("epoxidovo:open-chat", onOpen);
-    return () => window.removeEventListener("epoxidovo:open-chat", onOpen);
-  }, []);
-
-  const set = <K extends keyof FormValues>(key: K, val: FormValues[K]) => {
-    setValues((prev) => ({ ...prev, [key]: val }));
-    if (error) setError(null);
-  };
-
-  const onSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    if (sending) return;
-
-    // Klientská validácia
-    if (values.name.trim().length < 2) {
-      setError("Zadaj svoje meno.");
-      return;
-    }
-    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(values.email.trim())) {
-      setError("Zadaj platnú emailovú adresu.");
-      return;
-    }
-    if (!values.consent) {
-      setError("Musíš súhlasiť so spracovaním osobných údajov.");
-      return;
-    }
-
-    setSending(true);
-    setError(null);
-
-    try {
-      const res = await fetch("/api/lead", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          name: values.name.trim(),
-          email: values.email.trim(),
-          phone: values.phone.trim() || undefined,
-          message: values.message.trim() || undefined,
-          consent: true,
-          website: values.website,
-          source: "floating_form",
-        }),
-      });
-
-      if (!res.ok) {
-        const json = await res.json().catch(() => ({}));
-        setError(
-          json?.message ??
-            "Odoslanie zlyhalo. Skús to znova alebo nám zavolaj.",
-        );
-        setSending(false);
-        return;
-      }
-
-      setSuccess(true);
-      setValues(EMPTY);
-      trackEvent("generate_lead", {
-        source: "floating_form",
-        value: 1,
-        currency: "EUR",
-      });
-    } catch {
-      setError("Nepodarilo sa pripojiť. Skús znovu o chvíľu.");
-    } finally {
-      setSending(false);
-    }
-  };
-
-  const reset = () => {
-    setSuccess(false);
-    setError(null);
-    setValues(EMPTY);
-  };
-
   if (shouldHide) return null;
 
-  return (
-    <>
-      {/* Floating button */}
-      <button
-        type="button"
-        onClick={() => setOpen((v) => !v)}
-        aria-label={open ? "Zavrieť formulár" : "Otvoriť kontaktný formulár"}
-        aria-expanded={open}
-        className={cn(
-          "fixed bottom-5 right-5 md:bottom-7 md:right-7 z-[80]",
-          "inline-flex items-center justify-center rounded-full",
-          "bg-gradient-to-br from-[#5fcded] via-[#3db6e8] to-[#1a8cc4]",
-          "text-white shadow-[0_10px_30px_rgba(61,182,232,0.6)]",
-          "hover:shadow-[0_14px_40px_rgba(61,182,232,0.75)] hover:-translate-y-0.5",
-          "transition-all duration-300",
-          open ? "w-12 h-12" : "w-14 h-14 md:w-16 md:h-16",
-        )}
-      >
-        {open ? (
-          <X className="w-5 h-5" aria-hidden />
-        ) : (
-          <MessageCircle className="w-6 h-6 md:w-7 md:h-7" aria-hidden />
-        )}
-        {!open && (
-          <span className="absolute -top-1 -right-1 w-3 h-3 rounded-full bg-emerald-400 ring-2 ring-white" />
-        )}
-      </button>
+  const showHint = hintReady && !hintHidden;
 
-      {/* Hint bublina — desktop 1.5s→5s, mobile 15s→17s (delay via JS, no animation-delay) */}
-      {!open && !hintHidden && hintReady && (
-        <div
-          className="fixed bottom-24 right-5 md:bottom-28 md:right-7 z-[79] pointer-events-none animate-fade-up transition-opacity duration-500"
-          style={{ animationFillMode: "both" }}
-        >
-          <div className="px-4 py-2.5 rounded-2xl rounded-br-sm bg-white shadow-[0_8px_24px_rgba(0,0,0,0.15)] text-sm text-[var(--color-fg)] font-medium max-w-[220px]">
-            {isMobile ? "Spýtajte sa nás na čokoľvek" : "Opýtaj sa nás čokoľvek 👇"}
-          </div>
+  return (
+    <div className="fixed bottom-5 right-5 md:bottom-6 md:right-6 z-[80] flex flex-col items-end gap-2">
+      {/* Hint bublina vedľa FAB tlačidla */}
+      {showHint && (
+        <div className="mb-1 mr-1 max-w-[220px] rounded-2xl bg-white px-4 py-2.5 text-sm font-semibold text-zinc-900 shadow-[0_10px_30px_rgba(0,0,0,0.25)] ring-1 ring-black/10 animate-[fadeInUp_0.25s_ease-out]">
+          Napíšte nám na WhatsApp 👋
+          <div className="absolute -bottom-1.5 right-6 h-3 w-3 rotate-45 bg-white ring-1 ring-black/10" />
         </div>
       )}
 
-      {/* Panel */}
-      <div
-        role="dialog"
-        aria-label="Kontaktný formulár"
-        className={cn(
-          "fixed z-[81]",
-          "bottom-3 right-3 left-3 md:bottom-7 md:right-7 md:left-auto",
-          "md:w-[380px] max-h-[calc(100dvh-1.5rem)]",
-          "flex flex-col rounded-2xl bg-white shadow-2xl border border-[var(--color-border)] overflow-hidden",
-          "transition-all duration-300 ease-[cubic-bezier(0.16,1,0.3,1)]",
-          open
-            ? "opacity-100 translate-y-0 pointer-events-auto"
-            : "opacity-0 translate-y-4 pointer-events-none",
-        )}
+      {/* FAB WhatsApp button */}
+      <a
+        href={WHATSAPP_URL}
+        target="_blank"
+        rel="noopener noreferrer"
+        aria-label="Napíšte nám na WhatsApp"
+        className="group relative inline-flex items-center justify-center w-14 h-14 md:w-16 md:h-16 rounded-full bg-[#25D366] text-white shadow-[0_12px_30px_rgba(37,211,102,0.5)] ring-4 ring-white/80 hover:bg-[#1DA851] hover:scale-110 active:scale-95 transition-all duration-200 focus:outline-none focus-visible:ring-4 focus-visible:ring-[#25D366]/40"
       >
-        {/* Header */}
-        <div className="flex items-center justify-between px-5 py-4 bg-gradient-to-br from-[#3db6e8] to-[#1a8cc4] text-white">
-          <div className="flex items-center gap-3">
-            <div className="inline-flex items-center justify-center w-9 h-9 rounded-full bg-white/15">
-              <MessageCircle className="w-4 h-4" aria-hidden />
-            </div>
-            <div>
-              <div className="font-bold text-sm">Napíš nám</div>
-              <div className="text-[11px] text-white/85 leading-tight">
-                Máte otázky? Neváhajte nás kontaktovať 💬
-              </div>
-            </div>
-          </div>
-          <button
-            type="button"
-            onClick={() => setOpen(false)}
-            className="text-white/80 hover:text-white p-1 rounded-md hover:bg-white/10 transition-colors"
-            aria-label="Zavrieť"
-          >
-            <X className="w-4 h-4" aria-hidden />
-          </button>
-        </div>
-
-        {/* Body */}
-        {success ? (
-          <div className="px-6 py-8 flex flex-col items-center text-center bg-[var(--color-bg-soft)]">
-            <div className="w-14 h-14 rounded-full bg-emerald-100 text-emerald-600 inline-flex items-center justify-center mb-4">
-              <CheckCircle2 className="w-7 h-7" aria-hidden />
-            </div>
-            <div className="font-bold text-base mb-1">Odoslané, ďakujeme!</div>
-            <p className="text-sm text-[var(--color-fg-subtle)] leading-relaxed">
-              Tvoja správa došla na <strong>{SITE.contact.email}</strong>.
-              Čoskoro sa ti ozveme.
-            </p>
-            <button
-              type="button"
-              onClick={reset}
-              className="mt-5 text-xs text-[#3db6e8] hover:text-[#1a8cc4] underline"
-            >
-              Poslať ďalšiu správu
-            </button>
-          </div>
-        ) : (
-          <form
-            onSubmit={onSubmit}
-            className="flex-1 overflow-y-auto px-4 py-4 space-y-3 bg-[var(--color-bg-soft)]"
-          >
-            {/* Honeypot */}
-            <input
-              type="text"
-              name="website"
-              tabIndex={-1}
-              autoComplete="off"
-              value={values.website}
-              onChange={(e) => set("website", e.target.value)}
-              className="hidden"
-              aria-hidden
-            />
-
-            <div>
-              <label
-                htmlFor="ffc-name"
-                className="block text-[11px] font-semibold uppercase tracking-wider text-[var(--color-fg-subtle)] mb-1"
-              >
-                Meno
-              </label>
-              <input
-                ref={firstFieldRef}
-                id="ffc-name"
-                type="text"
-                required
-                autoComplete="name"
-                value={values.name}
-                onChange={(e) => set("name", e.target.value)}
-                placeholder="Meno a priezvisko"
-                className="w-full px-3 py-2.5 rounded-xl bg-white border border-[var(--color-border)] focus:border-[#3db6e8] focus:outline-none text-sm"
-              />
-            </div>
-
-            <div>
-              <label
-                htmlFor="ffc-email"
-                className="block text-[11px] font-semibold uppercase tracking-wider text-[var(--color-fg-subtle)] mb-1"
-              >
-                E-mail
-              </label>
-              <input
-                id="ffc-email"
-                type="email"
-                required
-                autoComplete="email"
-                value={values.email}
-                onChange={(e) => set("email", e.target.value)}
-                placeholder=""
-                className="w-full px-3 py-2.5 rounded-xl bg-white border border-[var(--color-border)] focus:border-[#3db6e8] focus:outline-none text-sm"
-              />
-            </div>
-
-            <div>
-              <label
-                htmlFor="ffc-phone"
-                className="block text-[11px] font-semibold uppercase tracking-wider text-[var(--color-fg-subtle)] mb-1"
-              >
-                Telefón <span className="text-[var(--color-fg-subtle)] normal-case font-normal">(nepovinné)</span>
-              </label>
-              <input
-                id="ffc-phone"
-                type="tel"
-                autoComplete="tel"
-                value={values.phone}
-                onChange={(e) => set("phone", e.target.value)}
-                placeholder=""
-                className="w-full px-3 py-2.5 rounded-xl bg-white border border-[var(--color-border)] focus:border-[#3db6e8] focus:outline-none text-sm"
-              />
-            </div>
-
-            <div>
-              <label
-                htmlFor="ffc-message"
-                className="block text-[11px] font-semibold uppercase tracking-wider text-[var(--color-fg-subtle)] mb-1"
-              >
-                Tvoja otázka / správa
-              </label>
-              <textarea
-                id="ffc-message"
-                rows={3}
-                value={values.message}
-                onChange={(e) => set("message", e.target.value)}
-                placeholder="Napíš nám čo ťa zaujíma — radi ti poradíme 💬"
-                className="w-full px-3 py-2.5 rounded-xl bg-white border border-[var(--color-border)] focus:border-[#3db6e8] focus:outline-none text-sm resize-none"
-              />
-            </div>
-
-            <label className="flex items-start gap-2 text-[11px] leading-snug text-[var(--color-fg-subtle)] cursor-pointer">
-              <input
-                type="checkbox"
-                checked={values.consent}
-                onChange={(e) => set("consent", e.target.checked)}
-                className="mt-0.5 w-4 h-4 rounded border-[var(--color-border)] text-[#3db6e8] focus:ring-[#3db6e8] cursor-pointer shrink-0"
-              />
-              <span>
-                Súhlasím so spracovaním osobných údajov podľa{" "}
-                <a
-                  href="/ochrana-sukromia"
-                  target="_blank"
-                  rel="noreferrer"
-                  className="underline hover:text-[#3db6e8]"
-                >
-                  zásad ochrany súkromia
-                </a>
-                .
-              </span>
-            </label>
-
-            {error && (
-              <div className="text-xs text-red-700 bg-red-50 border border-red-100 rounded-lg px-3 py-2">
-                {error}
-              </div>
-            )}
-
-            <button
-              type="submit"
-              disabled={sending}
-              className="w-full inline-flex items-center justify-center gap-2 px-4 py-3 rounded-xl bg-gradient-to-br from-[#5fcded] via-[#3db6e8] to-[#1a8cc4] text-white font-semibold text-sm shadow-[0_8px_20px_rgba(61,182,232,0.4)] hover:shadow-[0_12px_28px_rgba(61,182,232,0.55)] disabled:opacity-60 disabled:cursor-not-allowed transition-all"
-            >
-              {sending ? (
-                <>
-                  <Loader2 className="w-4 h-4 animate-spin" aria-hidden />
-                  Odosielam...
-                </>
-              ) : (
-                <>
-                  <Send className="w-4 h-4" aria-hidden />
-                  Odoslať otázku
-                </>
-              )}
-            </button>
-
-            <p className="text-[10px] text-center text-[var(--color-fg-subtle)] pt-1">
-              Alebo nás kontaktujte telefonicky na{" "}
-              <a
-                href={`tel:${SITE.contact.phoneRaw}`}
-                className="text-[#3db6e8] underline font-semibold"
-              >
-                {SITE.contact.phone}
-              </a>
-            </p>
-          </form>
-        )}
-      </div>
-    </>
+        <WhatsAppIcon className="w-7 h-7 md:w-8 md:h-8" />
+        {/* Subtle pulsing ring na pritiahnutie pozornosti */}
+        <span
+          aria-hidden
+          className="pointer-events-none absolute inset-0 rounded-full ring-4 ring-[#25D366]/40 animate-ping motion-reduce:hidden"
+          style={{ animationDuration: "2.5s" }}
+        />
+      </a>
+    </div>
   );
 }
