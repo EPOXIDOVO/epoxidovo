@@ -82,7 +82,7 @@ export default function CenovaPonukaPage() {
             </p>
             <nav
               aria-label="Breadcrumb"
-              className="mt-2 md:mt-6 text-xs md:text-base text-white/80"
+              className="mt-2 md:mt-6 text-[17px] md:text-base text-white/85 font-semibold"
             >
               <ol className="inline-flex items-center gap-1.5 md:gap-2.5">
                 <li>

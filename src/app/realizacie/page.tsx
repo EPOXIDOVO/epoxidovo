@@ -116,7 +116,7 @@ export default function RealizaciePage() {
             </div>
             <nav
               aria-label="Breadcrumb"
-              className="mt-3 md:mt-6 text-xs md:text-lg text-white/90"
+              className="mt-3 md:mt-6 text-[17px] md:text-lg text-white/90 font-semibold"
             >
               <ol className="inline-flex items-center gap-1.5 md:gap-2.5">
                 <li>

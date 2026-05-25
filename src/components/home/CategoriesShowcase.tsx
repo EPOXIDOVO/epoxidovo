@@ -77,11 +77,11 @@ export function CategoriesShowcase() {
                 }`}
               >
                 {/* Horný blok — kocka + nadpis. Pevná výška. */}
-                <div className="px-3 pt-2.5 pb-2 md:p-7 md:pb-4 h-[78px] md:h-[180px] flex flex-col">
+                <div className="px-3 pt-2.5 pb-2 md:p-7 md:pb-4 h-[96px] md:h-[180px] flex flex-col">
                   <div className="w-6 h-6 md:w-10 md:h-10 mb-1 md:mb-5 rounded-md bg-white text-[#5c2c18] group-hover:text-[#3db6e8] flex items-center justify-center p-1 md:p-1.5 transition-colors duration-700 shrink-0">
                     <DiceIcon pips={(idx + 1) as 1 | 2 | 3 | 4 | 5} />
                   </div>
-                  <h3 className="text-[13px] leading-[1.15] md:text-2xl lg:text-[28px] font-black text-white tracking-tight md:leading-[1.05]">
+                  <h3 className="text-[17px] leading-[1.12] md:text-2xl lg:text-[28px] font-black text-white tracking-tight md:leading-[1.05]">
                     {cat.name === "Jednofarebné"
                       ? "Hladké jednofarebné"
                       : cat.name}
