@@ -417,26 +417,20 @@ function customerEmailHtml(lead: LeadNotifyArgs): string {
             </td>
           </tr>
 
-          <!-- ═══ PODPIS — Tristan Vítaz, Epoxidovo s.r.o. + brand favicon ═══ -->
+          <!-- ═══ PODPIS — S pozdravom + EPOXIDOVO s.r.o. + brand favicon ═══ -->
           <tr>
             <td style="padding:8px 32px 36px;text-align:center;">
               <img src="${brandLogoUrl}" alt="EPOXIDOVO" width="64" height="64" style="display:block;margin:0 auto 14px;width:64px;height:64px;border:0;outline:none;border-radius:14px;">
               <p style="margin:0;font-size:16px;color:${TEXT};line-height:1.55;">
                 S pozdravom,<br>
-                <strong style="font-size:17px;">Tristan Vítaz</strong><br>
-                <span style="color:${TEXT_MUTED};font-size:14px;">EPOXIDOVO s. r. o.</span>
+                <strong style="font-size:17px;">EPOXIDOVO s. r. o.</strong>
               </p>
             </td>
           </tr>
 
-        </table>
-
-        <!-- ═══ TMAVÁ PÄTIČKA ═══ -->
-        <table role="presentation" cellpadding="0" cellspacing="0" border="0" width="600" style="max-width:600px;margin-top:18px;background:${FOOTER_BG};border-radius:16px;overflow:hidden;">
-
-          <!-- Wordmark v päte (medvedík odstránený lebo bol rozmazaný) -->
+          <!-- ═══ TMAVÁ PÄTA — pripojená priamo na hlavnú kartu (jeden súvislý email) ═══ -->
           <tr>
-            <td style="padding:32px 24px 12px;text-align:center;">
+            <td style="background:${FOOTER_BG};padding:32px 24px 16px;text-align:center;">
               <div style="color:#ffffff;font-size:22px;font-weight:900;letter-spacing:-0.01em;">
                 <span style="color:#5BC8F2;">EPOXID</span>OVO<span style="display:inline-block;width:7px;height:7px;border-radius:50%;background:#5BC8F2;vertical-align:middle;margin:0 5px 3px;"></span>SK
               </div>
@@ -445,7 +439,7 @@ function customerEmailHtml(lead: LeadNotifyArgs): string {
 
           <!-- Social ikony -->
           <tr>
-            <td style="padding:8px 24px 20px;text-align:center;">
+            <td style="background:${FOOTER_BG};padding:4px 24px 20px;text-align:center;">
               <a href="${SITE.social.instagram}" style="display:inline-block;margin:0 8px;text-decoration:none;" aria-label="Instagram">
                 <img src="https://cdn.jsdelivr.net/npm/simple-icons@v11/icons/instagram.svg" alt="Instagram" width="22" height="22" style="display:block;width:22px;height:22px;filter:invert(1);border:0;outline:none;opacity:0.85;">
               </a>
@@ -460,23 +454,14 @@ function customerEmailHtml(lead: LeadNotifyArgs): string {
 
           <!-- Kontakty — neclickable, jasne pod sebou -->
           <tr>
-            <td style="padding:0 24px 24px;text-align:center;">
-              <div style="color:#ffffff;font-size:15px;font-weight:700;margin-bottom:4px;">
+            <td style="background:${FOOTER_BG};padding:0 24px 32px;text-align:center;">
+              <div style="color:#ffffff;font-size:15px;font-weight:700;margin-bottom:6px;">
                 ${SITE.legalName}
               </div>
-              <div style="color:${FOOTER_TEXT};font-size:13px;line-height:1.7;">
+              <div style="color:${FOOTER_TEXT};font-size:13px;line-height:1.75;">
                 IČO ${SITE.business.ico}<br>
                 ${SITE.address.street}<br>
                 ${SITE.address.postalCode} ${SITE.address.city}
-              </div>
-            </td>
-          </tr>
-
-          <!-- Fine print -->
-          <tr>
-            <td style="padding:12px 24px 24px;text-align:center;border-top:1px solid rgba(255,255,255,0.08);">
-              <div style="color:rgba(255,255,255,0.45);font-size:10px;line-height:1.6;">
-                Tento email si dostal/a, lebo si vyplnil/a formulár na ${SITE.domain}
               </div>
             </td>
           </tr>
