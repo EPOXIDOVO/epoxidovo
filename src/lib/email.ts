@@ -219,27 +219,14 @@ const FOOTER_BG = "#1a1a2e";
 const FOOTER_TEXT = "#cbd5e1";
 const SOFT_GRAY = "#f3f4f6";
 
-// 8 realizácií — pri každom emaili sa vyberú 3 náhodne.
-// Absolutné URL pre email klientov (musia začínať https://).
-const REALIZACIE_POOL = [
-  "/images/realizacie/r-11.jpg",
-  "/images/realizacie/r-19.jpg",
-  "/images/realizacie/r-22.jpg",
-  "/images/realizacie/r-32.jpg",
-  "/images/realizacie/r-33.jpg",
-  "/images/realizacie/r-35.jpg",
-  "/images/realizacie/r-37.webp",
-  "/images/realizacie/r-40.jpg",
+// Fixed gallery — 3 reprezentatívne fotky, vždy rovnaké poradie
+// (priemyselná, metalická, hladká biela jednofarebná).
+// Absolutné URL pre email klientov.
+const GALLERY_3 = [
+  { src: "/images/realizacie/r-22.jpg", alt: "Priemyselná podlaha v hale — EPOXIDOVO" },
+  { src: "/images/realizacie/r-32.jpg", alt: "Metalická podlaha v bývaní — EPOXIDOVO" },
+  { src: "/images/realizacie/r-03.jpg", alt: "Hladká biela jednofarebná podlaha — EPOXIDOVO" },
 ];
-
-function pickRandom3(pool: string[]): string[] {
-  const arr = [...pool];
-  for (let i = arr.length - 1; i > 0; i--) {
-    const j = Math.floor(Math.random() * (i + 1));
-    [arr[i], arr[j]] = [arr[j], arr[i]];
-  }
-  return arr.slice(0, 3);
-}
 
 function customerEmailHtml(lead: LeadNotifyArgs): string {
   const firstName = lead.name.split(" ")[0];
@@ -250,7 +237,7 @@ function customerEmailHtml(lead: LeadNotifyArgs): string {
     month: "long",
     year: "numeric",
   });
-  const realizacie = pickRandom3(REALIZACIE_POOL);
+  const realizacie = GALLERY_3;
   const bearLogoUrl = `${SITE.url}/images/site/logo_v2.png`;
 
   // Box "Čo si nám poslal" — iba ak je niečo vyplnené
@@ -334,33 +321,55 @@ function customerEmailHtml(lead: LeadNotifyArgs): string {
               : ""
           }
 
-          <!-- ═══ CTA TLAČIDLÁ — Tel + WhatsApp + Email ═══ -->
+          <!-- ═══ CTA TLAČIDLÁ — Tel + WhatsApp + Email (bulletproof email buttons) ═══ -->
           <tr>
             <td style="padding:32px 32px 8px;text-align:center;">
-              <div style="font-size:17px;font-weight:700;color:${TEXT};margin-bottom:14px;line-height:1.45;">
+              <div style="font-size:17px;font-weight:700;color:${TEXT};margin-bottom:18px;line-height:1.45;">
                 V prípade otázok nám môžeš zavolať<br>alebo napísať na WhatsApp / Email
               </div>
               <table role="presentation" cellpadding="0" cellspacing="0" border="0" width="100%">
                 <tr>
-                  <td width="33.33%" style="padding-right:4px;">
-                    <a href="tel:${SITE.contact.phoneRaw}" style="display:block;background:#16a34a;color:#ffffff;text-decoration:none;text-align:center;padding:14px 8px;border-radius:12px;font-size:14px;font-weight:700;box-shadow:0 4px 14px rgba(22,163,74,0.35);">
-                      📞 Zavolať
-                    </a>
+                  <!-- Telefón button -->
+                  <td width="33.33%" align="center" valign="middle" style="padding-right:4px;">
+                    <table role="presentation" cellpadding="0" cellspacing="0" border="0" style="width:100%;">
+                      <tr>
+                        <td align="center" valign="middle" bgcolor="#16a34a" style="background:#16a34a;border-radius:12px;box-shadow:0 4px 14px rgba(22,163,74,0.35);">
+                          <a href="tel:${SITE.contact.phoneRaw}" style="display:block;padding:16px 8px;color:#ffffff;text-decoration:none;font-family:${FONT_STACK};font-size:14px;font-weight:700;line-height:1;border-radius:12px;mso-padding-alt:0;">
+                            📞&nbsp;Zavolať
+                          </a>
+                        </td>
+                      </tr>
+                    </table>
                   </td>
-                  <td width="33.33%" style="padding:0 4px;">
-                    <a href="https://wa.me/${whatsappNumber}" style="display:block;background:#25D366;color:#ffffff;text-decoration:none;text-align:center;padding:14px 8px;border-radius:12px;font-size:14px;font-weight:700;box-shadow:0 4px 14px rgba(37,211,102,0.35);">
-                      💬 WhatsApp
-                    </a>
+                  <!-- WhatsApp button -->
+                  <td width="33.33%" align="center" valign="middle" style="padding:0 4px;">
+                    <table role="presentation" cellpadding="0" cellspacing="0" border="0" style="width:100%;">
+                      <tr>
+                        <td align="center" valign="middle" bgcolor="#25D366" style="background:#25D366;border-radius:12px;box-shadow:0 4px 14px rgba(37,211,102,0.35);">
+                          <a href="https://wa.me/${whatsappNumber}" style="display:block;padding:16px 8px;color:#ffffff;text-decoration:none;font-family:${FONT_STACK};font-size:14px;font-weight:700;line-height:1;border-radius:12px;mso-padding-alt:0;">
+                            💬&nbsp;WhatsApp
+                          </a>
+                        </td>
+                      </tr>
+                    </table>
                   </td>
-                  <td width="33.33%" style="padding-left:4px;">
-                    <a href="mailto:${SITE.contact.email}" style="display:block;background:${BRAND_BLUE};color:#ffffff;text-decoration:none;text-align:center;padding:14px 8px;border-radius:12px;font-size:14px;font-weight:700;box-shadow:0 4px 14px rgba(61,182,232,0.4);">
-                      ✉️ Email
-                    </a>
+                  <!-- Email button -->
+                  <td width="33.33%" align="center" valign="middle" style="padding-left:4px;">
+                    <table role="presentation" cellpadding="0" cellspacing="0" border="0" style="width:100%;">
+                      <tr>
+                        <td align="center" valign="middle" bgcolor="${BRAND_BLUE}" style="background:${BRAND_BLUE};border-radius:12px;box-shadow:0 4px 14px rgba(61,182,232,0.4);">
+                          <a href="mailto:${SITE.contact.email}" style="display:block;padding:16px 8px;color:#ffffff;text-decoration:none;font-family:${FONT_STACK};font-size:14px;font-weight:700;line-height:1;border-radius:12px;mso-padding-alt:0;">
+                            ✉️&nbsp;Email
+                          </a>
+                        </td>
+                      </tr>
+                    </table>
                   </td>
                 </tr>
               </table>
-              <div style="margin-top:12px;font-size:13px;color:${TEXT_MUTED};">
-                Po-Pi 8:00 – 17:00 · <a href="tel:${SITE.contact.phoneRaw}" style="color:${BRAND_ORANGE_DARK};text-decoration:none;font-weight:600;">${SITE.contact.phone}</a>
+              <div style="margin-top:16px;font-size:14px;color:${TEXT};font-weight:600;">
+                <a href="tel:${SITE.contact.phoneRaw}" style="color:${BRAND_ORANGE_DARK};text-decoration:none;font-weight:700;">${SITE.contact.phone}</a>
+                <span style="color:${TEXT_MUTED};font-weight:400;"> · Po-Pi 8:00 – 17:00</span>
               </div>
             </td>
           </tr>
@@ -375,9 +384,9 @@ function customerEmailHtml(lead: LeadNotifyArgs): string {
                 <tr>
                   ${realizacie
                     .map(
-                      (src, i) => `<td width="33.33%" style="padding:${i === 0 ? "0 4px 0 0" : i === 1 ? "0 2px" : "0 0 0 4px"};">
+                      (item, i) => `<td width="33.33%" style="padding:${i === 0 ? "0 4px 0 0" : i === 1 ? "0 2px" : "0 0 0 4px"};">
                     <a href="${SITE.url}/realizacie" style="display:block;text-decoration:none;">
-                      <img src="${SITE.url}${src}" alt="Realizácia ${i + 1} — epoxidová podlaha" width="100%" style="display:block;width:100%;max-width:200px;height:auto;border-radius:10px;border:0;outline:none;">
+                      <img src="${SITE.url}${item.src}" alt="${escapeHtml(item.alt)}" width="100%" style="display:block;width:100%;max-width:200px;height:auto;border-radius:10px;border:0;outline:none;">
                     </a>
                   </td>`,
                     )
