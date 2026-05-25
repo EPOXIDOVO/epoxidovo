@@ -75,13 +75,14 @@ export default function RealizaciePage() {
       />
       {/* Floating close — "modal-style" zavretie, vráti na home stránku.
           Pozícia POD headerom (top-24/28), brand-modré aby nesplývalo s
-          bielym scroll-headerom ani sa neprekrývalo s hamburger menu. */}
+          bielym scroll-headerom ani sa neprekrývalo s hamburger menu.
+          Bublina s tieňom + ring + press feedback (scale-down + shadow-shrink). */}
       <Link
         href="/"
         aria-label="Zavrieť — späť na domovskú stránku"
-        className="fixed top-[88px] right-3 md:top-[104px] md:right-6 z-[60] inline-flex items-center gap-2 pl-3 pr-4 md:pl-4 md:pr-5 py-3 md:py-3.5 rounded-full bg-[#3db6e8] text-white font-bold text-sm md:text-base shadow-[0_8px_28px_rgba(61,182,232,0.55)] ring-2 ring-white/40 hover:bg-[#1a8cc4] hover:scale-105 active:scale-95 transition-all duration-200"
+        className="group fixed top-[88px] right-3 md:top-[104px] md:right-6 z-[60] inline-flex items-center gap-2 pl-3 pr-4 md:pl-4 md:pr-5 py-3 md:py-3.5 rounded-full bg-[#3db6e8] text-white font-bold text-sm md:text-base shadow-[0_10px_30px_rgba(61,182,232,0.55),0_0_0_4px_rgba(255,255,255,0.85),0_0_0_5px_rgba(61,182,232,0.4)] hover:bg-[#1a8cc4] hover:shadow-[0_14px_38px_rgba(26,140,196,0.7),0_0_0_4px_rgba(255,255,255,0.95),0_0_0_6px_rgba(26,140,196,0.5)] hover:-translate-y-0.5 active:translate-y-0 active:scale-90 active:shadow-[0_4px_12px_rgba(61,182,232,0.45),0_0_0_3px_rgba(255,255,255,0.75),0_0_0_4px_rgba(61,182,232,0.3)] transition-all duration-150 ease-out focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-[#3db6e8]/40 will-change-transform animate-[pulse-ring_2.5s_ease-in-out_infinite] motion-reduce:animate-none"
       >
-        <X className="w-5 h-5 md:w-6 md:h-6" strokeWidth={3} aria-hidden />
+        <X className="w-5 h-5 md:w-6 md:h-6 group-active:rotate-90 transition-transform duration-200" strokeWidth={3} aria-hidden />
         <span>Zavrieť</span>
       </Link>
       {/* Dark hero — rovnaký formát ako /kontakt: marquee fotiek + overlay + bublina */}
