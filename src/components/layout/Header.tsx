@@ -2,7 +2,6 @@
 
 import * as React from "react";
 import Link from "next/link";
-import Image from "next/image";
 import { Menu, X, Images, Phone, Home } from "lucide-react";
 import { Container } from "@/components/ui/Container";
 import { SamplePicker } from "@/components/home/SamplePicker";
@@ -56,20 +55,23 @@ export function Header({ transparentOnTop = false }: HeaderProps) {
         )}
       >
         <Container size="xl" className="flex items-center h-20 md:h-24 gap-6">
-          {/* Logo — vždy klikateľné, vedie na home */}
+          {/* Logo — CSS wordmark (perfectly crisp na Retine, žiadny PNG upscale).
+              Pôvodný logo.png mal len 285×50 px → bol rozmazaný na hi-DPI displejoch.
+              Farba sa prepína podľa scroll stavu: white nad hero, dark po scrolle. */}
           <Link
             href="/"
             aria-label="EPOXIDOVO — domov"
             className="shrink-0 relative z-20 touch-manipulation active:opacity-70 transition-opacity"
           >
-            <Image
-              src="/images/site/logo.png"
-              alt="EPOXIDOVO"
-              width={180}
-              height={56}
-              priority
-              className="h-12 md:h-14 w-auto"
-            />
+            <span
+              className={cn(
+                "block text-2xl md:text-3xl font-extrabold tracking-tight leading-none transition-colors duration-300",
+                isTransparent ? "text-white" : "text-[#0a0f1e]",
+              )}
+              style={{ textShadow: isTransparent ? "0 2px 8px rgba(0,0,0,0.4)" : "none" }}
+            >
+              EPOXIDOVO<span aria-hidden className="inline-block w-1.5 h-1.5 md:w-2 md:h-2 rounded-full bg-[#3db6e8] mx-1 align-baseline mb-1"></span>SK
+            </span>
           </Link>
 
           {/* Desktop CTA — Kontakt (zelená pill) + Cenová ponuka + Ukážky realizácií. */}
