@@ -2,7 +2,6 @@ import type { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
 import { Suspense } from "react";
-import { X } from "lucide-react";
 import { Container } from "@/components/ui/Container";
 import { Section } from "@/components/ui/Section";
 import { GalleryView } from "@/components/realizacie/GalleryView";
@@ -73,14 +72,6 @@ export default function RealizaciePage() {
           { name: "Realizácie", path: "/realizacie" },
         ]}
       />
-      {/* Floating close — biela bublina s X, neutrálna a kompaktná. */}
-      <Link
-        href="/"
-        aria-label="Zavrieť — späť na domovskú stránku"
-        className="group fixed top-[88px] right-3 md:top-[104px] md:right-6 z-[60] inline-flex items-center justify-center w-11 h-11 md:w-12 md:h-12 rounded-full bg-white text-zinc-900 shadow-[0_8px_22px_rgba(0,0,0,0.25)] ring-1 ring-black/10 hover:shadow-[0_12px_30px_rgba(0,0,0,0.35)] hover:-translate-y-0.5 hover:bg-zinc-50 active:translate-y-0 active:scale-90 active:shadow-[0_3px_10px_rgba(0,0,0,0.2)] transition-all duration-150 ease-out focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-[#3db6e8]/50"
-      >
-        <X className="w-5 h-5 md:w-6 md:h-6 group-active:rotate-90 transition-transform duration-200" strokeWidth={2.5} aria-hidden />
-      </Link>
       {/* Dark hero — rovnaký formát ako /kontakt: marquee fotiek + overlay + bublina */}
       <section className="relative isolate overflow-hidden bg-[#0a0f1e]">
         <div

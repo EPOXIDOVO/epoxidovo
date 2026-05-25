@@ -76,14 +76,25 @@ export function SamplePicker({ open, onClose }: SamplePickerProps) {
           open ? "translate-y-0 scale-100" : "translate-y-8 scale-95",
         )}
       >
-        {/* Close */}
+        {/* Close — 3D biela bublina s X. Radial gradient + inset highlights
+            dávajú pop-out look, hover scale 110% + tieň-up signalizuje
+            interaktivitu, active scale 90% + X rotácia = jasný press feedback. */}
         <button
           type="button"
           onClick={onClose}
           aria-label="Zavrieť okno"
-          className="absolute top-4 right-4 inline-flex items-center justify-center w-10 h-10 rounded-full hover:bg-[var(--color-bg-muted)] transition-colors"
+          className="group absolute top-4 right-4 inline-flex items-center justify-center w-11 h-11 md:w-12 md:h-12 rounded-full text-zinc-900 ring-2 ring-black/15 transition-all duration-200 ease-out hover:scale-110 active:scale-90 focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-[#3db6e8]/60"
+          style={{
+            background: "radial-gradient(120% 120% at 30% 25%, #ffffff 0%, #f4f4f5 70%, #e4e4e7 100%)",
+            boxShadow:
+              "0 8px 22px rgba(0,0,0,0.22), 0 3px 8px rgba(0,0,0,0.14), inset 0 2px 3px rgba(255,255,255,0.95), inset 0 -3px 6px rgba(0,0,0,0.10)",
+          }}
         >
-          <X className="w-5 h-5" aria-hidden />
+          <X
+            className="w-5 h-5 md:w-6 md:h-6 group-hover:text-[#1a8cc4] group-active:rotate-90 transition-all duration-200"
+            strokeWidth={3}
+            aria-hidden
+          />
         </button>
 
         <div className="px-6 md:px-10 pt-10 md:pt-12 pb-10">
