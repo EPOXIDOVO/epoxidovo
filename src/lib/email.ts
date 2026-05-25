@@ -238,7 +238,7 @@ function customerEmailHtml(lead: LeadNotifyArgs): string {
     year: "numeric",
   });
   const realizacie = GALLERY_3;
-  const bearLogoUrl = `${SITE.url}/images/site/logo_v2.png`;
+  const brandLogoUrl = `${SITE.url}/email-logo.png`; // Modrý E favicon
 
   // Box "Čo si nám poslal" — iba ak je niečo vyplnené
   const hasAnyDetail =
@@ -415,14 +415,15 @@ function customerEmailHtml(lead: LeadNotifyArgs): string {
             </td>
           </tr>
 
-          <!-- ═══ PODPIS s medvedíkom ═══ -->
+          <!-- ═══ PODPIS — Tristan Vítaz, Epoxidovo s.r.o. + brand favicon ═══ -->
           <tr>
             <td style="padding:8px 32px 36px;text-align:center;">
-              <p style="margin:0 0 16px;font-size:16px;color:${TEXT};line-height:1.6;">
-                Pekný deň,<br>
-                <strong>Tím EPOXIDOVO</strong>
+              <img src="${brandLogoUrl}" alt="EPOXIDOVO" width="64" height="64" style="display:block;margin:0 auto 14px;width:64px;height:64px;border:0;outline:none;border-radius:14px;">
+              <p style="margin:0;font-size:16px;color:${TEXT};line-height:1.55;">
+                S pozdravom,<br>
+                <strong style="font-size:17px;">Tristan Vítaz</strong><br>
+                <span style="color:${TEXT_MUTED};font-size:14px;">EPOXIDOVO s. r. o.</span>
               </p>
-              <img src="${bearLogoUrl}" alt="Maskot EPOXIDOVO" width="80" height="80" style="display:block;margin:0 auto;width:80px;height:80px;border:0;outline:none;">
             </td>
           </tr>
 
