@@ -116,6 +116,22 @@ export default function RootLayout({
         >
           {getDefaultConsentScript()}
         </Script>
+        {/* Disable pinch-zoom + double-tap zoom on mobile.
+            iOS Safari ignoruje viewport user-scalable=no od iOS 10, tak
+            chytáme gesture events priamo + double-tap timing detector. */}
+        <Script id="disable-zoom" strategy="beforeInteractive">
+          {`
+            document.addEventListener('gesturestart', function(e){e.preventDefault();});
+            document.addEventListener('gesturechange', function(e){e.preventDefault();});
+            document.addEventListener('gestureend', function(e){e.preventDefault();});
+            var lastTouchEnd = 0;
+            document.addEventListener('touchend', function(e){
+              var now = Date.now();
+              if (now - lastTouchEnd <= 300) { e.preventDefault(); }
+              lastTouchEnd = now;
+            }, { passive: false });
+          `}
+        </Script>
       </head>
       <body className="min-h-full flex flex-col bg-[var(--color-bg)] text-[var(--color-fg)]">
         {/* Skip-to-content link pre A11y */}
