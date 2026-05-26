@@ -4,6 +4,7 @@ import * as React from "react";
 import Link from "next/link";
 import { CheckCircle2 } from "lucide-react";
 import { trackEvent } from "@/components/analytics/Analytics";
+import { TurnstileWidget } from "@/components/turnstile/TurnstileWidget";
 
 interface FormState {
   name: string;
@@ -51,6 +52,7 @@ export function CenovaPonukaForm() {
   const [sending, setSending] = React.useState(false);
   const [success, setSuccess] = React.useState(false);
   const [error, setError] = React.useState<string | null>(null);
+  const [turnstileToken, setTurnstileToken] = React.useState<string | null>(null);
 
   const set = <K extends keyof FormState>(key: K, val: FormState[K]) => {
     setValues((prev) => ({ ...prev, [key]: val }));
@@ -107,6 +109,10 @@ export function CenovaPonukaForm() {
       setError("Zadaj mesto alebo lokalitu.");
       return;
     }
+    if (!turnstileToken) {
+      setError("Počkaj prosím chvíľu kým sa overí, že nie si bot.");
+      return;
+    }
 
     setSending(true);
     setError(null);
@@ -133,6 +139,7 @@ export function CenovaPonukaForm() {
           consent: true,
           source: "cenova_ponuka_form",
           website: values.website,
+          turnstileToken,
         }),
       });
 
@@ -306,6 +313,11 @@ export function CenovaPonukaForm() {
         </FieldWrap>
       </div>
 
+      {/* Cloudflare Turnstile — neviditeľný anti-bot widget */}
+      <div className="mt-6 flex justify-center">
+        <TurnstileWidget onVerify={setTurnstileToken} onExpire={() => setTurnstileToken(null)} />
+      </div>
+
       {error && (
         <div className="mt-4 p-3 rounded-lg bg-red-50 border border-red-100 text-sm text-red-700">
           {error}
@@ -314,7 +326,7 @@ export function CenovaPonukaForm() {
 
       <button
         type="submit"
-        disabled={sending}
+        disabled={sending || !turnstileToken}
         className="mt-7 mx-auto block px-9 py-4 rounded-full bg-[#f97316] text-white font-bold text-base md:text-lg hover:bg-[#ea580c] disabled:opacity-50 disabled:cursor-not-allowed shadow-[0_12px_36px_rgba(249,115,22,0.5)] hover:shadow-[0_16px_44px_rgba(249,115,22,0.65)] transition-all duration-300"
       >
         {sending ? "Posielame…" : "Pošlite mi cenovú ponuku"}

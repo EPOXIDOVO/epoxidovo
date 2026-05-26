@@ -55,6 +55,8 @@ export const LeadInputSchema = z.object({
   utmSource: z.string().optional(),
   utmMedium: z.string().optional(),
   utmCampaign: z.string().optional(),
+  // Cloudflare Turnstile token — server ho overí cez siteverify API
+  turnstileToken: z.string().optional(),
 });
 
 export type LeadInput = z.infer<typeof LeadInputSchema>;

@@ -4,6 +4,7 @@ import * as React from "react";
 import Link from "next/link";
 import { CheckCircle2 } from "lucide-react";
 import { trackEvent } from "@/components/analytics/Analytics";
+import { TurnstileWidget } from "@/components/turnstile/TurnstileWidget";
 
 interface State {
   name: string;
@@ -32,6 +33,7 @@ export function ContactMessageForm() {
   const [sending, setSending] = React.useState(false);
   const [success, setSuccess] = React.useState(false);
   const [error, setError] = React.useState<string | null>(null);
+  const [turnstileToken, setTurnstileToken] = React.useState<string | null>(null);
 
   const set = <K extends keyof State>(key: K, val: State[K]) => {
     setValues((prev) => ({ ...prev, [key]: val }));
@@ -54,6 +56,10 @@ export function ContactMessageForm() {
     }
     if (values.message.trim().length < 5) {
       setError("Napíš správu (aspoň 5 znakov).");
+      return;
+    }
+    if (!turnstileToken) {
+      setError("Počkaj chvíľu kým sa overí, že nie si bot.");
       return;
     }
 
@@ -84,6 +90,7 @@ export function ContactMessageForm() {
           consent: true,
           source: "kontakt_message_form",
           website: values.website,
+          turnstileToken,
         }),
       });
       if (!res.ok) {
@@ -236,9 +243,13 @@ export function ContactMessageForm() {
         </div>
       )}
 
+      <div className="mt-5 flex justify-center">
+        <TurnstileWidget onVerify={setTurnstileToken} onExpire={() => setTurnstileToken(null)} />
+      </div>
+
       <button
         type="submit"
-        disabled={sending}
+        disabled={sending || !turnstileToken}
         className="mt-6 w-full inline-flex items-center justify-center gap-2 px-7 py-3.5 rounded-full bg-[#3db6e8] text-white font-semibold hover:bg-[#1a8cc4] disabled:opacity-50 disabled:cursor-not-allowed shadow-[0_10px_30px_rgba(61,182,232,0.45)] transition-all duration-300"
       >
         {sending ? "Posielame…" : "Odoslať správu"}

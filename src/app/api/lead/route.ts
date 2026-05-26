@@ -2,6 +2,7 @@ export const runtime = "edge";
 
 import { NextRequest, NextResponse } from "next/server";
 import { LeadInputSchema } from "@/lib/leadSchema";
+import { verifyTurnstileToken } from "@/lib/turnstile";
 
 /**
  * POST /api/lead — submission z kontaktného formulára.
@@ -30,8 +31,34 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ ok: true }, { status: 200 });
     }
 
-    // 3) Tracking metadata
+    // 2b) Cloudflare Turnstile verification — bráni botom + brute force
     const headers = req.headers;
+    const remoteIp =
+      headers.get("cf-connecting-ip") ??
+      headers.get("x-forwarded-for")?.split(",")[0].trim() ??
+      null;
+    const turnstileResult = await verifyTurnstileToken(
+      data.turnstileToken,
+      remoteIp,
+    );
+    if (!turnstileResult.ok) {
+      console.warn(
+        "[lead] turnstile rejected:",
+        turnstileResult.reason,
+        "ip:",
+        remoteIp,
+      );
+      return NextResponse.json(
+        {
+          error: "captcha_failed",
+          message:
+            "Anti-spam overenie zlyhalo. Skús prosím znovu (refresh stránky).",
+        },
+        { status: 403 },
+      );
+    }
+
+    // 3) Tracking metadata
     const userAgent = headers.get("user-agent") ?? null;
     const referrer = headers.get("referer") ?? null;
 

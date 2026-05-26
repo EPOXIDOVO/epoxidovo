@@ -6,6 +6,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { CheckCircle2, AlertCircle, Loader2 } from "lucide-react";
 import { LeadInputSchema, type LeadInput } from "@/lib/leadSchema";
 import { trackEvent } from "@/components/analytics/Analytics";
+import { TurnstileWidget } from "@/components/turnstile/TurnstileWidget";
 
 /**
  * Kontaktný formulár — 1:1 podľa pôvodného webu:
@@ -33,6 +34,7 @@ export function ContactForm() {
     "idle" | "submitting" | "success" | "error"
   >("idle");
   const [serverError, setServerError] = React.useState<string | null>(null);
+  const [turnstileToken, setTurnstileToken] = React.useState<string | null>(null);
 
   const {
     register,
@@ -51,6 +53,10 @@ export function ContactForm() {
   });
 
   const onSubmit = async (data: FormFields) => {
+    if (!turnstileToken) {
+      setServerError("Počkaj chvíľu kým sa overí, že nie si bot.");
+      return;
+    }
     setStatus("submitting");
     setServerError(null);
 
@@ -63,6 +69,7 @@ export function ContactForm() {
       consent: data.consent as true,
       source: "contact_form",
       website: data.website,
+      turnstileToken,
     });
 
     try {
@@ -236,9 +243,13 @@ export function ContactForm() {
         </div>
       )}
 
+      <div className="mt-5 flex justify-center">
+        <TurnstileWidget onVerify={setTurnstileToken} onExpire={() => setTurnstileToken(null)} />
+      </div>
+
       <button
         type="submit"
-        disabled={status === "submitting"}
+        disabled={status === "submitting" || !turnstileToken}
         className="mt-6 w-full inline-flex items-center justify-center gap-2 px-7 py-4 rounded-full bg-[#3db6e8] text-white font-semibold text-sm hover:bg-[#1a8cc4] disabled:opacity-50 disabled:cursor-not-allowed shadow-[0_10px_30px_rgba(61,182,232,0.45)] hover:shadow-[0_12px_36px_rgba(61,182,232,0.6)] transition-all duration-300"
       >
         {status === "submitting" ? (
