@@ -3,6 +3,7 @@ export const runtime = "edge";
 import { NextRequest, NextResponse } from "next/server";
 import { LeadInputSchema } from "@/lib/leadSchema";
 import { verifyTurnstileToken } from "@/lib/turnstile";
+import { isDisposableEmail } from "@/lib/disposable-emails";
 
 /**
  * POST /api/lead — submission z kontaktného formulára.
@@ -55,6 +56,24 @@ export async function POST(req: NextRequest) {
             "Anti-spam overenie zlyhalo. Skús prosím znovu (refresh stránky).",
         },
         { status: 403 },
+      );
+    }
+
+    // 2c) Disposable email blocker — bráni mailinator/tempmail/atď.
+    if (isDisposableEmail(data.email)) {
+      console.warn(
+        "[lead] disposable email blocked:",
+        data.email,
+        "ip:",
+        remoteIp,
+      );
+      return NextResponse.json(
+        {
+          error: "disposable_email",
+          message:
+            "Použi prosím svoj reálny email — dočasné / disposable schránky neakceptujeme.",
+        },
+        { status: 400 },
       );
     }
 

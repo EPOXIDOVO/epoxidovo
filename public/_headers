@@ -1,0 +1,38 @@
+# Cloudflare Pages security headers.
+# Dokumentácia: https://developers.cloudflare.com/pages/configuration/headers/
+#
+# Tieto hlavičky sa aplikujú na všetky odpovede z CDN edge.
+# CSP (Content-Security-Policy) zámerne nepridávame — GTM / GA4 / Meta Pixel /
+# Microsoft Clarity / Turnstile používajú inline scripts a externé domény,
+# strict CSP by ich rozbil. Bot Fight Mode + Turnstile + disposable blocker
+# už pokrývajú reálne útoky.
+
+/*
+  # Bráni clickjacking-u (embedovaniu epoxidovo.sk do <iframe> útočníka).
+  X-Frame-Options: DENY
+
+  # Bráni MIME-sniffingu — browser musí rešpektovať Content-Type ktorý server pošle.
+  X-Content-Type-Options: nosniff
+
+  # Posiela len origin (nie celú URL) keď user klikne na externý link.
+  # Chráni pred leak parametrov v URL (search queries, tokeny, atď.).
+  Referrer-Policy: strict-origin-when-cross-origin
+
+  # Vypína prístup k browser APIs ktoré tvoja stránka nepotrebuje.
+  Permissions-Policy: camera=(), microphone=(), geolocation=(), payment=(), usb=(), magnetometer=(), gyroscope=()
+
+  # HSTS — vynúti HTTPS pre všetky budúce requesty (2 roky).
+  # Cloudflare už dáva svoj HSTS ale defense-in-depth.
+  Strict-Transport-Security: max-age=63072000; includeSubDomains; preload
+
+  # Legacy XSS protection (moderné browsery to ignorujú ale staršie Edge/IE rešpektujú).
+  X-XSS-Protection: 1; mode=block
+
+  # Cross-Origin-Opener-Policy — izoluje window od inych origins (chráni pred Spectre).
+  Cross-Origin-Opener-Policy: same-origin-allow-popups
+
+# API routes — žiadny cache nikde (browser, CDN, proxy).
+/api/*
+  Cache-Control: no-store, no-cache, must-revalidate, max-age=0
+  Pragma: no-cache
+  Expires: 0
