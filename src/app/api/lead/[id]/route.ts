@@ -80,6 +80,15 @@ export async function PATCH(
     }
   }
   if (body.notes !== undefined) {
+    if (typeof body.notes !== "string") {
+      return NextResponse.json({ error: "invalid_notes" }, { status: 400 });
+    }
+    if (body.notes.length > 5000) {
+      return NextResponse.json(
+        { error: "notes_too_long", message: "Poznámky max 5000 znakov." },
+        { status: 400 },
+      );
+    }
     data.notes = body.notes.trim() || null;
   }
   if (typeof body.failedCallCount === "number") {

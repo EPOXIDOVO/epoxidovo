@@ -4,6 +4,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { LeadInputSchema } from "@/lib/leadSchema";
 import { verifyTurnstileToken } from "@/lib/turnstile";
 import { isDisposableEmail } from "@/lib/disposable-emails";
+import { rateLimit, getClientIp } from "@/lib/rate-limit";
 
 /**
  * POST /api/lead — submission z kontaktného formulára.
@@ -13,9 +14,64 @@ import { isDisposableEmail } from "@/lib/disposable-emails";
  * Ak je RESEND_API_KEY nastavený → pošle 2 emaily (admin + customer).
  * Bez týchto env je fallback: log do servera + tichý success (aby form nezlyhal).
  */
+// Max payload size — 32 KB stačí na akýkoľvek lead. Bráni DoS cez veľký payload.
+const MAX_BODY_BYTES = 32 * 1024;
+
 export async function POST(req: NextRequest) {
   try {
-    const body = await req.json();
+    // 0a) Rate limit — 5 attempts / 20 min per IP per endpoint
+    const ip = getClientIp(req.headers);
+    const rl = rateLimit({
+      key: "lead-submit",
+      identifier: ip,
+      limit: 5,
+      windowMs: 20 * 60 * 1000,
+    });
+    if (!rl.ok) {
+      const retryAfter = Math.ceil(rl.resetMs / 1000);
+      console.warn("[lead] rate limit exceeded ip:", ip);
+      return NextResponse.json(
+        {
+          error: "rate_limited",
+          message:
+            "Príliš veľa požiadaviek. Skús to znova o pár minút, alebo nám zavolaj priamo.",
+        },
+        {
+          status: 429,
+          headers: {
+            "Retry-After": String(retryAfter),
+            "X-RateLimit-Limit": "5",
+            "X-RateLimit-Remaining": "0",
+            "X-RateLimit-Reset": String(retryAfter),
+          },
+        },
+      );
+    }
+
+    // 0b) Payload size guard — Content-Length check + reálny body size check
+    const contentLength = Number(req.headers.get("content-length") ?? 0);
+    if (contentLength > MAX_BODY_BYTES) {
+      return NextResponse.json(
+        { error: "payload_too_large", message: "Príliš veľká požiadavka." },
+        { status: 413 },
+      );
+    }
+    const raw = await req.text();
+    if (raw.length > MAX_BODY_BYTES) {
+      return NextResponse.json(
+        { error: "payload_too_large", message: "Príliš veľká požiadavka." },
+        { status: 413 },
+      );
+    }
+    let body: unknown;
+    try {
+      body = JSON.parse(raw);
+    } catch {
+      return NextResponse.json(
+        { error: "invalid_json", message: "Neplatný formát požiadavky." },
+        { status: 400 },
+      );
+    }
 
     // 1) Validácia
     const parsed = LeadInputSchema.safeParse(body);
@@ -34,10 +90,7 @@ export async function POST(req: NextRequest) {
 
     // 2b) Cloudflare Turnstile verification — bráni botom + brute force
     const headers = req.headers;
-    const remoteIp =
-      headers.get("cf-connecting-ip") ??
-      headers.get("x-forwarded-for")?.split(",")[0].trim() ??
-      null;
+    const remoteIp = ip !== "unknown" ? ip : null;
     const turnstileResult = await verifyTurnstileToken(
       data.turnstileToken,
       remoteIp,

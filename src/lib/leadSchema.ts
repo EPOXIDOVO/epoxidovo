@@ -50,13 +50,13 @@ export const LeadInputSchema = z.object({
   }),
   // Honeypot pre boty (nemal by byť nikdy vyplnený)
   website: z.string().max(0).optional().or(z.literal("")),
-  // Tracking
-  source: z.string().optional(),
-  utmSource: z.string().optional(),
-  utmMedium: z.string().optional(),
-  utmCampaign: z.string().optional(),
-  // Cloudflare Turnstile token — server ho overí cez siteverify API
-  turnstileToken: z.string().optional(),
+  // Tracking — kontrolované max lengths aby attacker nemohol stuffnúť 1MB string
+  source: z.string().max(80).regex(/^[A-Za-z0-9_\-]+$/, "invalid source").optional(),
+  utmSource: z.string().max(100).optional(),
+  utmMedium: z.string().max(100).optional(),
+  utmCampaign: z.string().max(150).optional(),
+  // Cloudflare Turnstile token — max 2048 chars per CF docs
+  turnstileToken: z.string().max(2048).optional(),
 });
 
 export type LeadInput = z.infer<typeof LeadInputSchema>;
