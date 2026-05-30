@@ -79,11 +79,11 @@ export function CookieBanner() {
       role="dialog"
       aria-labelledby="cookie-banner-title"
       aria-modal="false"
-      className="fixed bottom-0 inset-x-0 z-[90] p-3 md:p-5 pointer-events-none"
+      className="fixed bottom-0 inset-x-0 z-[90] p-2 md:p-5 pointer-events-none"
     >
       <div
         className={cn(
-          "pointer-events-auto mx-auto max-w-3xl bg-white rounded-2xl shadow-2xl border border-[var(--color-border)] overflow-hidden",
+          "pointer-events-auto mx-auto max-w-3xl bg-white rounded-xl md:rounded-2xl shadow-2xl border border-[var(--color-border)] overflow-hidden",
           "animate-fade-up",
         )}
       >
@@ -120,19 +120,19 @@ function BannerView({
   onCustomize: () => void;
 }) {
   return (
-    <div className="p-5 md:p-6">
-      <div className="flex items-start gap-3 md:gap-4">
-        <div className="shrink-0 inline-flex items-center justify-center w-10 h-10 rounded-xl bg-[#3db6e8]/10">
-          <Cookie className="w-5 h-5 text-[#3db6e8]" aria-hidden />
+    <div className="p-3 md:p-6">
+      <div className="flex items-start gap-2 md:gap-4">
+        <div className="shrink-0 inline-flex items-center justify-center w-6 h-6 md:w-10 md:h-10 rounded-md md:rounded-xl bg-[#3db6e8]/10">
+          <Cookie className="w-3.5 h-3.5 md:w-5 md:h-5 text-[#3db6e8]" aria-hidden />
         </div>
         <div className="flex-1 min-w-0">
           <h2
             id="cookie-banner-title"
-            className="text-base md:text-lg font-bold text-[var(--color-fg)] tracking-tight"
+            className="text-xs md:text-lg font-bold text-[var(--color-fg)] tracking-tight"
           >
             Používame cookies
           </h2>
-          <p className="mt-1.5 text-sm text-[var(--color-fg-muted)] leading-relaxed">
+          <p className="mt-0.5 md:mt-1.5 text-[11px] md:text-sm text-[var(--color-fg-muted)] leading-snug md:leading-relaxed">
             Pre fungovanie webu nutné cookies sú vždy aktívne. Pre analytiku a
             marketing potrebujeme tvoj súhlas. Viac v{" "}
             <Link
@@ -146,28 +146,28 @@ function BannerView({
         </div>
       </div>
 
-      <div className="mt-5 flex flex-col sm:flex-row gap-2.5">
+      <div className="mt-2.5 md:mt-5 flex flex-col sm:flex-row gap-1.5 md:gap-2.5">
         <button
           type="button"
           onClick={onAcceptAll}
-          className="inline-flex items-center justify-center gap-2 px-5 py-3 rounded-full bg-[#3db6e8] text-white font-semibold text-sm hover:bg-[#1a8cc4] transition-colors"
+          className="inline-flex items-center justify-center gap-1.5 md:gap-2 px-3 py-2 md:px-5 md:py-3 rounded-full bg-[#3db6e8] text-white font-semibold text-xs md:text-sm hover:bg-[#1a8cc4] transition-colors"
         >
-          <Check className="w-4 h-4" aria-hidden />
+          <Check className="w-3 h-3 md:w-4 md:h-4" aria-hidden />
           Prijať všetky
         </button>
         <button
           type="button"
           onClick={onRejectAll}
-          className="inline-flex items-center justify-center gap-2 px-5 py-3 rounded-full bg-[var(--color-bg-muted)] text-[var(--color-fg)] font-semibold text-sm hover:bg-[var(--color-border)] transition-colors"
+          className="inline-flex items-center justify-center gap-1.5 md:gap-2 px-3 py-2 md:px-5 md:py-3 rounded-full bg-[var(--color-bg-muted)] text-[var(--color-fg)] font-semibold text-xs md:text-sm hover:bg-[var(--color-border)] transition-colors"
         >
           Iba nutné
         </button>
         <button
           type="button"
           onClick={onCustomize}
-          className="inline-flex items-center justify-center gap-2 px-5 py-3 rounded-full bg-transparent border border-[var(--color-border-strong)] text-[var(--color-fg)] font-semibold text-sm hover:bg-[var(--color-bg-muted)] transition-colors"
+          className="inline-flex items-center justify-center gap-1.5 md:gap-2 px-3 py-2 md:px-5 md:py-3 rounded-full bg-transparent border border-[var(--color-border-strong)] text-[var(--color-fg)] font-semibold text-xs md:text-sm hover:bg-[var(--color-bg-muted)] transition-colors"
         >
-          <Settings2 className="w-4 h-4" aria-hidden />
+          <Settings2 className="w-3 h-3 md:w-4 md:h-4" aria-hidden />
           Upraviť
         </button>
       </div>
@@ -194,22 +194,22 @@ function SettingsView({
   onClose: () => void;
 }) {
   return (
-    <div className="p-5 md:p-6">
-      <div className="flex items-start justify-between gap-4 mb-5">
-        <h2 className="text-base md:text-lg font-bold text-[var(--color-fg)] tracking-tight">
+    <div className="p-3 md:p-6">
+      <div className="flex items-start justify-between gap-2 md:gap-4 mb-2.5 md:mb-5">
+        <h2 className="text-xs md:text-lg font-bold text-[var(--color-fg)] tracking-tight">
           Nastavenia cookies
         </h2>
         <button
           type="button"
           onClick={onClose}
           aria-label="Zavrieť"
-          className="shrink-0 inline-flex items-center justify-center w-9 h-9 rounded-full hover:bg-[var(--color-bg-muted)] transition-colors"
+          className="shrink-0 inline-flex items-center justify-center w-6 h-6 md:w-9 md:h-9 rounded-full hover:bg-[var(--color-bg-muted)] transition-colors"
         >
-          <X className="w-4 h-4" aria-hidden />
+          <X className="w-3 h-3 md:w-4 md:h-4" aria-hidden />
         </button>
       </div>
 
-      <div className="space-y-3">
+      <div className="space-y-1.5 md:space-y-3">
         <Category
           title="Nutné"
           description="Bez nich web nefunguje (session, CSRF). Tieto sú vždy aktívne."
@@ -230,25 +230,25 @@ function SettingsView({
         />
       </div>
 
-      <div className="mt-6 flex flex-col sm:flex-row gap-2.5">
+      <div className="mt-3 md:mt-6 flex flex-col sm:flex-row gap-1.5 md:gap-2.5">
         <button
           type="button"
           onClick={onSave}
-          className="inline-flex items-center justify-center gap-2 px-5 py-3 rounded-full bg-[#3db6e8] text-white font-semibold text-sm hover:bg-[#1a8cc4] transition-colors"
+          className="inline-flex items-center justify-center gap-1.5 md:gap-2 px-3 py-2 md:px-5 md:py-3 rounded-full bg-[#3db6e8] text-white font-semibold text-xs md:text-sm hover:bg-[#1a8cc4] transition-colors"
         >
-          <Check className="w-4 h-4" aria-hidden />
+          <Check className="w-3 h-3 md:w-4 md:h-4" aria-hidden />
           Uložiť voľbu
         </button>
         <button
           type="button"
           onClick={onBack}
-          className="inline-flex items-center justify-center gap-2 px-5 py-3 rounded-full bg-transparent border border-[var(--color-border-strong)] text-[var(--color-fg)] font-semibold text-sm hover:bg-[var(--color-bg-muted)] transition-colors"
+          className="inline-flex items-center justify-center gap-1.5 md:gap-2 px-3 py-2 md:px-5 md:py-3 rounded-full bg-transparent border border-[var(--color-border-strong)] text-[var(--color-fg)] font-semibold text-xs md:text-sm hover:bg-[var(--color-bg-muted)] transition-colors"
         >
           Späť
         </button>
       </div>
 
-      <p className="mt-4 text-xs text-[var(--color-fg-subtle)] leading-relaxed">
+      <p className="mt-2 md:mt-4 text-[10px] md:text-xs text-[var(--color-fg-subtle)] leading-snug md:leading-relaxed">
         Voľbu môžeš kedykoľvek zmeniť cez link „Cookies" v pätke webu.
       </p>
     </div>
@@ -269,17 +269,17 @@ function Category({
   disabled?: boolean;
 }) {
   return (
-    <div className="flex items-start justify-between gap-4 p-4 rounded-xl border border-[var(--color-border)]">
+    <div className="flex items-start justify-between gap-2 md:gap-4 p-2 md:p-4 rounded-lg md:rounded-xl border border-[var(--color-border)]">
       <div className="flex-1 min-w-0">
-        <div className="font-semibold text-sm text-[var(--color-fg)]">
+        <div className="font-semibold text-xs md:text-sm text-[var(--color-fg)]">
           {title}
           {disabled && (
-            <span className="ml-2 text-[10px] uppercase tracking-wider text-[var(--color-fg-subtle)] font-normal">
+            <span className="ml-1.5 md:ml-2 text-[9px] md:text-[10px] uppercase tracking-wider text-[var(--color-fg-subtle)] font-normal">
               povinné
             </span>
           )}
         </div>
-        <p className="mt-1 text-xs text-[var(--color-fg-muted)] leading-relaxed">
+        <p className="mt-0.5 md:mt-1 text-[10px] md:text-xs text-[var(--color-fg-muted)] leading-snug md:leading-relaxed">
           {description}
         </p>
       </div>
