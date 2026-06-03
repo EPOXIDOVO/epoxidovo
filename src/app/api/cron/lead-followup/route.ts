@@ -26,15 +26,39 @@ function escapeHtml(s: string): string {
     .replace(/'/g, "&#039;");
 }
 
+/**
+ * Konštantný-časový string compare — odolný voči timing attack-om.
+ * String equality (a === b) leaky — porovnáva znak po znaku a vráti false
+ * pri prvom rozdiele. Atakujúci môže merať response time a postupne
+ * uhádnuť každý znak secret-u. Toto compare prejde vždy plný buffer.
+ */
+function timingSafeEqual(a: string, b: string): boolean {
+  // Nie identické dĺžky → vraciame false ale stále urobíme dummy compare
+  // aby čas bol porovnateľný so správne dlhým input-om.
+  const aBytes = new TextEncoder().encode(a);
+  const bBytes = new TextEncoder().encode(b);
+  if (aBytes.length !== bBytes.length) {
+    // Stále urobíme XOR sweep aby čas bol konštantný
+    let _dummy = 0;
+    for (let i = 0; i < aBytes.length; i++) _dummy |= aBytes[i];
+    return false;
+  }
+  let diff = 0;
+  for (let i = 0; i < aBytes.length; i++) {
+    diff |= aBytes[i] ^ bBytes[i];
+  }
+  return diff === 0;
+}
+
 export async function POST(req: NextRequest) {
-  // 1) Authorization check
+  // 1) Authorization check (timing-safe)
   const expected = process.env.CRON_SECRET;
   if (!expected) {
     console.error("[cron.followup] CRON_SECRET env var missing");
     return NextResponse.json({ error: "server_misconfigured" }, { status: 500 });
   }
-  const auth = req.headers.get("authorization") ?? "";
-  if (auth !== `Bearer ${expected}`) {
+  const authHeader = req.headers.get("authorization") ?? "";
+  if (!timingSafeEqual(authHeader, `Bearer ${expected}`)) {
     return NextResponse.json({ error: "unauthorized" }, { status: 401 });
   }
 
@@ -118,8 +142,9 @@ export async function POST(req: NextRequest) {
       results,
     });
   } catch (e) {
+    // Logujeme detail server-side, ale klientovi nevraciame raw exception message
+    // (mohlo by obsahovať DB connection string alebo iné citlivé veci).
     console.error("[cron.followup] error:", e);
-    const msg = e instanceof Error ? e.message : "unknown";
-    return NextResponse.json({ error: "exception", message: msg }, { status: 500 });
+    return NextResponse.json({ error: "exception" }, { status: 500 });
   }
 }

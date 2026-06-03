@@ -1,21 +1,19 @@
 export const runtime = "edge";
 
 import { NextResponse } from "next/server";
-import { auth } from "@/lib/auth";
+import { requireAdmin } from "@/lib/auth-helpers";
 import { getLeads, isDbAvailable, STATUS_LABELS } from "@/lib/leads";
 
 /**
  * GET /api/admin/leads/export — CSV export všetkých leadov.
- * Auth required.
+ * **ADMIN only** — obsahuje PII (mená, emaily, telefóny všetkých leadov).
  *
  * Stĺpce: ID, Vytvorené, Meno, Email, Telefón, Typ priestoru, Záujem, Plocha,
  *         Správa, Stav, Zdroj, UTM Source, UTM Medium, UTM Campaign, Referrer.
  */
 export async function GET() {
-  const session = await auth();
-  if (!session?.user) {
-    return NextResponse.json({ error: "unauthorized" }, { status: 401 });
-  }
+  const check = await requireAdmin();
+  if (check.error) return check.error;
   if (!isDbAvailable()) {
     return NextResponse.json(
       { error: "db_unavailable" },

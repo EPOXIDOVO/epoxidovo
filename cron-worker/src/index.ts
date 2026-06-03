@@ -22,18 +22,36 @@ export default {
     ctx.waitUntil(runFollowup(env));
   },
 
-  // Manuálny trigger pre testovanie: curl https://<worker>.workers.dev/run
+  // Manuálny trigger — VYŽADUJE Bearer auth (rovnaký secret ako cron).
+  // curl -H "Authorization: Bearer $CRON_SECRET" https://<worker>.workers.dev/run
   async fetch(req: Request, env: Env): Promise<Response> {
     const url = new URL(req.url);
     if (url.pathname === "/run") {
+      // Auth check — bez secret-u nikto nemôže ručne spustiť cron.
+      const authHeader = req.headers.get("authorization") ?? "";
+      if (!constantTimeEqual(authHeader, `Bearer ${env.CRON_SECRET ?? ""}`)) {
+        return new Response("unauthorized", { status: 401 });
+      }
       const result = await runFollowup(env);
       return Response.json(result);
     }
-    return new Response("epoxidovo cron worker — POST /run to trigger manually", {
+    return new Response("epoxidovo cron worker — POST /run with Bearer auth to trigger", {
       status: 200,
     });
   },
 };
+
+/** Konštantný-časový string compare (timing-safe). */
+function constantTimeEqual(a: string, b: string): boolean {
+  const aBytes = new TextEncoder().encode(a);
+  const bBytes = new TextEncoder().encode(b);
+  if (aBytes.length !== bBytes.length) return false;
+  let diff = 0;
+  for (let i = 0; i < aBytes.length; i++) {
+    diff |= aBytes[i] ^ bBytes[i];
+  }
+  return diff === 0;
+}
 
 async function runFollowup(env: Env): Promise<{ ok: boolean; status?: number; body?: unknown; error?: string }> {
   const target = env.CRON_TARGET_URL;

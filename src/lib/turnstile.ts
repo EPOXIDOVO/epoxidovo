@@ -10,9 +10,20 @@ export async function verifyTurnstileToken(
 ): Promise<{ ok: boolean; reason?: string }> {
   const secret = process.env.TURNSTILE_SECRET_KEY;
 
-  // Dev bypass — bez secret kľúča prepustíme všetko
+  // Bez secret kľúča:
+  //  - v PRODUKCII: fail-closed (odmietame request) — bráni boti spamovať
+  //    keby sa nedopatrením vymazal env var v CF Pages dashboarde.
+  //  - v DEVE: bypass (prepustíme) — vývojár nemá Turnstile pre localhost.
   if (!secret) {
-    console.warn("[turnstile] TURNSTILE_SECRET_KEY not set — bypassing verification");
+    if (process.env.NODE_ENV === "production") {
+      console.error(
+        "[turnstile] FATAL: TURNSTILE_SECRET_KEY missing in production — refusing request",
+      );
+      return { ok: false, reason: "secret_missing_in_prod" };
+    }
+    console.warn(
+      "[turnstile] TURNSTILE_SECRET_KEY not set — dev bypass (NOT for production)",
+    );
     return { ok: true };
   }
 

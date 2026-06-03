@@ -1,21 +1,8 @@
 export const runtime = "edge";
 
 import { NextRequest, NextResponse } from "next/server";
-import { auth } from "@/lib/auth";
+import { requireAdmin } from "@/lib/auth-helpers";
 import { prisma } from "@/lib/prisma";
-
-async function requireAdmin() {
-  const session = await auth();
-  if (!session?.user) {
-    return { error: NextResponse.json({ error: "unauthorized" }, { status: 401 }) };
-  }
-  // @ts-expect-error session.user.role
-  const role: string | undefined = session.user.role;
-  if (role !== "ADMIN") {
-    return { error: NextResponse.json({ error: "forbidden" }, { status: 403 }) };
-  }
-  return { session };
-}
 
 /** PATCH /api/admin/users/[id] — toggle active flag (alebo zmeniť rolu) */
 export async function PATCH(

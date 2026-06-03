@@ -39,9 +39,29 @@ const FROM_ADDRESS =
 const useSecureCookies = process.env.NODE_ENV === "production";
 const cookiePrefix = useSecureCookies ? "__Secure-" : "";
 
-/** 6-ciferný OTP kód (100000-999999) */
+/**
+ * 6-ciferný OTP kód (100000-999999) generovaný cez Web Crypto API.
+ *
+ * Math.random() je NIE cryptographically secure — V8 internals robia jeho výstup
+ * čiastočne predvídateľný (mt19937 PRNG bez crypto seed). crypto.getRandomValues
+ * je CSPRNG dostupné na edge runtime aj Node.js.
+ */
 function generateOtpCode(): string {
-  return Math.floor(100000 + Math.random() * 900000).toString();
+  // Rejection sampling — generujeme 32-bit unsigned int a odmietame hodnoty
+  // ktoré by spôsobili bias (rozsah 900000 nie je mocnina 2). Praktická pravdepodobnosť
+  // rejekcie je ~0%, prakticky vždy prejde prvý pokus.
+  const max = 900000;
+  const range = 0xffffffff; // 2^32 - 1
+  const cutoff = range - (range % max);
+
+  const buf = new Uint32Array(1);
+  let value: number;
+  do {
+    crypto.getRandomValues(buf);
+    value = buf[0];
+  } while (value > cutoff);
+
+  return (100000 + (value % max)).toString();
 }
 
 /** HTML šablóna emailu s prominentným OTP kódom */
@@ -154,8 +174,9 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
      *  - Inak: musí existovať User row s active=true
      */
     async signIn({ user }) {
+      // Emaily NELOGUJEME — sú to PII. Stačí nám "attempt" / "ok" / "rejected"
+      // bez identity. Pre debugging detail sa pozri do Audit Log v DB neskôr.
       const email = (user.email ?? "").toLowerCase();
-      console.log("[auth.signIn] attempt for email:", email);
       if (!email) return false;
 
       if (adminEmails.includes(email)) {
@@ -165,17 +186,16 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
             create: { email, role: "ADMIN", active: true },
             update: { role: "ADMIN", active: true },
           });
-          console.log("[auth.signIn] admin upsert OK");
+          return true;
         } catch (e) {
           console.error("[auth.signIn] bootstrap upsert failed:", e);
+          return false;
         }
-        return true;
       }
 
       try {
         const dbUser = await prisma.user.findUnique({ where: { email } });
         if (!dbUser || !dbUser.active) {
-          console.log("[auth.signIn] rejected:", email);
           return false;
         }
         return true;
@@ -223,12 +243,6 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
         session.user.id = token.id as string | undefined;
         // @ts-expect-error rozšírenie session.user.role
         session.user.role = token.role as string | undefined;
-        console.log(
-          "[auth.session] for:",
-          session.user.email,
-          "role:",
-          token.role,
-        );
       }
       return session;
     },
@@ -241,14 +255,6 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
     async redirect({ url, baseUrl }) {
       const canonicalBase =
         process.env.AUTH_URL ?? SITE.url ?? baseUrl;
-      console.log(
-        "[auth.redirect] url:",
-        url,
-        "baseUrl:",
-        baseUrl,
-        "canonical:",
-        canonicalBase,
-      );
       // Relatívny URL → prefixneme canonical base
       if (url.startsWith("/")) {
         return `${canonicalBase}${url}`;

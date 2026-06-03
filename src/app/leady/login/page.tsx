@@ -129,8 +129,8 @@ export default async function LeadyLoginPage({ searchParams }: LoginPageProps) {
                 <div className="mt-4 p-3 rounded-lg bg-red-50 border border-red-100 text-sm text-red-700 flex items-start gap-2">
                   <AlertCircle className="w-4 h-4 shrink-0 mt-0.5" aria-hidden />
                   <span>
-                    Prihlásenie zlyhalo. Tento email nemá oprávnenie alebo
-                    nie si pridaný v systéme.
+                    Prihlásenie zlyhalo. Skús prosím znovu, alebo kontaktuj
+                    admina ak problém pretrváva.
                   </span>
                 </div>
               )}

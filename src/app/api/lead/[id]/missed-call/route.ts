@@ -1,7 +1,7 @@
 export const runtime = "edge";
 
 import { NextRequest, NextResponse } from "next/server";
-import { auth } from "@/lib/auth";
+import { requireAdminOrAgent } from "@/lib/auth-helpers";
 import { prisma } from "@/lib/prisma";
 import { SITE } from "@/lib/site";
 
@@ -19,15 +19,8 @@ export async function POST(
   _req: NextRequest,
   context: { params: Promise<{ id: string }> },
 ) {
-  const session = await auth();
-  if (!session?.user) {
-    return NextResponse.json({ error: "unauthorized" }, { status: 401 });
-  }
-  // @ts-expect-error session.user.role rozšírené v auth.ts
-  const role: string | undefined = session.user.role;
-  if (role !== "ADMIN" && role !== "AGENT") {
-    return NextResponse.json({ error: "forbidden" }, { status: 403 });
-  }
+  const check = await requireAdminOrAgent();
+  if (check.error) return check.error;
 
   const { id } = await context.params;
   const now = new Date();
