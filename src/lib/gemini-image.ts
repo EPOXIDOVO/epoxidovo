@@ -30,14 +30,12 @@ interface GeminiResponse {
   error?: { code: number; message: string; status: string };
 }
 
-function getApiKey(): string {
-  const key = process.env.GEMINI_API_KEY;
-  if (!key) {
-    throw new Error(
-      "GEMINI_API_KEY env var is not set. Get one from https://aistudio.google.com/apikey",
-    );
-  }
-  return key;
+/**
+ * Vráti API kľúč alebo null. Volajúce funkcie majú handlovať null → ok:false
+ * s friendly hláškou, namiesto crashu s HTTP 500.
+ */
+function getApiKeyOrNull(): string | null {
+  return process.env.GEMINI_API_KEY ?? null;
 }
 
 // ════════════════════════════════════════════════════════════════════════
@@ -60,7 +58,11 @@ export async function checkIfFloor(
   imageBase64: string,
   mimeType: string,
 ): Promise<FloorCheckResult> {
-  const apiKey = getApiKey();
+  const apiKey = getApiKeyOrNull();
+  if (!apiKey) {
+    console.error("[gemini.checkIfFloor] GEMINI_API_KEY missing in env");
+    return { ok: false, reason: "api_key_missing" };
+  }
   const url = `${GEMINI_API_BASE}/models/gemini-2.5-flash:generateContent?key=${apiKey}`;
 
   const body = {
@@ -157,7 +159,11 @@ export async function generateFloorEdit(
   inputMimeType: string,
   prompt: string,
 ): Promise<GenerateImageResult> {
-  const apiKey = getApiKey();
+  const apiKey = getApiKeyOrNull();
+  if (!apiKey) {
+    console.error("[gemini.generateFloorEdit] GEMINI_API_KEY missing in env");
+    return { ok: false, reason: "api_key_missing" };
+  }
   const url = `${GEMINI_API_BASE}/models/gemini-3.1-flash-image:generateContent?key=${apiKey}`;
 
   const body = {

@@ -189,6 +189,18 @@ export async function POST(req: NextRequest) {
   }
 
   if (!result.ok) {
+    // Špeciálny case: API key chýba (server-config problém, nie user error)
+    if (result.reason === "api_key_missing") {
+      return NextResponse.json(
+        {
+          ok: false,
+          error: "service_unavailable",
+          message:
+            "AI Vizualizér sa práve konfiguruje, skús prosím o pár minút.",
+        },
+        { status: 503 },
+      );
+    }
     const message = result.reason?.startsWith("blocked_")
       ? "AI odmietla túto požiadavku. Skús inú fotku."
       : result.reason === "no_image_in_response"

@@ -77,6 +77,18 @@ export async function POST(req: NextRequest) {
   const normalizedMime = body.mimeType === "image/jpg" ? "image/jpeg" : body.mimeType;
   const result = await checkIfFloor(body.imageBase64, normalizedMime);
   if (!result.ok) {
+    // Špeciálny case: API key chýba (server-config problém, nie user error)
+    if (result.reason === "api_key_missing") {
+      return NextResponse.json(
+        {
+          ok: false,
+          error: "service_unavailable",
+          message:
+            "AI Vizualizér sa práve konfiguruje, skús prosím o pár minút.",
+        },
+        { status: 503 },
+      );
+    }
     const message = result.reason?.startsWith("blocked_")
       ? "Tento typ obsahu nie je možné spracovať. Skús inú fotku."
       : "Na fotke nevidíme jasnú podlahu. Skús fotku miestnosti, kde je vidno aspoň 25 % podlahy.";
