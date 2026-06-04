@@ -2,7 +2,7 @@
 
 import * as React from "react";
 import Link from "next/link";
-import { Menu, X, Images, Phone, Home } from "lucide-react";
+import { Menu, X, Images, Phone, Home, Sparkles } from "lucide-react";
 import { Container } from "@/components/ui/Container";
 import { SamplePicker } from "@/components/home/SamplePicker";
 import { SITE } from "@/lib/site";
@@ -82,8 +82,8 @@ export function Header({ transparentOnTop = false }: HeaderProps) {
             </span>
           </Link>
 
-          {/* Desktop CTA — Kontakt (zelená pill) + Cenová ponuka + Ukážky realizácií. */}
-          <div className="hidden md:flex items-center gap-4 ml-auto">
+          {/* Desktop CTA — Kontakt (zelená pill) + Cenová ponuka + Ukážky realizácií + AI Vizualizácia */}
+          <div className="hidden md:flex items-center gap-3 lg:gap-4 ml-auto">
             <Link
               href="/kontakt"
               className="inline-flex items-center gap-2 px-4 lg:px-5 py-2.5 rounded-full bg-[#16a34a] text-white font-semibold text-sm lg:text-base shadow-[0_6px_20px_rgba(22,163,74,0.4)] hover:bg-[#15803d] hover:shadow-[0_8px_24px_rgba(21,128,61,0.55)] hover:-translate-y-0.5 transition-all duration-300"
@@ -102,6 +102,13 @@ export function Header({ transparentOnTop = false }: HeaderProps) {
               <Images className="w-4 h-4" aria-hidden />
               Ukážky realizácií
             </button>
+            <Link
+              href="/ai-vizualizer"
+              className="inline-flex items-center gap-2 px-4 lg:px-5 py-2.5 rounded-full bg-gradient-to-r from-[#3db6e8] to-[#a855f7] text-white font-semibold text-sm lg:text-base shadow-[0_6px_20px_rgba(168,85,247,0.4)] hover:from-[#1a8cc4] hover:to-[#9333ea] hover:shadow-[0_8px_24px_rgba(168,85,247,0.55)] hover:-translate-y-0.5 transition-all duration-300"
+            >
+              <Sparkles className="w-4 h-4" aria-hidden />
+              <span className="whitespace-nowrap">AI Vizualizácia</span>
+            </Link>
           </div>
 
           {/* Mobile hamburger — výrazne vpravo hore */}
@@ -163,6 +170,14 @@ export function Header({ transparentOnTop = false }: HeaderProps) {
               className="inline-flex items-center justify-center px-6 py-4 rounded-full bg-[#f97316] text-white font-semibold hover:bg-[#ea580c] shadow-[0_8px_24px_rgba(249,115,22,0.5)] transition-colors"
             >
               Cenová ponuka
+            </Link>
+            <Link
+              href="/ai-vizualizer"
+              onClick={() => setOpen(false)}
+              className="inline-flex items-center justify-center gap-2 px-6 py-4 rounded-full bg-gradient-to-r from-[#3db6e8] to-[#a855f7] text-white font-semibold hover:from-[#1a8cc4] hover:to-[#9333ea] shadow-[0_8px_24px_rgba(168,85,247,0.4)] transition-colors"
+            >
+              <Sparkles className="w-4 h-4" aria-hidden />
+              AI Vizualizácia
             </Link>
             <Link
               href="/kontakt"

@@ -3,7 +3,7 @@ export const runtime = "edge";
 import type { Metadata } from "next";
 import Link from "next/link";
 import { redirect } from "next/navigation";
-import { Inbox, LayoutDashboard, LogOut, Settings, Users, PhoneCall, Receipt } from "lucide-react";
+import { Inbox, LayoutDashboard, LogOut, Settings, Users, PhoneCall, Receipt, Sparkles } from "lucide-react";
 import { auth, signOut } from "@/lib/auth";
 import { SITE } from "@/lib/site";
 
@@ -16,6 +16,7 @@ const NAV = [
   { href: "/admin", label: "Prehľad", icon: LayoutDashboard },
   { href: "/admin/leads", label: "Leady", icon: Inbox },
   { href: "/admin/faktury", label: "Faktúry", icon: Receipt },
+  { href: "/admin/vizualizer", label: "AI Vizualizér", icon: Sparkles },
   { href: "/admin/agents", label: "Agenti", icon: Users },
   { href: "/leady", label: "Lead Software ↗", icon: PhoneCall },
   { href: "/admin/nastavenia", label: "Nastavenia", icon: Settings },

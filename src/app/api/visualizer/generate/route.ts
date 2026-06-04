@@ -125,7 +125,9 @@ export async function POST(req: NextRequest) {
   const prompt = buildGeminiPrompt(preset.texture, preset.color);
   const result = await generateFloorEdit(body.imageBase64, normalizedMime, prompt);
 
-  // 5) Log to DB (always — for analytics, even failures)
+  // 5) Log to DB (always — for analytics + admin review of results)
+  // Ukladáme input + output base64 aby admin mohol skontrolovať kvalitu AI.
+  // Pri zlyhaní ukladáme len input (bez output) pre debug.
   if (process.env.DATABASE_URL && !process.env.DATABASE_URL.includes("placeholder")) {
     try {
       const { prisma } = await import("@/lib/prisma");
@@ -136,6 +138,10 @@ export async function POST(req: NextRequest) {
           color: body.colorSlug,
           ok: result.ok,
           errorCode: result.ok ? null : result.reason ?? null,
+          inputImageData: body.imageBase64,
+          inputMimeType: normalizedMime,
+          outputImageData: result.ok ? result.imageBase64 ?? null : null,
+          outputMimeType: result.ok ? result.mimeType ?? null : null,
         },
       });
     } catch (err) {

@@ -274,9 +274,10 @@ export function Hero() {
                 <Images className="w-3.5 h-3.5 md:w-4 md:h-4" aria-hidden />
                 Ukážky realizácií
               </button>
+              {/* Mobile: full-width pod 2 horné buttony. Desktop: inline ako 3. */}
               <Link
                 href="/ai-vizualizer"
-                className="btn btn-lg max-md:!px-4 max-md:!py-2.5 max-md:!text-[13px] !bg-gradient-to-r !from-[#3db6e8] !to-[#a855f7] !text-white hover:!from-[#1a8cc4] hover:!to-[#9333ea] !shadow-[0_8px_24px_rgba(168,85,247,0.4)] hover:!shadow-[0_12px_36px_rgba(168,85,247,0.55)] !transition-all !duration-300"
+                className="btn btn-lg max-md:!px-4 max-md:!py-2.5 max-md:!text-[13px] max-md:!w-full max-md:basis-full !bg-gradient-to-r !from-[#3db6e8] !to-[#a855f7] !text-white hover:!from-[#1a8cc4] hover:!to-[#9333ea] !shadow-[0_8px_24px_rgba(168,85,247,0.4)] hover:!shadow-[0_12px_36px_rgba(168,85,247,0.55)] !transition-all !duration-300"
               >
                 <Sparkles className="w-3.5 h-3.5 md:w-4 md:h-4" aria-hidden />
                 AI Vizualizácia

@@ -166,8 +166,9 @@ model VerificationToken {
   @@unique([identifier, token])
 }
 
-/// AI Visualizer — tracking generácií pre rate limiting per IP.
-/// Každý request = 1 row. Cleanup: rows staršie než 7 dní môžu byť mazané.
+/// AI Visualizer — tracking generácií pre rate limiting per IP + admin gallery.
+/// Každý request = 1 row. Cleanup: rows staršie než 30 dní by mohli byť mazané
+/// (cleanup cron worker bude pridaný keď DB bude rásť).
 model VisualizerGeneration {
   id        String   @id @default(cuid())
   createdAt DateTime @default(now())
@@ -185,6 +186,15 @@ model VisualizerGeneration {
   ok        Boolean  @default(true) // false ak generácia zlyhala
   errorCode String?  // ak ok=false: "validation_failed" | "rate_limit" | "api_error" | ...
 
+  // Images pre admin review — base64 stored ako Text. Pri raste DB:
+  //   - presunúť na CF R2 (binding cez wrangler.toml)
+  //   - alebo cleanup po 30 dňoch
+  inputImageData  String? @db.Text  // base64 input (bez data: prefixu)
+  inputMimeType   String?           // "image/jpeg" | "image/png" | "image/webp"
+  outputImageData String? @db.Text  // base64 result
+  outputMimeType  String?           // typicky "image/png"
+
   @@index([ip, createdAt])
   @@index([createdAt])
+  @@index([ok])
 }
