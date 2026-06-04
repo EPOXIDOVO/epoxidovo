@@ -91,10 +91,6 @@ export function AiVisualizer() {
   };
 
   const validate = async (base64: string, mime: string) => {
-    if (!turnstileToken) {
-      // Pre validate je Turnstile nepovinný (lacný call), ale ak je k dispozícii
-      // pridáme ho. Server-side ho zatiaľ vyžaduje — v dev bypass-uje.
-    }
     setStep("validating");
     try {
       const res = await fetch("/api/visualizer/validate", {
@@ -103,7 +99,6 @@ export function AiVisualizer() {
         body: JSON.stringify({
           imageBase64: base64,
           mimeType: mime,
-          turnstileToken: turnstileToken ?? "dev-bypass",
         }),
       });
       const data = await res.json();

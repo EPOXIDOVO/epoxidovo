@@ -2,7 +2,6 @@ export const runtime = "edge";
 
 import { NextRequest, NextResponse } from "next/server";
 import { checkIfFloor } from "@/lib/gemini-image";
-import { verifyTurnstileToken } from "@/lib/turnstile";
 
 /**
  * POST /api/visualizer/validate
@@ -13,11 +12,15 @@ import { verifyTurnstileToken } from "@/lib/turnstile";
  *
  * Beží PRED drahou /generate volaním. Cost: ~$0.0005 per call.
  *
+ * **Bez Turnstile** zámerne — widget sa renderuje až v ďalšom kroku
+ * (pri pick textúra/farba). Validate je lacný call a ochrana je na
+ * úrovni CF WAF rate limit rule + cost cap ($0.0005 × 100k = $50).
+ * Skutočne drahá generácia (/generate) Turnstile vyžaduje.
+ *
  * Request body (JSON):
  *   {
  *     imageBase64: string,      // base64 bez "data:image/jpeg;base64," prefixu
  *     mimeType: string,         // image/jpeg | image/png | image/webp
- *     turnstileToken: string,   // Cloudflare Turnstile token
  *   }
  *
  * Response:
@@ -28,7 +31,6 @@ import { verifyTurnstileToken } from "@/lib/turnstile";
 interface ValidateBody {
   imageBase64?: string;
   mimeType?: string;
-  turnstileToken?: string;
 }
 
 const MAX_BASE64_SIZE = 5 * 1024 * 1024 * 1.4; // ~5MB image after base64 inflation
@@ -70,27 +72,8 @@ export async function POST(req: NextRequest) {
     );
   }
 
-  // 2) Turnstile check (anti-bot)
-  const remoteIp =
-    req.headers.get("cf-connecting-ip") ??
-    req.headers.get("x-forwarded-for")?.split(",")[0].trim() ??
-    null;
-  const turnstileResult = await verifyTurnstileToken(
-    body.turnstileToken,
-    remoteIp,
-  );
-  if (!turnstileResult.ok) {
-    return NextResponse.json(
-      {
-        ok: false,
-        error: "captcha_failed",
-        message: "Anti-spam overenie zlyhalo. Skús prosím znovu.",
-      },
-      { status: 403 },
-    );
-  }
-
-  // 3) Floor check cez Gemini Flash
+  // 2) Floor check cez Gemini Flash
+  // (Žiadny Turnstile — vid komentár v hlavičke)
   const normalizedMime = body.mimeType === "image/jpg" ? "image/jpeg" : body.mimeType;
   const result = await checkIfFloor(body.imageBase64, normalizedMime);
   if (!result.ok) {
