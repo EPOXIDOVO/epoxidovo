@@ -53,6 +53,39 @@ export function CenovaPonukaForm() {
   const [success, setSuccess] = React.useState(false);
   const [error, setError] = React.useState<string | null>(null);
   const [turnstileToken, setTurnstileToken] = React.useState<string | null>(null);
+  // Ak user prišiel z AI vizualizera → preberieme z sessionStorage info
+  // o zvolenej textúre/farbe a vložíme do message-u + UI banneru.
+  const [visualizerPrefill, setVisualizerPrefill] = React.useState<{
+    textureLabel: string;
+    colorName: string;
+  } | null>(null);
+
+  // Mount: pre-fill z vizualizera ak je v sessionStorage
+  React.useEffect(() => {
+    try {
+      const raw = sessionStorage.getItem("visualizer_prefill");
+      if (!raw) return;
+      const data = JSON.parse(raw) as {
+        textureLabel?: string;
+        colorName?: string;
+      };
+      if (data.textureLabel && data.colorName) {
+        setVisualizerPrefill({
+          textureLabel: data.textureLabel,
+          colorName: data.colorName,
+        });
+        // Pre-fill správy s touto info
+        setValues((prev) => ({
+          ...prev,
+          message: `Mám záujem o cenovku na podlahu: ${data.textureLabel} - ${data.colorName} (vyskúšal/a som cez AI vizualizér).`,
+        }));
+      }
+      // Jednorazové použitie — vymažeme po načítaní
+      sessionStorage.removeItem("visualizer_prefill");
+    } catch {
+      // sessionStorage nedostupné — ignorujeme
+    }
+  }, []);
 
   const set = <K extends keyof FormState>(key: K, val: FormState[K]) => {
     setValues((prev) => ({ ...prev, [key]: val }));
@@ -207,6 +240,20 @@ export function CenovaPonukaForm() {
           />
         </label>
       </div>
+
+      {/* Banner ak user prišiel z AI vizualizera */}
+      {visualizerPrefill && (
+        <div className="mb-6 rounded-2xl bg-gradient-to-br from-[#3db6e8]/10 to-[#a855f7]/10 border border-[#3db6e8]/30 p-4 md:p-5 flex items-start gap-3">
+          <span className="shrink-0 inline-flex items-center justify-center w-9 h-9 rounded-lg bg-gradient-to-br from-[#3db6e8] to-[#a855f7] text-white">
+            ✨
+          </span>
+          <div className="text-sm md:text-base text-[var(--color-fg)] leading-relaxed">
+            Ponuka pre podlahu z AI vizualizera:{" "}
+            <strong>{visualizerPrefill.textureLabel}</strong> ·{" "}
+            <strong>{visualizerPrefill.colorName}</strong>
+          </div>
+        </div>
+      )}
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-5">
         <FieldWrap label="Meno a priezvisko *" id="cp-name">

@@ -165,3 +165,26 @@ model VerificationToken {
 
   @@unique([identifier, token])
 }
+
+/// AI Visualizer — tracking generácií pre rate limiting per IP.
+/// Každý request = 1 row. Cleanup: rows staršie než 7 dní môžu byť mazané.
+model VisualizerGeneration {
+  id        String   @id @default(cuid())
+  createdAt DateTime @default(now())
+
+  // IP klienta (cf-connecting-ip). Indexované pre rýchly rate-limit query.
+  ip        String
+
+  // Voliteľný link na lead ak user konvertoval z vizualizera.
+  // Slúži aj na analytiku conversion rate.
+  leadId    String?
+
+  // Metadata pre debug / analytics
+  texture   String?  // "hladka" | "metalicka" | "chips" | "mramor"
+  color     String?  // slug farby (presets key)
+  ok        Boolean  @default(true) // false ak generácia zlyhala
+  errorCode String?  // ak ok=false: "validation_failed" | "rate_limit" | "api_error" | ...
+
+  @@index([ip, createdAt])
+  @@index([createdAt])
+}
