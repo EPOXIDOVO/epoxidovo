@@ -570,7 +570,7 @@ function PickStep({
             Vygenerovať vizualizáciu
           </button>
           <p className="mt-2 text-[11px] text-center text-[var(--color-fg-subtle)]">
-            Trvá 20–40 sekúnd · denný limit 5 generácií / IP
+            Trvá 20–40 sekúnd · denný limit 3 generácie
           </p>
         </div>
       </div>

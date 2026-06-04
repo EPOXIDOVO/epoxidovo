@@ -38,10 +38,29 @@ interface GenerateBody {
 
 const MAX_BASE64_SIZE = 5 * 1024 * 1024 * 1.4;
 const ALLOWED_MIMES = new Set(["image/jpeg", "image/jpg", "image/png", "image/webp"]);
-const RATE_LIMIT_PER_DAY = 5;
+// Per-IP limit: max 3 úspešné generácie / 24h.
+// 3 × Turnstile vyriešiť ≈ €0.006 cost atakujúcemu za €0.20 ti spáleného budgetu.
+const RATE_LIMIT_PER_DAY_PER_IP = 3;
+// Globálny denný cap: max 100 úspešných generácií / 24h naprieč všetkými IP.
+// Pri ceně €0.06/gen = max €6/deň = €50 budget vydrží 8+ dní aj pri sustained abuse.
+const GLOBAL_DAILY_CAP = 100;
 const RATE_WINDOW_MS = 24 * 60 * 60 * 1000;
 
 export async function POST(req: NextRequest) {
+  // 0) Kill switch — admin môže okamžite vypnúť vizualizér env premennou
+  // VISUALIZER_ENABLED=false (napr. ak by sa objavil abuse, alebo budget alert).
+  if (process.env.VISUALIZER_ENABLED === "false") {
+    return NextResponse.json(
+      {
+        ok: false,
+        error: "feature_disabled",
+        message:
+          "AI Vizualizér je dočasne nedostupný. Skús prosím neskôr alebo nám napíš cez kontaktný formulár.",
+      },
+      { status: 503 },
+    );
+  }
+
   let body: GenerateBody;
   try {
     body = (await req.json()) as GenerateBody;
@@ -95,21 +114,41 @@ export async function POST(req: NextRequest) {
     );
   }
 
-  // 3) Rate limit per IP (max 5 generations / 24h)
-  // Optimistic check: ak nie je DATABASE_URL, preskočíme limit (dev mode).
+  // 3) Rate limits — 2 vrstvy:
+  //    (a) Per-IP: max 3 úspešné gen / 24h (chráni pred bot abuse z 1 IP)
+  //    (b) Globálny cap: max 100 úspešných gen / 24h (chráni budget pri
+  //        distribuovanom attacku z mnohých IP)
   if (process.env.DATABASE_URL && !process.env.DATABASE_URL.includes("placeholder")) {
     try {
       const { prisma } = await import("@/lib/prisma");
       const windowStart = new Date(Date.now() - RATE_WINDOW_MS);
-      const recentCount = await prisma.visualizerGeneration.count({
-        where: { ip: remoteIp, createdAt: { gte: windowStart }, ok: true },
-      });
-      if (recentCount >= RATE_LIMIT_PER_DAY) {
+
+      const [perIpCount, globalCount] = await Promise.all([
+        prisma.visualizerGeneration.count({
+          where: { ip: remoteIp, createdAt: { gte: windowStart }, ok: true },
+        }),
+        prisma.visualizerGeneration.count({
+          where: { createdAt: { gte: windowStart }, ok: true },
+        }),
+      ]);
+
+      if (perIpCount >= RATE_LIMIT_PER_DAY_PER_IP) {
         return NextResponse.json(
           {
             ok: false,
-            error: "rate_limit",
-            message: `Dosiahol si denný limit ${RATE_LIMIT_PER_DAY} vizualizácií. Skús zajtra alebo nám pošli fotku priamo cez formulár.`,
+            error: "rate_limit_ip",
+            message: `Dosiahol si denný limit ${RATE_LIMIT_PER_DAY_PER_IP} vizualizácií. Skús zajtra alebo nám pošli fotku priamo cez formulár.`,
+          },
+          { status: 429 },
+        );
+      }
+      if (globalCount >= GLOBAL_DAILY_CAP) {
+        return NextResponse.json(
+          {
+            ok: false,
+            error: "rate_limit_global",
+            message:
+              "AI Vizualizér dosiahol denný globálny limit. Skús zajtra alebo nám napíš cez formulár — radi ti pošleme ukážky aj bez AI.",
           },
           { status: 429 },
         );
