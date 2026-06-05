@@ -74,7 +74,9 @@ export function AiVisualizer() {
       return;
     }
 
-    // Read as base64
+    // Read as base64 a rovno do pick step (žiadny validate medzistupeň —
+    // Nano Banana 2 sám rozhoduje či vie vyrenderovať floor, pre-check Flash
+    // bol príliš striktný a blokoval legit fotky).
     const reader = new FileReader();
     reader.onload = () => {
       const dataUrl = reader.result as string;
@@ -83,39 +85,10 @@ export function AiVisualizer() {
       setMimeType(file.type === "image/jpg" ? "image/jpeg" : file.type);
       setPreviewUrl(dataUrl);
       trackEvent("visualizer_upload", { size: file.size, type: file.type });
-      // Auto-spustí validáciu
-      validate(base64, file.type === "image/jpg" ? "image/jpeg" : file.type);
+      setStep("pick");
     };
     reader.onerror = () => setError("Nepodarilo sa načítať fotku. Skús inú.");
     reader.readAsDataURL(file);
-  };
-
-  const validate = async (base64: string, mime: string) => {
-    setStep("validating");
-    try {
-      const res = await fetch("/api/visualizer/validate", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          imageBase64: base64,
-          mimeType: mime,
-        }),
-      });
-      const data = await res.json();
-      if (!data.ok) {
-        setError(
-          data.message ?? "Nepodarilo sa overiť fotku. Skús inú.",
-        );
-        setStep("error");
-        trackEvent("visualizer_validate_fail", { reason: data.error });
-        return;
-      }
-      setStep("pick");
-      trackEvent("visualizer_validate_ok");
-    } catch {
-      setError("Sieťová chyba. Skontroluj pripojenie a skús znovu.");
-      setStep("error");
-    }
   };
 
   // ───────────────────────────────────────────────────────────────────────
@@ -237,12 +210,8 @@ export function AiVisualizer() {
         <UploadStep
           onFile={handleFile}
           onClick={() => fileInputRef.current?.click()}
+          error={error}
         />
-      )}
-
-      {/* STEP: VALIDATING */}
-      {step === "validating" && (
-        <ValidatingStep previewUrl={previewUrl} />
       )}
 
       {/* STEP: PICK */}
@@ -326,9 +295,10 @@ function Header({ step }: { step: Step }) {
       <h1 className="text-3xl md:text-5xl font-extrabold tracking-tight text-[var(--color-fg)]">
         Pozri svoju budúcu podlahu
       </h1>
-      <p className="mt-3 text-base md:text-lg text-[var(--color-fg-muted)] max-w-2xl mx-auto leading-relaxed">
-        Nahraj fotku miestnosti, vyber typ podlahy a farbu — AI ti za 30 sekúnd
-        ukáže ako by vyzerala s epoxidom.
+      <p className="mt-3 text-base md:text-lg font-bold text-[var(--color-fg-muted)] max-w-2xl mx-auto leading-relaxed">
+        Nahraj fotku miestnosti, vyber typ podlahy a farbu.
+        <br />
+        AI ti za pár sekúnd ukáže ako bude vyzerať tvoja podlaha.
       </p>
       {stepNum > 0 && (
         <div className="mt-6 flex justify-center gap-2">
@@ -351,12 +321,27 @@ function Header({ step }: { step: Step }) {
 function UploadStep({
   onFile,
   onClick,
+  error,
 }: {
   onFile: (f: File) => void;
   onClick: () => void;
+  error?: string | null;
 }) {
   const [dragging, setDragging] = React.useState(false);
   return (
+    <>
+      {/* Error banner ak validácia predošlej fotky zlyhala (nie je podlaha) */}
+      {error && (
+        <div className="mb-5 rounded-2xl bg-amber-50 border border-amber-200 p-4 md:p-5 flex items-start gap-3">
+          <span className="shrink-0 inline-flex items-center justify-center w-8 h-8 rounded-full bg-amber-100 text-amber-700">
+            <AlertCircle className="w-5 h-5" aria-hidden />
+          </span>
+          <div className="text-sm md:text-base font-bold text-amber-900 leading-relaxed">
+            {error}
+          </div>
+        </div>
+      )}
+
     <div
       onDragOver={(e) => {
         e.preventDefault();
@@ -382,7 +367,7 @@ function UploadStep({
       <h2 className="text-xl md:text-2xl font-extrabold tracking-tight text-[var(--color-fg)]">
         Klikni alebo presuň fotku miestnosti
       </h2>
-      <p className="mt-2 text-sm md:text-base text-[var(--color-fg-muted)]">
+      <p className="mt-2 text-sm md:text-base font-bold text-[var(--color-fg-muted)]">
         JPG, PNG alebo WebP · max 5 MB
       </p>
 
@@ -390,7 +375,7 @@ function UploadStep({
         <div className="text-xs font-bold text-[var(--color-fg)] uppercase tracking-wider mb-2">
           💡 Tipy pre najlepší výsledok
         </div>
-        <ul className="space-y-1.5 text-xs md:text-sm text-[var(--color-fg-muted)] leading-relaxed">
+        <ul className="space-y-1.5 text-xs md:text-sm font-bold text-[var(--color-fg-muted)] leading-relaxed">
           <li>• Foť priamo cez podlahu, nie šikmo zhora</li>
           <li>• Dobré osvetlenie (denné svetlo je ideál)</li>
           <li>• Aspoň 50 % obrázku má byť podlaha</li>
@@ -398,6 +383,7 @@ function UploadStep({
         </ul>
       </div>
     </div>
+    </>
   );
 }
 
@@ -422,7 +408,7 @@ function ValidatingStep({ previewUrl }: { previewUrl: string | null }) {
           </div>
         </div>
       )}
-      <p className="text-sm text-[var(--color-fg-muted)]">
+      <p className="text-sm font-bold text-[var(--color-fg-muted)]">
         Overujeme či je na fotke viditeľná podlaha (3-5 sekúnd).
       </p>
     </div>
@@ -465,15 +451,11 @@ function PickStep({
               alt="Tvoja fotka"
               className="absolute inset-0 w-full h-full object-cover"
             />
-            <div className="absolute top-3 left-3 px-3 py-1 rounded-full bg-black/60 text-white text-xs font-semibold backdrop-blur-sm inline-flex items-center gap-1.5">
-              <CheckCircle2 className="w-3.5 h-3.5 text-green-400" aria-hidden />
-              Podlaha overená
-            </div>
           </div>
           <button
             type="button"
             onClick={onBack}
-            className="mt-3 inline-flex items-center gap-1.5 text-sm font-semibold text-[var(--color-fg-muted)] hover:text-[var(--color-fg)] transition-colors"
+            className="mt-3 inline-flex items-center gap-1.5 text-sm font-bold text-[var(--color-fg-muted)] hover:text-[var(--color-fg)] transition-colors"
           >
             <ArrowLeft className="w-4 h-4" aria-hidden />
             Zmeniť fotku
@@ -482,10 +464,10 @@ function PickStep({
 
         {/* Picker vpravo */}
         <div className="flex flex-col">
+          <label className="block text-sm font-bold uppercase tracking-wider text-[var(--color-fg)] mb-3">
+            Vyber typ podlahy a farbu
+          </label>
           <div>
-            <label className="block text-xs font-bold uppercase tracking-wider text-[var(--color-fg-muted)] mb-2">
-              1. Typ podlahy
-            </label>
             <div className="grid grid-cols-2 gap-2">
               {textureKeys.map((t) => {
                 const def = TEXTURES[t];
@@ -504,7 +486,7 @@ function PickStep({
                     <div className="text-sm font-bold text-[var(--color-fg)]">
                       {def.label}
                     </div>
-                    <div className="text-[11px] text-[var(--color-fg-muted)] mt-0.5 leading-tight">
+                    <div className="text-[11px] font-bold text-[var(--color-fg-muted)] mt-0.5 leading-tight">
                       {def.description}
                     </div>
                   </button>
@@ -514,9 +496,6 @@ function PickStep({
           </div>
 
           <div className="mt-5">
-            <label className="block text-xs font-bold uppercase tracking-wider text-[var(--color-fg-muted)] mb-2">
-              2. Farba
-            </label>
             <div className="grid grid-cols-4 gap-2">
               {colors.map((c) => {
                 const active = c.slug === colorSlug;
@@ -543,7 +522,7 @@ function PickStep({
                 );
               })}
             </div>
-            <div className="mt-2 text-sm font-semibold text-[var(--color-fg)]">
+            <div className="mt-2 text-sm font-bold text-[var(--color-fg)]">
               {colors.find((c) => c.slug === colorSlug)?.commercialName}
             </div>
           </div>
@@ -564,7 +543,7 @@ function PickStep({
             <Sparkles className="w-5 h-5" aria-hidden />
             Vygenerovať vizualizáciu
           </button>
-          <p className="mt-2 text-[11px] text-center text-[var(--color-fg-subtle)]">
+          <p className="mt-2 text-[11px] font-bold text-center text-[var(--color-fg-subtle)]">
             Trvá 20–40 sekúnd · denný limit 3 generácie
           </p>
         </div>
@@ -598,10 +577,10 @@ function GeneratingStep({ progress }: { progress: number }) {
           style={{ width: `${progress}%` }}
         />
       </div>
-      <div className="mt-3 text-sm font-semibold text-[var(--color-fg)]">
+      <div className="mt-3 text-sm font-bold text-[var(--color-fg)]">
         {currentStage.label}
       </div>
-      <p className="mt-1 text-xs text-[var(--color-fg-muted)]">
+      <p className="mt-1 text-xs font-bold text-[var(--color-fg-muted)]">
         {Math.round(progress)}% · zvyčajne 20-40 sekúnd
       </p>
     </div>
@@ -692,7 +671,7 @@ function ResultStep({
         <div className="text-sm font-bold text-[var(--color-fg)]">
           {textureLabel} · {colorName}
         </div>
-        <div className="text-xs text-[var(--color-fg-muted)] mt-0.5">
+        <div className="text-xs font-bold text-[var(--color-fg-muted)] mt-0.5">
           ← Posuvníkom porovnaj pred a po →
         </div>
       </div>
@@ -729,7 +708,7 @@ function ResultStep({
         <h3 className="text-xl md:text-2xl font-extrabold tracking-tight">
           Páči sa ti? Pošlite mi cenovku.
         </h3>
-        <p className="mt-2 text-sm md:text-base text-white/90 leading-relaxed max-w-md mx-auto">
+        <p className="mt-2 text-sm md:text-base font-bold text-white/90 leading-relaxed max-w-md mx-auto">
           Pripravíme presnú kalkuláciu na túto podlahu pre tvoju miestnosť do
           24 hodín.
         </p>
@@ -761,7 +740,7 @@ function ErrorStep({
       <h2 className="text-xl md:text-2xl font-extrabold text-[var(--color-fg)]">
         Niečo sa pokazilo
       </h2>
-      <p className="mt-2 text-sm md:text-base text-[var(--color-fg-muted)] max-w-md mx-auto leading-relaxed">
+      <p className="mt-2 text-sm md:text-base font-bold text-[var(--color-fg-muted)] max-w-md mx-auto leading-relaxed">
         {message ?? "Skús to prosím znovu o chvíľu."}
       </p>
       <div className="mt-6 flex flex-wrap justify-center gap-2">
