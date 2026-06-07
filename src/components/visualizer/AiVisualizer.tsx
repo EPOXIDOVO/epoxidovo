@@ -320,14 +320,15 @@ function Header({ step }: { step: Step }) {
           : 0;
   return (
     <header className="text-center mb-3 md:mb-8">
-      <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-[#3db6e8]/10 text-[#3db6e8] text-[10px] md:text-xs font-bold uppercase tracking-wider mb-2 md:mb-3">
+      {/* AI gradient pill — značí "AI features" v celom UI */}
+      <div className="inline-flex items-center gap-1.5 px-3 py-1 md:px-4 md:py-1.5 rounded-full bg-gradient-to-r from-[#7EC8F0] via-[#6AA8F0] to-[#8B5CF6] text-white text-[10px] md:text-xs font-extrabold uppercase tracking-wider mb-2 md:mb-3 shadow-[0_4px_14px_rgba(139,92,246,0.35)]">
         <Sparkles className="w-3 h-3 md:w-3.5 md:h-3.5" aria-hidden />
         AI Vizualizácia
       </div>
-      <h1 className="text-xl md:text-5xl font-extrabold tracking-tight text-[var(--color-fg)]">
+      <h1 className="text-xl md:text-5xl font-black tracking-tight text-[#1B2430]">
         Pozri svoju budúcu podlahu
       </h1>
-      <p className="mt-1.5 md:mt-3 text-xs md:text-lg font-bold text-[var(--color-fg-muted)] max-w-2xl mx-auto leading-snug md:leading-relaxed">
+      <p className="mt-1.5 md:mt-3 text-xs md:text-lg font-bold text-[#1B2430]/65 max-w-2xl mx-auto leading-snug md:leading-relaxed">
         Nahraj fotku, vyber typ podlahy a farbu.
         <br className="hidden md:inline" />
         <span className="md:hidden"> </span>
@@ -340,8 +341,8 @@ function Header({ step }: { step: Step }) {
               key={n}
               className={`h-1 md:h-1.5 rounded-full transition-all ${
                 n <= stepNum
-                  ? "w-8 md:w-12 bg-[#3db6e8]"
-                  : "w-4 md:w-6 bg-[var(--color-border-strong)]"
+                  ? "w-8 md:w-12 bg-gradient-to-r from-[#7EC8F0] via-[#6AA8F0] to-[#8B5CF6]"
+                  : "w-4 md:w-6 bg-[#1B2430]/15"
               }`}
             />
           ))}
@@ -388,27 +389,27 @@ function UploadStep({
         if (f) onFile(f);
       }}
       onClick={onClick}
-      className={`cursor-pointer rounded-3xl border-2 border-dashed p-6 md:p-16 text-center transition-all ${
+      className={`cursor-pointer rounded-3xl border-2 border-dashed p-6 md:p-16 text-center transition-all bg-white ${
         dragging
-          ? "border-[#3db6e8] bg-[#3db6e8]/5 scale-[1.01]"
-          : "border-[var(--color-border-strong)] bg-white hover:border-[#3db6e8] hover:bg-[#3db6e8]/5"
+          ? "border-[#2EA3DC] bg-[#2EA3DC]/5 scale-[1.01] shadow-[0_8px_28px_rgba(46,163,220,0.2)]"
+          : "border-[#1B2430]/20 hover:border-[#2EA3DC] hover:bg-[#2EA3DC]/5 hover:shadow-[0_8px_28px_rgba(46,163,220,0.15)]"
       }`}
     >
-      <div className="inline-flex items-center justify-center w-12 h-12 md:w-20 md:h-20 rounded-xl md:rounded-2xl bg-[#3db6e8]/10 text-[#3db6e8] mb-3 md:mb-5">
+      <div className="inline-flex items-center justify-center w-12 h-12 md:w-20 md:h-20 rounded-2xl bg-[#2EA3DC] text-white mb-3 md:mb-5 shadow-[0_8px_20px_rgba(46,163,220,0.4)]">
         <Upload className="w-6 h-6 md:w-9 md:h-9" aria-hidden />
       </div>
-      <h2 className="text-base md:text-2xl font-extrabold tracking-tight text-[var(--color-fg)]">
+      <h2 className="text-base md:text-2xl font-extrabold tracking-tight text-[#1B2430]">
         Klikni alebo presuň fotku miestnosti
       </h2>
-      <p className="mt-1 md:mt-2 text-xs md:text-base font-bold text-[var(--color-fg-muted)]">
+      <p className="mt-1 md:mt-2 text-xs md:text-base font-bold text-[#1B2430]/65">
         JPG, PNG alebo WebP · max 5 MB
       </p>
 
-      <div className="mt-4 md:mt-7 max-w-md mx-auto text-left bg-[var(--color-bg-muted)] rounded-xl p-3 md:p-5">
-        <div className="text-[10px] md:text-xs font-bold text-[var(--color-fg)] uppercase tracking-wider mb-1.5 md:mb-2">
+      <div className="mt-4 md:mt-7 max-w-md mx-auto text-left bg-[#F8FAFC] rounded-2xl p-3 md:p-5 ring-1 ring-[#1B2430]/5">
+        <div className="text-[10px] md:text-xs font-extrabold text-[#1B2430] uppercase tracking-wider mb-1.5 md:mb-2">
           💡 Tipy pre najlepší výsledok
         </div>
-        <ul className="space-y-1 md:space-y-1.5 text-[11px] md:text-sm font-bold text-[var(--color-fg-muted)] leading-snug md:leading-relaxed">
+        <ul className="space-y-1 md:space-y-1.5 text-[11px] md:text-sm font-bold text-[#1B2430]/70 leading-snug md:leading-relaxed">
           <li>• Foť priamo cez podlahu, nie šikmo</li>
           <li>• Dobré osvetlenie</li>
           <li>• Aspoň 50 % obrázku má byť podlaha</li>
@@ -436,10 +437,10 @@ function PickTextureStep({
   const textureKeys = Object.keys(TEXTURES) as TextureSlug[];
 
   return (
-    <div className="rounded-3xl bg-white p-4 md:p-6 shadow-[var(--shadow-card)] border border-[var(--color-border)]">
+    <div className="rounded-3xl bg-white p-4 md:p-6 shadow-[0_10px_40px_rgba(27,36,48,0.08)] ring-1 ring-[#1B2430]/5">
       {/* Mini preview fotky + back tlačidlo */}
       <div className="flex items-center gap-3 mb-4">
-        <div className="relative w-14 h-14 md:w-16 md:h-16 rounded-xl overflow-hidden bg-[var(--color-bg-muted)] shrink-0">
+        <div className="relative w-14 h-14 md:w-16 md:h-16 rounded-2xl overflow-hidden bg-[#F8FAFC] shrink-0 ring-1 ring-[#1B2430]/10">
           {/* eslint-disable-next-line @next/next/no-img-element */}
           <img
             src={previewUrl}
@@ -450,14 +451,14 @@ function PickTextureStep({
         <button
           type="button"
           onClick={onBack}
-          className="inline-flex items-center gap-1.5 text-xs md:text-sm font-bold text-[var(--color-fg-muted)] hover:text-[var(--color-fg)] transition-colors"
+          className="inline-flex items-center gap-1.5 text-xs md:text-sm font-extrabold text-[#1B2430]/70 hover:text-[#2EA3DC] transition-colors"
         >
           <ArrowLeft className="w-4 h-4" aria-hidden />
           Zmeniť fotku
         </button>
       </div>
 
-      <label className="block text-base md:text-lg font-extrabold text-[var(--color-fg)] mb-3">
+      <label className="block text-base md:text-lg font-extrabold text-[#1B2430] mb-3">
         1. Vyber typ podlahy
       </label>
       <div className="grid grid-cols-2 gap-2.5 md:gap-3">
@@ -469,10 +470,10 @@ function PickTextureStep({
               key={t}
               type="button"
               onClick={() => onTexture(t)}
-              className={`group relative overflow-hidden rounded-xl border-2 transition-all text-left ${
+              className={`group relative overflow-hidden rounded-2xl border-2 transition-all text-left ${
                 active
-                  ? "border-[#3db6e8] scale-[1.02]"
-                  : "border-[var(--color-border)] hover:border-[var(--color-border-strong)]"
+                  ? "border-[#2EA3DC] scale-[1.02] shadow-[0_8px_28px_rgba(46,163,220,0.35)]"
+                  : "border-[#1B2430]/10 hover:border-[#2EA3DC]/50 hover:-translate-y-0.5 hover:shadow-[0_6px_20px_rgba(27,36,48,0.1)]"
               }`}
             >
               {/* Vizuálny náhľad textúry — CSS background pattern */}
@@ -481,17 +482,17 @@ function PickTextureStep({
                 style={def.swatchCss}
               >
                 {active && (
-                  <span className="absolute top-2 right-2 inline-flex items-center justify-center w-6 h-6 rounded-full bg-[#3db6e8] text-white shadow-md">
+                  <span className="absolute top-2 right-2 inline-flex items-center justify-center w-6 h-6 rounded-full bg-[#2EA3DC] text-white shadow-[0_4px_12px_rgba(46,163,220,0.5)]">
                     <CheckCircle2 className="w-4 h-4" aria-hidden />
                   </span>
                 )}
               </div>
               {/* Label pod náhľadom */}
               <div className="p-2.5 md:p-3 bg-white">
-                <div className="text-sm md:text-base font-extrabold text-[var(--color-fg)]">
+                <div className="text-sm md:text-base font-extrabold text-[#1B2430]">
                   {def.label}
                 </div>
-                <div className="text-[10px] md:text-xs font-bold text-[var(--color-fg-muted)] mt-0.5 leading-tight">
+                <div className="text-[10px] md:text-xs font-bold text-[#1B2430]/60 mt-0.5 leading-tight">
                   {def.description}
                 </div>
               </div>
@@ -499,7 +500,7 @@ function PickTextureStep({
           );
         })}
       </div>
-      <p className="mt-3 text-[11px] md:text-xs font-bold text-center text-[var(--color-fg-subtle)]">
+      <p className="mt-3 text-[11px] md:text-xs font-bold text-center text-[#1B2430]/50">
         Klikni na textúru → pokračuješ na výber farby
       </p>
     </div>
@@ -533,10 +534,10 @@ function PickColorStep({
   const activeColor = colors.find((c) => c.slug === colorSlug);
 
   return (
-    <div className="rounded-3xl bg-white p-4 md:p-6 shadow-[var(--shadow-card)] border border-[var(--color-border)]">
+    <div className="rounded-3xl bg-white p-4 md:p-6 shadow-[0_10px_40px_rgba(27,36,48,0.08)] ring-1 ring-[#1B2430]/5">
       {/* Mini preview + zvolená textúra + back */}
       <div className="flex items-center gap-3 mb-4">
-        <div className="relative w-14 h-14 md:w-16 md:h-16 rounded-xl overflow-hidden bg-[var(--color-bg-muted)] shrink-0">
+        <div className="relative w-14 h-14 md:w-16 md:h-16 rounded-2xl overflow-hidden bg-[#F8FAFC] shrink-0 ring-1 ring-[#1B2430]/10">
           {/* eslint-disable-next-line @next/next/no-img-element */}
           <img
             src={previewUrl}
@@ -545,24 +546,24 @@ function PickColorStep({
           />
         </div>
         <div className="flex-1 min-w-0">
-          <div className="text-[10px] md:text-xs font-bold uppercase tracking-wider text-[var(--color-fg-subtle)]">
+          <div className="text-[10px] md:text-xs font-extrabold uppercase tracking-wider text-[#1B2430]/55">
             Textúra
           </div>
-          <div className="text-sm md:text-base font-extrabold text-[var(--color-fg)] truncate">
+          <div className="text-sm md:text-base font-extrabold text-[#1B2430] truncate">
             {textureDef.label}
           </div>
         </div>
         <button
           type="button"
           onClick={onBack}
-          className="inline-flex items-center gap-1.5 text-xs font-bold text-[var(--color-fg-muted)] hover:text-[var(--color-fg)] transition-colors shrink-0"
+          className="inline-flex items-center gap-1.5 text-xs font-extrabold text-[#1B2430]/70 hover:text-[#2EA3DC] transition-colors shrink-0"
         >
           <ArrowLeft className="w-4 h-4" aria-hidden />
           Späť
         </button>
       </div>
 
-      <label className="block text-base md:text-lg font-extrabold text-[var(--color-fg)] mb-3">
+      <label className="block text-base md:text-lg font-extrabold text-[#1B2430] mb-3">
         2. Vyber farbu
       </label>
       <div className="grid grid-cols-4 gap-2">
@@ -574,16 +575,16 @@ function PickColorStep({
               type="button"
               onClick={() => onColor(c.slug)}
               title={c.commercialName}
-              className={`group relative aspect-square rounded-lg border-2 transition-all ${
+              className={`group relative aspect-square rounded-xl border-2 transition-all ${
                 active
-                  ? "border-[#3db6e8] scale-105 shadow-md"
-                  : "border-[var(--color-border)] hover:border-[var(--color-border-strong)]"
+                  ? "border-[#2EA3DC] scale-105 shadow-[0_6px_20px_rgba(46,163,220,0.4)]"
+                  : "border-[#1B2430]/10 hover:border-[#2EA3DC]/50"
               }`}
               style={{ backgroundColor: c.hex }}
             >
               {active && (
                 <CheckCircle2
-                  className="absolute top-1 right-1 w-4 h-4 text-white drop-shadow-md"
+                  className="absolute top-1 right-1 w-4 h-4 text-white drop-shadow-[0_2px_4px_rgba(0,0,0,0.4)]"
                   aria-hidden
                 />
               )}
@@ -592,7 +593,7 @@ function PickColorStep({
         })}
       </div>
       {activeColor && (
-        <div className="mt-2 text-sm font-extrabold text-[var(--color-fg)]">
+        <div className="mt-2 text-sm font-extrabold text-[#1B2430]">
           {activeColor.commercialName}
         </div>
       )}
@@ -604,16 +605,17 @@ function PickColorStep({
         />
       </div>
 
+      {/* Primárna akcia — oranžová pill ako "Cenová ponuka" na homepage */}
       <button
         type="button"
         disabled={!turnstileToken}
         onClick={onGenerate}
-        className="mt-3 w-full inline-flex items-center justify-center gap-2 px-6 py-3 md:py-3.5 rounded-full bg-gradient-to-r from-[#3db6e8] via-[#7c5ee8] to-[#a855f7] text-white font-extrabold text-sm md:text-base hover:brightness-110 disabled:opacity-50 disabled:cursor-not-allowed shadow-[0_8px_24px_rgba(168,85,247,0.4)] transition-all"
+        className="mt-3 w-full inline-flex items-center justify-center gap-2 px-6 py-3 md:py-3.5 rounded-full bg-[#F0851A] text-white font-extrabold text-sm md:text-base hover:bg-[#D9760F] disabled:opacity-50 disabled:cursor-not-allowed shadow-[0_10px_30px_rgba(240,133,26,0.45)] hover:shadow-[0_14px_40px_rgba(240,133,26,0.6)] transition-all duration-300"
       >
         <Sparkles className="w-5 h-5" aria-hidden />
         Vygenerovať vizualizáciu
       </button>
-      <p className="mt-2 text-[11px] font-bold text-center text-[var(--color-fg-subtle)]">
+      <p className="mt-2 text-[11px] font-bold text-center text-[#1B2430]/50">
         Trvá 20–40 sekúnd · denný limit 3 generácie
       </p>
     </div>
@@ -631,24 +633,38 @@ function GeneratingStep({ progress }: { progress: number }) {
     stages.find((s) => progress < s.pct) ?? stages[stages.length - 1];
 
   return (
-    <div className="rounded-3xl bg-white p-8 md:p-12 text-center shadow-[var(--shadow-card)] border border-[var(--color-border)]">
-      <div className="inline-flex items-center justify-center w-20 h-20 rounded-full bg-[#3db6e8]/10 mb-5">
-        <Loader2 className="w-10 h-10 animate-spin text-[#3db6e8]" aria-hidden />
+    <div className="rounded-3xl bg-white p-8 md:p-12 text-center shadow-[0_10px_40px_rgba(27,36,48,0.08)] ring-1 ring-[#1B2430]/5">
+      {/* AI gradient spinner — conic gradient rotujúci s biely stred */}
+      <div className="inline-flex items-center justify-center w-20 h-20 rounded-full mb-5 relative">
+        <span
+          aria-hidden
+          className="absolute inset-0 rounded-full animate-spin"
+          style={{
+            background:
+              "conic-gradient(from 0deg, #7EC8F0, #6AA8F0, #8B5CF6, #7EC8F0)",
+            animationDuration: "1.4s",
+          }}
+        />
+        <span className="absolute inset-1.5 rounded-full bg-white" />
+        <Sparkles
+          className="relative w-8 h-8 text-[#8B5CF6]"
+          aria-hidden
+        />
       </div>
-      <h2 className="text-xl md:text-2xl font-extrabold text-[var(--color-fg)]">
+      <h2 className="text-xl md:text-2xl font-black text-[#1B2430]">
         Generujeme tvoju podlahu
       </h2>
 
-      <div className="mt-6 w-full max-w-md mx-auto bg-[var(--color-bg-muted)] rounded-full h-2 overflow-hidden">
+      <div className="mt-6 w-full max-w-md mx-auto bg-[#1B2430]/10 rounded-full h-2 overflow-hidden">
         <div
-          className="h-full bg-[#3db6e8] transition-all duration-500"
+          className="h-full bg-gradient-to-r from-[#7EC8F0] via-[#6AA8F0] to-[#8B5CF6] transition-all duration-500"
           style={{ width: `${progress}%` }}
         />
       </div>
-      <div className="mt-3 text-sm font-bold text-[var(--color-fg)]">
+      <div className="mt-3 text-sm font-extrabold text-[#1B2430]">
         {currentStage.label}
       </div>
-      <p className="mt-1 text-xs font-bold text-[var(--color-fg-muted)]">
+      <p className="mt-1 text-xs font-bold text-[#1B2430]/60">
         {Math.round(progress)}% · zvyčajne 20-40 sekúnd
       </p>
     </div>
@@ -679,10 +695,10 @@ function ResultStep({
   onStartOver: () => void;
 }) {
   return (
-    <div className="rounded-3xl bg-white p-5 md:p-8 shadow-[var(--shadow-card)] border border-[var(--color-border)]">
+    <div className="rounded-3xl bg-white p-5 md:p-8 shadow-[0_10px_40px_rgba(27,36,48,0.08)] ring-1 ring-[#1B2430]/5">
       {/* Before/After slider */}
       <div
-        className="relative w-full aspect-video md:aspect-[4/3] rounded-2xl overflow-hidden bg-[var(--color-bg-muted)] select-none"
+        className="relative w-full aspect-video md:aspect-[4/3] rounded-2xl overflow-hidden bg-[#F8FAFC] select-none"
         style={{ touchAction: "none" }}
       >
         {/* After (vždy plne viditeľný v pozadí) */}
@@ -717,10 +733,10 @@ function ResultStep({
           </div>
         </div>
         {/* Labels */}
-        <div className="absolute top-3 left-3 px-2.5 py-1 rounded-md bg-black/60 text-white text-xs font-bold uppercase tracking-wider backdrop-blur-sm">
+        <div className="absolute top-3 left-3 px-2.5 py-1 rounded-md bg-[#1B2430]/85 text-white text-xs font-extrabold uppercase tracking-wider backdrop-blur-sm">
           Pred
         </div>
-        <div className="absolute top-3 right-3 px-2.5 py-1 rounded-md bg-[#3db6e8] text-white text-xs font-bold uppercase tracking-wider">
+        <div className="absolute top-3 right-3 px-2.5 py-1 rounded-md bg-[#2EA3DC] text-white text-xs font-extrabold uppercase tracking-wider shadow-[0_4px_12px_rgba(46,163,220,0.4)]">
           Po
         </div>
         {/* Slider input — full width invisible */}
@@ -736,10 +752,10 @@ function ResultStep({
       </div>
 
       <div className="mt-4 text-center">
-        <div className="text-sm font-bold text-[var(--color-fg)]">
+        <div className="text-sm font-extrabold text-[#1B2430]">
           {textureLabel} · {colorName}
         </div>
-        <div className="text-xs font-bold text-[var(--color-fg-muted)] mt-0.5">
+        <div className="text-xs font-bold text-[#1B2430]/60 mt-0.5">
           ← Posuvníkom porovnaj pred a po →
         </div>
       </div>
@@ -748,7 +764,7 @@ function ResultStep({
         <button
           type="button"
           onClick={onDownload}
-          className="inline-flex items-center gap-2 px-4 py-2.5 rounded-full bg-[var(--color-bg-muted)] text-[var(--color-fg)] font-semibold text-sm hover:bg-[var(--color-border)] transition-colors"
+          className="inline-flex items-center gap-2 px-4 py-2.5 rounded-full bg-[#F8FAFC] text-[#1B2430] font-extrabold text-sm ring-1 ring-[#1B2430]/10 hover:bg-[#1B2430]/5 transition-colors"
         >
           <Download className="w-4 h-4" aria-hidden />
           Stiahnuť
@@ -756,7 +772,7 @@ function ResultStep({
         <button
           type="button"
           onClick={onTryAgain}
-          className="inline-flex items-center gap-2 px-4 py-2.5 rounded-full bg-[var(--color-bg-muted)] text-[var(--color-fg)] font-semibold text-sm hover:bg-[var(--color-border)] transition-colors"
+          className="inline-flex items-center gap-2 px-4 py-2.5 rounded-full bg-[#F8FAFC] text-[#1B2430] font-extrabold text-sm ring-1 ring-[#1B2430]/10 hover:bg-[#1B2430]/5 transition-colors"
         >
           <RefreshCw className="w-4 h-4" aria-hidden />
           Skús inú farbu
@@ -764,29 +780,29 @@ function ResultStep({
         <button
           type="button"
           onClick={onStartOver}
-          className="inline-flex items-center gap-2 px-4 py-2.5 rounded-full bg-[var(--color-bg-muted)] text-[var(--color-fg)] font-semibold text-sm hover:bg-[var(--color-border)] transition-colors"
+          className="inline-flex items-center gap-2 px-4 py-2.5 rounded-full bg-[#F8FAFC] text-[#1B2430] font-extrabold text-sm ring-1 ring-[#1B2430]/10 hover:bg-[#1B2430]/5 transition-colors"
         >
           <Upload className="w-4 h-4" aria-hidden />
           Iná fotka
         </button>
       </div>
 
-      {/* CTA na cenovku — najdôležitejšia časť, konverzný hook */}
-      <div className="mt-8 rounded-2xl bg-gradient-to-br from-[#f97316] to-[#ea580c] p-6 md:p-8 text-center text-white shadow-[0_10px_40px_rgba(249,115,22,0.3)]">
-        <h3 className="text-xl md:text-2xl font-extrabold tracking-tight">
-          Páči sa ti? Pošlite mi cenovku.
+      {/* CTA na cenovku — najdôležitejšia časť, konverzný hook (orange brand) */}
+      <div className="mt-8 rounded-3xl bg-gradient-to-br from-[#F0851A] to-[#D9760F] p-6 md:p-8 text-center text-white shadow-[0_12px_40px_rgba(240,133,26,0.35)]">
+        <h3 className="text-xl md:text-2xl font-black tracking-tight">
+          Páči sa ti? Pošlite mi nezáväznú cenovku.
         </h3>
-        <p className="mt-2 text-sm md:text-base font-bold text-white/90 leading-relaxed max-w-md mx-auto">
+        <p className="mt-2 text-sm md:text-base font-bold text-white/95 leading-relaxed max-w-md mx-auto">
           Pripravíme presnú kalkuláciu na túto podlahu pre tvoju miestnosť do
           24 hodín.
         </p>
         <button
           type="button"
           onClick={onRequestQuote}
-          className="mt-5 inline-flex items-center gap-2 px-6 py-3.5 rounded-full bg-white text-[#ea580c] font-bold text-sm md:text-base hover:bg-white/90 shadow-[0_8px_24px_rgba(0,0,0,0.2)] transition-all"
+          className="mt-5 inline-flex items-center gap-2 px-6 py-3.5 rounded-full bg-white text-[#D9760F] font-black text-sm md:text-base hover:bg-white/95 shadow-[0_8px_24px_rgba(0,0,0,0.18)] transition-all"
         >
           <Send className="w-4 h-4" aria-hidden />
-          Chcem cenovú ponuku
+          Nezáväzná cenová ponuka
         </button>
       </div>
     </div>
@@ -805,24 +821,24 @@ function ErrorStep({
       <div className="inline-flex items-center justify-center w-16 h-16 rounded-full bg-red-50 text-red-600 mb-5">
         <AlertCircle className="w-8 h-8" aria-hidden />
       </div>
-      <h2 className="text-xl md:text-2xl font-extrabold text-[var(--color-fg)]">
+      <h2 className="text-xl md:text-2xl font-black text-[#1B2430]">
         Niečo sa pokazilo
       </h2>
-      <p className="mt-2 text-sm md:text-base font-bold text-[var(--color-fg-muted)] max-w-md mx-auto leading-relaxed">
+      <p className="mt-2 text-sm md:text-base font-bold text-[#1B2430]/65 max-w-md mx-auto leading-relaxed">
         {message ?? "Skús to prosím znovu o chvíľu."}
       </p>
       <div className="mt-6 flex flex-wrap justify-center gap-2">
         <button
           type="button"
           onClick={onRetry}
-          className="inline-flex items-center gap-2 px-5 py-3 rounded-full bg-[#3db6e8] text-white font-semibold text-sm hover:bg-[#1a8cc4] transition-colors"
+          className="inline-flex items-center gap-2 px-5 py-3 rounded-full bg-[#2EA3DC] text-white font-extrabold text-sm hover:bg-[#1E8AC1] shadow-[0_8px_24px_rgba(46,163,220,0.4)] transition-colors"
         >
           <RefreshCw className="w-4 h-4" aria-hidden />
           Skús znovu
         </button>
         <Link
           href="/kontakt"
-          className="inline-flex items-center gap-2 px-5 py-3 rounded-full bg-[var(--color-bg-muted)] text-[var(--color-fg)] font-semibold text-sm hover:bg-[var(--color-border)] transition-colors"
+          className="inline-flex items-center gap-2 px-5 py-3 rounded-full bg-[#F8FAFC] text-[#1B2430] font-extrabold text-sm ring-1 ring-[#1B2430]/10 hover:bg-[#1B2430]/5 transition-colors"
         >
           Kontaktuj nás
         </Link>

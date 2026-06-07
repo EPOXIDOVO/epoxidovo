@@ -16,8 +16,8 @@ export const metadata: Metadata = {
 
 export default function AiVizualizerPage() {
   return (
-    <main className="min-h-screen bg-[var(--color-bg-soft)]">
+    <div className="min-h-screen bg-[#F8FAFC]">
       <AiVisualizer />
-    </main>
+    </div>
   );
 }
