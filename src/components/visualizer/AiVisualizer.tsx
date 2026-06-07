@@ -477,13 +477,27 @@ function PickTextureStep({
                   : "border-[#1B2430]/10 hover:border-[#2EA3DC]/50 hover:-translate-y-0.5 hover:shadow-[0_6px_20px_rgba(27,36,48,0.1)]"
               }`}
             >
-              {/* Vizuálny náhľad textúry — CSS background pattern */}
+              {/* Vizuálny náhľad textúry — reálna fotka ak je k dispozícii,
+                  inak CSS pattern fallback. */}
               <div
-                className="aspect-[4/3] w-full relative"
-                style={def.swatchCss}
+                className="aspect-[4/3] w-full relative bg-[#F8FAFC]"
+                style={def.previewImage ? undefined : def.swatchCss}
               >
+                {def.previewImage && (
+                  // eslint-disable-next-line @next/next/no-img-element
+                  <img
+                    src={def.previewImage}
+                    alt={`Náhľad podlahy: ${def.label}`}
+                    loading="lazy"
+                    className="absolute inset-0 w-full h-full object-cover"
+                    style={{
+                      objectPosition:
+                        def.previewObjectPosition ?? "center center",
+                    }}
+                  />
+                )}
                 {active && (
-                  <span className="absolute top-2 right-2 inline-flex items-center justify-center w-6 h-6 rounded-full bg-[#2EA3DC] text-white shadow-[0_4px_12px_rgba(46,163,220,0.5)]">
+                  <span className="absolute top-2 right-2 inline-flex items-center justify-center w-6 h-6 rounded-full bg-[#2EA3DC] text-white shadow-[0_4px_12px_rgba(46,163,220,0.5)] ring-2 ring-white">
                     <CheckCircle2 className="w-4 h-4" aria-hidden />
                   </span>
                 )}

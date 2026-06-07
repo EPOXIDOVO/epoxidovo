@@ -22,8 +22,12 @@ export interface TextureDef {
   description: string; // krátky popis pod ikonkou
   /** Bázový text v prompte pre Gemini — opisuje povrch / dokončenie. */
   promptBase: string;
-  /** CSS background pre vizuálny náhľad v pickeri (mini-vzor). */
+  /** CSS background pre vizuálny náhľad v pickeri (mini-vzor) — fallback. */
   swatchCss: React.CSSProperties;
+  /** Reálna fotka z realizácie pre vizuálny náhľad (preferred over swatchCss). */
+  previewImage?: string;
+  /** Object-position pre fokus na podlahu v náhľade (napr. "center bottom"). */
+  previewObjectPosition?: string;
 }
 
 export interface ColorPreset {
@@ -50,6 +54,8 @@ export const TEXTURES: Record<TextureSlug, TextureDef> = {
         "linear-gradient(135deg, #4a5160 0%, #6b7385 45%, #4a5160 100%)",
       boxShadow: "inset 0 0 30px rgba(255,255,255,0.15)",
     },
+    previewImage: "/images/realizacie/r-04.jpg",
+    previewObjectPosition: "center 70%",
   },
   metalicka: {
     slug: "metalicka",
@@ -69,25 +75,41 @@ export const TEXTURES: Record<TextureSlug, TextureDef> = {
         "conic-gradient(from 210deg at 30% 50%, #1e3a5f 0deg, #5a8ec4 90deg, #1e3a5f 180deg, #4a6f9e 270deg, #1e3a5f 360deg)",
       filter: "blur(0.3px)",
     },
+    previewImage: "/images/realizacie/r-32.jpg",
+    previewObjectPosition: "center 60%",
   },
   chips: {
     slug: "chips",
-    label: "Chips",
+    label: "Chipsová",
     description: "Dekoratívne vločky v epoxide",
     promptBase:
-      "epoxy floor with evenly scattered multi-colored decorative vinyl chips/flakes, " +
-        "chips are flat and embedded in clear satin coat, uniform random distribution, " +
-        "no clustering, no clear bare spots, professional photorealistic interior photography",
+      "epoxy floor with evenly scattered multi-colored decorative vinyl chips/flakes " +
+        "on RAL 7035 light grey base, very high chip density (70% coverage), mix of " +
+        "black, dark grey, light grey, white and beige chip colors, chips are flat " +
+        "and embedded in clear satin coat, uniform random distribution, no clustering, " +
+        "no clear bare spots, professional photorealistic interior photography",
     swatchCss: {
-      background: [
-        "radial-gradient(circle at 20% 25%, #2a2a2a 1.5px, transparent 2px)",
-        "radial-gradient(circle at 75% 30%, #5a5a5a 1.5px, transparent 2px)",
-        "radial-gradient(circle at 40% 65%, #8b6f3a 1.5px, transparent 2px)",
-        "radial-gradient(circle at 80% 80%, #ddd 1px, transparent 1.5px)",
-        "radial-gradient(circle at 15% 80%, #888 1.5px, transparent 2px)",
-        "radial-gradient(circle at 60% 15%, #444 1px, transparent 1.5px)",
-        "linear-gradient(135deg, #c4b094 0%, #d4be9a 100%)",
+      // Veľmi hustý chips pattern na RAL 7035 sivej (#D7D7D7) báze.
+      // Layered radial-gradients vytvárajú efekt sypaných vločiek.
+      backgroundColor: "#D7D7D7",
+      backgroundImage: [
+        // Tmavé chipsy
+        "radial-gradient(circle, #1a1a1a 1.2px, transparent 1.7px)",
+        "radial-gradient(circle, #333 1px, transparent 1.5px)",
+        "radial-gradient(circle, #555 1.2px, transparent 1.7px)",
+        // Stredne sivé
+        "radial-gradient(circle, #777 1px, transparent 1.5px)",
+        "radial-gradient(circle, #999 1.2px, transparent 1.7px)",
+        // Svetlé / biele
+        "radial-gradient(circle, #fff 1px, transparent 1.5px)",
+        "radial-gradient(circle, #eee 1.2px, transparent 1.7px)",
+        // Béžové akcenty
+        "radial-gradient(circle, #b8a890 1px, transparent 1.5px)",
       ].join(", "),
+      backgroundSize:
+        "9px 9px, 13px 13px, 11px 11px, 15px 15px, 8px 8px, 12px 12px, 14px 14px, 16px 16px",
+      backgroundPosition:
+        "0 0, 4px 4px, 7px 2px, 2px 6px, 5px 1px, 1px 8px, 9px 5px, 6px 3px",
     },
   },
   mramor: {
@@ -106,6 +128,8 @@ export const TEXTURES: Record<TextureSlug, TextureDef> = {
       background:
         "linear-gradient(135deg, #f5f1ea 0%, #e8e2d5 25%, #f5f1ea 30%, #d4cdbf 50%, #f5f1ea 55%, #e8e2d5 80%, #f5f1ea 100%)",
     },
+    previewImage: "/images/realizacie/r-37.webp",
+    previewObjectPosition: "center 70%",
   },
 };
 
