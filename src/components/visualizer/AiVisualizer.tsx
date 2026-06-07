@@ -399,7 +399,8 @@ function UploadStep({
         <Upload className="w-6 h-6 md:w-9 md:h-9" aria-hidden />
       </div>
       <h2 className="text-base md:text-2xl font-extrabold tracking-tight text-[#1B2430]">
-        Klikni alebo presuň fotku miestnosti
+        <span className="md:hidden">Klikni a nahraj fotku…</span>
+        <span className="hidden md:inline">Klikni alebo presuň fotku miestnosti</span>
       </h2>
       <p className="mt-1 md:mt-2 text-xs md:text-base font-bold text-[#1B2430]/65">
         JPG, PNG alebo WebP · max 5 MB
