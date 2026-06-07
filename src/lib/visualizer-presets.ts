@@ -1,3 +1,6 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
+import type React from "react";
+
 /**
  * AI Vizualizér — predvolené textúry a farby.
  *
@@ -19,6 +22,8 @@ export interface TextureDef {
   description: string; // krátky popis pod ikonkou
   /** Bázový text v prompte pre Gemini — opisuje povrch / dokončenie. */
   promptBase: string;
+  /** CSS background pre vizuálny náhľad v pickeri (mini-vzor). */
+  swatchCss: React.CSSProperties;
 }
 
 export interface ColorPreset {
@@ -40,27 +45,67 @@ export const TEXTURES: Record<TextureSlug, TextureDef> = {
     description: "Jednofarebný hladký epoxid",
     promptBase:
       "smooth seamless single-color epoxy floor with high-gloss mirror-like finish, professional photorealistic interior",
+    swatchCss: {
+      background:
+        "linear-gradient(135deg, #4a5160 0%, #6b7385 45%, #4a5160 100%)",
+      boxShadow: "inset 0 0 30px rgba(255,255,255,0.15)",
+    },
   },
   metalicka: {
     slug: "metalicka",
     label: "Metalická",
     description: "Trojrozmerný metalický efekt",
     promptBase:
-      "metallic epoxy floor with subtle 3D depth, swirling pearlescent pigments, mirror-like reflective finish that catches light, professional photorealistic interior",
+      // **Locked design** — extra-detailný prompt pre konzistenciu naprieč
+      // generáciami (užívateľ chce predvídateľné výsledky pri metalickej).
+      "luxury 3D metallic epoxy floor with deep liquid pearlescent finish, " +
+        "flowing organic swirls of varying tone density (60% base color, 40% lighter " +
+        "highlights), mirror-polished reflective surface that catches and reflects " +
+        "ambient light, no chunks or flakes, smooth flowing pigment patterns " +
+        "reminiscent of poured metal, professional photorealistic interior photography, " +
+        "high contrast reflections matching room lighting",
+    swatchCss: {
+      background:
+        "conic-gradient(from 210deg at 30% 50%, #1e3a5f 0deg, #5a8ec4 90deg, #1e3a5f 180deg, #4a6f9e 270deg, #1e3a5f 360deg)",
+      filter: "blur(0.3px)",
+    },
   },
   chips: {
     slug: "chips",
     label: "Chips",
     description: "Dekoratívne vločky v epoxide",
     promptBase:
-      "epoxy floor with evenly scattered multi-colored decorative flakes (vinyl chips), satin clear coat over the chips, professional photorealistic interior",
+      "epoxy floor with evenly scattered multi-colored decorative vinyl chips/flakes, " +
+        "chips are flat and embedded in clear satin coat, uniform random distribution, " +
+        "no clustering, no clear bare spots, professional photorealistic interior photography",
+    swatchCss: {
+      background: [
+        "radial-gradient(circle at 20% 25%, #2a2a2a 1.5px, transparent 2px)",
+        "radial-gradient(circle at 75% 30%, #5a5a5a 1.5px, transparent 2px)",
+        "radial-gradient(circle at 40% 65%, #8b6f3a 1.5px, transparent 2px)",
+        "radial-gradient(circle at 80% 80%, #ddd 1px, transparent 1.5px)",
+        "radial-gradient(circle at 15% 80%, #888 1.5px, transparent 2px)",
+        "radial-gradient(circle at 60% 15%, #444 1px, transparent 1.5px)",
+        "linear-gradient(135deg, #c4b094 0%, #d4be9a 100%)",
+      ].join(", "),
+    },
   },
   mramor: {
     slug: "mramor",
     label: "Mramor",
     description: "Mramorový vzor",
     promptBase:
-      "epoxy floor with realistic natural marble pattern, fine veining throughout, high-gloss polished finish, professional photorealistic interior",
+      // **Locked design** — explicitný popis aby AI vygenerovala konzistentný
+      // mramor pre všetkých užívateľov s rovnakou farbou.
+      "luxury epoxy floor with realistic natural marble pattern, fine grey veining " +
+        "running diagonally and curving organically through the surface, " +
+        "vein thickness 1-3mm with varying opacity, mirror-polished high-gloss " +
+        "finish, classic Italian marble aesthetic similar to Carrara/Calacatta, " +
+        "professional photorealistic interior photography",
+    swatchCss: {
+      background:
+        "linear-gradient(135deg, #f5f1ea 0%, #e8e2d5 25%, #f5f1ea 30%, #d4cdbf 50%, #f5f1ea 55%, #e8e2d5 80%, #f5f1ea 100%)",
+    },
   },
 };
 
