@@ -111,6 +111,41 @@ export function Hero() {
     lastManualRef.current = Date.now();
   }, []);
 
+  // Swipe-loop detekcia — keď user na poslednej karte swipuje doprava
+  // (alebo na prvej karte doľava), browser natively nedovolí scroll. My
+  // tu detekujeme tento "nárazový" swipe a animujeme na druhý koniec.
+  const touchStartXRef = React.useRef(0);
+  const touchStartScrollLeftRef = React.useRef(0);
+
+  const onTouchStart = React.useCallback((e: React.TouchEvent<HTMLDivElement>) => {
+    pauseAutoRotate();
+    touchStartXRef.current = e.touches[0].clientX;
+    touchStartScrollLeftRef.current = scrollRef.current?.scrollLeft ?? 0;
+  }, [pauseAutoRotate]);
+
+  const onTouchEnd = React.useCallback((e: React.TouchEvent<HTMLDivElement>) => {
+    pauseAutoRotate();
+    const el = scrollRef.current;
+    if (!el) return;
+    const endX = e.changedTouches[0].clientX;
+    const deltaX = touchStartXRef.current - endX; // +ve = swipe DOĽAVA (na ďalšiu kartu)
+    const scrollMoved = Math.abs(el.scrollLeft - touchStartScrollLeftRef.current);
+    const maxScroll = el.scrollWidth - el.clientWidth;
+    const SWIPE_THRESHOLD = 50; // px — minimum gesture
+    const STUCK_THRESHOLD = 8; // px — koľko scroll "ne-pohol"
+
+    // Na poslednej karte + swipe doľava (intent na ďalšiu) + scroll sa nepohol → loop na 1.
+    if (deltaX > SWIPE_THRESHOLD && el.scrollLeft >= maxScroll - 10 && scrollMoved < STUCK_THRESHOLD) {
+      el.scrollTo({ left: 0, behavior: "smooth" });
+      return;
+    }
+    // Na prvej karte + swipe doprava (intent na predošlú) + scroll sa nepohol → loop na poslednú.
+    if (deltaX < -SWIPE_THRESHOLD && el.scrollLeft <= 10 && scrollMoved < STUCK_THRESHOLD) {
+      el.scrollTo({ left: (CHIPS.length - 1) * el.clientWidth, behavior: "smooth" });
+      return;
+    }
+  }, [pauseAutoRotate]);
+
   return (
     <>
       <section
@@ -322,9 +357,9 @@ export function Hero() {
           <div
             ref={scrollRef}
             onScroll={handleScroll}
-            onTouchStart={pauseAutoRotate}
+            onTouchStart={onTouchStart}
             onTouchMove={pauseAutoRotate}
-            onTouchEnd={pauseAutoRotate}
+            onTouchEnd={onTouchEnd}
             onPointerDown={pauseAutoRotate}
             className="flex overflow-x-auto snap-x snap-mandatory scroll-smooth [&::-webkit-scrollbar]:hidden"
             style={{ scrollbarWidth: "none", msOverflowStyle: "none" } as React.CSSProperties}
