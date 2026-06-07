@@ -92,11 +92,11 @@ export function AiChatWidget() {
         className="group relative inline-flex items-center justify-center w-14 h-14 md:w-16 md:h-16 rounded-full bg-[#25D366] text-white shadow-[0_12px_30px_rgba(37,211,102,0.5)] ring-4 ring-white/80 hover:bg-[#1DA851] hover:scale-110 active:scale-95 transition-all duration-200 focus:outline-none focus-visible:ring-4 focus-visible:ring-[#25D366]/40"
       >
         <WhatsAppIcon className="w-7 h-7 md:w-8 md:h-8" />
-        {/* Subtle pulsing ring na pritiahnutie pozornosti */}
+        {/* Jemný pulsing ring — pomalý a tenký aby nerušil */}
         <span
           aria-hidden
-          className="pointer-events-none absolute inset-0 rounded-full ring-4 ring-[#25D366]/40 animate-ping motion-reduce:hidden"
-          style={{ animationDuration: "2.5s" }}
+          className="pointer-events-none absolute inset-0 rounded-full ring-2 ring-[#25D366]/25 animate-ping motion-reduce:hidden"
+          style={{ animationDuration: "4.5s" }}
         />
       </a>
     </div>
