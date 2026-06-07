@@ -14,6 +14,9 @@ import {
   Loader2,
   ArrowLeft,
   ArrowRight,
+  Images,
+  Maximize2,
+  X,
 } from "lucide-react";
 import { TurnstileWidget } from "@/components/turnstile/TurnstileWidget";
 import { trackEvent } from "@/components/analytics/Analytics";
@@ -318,6 +321,27 @@ function Header({ step }: { step: Step }) {
         : step === "generating" || step === "result"
           ? 3
           : 0;
+  // Dynamický nadpis + subtitle podľa kroku
+  const isResult = step === "result";
+  const title = isResult
+    ? "Hotovo! Takto môže vyzerať tvoja podlaha"
+    : "Pozri svoju budúcu podlahu";
+  const subtitleNode = isResult ? (
+    <>
+      Výsledky AI nie sú vždy 100% presné — pre istotu si pozri aj
+      <br className="hidden md:inline" />
+      <span className="md:hidden"> </span>
+      reálne <strong>ukážky našich realizácií</strong>.
+    </>
+  ) : (
+    <>
+      Nahraj fotku, vyber typ podlahy a farbu.
+      <br className="hidden md:inline" />
+      <span className="md:hidden"> </span>
+      AI ti za pár sekúnd ukáže ako bude vyzerať.
+    </>
+  );
+
   return (
     <header className="text-center mb-3 md:mb-8">
       {/* AI gradient pill — značí "AI features" v celom UI */}
@@ -326,14 +350,21 @@ function Header({ step }: { step: Step }) {
         AI Vizualizácia
       </div>
       <h1 className="text-xl md:text-5xl font-black tracking-tight text-[#1B2430]">
-        Pozri svoju budúcu podlahu
+        {title}
       </h1>
       <p className="mt-1.5 md:mt-3 text-xs md:text-lg font-bold text-[#1B2430]/65 max-w-2xl mx-auto leading-snug md:leading-relaxed">
-        Nahraj fotku, vyber typ podlahy a farbu.
-        <br className="hidden md:inline" />
-        <span className="md:hidden"> </span>
-        AI ti za pár sekúnd ukáže ako bude vyzerať.
+        {subtitleNode}
       </p>
+      {/* Po výsledku — odkaz na realizácie pre istotu */}
+      {isResult && (
+        <Link
+          href="/realizacie"
+          className="mt-3 md:mt-4 inline-flex items-center gap-1.5 px-4 py-2 rounded-full bg-white text-[#2EA3DC] font-extrabold text-xs md:text-sm ring-1 ring-[#2EA3DC]/30 hover:bg-[#2EA3DC]/5 hover:ring-[#2EA3DC] transition-colors shadow-sm"
+        >
+          <Images className="w-4 h-4" aria-hidden />
+          Pozri ukážky realizácií
+        </Link>
+      )}
       {stepNum > 0 && (
         <div className="mt-3 md:mt-6 flex justify-center gap-1.5 md:gap-2">
           {[1, 2, 3].map((n) => (
@@ -709,12 +740,26 @@ function ResultStep({
   onRequestQuote: () => void;
   onStartOver: () => void;
 }) {
+  const [fullscreen, setFullscreen] = React.useState(false);
+
+  // ESC zatvára fullscreen
+  React.useEffect(() => {
+    if (!fullscreen) return;
+    const onKey = (e: KeyboardEvent) => e.key === "Escape" && setFullscreen(false);
+    window.addEventListener("keydown", onKey);
+    return () => window.removeEventListener("keydown", onKey);
+  }, [fullscreen]);
+
   return (
     <div className="rounded-3xl bg-white p-5 md:p-8 shadow-[0_10px_40px_rgba(27,36,48,0.08)] ring-1 ring-[#1B2430]/5">
-      {/* Before/After slider */}
+      {/* Before/After slider — klik na obrázok → fullscreen lightbox */}
       <div
-        className="relative w-full aspect-video md:aspect-[4/3] rounded-2xl overflow-hidden bg-[#F8FAFC] select-none"
+        className="relative w-full aspect-video md:aspect-[4/3] rounded-2xl overflow-hidden bg-[#F8FAFC] select-none group cursor-zoom-in"
         style={{ touchAction: "none" }}
+        onClick={() => setFullscreen(true)}
+        role="button"
+        tabIndex={0}
+        aria-label="Otvor veľký náhľad výsledku"
       >
         {/* After (vždy plne viditeľný v pozadí) */}
         {/* eslint-disable-next-line @next/next/no-img-element */}
@@ -743,24 +788,31 @@ function ResultStep({
           style={{ left: `${sliderPos}%` }}
         >
           <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-10 h-10 rounded-full bg-white shadow-lg flex items-center justify-center gap-0.5">
-            <ArrowLeft className="w-3 h-3 text-[var(--color-fg)]" aria-hidden />
-            <ArrowRight className="w-3 h-3 text-[var(--color-fg)]" aria-hidden />
+            <ArrowLeft className="w-3 h-3 text-[#1B2430]" aria-hidden />
+            <ArrowRight className="w-3 h-3 text-[#1B2430]" aria-hidden />
           </div>
         </div>
         {/* Labels */}
-        <div className="absolute top-3 left-3 px-2.5 py-1 rounded-md bg-[#1B2430]/85 text-white text-xs font-extrabold uppercase tracking-wider backdrop-blur-sm">
+        <div className="absolute top-3 left-3 px-2.5 py-1 rounded-md bg-[#1B2430]/85 text-white text-xs font-extrabold uppercase tracking-wider backdrop-blur-sm pointer-events-none">
           Pred
         </div>
-        <div className="absolute top-3 right-3 px-2.5 py-1 rounded-md bg-[#2EA3DC] text-white text-xs font-extrabold uppercase tracking-wider shadow-[0_4px_12px_rgba(46,163,220,0.4)]">
+        <div className="absolute top-3 right-3 px-2.5 py-1 rounded-md bg-[#2EA3DC] text-white text-xs font-extrabold uppercase tracking-wider shadow-[0_4px_12px_rgba(46,163,220,0.4)] pointer-events-none">
           Po
         </div>
-        {/* Slider input — full width invisible */}
+        {/* Expand icon — vizuálny hint že sa dá kliknúť */}
+        <div className="absolute bottom-3 right-3 inline-flex items-center gap-1.5 px-2.5 py-1.5 rounded-full bg-[#1B2430]/85 text-white text-[10px] md:text-xs font-extrabold backdrop-blur-sm shadow-md pointer-events-none group-hover:bg-[#1B2430]">
+          <Maximize2 className="w-3 h-3 md:w-3.5 md:h-3.5" aria-hidden />
+          Zväčšiť
+        </div>
+        {/* Slider input — full width invisible. stopPropagation aby nezatvorilo expand. */}
         <input
           type="range"
           min={0}
           max={100}
           value={sliderPos}
           onChange={(e) => onSlider(Number(e.target.value))}
+          onClick={(e) => e.stopPropagation()}
+          onPointerDown={(e) => e.stopPropagation()}
           className="absolute inset-0 w-full h-full opacity-0 cursor-ew-resize"
           aria-label="Porovnanie pred a po"
         />
@@ -771,36 +823,67 @@ function ResultStep({
           {textureLabel} · {colorName}
         </div>
         <div className="text-xs font-bold text-[#1B2430]/60 mt-0.5">
-          ← Posuvníkom porovnaj pred a po →
+          ← Posuvníkom porovnaj pred a po · klik = veľký náhľad
         </div>
       </div>
 
-      <div className="mt-6 flex flex-wrap justify-center gap-2">
+      {/* 3 secondary buttons — vždy v jednom rade (grid-cols-3),
+          ikona naľavo, label napravo, jednotná šírka. */}
+      <div className="mt-6 grid grid-cols-3 gap-2">
         <button
           type="button"
           onClick={onDownload}
-          className="inline-flex items-center gap-2 px-4 py-2.5 rounded-full bg-[#F8FAFC] text-[#1B2430] font-extrabold text-sm ring-1 ring-[#1B2430]/10 hover:bg-[#1B2430]/5 transition-colors"
+          className="inline-flex flex-col md:flex-row items-center justify-center gap-1 md:gap-2 px-2 md:px-4 py-3 rounded-2xl bg-[#F8FAFC] text-[#1B2430] font-extrabold text-[11px] md:text-sm ring-1 ring-[#1B2430]/10 hover:bg-white hover:ring-[#2EA3DC] hover:text-[#2EA3DC] hover:shadow-[0_6px_16px_rgba(46,163,220,0.15)] transition-all"
         >
-          <Download className="w-4 h-4" aria-hidden />
-          Stiahnuť
+          <Download className="w-4 h-4 md:w-4 md:h-4 shrink-0" aria-hidden />
+          <span>Stiahnuť</span>
         </button>
         <button
           type="button"
           onClick={onTryAgain}
-          className="inline-flex items-center gap-2 px-4 py-2.5 rounded-full bg-[#F8FAFC] text-[#1B2430] font-extrabold text-sm ring-1 ring-[#1B2430]/10 hover:bg-[#1B2430]/5 transition-colors"
+          className="inline-flex flex-col md:flex-row items-center justify-center gap-1 md:gap-2 px-2 md:px-4 py-3 rounded-2xl bg-[#F8FAFC] text-[#1B2430] font-extrabold text-[11px] md:text-sm ring-1 ring-[#1B2430]/10 hover:bg-white hover:ring-[#2EA3DC] hover:text-[#2EA3DC] hover:shadow-[0_6px_16px_rgba(46,163,220,0.15)] transition-all"
         >
-          <RefreshCw className="w-4 h-4" aria-hidden />
-          Skús inú farbu
+          <RefreshCw className="w-4 h-4 md:w-4 md:h-4 shrink-0" aria-hidden />
+          <span className="text-center leading-tight">Iná farba</span>
         </button>
         <button
           type="button"
           onClick={onStartOver}
-          className="inline-flex items-center gap-2 px-4 py-2.5 rounded-full bg-[#F8FAFC] text-[#1B2430] font-extrabold text-sm ring-1 ring-[#1B2430]/10 hover:bg-[#1B2430]/5 transition-colors"
+          className="inline-flex flex-col md:flex-row items-center justify-center gap-1 md:gap-2 px-2 md:px-4 py-3 rounded-2xl bg-[#F8FAFC] text-[#1B2430] font-extrabold text-[11px] md:text-sm ring-1 ring-[#1B2430]/10 hover:bg-white hover:ring-[#2EA3DC] hover:text-[#2EA3DC] hover:shadow-[0_6px_16px_rgba(46,163,220,0.15)] transition-all"
         >
-          <Upload className="w-4 h-4" aria-hidden />
-          Iná fotka
+          <Upload className="w-4 h-4 md:w-4 md:h-4 shrink-0" aria-hidden />
+          <span>Iná fotka</span>
         </button>
       </div>
+
+      {/* Fullscreen lightbox — veľký náhľad výsledku */}
+      {fullscreen && (
+        <div
+          role="dialog"
+          aria-modal="true"
+          onClick={() => setFullscreen(false)}
+          className="fixed inset-0 z-[100] bg-black/95 backdrop-blur-sm flex items-center justify-center p-3 md:p-8 cursor-zoom-out"
+        >
+          <button
+            type="button"
+            onClick={() => setFullscreen(false)}
+            aria-label="Zavrieť"
+            className="absolute top-4 right-4 inline-flex items-center justify-center w-11 h-11 rounded-full bg-white/15 text-white hover:bg-white/25 backdrop-blur-sm transition-colors z-10"
+          >
+            <X className="w-6 h-6" aria-hidden />
+          </button>
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img
+            src={afterDataUrl}
+            alt={`Po: ${textureLabel} ${colorName}`}
+            className="max-w-full max-h-full object-contain rounded-2xl shadow-2xl"
+            onClick={(e) => e.stopPropagation()}
+          />
+          <div className="absolute bottom-4 left-1/2 -translate-x-1/2 px-4 py-2 rounded-full bg-white/15 text-white text-xs md:text-sm font-extrabold backdrop-blur-sm">
+            {textureLabel} · {colorName}
+          </div>
+        </div>
+      )}
 
       {/* CTA na cenovku — najdôležitejšia časť, konverzný hook (orange brand) */}
       <div className="mt-8 rounded-3xl bg-gradient-to-br from-[#F0851A] to-[#D9760F] p-6 md:p-8 text-center text-white shadow-[0_12px_40px_rgba(240,133,26,0.35)]">
