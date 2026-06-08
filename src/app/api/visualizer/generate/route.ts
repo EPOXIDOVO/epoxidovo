@@ -9,19 +9,31 @@ import type { Finish } from "@/lib/visualizer-presets";
 /**
  * POST /api/visualizer/generate
  *
- * Hlavná generácia: vymení podlahu na fotke za zvolenú textúru/farbu.
- * Cost: ~$0.067 per call. Chránené:
- *   1. Turnstile token (anti-bot)
- *   2. Per-IP rate limit cez Prisma (max 5 / 24h)
- *   3. Validácia textury + color slug oproti predefinovanému zoznamu
+ * Hlavná generácia: vymení podlahu na fotke za zvolenú textúru/farbu/lak.
+ * Cost: ~€0.067 per call.
+ *
+ * ═══ BUDGET PROTECTION (5 vrstiev) ═══
+ *   1. Kill switch (VISUALIZER_ENABLED=false) — okamžite vypnúť celé API
+ *   2. Origin/Referer check — len epoxidovo.sk + localhost môžu volať
+ *   3. Turnstile token (Cloudflare anti-bot challenge)
+ *   4. Per-IP rate limit: 2 úspešné gen / 24h
+ *   5. Global cap: 25 úspešných gen / 24h (~€1.68/deň worst-case)
+ *
+ * ═══ PROMPT INJECTION PROTECTION ═══
+ * Klient NEMÔŽE poslať custom prompt — posiela LEN texture+color+finish slugy,
+ * server ich validuje voči predefinovanému zoznamu (TEXTURES/COLORS/FINISHES)
+ * a sám zostavuje finálny prompt cez buildGeminiPrompt(). Prompt vždy hovorí
+ * "Replace ONLY the existing floor" — Gemini nedostane šancu generovať
+ * tváre, autá, alebo iný non-floor obsah.
  *
  * Request body (JSON):
  *   {
- *     imageBase64: string,
- *     mimeType: string,
- *     texture: TextureSlug,
- *     colorSlug: string,
- *     turnstileToken: string,
+ *     imageBase64: string,         // <= 4 MB raw
+ *     mimeType: string,            // jpg/png/webp only
+ *     texture: TextureSlug,        // hladka/metalicka/chips/mramor (validated)
+ *     colorSlug: string,           // must exist in COLORS[texture]
+ *     finish?: "matna" | "leskla", // default leskla
+ *     turnstileToken: string,      // Cloudflare anti-bot
  *   }
  *
  * Response:
@@ -39,15 +51,57 @@ interface GenerateBody {
   turnstileToken?: string;
 }
 
-const MAX_BASE64_SIZE = 5 * 1024 * 1024 * 1.4;
+/**
+ * Max veľkosť uploadovanej base64 fotky. 4 MB raw = ~5.6 MB base64.
+ * Stačí pre prakticky každú mobilnú fotku po klientskom resize.
+ * Menej = menej Gemini cost (vstup sa škáluje s veľkosťou) + ťažší abuse.
+ */
+const MAX_BASE64_SIZE = 4 * 1024 * 1024 * 1.4;
 const ALLOWED_MIMES = new Set(["image/jpeg", "image/jpg", "image/png", "image/webp"]);
-// Per-IP limit: max 3 úspešné generácie / 24h.
-// 3 × Turnstile vyriešiť ≈ €0.006 cost atakujúcemu za €0.20 ti spáleného budgetu.
-const RATE_LIMIT_PER_DAY_PER_IP = 3;
-// Globálny denný cap: max 100 úspešných generácií / 24h naprieč všetkými IP.
-// Pri ceně €0.06/gen = max €6/deň = €50 budget vydrží 8+ dní aj pri sustained abuse.
-const GLOBAL_DAILY_CAP = 100;
+
+/**
+ * Per-IP limit: max 2 úspešné generácie / 24h.
+ * Reálny user zvyčajne vyskúša 1–2 kombinácie. Bot s rotujúcim Turnstile
+ * tokenom dostane 2 hity z 1 IP, potom 24h pauza.
+ */
+const RATE_LIMIT_PER_DAY_PER_IP = 2;
+
+/**
+ * Globálny denný cap: max 25 úspešných generácií / 24h naprieč VŠETKÝMI IP.
+ * Pri ceně ~€0.067/gen = max €1.68/deň = ~€50/mesiac worst-case
+ * aj pri sustained distribuovanom attacku.
+ * Pre malú stránku (5–10 reálnych userov/deň) je toto dostatočná rezerva.
+ */
+const GLOBAL_DAILY_CAP = 25;
 const RATE_WINDOW_MS = 24 * 60 * 60 * 1000;
+
+/**
+ * Dovolené originy (Origin / Referer header). Bot s curl/python bez správneho
+ * Origin headera bude blokovaný. Browseri s legit usage ho posielajú automaticky.
+ * Spoofing možný, ale raises the bar — kombinované s Turnstile + rate limit.
+ */
+const ALLOWED_HOSTS = new Set([
+  "epoxidovo.sk",
+  "www.epoxidovo.sk",
+  "localhost",
+  "127.0.0.1",
+]);
+
+function isAllowedOrigin(req: NextRequest): boolean {
+  const originHeader = req.headers.get("origin") ?? req.headers.get("referer");
+  if (!originHeader) return false;
+  try {
+    const url = new URL(originHeader);
+    const host = url.hostname;
+    if (ALLOWED_HOSTS.has(host)) return true;
+    // CF Pages preview deploys (napr. abc123.epoxidovo.pages.dev)
+    if (host.endsWith(".epoxidovo.sk")) return true;
+    if (host.endsWith(".epoxidovo.pages.dev")) return true;
+    return false;
+  } catch {
+    return false;
+  }
+}
 
 export async function POST(req: NextRequest) {
   // 0) Kill switch — admin môže okamžite vypnúť vizualizér env premennou
@@ -61,6 +115,16 @@ export async function POST(req: NextRequest) {
           "AI Vizualizér je dočasne nedostupný. Skús prosím neskôr alebo nám napíš cez kontaktný formulár.",
       },
       { status: 503 },
+    );
+  }
+
+  // 0.5) Origin / Referer check — blokuje basic bot scripts (curl/python bez
+  // správneho headera). Spoofovateľné, ale Turnstile + rate limit vrstvy stoja
+  // za týmto. Reálne browser-based usage Origin/Referer header posiela.
+  if (!isAllowedOrigin(req)) {
+    return NextResponse.json(
+      { ok: false, error: "invalid_origin", message: "Neplatný zdroj požiadavky." },
+      { status: 403 },
     );
   }
 
