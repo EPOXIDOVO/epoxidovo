@@ -982,14 +982,24 @@ function ResultStep({
 
       {/* ═════ PRAVÝ STĹPEC (lg+): info + akcie + CTA ═════ */}
       <div className="mt-4 lg:mt-0 flex flex-col gap-3">
-        {/* Realizácie pill — alternatíva pre user-a ak chce vidieť reálne práce */}
-        <Link
-          href="/realizacie"
-          className="inline-flex items-center justify-center gap-1.5 px-4 py-2.5 rounded-xl bg-white text-[#2EA3DC] font-extrabold text-xs md:text-sm ring-1 ring-[#2EA3DC]/30 hover:bg-[#2EA3DC]/5 hover:ring-[#2EA3DC] transition-colors shadow-sm"
-        >
-          <Images className="w-4 h-4" aria-hidden />
-          Pozri ukážky realizácií
-        </Link>
+        {/* Disclaimer warning — rovnaký štýl ako v DemoExample pred uploadom.
+            User požiadal aby bolo aj v result step jasne povedané že AI nemusí
+            vždy vygenerovať správny výsledok + link na reálne realizácie. */}
+        <div className="rounded-lg bg-[#F0851A]/10 ring-1 ring-[#F0851A]/30 px-3 py-2">
+          <div className="flex items-start gap-2">
+            <AlertCircle className="w-4 h-4 text-[#F0851A] shrink-0 mt-0.5" aria-hidden />
+            <div className="text-xs font-bold text-[#1B2430] leading-snug">
+              AI nemusí vždy vygenerovať správny výsledok. Pre istotu si pozri aj{" "}
+              <Link
+                href="/realizacie"
+                className="text-[#F0851A] hover:text-[#D9760F] font-black underline underline-offset-2"
+              >
+                ukážky realizácií
+              </Link>
+              .
+            </div>
+          </div>
+        </div>
 
         {/* 3 secondary buttons — vždy v jednom rade, ikona+label */}
         <div className="grid grid-cols-3 gap-2">
