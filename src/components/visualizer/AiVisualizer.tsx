@@ -888,8 +888,48 @@ function ResultStep({
     return () => window.removeEventListener("keydown", onKey);
   }, [fullscreen]);
 
+  // Auto-animácia pri prvom mount-e: slider sa hýbe 100 → 0 → 65 cez ~1.5s
+  // aby user OKAMŽITE videl že sú tam DVE rôzne fotky (BEFORE aj AFTER) — nie
+  // len jeden statický výsledok. Toto rieši časté user feedback "obe polky
+  // vyzerajú rovnako" pri subtílnejších AI generáciách.
+  // Animáciu spustíme len raz pri prvom renderi, potom necháme usera ovládať.
+  const animatedOnMount = React.useRef(false);
+  React.useEffect(() => {
+    if (animatedOnMount.current) return;
+    animatedOnMount.current = true;
+    // Štart: po-only (100% = celé AFTER), potom plynulý prechod na ~65 default
+    onSlider(100);
+    let raf = 0;
+    const start = performance.now();
+    const tick = (now: number) => {
+      const elapsed = now - start;
+      // Fáza 1 (0 → 600ms): 100 → 5 (odhaľ BEFORE)
+      // Fáza 2 (600 → 1500ms): 5 → 65 (vráť sa na default split)
+      let pos: number;
+      if (elapsed < 600) {
+        const t = elapsed / 600;
+        // easeOutCubic
+        const eased = 1 - Math.pow(1 - t, 3);
+        pos = 100 - eased * 95;
+      } else if (elapsed < 1500) {
+        const t = (elapsed - 600) / 900;
+        const eased = t * t * (3 - 2 * t); // smoothstep
+        pos = 5 + eased * 60;
+      } else {
+        pos = 65;
+      }
+      onSlider(Math.round(pos));
+      if (elapsed < 1500) {
+        raf = requestAnimationFrame(tick);
+      }
+    };
+    raf = requestAnimationFrame(tick);
+    return () => cancelAnimationFrame(raf);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
   return (
-    <div className="rounded-3xl bg-white p-4 md:p-5 lg:p-6 shadow-[0_10px_40px_rgba(27,36,48,0.08)] ring-1 ring-[#1B2430]/5 lg:grid lg:grid-cols-[1.55fr_1fr] lg:gap-6 lg:items-start">
+    <div className="rounded-3xl bg-white p-4 md:p-5 lg:p-6 shadow-[0_10px_40px_rgba(27,36,48,0.08)] ring-1 ring-[#1B2430]/5 lg:grid lg:grid-cols-[1.55fr_1fr] lg:gap-6 lg:items-stretch">
       {/* ═════ ĽAVÝ STĹPEC (lg+): Before/After slider ═════ */}
       <div className="lg:min-w-0">
       {/* Before/After slider — klik na obrázok → fullscreen lightbox */}
@@ -922,22 +962,23 @@ function ResultStep({
             draggable={false}
           />
         </div>
-        {/* Slider handle */}
+        {/* Slider handle — hrubšia biela čiara + ring-2 čierna outline aby bola
+            jasne vidno aj na svetlých podlahách. Drop shadow zo strany pre 3D. */}
         <div
-          className="absolute top-0 bottom-0 w-0.5 bg-white shadow-[0_0_10px_rgba(0,0,0,0.5)] pointer-events-none"
-          style={{ left: `${sliderPos}%` }}
+          className="absolute top-0 bottom-0 w-[3px] bg-white shadow-[2px_0_8px_rgba(0,0,0,0.6),-2px_0_8px_rgba(0,0,0,0.6)] pointer-events-none"
+          style={{ left: `calc(${sliderPos}% - 1.5px)` }}
         >
-          <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-10 h-10 rounded-full bg-white shadow-lg flex items-center justify-center gap-0.5">
-            <ArrowLeft className="w-3 h-3 text-[#1B2430]" aria-hidden />
-            <ArrowRight className="w-3 h-3 text-[#1B2430]" aria-hidden />
+          <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-11 h-11 rounded-full bg-white ring-2 ring-[#1B2430]/15 shadow-[0_4px_16px_rgba(0,0,0,0.35)] flex items-center justify-center gap-0.5">
+            <ArrowLeft className="w-3.5 h-3.5 text-[#1B2430]" aria-hidden />
+            <ArrowRight className="w-3.5 h-3.5 text-[#1B2430]" aria-hidden />
           </div>
         </div>
-        {/* Labels */}
-        <div className="absolute top-3 left-3 px-2.5 py-1 rounded-md bg-[#1B2430]/85 text-white text-xs font-extrabold uppercase tracking-wider backdrop-blur-sm pointer-events-none">
+        {/* Labels — výraznejšie pozadie + ring aby boli vidno aj na hocijakom obsahu */}
+        <div className="absolute top-3 left-3 px-3 py-1.5 rounded-md bg-[#1B2430] text-white text-xs font-black uppercase tracking-wider shadow-[0_4px_14px_rgba(0,0,0,0.5)] ring-2 ring-white/20 pointer-events-none">
           Pred
         </div>
-        <div className="absolute top-3 right-3 px-2.5 py-1 rounded-md bg-[#2EA3DC] text-white text-xs font-extrabold uppercase tracking-wider shadow-[0_4px_12px_rgba(46,163,220,0.4)] pointer-events-none">
-          Po
+        <div className="absolute top-3 right-3 px-3 py-1.5 rounded-md bg-[#2EA3DC] text-white text-xs font-black uppercase tracking-wider shadow-[0_4px_14px_rgba(46,163,220,0.6)] ring-2 ring-white/30 pointer-events-none">
+          Po · AI
         </div>
         {/* Expand button — skutočne klikateľný (z-20 nad slider input).
             stopPropagation aby slider neukradol klik. */}
@@ -980,8 +1021,10 @@ function ResultStep({
       </div>
       {/* ═════ KONIEC ĽAVÉHO STĹPCA ═════ */}
 
-      {/* ═════ PRAVÝ STĹPEC (lg+): info + akcie + CTA ═════ */}
-      <div className="mt-4 lg:mt-0 flex flex-col gap-3">
+      {/* ═════ PRAVÝ STĹPEC (lg+): info + akcie + CTA ═════
+           lg:h-full + flex-col + gap → CTA box dostane mt-auto a sám sa pretiahne
+           dolu, takže pravý stĺpec končí na rovnakej výške ako slider. */}
+      <div className="mt-4 lg:mt-0 flex flex-col gap-3 lg:h-full">
         {/* Disclaimer warning — rovnaký štýl ako v DemoExample pred uploadom.
             User požiadal aby bolo aj v result step jasne povedané že AI nemusí
             vždy vygenerovať správny výsledok + link na reálne realizácie. */}
@@ -1029,8 +1072,10 @@ function ResultStep({
           </button>
         </div>
 
-        {/* CTA na cenovku — kompaktnejšia verzia, sedí v pravom stĺpci */}
-        <div className="rounded-2xl bg-gradient-to-br from-[#F0851A] to-[#D9760F] p-4 md:p-5 text-center text-white shadow-[0_12px_40px_rgba(240,133,26,0.35)]">
+        {/* CTA na cenovku — flex-1 + flex-col-center na desktope, aby vyplnil
+            zvyšok pravého stĺpca (žiadne prázdne miesto pod boxom). Button
+            zostáva pri spodku. */}
+        <div className="rounded-2xl bg-gradient-to-br from-[#F0851A] to-[#D9760F] p-4 md:p-5 text-center text-white shadow-[0_12px_40px_rgba(240,133,26,0.35)] lg:flex-1 lg:flex lg:flex-col lg:justify-center">
           <h3 className="text-base md:text-lg lg:text-xl font-black tracking-tight leading-tight">
             Toto je ono! Pošleme ti nezáväznú cenovú ponuku.
           </h3>
@@ -1040,7 +1085,7 @@ function ResultStep({
           <button
             type="button"
             onClick={onRequestQuote}
-            className="mt-3 w-full inline-flex items-center justify-center gap-2 px-4 py-3 rounded-full bg-white text-[#D9760F] font-black text-sm hover:bg-white/95 shadow-[0_8px_24px_rgba(0,0,0,0.18)] transition-all"
+            className="mt-3 lg:mt-4 w-full inline-flex items-center justify-center gap-2 px-4 py-3 rounded-full bg-white text-[#D9760F] font-black text-sm hover:bg-white/95 shadow-[0_8px_24px_rgba(0,0,0,0.18)] transition-all"
           >
             <Send className="w-4 h-4" aria-hidden />
             Cenová ponuka
