@@ -19,17 +19,20 @@ export function SiteChrome({ children }: { children: React.ReactNode }) {
 
   if (isBareRoute) return <>{children}</>;
 
-  // /ai-vizualizer = 1-page no-scroll layout (Footer hidden, main fills viewport).
-  const isVisualizer = pathname.startsWith("/ai-vizualizer");
+  // 1-page no-scroll layout pre /ai-vizualizer + /cenova-ponuka
+  // (Footer hidden, main fills viewport, žiadny dlhý scroll dolu).
+  const is1PageRoute =
+    pathname.startsWith("/ai-vizualizer") ||
+    pathname.startsWith("/cenova-ponuka");
 
-  if (isVisualizer) {
+  if (is1PageRoute) {
     return (
       <>
         <Header transparentOnTop={false} />
         <main id="main" className="h-[100dvh] pt-20 md:pt-24 flex flex-col">
           {children}
         </main>
-        {/* Footer hidden on visualizer page for 1-page UX */}
+        {/* Footer hidden on this route for 1-page UX */}
       </>
     );
   }
