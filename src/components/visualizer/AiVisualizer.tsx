@@ -1,7 +1,6 @@
 "use client";
 
 import * as React from "react";
-import Image from "next/image";
 import Link from "next/link";
 import {
   Sparkles,
@@ -965,13 +964,11 @@ function DemoExample() {
       {/* ─── MOBILE LAYOUT: horizontálny strip pred → šípka → po ─── */}
       <div className="md:hidden mt-2 grid grid-cols-[1fr_auto_1fr] gap-2 items-center">
         <div className="relative aspect-square rounded-lg overflow-hidden bg-[#F8FAFC] ring-1 ring-[#1B2430]/10">
-          <Image
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img
             src="/images/visualizer-demo/pred.jpg"
             alt="Pôvodná fotka miestnosti"
-            fill
-            sizes="(max-width: 768px) 45vw, 250px"
-            priority
-            className="object-cover"
+            className="absolute inset-0 w-full h-full object-cover"
           />
           <div className="absolute top-1 left-1 px-1.5 py-0.5 rounded-md bg-[#1B2430] text-white text-[9px] font-black uppercase tracking-wider z-10">
             Pred
@@ -986,14 +983,11 @@ function DemoExample() {
           </span>
         </div>
         <div className="relative aspect-square rounded-lg overflow-hidden bg-[#F8FAFC] ring-2 ring-[#2EA3DC]">
-          <Image
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img
             src="/images/visualizer-demo/po.jpg"
             alt="Fotka miestnosti po AI vizualizácii"
-            fill
-            sizes="(max-width: 768px) 45vw, 250px"
-            priority
-            className="object-cover scale-[1.12]"
-            style={{ objectPosition: "center 38%" }}
+            className="absolute inset-0 w-full h-full object-cover"
           />
           <div className="absolute top-1 left-1 px-1.5 py-0.5 rounded-md bg-[#2EA3DC] text-white text-[9px] font-black uppercase tracking-wider z-10">
             Po
@@ -1011,13 +1005,11 @@ function DemoExample() {
           </div>
         </div>
         <div className="relative flex-1 min-h-[100px] rounded-2xl overflow-hidden bg-[#F8FAFC] ring-1 ring-[#1B2430]/10">
-          <Image
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img
             src="/images/visualizer-demo/pred.jpg"
             alt="Pôvodná fotka miestnosti"
-            fill
-            sizes="(max-width: 1280px) 30vw, 400px"
-            priority
-            className="object-cover"
+            className="absolute inset-0 w-full h-full object-cover"
           />
           <div className="absolute top-2 left-2 px-2.5 py-1 rounded-md bg-[#1B2430] text-white text-xs font-black uppercase tracking-wider shadow-md z-10">
             Pred
@@ -1047,14 +1039,11 @@ function DemoExample() {
           </div>
         </div>
         <div className="relative flex-1 min-h-[80px] rounded-2xl overflow-hidden bg-[#F8FAFC] ring-2 ring-[#2EA3DC]">
-          <Image
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img
             src="/images/visualizer-demo/po.jpg"
             alt="Fotka miestnosti po AI vizualizácii"
-            fill
-            sizes="(max-width: 1280px) 30vw, 400px"
-            priority
-            className="object-cover scale-[1.12]"
-            style={{ objectPosition: "center 38%" }}
+            className="absolute inset-0 w-full h-full object-cover"
           />
           <div className="absolute top-2 left-2 px-2.5 py-1 rounded-md bg-[#2EA3DC] text-white text-xs font-black uppercase tracking-wider shadow-[0_4px_12px_rgba(46,163,220,0.5)] z-10">
             Po
