@@ -16,9 +16,9 @@ export const metadata: Metadata = {
 
 export default function AiVizualizerPage() {
   return (
-    // Mobile: prirodzená výška; Desktop: presne viewport mínus global header (96px),
-    // overflow-hidden aby sa nedalo scrollovať (1-page UX).
-    <div className="min-h-screen bg-[#F8FAFC] md:h-[calc(100dvh-96px)] md:min-h-0 md:overflow-hidden">
+    // SiteChrome dáva main h-[100dvh] flex flex-col → tento div vyplní zvyšok
+    // (po global headeri) cez flex-1. Žiadny scroll na desktope.
+    <div className="flex-1 min-h-0 bg-[#F8FAFC] overflow-y-auto md:overflow-hidden">
       <AiVisualizer />
     </div>
   );

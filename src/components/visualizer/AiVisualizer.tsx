@@ -221,9 +221,10 @@ export function AiVisualizer() {
   // Render — krokový UI
   // ───────────────────────────────────────────────────────────────────────
 
-  return (
     // Mobile: prirodzená výška; Desktop: vyplní viewport (page wrapper limituje výšku).
-    <div className="max-w-5xl mx-auto px-4 py-3 md:py-6 md:h-full md:flex md:flex-col">
+  return (
+    <div className="max-w-5xl mx-auto px-4 py-3 md:py-4 md:h-full md:flex md:flex-col">
+      <Breadcrumb />
       <Header step={step} />
 
       {/* STEP: UPLOAD — mobile: iba upload | desktop: upload + demo side-by-side,
@@ -317,6 +318,32 @@ export function AiVisualizer() {
 // ════════════════════════════════════════════════════════════════════════
 // Sub-komponenty
 // ════════════════════════════════════════════════════════════════════════
+
+/* Breadcrumb — "Domovská stránka / AI Vizualizácia" pre lepšiu navigáciu.
+   Mnoho používateľov nevie že kliknutím na logo sa vrátia domov. */
+function Breadcrumb() {
+  return (
+    <nav
+      aria-label="Breadcrumb"
+      className="mb-2 md:mb-3 text-xs md:text-sm font-bold text-[#1B2430]/65 shrink-0"
+    >
+      <ol className="inline-flex items-center gap-1.5">
+        <li>
+          <Link
+            href="/"
+            className="hover:text-[#2EA3DC] transition-colors"
+          >
+            Domovská stránka
+          </Link>
+        </li>
+        <li className="text-[#1B2430]/30" aria-hidden>
+          /
+        </li>
+        <li className="text-[#2EA3DC] font-black">AI Vizualizácia</li>
+      </ol>
+    </nav>
+  );
+}
 
 function Header({ step }: { step: Step }) {
   const stepNum =

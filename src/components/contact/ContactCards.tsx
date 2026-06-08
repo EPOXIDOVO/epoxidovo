@@ -80,7 +80,7 @@ export function ContactCards() {
           Napíšte správu
         </span>
         <p className="mt-3 text-sm text-[var(--color-fg-muted)]">
-          Odpovieme zvyčajne hneď
+          Odpovieme do 24 hodín
         </p>
       </a>
     </div>
