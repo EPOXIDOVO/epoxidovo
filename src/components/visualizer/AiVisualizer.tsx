@@ -961,36 +961,53 @@ function DemoExample() {
         </h3>
       </div>
 
-      {/* ─── MOBILE LAYOUT: horizontálny strip pred → šípka → po ─── */}
-      <div className="md:hidden mt-2 grid grid-cols-[1fr_auto_1fr] gap-2 items-center">
-        <div className="relative aspect-square rounded-lg overflow-hidden bg-[#F8FAFC] ring-1 ring-[#1B2430]/10">
-          {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img
-            src="/images/visualizer-demo/pred.jpg"
-            alt="Pôvodná fotka miestnosti"
-            className="absolute inset-0 w-full h-full object-cover"
-          />
-          <div className="absolute top-1 left-1 px-1.5 py-0.5 rounded-md bg-[#1B2430] text-white text-[9px] font-black uppercase tracking-wider z-10">
-            Pred
+      {/* ─── MOBILE LAYOUT: horizontálny strip pred → šípka → po + popisky pod fotkami ─── */}
+      <div className="md:hidden mt-2 grid grid-cols-[1fr_auto_1fr] gap-2 items-start">
+        {/* PRED stĺpec: fotka + popisok */}
+        <div className="flex flex-col gap-1.5">
+          <div className="relative aspect-square rounded-lg overflow-hidden bg-[#F8FAFC] ring-1 ring-[#1B2430]/10">
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img
+              src="/images/visualizer-demo/pred.jpg"
+              alt="Pôvodná fotka miestnosti"
+              className="absolute inset-0 w-full h-full object-cover"
+            />
+            <div className="absolute top-1 left-1 px-1.5 py-0.5 rounded-md bg-[#1B2430] text-white text-[9px] font-black uppercase tracking-wider z-10">
+              Pred
+            </div>
+          </div>
+          <div className="text-[11px] font-black text-[#1B2430] leading-tight text-center flex items-center justify-center gap-1">
+            <span className="inline-flex items-center justify-center w-4 h-4 rounded-full bg-[#2EA3DC] text-white text-[9px] font-black shrink-0">1</span>
+            <span>Nahraj fotku</span>
           </div>
         </div>
-        <div className="flex flex-col items-center gap-1">
+
+        {/* Stredná šípka — vertikálne zarovnaná na stred fotiek */}
+        <div className="flex flex-col items-center gap-1 pt-8">
           <span className="inline-flex items-center justify-center w-8 h-8 rounded-full bg-gradient-to-br from-[#7EC8F0] via-[#6AA8F0] to-[#8B5CF6] text-white shadow-[0_4px_12px_rgba(139,92,246,0.45)]">
             <ArrowRight className="w-4 h-4" strokeWidth={3} aria-hidden />
           </span>
-          <span className="text-[8px] font-black uppercase tracking-wider text-[#8B5CF6] leading-none">
+          <span className="text-[8px] font-black uppercase tracking-wider text-[#8B5CF6] leading-none whitespace-nowrap">
             AI·30s
           </span>
         </div>
-        <div className="relative aspect-square rounded-lg overflow-hidden bg-[#F8FAFC] ring-2 ring-[#2EA3DC]">
-          {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img
-            src="/images/visualizer-demo/po.jpg"
-            alt="Fotka miestnosti po AI vizualizácii"
-            className="absolute inset-0 w-full h-full object-cover"
-          />
-          <div className="absolute top-1 left-1 px-1.5 py-0.5 rounded-md bg-[#2EA3DC] text-white text-[9px] font-black uppercase tracking-wider z-10">
-            Po
+
+        {/* PO stĺpec: fotka + popisok */}
+        <div className="flex flex-col gap-1.5">
+          <div className="relative aspect-square rounded-lg overflow-hidden bg-[#F8FAFC] ring-2 ring-[#2EA3DC]">
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img
+              src="/images/visualizer-demo/po.jpg"
+              alt="Fotka miestnosti po AI vizualizácii"
+              className="absolute inset-0 w-full h-full object-cover"
+            />
+            <div className="absolute top-1 left-1 px-1.5 py-0.5 rounded-md bg-[#2EA3DC] text-white text-[9px] font-black uppercase tracking-wider z-10">
+              Po
+            </div>
+          </div>
+          <div className="text-[11px] font-black text-[#2EA3DC] leading-tight text-center flex items-center justify-center gap-1">
+            <span className="inline-flex items-center justify-center w-4 h-4 rounded-full bg-[#2EA3DC] text-white text-[9px] font-black shrink-0">2</span>
+            <span>AI výsledok</span>
           </div>
         </div>
       </div>
