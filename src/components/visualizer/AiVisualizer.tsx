@@ -358,7 +358,7 @@ function Header({ step }: { step: Step }) {
   const isResult = step === "result";
   const title = isResult
     ? "Hotovo! Takto môže vyzerať tvoja podlaha"
-    : "Pozri si ako bude vyzerať tvoja podlaha";
+    : "Pozri si ako môže vyzerať tvoja podlaha";
   const subtitleNode = isResult ? (
     <>
       Výsledky AI nie sú vždy 100% presné — pre istotu si pozri aj
@@ -371,7 +371,7 @@ function Header({ step }: { step: Step }) {
       Nahraj fotku, vyber typ podlahy a farbu.
       <br className="hidden md:inline" />
       <span className="md:hidden"> </span>
-      AI ti za pár sekúnd ukáže ako bude vyzerať.
+      AI ti za pár sekúnd ukáže ako môže vyzerať.
     </>
   );
 
@@ -453,20 +453,20 @@ function UploadStep({
         if (f) onFile(f);
       }}
       onClick={onClick}
-      className={`cursor-pointer rounded-2xl md:rounded-3xl border-2 border-dashed p-3 md:p-10 lg:p-14 text-center transition-all bg-white flex-1 min-h-0 md:h-full flex flex-col items-center justify-center ${
+      className={`cursor-pointer rounded-2xl md:rounded-3xl border-2 border-dashed p-6 md:p-10 lg:p-14 text-center transition-all bg-white flex-1 min-h-0 md:h-full flex flex-col items-center justify-center ${
         dragging
           ? "border-[#2EA3DC] bg-[#2EA3DC]/5 scale-[1.01] shadow-[0_8px_28px_rgba(46,163,220,0.2)]"
           : "border-[#1B2430]/20 hover:border-[#2EA3DC] hover:bg-[#2EA3DC]/5 hover:shadow-[0_8px_28px_rgba(46,163,220,0.15)]"
       }`}
     >
-      <div className="inline-flex items-center justify-center w-10 h-10 md:w-20 md:h-20 rounded-xl md:rounded-2xl bg-[#2EA3DC] text-white mb-2 md:mb-5 shadow-[0_8px_20px_rgba(46,163,220,0.4)]">
-        <Upload className="w-5 h-5 md:w-9 md:h-9" aria-hidden />
+      <div className="inline-flex items-center justify-center w-16 h-16 md:w-20 md:h-20 rounded-2xl bg-[#2EA3DC] text-white mb-3 md:mb-5 shadow-[0_8px_20px_rgba(46,163,220,0.4)]">
+        <Upload className="w-8 h-8 md:w-9 md:h-9" aria-hidden />
       </div>
-      <h2 className="text-sm md:text-2xl font-extrabold tracking-tight text-[#1B2430]">
-        <span className="md:hidden">Klikni a nahraj fotku…</span>
+      <h2 className="text-lg md:text-2xl font-extrabold tracking-tight text-[#1B2430]">
+        <span className="md:hidden">Klikni a nahraj fotku</span>
         <span className="hidden md:inline">Klikni alebo presuň fotku miestnosti</span>
       </h2>
-      <p className="mt-0.5 md:mt-2 text-[11px] md:text-base font-bold text-[#1B2430]/65">
+      <p className="mt-1.5 md:mt-2 text-xs md:text-base font-bold text-[#1B2430]/65">
         JPG, PNG alebo WebP · max 5 MB
       </p>
 
