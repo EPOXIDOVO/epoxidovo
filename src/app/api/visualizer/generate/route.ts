@@ -60,19 +60,21 @@ const MAX_BASE64_SIZE = 4 * 1024 * 1024 * 1.4;
 const ALLOWED_MIMES = new Set(["image/jpeg", "image/jpg", "image/png", "image/webp"]);
 
 /**
- * Per-IP limit: max 2 úspešné generácie / 24h.
- * Reálny user zvyčajne vyskúša 1–2 kombinácie. Bot s rotujúcim Turnstile
- * tokenom dostane 2 hity z 1 IP, potom 24h pauza.
+ * Per-IP limit: max 5 úspešných generácií / 24h.
+ * Reálny zákazník typicky chce vyskúšať viacero kombinácií (rôzne farby,
+ * matný vs lesklý, prípadne dva typy textúry) než sa rozhodne — 5 dáva dosť
+ * priestoru. Bot s rotujúcim Turnstile dostane 5 hits z 1 IP, potom 24h pauza.
  */
-const RATE_LIMIT_PER_DAY_PER_IP = 2;
+const RATE_LIMIT_PER_DAY_PER_IP = 5;
 
 /**
- * Globálny denný cap: max 25 úspešných generácií / 24h naprieč VŠETKÝMI IP.
- * Pri ceně ~€0.067/gen = max €1.68/deň = ~€50/mesiac worst-case
+ * Globálny denný cap: max 30 úspešných generácií / 24h naprieč VŠETKÝMI IP.
+ * Pri ceně ~€0.067/gen = max ~€2/deň = ~€60/mesiac worst-case
  * aj pri sustained distribuovanom attacku.
- * Pre malú stránku (5–10 reálnych userov/deň) je toto dostatočná rezerva.
+ * Reálne pri 5 user/deň × 3 generácie = 15/deň = ~€30/mesiac, cap 30 dáva
+ * 2× headroom pre špičky.
  */
-const GLOBAL_DAILY_CAP = 25;
+const GLOBAL_DAILY_CAP = 30;
 const RATE_WINDOW_MS = 24 * 60 * 60 * 1000;
 
 /**
