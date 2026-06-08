@@ -358,7 +358,7 @@ function Header({ step }: { step: Step }) {
   const isResult = step === "result";
   const title = isResult
     ? "Hotovo! Takto môže vyzerať tvoja podlaha"
-    : "Pozri svoju budúcu podlahu";
+    : "Pozri si ako bude vyzerať tvoja podlaha";
   const subtitleNode = isResult ? (
     <>
       Výsledky AI nie sú vždy 100% presné — pre istotu si pozri aj
@@ -1007,7 +1007,8 @@ function DemoExample() {
         <img
           src="/images/visualizer-demo/po.jpg"
           alt="Fotka miestnosti po AI vizualizácii"
-          className="absolute inset-0 w-full h-full object-cover"
+          className="absolute inset-0 w-full h-full object-cover scale-[1.12]"
+          style={{ objectPosition: "center 38%" }}
           loading="lazy"
         />
         <div className="absolute top-2 left-2 px-2.5 py-1 rounded-md bg-[#2EA3DC] text-white text-xs font-black uppercase tracking-wider shadow-[0_4px_12px_rgba(46,163,220,0.5)]">
