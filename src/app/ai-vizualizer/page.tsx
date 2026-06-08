@@ -16,7 +16,9 @@ export const metadata: Metadata = {
 
 export default function AiVizualizerPage() {
   return (
-    <div className="min-h-screen bg-[#F8FAFC]">
+    // Mobile: prirodzená výška; Desktop: presne viewport mínus global header (96px),
+    // overflow-hidden aby sa nedalo scrollovať (1-page UX).
+    <div className="min-h-screen bg-[#F8FAFC] md:h-[calc(100dvh-96px)] md:min-h-0 md:overflow-hidden">
       <AiVisualizer />
     </div>
   );

@@ -222,12 +222,14 @@ export function AiVisualizer() {
   // ───────────────────────────────────────────────────────────────────────
 
   return (
-    <div className="max-w-4xl mx-auto px-4 py-3 md:py-12">
+    // Mobile: prirodzená výška; Desktop: vyplní viewport (page wrapper limituje výšku).
+    <div className="max-w-5xl mx-auto px-4 py-3 md:py-6 md:h-full md:flex md:flex-col">
       <Header step={step} />
 
-      {/* STEP: UPLOAD — mobile: iba upload | desktop: upload + demo side-by-side, rovnaká výška */}
+      {/* STEP: UPLOAD — mobile: iba upload | desktop: upload + demo side-by-side,
+          rovnaká výška, vyplní zvyšok viewportu (flex-1 + min-h-0). */}
       {step === "upload" && (
-        <div className="md:grid md:grid-cols-[3fr_2fr] md:gap-6 md:items-stretch">
+        <div className="md:grid md:grid-cols-[3fr_2fr] md:gap-6 md:items-stretch md:flex-1 md:min-h-0 md:mt-4">
           <UploadStep
             onFile={handleFile}
             onClick={() => fileInputRef.current?.click()}
@@ -347,7 +349,7 @@ function Header({ step }: { step: Step }) {
   );
 
   return (
-    <header className="text-center mb-3 md:mb-8">
+    <header className="text-center mb-3 md:mb-4 md:shrink-0">
       {/* AI gradient pill — značí "AI features" v celom UI */}
       <div className="inline-flex items-center gap-1.5 px-3 py-1 md:px-4 md:py-1.5 rounded-full bg-gradient-to-r from-[#7EC8F0] via-[#6AA8F0] to-[#8B5CF6] text-white text-[10px] md:text-xs font-extrabold uppercase tracking-wider mb-2 md:mb-3 shadow-[0_4px_14px_rgba(139,92,246,0.35)]">
         <Sparkles className="w-3 h-3 md:w-3.5 md:h-3.5" aria-hidden />
@@ -931,13 +933,14 @@ function DemoExample() {
         </h3>
       </div>
 
-      {/* Pred fotka + popis POD fotkou */}
+      {/* Pred fotka + popis NAD fotkou — väčší, cyan, bold */}
       <div className="mt-3 shrink-0">
-        <div className="text-[11px] font-black text-[#1B2430]/55 uppercase tracking-wider mb-1.5">
-          1. Nahraj svoju fotku
+        <div className="text-sm font-black text-[#2EA3DC] uppercase tracking-wider mb-2 flex items-center gap-1.5">
+          <span className="inline-flex items-center justify-center w-5 h-5 rounded-full bg-[#2EA3DC] text-white text-[10px] font-black">1</span>
+          Nahraj svoju fotku
         </div>
       </div>
-      <div className="relative flex-1 min-h-[80px] rounded-2xl overflow-hidden bg-[#F8FAFC] ring-1 ring-[#1B2430]/10">
+      <div className="relative flex-1 min-h-[100px] rounded-2xl overflow-hidden bg-[#F8FAFC] ring-1 ring-[#1B2430]/10">
         {/* eslint-disable-next-line @next/next/no-img-element */}
         <img
           src="/images/process/step-02-priprava.webp"
@@ -965,11 +968,11 @@ function DemoExample() {
         </span>
       </div>
 
-      {/* Po fotka + popis NAD ňou */}
+      {/* Po fotka + popis NAD fotkou — väčší, cyan, bold */}
       <div className="shrink-0">
-        <div className="text-[11px] font-black text-[#2EA3DC] uppercase tracking-wider mb-1.5 flex items-center gap-1">
-          <Sparkles className="w-3 h-3" aria-hidden />
-          2. AI vygeneruje výsledok
+        <div className="text-sm font-black text-[#2EA3DC] uppercase tracking-wider mb-2 flex items-center gap-1.5">
+          <span className="inline-flex items-center justify-center w-5 h-5 rounded-full bg-[#2EA3DC] text-white text-[10px] font-black">2</span>
+          AI vygeneruje výsledok
         </div>
       </div>
       <div className="relative flex-1 min-h-[80px] rounded-2xl overflow-hidden bg-[#F8FAFC] ring-2 ring-[#2EA3DC]">
@@ -989,18 +992,17 @@ function DemoExample() {
         </div>
       </div>
 
-      {/* Prominentné upozornenie + link na realizácie */}
-      <div className="mt-3 rounded-xl bg-[#F0851A]/10 ring-1 ring-[#F0851A]/30 p-3 shrink-0">
-        <div className="flex items-start gap-2">
-          <AlertCircle className="w-4 h-4 text-[#F0851A] shrink-0 mt-0.5" aria-hidden />
-          <div className="text-[11px] font-bold text-[#1B2430] leading-snug">
-            AI nie vždy vygeneruje 100% presný výsledok. Pre overenie reálnej
-            kvality si pozri{" "}
+      {/* Krátke upozornenie (2 riadky) + link na realizácie */}
+      <div className="mt-3 rounded-xl bg-[#F0851A]/10 ring-1 ring-[#F0851A]/30 px-3 py-2 shrink-0">
+        <div className="flex items-center gap-2">
+          <AlertCircle className="w-4 h-4 text-[#F0851A] shrink-0" aria-hidden />
+          <div className="text-xs font-bold text-[#1B2430] leading-snug">
+            Pre istotu si pozri aj{" "}
             <Link
               href="/realizacie"
               className="text-[#F0851A] hover:text-[#D9760F] font-black underline underline-offset-2"
             >
-              naše skutočné realizácie
+              ukážky realizácií
             </Link>
             .
           </div>
