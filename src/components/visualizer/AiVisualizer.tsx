@@ -962,10 +962,10 @@ function ResultStep({
       {/* CTA na cenovku — najdôležitejšia časť, konverzný hook (orange brand) */}
       <div className="mt-8 rounded-3xl bg-gradient-to-br from-[#F0851A] to-[#D9760F] p-6 md:p-8 text-center text-white shadow-[0_12px_40px_rgba(240,133,26,0.35)]">
         <h3 className="text-xl md:text-2xl font-black tracking-tight">
-          Páči sa ti? Pošlite mi nezáväznú cenovku.
+          Toto je ono! Pošlite mi nezáväznú cenovú ponuku.
         </h3>
         <p className="mt-2 text-sm md:text-base font-bold text-white/95 leading-relaxed max-w-md mx-auto">
-          Pripravíme presnú kalkuláciu na túto podlahu pre tvoju miestnosť do
+          Pripravíme ti kalkuláciu na túto podlahu pre tvoju miestnosť do
           24 hodín.
         </p>
         <button
