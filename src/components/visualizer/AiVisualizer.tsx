@@ -989,7 +989,7 @@ function DemoExample() {
         <span className="relative inline-flex items-center justify-center w-14 h-14 rounded-full bg-gradient-to-br from-[#7EC8F0] via-[#6AA8F0] to-[#8B5CF6] text-white shadow-[0_8px_24px_rgba(139,92,246,0.55)] ring-4 ring-white">
           <ArrowDown className="w-7 h-7" strokeWidth={3} aria-hidden />
         </span>
-        <span className="relative mt-1.5 inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-white ring-2 ring-[#8B5CF6]/40 text-[#8B5CF6] text-xs font-black uppercase tracking-wider shadow-sm">
+        <span className="relative mt-3 inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-white ring-2 ring-[#8B5CF6]/40 text-[#8B5CF6] text-xs font-black uppercase tracking-wider shadow-sm">
           <Sparkles className="w-3.5 h-3.5" aria-hidden />
           AI · 30 sekúnd
         </span>
