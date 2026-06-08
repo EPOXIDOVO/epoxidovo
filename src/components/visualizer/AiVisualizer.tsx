@@ -833,11 +833,21 @@ function ResultStep({
         <div className="absolute top-3 right-3 px-2.5 py-1 rounded-md bg-[#2EA3DC] text-white text-xs font-extrabold uppercase tracking-wider shadow-[0_4px_12px_rgba(46,163,220,0.4)] pointer-events-none">
           Po
         </div>
-        {/* Expand icon — vizuálny hint že sa dá kliknúť */}
-        <div className="absolute bottom-3 right-3 inline-flex items-center gap-1.5 px-2.5 py-1.5 rounded-full bg-[#1B2430]/85 text-white text-[10px] md:text-xs font-extrabold backdrop-blur-sm shadow-md pointer-events-none group-hover:bg-[#1B2430]">
-          <Maximize2 className="w-3 h-3 md:w-3.5 md:h-3.5" aria-hidden />
+        {/* Expand button — skutočne klikateľný (z-20 nad slider input).
+            stopPropagation aby slider neukradol klik. */}
+        <button
+          type="button"
+          onClick={(e) => {
+            e.stopPropagation();
+            setFullscreen(true);
+          }}
+          onPointerDown={(e) => e.stopPropagation()}
+          aria-label="Zväčšiť výsledok"
+          className="absolute bottom-3 right-3 z-20 inline-flex items-center gap-1.5 px-3 py-2 rounded-full bg-[#1B2430]/90 text-white text-[10px] md:text-xs font-extrabold backdrop-blur-sm shadow-md hover:bg-[#1B2430] active:scale-95 transition-all cursor-pointer"
+        >
+          <Maximize2 className="w-3.5 h-3.5 md:w-4 md:h-4" aria-hidden />
           Zväčšiť
-        </div>
+        </button>
         {/* Slider input — full width invisible. stopPropagation aby nezatvorilo expand. */}
         <input
           type="range"
