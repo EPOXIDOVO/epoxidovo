@@ -227,10 +227,10 @@ export function AiVisualizer() {
       <Breadcrumb />
       <Header step={step} />
 
-      {/* STEP: UPLOAD — mobile: iba upload | desktop: upload + demo side-by-side,
-          rovnaká výška, vyplní zvyšok viewportu (flex-1 + min-h-0). */}
+      {/* STEP: UPLOAD — mobile: vertical stack (upload + mini demo) | desktop: side-by-side,
+          obe vyplnia výšku viewportu (flex-1 + min-h-0). */}
       {step === "upload" && (
-        <div className="md:grid md:grid-cols-[3fr_2fr] md:gap-6 md:items-stretch md:flex-1 md:min-h-0 md:mt-4">
+        <div className="flex flex-col gap-3 md:grid md:grid-cols-[3fr_2fr] md:gap-6 md:items-stretch flex-1 min-h-0 mt-2 md:mt-4">
           <UploadStep
             onFile={handleFile}
             onClick={() => fileInputRef.current?.click()}
@@ -453,24 +453,26 @@ function UploadStep({
         if (f) onFile(f);
       }}
       onClick={onClick}
-      className={`cursor-pointer rounded-3xl border-2 border-dashed p-6 md:p-10 lg:p-14 text-center transition-all bg-white md:h-full md:flex md:flex-col md:items-center md:justify-center ${
+      className={`cursor-pointer rounded-2xl md:rounded-3xl border-2 border-dashed p-3 md:p-10 lg:p-14 text-center transition-all bg-white flex-1 min-h-0 md:h-full flex flex-col items-center justify-center ${
         dragging
           ? "border-[#2EA3DC] bg-[#2EA3DC]/5 scale-[1.01] shadow-[0_8px_28px_rgba(46,163,220,0.2)]"
           : "border-[#1B2430]/20 hover:border-[#2EA3DC] hover:bg-[#2EA3DC]/5 hover:shadow-[0_8px_28px_rgba(46,163,220,0.15)]"
       }`}
     >
-      <div className="inline-flex items-center justify-center w-12 h-12 md:w-20 md:h-20 rounded-2xl bg-[#2EA3DC] text-white mb-3 md:mb-5 shadow-[0_8px_20px_rgba(46,163,220,0.4)]">
-        <Upload className="w-6 h-6 md:w-9 md:h-9" aria-hidden />
+      <div className="inline-flex items-center justify-center w-10 h-10 md:w-20 md:h-20 rounded-xl md:rounded-2xl bg-[#2EA3DC] text-white mb-2 md:mb-5 shadow-[0_8px_20px_rgba(46,163,220,0.4)]">
+        <Upload className="w-5 h-5 md:w-9 md:h-9" aria-hidden />
       </div>
-      <h2 className="text-base md:text-2xl font-extrabold tracking-tight text-[#1B2430]">
+      <h2 className="text-sm md:text-2xl font-extrabold tracking-tight text-[#1B2430]">
         <span className="md:hidden">Klikni a nahraj fotku…</span>
         <span className="hidden md:inline">Klikni alebo presuň fotku miestnosti</span>
       </h2>
-      <p className="mt-1 md:mt-2 text-xs md:text-base font-bold text-[#1B2430]/65">
+      <p className="mt-0.5 md:mt-2 text-[11px] md:text-base font-bold text-[#1B2430]/65">
         JPG, PNG alebo WebP · max 5 MB
       </p>
 
-      <div className="mt-4 md:mt-7 max-w-md mx-auto text-left bg-[#F8FAFC] rounded-2xl p-3 md:p-5 ring-1 ring-[#1B2430]/5">
+      {/* Tipy IBA na desktope — na mobile by zaberali príliš veľa priestoru,
+          demo panel s príkladom postačuje. */}
+      <div className="hidden md:block mt-4 md:mt-7 max-w-md mx-auto text-left bg-[#F8FAFC] rounded-2xl p-3 md:p-5 ring-1 ring-[#1B2430]/5">
         <div className="text-[10px] md:text-xs font-extrabold text-[#1B2430] uppercase tracking-wider mb-1.5 md:mb-2">
           💡 Tipy pre najlepší výsledok
         </div>
@@ -948,83 +950,123 @@ function DemoExample() {
   return (
     <aside
       aria-label="Príklad ako funguje AI vizualizácia"
-      className="hidden md:flex md:flex-col md:h-full md:rounded-3xl md:bg-white md:p-5 md:shadow-[0_10px_40px_rgba(27,36,48,0.08)] md:ring-1 md:ring-[#1B2430]/5"
+      className="flex flex-col rounded-2xl md:rounded-3xl bg-white p-2.5 md:p-5 shadow-[0_10px_40px_rgba(27,36,48,0.08)] ring-1 ring-[#1B2430]/5 md:h-full"
     >
-      {/* Header — väčší, výraznejší */}
-      <div className="flex items-center gap-2 shrink-0">
-        <span className="inline-flex items-center justify-center w-9 h-9 rounded-xl bg-gradient-to-br from-[#7EC8F0] via-[#6AA8F0] to-[#8B5CF6] text-white shadow-[0_6px_18px_rgba(139,92,246,0.4)]">
-          <Sparkles className="w-5 h-5" aria-hidden />
+      {/* Header — kompaktnejší na mobile */}
+      <div className="flex items-center gap-1.5 md:gap-2 shrink-0">
+        <span className="inline-flex items-center justify-center w-6 h-6 md:w-9 md:h-9 rounded-md md:rounded-xl bg-gradient-to-br from-[#7EC8F0] via-[#6AA8F0] to-[#8B5CF6] text-white shadow-[0_4px_12px_rgba(139,92,246,0.4)]">
+          <Sparkles className="w-3 h-3 md:w-5 md:h-5" aria-hidden />
         </span>
-        <h3 className="text-lg font-black text-[#1B2430] uppercase tracking-wider">
+        <h3 className="text-xs md:text-lg font-black text-[#1B2430] uppercase tracking-wider">
           Ako to funguje
         </h3>
       </div>
 
-      {/* Pred fotka + popis NAD fotkou — väčší, cyan, bold */}
-      <div className="mt-3 shrink-0">
-        <div className="text-sm font-black text-[#2EA3DC] uppercase tracking-wider mb-2 flex items-center gap-1.5">
-          <span className="inline-flex items-center justify-center w-5 h-5 rounded-full bg-[#2EA3DC] text-white text-[10px] font-black">1</span>
-          Nahraj svoju fotku
+      {/* ─── MOBILE LAYOUT: horizontálny strip pred → šípka → po ─── */}
+      <div className="md:hidden mt-2 grid grid-cols-[1fr_auto_1fr] gap-2 items-center">
+        <div className="relative aspect-square rounded-lg overflow-hidden bg-[#F8FAFC] ring-1 ring-[#1B2430]/10">
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img
+            src="/images/visualizer-demo/pred.jpg"
+            alt="Pôvodná fotka miestnosti"
+            className="absolute inset-0 w-full h-full object-cover"
+            loading="lazy"
+          />
+          <div className="absolute top-1 left-1 px-1.5 py-0.5 rounded-md bg-[#1B2430] text-white text-[9px] font-black uppercase tracking-wider">
+            Pred
+          </div>
         </div>
-      </div>
-      <div className="relative flex-1 min-h-[100px] rounded-2xl overflow-hidden bg-[#F8FAFC] ring-1 ring-[#1B2430]/10">
-        {/* eslint-disable-next-line @next/next/no-img-element */}
-        <img
-          src="/images/visualizer-demo/pred.jpg"
-          alt="Pôvodná fotka miestnosti"
-          className="absolute inset-0 w-full h-full object-cover"
-          loading="lazy"
-        />
-        <div className="absolute top-2 left-2 px-2.5 py-1 rounded-md bg-[#1B2430] text-white text-xs font-black uppercase tracking-wider shadow-md">
-          Pred
+        <div className="flex flex-col items-center gap-1">
+          <span className="inline-flex items-center justify-center w-8 h-8 rounded-full bg-gradient-to-br from-[#7EC8F0] via-[#6AA8F0] to-[#8B5CF6] text-white shadow-[0_4px_12px_rgba(139,92,246,0.45)]">
+            <ArrowRight className="w-4 h-4" strokeWidth={3} aria-hidden />
+          </span>
+          <span className="text-[8px] font-black uppercase tracking-wider text-[#8B5CF6] leading-none">
+            AI·30s
+          </span>
         </div>
-      </div>
-
-      {/* Šípka medzi fotkami — väčšia, výraznejšia + "ai vygeneruje" */}
-      <div className="relative flex flex-col items-center justify-center py-3 shrink-0">
-        <span
-          className="absolute left-1/2 -translate-x-1/2 top-0 bottom-0 w-1 bg-gradient-to-b from-[#7EC8F0]/30 via-[#8B5CF6]/60 to-[#8B5CF6]/30 rounded-full"
-          aria-hidden
-        />
-        <span className="relative inline-flex items-center justify-center w-14 h-14 rounded-full bg-gradient-to-br from-[#7EC8F0] via-[#6AA8F0] to-[#8B5CF6] text-white shadow-[0_8px_24px_rgba(139,92,246,0.55)] ring-4 ring-white">
-          <ArrowDown className="w-7 h-7" strokeWidth={3} aria-hidden />
-        </span>
-        <span className="relative mt-3 inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-white ring-2 ring-[#8B5CF6]/40 text-[#8B5CF6] text-xs font-black uppercase tracking-wider shadow-sm">
-          <Sparkles className="w-3.5 h-3.5" aria-hidden />
-          AI · 30 sekúnd
-        </span>
-      </div>
-
-      {/* Po fotka + popis NAD fotkou — väčší, cyan, bold */}
-      <div className="shrink-0">
-        <div className="text-sm font-black text-[#2EA3DC] uppercase tracking-wider mb-2 flex items-center gap-1.5">
-          <span className="inline-flex items-center justify-center w-5 h-5 rounded-full bg-[#2EA3DC] text-white text-[10px] font-black">2</span>
-          AI vygeneruje výsledok
-        </div>
-      </div>
-      <div className="relative flex-1 min-h-[80px] rounded-2xl overflow-hidden bg-[#F8FAFC] ring-2 ring-[#2EA3DC]">
-        {/* eslint-disable-next-line @next/next/no-img-element */}
-        <img
-          src="/images/visualizer-demo/po.jpg"
-          alt="Fotka miestnosti po AI vizualizácii"
-          className="absolute inset-0 w-full h-full object-cover scale-[1.12]"
-          style={{ objectPosition: "center 38%" }}
-          loading="lazy"
-        />
-        <div className="absolute top-2 left-2 px-2.5 py-1 rounded-md bg-[#2EA3DC] text-white text-xs font-black uppercase tracking-wider shadow-[0_4px_12px_rgba(46,163,220,0.5)]">
-          Po
-        </div>
-        <div className="absolute top-2 right-2 inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-gradient-to-r from-[#7EC8F0] via-[#6AA8F0] to-[#8B5CF6] text-white text-[10px] font-black uppercase tracking-wider shadow-md">
-          <Sparkles className="w-2.5 h-2.5" aria-hidden />
-          AI
+        <div className="relative aspect-square rounded-lg overflow-hidden bg-[#F8FAFC] ring-2 ring-[#2EA3DC]">
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img
+            src="/images/visualizer-demo/po.jpg"
+            alt="Fotka miestnosti po AI vizualizácii"
+            className="absolute inset-0 w-full h-full object-cover scale-[1.12]"
+            style={{ objectPosition: "center 38%" }}
+            loading="lazy"
+          />
+          <div className="absolute top-1 left-1 px-1.5 py-0.5 rounded-md bg-[#2EA3DC] text-white text-[9px] font-black uppercase tracking-wider">
+            Po
+          </div>
         </div>
       </div>
 
-      {/* Krátke upozornenie + link na realizácie (bez pomlčky, 2 riadky pod sebou) */}
-      <div className="mt-3 rounded-xl bg-[#F0851A]/10 ring-1 ring-[#F0851A]/30 px-3 py-2 shrink-0">
-        <div className="flex items-start gap-2">
-          <AlertCircle className="w-4 h-4 text-[#F0851A] shrink-0 mt-0.5" aria-hidden />
-          <div className="text-xs font-bold text-[#1B2430] leading-snug">
+      {/* ─── DESKTOP LAYOUT: vertikálny s veľkými labels a šípkou dolu ─── */}
+      <div className="hidden md:flex md:flex-col md:flex-1 md:min-h-0">
+        {/* Pred label + fotka */}
+        <div className="mt-3 shrink-0">
+          <div className="text-sm font-black text-[#2EA3DC] uppercase tracking-wider mb-2 flex items-center gap-1.5">
+            <span className="inline-flex items-center justify-center w-5 h-5 rounded-full bg-[#2EA3DC] text-white text-[10px] font-black">1</span>
+            Nahraj svoju fotku
+          </div>
+        </div>
+        <div className="relative flex-1 min-h-[100px] rounded-2xl overflow-hidden bg-[#F8FAFC] ring-1 ring-[#1B2430]/10">
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img
+            src="/images/visualizer-demo/pred.jpg"
+            alt="Pôvodná fotka miestnosti"
+            className="absolute inset-0 w-full h-full object-cover"
+            loading="lazy"
+          />
+          <div className="absolute top-2 left-2 px-2.5 py-1 rounded-md bg-[#1B2430] text-white text-xs font-black uppercase tracking-wider shadow-md">
+            Pred
+          </div>
+        </div>
+
+        {/* Šípka medzi fotkami */}
+        <div className="relative flex flex-col items-center justify-center py-3 shrink-0">
+          <span
+            className="absolute left-1/2 -translate-x-1/2 top-0 bottom-0 w-1 bg-gradient-to-b from-[#7EC8F0]/30 via-[#8B5CF6]/60 to-[#8B5CF6]/30 rounded-full"
+            aria-hidden
+          />
+          <span className="relative inline-flex items-center justify-center w-14 h-14 rounded-full bg-gradient-to-br from-[#7EC8F0] via-[#6AA8F0] to-[#8B5CF6] text-white shadow-[0_8px_24px_rgba(139,92,246,0.55)] ring-4 ring-white">
+            <ArrowDown className="w-7 h-7" strokeWidth={3} aria-hidden />
+          </span>
+          <span className="relative mt-3 inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-white ring-2 ring-[#8B5CF6]/40 text-[#8B5CF6] text-xs font-black uppercase tracking-wider shadow-sm">
+            <Sparkles className="w-3.5 h-3.5" aria-hidden />
+            AI · 30 sekúnd
+          </span>
+        </div>
+
+        {/* Po label + fotka */}
+        <div className="shrink-0">
+          <div className="text-sm font-black text-[#2EA3DC] uppercase tracking-wider mb-2 flex items-center gap-1.5">
+            <span className="inline-flex items-center justify-center w-5 h-5 rounded-full bg-[#2EA3DC] text-white text-[10px] font-black">2</span>
+            AI vygeneruje výsledok
+          </div>
+        </div>
+        <div className="relative flex-1 min-h-[80px] rounded-2xl overflow-hidden bg-[#F8FAFC] ring-2 ring-[#2EA3DC]">
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img
+            src="/images/visualizer-demo/po.jpg"
+            alt="Fotka miestnosti po AI vizualizácii"
+            className="absolute inset-0 w-full h-full object-cover scale-[1.12]"
+            style={{ objectPosition: "center 38%" }}
+            loading="lazy"
+          />
+          <div className="absolute top-2 left-2 px-2.5 py-1 rounded-md bg-[#2EA3DC] text-white text-xs font-black uppercase tracking-wider shadow-[0_4px_12px_rgba(46,163,220,0.5)]">
+            Po
+          </div>
+          <div className="absolute top-2 right-2 inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-gradient-to-r from-[#7EC8F0] via-[#6AA8F0] to-[#8B5CF6] text-white text-[10px] font-black uppercase tracking-wider shadow-md">
+            <Sparkles className="w-2.5 h-2.5" aria-hidden />
+            AI
+          </div>
+        </div>
+      </div>
+
+      {/* Krátke upozornenie + link na realizácie — viditeľné na oboch platformách */}
+      <div className="mt-2 md:mt-3 rounded-lg md:rounded-xl bg-[#F0851A]/10 ring-1 ring-[#F0851A]/30 px-2.5 md:px-3 py-1.5 md:py-2 shrink-0">
+        <div className="flex items-start gap-1.5 md:gap-2">
+          <AlertCircle className="w-3.5 h-3.5 md:w-4 md:h-4 text-[#F0851A] shrink-0 mt-0.5" aria-hidden />
+          <div className="text-[10px] md:text-xs font-bold text-[#1B2430] leading-snug">
             <div>AI nemusí vždy vygenerovať správny výsledok.</div>
             <div className="mt-0.5">
               Pre istotu si pozri aj{" "}
