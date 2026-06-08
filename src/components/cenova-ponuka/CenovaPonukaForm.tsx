@@ -53,34 +53,10 @@ export function CenovaPonukaForm() {
   const [success, setSuccess] = React.useState(false);
   const [error, setError] = React.useState<string | null>(null);
   const [turnstileToken, setTurnstileToken] = React.useState<string | null>(null);
-  // Ak user prišiel z AI vizualizera → preberieme z sessionStorage info
-  // o zvolenej textúre/farbe a vložíme do message-u + UI banneru.
-  const [visualizerPrefill, setVisualizerPrefill] = React.useState<{
-    textureLabel: string;
-    colorName: string;
-  } | null>(null);
 
-  // Mount: pre-fill z vizualizera ak je v sessionStorage
+  // Vyčistíme prípadné staré dáta z vizualizera (banner už nepoužívame).
   React.useEffect(() => {
     try {
-      const raw = sessionStorage.getItem("visualizer_prefill");
-      if (!raw) return;
-      const data = JSON.parse(raw) as {
-        textureLabel?: string;
-        colorName?: string;
-      };
-      if (data.textureLabel && data.colorName) {
-        setVisualizerPrefill({
-          textureLabel: data.textureLabel,
-          colorName: data.colorName,
-        });
-        // Pre-fill správy s touto info
-        setValues((prev) => ({
-          ...prev,
-          message: `Mám záujem o cenovku na podlahu: ${data.textureLabel} - ${data.colorName} (vyskúšal/a som cez AI vizualizér).`,
-        }));
-      }
-      // Jednorazové použitie — vymažeme po načítaní
       sessionStorage.removeItem("visualizer_prefill");
     } catch {
       // sessionStorage nedostupné — ignorujeme
@@ -240,20 +216,6 @@ export function CenovaPonukaForm() {
           />
         </label>
       </div>
-
-      {/* Banner ak user prišiel z AI vizualizera */}
-      {visualizerPrefill && (
-        <div className="mb-3 rounded-xl bg-gradient-to-br from-[#3db6e8]/10 to-[#a855f7]/10 border border-[#3db6e8]/30 px-3 py-2 flex items-center gap-2">
-          <span className="shrink-0 inline-flex items-center justify-center w-7 h-7 rounded-md bg-gradient-to-br from-[#3db6e8] to-[#a855f7] text-white text-sm">
-            ✨
-          </span>
-          <div className="text-xs md:text-sm text-[var(--color-fg)]">
-            Ponuka pre:{" "}
-            <strong>{visualizerPrefill.textureLabel}</strong> ·{" "}
-            <strong>{visualizerPrefill.colorName}</strong>
-          </div>
-        </div>
-      )}
 
       {/* 3-col grid na desktope (kompaktnejšie), 2-col tablet, 1-col mobile */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">

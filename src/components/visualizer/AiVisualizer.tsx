@@ -237,22 +237,6 @@ export function AiVisualizer() {
 
   const requestQuote = () => {
     if (!resultBase64) return;
-    // Pre-fill /cenova-ponuka cez sessionStorage (väčší než URL params).
-    try {
-      const colorObj = COLORS[texture].find((c) => c.slug === colorSlug);
-      sessionStorage.setItem(
-        "visualizer_prefill",
-        JSON.stringify({
-          texture,
-          colorSlug,
-          textureLabel: TEXTURES[texture].label,
-          colorName: colorObj?.commercialName ?? colorSlug,
-          generatedAt: new Date().toISOString(),
-        }),
-      );
-    } catch {
-      // sessionStorage nedostupné — pokračujeme bez prefill
-    }
     trackEvent("visualizer_request_quote", { texture, color: colorSlug });
     window.location.href = `/cenova-ponuka?source=ai_vizualizer&texture=${texture}&color=${colorSlug}`;
   };
@@ -987,7 +971,7 @@ function ResultStep({
           className="mt-5 inline-flex items-center gap-2 px-6 py-3.5 rounded-full bg-white text-[#D9760F] font-black text-sm md:text-base hover:bg-white/95 shadow-[0_8px_24px_rgba(0,0,0,0.18)] transition-all"
         >
           <Send className="w-4 h-4" aria-hidden />
-          Cenová ponuka z vizualizátora
+          Cenová ponuka
         </button>
       </div>
     </div>
@@ -1004,12 +988,12 @@ function DemoExample() {
       aria-label="Príklad ako funguje AI vizualizácia"
       className="flex flex-col rounded-2xl md:rounded-3xl bg-white p-2.5 md:p-5 shadow-[0_10px_40px_rgba(27,36,48,0.08)] ring-1 ring-[#1B2430]/5 md:h-full"
     >
-      {/* Header — kompaktnejší na mobile */}
-      <div className="flex items-center gap-1.5 md:gap-2 shrink-0">
-        <span className="inline-flex items-center justify-center w-6 h-6 md:w-9 md:h-9 rounded-md md:rounded-xl bg-gradient-to-br from-[#7EC8F0] via-[#6AA8F0] to-[#8B5CF6] text-white shadow-[0_4px_12px_rgba(139,92,246,0.4)]">
-          <Sparkles className="w-3 h-3 md:w-5 md:h-5" aria-hidden />
+      {/* Header — kompaktný (väčší na mobile lebo tam je horizontálny strip s viac priestoru) */}
+      <div className="flex items-center gap-1.5 md:gap-1.5 shrink-0">
+        <span className="inline-flex items-center justify-center w-6 h-6 md:w-7 md:h-7 rounded-md bg-gradient-to-br from-[#7EC8F0] via-[#6AA8F0] to-[#8B5CF6] text-white shadow-[0_4px_12px_rgba(139,92,246,0.4)]">
+          <Sparkles className="w-3 h-3 md:w-4 md:h-4" aria-hidden />
         </span>
-        <h3 className="text-xs md:text-lg font-black text-[#1B2430] uppercase tracking-wider">
+        <h3 className="text-xs md:text-sm font-black text-[#1B2430] uppercase tracking-wider">
           Ako to funguje
         </h3>
       </div>
@@ -1065,54 +1049,46 @@ function DemoExample() {
         </div>
       </div>
 
-      {/* ─── DESKTOP LAYOUT: vertikálny — fotky maximálne, ostatné minimum ─── */}
+      {/* ─── DESKTOP LAYOUT: fotky MAXIMÁLNE — žiadne separátne labels, len overlay badges ─── */}
       <div className="hidden md:flex md:flex-col md:flex-1 md:min-h-0 md:gap-2">
-        {/* Pred label */}
-        <div className="shrink-0 text-xs font-black text-[#2EA3DC] uppercase tracking-wider flex items-center gap-1.5">
-          <span className="inline-flex items-center justify-center w-5 h-5 rounded-full bg-[#2EA3DC] text-white text-[10px] font-black">1</span>
-          Nahraj svoju fotku
-        </div>
-        {/* Pred fotka — flex-1 zaberie max priestor */}
-        <div className="relative flex-1 min-h-[120px] rounded-2xl overflow-hidden bg-[#F8FAFC] ring-1 ring-[#1B2430]/10">
+        {/* Pred fotka — flex-1, label "Pred" ako overlay badge v rohu */}
+        <div className="relative flex-1 min-h-[160px] rounded-2xl overflow-hidden bg-[#F8FAFC] ring-1 ring-[#1B2430]/10">
           {/* eslint-disable-next-line @next/next/no-img-element */}
           <img
             src="/images/visualizer-demo/pred.jpg"
             alt="Pôvodná fotka miestnosti"
             className="absolute inset-0 w-full h-full object-cover"
           />
-          <div className="absolute top-2 left-2 px-2.5 py-1 rounded-md bg-[#1B2430] text-white text-xs font-black uppercase tracking-wider shadow-md z-10">
-            Pred
+          <div className="absolute top-2 left-2 inline-flex items-center gap-1.5 px-2.5 py-1 rounded-md bg-[#1B2430] text-white text-xs font-black uppercase tracking-wider shadow-md z-10">
+            <span className="inline-flex items-center justify-center w-4 h-4 rounded-full bg-white text-[#1B2430] text-[10px] font-black">1</span>
+            Pred · tvoja fotka
           </div>
         </div>
 
-        {/* Šípka medzi fotkami — kompaktná, single-line layout */}
-        <div className="flex items-center justify-center gap-2 shrink-0">
+        {/* Tiny separator s šípkou a AI pillom */}
+        <div className="flex items-center justify-center gap-2 shrink-0 py-0.5">
           <span className="h-px flex-1 bg-gradient-to-r from-transparent via-[#8B5CF6]/40 to-[#8B5CF6]/60" aria-hidden />
-          <span className="inline-flex items-center justify-center w-10 h-10 rounded-full bg-gradient-to-br from-[#7EC8F0] via-[#6AA8F0] to-[#8B5CF6] text-white shadow-[0_6px_18px_rgba(139,92,246,0.5)] ring-2 ring-white shrink-0">
-            <ArrowDown className="w-5 h-5" strokeWidth={3} aria-hidden />
+          <span className="inline-flex items-center justify-center w-9 h-9 rounded-full bg-gradient-to-br from-[#7EC8F0] via-[#6AA8F0] to-[#8B5CF6] text-white shadow-[0_4px_14px_rgba(139,92,246,0.5)] ring-2 ring-white shrink-0">
+            <ArrowDown className="w-4 h-4" strokeWidth={3} aria-hidden />
           </span>
-          <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full bg-white ring-2 ring-[#8B5CF6]/40 text-[#8B5CF6] text-[11px] font-black uppercase tracking-wider shadow-sm shrink-0">
+          <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-white ring-2 ring-[#8B5CF6]/40 text-[#8B5CF6] text-[11px] font-black uppercase tracking-wider shadow-sm shrink-0">
             <Sparkles className="w-3 h-3" aria-hidden />
             AI · 30 s
           </span>
           <span className="h-px flex-1 bg-gradient-to-l from-transparent via-[#8B5CF6]/40 to-[#8B5CF6]/60" aria-hidden />
         </div>
 
-        {/* Po label */}
-        <div className="shrink-0 text-xs font-black text-[#2EA3DC] uppercase tracking-wider flex items-center gap-1.5">
-          <span className="inline-flex items-center justify-center w-5 h-5 rounded-full bg-[#2EA3DC] text-white text-[10px] font-black">2</span>
-          AI vygeneruje výsledok
-        </div>
-        {/* Po fotka — flex-1 zaberie max priestor */}
-        <div className="relative flex-1 min-h-[120px] rounded-2xl overflow-hidden bg-[#F8FAFC] ring-2 ring-[#2EA3DC]">
+        {/* Po fotka — flex-1, label "Po" ako overlay v rohu */}
+        <div className="relative flex-1 min-h-[160px] rounded-2xl overflow-hidden bg-[#F8FAFC] ring-2 ring-[#2EA3DC]">
           {/* eslint-disable-next-line @next/next/no-img-element */}
           <img
             src="/images/visualizer-demo/po.jpg"
             alt="Fotka miestnosti po AI vizualizácii"
             className="absolute inset-0 w-full h-full object-cover"
           />
-          <div className="absolute top-2 left-2 px-2.5 py-1 rounded-md bg-[#2EA3DC] text-white text-xs font-black uppercase tracking-wider shadow-[0_4px_12px_rgba(46,163,220,0.5)] z-10">
-            Po
+          <div className="absolute top-2 left-2 inline-flex items-center gap-1.5 px-2.5 py-1 rounded-md bg-[#2EA3DC] text-white text-xs font-black uppercase tracking-wider shadow-[0_4px_12px_rgba(46,163,220,0.5)] z-10">
+            <span className="inline-flex items-center justify-center w-4 h-4 rounded-full bg-white text-[#2EA3DC] text-[10px] font-black">2</span>
+            Po · AI výsledok
           </div>
           <div className="absolute top-2 right-2 inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-gradient-to-r from-[#7EC8F0] via-[#6AA8F0] to-[#8B5CF6] text-white text-[10px] font-black uppercase tracking-wider shadow-md z-10">
             <Sparkles className="w-2.5 h-2.5" aria-hidden />
