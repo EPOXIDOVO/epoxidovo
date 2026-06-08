@@ -904,7 +904,7 @@ function ResultStep({
           className="mt-5 inline-flex items-center gap-2 px-6 py-3.5 rounded-full bg-white text-[#D9760F] font-black text-sm md:text-base hover:bg-white/95 shadow-[0_8px_24px_rgba(0,0,0,0.18)] transition-all"
         >
           <Send className="w-4 h-4" aria-hidden />
-          Nezáväzná cenová ponuka
+          Cenová ponuka z vizualizátora
         </button>
       </div>
     </div>
@@ -921,18 +921,23 @@ function DemoExample() {
       aria-label="Príklad ako funguje AI vizualizácia"
       className="hidden md:flex md:flex-col md:h-full md:rounded-3xl md:bg-white md:p-5 md:shadow-[0_10px_40px_rgba(27,36,48,0.08)] md:ring-1 md:ring-[#1B2430]/5"
     >
-      {/* Header */}
+      {/* Header — väčší, výraznejší */}
       <div className="flex items-center gap-2 shrink-0">
-        <span className="inline-flex items-center justify-center w-7 h-7 rounded-lg bg-gradient-to-br from-[#7EC8F0] via-[#6AA8F0] to-[#8B5CF6] text-white shadow-[0_4px_12px_rgba(139,92,246,0.35)]">
-          <Sparkles className="w-3.5 h-3.5" aria-hidden />
+        <span className="inline-flex items-center justify-center w-9 h-9 rounded-xl bg-gradient-to-br from-[#7EC8F0] via-[#6AA8F0] to-[#8B5CF6] text-white shadow-[0_6px_18px_rgba(139,92,246,0.4)]">
+          <Sparkles className="w-5 h-5" aria-hidden />
         </span>
-        <h3 className="text-sm font-black text-[#1B2430] uppercase tracking-wider">
+        <h3 className="text-lg font-black text-[#1B2430] uppercase tracking-wider">
           Ako to funguje
         </h3>
       </div>
 
-      {/* Pred fotka — flex-1, vyplňuje voľný priestor */}
-      <div className="relative flex-1 min-h-[100px] rounded-2xl overflow-hidden bg-[#F8FAFC] ring-1 ring-[#1B2430]/10 mt-3">
+      {/* Pred fotka + popis POD fotkou */}
+      <div className="mt-3 shrink-0">
+        <div className="text-[11px] font-black text-[#1B2430]/55 uppercase tracking-wider mb-1.5">
+          1. Nahraj svoju fotku
+        </div>
+      </div>
+      <div className="relative flex-1 min-h-[80px] rounded-2xl overflow-hidden bg-[#F8FAFC] ring-1 ring-[#1B2430]/10">
         {/* eslint-disable-next-line @next/next/no-img-element */}
         <img
           src="/images/process/step-02-priprava.webp"
@@ -940,31 +945,34 @@ function DemoExample() {
           className="absolute inset-0 w-full h-full object-cover"
           loading="lazy"
         />
-        <div className="absolute top-2 left-2 px-2 py-0.5 rounded-md bg-[#1B2430]/85 text-white text-[10px] font-extrabold uppercase tracking-wider backdrop-blur-sm">
+        <div className="absolute top-2 left-2 px-2.5 py-1 rounded-md bg-[#1B2430] text-white text-xs font-black uppercase tracking-wider shadow-md">
           Pred
         </div>
-        <div className="absolute bottom-2 left-2 right-2 text-[11px] font-extrabold text-white drop-shadow-[0_2px_4px_rgba(0,0,0,0.6)]">
-          Tvoja fotka miestnosti
-        </div>
       </div>
 
-      {/* Šípka medzi fotkami — gradient kruh so šípkou dolu + label */}
-      <div className="relative flex flex-col items-center justify-center py-2 shrink-0">
+      {/* Šípka medzi fotkami — väčšia, výraznejšia + "ai vygeneruje" */}
+      <div className="relative flex flex-col items-center justify-center py-3 shrink-0">
         <span
-          className="absolute left-1/2 -translate-x-1/2 top-0 bottom-0 w-0.5 bg-gradient-to-b from-[#7EC8F0]/30 via-[#6AA8F0]/40 to-[#8B5CF6]/30 rounded-full"
+          className="absolute left-1/2 -translate-x-1/2 top-0 bottom-0 w-1 bg-gradient-to-b from-[#7EC8F0]/30 via-[#8B5CF6]/60 to-[#8B5CF6]/30 rounded-full"
           aria-hidden
         />
-        <span className="relative inline-flex items-center justify-center w-10 h-10 rounded-full bg-gradient-to-br from-[#7EC8F0] via-[#6AA8F0] to-[#8B5CF6] text-white shadow-[0_6px_18px_rgba(139,92,246,0.45)] ring-4 ring-white">
-          <ArrowDown className="w-5 h-5" strokeWidth={2.5} aria-hidden />
+        <span className="relative inline-flex items-center justify-center w-14 h-14 rounded-full bg-gradient-to-br from-[#7EC8F0] via-[#6AA8F0] to-[#8B5CF6] text-white shadow-[0_8px_24px_rgba(139,92,246,0.55)] ring-4 ring-white">
+          <ArrowDown className="w-7 h-7" strokeWidth={3} aria-hidden />
         </span>
-        <span className="relative mt-1 inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-white ring-1 ring-[#8B5CF6]/30 text-[#8B5CF6] text-[10px] font-black uppercase tracking-wider">
-          <Sparkles className="w-2.5 h-2.5" aria-hidden />
-          AI · 30 s
+        <span className="relative mt-1.5 inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-white ring-2 ring-[#8B5CF6]/40 text-[#8B5CF6] text-xs font-black uppercase tracking-wider shadow-sm">
+          <Sparkles className="w-3.5 h-3.5" aria-hidden />
+          AI · 30 sekúnd
         </span>
       </div>
 
-      {/* Po fotka — flex-1, vyplňuje voľný priestor */}
-      <div className="relative flex-1 min-h-[100px] rounded-2xl overflow-hidden bg-[#F8FAFC] ring-2 ring-[#2EA3DC]/40">
+      {/* Po fotka + popis NAD ňou */}
+      <div className="shrink-0">
+        <div className="text-[11px] font-black text-[#2EA3DC] uppercase tracking-wider mb-1.5 flex items-center gap-1">
+          <Sparkles className="w-3 h-3" aria-hidden />
+          2. AI vygeneruje výsledok
+        </div>
+      </div>
+      <div className="relative flex-1 min-h-[80px] rounded-2xl overflow-hidden bg-[#F8FAFC] ring-2 ring-[#2EA3DC]">
         {/* eslint-disable-next-line @next/next/no-img-element */}
         <img
           src="/images/process/step-04-hotovo.webp"
@@ -972,19 +980,32 @@ function DemoExample() {
           className="absolute inset-0 w-full h-full object-cover"
           loading="lazy"
         />
-        <div className="absolute top-2 left-2 px-2 py-0.5 rounded-md bg-[#2EA3DC] text-white text-[10px] font-extrabold uppercase tracking-wider shadow-[0_4px_12px_rgba(46,163,220,0.4)]">
+        <div className="absolute top-2 left-2 px-2.5 py-1 rounded-md bg-[#2EA3DC] text-white text-xs font-black uppercase tracking-wider shadow-[0_4px_12px_rgba(46,163,220,0.5)]">
           Po
         </div>
-        <div className="absolute bottom-2 left-2 right-2 text-[11px] font-extrabold text-white drop-shadow-[0_2px_4px_rgba(0,0,0,0.6)]">
-          AI vygenerovaný výsledok
+        <div className="absolute top-2 right-2 inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-gradient-to-r from-[#7EC8F0] via-[#6AA8F0] to-[#8B5CF6] text-white text-[10px] font-black uppercase tracking-wider shadow-md">
+          <Sparkles className="w-2.5 h-2.5" aria-hidden />
+          AI
         </div>
       </div>
 
-      {/* Tiny disclaimer */}
-      <p className="mt-3 text-[10px] font-bold text-[#1B2430]/50 leading-snug shrink-0">
-        Ilustračný príklad — reálny výsledok závisí od fotky a zvolenej
-        kombinácie textúry/farby.
-      </p>
+      {/* Prominentné upozornenie + link na realizácie */}
+      <div className="mt-3 rounded-xl bg-[#F0851A]/10 ring-1 ring-[#F0851A]/30 p-3 shrink-0">
+        <div className="flex items-start gap-2">
+          <AlertCircle className="w-4 h-4 text-[#F0851A] shrink-0 mt-0.5" aria-hidden />
+          <div className="text-[11px] font-bold text-[#1B2430] leading-snug">
+            AI nie vždy vygeneruje 100% presný výsledok. Pre overenie reálnej
+            kvality si pozri{" "}
+            <Link
+              href="/realizacie"
+              className="text-[#F0851A] hover:text-[#D9760F] font-black underline underline-offset-2"
+            >
+              naše skutočné realizácie
+            </Link>
+            .
+          </div>
+        </div>
+      </div>
     </aside>
   );
 }
