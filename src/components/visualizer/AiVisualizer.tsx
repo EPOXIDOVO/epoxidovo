@@ -1012,16 +1012,15 @@ function DemoExample() {
         </div>
       </div>
 
-      {/* ─── DESKTOP LAYOUT: vertikálny s veľkými labels a šípkou dolu ─── */}
-      <div className="hidden md:flex md:flex-col md:flex-1 md:min-h-0">
-        {/* Pred label + fotka */}
-        <div className="mt-3 shrink-0">
-          <div className="text-sm font-black text-[#2EA3DC] uppercase tracking-wider mb-2 flex items-center gap-1.5">
-            <span className="inline-flex items-center justify-center w-5 h-5 rounded-full bg-[#2EA3DC] text-white text-[10px] font-black">1</span>
-            Nahraj svoju fotku
-          </div>
+      {/* ─── DESKTOP LAYOUT: vertikálny — fotky maximálne, ostatné minimum ─── */}
+      <div className="hidden md:flex md:flex-col md:flex-1 md:min-h-0 md:gap-2">
+        {/* Pred label */}
+        <div className="shrink-0 text-xs font-black text-[#2EA3DC] uppercase tracking-wider flex items-center gap-1.5">
+          <span className="inline-flex items-center justify-center w-5 h-5 rounded-full bg-[#2EA3DC] text-white text-[10px] font-black">1</span>
+          Nahraj svoju fotku
         </div>
-        <div className="relative flex-1 min-h-[100px] rounded-2xl overflow-hidden bg-[#F8FAFC] ring-1 ring-[#1B2430]/10">
+        {/* Pred fotka — flex-1 zaberie max priestor */}
+        <div className="relative flex-1 min-h-[120px] rounded-2xl overflow-hidden bg-[#F8FAFC] ring-1 ring-[#1B2430]/10">
           {/* eslint-disable-next-line @next/next/no-img-element */}
           <img
             src="/images/visualizer-demo/pred.jpg"
@@ -1033,29 +1032,26 @@ function DemoExample() {
           </div>
         </div>
 
-        {/* Šípka medzi fotkami */}
-        <div className="relative flex flex-col items-center justify-center py-3 shrink-0">
-          <span
-            className="absolute left-1/2 -translate-x-1/2 top-0 bottom-0 w-1 bg-gradient-to-b from-[#7EC8F0]/30 via-[#8B5CF6]/60 to-[#8B5CF6]/30 rounded-full"
-            aria-hidden
-          />
-          <span className="relative inline-flex items-center justify-center w-14 h-14 rounded-full bg-gradient-to-br from-[#7EC8F0] via-[#6AA8F0] to-[#8B5CF6] text-white shadow-[0_8px_24px_rgba(139,92,246,0.55)] ring-4 ring-white">
-            <ArrowDown className="w-7 h-7" strokeWidth={3} aria-hidden />
+        {/* Šípka medzi fotkami — kompaktná, single-line layout */}
+        <div className="flex items-center justify-center gap-2 shrink-0">
+          <span className="h-px flex-1 bg-gradient-to-r from-transparent via-[#8B5CF6]/40 to-[#8B5CF6]/60" aria-hidden />
+          <span className="inline-flex items-center justify-center w-10 h-10 rounded-full bg-gradient-to-br from-[#7EC8F0] via-[#6AA8F0] to-[#8B5CF6] text-white shadow-[0_6px_18px_rgba(139,92,246,0.5)] ring-2 ring-white shrink-0">
+            <ArrowDown className="w-5 h-5" strokeWidth={3} aria-hidden />
           </span>
-          <span className="relative mt-3 inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-white ring-2 ring-[#8B5CF6]/40 text-[#8B5CF6] text-xs font-black uppercase tracking-wider shadow-sm">
-            <Sparkles className="w-3.5 h-3.5" aria-hidden />
-            AI · 30 sekúnd
+          <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full bg-white ring-2 ring-[#8B5CF6]/40 text-[#8B5CF6] text-[11px] font-black uppercase tracking-wider shadow-sm shrink-0">
+            <Sparkles className="w-3 h-3" aria-hidden />
+            AI · 30 s
           </span>
+          <span className="h-px flex-1 bg-gradient-to-l from-transparent via-[#8B5CF6]/40 to-[#8B5CF6]/60" aria-hidden />
         </div>
 
-        {/* Po label + fotka */}
-        <div className="shrink-0">
-          <div className="text-sm font-black text-[#2EA3DC] uppercase tracking-wider mb-2 flex items-center gap-1.5">
-            <span className="inline-flex items-center justify-center w-5 h-5 rounded-full bg-[#2EA3DC] text-white text-[10px] font-black">2</span>
-            AI vygeneruje výsledok
-          </div>
+        {/* Po label */}
+        <div className="shrink-0 text-xs font-black text-[#2EA3DC] uppercase tracking-wider flex items-center gap-1.5">
+          <span className="inline-flex items-center justify-center w-5 h-5 rounded-full bg-[#2EA3DC] text-white text-[10px] font-black">2</span>
+          AI vygeneruje výsledok
         </div>
-        <div className="relative flex-1 min-h-[80px] rounded-2xl overflow-hidden bg-[#F8FAFC] ring-2 ring-[#2EA3DC]">
+        {/* Po fotka — flex-1 zaberie max priestor */}
+        <div className="relative flex-1 min-h-[120px] rounded-2xl overflow-hidden bg-[#F8FAFC] ring-2 ring-[#2EA3DC]">
           {/* eslint-disable-next-line @next/next/no-img-element */}
           <img
             src="/images/visualizer-demo/po.jpg"
@@ -1072,22 +1068,19 @@ function DemoExample() {
         </div>
       </div>
 
-      {/* Krátke upozornenie + link na realizácie — viditeľné na oboch platformách */}
-      <div className="mt-2 md:mt-3 rounded-lg md:rounded-xl bg-[#F0851A]/10 ring-1 ring-[#F0851A]/30 px-2.5 md:px-3 py-1.5 md:py-2 shrink-0">
-        <div className="flex items-start gap-1.5 md:gap-2">
-          <AlertCircle className="w-3.5 h-3.5 md:w-4 md:h-4 text-[#F0851A] shrink-0 mt-0.5" aria-hidden />
-          <div className="text-[10px] md:text-xs font-bold text-[#1B2430] leading-snug">
-            <div>AI nemusí vždy vygenerovať správny výsledok.</div>
-            <div className="mt-0.5">
-              Pre istotu si pozri aj{" "}
-              <Link
-                href="/realizacie"
-                className="text-[#F0851A] hover:text-[#D9760F] font-black underline underline-offset-2"
-              >
-                ukážky realizácií
-              </Link>
-              .
-            </div>
+      {/* Krátke upozornenie + link na realizácie — kompaktné */}
+      <div className="mt-2 rounded-lg bg-[#F0851A]/10 ring-1 ring-[#F0851A]/30 px-2.5 py-1.5 shrink-0">
+        <div className="flex items-start gap-1.5">
+          <AlertCircle className="w-3.5 h-3.5 text-[#F0851A] shrink-0 mt-0.5" aria-hidden />
+          <div className="text-[10px] md:text-[11px] font-bold text-[#1B2430] leading-snug">
+            AI nemusí vždy vygenerovať správny výsledok. Pre istotu si pozri aj{" "}
+            <Link
+              href="/realizacie"
+              className="text-[#F0851A] hover:text-[#D9760F] font-black underline underline-offset-2"
+            >
+              ukážky realizácií
+            </Link>
+            .
           </div>
         </div>
       </div>
