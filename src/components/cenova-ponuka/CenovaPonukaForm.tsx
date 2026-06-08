@@ -219,13 +219,13 @@ export function CenovaPonukaForm() {
   }
 
   const inputCls =
-    "block w-full appearance-none px-4 py-3 rounded-xl border border-[var(--color-border-strong)] bg-white focus:outline-none focus:ring-2 focus:ring-[#3db6e8] focus:border-transparent text-sm text-zinc-900 placeholder:text-zinc-400 caret-zinc-900";
+    "block w-full appearance-none px-3 py-2 md:px-3 md:py-2 rounded-lg border border-[var(--color-border-strong)] bg-white focus:outline-none focus:ring-2 focus:ring-[#3db6e8] focus:border-transparent text-sm text-zinc-900 placeholder:text-zinc-400 caret-zinc-900";
 
   return (
     <form
       onSubmit={onSubmit}
       noValidate
-      className="rounded-2xl bg-white border border-[var(--color-border)] p-6 md:p-10 shadow-[var(--shadow-card)] max-w-3xl mx-auto"
+      className="rounded-2xl bg-white border border-[var(--color-border)] p-4 md:p-6 shadow-[var(--shadow-card)] max-w-5xl mx-auto"
     >
       {/* Honeypot */}
       <div className="absolute -left-[9999px]" aria-hidden>
@@ -243,19 +243,20 @@ export function CenovaPonukaForm() {
 
       {/* Banner ak user prišiel z AI vizualizera */}
       {visualizerPrefill && (
-        <div className="mb-6 rounded-2xl bg-gradient-to-br from-[#3db6e8]/10 to-[#a855f7]/10 border border-[#3db6e8]/30 p-4 md:p-5 flex items-start gap-3">
-          <span className="shrink-0 inline-flex items-center justify-center w-9 h-9 rounded-lg bg-gradient-to-br from-[#3db6e8] to-[#a855f7] text-white">
+        <div className="mb-3 rounded-xl bg-gradient-to-br from-[#3db6e8]/10 to-[#a855f7]/10 border border-[#3db6e8]/30 px-3 py-2 flex items-center gap-2">
+          <span className="shrink-0 inline-flex items-center justify-center w-7 h-7 rounded-md bg-gradient-to-br from-[#3db6e8] to-[#a855f7] text-white text-sm">
             ✨
           </span>
-          <div className="text-sm md:text-base text-[var(--color-fg)] leading-relaxed">
-            Ponuka pre podlahu z AI vizualizera:{" "}
+          <div className="text-xs md:text-sm text-[var(--color-fg)]">
+            Ponuka pre:{" "}
             <strong>{visualizerPrefill.textureLabel}</strong> ·{" "}
             <strong>{visualizerPrefill.colorName}</strong>
           </div>
         </div>
       )}
 
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-5">
+      {/* 3-col grid na desktope (kompaktnejšie), 2-col tablet, 1-col mobile */}
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
         <FieldWrap label="Meno a priezvisko *" id="cp-name">
           <input
             id="cp-name"
@@ -329,7 +330,7 @@ export function CenovaPonukaForm() {
         <FieldWrap
           label="Typ priestoru"
           id="cp-priestor"
-          className="md:col-span-2"
+          className="sm:col-span-2 lg:col-span-1"
         >
           <select
             id="cp-priestor"
@@ -347,11 +348,11 @@ export function CenovaPonukaForm() {
         <FieldWrap
           label="Doplňujúce informácie"
           id="cp-message"
-          className="md:col-span-2"
+          className="sm:col-span-2 lg:col-span-3"
         >
           <textarea
             id="cp-message"
-            rows={4}
+            rows={2}
             placeholder="Napríklad farba, vzor, špeciálne požiadavky…"
             value={values.message}
             onChange={(e) => set("message", e.target.value)}
@@ -360,29 +361,27 @@ export function CenovaPonukaForm() {
         </FieldWrap>
       </div>
 
-      {/* Cloudflare Turnstile — neviditeľný anti-bot widget */}
-      <div className="mt-6 flex justify-center">
+      {/* Turnstile + button + disclaimer v jednom kompaktnom rade na desktope */}
+      <div className="mt-4 flex flex-col md:flex-row md:items-center md:justify-between gap-3">
         <TurnstileWidget onVerify={setTurnstileToken} onExpire={() => setTurnstileToken(null)} />
+
+        <button
+          type="submit"
+          disabled={sending || !turnstileToken}
+          className="px-7 py-3 rounded-full bg-[#f97316] text-white font-bold text-sm md:text-base hover:bg-[#ea580c] disabled:opacity-50 disabled:cursor-not-allowed shadow-[0_10px_28px_rgba(249,115,22,0.45)] hover:shadow-[0_14px_36px_rgba(249,115,22,0.6)] transition-all duration-300 whitespace-nowrap"
+        >
+          {sending ? "Posielame…" : "Pošlite mi cenovú ponuku"}
+        </button>
       </div>
 
       {error && (
-        <div className="mt-4 p-3 rounded-lg bg-red-50 border border-red-100 text-sm text-red-700">
+        <div className="mt-3 p-2.5 rounded-lg bg-red-50 border border-red-100 text-sm text-red-700">
           {error}
         </div>
       )}
 
-      <button
-        type="submit"
-        disabled={sending || !turnstileToken}
-        className="mt-7 mx-auto block px-9 py-4 rounded-full bg-[#f97316] text-white font-bold text-base md:text-lg hover:bg-[#ea580c] disabled:opacity-50 disabled:cursor-not-allowed shadow-[0_12px_36px_rgba(249,115,22,0.5)] hover:shadow-[0_16px_44px_rgba(249,115,22,0.65)] transition-all duration-300"
-      >
-        {sending ? "Posielame…" : "Pošlite mi cenovú ponuku"}
-      </button>
-
-      <p className="mt-5 text-center text-xs text-[var(--color-fg-muted)] leading-relaxed">
-        Tvoje údaje použijeme len na prípravu ponuky a kontaktovanie.
-        <br />
-        Spracujeme ich do 24 hodín.
+      <p className="mt-2 text-center text-[11px] text-[var(--color-fg-muted)] leading-snug">
+        Tvoje údaje použijeme len na prípravu ponuky. Spracujeme ich do 24 hodín.
       </p>
     </form>
   );
@@ -400,7 +399,7 @@ function FieldWrap({ label, id, className, children }: FieldWrapProps) {
     <div className={className}>
       <label
         htmlFor={id}
-        className="block text-sm font-semibold text-[var(--color-fg)] mb-1.5"
+        className="block text-xs md:text-sm font-bold text-[var(--color-fg)] mb-1"
       >
         {label}
       </label>

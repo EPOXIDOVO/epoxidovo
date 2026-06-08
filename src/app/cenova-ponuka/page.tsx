@@ -23,7 +23,7 @@ const MARQUEE_PHOTOS = [
 export default function CenovaPonukaPage() {
   return (
     // SiteChrome dáva main h-[100dvh] flex flex-col → tento div vyplní zvyšok.
-    // Žiadny scroll na desktope (1-page UX). Mobile: scroll povolený (form je dlhý).
+    // Original hero zostáva, iba form sekcia je kompaktnejšia.
     <div className="flex-1 min-h-0 bg-[var(--color-copper)] overflow-y-auto md:overflow-hidden flex flex-col">
       <BreadcrumbsJsonLd
         items={[
@@ -31,7 +31,7 @@ export default function CenovaPonukaPage() {
           { name: "Cenová ponuka", path: "/cenova-ponuka" },
         ]}
       />
-      {/* Kompaktný hero strip — tmavé pozadie, len titulok + breadcrumb */}
+      {/* Hero — pohyblivý marquee fotiek podláh + tmavý overlay + bublina (PÔVODNÝ DIZAJN) */}
       <section className="relative isolate overflow-hidden bg-[#0a0f1e] shrink-0">
         <div
           aria-hidden
@@ -57,25 +57,36 @@ export default function CenovaPonukaPage() {
         </div>
         <div
           aria-hidden
-          className="pointer-events-none absolute inset-0 bg-black/65"
+          className="pointer-events-none absolute inset-0 bg-black/60"
         />
-        <Container size="xl" className="py-4 md:py-5 relative z-10">
-          <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-2 text-white">
-            <div>
-              <h1 className="text-xl md:text-3xl lg:text-4xl font-black tracking-tight leading-tight">
+        <div
+          aria-hidden
+          className="pointer-events-none absolute inset-x-0 top-0 h-full"
+          style={{
+            background:
+              "radial-gradient(60% 60% at 50% 0%, rgba(61,182,232,0.18), transparent 75%)",
+          }}
+        />
+        <Container
+          size="xl"
+          className="pt-6 md:pt-10 pb-4 md:pb-8 relative z-10"
+        >
+          <div className="text-center text-white">
+            <div className="inline-block px-5 md:px-12 py-3 md:py-5 rounded-2xl md:rounded-3xl bg-white/[0.06] backdrop-blur-md border border-white/15 shadow-[0_20px_60px_rgba(0,0,0,0.35)]">
+              <h1 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-extrabold tracking-tight leading-tight">
                 Nezáväzná{" "}
                 <span className="text-[#3db6e8]">cenová ponuka</span>
               </h1>
-              <p className="mt-0.5 text-xs md:text-sm text-white/85 font-bold">
-                Vyplň formulár a do <strong>24 hodín</strong> ti pošleme
-                kalkuláciu na mieru.
-              </p>
             </div>
+            <p className="mt-2 md:mt-4 text-xs md:text-base text-white/90 max-w-2xl mx-auto leading-snug md:leading-relaxed font-medium">
+              Vyplň formulár a do <strong>24 hodín</strong> ti pošleme cenovú
+              kalkuláciu na mieru.
+            </p>
             <nav
               aria-label="Breadcrumb"
-              className="text-xs md:text-sm text-white/85 font-bold shrink-0"
+              className="mt-2 md:mt-3 text-xs md:text-sm text-white/85 font-semibold"
             >
-              <ol className="inline-flex items-center gap-1.5">
+              <ol className="inline-flex items-center gap-1.5 md:gap-2.5">
                 <li>
                   <Link
                     href="/"
@@ -87,20 +98,27 @@ export default function CenovaPonukaPage() {
                 <li className="text-white/40" aria-hidden>
                   /
                 </li>
-                <li className="text-[#3db6e8] font-black">Cenová ponuka</li>
+                <li>
+                  <Link
+                    href="/kontakt"
+                    className="text-[#3db6e8] hover:text-white transition-colors font-semibold"
+                  >
+                    Kontaktujte nás
+                  </Link>
+                </li>
               </ol>
             </nav>
           </div>
         </Container>
       </section>
 
-      {/* Form section — vyplní zvyšok výšky */}
+      {/* Form section — vyplní zvyšok výšky, form je compacted vnútri */}
       <Section
         tone="default"
         size="md"
-        className="bg-[var(--color-copper)] !text-white flex-1 min-h-0 overflow-y-auto !py-4 md:!py-6"
+        className="bg-[var(--color-copper)] !text-white flex-1 min-h-0 overflow-y-auto !py-3 md:!py-4"
       >
-        <Container size="xl" className="py-2 md:py-2">
+        <Container size="xl" className="py-0">
           <CenovaPonukaForm />
         </Container>
       </Section>
