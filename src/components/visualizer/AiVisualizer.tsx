@@ -180,13 +180,42 @@ export function AiVisualizer() {
     setStep("upload");
   };
 
-  const download = () => {
+  const download = async () => {
     if (!resultBase64) return;
-    const link = document.createElement("a");
-    link.href = `data:${resultMime};base64,${resultBase64}`;
-    link.download = `epoxidovo-vizualizacia-${texture}-${colorSlug}.png`;
-    link.click();
+    const filename = `epoxidovo-vizualizacia-${texture}-${colorSlug}.png`;
     trackEvent("visualizer_download", { texture, color: colorSlug });
+
+    // Konvertuj base64 → Blob/File aby fungoval Web Share API.
+    // Na iOS share sheet ponúkne "Save Image" → uloží do Photos library.
+    // Na Android share sheet zase ponúkne galériu, na desktope fallback download.
+    try {
+      const byteString = atob(resultBase64);
+      const bytes = new Uint8Array(byteString.length);
+      for (let i = 0; i < byteString.length; i++) bytes[i] = byteString.charCodeAt(i);
+      const blob = new Blob([bytes], { type: resultMime });
+      const file = new File([blob], filename, { type: resultMime });
+
+      // navigator.canShare available na iOS Safari 15+ a Android Chrome
+      if (
+        typeof navigator !== "undefined" &&
+        "share" in navigator &&
+        typeof navigator.canShare === "function" &&
+        navigator.canShare({ files: [file] })
+      ) {
+        await navigator.share({ files: [file], title: "Moja AI vizualizácia podlahy" });
+        return;
+      }
+
+      // Fallback: classic blob URL download → ide do Downloads/Files
+      const url = URL.createObjectURL(blob);
+      const link = document.createElement("a");
+      link.href = url;
+      link.download = filename;
+      link.click();
+      setTimeout(() => URL.revokeObjectURL(url), 100);
+    } catch {
+      // User cancelled share alebo iný problém → silently ignore
+    }
   };
 
   const requestQuote = () => {
@@ -360,10 +389,7 @@ function Header({ step }: { step: Step }) {
     : "Pozri si ako môže vyzerať tvoja podlaha";
   const subtitleNode = isResult ? (
     <>
-      Výsledky AI nie sú vždy 100% presné — pre istotu si pozri aj
-      <br className="hidden md:inline" />
-      <span className="md:hidden"> </span>
-      reálne <strong>ukážky našich realizácií</strong>.
+      Pre istotu si pozri aj <strong>ukážky realizácií</strong>.
     </>
   ) : (
     <>

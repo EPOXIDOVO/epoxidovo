@@ -17,8 +17,10 @@ export const metadata: Metadata = {
 export default function AiVizualizerPage() {
   return (
     // SiteChrome dáva main h-[100dvh] flex flex-col → tento div vyplní zvyšok.
-    // overflow-hidden na oboch platformách = 1-page UX bez scrollu.
-    <div className="flex-1 min-h-0 bg-[#F8FAFC] overflow-hidden">
+    // overflow-y-auto: upload step sa zmestí presne na viewport (žiadny scroll),
+    // ostatné kroky (result s CTA, pick textury, generating) sa môžu prirodzene
+    // scrollovať ak presahujú výšku — najmä na mobile.
+    <div className="flex-1 min-h-0 bg-[#F8FAFC] overflow-y-auto">
       <AiVisualizer />
     </div>
   );
