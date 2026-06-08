@@ -66,7 +66,9 @@ export function AiVisualizer() {
   // Result state
   const [resultBase64, setResultBase64] = React.useState<string | null>(null);
   const [resultMime, setResultMime] = React.useState<string>("image/png");
-  const [sliderPos, setSliderPos] = React.useState(50);
+  // Slider default = 65 → AFTER dominantne viditeľná hneď ako sa zobrazí výsledok.
+  // 50 by mohol pri subtílnejších AI generáciách pôsobiť ako "nič sa nezmenilo".
+  const [sliderPos, setSliderPos] = React.useState(65);
 
   const fileInputRef = React.useRef<HTMLInputElement | null>(null);
 
@@ -412,30 +414,30 @@ function Header({ step }: { step: Step }) {
   );
 
   return (
-    <header className="text-center mb-3 md:mb-4 md:shrink-0">
+    <header className="text-center mb-3 md:mb-3 md:shrink-0">
       {/* AI gradient pill — značí "AI features" v celom UI */}
-      <div className="inline-flex items-center gap-1.5 px-3 py-1 md:px-4 md:py-1.5 rounded-full bg-gradient-to-r from-[#7EC8F0] via-[#6AA8F0] to-[#8B5CF6] text-white text-[10px] md:text-xs font-extrabold uppercase tracking-wider mb-2 md:mb-3 shadow-[0_4px_14px_rgba(139,92,246,0.35)]">
+      <div className="inline-flex items-center gap-1.5 px-3 py-1 md:px-4 md:py-1.5 rounded-full bg-gradient-to-r from-[#7EC8F0] via-[#6AA8F0] to-[#8B5CF6] text-white text-[10px] md:text-xs font-extrabold uppercase tracking-wider mb-2 md:mb-2 shadow-[0_4px_14px_rgba(139,92,246,0.35)]">
         <Sparkles className="w-3 h-3 md:w-3.5 md:h-3.5" aria-hidden />
         AI Vizualizácia
       </div>
-      <h1 className="text-xl md:text-5xl font-black tracking-tight text-[#1B2430]">
+      {/* H1 — result step má menší font na desktope (viac priestoru pre obsah) */}
+      <h1
+        className={`font-black tracking-tight text-[#1B2430] ${
+          isResult ? "text-xl md:text-3xl" : "text-xl md:text-5xl"
+        }`}
+      >
         {title}
       </h1>
-      <p className="mt-1.5 md:mt-3 text-xs md:text-lg font-bold text-[#1B2430]/65 max-w-2xl mx-auto leading-snug md:leading-relaxed">
-        {subtitleNode}
-      </p>
-      {/* Po výsledku — odkaz na realizácie pre istotu */}
-      {isResult && (
-        <Link
-          href="/realizacie"
-          className="mt-3 md:mt-4 inline-flex items-center gap-1.5 px-4 py-2 rounded-full bg-white text-[#2EA3DC] font-extrabold text-xs md:text-sm ring-1 ring-[#2EA3DC]/30 hover:bg-[#2EA3DC]/5 hover:ring-[#2EA3DC] transition-colors shadow-sm"
-        >
-          <Images className="w-4 h-4" aria-hidden />
-          Pozri ukážky realizácií
-        </Link>
+      {/* Subtitle len pre non-result kroky (result má vlastný realizations pill nižšie) */}
+      {!isResult && (
+        <p className="mt-1.5 md:mt-3 text-xs md:text-lg font-bold text-[#1B2430]/65 max-w-2xl mx-auto leading-snug md:leading-relaxed">
+          {subtitleNode}
+        </p>
       )}
-      {stepNum > 0 && (
-        <div className="mt-3 md:mt-6 flex justify-center gap-1.5 md:gap-2">
+      {/* Step indicator — len pre non-result kroky (result je už hotový, indicator
+          by zbytočne zaberal vertikálne miesto na 16" laptopoch). */}
+      {stepNum > 0 && !isResult && (
+        <div className="mt-3 md:mt-5 flex justify-center gap-1.5 md:gap-2">
           {[1, 2, 3].map((n) => (
             <span
               key={n}
@@ -874,10 +876,12 @@ function ResultStep({
   }, [fullscreen]);
 
   return (
-    <div className="rounded-3xl bg-white p-5 md:p-8 shadow-[0_10px_40px_rgba(27,36,48,0.08)] ring-1 ring-[#1B2430]/5">
+    <div className="rounded-3xl bg-white p-4 md:p-5 lg:p-6 shadow-[0_10px_40px_rgba(27,36,48,0.08)] ring-1 ring-[#1B2430]/5 lg:grid lg:grid-cols-[1.55fr_1fr] lg:gap-6 lg:items-start">
+      {/* ═════ ĽAVÝ STĹPEC (lg+): Before/After slider ═════ */}
+      <div className="lg:min-w-0">
       {/* Before/After slider — klik na obrázok → fullscreen lightbox */}
       <div
-        className="relative w-full aspect-video md:aspect-[4/3] rounded-2xl overflow-hidden bg-[#F8FAFC] select-none group cursor-zoom-in"
+        className="relative w-full aspect-video lg:aspect-[16/11] rounded-2xl overflow-hidden bg-[#F8FAFC] select-none group cursor-zoom-in"
         style={{ touchAction: "none" }}
         onClick={() => setFullscreen(true)}
         role="button"
@@ -951,45 +955,78 @@ function ResultStep({
         />
       </div>
 
-      <div className="mt-4 text-center">
+      {/* Label pod sliderom — textura · farba · lak + hint */}
+      <div className="mt-3 text-center">
         <div className="text-sm font-extrabold text-[#1B2430]">
           {textureLabel} · {colorName} · {finishLabel}
         </div>
-        <div className="text-xs font-bold text-[#1B2430]/60 mt-0.5">
+        <div className="text-[11px] md:text-xs font-bold text-[#1B2430]/60 mt-0.5">
           ← Posuvníkom porovnaj pred a po · klik = veľký náhľad
         </div>
       </div>
-
-      {/* 3 secondary buttons — vždy v jednom rade (grid-cols-3),
-          ikona naľavo, label napravo, jednotná šírka. */}
-      <div className="mt-6 grid grid-cols-3 gap-2">
-        <button
-          type="button"
-          onClick={onDownload}
-          className="inline-flex flex-col md:flex-row items-center justify-center gap-1 md:gap-2 px-2 md:px-4 py-3 rounded-2xl bg-[#F8FAFC] text-[#1B2430] font-extrabold text-[11px] md:text-sm ring-1 ring-[#1B2430]/10 hover:bg-white hover:ring-[#2EA3DC] hover:text-[#2EA3DC] hover:shadow-[0_6px_16px_rgba(46,163,220,0.15)] transition-all"
-        >
-          <Download className="w-4 h-4 md:w-4 md:h-4 shrink-0" aria-hidden />
-          <span>Stiahnuť</span>
-        </button>
-        <button
-          type="button"
-          onClick={onTryAgain}
-          className="inline-flex flex-col md:flex-row items-center justify-center gap-1 md:gap-2 px-2 md:px-4 py-3 rounded-2xl bg-[#F8FAFC] text-[#1B2430] font-extrabold text-[11px] md:text-sm ring-1 ring-[#1B2430]/10 hover:bg-white hover:ring-[#2EA3DC] hover:text-[#2EA3DC] hover:shadow-[0_6px_16px_rgba(46,163,220,0.15)] transition-all"
-        >
-          <RefreshCw className="w-4 h-4 md:w-4 md:h-4 shrink-0" aria-hidden />
-          <span className="text-center leading-tight">Iná farba</span>
-        </button>
-        <button
-          type="button"
-          onClick={onStartOver}
-          className="inline-flex flex-col md:flex-row items-center justify-center gap-1 md:gap-2 px-2 md:px-4 py-3 rounded-2xl bg-[#F8FAFC] text-[#1B2430] font-extrabold text-[11px] md:text-sm ring-1 ring-[#1B2430]/10 hover:bg-white hover:ring-[#2EA3DC] hover:text-[#2EA3DC] hover:shadow-[0_6px_16px_rgba(46,163,220,0.15)] transition-all"
-        >
-          <Upload className="w-4 h-4 md:w-4 md:h-4 shrink-0" aria-hidden />
-          <span>Iná fotka</span>
-        </button>
       </div>
+      {/* ═════ KONIEC ĽAVÉHO STĹPCA ═════ */}
 
-      {/* Fullscreen lightbox — veľký náhľad výsledku */}
+      {/* ═════ PRAVÝ STĹPEC (lg+): info + akcie + CTA ═════ */}
+      <div className="mt-4 lg:mt-0 flex flex-col gap-3">
+        {/* Realizácie pill — alternatíva pre user-a ak chce vidieť reálne práce */}
+        <Link
+          href="/realizacie"
+          className="inline-flex items-center justify-center gap-1.5 px-4 py-2.5 rounded-xl bg-white text-[#2EA3DC] font-extrabold text-xs md:text-sm ring-1 ring-[#2EA3DC]/30 hover:bg-[#2EA3DC]/5 hover:ring-[#2EA3DC] transition-colors shadow-sm"
+        >
+          <Images className="w-4 h-4" aria-hidden />
+          Pozri ukážky realizácií
+        </Link>
+
+        {/* 3 secondary buttons — vždy v jednom rade, ikona+label */}
+        <div className="grid grid-cols-3 gap-2">
+          <button
+            type="button"
+            onClick={onDownload}
+            className="inline-flex flex-col md:flex-row items-center justify-center gap-1 md:gap-1.5 px-2 py-2.5 rounded-xl bg-[#F8FAFC] text-[#1B2430] font-extrabold text-[11px] md:text-xs ring-1 ring-[#1B2430]/10 hover:bg-white hover:ring-[#2EA3DC] hover:text-[#2EA3DC] hover:shadow-[0_6px_16px_rgba(46,163,220,0.15)] transition-all"
+          >
+            <Download className="w-4 h-4 shrink-0" aria-hidden />
+            <span>Stiahnuť</span>
+          </button>
+          <button
+            type="button"
+            onClick={onTryAgain}
+            className="inline-flex flex-col md:flex-row items-center justify-center gap-1 md:gap-1.5 px-2 py-2.5 rounded-xl bg-[#F8FAFC] text-[#1B2430] font-extrabold text-[11px] md:text-xs ring-1 ring-[#1B2430]/10 hover:bg-white hover:ring-[#2EA3DC] hover:text-[#2EA3DC] hover:shadow-[0_6px_16px_rgba(46,163,220,0.15)] transition-all"
+          >
+            <RefreshCw className="w-4 h-4 shrink-0" aria-hidden />
+            <span className="text-center leading-tight">Iná farba</span>
+          </button>
+          <button
+            type="button"
+            onClick={onStartOver}
+            className="inline-flex flex-col md:flex-row items-center justify-center gap-1 md:gap-1.5 px-2 py-2.5 rounded-xl bg-[#F8FAFC] text-[#1B2430] font-extrabold text-[11px] md:text-xs ring-1 ring-[#1B2430]/10 hover:bg-white hover:ring-[#2EA3DC] hover:text-[#2EA3DC] hover:shadow-[0_6px_16px_rgba(46,163,220,0.15)] transition-all"
+          >
+            <Upload className="w-4 h-4 shrink-0" aria-hidden />
+            <span>Iná fotka</span>
+          </button>
+        </div>
+
+        {/* CTA na cenovku — kompaktnejšia verzia, sedí v pravom stĺpci */}
+        <div className="rounded-2xl bg-gradient-to-br from-[#F0851A] to-[#D9760F] p-4 md:p-5 text-center text-white shadow-[0_12px_40px_rgba(240,133,26,0.35)]">
+          <h3 className="text-base md:text-lg lg:text-xl font-black tracking-tight leading-tight">
+            Toto je ono! Pošleme ti nezáväznú cenovú ponuku.
+          </h3>
+          <p className="mt-1.5 text-xs md:text-sm font-bold text-white/95 leading-snug">
+            Pripravíme ti kalkuláciu na túto podlahu pre tvoju miestnosť do 24 hodín.
+          </p>
+          <button
+            type="button"
+            onClick={onRequestQuote}
+            className="mt-3 w-full inline-flex items-center justify-center gap-2 px-4 py-3 rounded-full bg-white text-[#D9760F] font-black text-sm hover:bg-white/95 shadow-[0_8px_24px_rgba(0,0,0,0.18)] transition-all"
+          >
+            <Send className="w-4 h-4" aria-hidden />
+            Cenová ponuka
+          </button>
+        </div>
+      </div>
+      {/* ═════ KONIEC PRAVÉHO STĹPCA ═════ */}
+
+      {/* Fullscreen lightbox — veľký náhľad výsledku (fixed, mimo gridu) */}
       {fullscreen && (
         <div
           role="dialog"
@@ -1017,25 +1054,6 @@ function ResultStep({
           </div>
         </div>
       )}
-
-      {/* CTA na cenovku — najdôležitejšia časť, konverzný hook (orange brand) */}
-      <div className="mt-8 rounded-3xl bg-gradient-to-br from-[#F0851A] to-[#D9760F] p-6 md:p-8 text-center text-white shadow-[0_12px_40px_rgba(240,133,26,0.35)]">
-        <h3 className="text-xl md:text-2xl font-black tracking-tight">
-          Toto je ono! Pošleme ti nezáväznú cenovú ponuku.
-        </h3>
-        <p className="mt-2 text-sm md:text-base font-bold text-white/95 leading-relaxed max-w-md mx-auto">
-          Pripravíme ti kalkuláciu na túto podlahu pre tvoju miestnosť do
-          24 hodín.
-        </p>
-        <button
-          type="button"
-          onClick={onRequestQuote}
-          className="mt-5 inline-flex items-center gap-2 px-6 py-3.5 rounded-full bg-white text-[#D9760F] font-black text-sm md:text-base hover:bg-white/95 shadow-[0_8px_24px_rgba(0,0,0,0.18)] transition-all"
-        >
-          <Send className="w-4 h-4" aria-hidden />
-          Cenová ponuka
-        </button>
-      </div>
     </div>
   );
 }
