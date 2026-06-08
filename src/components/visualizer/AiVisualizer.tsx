@@ -224,17 +224,17 @@ export function AiVisualizer() {
     <div className="max-w-4xl mx-auto px-4 py-3 md:py-12">
       <Header step={step} />
 
-      {/* STEP: UPLOAD */}
+      {/* STEP: UPLOAD — mobile: iba upload | desktop: upload + demo side-by-side */}
       {step === "upload" && (
-        <UploadStep
-          onFile={handleFile}
-          onClick={() => fileInputRef.current?.click()}
-          error={error}
-        />
+        <div className="md:grid md:grid-cols-[3fr_2fr] md:gap-6 md:items-start">
+          <UploadStep
+            onFile={handleFile}
+            onClick={() => fileInputRef.current?.click()}
+            error={error}
+          />
+          <DemoExample />
+        </div>
       )}
-
-      {/* Demo "ako to funguje" — iba na desktope, len v upload step */}
-      {step === "upload" && <DemoExample />}
 
       {/* STEP: PICK TEXTURE */}
       {step === "pick-texture" && previewUrl && (
@@ -911,100 +911,81 @@ function ResultStep({
 }
 
 /* ═══════════════════════════════════════════════════════════════════════
- * Demo "Ako to funguje" — vizuálny príklad pred/po pod upload boxom
- * Iba na desktope (md:block), iba v upload step.
+ * Demo "Ako to funguje" — kompaktný vertikálny info panel.
+ * Sedí VEDĽA upload boxu na desktope (md+ only). Mobile: skrytý.
  * ─────────────────────────────────────────────────────────────────────── */
 function DemoExample() {
   return (
-    <section
+    <aside
       aria-label="Príklad ako funguje AI vizualizácia"
-      className="hidden md:block mt-10"
+      className="hidden md:flex md:flex-col md:gap-3 md:rounded-3xl md:bg-white md:p-5 md:shadow-[0_10px_40px_rgba(27,36,48,0.08)] md:ring-1 md:ring-[#1B2430]/5"
     >
-      <div className="text-center mb-6">
-        <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-[#1B2430]/5 text-[#1B2430]/70 text-xs font-extrabold uppercase tracking-wider mb-3">
+      {/* Header */}
+      <div className="flex items-center gap-2">
+        <span className="inline-flex items-center justify-center w-7 h-7 rounded-lg bg-gradient-to-br from-[#7EC8F0] via-[#6AA8F0] to-[#8B5CF6] text-white shadow-[0_4px_12px_rgba(139,92,246,0.35)]">
+          <Sparkles className="w-3.5 h-3.5" aria-hidden />
+        </span>
+        <h3 className="text-sm font-black text-[#1B2430] uppercase tracking-wider">
           Ako to funguje
-        </div>
-        <h2 className="text-2xl md:text-3xl font-black text-[#1B2430]">
-          Príklad výsledku za pár sekúnd
-        </h2>
-        <p className="mt-2 text-sm md:text-base font-bold text-[#1B2430]/65 max-w-2xl mx-auto">
-          Nahraj fotku tvojej miestnosti vľavo — AI ti ukáže ako by vyzerala
-          s novou epoxidovou podlahou.
-        </p>
+        </h3>
       </div>
 
-      <div className="grid grid-cols-[1fr_auto_1fr] gap-4 md:gap-6 items-center max-w-4xl mx-auto">
-        {/* PRED */}
-        <div className="rounded-3xl bg-white p-3 shadow-[0_10px_40px_rgba(27,36,48,0.08)] ring-1 ring-[#1B2430]/5">
-          <div className="relative aspect-[4/3] rounded-2xl overflow-hidden bg-[#F8FAFC]">
-            {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img
-              src="/images/process/step-02-priprava.webp"
-              alt="Fotka miestnosti pred AI vizualizáciou"
-              className="absolute inset-0 w-full h-full object-cover"
-              loading="lazy"
-            />
-            <div className="absolute top-3 left-3 px-3 py-1.5 rounded-full bg-[#1B2430]/85 text-white text-xs font-extrabold uppercase tracking-wider backdrop-blur-sm">
-              Pred
-            </div>
-          </div>
-          <div className="mt-3 text-center">
-            <div className="text-sm font-extrabold text-[#1B2430]">
-              Tvoja fotka miestnosti
-            </div>
-            <div className="text-xs font-bold text-[#1B2430]/60 mt-0.5">
-              Nahraj akúkoľvek fotku interiéru
-            </div>
-          </div>
+      {/* Pred fotka */}
+      <div className="relative aspect-[16/10] rounded-2xl overflow-hidden bg-[#F8FAFC] ring-1 ring-[#1B2430]/10">
+        {/* eslint-disable-next-line @next/next/no-img-element */}
+        <img
+          src="/images/process/step-02-priprava.webp"
+          alt="Pôvodná fotka miestnosti"
+          className="absolute inset-0 w-full h-full object-cover"
+          loading="lazy"
+        />
+        <div className="absolute top-2 left-2 px-2 py-0.5 rounded-md bg-[#1B2430]/85 text-white text-[10px] font-extrabold uppercase tracking-wider backdrop-blur-sm">
+          Pred
         </div>
-
-        {/* Šípka stred — AI gradient */}
-        <div className="flex flex-col items-center justify-center gap-2">
-          <div className="inline-flex items-center justify-center w-14 h-14 rounded-full bg-gradient-to-br from-[#7EC8F0] via-[#6AA8F0] to-[#8B5CF6] text-white shadow-[0_8px_24px_rgba(139,92,246,0.45)]">
-            <Sparkles className="w-6 h-6" aria-hidden />
-          </div>
-          <ArrowRight
-            className="w-8 h-8 text-[#1B2430]/40 -mt-1"
-            aria-hidden
-          />
-          <div className="text-[10px] font-extrabold uppercase tracking-wider text-[#1B2430]/60 text-center leading-tight">
-            AI<br />30 sekúnd
-          </div>
-        </div>
-
-        {/* PO */}
-        <div className="rounded-3xl bg-white p-3 shadow-[0_10px_40px_rgba(27,36,48,0.08)] ring-1 ring-[#2EA3DC]/30">
-          <div className="relative aspect-[4/3] rounded-2xl overflow-hidden bg-[#F8FAFC]">
-            {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img
-              src="/images/process/step-04-hotovo.webp"
-              alt="Fotka miestnosti po AI vizualizácii s novou podlahou"
-              className="absolute inset-0 w-full h-full object-cover"
-              loading="lazy"
-            />
-            <div className="absolute top-3 left-3 px-3 py-1.5 rounded-full bg-[#2EA3DC] text-white text-xs font-extrabold uppercase tracking-wider shadow-[0_4px_12px_rgba(46,163,220,0.4)]">
-              Po
-            </div>
-            <div className="absolute top-3 right-3 inline-flex items-center gap-1 px-2.5 py-1 rounded-full bg-gradient-to-r from-[#7EC8F0] via-[#6AA8F0] to-[#8B5CF6] text-white text-[10px] font-extrabold uppercase tracking-wider shadow-md">
-              <Sparkles className="w-2.5 h-2.5" aria-hidden />
-              AI
-            </div>
-          </div>
-          <div className="mt-3 text-center">
-            <div className="text-sm font-extrabold text-[#1B2430]">
-              AI vygenerovaný výsledok
-            </div>
-            <div className="text-xs font-bold text-[#1B2430]/60 mt-0.5">
-              Vyber typ a farbu podlahy
-            </div>
-          </div>
+        <div className="absolute bottom-2 left-2 right-2 text-[11px] font-extrabold text-white drop-shadow-[0_2px_4px_rgba(0,0,0,0.6)]">
+          Tvoja fotka miestnosti
         </div>
       </div>
 
-      <p className="mt-6 text-center text-xs font-bold text-[#1B2430]/50">
-        Ilustračný príklad — reálny výsledok závisí od tvojej fotky a zvolenej kombinácie.
+      {/* Stredná šípka — AI gradient */}
+      <div className="flex items-center justify-center gap-2 py-0.5">
+        <span
+          className="h-px flex-1 bg-gradient-to-r from-transparent via-[#1B2430]/15 to-transparent"
+          aria-hidden
+        />
+        <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full bg-gradient-to-r from-[#7EC8F0] via-[#6AA8F0] to-[#8B5CF6] text-white text-[10px] font-extrabold uppercase tracking-wider shadow-[0_4px_12px_rgba(139,92,246,0.35)]">
+          <Sparkles className="w-2.5 h-2.5" aria-hidden />
+          AI · 30 s
+        </span>
+        <span
+          className="h-px flex-1 bg-gradient-to-l from-transparent via-[#1B2430]/15 to-transparent"
+          aria-hidden
+        />
+      </div>
+
+      {/* Po fotka */}
+      <div className="relative aspect-[16/10] rounded-2xl overflow-hidden bg-[#F8FAFC] ring-2 ring-[#2EA3DC]/40">
+        {/* eslint-disable-next-line @next/next/no-img-element */}
+        <img
+          src="/images/process/step-04-hotovo.webp"
+          alt="Fotka miestnosti po AI vizualizácii"
+          className="absolute inset-0 w-full h-full object-cover"
+          loading="lazy"
+        />
+        <div className="absolute top-2 left-2 px-2 py-0.5 rounded-md bg-[#2EA3DC] text-white text-[10px] font-extrabold uppercase tracking-wider shadow-[0_4px_12px_rgba(46,163,220,0.4)]">
+          Po
+        </div>
+        <div className="absolute bottom-2 left-2 right-2 text-[11px] font-extrabold text-white drop-shadow-[0_2px_4px_rgba(0,0,0,0.6)]">
+          AI vygenerovaný výsledok
+        </div>
+      </div>
+
+      {/* Tiny disclaimer */}
+      <p className="text-[10px] font-bold text-[#1B2430]/50 leading-snug">
+        Ilustračný príklad — reálny výsledok závisí od fotky a zvolenej
+        kombinácie textúry/farby.
       </p>
-    </section>
+    </aside>
   );
 }
 
