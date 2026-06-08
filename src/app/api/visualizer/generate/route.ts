@@ -3,7 +3,8 @@ export const runtime = "edge";
 import { NextRequest, NextResponse } from "next/server";
 import { generateFloorEdit } from "@/lib/gemini-image";
 import { verifyTurnstileToken } from "@/lib/turnstile";
-import { buildGeminiPrompt, getColorPreset } from "@/lib/visualizer-presets";
+import { buildGeminiPrompt, getColorPreset, isValidFinish } from "@/lib/visualizer-presets";
+import type { Finish } from "@/lib/visualizer-presets";
 
 /**
  * POST /api/visualizer/generate
@@ -33,6 +34,8 @@ interface GenerateBody {
   mimeType?: string;
   texture?: string;
   colorSlug?: string;
+  /** Povrchový lak — matná / lesklá. Default: "leskla" pre BC. */
+  finish?: string;
   turnstileToken?: string;
 }
 
@@ -98,6 +101,10 @@ export async function POST(req: NextRequest) {
     );
   }
 
+  // Finish (matná/lesklá) — voliteľné, default leskla pre backward compat.
+  const finish: Finish =
+    body.finish && isValidFinish(body.finish) ? body.finish : "leskla";
+
   // 2) Turnstile (anti-bot)
   const remoteIp =
     req.headers.get("cf-connecting-ip") ??
@@ -161,7 +168,7 @@ export async function POST(req: NextRequest) {
 
   // 4) Generate cez Gemini Nano Banana 2
   const normalizedMime = body.mimeType === "image/jpg" ? "image/jpeg" : body.mimeType;
-  const prompt = buildGeminiPrompt(preset.texture, preset.color);
+  const prompt = buildGeminiPrompt(preset.texture, preset.color, finish);
   const result = await generateFloorEdit(body.imageBase64, normalizedMime, prompt);
 
   // 5) Log to DB (always — for analytics + admin review of results)

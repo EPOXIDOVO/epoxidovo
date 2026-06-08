@@ -22,7 +22,9 @@ import { TurnstileWidget } from "@/components/turnstile/TurnstileWidget";
 import { trackEvent } from "@/components/analytics/Analytics";
 import {
   COLORS,
+  FINISHES,
   TEXTURES,
+  type Finish,
   type TextureSlug,
 } from "@/lib/visualizer-presets";
 
@@ -54,10 +56,11 @@ export function AiVisualizer() {
   const [mimeType, setMimeType] = React.useState<string>("image/jpeg");
   const [previewUrl, setPreviewUrl] = React.useState<string | null>(null);
 
-  // Picker state — START AS null aby pri otvorení pickera žiadna textúra/farba
-  // nebola zvýraznená modrou (vyznačí sa až keď user reálne klikne).
+  // Picker state — START AS null aby pri otvorení pickera žiadna textúra/farba/
+  // lak neboli zvýraznené modrou (vyznačí sa až keď user reálne klikne).
   const [texture, setTexture] = React.useState<TextureSlug | null>(null);
   const [colorSlug, setColorSlug] = React.useState<string | null>(null);
+  const [finish, setFinish] = React.useState<Finish | null>(null);
   const [turnstileToken, setTurnstileToken] = React.useState<string | null>(null);
 
   // Result state
@@ -111,7 +114,7 @@ export function AiVisualizer() {
   // ───────────────────────────────────────────────────────────────────────
 
   const generate = async () => {
-    if (!imageBase64 || !turnstileToken || !texture || !colorSlug) return;
+    if (!imageBase64 || !turnstileToken || !texture || !colorSlug || !finish) return;
     setStep("generating");
     setProgress(0);
     setError(null);
@@ -135,6 +138,7 @@ export function AiVisualizer() {
           mimeType,
           texture,
           colorSlug,
+          finish,
           turnstileToken,
         }),
       });
@@ -180,10 +184,10 @@ export function AiVisualizer() {
   };
 
   const download = () => {
-    if (!resultBase64 || !texture || !colorSlug) return;
+    if (!resultBase64 || !texture || !colorSlug || !finish) return;
     const ext = resultMime?.includes("png") ? "png" : "jpg";
-    const filename = `epoxidovo-vizualizacia-${texture}-${colorSlug}.${ext}`;
-    trackEvent("visualizer_download", { texture, color: colorSlug });
+    const filename = `epoxidovo-vizualizacia-${texture}-${colorSlug}-${finish}.${ext}`;
+    trackEvent("visualizer_download", { texture, color: colorSlug, finish });
 
     // KRITICKÉ: všetko musí byť SYNCHRONNE pred navigator.share, inak iOS
     // stratí "user activation" a share sheet sa nezobrazí. Žiadny await.
@@ -235,13 +239,14 @@ export function AiVisualizer() {
   };
 
   const requestQuote = () => {
-    if (!resultBase64 || !texture || !colorSlug) return;
-    trackEvent("visualizer_request_quote", { texture, color: colorSlug });
-    window.location.href = `/cenova-ponuka?source=ai_vizualizer&texture=${texture}&color=${colorSlug}`;
+    if (!resultBase64 || !texture || !colorSlug || !finish) return;
+    trackEvent("visualizer_request_quote", { texture, color: colorSlug, finish });
+    window.location.href = `/cenova-ponuka?source=ai_vizualizer&texture=${texture}&color=${colorSlug}&finish=${finish}`;
   };
 
   // Pri zmene textúry zresetujeme farbu na null — user musí vedome kliknúť
-  // farbu (žiadny default highlight v color pickeri).
+  // farbu (žiadny default highlight v color pickeri). Lak zachováme — finish
+  // je nezávislý od textúry/farby (preference užívateľa naprieč variantmi).
   React.useEffect(() => {
     setColorSlug(null);
   }, [texture]);
@@ -291,6 +296,8 @@ export function AiVisualizer() {
           texture={texture}
           colorSlug={colorSlug}
           onColor={setColorSlug}
+          finish={finish}
+          onFinish={setFinish}
           turnstileToken={turnstileToken}
           onTurnstile={setTurnstileToken}
           onGenerate={generate}
@@ -306,9 +313,9 @@ export function AiVisualizer() {
         <GeneratingStep progress={progress} />
       )}
 
-      {/* STEP: RESULT — texture/colorSlug guaranteed non-null (generate()
-          early-returns ak su null, takže sa sem nedostaneme) */}
-      {step === "result" && resultBase64 && previewUrl && texture && colorSlug && (
+      {/* STEP: RESULT — texture/colorSlug/finish guaranteed non-null
+          (generate() early-returns ak su null, takže sa sem nedostaneme) */}
+      {step === "result" && resultBase64 && previewUrl && texture && colorSlug && finish && (
         <ResultStep
           beforeUrl={previewUrl}
           afterDataUrl={`data:${resultMime};base64,${resultBase64}`}
@@ -319,6 +326,7 @@ export function AiVisualizer() {
             COLORS[texture].find((c) => c.slug === colorSlug)?.commercialName ??
             colorSlug
           }
+          finishLabel={FINISHES[finish].label}
           onDownload={download}
           onTryAgain={tryAgain}
           onRequestQuote={requestQuote}
@@ -624,6 +632,8 @@ function PickColorStep({
   texture,
   colorSlug,
   onColor,
+  finish,
+  onFinish,
   turnstileToken,
   onTurnstile,
   onGenerate,
@@ -633,6 +643,8 @@ function PickColorStep({
   texture: TextureSlug;
   colorSlug: string | null;
   onColor: (c: string) => void;
+  finish: Finish | null;
+  onFinish: (f: Finish) => void;
   turnstileToken: string | null;
   onTurnstile: (t: string | null) => void;
   onGenerate: () => void;
@@ -641,6 +653,7 @@ function PickColorStep({
   const colors = COLORS[texture];
   const textureDef = TEXTURES[texture];
   const activeColor = colors.find((c) => c.slug === colorSlug);
+  const finishKeys = Object.keys(FINISHES) as Finish[];
 
   return (
     <div className="rounded-3xl bg-white p-4 md:p-6 shadow-[0_10px_40px_rgba(27,36,48,0.08)] ring-1 ring-[#1B2430]/5">
@@ -707,6 +720,50 @@ function PickColorStep({
         </div>
       )}
 
+      {/* Krok 3: Povrchový lak — len finálny topcoat. Žiadny default,
+          aktivuje sa modrá až po kliknutí. */}
+      <label className="block text-base md:text-lg font-extrabold text-[#1B2430] mt-5 mb-3">
+        3. Vyber povrchový lak
+      </label>
+      <div className="grid grid-cols-2 gap-2.5">
+        {finishKeys.map((f) => {
+          const def = FINISHES[f];
+          const active = f === finish;
+          return (
+            <button
+              key={f}
+              type="button"
+              onClick={() => onFinish(f)}
+              className={`relative rounded-xl border-2 p-3 text-left transition-all ${
+                active
+                  ? "border-[#2EA3DC] bg-[#2EA3DC]/5 shadow-[0_6px_20px_rgba(46,163,220,0.25)]"
+                  : "border-[#1B2430]/10 bg-white hover:border-[#2EA3DC]/50"
+              }`}
+            >
+              <div className="flex items-center gap-2">
+                <span
+                  className={`shrink-0 inline-flex items-center justify-center w-5 h-5 rounded-full border-2 ${
+                    active
+                      ? "border-[#2EA3DC] bg-[#2EA3DC]"
+                      : "border-[#1B2430]/30 bg-white"
+                  }`}
+                >
+                  {active && (
+                    <span className="block w-2 h-2 rounded-full bg-white" />
+                  )}
+                </span>
+                <span className="text-sm md:text-base font-extrabold text-[#1B2430]">
+                  {def.label}
+                </span>
+              </div>
+              <p className="mt-1 ml-7 text-[11px] md:text-xs font-bold text-[#1B2430]/60 leading-tight">
+                {def.description}
+              </p>
+            </button>
+          );
+        })}
+      </div>
+
       <div className="mt-4 flex justify-center">
         <TurnstileWidget
           onVerify={onTurnstile}
@@ -715,10 +772,10 @@ function PickColorStep({
       </div>
 
       {/* Primárna akcia — oranžová pill ako "Cenová ponuka" na homepage.
-          Disabled kým user nezvolí farbu alebo Turnstile neprejde. */}
+          Disabled kým user nezvolí farbu, lak alebo Turnstile neprejde. */}
       <button
         type="button"
-        disabled={!turnstileToken || !colorSlug}
+        disabled={!turnstileToken || !colorSlug || !finish}
         onClick={onGenerate}
         className="mt-3 w-full inline-flex items-center justify-center gap-2 px-6 py-3 md:py-3.5 rounded-full bg-[#F0851A] text-white font-extrabold text-sm md:text-base hover:bg-[#D9760F] disabled:opacity-50 disabled:cursor-not-allowed shadow-[0_10px_30px_rgba(240,133,26,0.45)] hover:shadow-[0_14px_40px_rgba(240,133,26,0.6)] transition-all duration-300"
       >
@@ -788,6 +845,7 @@ function ResultStep({
   onSlider,
   textureLabel,
   colorName,
+  finishLabel,
   onDownload,
   onTryAgain,
   onRequestQuote,
@@ -799,6 +857,7 @@ function ResultStep({
   onSlider: (v: number) => void;
   textureLabel: string;
   colorName: string;
+  finishLabel: string;
   onDownload: () => void;
   onTryAgain: () => void;
   onRequestQuote: () => void;
@@ -894,7 +953,7 @@ function ResultStep({
 
       <div className="mt-4 text-center">
         <div className="text-sm font-extrabold text-[#1B2430]">
-          {textureLabel} · {colorName}
+          {textureLabel} · {colorName} · {finishLabel}
         </div>
         <div className="text-xs font-bold text-[#1B2430]/60 mt-0.5">
           ← Posuvníkom porovnaj pred a po · klik = veľký náhľad
@@ -954,7 +1013,7 @@ function ResultStep({
             onClick={(e) => e.stopPropagation()}
           />
           <div className="absolute bottom-4 left-1/2 -translate-x-1/2 px-4 py-2 rounded-full bg-white/15 text-white text-xs md:text-sm font-extrabold backdrop-blur-sm">
-            {textureLabel} · {colorName}
+            {textureLabel} · {colorName} · {finishLabel}
           </div>
         </div>
       )}

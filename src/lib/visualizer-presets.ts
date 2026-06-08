@@ -16,6 +16,24 @@ import type React from "react";
 
 export type TextureSlug = "hladka" | "metalicka" | "chips" | "mramor";
 
+/** Povrchový lak — len finálny topcoat, nezávislý od textúry/farby. */
+export type Finish = "matna" | "leskla";
+
+export const FINISHES: Record<Finish, { label: string; description: string }> = {
+  leskla: {
+    label: "Lesklá",
+    description: "Vysoký lesk, sýta farba, viditeľné odrazy.",
+  },
+  matna: {
+    label: "Matná",
+    description: "Bez odrazov, moderný industriálny vzhľad.",
+  },
+};
+
+export function isValidFinish(s: string): s is Finish {
+  return s === "matna" || s === "leskla";
+}
+
 export interface TextureDef {
   slug: TextureSlug;
   label: string; // SK display name (Hladká)
@@ -402,10 +420,19 @@ export function isValidTextureSlug(s: string): s is TextureSlug {
 export function buildGeminiPrompt(
   texture: TextureDef,
   color: ColorPreset,
+  finish: Finish,
 ): string {
+  // Finish dominuje nad pôvodným promptBase (ten môže obsahovať "high-gloss"
+  // ako default) — koncový override určuje finálny lak.
+  const finishInstruction =
+    finish === "matna"
+      ? "FINAL FINISH: Apply a MATTE non-reflective topcoat. No mirror reflections, no specular highlights — soft diffuse surface only."
+      : "FINAL FINISH: Apply a HIGH-GLOSS reflective topcoat with clear mirror-like surface reflections.";
+
   return [
     `Replace ONLY the existing floor in the photo with a ${texture.promptBase}.`,
     `Floor color and pattern: ${color.promptColor}.`,
+    finishInstruction,
     `CRITICAL: Keep EVERY OTHER element of the photo EXACTLY identical:`,
     `- All walls, ceiling, doors, windows unchanged`,
     `- All furniture, objects, items on the floor preserved in their exact positions`,
