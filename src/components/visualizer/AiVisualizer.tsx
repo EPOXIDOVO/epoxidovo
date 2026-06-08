@@ -1021,10 +1021,10 @@ function DemoExample() {
 
       {/* Krátke upozornenie (2 riadky) + link na realizácie */}
       <div className="mt-3 rounded-xl bg-[#F0851A]/10 ring-1 ring-[#F0851A]/30 px-3 py-2 shrink-0">
-        <div className="flex items-center gap-2">
-          <AlertCircle className="w-4 h-4 text-[#F0851A] shrink-0" aria-hidden />
+        <div className="flex items-start gap-2">
+          <AlertCircle className="w-4 h-4 text-[#F0851A] shrink-0 mt-0.5" aria-hidden />
           <div className="text-xs font-bold text-[#1B2430] leading-snug">
-            Pre istotu si pozri aj{" "}
+            AI nemusí vždy vygenerovať správny výsledok — pre istotu si pozri aj{" "}
             <Link
               href="/realizacie"
               className="text-[#F0851A] hover:text-[#D9760F] font-black underline underline-offset-2"
