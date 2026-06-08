@@ -180,42 +180,59 @@ export function AiVisualizer() {
     setStep("upload");
   };
 
-  const download = async () => {
+  const download = () => {
     if (!resultBase64) return;
-    const filename = `epoxidovo-vizualizacia-${texture}-${colorSlug}.png`;
+    const ext = resultMime?.includes("png") ? "png" : "jpg";
+    const filename = `epoxidovo-vizualizacia-${texture}-${colorSlug}.${ext}`;
     trackEvent("visualizer_download", { texture, color: colorSlug });
 
-    // Konvertuj base64 → Blob/File aby fungoval Web Share API.
-    // Na iOS share sheet ponúkne "Save Image" → uloží do Photos library.
-    // Na Android share sheet zase ponúkne galériu, na desktope fallback download.
+    // KRITICKÉ: všetko musí byť SYNCHRONNE pred navigator.share, inak iOS
+    // stratí "user activation" a share sheet sa nezobrazí. Žiadny await.
+    let blob: Blob;
+    let file: File;
     try {
       const byteString = atob(resultBase64);
       const bytes = new Uint8Array(byteString.length);
       for (let i = 0; i < byteString.length; i++) bytes[i] = byteString.charCodeAt(i);
-      const blob = new Blob([bytes], { type: resultMime });
-      const file = new File([blob], filename, { type: resultMime });
-
-      // navigator.canShare available na iOS Safari 15+ a Android Chrome
-      if (
-        typeof navigator !== "undefined" &&
-        "share" in navigator &&
-        typeof navigator.canShare === "function" &&
-        navigator.canShare({ files: [file] })
-      ) {
-        await navigator.share({ files: [file], title: "Moja AI vizualizácia podlahy" });
-        return;
-      }
-
-      // Fallback: classic blob URL download → ide do Downloads/Files
-      const url = URL.createObjectURL(blob);
-      const link = document.createElement("a");
-      link.href = url;
-      link.download = filename;
-      link.click();
-      setTimeout(() => URL.revokeObjectURL(url), 100);
+      blob = new Blob([bytes], { type: resultMime });
+      file = new File([blob], filename, { type: resultMime });
     } catch {
-      // User cancelled share alebo iný problém → silently ignore
+      return;
     }
+
+    // Web Share API — synchronný call (.catch handluje cancel asynchronne).
+    // Na iOS Safari 15+ a Android Chrome: share sheet → "Save Image" → Photos.
+    const nav = typeof navigator !== "undefined" ? navigator : null;
+    if (
+      nav &&
+      typeof nav.share === "function" &&
+      typeof nav.canShare === "function"
+    ) {
+      try {
+        if (nav.canShare({ files: [file] })) {
+          // Volaj share() priamo, bez await — preserves user activation
+          nav.share({
+            files: [file],
+            title: "Moja AI vizualizácia podlahy — EPOXIDOVO",
+          }).catch(() => {
+            /* user cancelled — silently */
+          });
+          return;
+        }
+      } catch {
+        /* canShare hodil error → fallback */
+      }
+    }
+
+    // Fallback: klasický blob URL download (Desktop)
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement("a");
+    link.href = url;
+    link.download = filename;
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+    setTimeout(() => URL.revokeObjectURL(url), 100);
   };
 
   const requestQuote = () => {

@@ -29,7 +29,12 @@ export function SiteChrome({ children }: { children: React.ReactNode }) {
     return (
       <>
         <Header transparentOnTop={false} />
-        <main id="main" className="h-[100dvh] pt-20 md:pt-24 flex flex-col">
+        {/* Mobile: prirodzený flow s natívnym scrollom (form/CTA potrebuje miesto).
+            Desktop: 1-page no-scroll layout (h-[100dvh] + flex). */}
+        <main
+          id="main"
+          className="pt-20 md:pt-24 md:h-[100dvh] md:flex md:flex-col"
+        >
           {children}
         </main>
         {/* Footer hidden on this route for 1-page UX */}

@@ -22,9 +22,9 @@ const MARQUEE_PHOTOS = [
 
 export default function CenovaPonukaPage() {
   return (
-    // SiteChrome dáva main h-[100dvh] flex flex-col → tento div vyplní zvyšok.
-    // Original hero zostáva, iba form sekcia je kompaktnejšia.
-    <div className="flex-1 min-h-0 bg-[var(--color-copper)] overflow-y-auto md:overflow-hidden flex flex-col">
+    // Mobile: natívny flow (form má veľa fields, treba scroll).
+    // Desktop: SiteChrome dáva main h-[100dvh] flex flex-col → flex-1 vyplní zvyšok.
+    <div className="bg-[var(--color-copper)] flex flex-col md:flex-1 md:min-h-0 md:overflow-hidden">
       <BreadcrumbsJsonLd
         items={[
           { name: "Domov", path: "/" },

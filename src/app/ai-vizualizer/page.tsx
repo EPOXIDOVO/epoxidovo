@@ -16,11 +16,11 @@ export const metadata: Metadata = {
 
 export default function AiVizualizerPage() {
   return (
-    // SiteChrome dáva main h-[100dvh] flex flex-col → tento div vyplní zvyšok.
-    // overflow-y-auto: upload step sa zmestí presne na viewport (žiadny scroll),
-    // ostatné kroky (result s CTA, pick textury, generating) sa môžu prirodzene
-    // scrollovať ak presahujú výšku — najmä na mobile.
-    <div className="flex-1 min-h-0 bg-[#F8FAFC] overflow-y-auto">
+    // Mobile: natívny flow (content sa môže rozšíriť pod viewport a scroll je
+    // natívny document scroll → CTA, form atď. sú dosiahnuteľné).
+    // Desktop: SiteChrome dáva main h-[100dvh] flex flex-col → flex-1 vyplní
+    // zvyšok, overflow-hidden = 1-page UX bez scrollu.
+    <div className="bg-[#F8FAFC] md:flex-1 md:min-h-0 md:overflow-y-auto">
       <AiVisualizer />
     </div>
   );
