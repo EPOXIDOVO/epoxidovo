@@ -172,6 +172,12 @@ export function AiVisualizer() {
 
   const tryAgain = () => {
     setResultBase64(null);
+    // Reset voľby aby picker zobrazil čistý stav (žiadny default highlight) —
+    // user prichádza zo "result" a chce skúsiť úplne inú kombináciu.
+    setTexture(null);
+    setColorSlug(null);
+    setFinish(null);
+    setTurnstileToken(null);
     setStep("pick-texture");
     scrollToTop();
   };
@@ -182,6 +188,13 @@ export function AiVisualizer() {
     setResultBase64(null);
     setError(null);
     setProgress(0);
+    // KRITICKÉ: resetni AJ texture/colorSlug/finish, inak po uploade novej fotky
+    // user uvidí predošlú voľbu defaultne zvýraznenú modrou (čo je presne to,
+    // čo user nechce — žiadny default highlight pri vstupe do pickera).
+    setTexture(null);
+    setColorSlug(null);
+    setFinish(null);
+    setTurnstileToken(null);
     setStep("upload");
   };
 
