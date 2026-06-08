@@ -325,7 +325,7 @@ function Breadcrumb() {
   return (
     <nav
       aria-label="Breadcrumb"
-      className="mb-2 md:mb-3 text-xs md:text-sm font-bold text-[#1B2430]/65 shrink-0"
+      className="mb-2 md:mb-3 text-xs md:text-sm font-bold text-[#1B2430]/65 shrink-0 text-center"
     >
       <ol className="inline-flex items-center gap-1.5">
         <li>
@@ -970,7 +970,7 @@ function DemoExample() {
       <div className="relative flex-1 min-h-[100px] rounded-2xl overflow-hidden bg-[#F8FAFC] ring-1 ring-[#1B2430]/10">
         {/* eslint-disable-next-line @next/next/no-img-element */}
         <img
-          src="/images/process/step-02-priprava.webp"
+          src="/images/visualizer-demo/pred.jpg"
           alt="Pôvodná fotka miestnosti"
           className="absolute inset-0 w-full h-full object-cover"
           loading="lazy"
@@ -1005,7 +1005,7 @@ function DemoExample() {
       <div className="relative flex-1 min-h-[80px] rounded-2xl overflow-hidden bg-[#F8FAFC] ring-2 ring-[#2EA3DC]">
         {/* eslint-disable-next-line @next/next/no-img-element */}
         <img
-          src="/images/process/step-04-hotovo.webp"
+          src="/images/visualizer-demo/po.jpg"
           alt="Fotka miestnosti po AI vizualizácii"
           className="absolute inset-0 w-full h-full object-cover"
           loading="lazy"
@@ -1019,19 +1019,22 @@ function DemoExample() {
         </div>
       </div>
 
-      {/* Krátke upozornenie (2 riadky) + link na realizácie */}
+      {/* Krátke upozornenie + link na realizácie (bez pomlčky, 2 riadky pod sebou) */}
       <div className="mt-3 rounded-xl bg-[#F0851A]/10 ring-1 ring-[#F0851A]/30 px-3 py-2 shrink-0">
         <div className="flex items-start gap-2">
           <AlertCircle className="w-4 h-4 text-[#F0851A] shrink-0 mt-0.5" aria-hidden />
           <div className="text-xs font-bold text-[#1B2430] leading-snug">
-            AI nemusí vždy vygenerovať správny výsledok — pre istotu si pozri aj{" "}
-            <Link
-              href="/realizacie"
-              className="text-[#F0851A] hover:text-[#D9760F] font-black underline underline-offset-2"
-            >
-              ukážky realizácií
-            </Link>
-            .
+            <div>AI nemusí vždy vygenerovať správny výsledok.</div>
+            <div className="mt-0.5">
+              Pre istotu si pozri aj{" "}
+              <Link
+                href="/realizacie"
+                className="text-[#F0851A] hover:text-[#D9760F] font-black underline underline-offset-2"
+              >
+                ukážky realizácií
+              </Link>
+              .
+            </div>
           </div>
         </div>
       </div>
