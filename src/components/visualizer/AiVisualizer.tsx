@@ -475,9 +475,9 @@ function UploadStep({
           💡 Tipy pre najlepší výsledok
         </div>
         <ul className="space-y-1 md:space-y-1.5 text-[11px] md:text-sm font-bold text-[#1B2430]/70 leading-snug md:leading-relaxed">
-          <li>• Foť priamo cez podlahu, nie šikmo</li>
           <li>• Dobré osvetlenie</li>
-          <li>• Aspoň 50 % obrázku má byť podlaha</li>
+          <li>• Aspoň 40 % fotky by mala byť podlaha</li>
+          <li>• Predmety, nábytok aj ľudia môžu ostať na fotke</li>
         </ul>
       </div>
     </div>
