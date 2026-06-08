@@ -54,11 +54,10 @@ export function AiVisualizer() {
   const [mimeType, setMimeType] = React.useState<string>("image/jpeg");
   const [previewUrl, setPreviewUrl] = React.useState<string | null>(null);
 
-  // Picker state
-  const [texture, setTexture] = React.useState<TextureSlug>("hladka");
-  const [colorSlug, setColorSlug] = React.useState<string>(
-    COLORS.hladka[0].slug,
-  );
+  // Picker state — START AS null aby pri otvorení pickera žiadna textúra/farba
+  // nebola zvýraznená modrou (vyznačí sa až keď user reálne klikne).
+  const [texture, setTexture] = React.useState<TextureSlug | null>(null);
+  const [colorSlug, setColorSlug] = React.useState<string | null>(null);
   const [turnstileToken, setTurnstileToken] = React.useState<string | null>(null);
 
   // Result state
@@ -112,7 +111,7 @@ export function AiVisualizer() {
   // ───────────────────────────────────────────────────────────────────────
 
   const generate = async () => {
-    if (!imageBase64 || !turnstileToken) return;
+    if (!imageBase64 || !turnstileToken || !texture || !colorSlug) return;
     setStep("generating");
     setProgress(0);
     setError(null);
@@ -181,7 +180,7 @@ export function AiVisualizer() {
   };
 
   const download = () => {
-    if (!resultBase64) return;
+    if (!resultBase64 || !texture || !colorSlug) return;
     const ext = resultMime?.includes("png") ? "png" : "jpg";
     const filename = `epoxidovo-vizualizacia-${texture}-${colorSlug}.${ext}`;
     trackEvent("visualizer_download", { texture, color: colorSlug });
@@ -236,14 +235,15 @@ export function AiVisualizer() {
   };
 
   const requestQuote = () => {
-    if (!resultBase64) return;
+    if (!resultBase64 || !texture || !colorSlug) return;
     trackEvent("visualizer_request_quote", { texture, color: colorSlug });
     window.location.href = `/cenova-ponuka?source=ai_vizualizer&texture=${texture}&color=${colorSlug}`;
   };
 
-  // Auto-update color keď user prepne textúru
+  // Pri zmene textúry zresetujeme farbu na null — user musí vedome kliknúť
+  // farbu (žiadny default highlight v color pickeri).
   React.useEffect(() => {
-    setColorSlug(COLORS[texture][0].slug);
+    setColorSlug(null);
   }, [texture]);
 
   // ───────────────────────────────────────────────────────────────────────
@@ -283,8 +283,9 @@ export function AiVisualizer() {
         />
       )}
 
-      {/* STEP: PICK COLOR */}
-      {step === "pick-color" && previewUrl && (
+      {/* STEP: PICK COLOR — texture musí byť picknutá (parent posúva na tento
+          step len cez onTexture callback, takže texture je guaranteed non-null) */}
+      {step === "pick-color" && previewUrl && texture && (
         <PickColorStep
           previewUrl={previewUrl}
           texture={texture}
@@ -305,8 +306,9 @@ export function AiVisualizer() {
         <GeneratingStep progress={progress} />
       )}
 
-      {/* STEP: RESULT */}
-      {step === "result" && resultBase64 && previewUrl && (
+      {/* STEP: RESULT — texture/colorSlug guaranteed non-null (generate()
+          early-returns ak su null, takže sa sem nedostaneme) */}
+      {step === "result" && resultBase64 && previewUrl && texture && colorSlug && (
         <ResultStep
           beforeUrl={previewUrl}
           afterDataUrl={`data:${resultMime};base64,${resultBase64}`}
@@ -523,7 +525,7 @@ function PickTextureStep({
   onBack,
 }: {
   previewUrl: string;
-  texture: TextureSlug;
+  texture: TextureSlug | null;
   onTexture: (t: TextureSlug) => void;
   onBack: () => void;
 }) {
@@ -629,7 +631,7 @@ function PickColorStep({
 }: {
   previewUrl: string;
   texture: TextureSlug;
-  colorSlug: string;
+  colorSlug: string | null;
   onColor: (c: string) => void;
   turnstileToken: string | null;
   onTurnstile: (t: string | null) => void;
@@ -712,10 +714,11 @@ function PickColorStep({
         />
       </div>
 
-      {/* Primárna akcia — oranžová pill ako "Cenová ponuka" na homepage */}
+      {/* Primárna akcia — oranžová pill ako "Cenová ponuka" na homepage.
+          Disabled kým user nezvolí farbu alebo Turnstile neprejde. */}
       <button
         type="button"
-        disabled={!turnstileToken}
+        disabled={!turnstileToken || !colorSlug}
         onClick={onGenerate}
         className="mt-3 w-full inline-flex items-center justify-center gap-2 px-6 py-3 md:py-3.5 rounded-full bg-[#F0851A] text-white font-extrabold text-sm md:text-base hover:bg-[#D9760F] disabled:opacity-50 disabled:cursor-not-allowed shadow-[0_10px_30px_rgba(240,133,26,0.45)] hover:shadow-[0_14px_40px_rgba(240,133,26,0.6)] transition-all duration-300"
       >
