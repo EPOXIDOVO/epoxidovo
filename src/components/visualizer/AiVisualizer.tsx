@@ -728,10 +728,9 @@ function PickColorStep({
       <label className="block text-sm md:text-base font-extrabold text-[#1B2430] mb-2">
         2. Vyber farbu
       </label>
-      {/* Featured row — top 4 farby. Fixná výška (h-14 md:h-16) namiesto
-          aspect-square aby swatche neboli obrovské na desktope a finish
-          picker + generate button zostali viditeľné na 1 stránke. */}
-      <div className="grid grid-cols-4 gap-2">
+      {/* Featured row — top 4 farby. Fixná výška: na mobile/tablet kompaktne,
+          na desktope (lg+) výrazne vyššie — máme tam dosť miesta. */}
+      <div className="grid grid-cols-4 gap-2 md:gap-3">
         {featuredColors.map((c) => {
           const active = c.slug === colorSlug;
           return (
@@ -740,7 +739,7 @@ function PickColorStep({
               type="button"
               onClick={() => onColor(c.slug)}
               title={c.commercialName}
-              className={`group relative h-14 md:h-16 rounded-xl border-2 transition-all ${
+              className={`group relative h-16 md:h-20 lg:h-28 rounded-xl md:rounded-2xl border-2 transition-all ${
                 active
                   ? "border-[#2EA3DC] scale-105 shadow-[0_6px_20px_rgba(46,163,220,0.4)]"
                   : "border-[#1B2430]/10 hover:border-[#2EA3DC]/50"
@@ -749,7 +748,7 @@ function PickColorStep({
             >
               {active && (
                 <CheckCircle2
-                  className="absolute top-1 right-1 w-4 h-4 text-white drop-shadow-[0_2px_4px_rgba(0,0,0,0.4)]"
+                  className="absolute top-1.5 right-1.5 w-5 h-5 text-white drop-shadow-[0_2px_4px_rgba(0,0,0,0.4)]"
                   aria-hidden
                 />
               )}
