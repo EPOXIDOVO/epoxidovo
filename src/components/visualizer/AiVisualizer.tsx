@@ -809,12 +809,14 @@ function PickColorStep({
               </button>
             </div>
 
-            {/* Vlastné + featured farby (top sekcia) */}
+            {/* Vlastné + featured farby (top sekcia).
+                Labels sú teraz BLOCK pod swatchom (nie absolute) → žiadne
+                prekrývanie s ďalším radom. font-black + dark color = čitateľné. */}
             <div className="px-5 md:px-6 py-4">
-              <div className="text-[11px] md:text-xs font-extrabold text-[#1B2430]/60 uppercase tracking-wider mb-2">
+              <div className="text-xs md:text-sm font-black text-[#1B2430] uppercase tracking-wider mb-3">
                 Naša paleta ({colors.length})
               </div>
-              <div className="grid grid-cols-4 md:grid-cols-6 gap-2">
+              <div className="grid grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-x-2 gap-y-3">
                 {colors.map((c) => {
                   const active = c.slug === colorSlug;
                   return (
@@ -826,20 +828,24 @@ function PickColorStep({
                         setShowAllModal(false);
                       }}
                       title={c.commercialName}
-                      className={`group relative h-16 rounded-xl border-2 transition-all ${
-                        active
-                          ? "border-[#2EA3DC] shadow-[0_6px_20px_rgba(46,163,220,0.4)]"
-                          : "border-[#1B2430]/10 hover:border-[#2EA3DC]/50 hover:scale-105"
-                      }`}
-                      style={{ backgroundColor: c.hex }}
+                      className="group flex flex-col gap-1.5 text-left"
                     >
-                      {active && (
-                        <CheckCircle2
-                          className="absolute top-1 right-1 w-4 h-4 text-white drop-shadow-[0_2px_4px_rgba(0,0,0,0.4)]"
-                          aria-hidden
-                        />
-                      )}
-                      <span className="absolute inset-x-0 -bottom-5 text-[9px] font-bold text-[#1B2430]/70 text-center truncate px-1">
+                      <div
+                        className={`relative h-16 rounded-xl border-2 transition-all ${
+                          active
+                            ? "border-[#2EA3DC] shadow-[0_6px_20px_rgba(46,163,220,0.4)]"
+                            : "border-[#1B2430]/10 group-hover:border-[#2EA3DC]/50 group-hover:scale-105"
+                        }`}
+                        style={{ backgroundColor: c.hex }}
+                      >
+                        {active && (
+                          <CheckCircle2
+                            className="absolute top-1 right-1 w-4 h-4 text-white drop-shadow-[0_2px_4px_rgba(0,0,0,0.4)]"
+                            aria-hidden
+                          />
+                        )}
+                      </div>
+                      <span className="text-[11px] md:text-xs font-black text-[#1B2430] text-center leading-tight">
                         {c.commercialName}
                       </span>
                     </button>
@@ -850,16 +856,19 @@ function PickColorStep({
 
             {/* RAL Classic sekcia (len pre Hladká) */}
             {ralColors.length > 0 && (
-              <div className="px-5 md:px-6 pt-4 pb-6 mt-4 border-t border-[#1B2430]/10">
-                <div className="text-[11px] md:text-xs font-extrabold text-[#1B2430]/60 uppercase tracking-wider mb-2 flex items-center gap-2">
-                  RAL Classic ({ralColors.length})
-                  <span className="text-[10px] font-bold text-[#1B2430]/50 normal-case tracking-normal">
+              <div className="px-5 md:px-6 pt-4 pb-6 border-t border-[#1B2430]/10">
+                <div className="mb-3">
+                  <div className="text-xs md:text-sm font-black text-[#1B2430] uppercase tracking-wider">
+                    RAL Classic ({ralColors.length})
+                  </div>
+                  <div className="text-[11px] md:text-xs font-bold text-[#1B2430]/70 mt-0.5">
                     štandardná priemyselná paleta
-                  </span>
+                  </div>
                 </div>
-                <div className="grid grid-cols-4 md:grid-cols-6 gap-2 mt-3">
+                <div className="grid grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-x-2 gap-y-3">
                   {ralColors.map((c) => {
                     const active = c.slug === colorSlug;
+                    const [ralCode, ralName] = c.commercialName.split(" · ");
                     return (
                       <button
                         key={c.slug}
@@ -869,22 +878,31 @@ function PickColorStep({
                           setShowAllModal(false);
                         }}
                         title={c.commercialName}
-                        className={`group relative h-16 rounded-xl border-2 transition-all ${
-                          active
-                            ? "border-[#2EA3DC] shadow-[0_6px_20px_rgba(46,163,220,0.4)]"
-                            : "border-[#1B2430]/10 hover:border-[#2EA3DC]/50 hover:scale-105"
-                        }`}
-                        style={{ backgroundColor: c.hex }}
+                        className="group flex flex-col gap-1.5 text-left"
                       >
-                        {active && (
-                          <CheckCircle2
-                            className="absolute top-1 right-1 w-4 h-4 text-white drop-shadow-[0_2px_4px_rgba(0,0,0,0.4)]"
-                            aria-hidden
-                          />
-                        )}
-                        <span className="absolute inset-x-0 -bottom-5 text-[9px] font-bold text-[#1B2430]/70 text-center truncate px-1">
-                          {c.commercialName.split(" · ")[0]}
-                        </span>
+                        <div
+                          className={`relative h-16 rounded-xl border-2 transition-all ${
+                            active
+                              ? "border-[#2EA3DC] shadow-[0_6px_20px_rgba(46,163,220,0.4)]"
+                              : "border-[#1B2430]/10 group-hover:border-[#2EA3DC]/50 group-hover:scale-105"
+                          }`}
+                          style={{ backgroundColor: c.hex }}
+                        >
+                          {active && (
+                            <CheckCircle2
+                              className="absolute top-1 right-1 w-4 h-4 text-white drop-shadow-[0_2px_4px_rgba(0,0,0,0.4)]"
+                              aria-hidden
+                            />
+                          )}
+                        </div>
+                        <div className="text-center leading-tight">
+                          <div className="text-[11px] md:text-xs font-black text-[#1B2430]">
+                            {ralCode}
+                          </div>
+                          <div className="text-[10px] md:text-[11px] font-bold text-[#1B2430]/70 truncate">
+                            {ralName}
+                          </div>
+                        </div>
                       </button>
                     );
                   })}
