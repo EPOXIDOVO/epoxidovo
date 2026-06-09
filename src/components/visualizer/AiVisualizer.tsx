@@ -1037,14 +1037,14 @@ function MramorPicker({
   const veinRal = ral.find((r) => ralSlug(r) === veinSlug);
 
   return (
-    <div className="space-y-3">
+    <div className="space-y-2">
       <label className="block text-sm md:text-base font-extrabold text-[#1B2430]">
-        2. Vyber farby mramoru
+        2. Vyber 2 farby mramoru
       </label>
 
-      {/* Bázová farba */}
+      {/* Bázová farba — kompaktný row */}
       <div>
-        <div className="text-[11px] md:text-xs font-black text-[#1B2430] uppercase tracking-wider mb-1.5">
+        <div className="text-[10px] md:text-[11px] font-black text-[#1B2430] uppercase tracking-wider mb-1">
           Bázová farba {baseRal && <span className="text-[#2EA3DC] normal-case tracking-normal">· {baseRal.name}</span>}
         </div>
         <RalSwatchRow
@@ -1056,7 +1056,7 @@ function MramorPicker({
 
       {/* Farba žiliek */}
       <div>
-        <div className="text-[11px] md:text-xs font-black text-[#1B2430] uppercase tracking-wider mb-1.5">
+        <div className="text-[10px] md:text-[11px] font-black text-[#1B2430] uppercase tracking-wider mb-1">
           Farba žiliek {veinRal && <span className="text-[#2EA3DC] normal-case tracking-normal">· {veinRal.name}</span>}
         </div>
         <RalSwatchRow
@@ -1065,12 +1065,6 @@ function MramorPicker({
           onPick={setVein}
         />
       </div>
-
-      {/* Pomôcka */}
-      <p className="text-[11px] md:text-xs font-bold text-[#1B2430]/70 leading-snug">
-        Mramor tipicky vznikne kombináciou 2 farieb — báza je dominantná, žilky tvoria
-        prirodzený vzor cez podlahu (klasicky tmavšie žilky na svetlej báze).
-      </p>
     </div>
   );
 }
@@ -1107,27 +1101,27 @@ function MetalickaPicker({
     .filter(Boolean) as RalColor[];
 
   return (
-    <div className="space-y-3">
+    <div className="space-y-2">
       <label className="block text-sm md:text-base font-extrabold text-[#1B2430]">
         2. Vyber 1–3 farby (zmiešajú sa)
       </label>
 
-      {/* Vybrané farby — chips s × na odstránenie */}
+      {/* Vybrané farby — kompaktné chips */}
       {selectedRals.length > 0 && (
-        <div className="flex flex-wrap gap-1.5">
+        <div className="flex flex-wrap gap-1">
           {selectedRals.map((r) => (
             <button
               key={r.ral}
               type="button"
               onClick={() => toggle(ralSlug(r))}
-              className="group inline-flex items-center gap-1.5 pl-1 pr-2 py-1 rounded-full bg-[#2EA3DC]/10 ring-1 ring-[#2EA3DC]/40 text-xs font-extrabold text-[#1B2430] hover:bg-[#2EA3DC]/20"
+              className="group inline-flex items-center gap-1 pl-0.5 pr-1.5 py-0.5 rounded-full bg-[#2EA3DC]/10 ring-1 ring-[#2EA3DC]/40 text-[11px] font-extrabold text-[#1B2430] hover:bg-[#2EA3DC]/20"
             >
               <span
-                className="inline-block w-4 h-4 rounded-full ring-1 ring-black/20"
+                className="inline-block w-3.5 h-3.5 rounded-full ring-1 ring-black/20"
                 style={{ backgroundColor: r.hex }}
               />
               <span>{r.name}</span>
-              <X className="w-3 h-3 text-[#1B2430]/60 group-hover:text-[#1B2430]" aria-hidden />
+              <X className="w-2.5 h-2.5 text-[#1B2430]/60 group-hover:text-[#1B2430]" aria-hidden />
             </button>
           ))}
         </div>
@@ -1141,14 +1135,6 @@ function MetalickaPicker({
         onPick={toggle}
         disabled={(slug) => selected.length >= MAX && !selected.includes(slug)}
       />
-
-      <p className="text-[11px] md:text-xs font-bold text-[#1B2430]/70 leading-snug">
-        {selected.length === 0
-          ? "Vyber aspoň 1 farbu. 1 farba = pekný uniformný metalik, viac farieb = zmiešané swirly."
-          : selected.length === 1
-            ? "1 farba — jednoduchý metalický finish. Pre dramatickejší efekt pridaj ďalšiu."
-            : `${selected.length} farby — AI ich zmieša do pearlescent swirlov.`}
-      </p>
     </div>
   );
 }
@@ -1169,7 +1155,7 @@ function RalSwatchRow({
   disabled?: (slug: string) => boolean;
 }) {
   return (
-    <div className="grid grid-cols-10 md:grid-cols-10 gap-1.5">
+    <div className="grid grid-cols-10 gap-1">
       {ral.map((r) => {
         const slug = ralSlug(r);
         const isActive = slug === activeSlug;
@@ -1182,18 +1168,18 @@ function RalSwatchRow({
             onClick={() => onPick(slug)}
             disabled={isDisabled}
             title={`${r.ral} · ${r.name}`}
-            className={`relative h-10 md:h-12 lg:h-14 rounded-md border-2 transition-all ${
+            className={`relative h-7 md:h-8 rounded border-2 transition-all ${
               isActive || isSelected
-                ? "border-[#2EA3DC] scale-105 shadow-[0_4px_12px_rgba(46,163,220,0.4)]"
+                ? "border-[#2EA3DC] scale-110 shadow-[0_4px_12px_rgba(46,163,220,0.4)] z-10"
                 : isDisabled
                   ? "border-[#1B2430]/10 opacity-30 cursor-not-allowed"
-                  : "border-[#1B2430]/10 hover:border-[#2EA3DC]/50 hover:scale-105"
+                  : "border-[#1B2430]/10 hover:border-[#2EA3DC]/50 hover:scale-110"
             }`}
             style={{ backgroundColor: r.hex }}
           >
             {(isActive || isSelected) && (
               <CheckCircle2
-                className="absolute top-0.5 right-0.5 w-3.5 h-3.5 text-white drop-shadow-[0_2px_4px_rgba(0,0,0,0.4)]"
+                className="absolute top-0 right-0 w-3 h-3 text-white drop-shadow-[0_2px_4px_rgba(0,0,0,0.4)]"
                 aria-hidden
               />
             )}
