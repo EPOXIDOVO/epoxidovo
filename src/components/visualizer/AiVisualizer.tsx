@@ -1007,15 +1007,15 @@ function ResultStep({
           className="absolute inset-0 w-full h-full opacity-0 cursor-ew-resize"
           aria-label="Porovnanie pred a po"
         />
-      </div>
 
-      {/* Label pod sliderom — textura · farba · lak + hint */}
-      <div className="mt-3 text-center">
-        <div className="text-sm font-extrabold text-[#1B2430]">
+        {/* Label OVERLAY na spodku fotky — textura · farba · lak.
+            Pôvodne bol pod fotkou ako blok textu, ale to spôsobovalo že
+            ľavý stĺpec bol vyšší než pravý → orange CTA box nelícoval
+            spodnou hranou s fotkou. Teraz je label SÚČASŤOU fotky → ľavý
+            stĺpec má presne výšku fotky (cez aspect-ratio) → pravý stĺpec
+            sa naňho perfektne stretch-uje. */}
+        <div className="absolute bottom-3 left-3 max-w-[calc(100%-120px)] px-3 py-1.5 rounded-md bg-[#1B2430]/85 text-white text-xs md:text-sm font-extrabold backdrop-blur-sm shadow-md pointer-events-none truncate">
           {textureLabel} · {colorName} · {finishLabel}
-        </div>
-        <div className="text-[11px] md:text-xs font-bold text-[#1B2430]/60 mt-0.5">
-          ← Posuvníkom porovnaj pred a po · klik = veľký náhľad
         </div>
       </div>
       </div>
