@@ -272,7 +272,7 @@ export function AiVisualizer() {
 
     // Mobile: prirodzená výška; Desktop: vyplní viewport (page wrapper limituje výšku).
   return (
-    <div className="max-w-5xl mx-auto px-4 py-3 md:py-4 md:h-full md:flex md:flex-col">
+    <div className="max-w-screen-2xl mx-auto px-4 py-3 md:py-4 md:h-full md:flex md:flex-col">
       <Breadcrumb />
       <Header step={step} />
 

@@ -424,19 +424,22 @@ export function buildGeminiPrompt(
 ): string {
   // Finish dominuje nad pôvodným promptBase (ten môže obsahovať "high-gloss"
   // ako default) — koncový override určuje finálny lak.
+  // Posilnená wording aby AI urobila VIDITEĽNE iný výsledok od originálu —
+  // user feedback: matná občas vyzerala rovnako ako pôvodná lesklá podlaha.
   const finishInstruction =
     finish === "matna"
-      ? "FINAL FINISH: Apply a MATTE non-reflective topcoat. No mirror reflections, no specular highlights — soft diffuse surface only."
-      : "FINAL FINISH: Apply a HIGH-GLOSS reflective topcoat with clear mirror-like surface reflections.";
+      ? "FINAL FINISH (CRITICAL): The new floor MUST have a clearly MATTE, completely non-reflective surface. Eliminate ALL specular highlights, mirror reflections, and shiny spots. Surface should look like soft chalky concrete-style matte — visibly different from any glossy original floor. Diffuse light scattering only, no light source reflections visible on the floor."
+      : "FINAL FINISH (CRITICAL): The new floor MUST have a strongly HIGH-GLOSS, mirror-like reflective surface. Strong specular highlights, visible reflections of ceiling lights and nearby objects on the floor, wet-look shine — visibly more glossy than typical matte floors.";
 
   return [
     `Replace ONLY the existing floor in the photo with a ${texture.promptBase}.`,
     `Floor color and pattern: ${color.promptColor}.`,
     finishInstruction,
+    `MAKE THE RESULT VISIBLY DIFFERENT FROM THE ORIGINAL — the new floor color, pattern, and finish must be clearly distinguishable from the existing floor in the input photo.`,
     `CRITICAL: Keep EVERY OTHER element of the photo EXACTLY identical:`,
     `- All walls, ceiling, doors, windows unchanged`,
     `- All furniture, objects, items on the floor preserved in their exact positions`,
-    `- Lighting, shadows, perspective unchanged`,
+    `- Lighting source positions, shadows angles, perspective unchanged`,
     `- People or body parts visible unchanged`,
     `- Cables, electronics, boxes, anything on the floor preserved`,
     `Photorealistic, professional interior photography.`,
