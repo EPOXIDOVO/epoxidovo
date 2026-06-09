@@ -3,8 +3,9 @@ export const runtime = "edge";
 import { NextRequest, NextResponse } from "next/server";
 import { generateFloorEdit } from "@/lib/gemini-image";
 import { verifyTurnstileToken } from "@/lib/turnstile";
-import { buildGeminiPrompt, getColorPreset, isValidFinish } from "@/lib/visualizer-presets";
-import type { Finish } from "@/lib/visualizer-presets";
+import { buildGeminiPrompt, getColorPreset, isValidFinish, getReferenceImagePaths, isValidTextureSlug } from "@/lib/visualizer-presets";
+import type { Finish, TextureSlug } from "@/lib/visualizer-presets";
+import type { ReferenceImage } from "@/lib/gemini-image";
 
 /**
  * POST /api/visualizer/generate
@@ -88,6 +89,25 @@ const ALLOWED_HOSTS = new Set([
   "localhost",
   "127.0.0.1",
 ]);
+
+/**
+ * Edge-runtime safe ArrayBuffer → base64 (žiadny Buffer API).
+ * Spracováva po chunkoch aby sa nevybuchol stack pri veľkých obrázkoch.
+ */
+function arrayBufferToBase64(buffer: ArrayBuffer): string {
+  const bytes = new Uint8Array(buffer);
+  const CHUNK_SIZE = 0x8000;
+  const chunks: string[] = [];
+  for (let i = 0; i < bytes.length; i += CHUNK_SIZE) {
+    chunks.push(
+      String.fromCharCode.apply(
+        null,
+        Array.from(bytes.subarray(i, i + CHUNK_SIZE)),
+      ),
+    );
+  }
+  return btoa(chunks.join(""));
+}
 
 function isAllowedOrigin(req: NextRequest): boolean {
   const originHeader = req.headers.get("origin") ?? req.headers.get("referer");
@@ -235,7 +255,44 @@ export async function POST(req: NextRequest) {
   // 4) Generate cez Gemini Nano Banana 2
   const normalizedMime = body.mimeType === "image/jpg" ? "image/jpeg" : body.mimeType;
   const prompt = buildGeminiPrompt(preset.texture, preset.color, finish);
-  const result = await generateFloorEdit(body.imageBase64, normalizedMime, prompt);
+
+  // Reference images pre style-guided generáciu (len pre mramor/metalicka).
+  // Fetch z public/images/realizacie/... cez request origin.
+  // Posielame max 2 referencie (cost trade-off, viac = drahšie tokeny).
+  let referenceImages: ReferenceImage[] = [];
+  if (isValidTextureSlug(body.texture)) {
+    const refPaths = getReferenceImagePaths(body.texture as TextureSlug).slice(0, 2);
+    if (refPaths.length > 0) {
+      const origin = `${new URL(req.url).protocol}//${req.headers.get("host") ?? "epoxidovo.sk"}`;
+      try {
+        referenceImages = await Promise.all(
+          refPaths.map(async (path) => {
+            const resp = await fetch(`${origin}${path}`);
+            if (!resp.ok) throw new Error(`ref fetch ${path} → ${resp.status}`);
+            const buf = await resp.arrayBuffer();
+            const base64 = arrayBufferToBase64(buf);
+            const mimeType = path.endsWith(".png")
+              ? "image/png"
+              : path.endsWith(".webp")
+                ? "image/webp"
+                : "image/jpeg";
+            return { base64, mimeType };
+          }),
+        );
+      } catch (err) {
+        console.error("[visualizer.generate] reference image fetch failed:", err);
+        // Fallback: pokračujeme bez referencií (AI generuje generic vzor).
+        referenceImages = [];
+      }
+    }
+  }
+
+  const result = await generateFloorEdit(
+    body.imageBase64,
+    normalizedMime,
+    prompt,
+    referenceImages,
+  );
 
   // 5) Log to DB (always — for analytics + admin review of results)
   // Ukladáme input + output base64 aby admin mohol skontrolovať kvalitu AI.

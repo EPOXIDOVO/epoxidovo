@@ -146,6 +146,11 @@ export interface GenerateImageResult {
   reason?: string;
 }
 
+export interface ReferenceImage {
+  base64: string;
+  mimeType: string;
+}
+
 /**
  * Pošle obrázok + prompt do Gemini Nano Banana 2 (`gemini-3.1-flash-image`)
  * a vráti vygenerovaný edit.
@@ -153,11 +158,14 @@ export interface GenerateImageResult {
  * @param imageBase64 base64 input obrázku (bez prefixu)
  * @param inputMimeType `image/jpeg` | `image/png` | `image/webp`
  * @param prompt finálny prompt (zostavený cez buildGeminiPrompt)
+ * @param referenceImages voliteľné style-guide fotky (mramor/metalika),
+ *   posielané do Gemini PO room photo. Prompt by mal explicitne referenciu.
  */
 export async function generateFloorEdit(
   imageBase64: string,
   inputMimeType: string,
   prompt: string,
+  referenceImages: ReferenceImage[] = [],
 ): Promise<GenerateImageResult> {
   const apiKey = getApiKeyOrNull();
   if (!apiKey) {
@@ -166,14 +174,20 @@ export async function generateFloorEdit(
   }
   const url = `${GEMINI_API_BASE}/models/gemini-3.1-flash-image:generateContent?key=${apiKey}`;
 
+  // Parts: [prompt, room_photo, ...reference_photos]
+  const parts: GeminiContent["parts"] = [
+    { text: prompt },
+    { inlineData: { mimeType: inputMimeType, data: imageBase64 } },
+    ...referenceImages.map((ref) => ({
+      inlineData: { mimeType: ref.mimeType, data: ref.base64 },
+    })),
+  ];
+
   const body = {
     contents: [
       {
         role: "user",
-        parts: [
-          { text: prompt },
-          { inlineData: { mimeType: inputMimeType, data: imageBase64 } },
-        ],
+        parts,
       },
     ],
     generationConfig: {

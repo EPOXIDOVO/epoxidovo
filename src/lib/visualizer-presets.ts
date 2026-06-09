@@ -537,14 +537,16 @@ export function getColorPreset(
         commercialName: `${baseRal.name} · žilky ${veinRal.name}`,
         hex: baseRal.hex,
         promptColor:
-          `realistic natural marble pattern (Carrara/Calacatta style) with ${baseRal.name.toLowerCase()} base ` +
+          `realistic natural marble pattern with ${baseRal.name.toLowerCase()} base ` +
           `(exact hex ${baseRal.hex.toUpperCase()}, matching RAL ${baseRal.ral.replace("RAL ", "")}) ` +
           `and ${veinRal.name.toLowerCase()} veining ` +
           `(exact hex ${veinRal.hex.toUpperCase()}, matching RAL ${veinRal.ral.replace("RAL ", "")}). ` +
-          `VARYING VEIN THICKNESS — combination of fine 0.5-1mm hairline veins AND bold 3-8mm broad marbled strokes, ` +
-          `organic natural variation, NOT uniform thin lines. Veins fork and branch like tree roots, ` +
-          `some areas dense with veining, other areas mostly clean base color. Some translucent grey/colored ` +
-          `cloudy zones blending into base. Classic luxury natural marble aesthetic, mirror-polished surface`,
+          `USE THE ADDITIONAL REFERENCE IMAGES (provided after the room photo) as STYLE GUIDE for the veining pattern — ` +
+          `VARYING vein thickness (fine 0.5-1mm hairlines mixed with bold 3-8mm marbled strokes), ` +
+          `veins go in DIFFERENT directions (diagonals, curves, branching), organic NOT uniform, ` +
+          `veins fork like tree roots, some areas dense, other areas mostly clean base. ` +
+          `Recolor the reference pattern: base color = ${baseRal.hex.toUpperCase()}, veins = ${veinRal.hex.toUpperCase()}. ` +
+          `Mirror-polished surface, classic luxury natural marble aesthetic`,
       },
     };
   }
@@ -559,15 +561,18 @@ export function getColorPreset(
     let promptColor: string;
     if (colors.length === 1) {
       promptColor =
-        `metallic finish with ${colors[0].name.toLowerCase()} base ` +
-        `(exact hex ${colors[0].hex.toUpperCase()}), flowing organic pearlescent swirls of ` +
-        `varying tone density, mirror-polished reflective surface, no chunks, smooth poured-metal aesthetic`;
+        `metallic epoxy finish with ${colors[0].name.toLowerCase()} base ` +
+        `(exact hex ${colors[0].hex.toUpperCase()}). ` +
+        `USE THE ADDITIONAL REFERENCE IMAGES (provided after the room photo) as STYLE GUIDE for the swirl pattern — ` +
+        `flowing organic pearlescent swirls of varying tone density, mirror-polished reflective surface, ` +
+        `no chunks, smooth poured-metal aesthetic. Recolor reference pattern to match the ${colors[0].hex.toUpperCase()} base`;
     } else {
       const colorList = colors
         .map((c) => `${c.name.toLowerCase()} (hex ${c.hex.toUpperCase()})`)
         .join(", ");
       promptColor =
-        `metallic finish with MIXED colors blending together in fluid pearlescent swirls: ${colorList}. ` +
+        `metallic epoxy finish with MIXED colors blending together in fluid pearlescent swirls: ${colorList}. ` +
+        `USE THE ADDITIONAL REFERENCE IMAGES (provided after the room photo) as STYLE GUIDE for the swirl flow pattern. ` +
         `Colors flow organically into each other creating a marbled metallic effect, ` +
         `60% primary color (${colors[0].name.toLowerCase()}) with ${colors
           .slice(1)
@@ -634,6 +639,38 @@ export function getRalForMarble(): RalColor[] {
 
 export function ralSlug(ral: RalColor): string {
   return ral.ral.toLowerCase().replace(/\s+/g, "-");
+}
+
+// ════════════════════════════════════════════════════════════════════════
+// REFERENCE PORTFOLIO IMAGES — pre style-guided generáciu
+// ════════════════════════════════════════════════════════════════════════
+// Pre mramor/metalicka posielame Geminimu okrem user-ovej fotky aj 1-2
+// reálne portfólio fotky ako STYLE REFERENCE. AI tým napodobní reálny vein
+// pattern / metalický swirl namiesto generovať generický vzor z hlavy.
+//
+// Hladká + Chipsová: bez referencií (jednoduchšie textúry, generic OK).
+
+const REFERENCE_IMAGES: Record<TextureSlug, string[]> = {
+  hladka: [],
+  chips: [],
+  mramor: [
+    "/images/realizacie/r-11.jpg",
+    "/images/realizacie/r-12.jpg",
+    "/images/realizacie/r-37.webp",
+  ],
+  metalicka: [
+    "/images/realizacie/r-32.jpg",
+    "/images/realizacie/r-33.jpg",
+    "/images/realizacie/r-35.jpg",
+  ],
+};
+
+/**
+ * Vráti cesty k portfolio reference fotkám pre danú textúru.
+ * Volajúci si ich potom musí fetch-núť + base64-ovať pred poslaním do Gemini.
+ */
+export function getReferenceImagePaths(texture: TextureSlug): string[] {
+  return REFERENCE_IMAGES[texture] ?? [];
 }
 
 export function isValidTextureSlug(s: string): s is TextureSlug {
