@@ -639,7 +639,7 @@ function PickTextureStep({
           );
         })}
       </div>
-      <p className="mt-3 text-[11px] md:text-xs font-bold text-center text-[#1B2430]/50">
+      <p className="mt-3 text-xs md:text-sm font-black text-center text-[#1B2430]">
         Klikni na textúru → pokračuješ na výber farby
       </p>
     </div>

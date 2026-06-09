@@ -63,10 +63,15 @@ export interface ColorPreset {
 // TEXTÚRY
 // ════════════════════════════════════════════════════════════════════════
 
+// Poradie textúr v pickeri = poradie kľúčov v tomto Recorde (JS Object
+// preserves insertion order). User požaduje: Jednofarebná, Chipsová,
+// Mramorová, Metalická (rovnaké poradie ako v portfoliu).
+// Slugy zostávajú pôvodné (hladka/chips/mramor/metalicka) — nemeníme aby
+// nevybuchli URL params, DB záznamy, sessionStorage, atď.
 export const TEXTURES: Record<TextureSlug, TextureDef> = {
   hladka: {
     slug: "hladka",
-    label: "Hladká",
+    label: "Jednofarebná",
     description: "Jednofarebný hladký epoxid",
     promptBase:
       "smooth seamless single-color epoxy floor with high-gloss mirror-like finish, professional photorealistic interior",
@@ -77,27 +82,6 @@ export const TEXTURES: Record<TextureSlug, TextureDef> = {
     },
     previewImage: "/images/realizacie/r-04.jpg",
     previewObjectPosition: "center 70%",
-  },
-  metalicka: {
-    slug: "metalicka",
-    label: "Metalická",
-    description: "Trojrozmerný metalický efekt",
-    promptBase:
-      // **Locked design** — extra-detailný prompt pre konzistenciu naprieč
-      // generáciami (užívateľ chce predvídateľné výsledky pri metalickej).
-      "luxury 3D metallic epoxy floor with deep liquid pearlescent finish, " +
-        "flowing organic swirls of varying tone density (60% base color, 40% lighter " +
-        "highlights), mirror-polished reflective surface that catches and reflects " +
-        "ambient light, no chunks or flakes, smooth flowing pigment patterns " +
-        "reminiscent of poured metal, professional photorealistic interior photography, " +
-        "high contrast reflections matching room lighting",
-    swatchCss: {
-      background:
-        "conic-gradient(from 210deg at 30% 50%, #1e3a5f 0deg, #5a8ec4 90deg, #1e3a5f 180deg, #4a6f9e 270deg, #1e3a5f 360deg)",
-      filter: "blur(0.3px)",
-    },
-    previewImage: "/images/realizacie/r-32.jpg",
-    previewObjectPosition: "center 60%",
   },
   chips: {
     slug: "chips",
@@ -135,7 +119,7 @@ export const TEXTURES: Record<TextureSlug, TextureDef> = {
   },
   mramor: {
     slug: "mramor",
-    label: "Mramor",
+    label: "Mramorová",
     description: "Mramorový vzor",
     promptBase:
       // **Locked design** — explicitný popis aby AI vygenerovala konzistentný
@@ -151,6 +135,27 @@ export const TEXTURES: Record<TextureSlug, TextureDef> = {
     },
     previewImage: "/images/realizacie/r-37.webp",
     previewObjectPosition: "center 70%",
+  },
+  metalicka: {
+    slug: "metalicka",
+    label: "Metalická",
+    description: "Trojrozmerný metalický efekt",
+    promptBase:
+      // **Locked design** — extra-detailný prompt pre konzistenciu naprieč
+      // generáciami (užívateľ chce predvídateľné výsledky pri metalickej).
+      "luxury 3D metallic epoxy floor with deep liquid pearlescent finish, " +
+        "flowing organic swirls of varying tone density (60% base color, 40% lighter " +
+        "highlights), mirror-polished reflective surface that catches and reflects " +
+        "ambient light, no chunks or flakes, smooth flowing pigment patterns " +
+        "reminiscent of poured metal, professional photorealistic interior photography, " +
+        "high contrast reflections matching room lighting",
+    swatchCss: {
+      background:
+        "conic-gradient(from 210deg at 30% 50%, #1e3a5f 0deg, #5a8ec4 90deg, #1e3a5f 180deg, #4a6f9e 270deg, #1e3a5f 360deg)",
+      filter: "blur(0.3px)",
+    },
+    previewImage: "/images/realizacie/r-32.jpg",
+    previewObjectPosition: "center 60%",
   },
 };
 
