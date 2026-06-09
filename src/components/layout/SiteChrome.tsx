@@ -33,7 +33,7 @@ export function SiteChrome({ children }: { children: React.ReactNode }) {
             Desktop: 1-page no-scroll layout (h-[100dvh] + flex). */}
         <main
           id="main"
-          className="pt-20 md:pt-24 md:h-[100dvh] md:flex md:flex-col"
+          className="pt-20 md:pt-24 md:h-[100dvh] md:flex md:flex-col md:overflow-hidden"
         >
           {children}
         </main>
