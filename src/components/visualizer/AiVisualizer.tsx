@@ -26,6 +26,7 @@ import {
   TEXTURES,
   getRalCatalog,
   getRalColors,
+  getRalForMarble,
   ralSlug,
   type Finish,
   type RalColor,
@@ -1022,7 +1023,9 @@ function MramorPicker({
   colorSlug: string | null;
   onColor: (c: string | null) => void;
 }) {
-  const ral = getRalCatalog();
+  // Filtrovaná paleta — len prírodné mramorové tóny (whites/greys/beiges/
+  // browns/black). Modré/zelené/červené žilky nedávajú v mramore zmysel.
+  const ral = getRalForMarble();
   // Parse compound slug
   const [baseSlug, veinSlug] = (colorSlug ?? "").includes(":")
     ? (colorSlug as string).split(":")

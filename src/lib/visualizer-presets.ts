@@ -537,12 +537,14 @@ export function getColorPreset(
         commercialName: `${baseRal.name} · žilky ${veinRal.name}`,
         hex: baseRal.hex,
         promptColor:
-          `realistic marble pattern with ${baseRal.name.toLowerCase()} base ` +
+          `realistic natural marble pattern (Carrara/Calacatta style) with ${baseRal.name.toLowerCase()} base ` +
           `(exact hex ${baseRal.hex.toUpperCase()}, matching RAL ${baseRal.ral.replace("RAL ", "")}) ` +
           `and ${veinRal.name.toLowerCase()} veining ` +
           `(exact hex ${veinRal.hex.toUpperCase()}, matching RAL ${veinRal.ral.replace("RAL ", "")}). ` +
-          `Fine veins 1-3mm thick running diagonally and curving organically through the surface, ` +
-          `classic Italian marble aesthetic, varying vein opacity for natural look`,
+          `VARYING VEIN THICKNESS — combination of fine 0.5-1mm hairline veins AND bold 3-8mm broad marbled strokes, ` +
+          `organic natural variation, NOT uniform thin lines. Veins fork and branch like tree roots, ` +
+          `some areas dense with veining, other areas mostly clean base color. Some translucent grey/colored ` +
+          `cloudy zones blending into base. Classic luxury natural marble aesthetic, mirror-polished surface`,
       },
     };
   }
@@ -606,11 +608,28 @@ function findRalRaw(slug: string): RalColor | null {
 }
 
 /**
- * Vráti celú RAL paletu pre potreby UI — používa sa v marble/metallic
- * custom picker-och bez ohľadu na textúru.
+ * Vráti celú RAL paletu pre potreby UI — používa sa v metallic mix picker-i
+ * a v "Ďalšie farby" module pre hladka/chips.
  */
 export function getRalCatalog(): RalColor[] {
   return RAL_CLASSIC;
+}
+
+/**
+ * Filtrovaná RAL paleta pre MRAMOR — len prírodné mramorové tóny.
+ * Reálne mramory existujú vo whites, beiges, greys, blacks a browns.
+ * Modré/zelené/červené/žlté žilky neexistujú v prírode (s výnimkou
+ * Rosso Levanto kde je červená BÁZA, nie žilky) → vypadnú.
+ *
+ * Vyberáme RAL kódy podľa prefix-u (whites=9xxx/1xxx, greys=7xxx, browns=8xxx).
+ */
+export function getRalForMarble(): RalColor[] {
+  return RAL_CLASSIC.filter((r) => {
+    const code = r.ral.replace("RAL ", "");
+    const prefix = code[0];
+    // 9xxx = whites/black, 1xxx = beige/ivory, 7xxx = greys, 8xxx = browns
+    return prefix === "9" || prefix === "1" || prefix === "7" || prefix === "8";
+  });
 }
 
 export function ralSlug(ral: RalColor): string {
