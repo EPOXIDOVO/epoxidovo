@@ -1150,12 +1150,13 @@ function ResultStep({
             <ArrowRight className="w-3.5 h-3.5 text-[#1B2430]" aria-hidden />
           </div>
         </div>
-        {/* Labels — výraznejšie pozadie + ring aby boli vidno aj na hocijakom obsahu */}
+        {/* Labels — výraznejšie + explicitnejšie texty aby bolo jasné že
+            PRED = užívateľova fotka (originál), PO = AI náhľad novej podlahy */}
         <div className="absolute top-3 left-3 px-3 py-1.5 rounded-md bg-[#1B2430] text-white text-xs font-black uppercase tracking-wider shadow-[0_4px_14px_rgba(0,0,0,0.5)] ring-2 ring-white/20 pointer-events-none">
-          Pred
+          Pred · tvoja fotka
         </div>
         <div className="absolute top-3 right-3 px-3 py-1.5 rounded-md bg-[#2EA3DC] text-white text-xs font-black uppercase tracking-wider shadow-[0_4px_14px_rgba(46,163,220,0.6)] ring-2 ring-white/30 pointer-events-none">
-          Po · AI
+          Po · nová podlaha
         </div>
         {/* Expand button — skutočne klikateľný (z-20 nad slider input).
             stopPropagation aby slider neukradol klik. */}

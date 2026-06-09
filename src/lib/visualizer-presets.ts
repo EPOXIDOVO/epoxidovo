@@ -524,16 +524,16 @@ export function buildGeminiPrompt(
       : "FINAL FINISH (CRITICAL): The new floor MUST have a strongly HIGH-GLOSS, mirror-like reflective surface. Strong specular highlights, visible reflections of ceiling lights and nearby objects on the floor, wet-look shine — visibly more glossy than typical matte floors.";
 
   return [
-    `Replace ONLY the existing floor in the photo with a ${texture.promptBase}.`,
-    `Floor color and pattern: ${color.promptColor}.`,
+    `Task: Completely REPLACE the existing floor surface in this photo with a brand new ${texture.promptBase}.`,
+    `New floor color and pattern: ${color.promptColor}.`,
     finishInstruction,
-    `MAKE THE RESULT VISIBLY DIFFERENT FROM THE ORIGINAL — the new floor color, pattern, and finish must be clearly distinguishable from the existing floor in the input photo.`,
-    `CRITICAL: Keep EVERY OTHER element of the photo EXACTLY identical:`,
+    `ABSOLUTE REQUIREMENT — the new floor must be IMMEDIATELY recognizable as a transformation. The original floor pattern, original color, original texture must NOT be visible in the result. The new floor entirely covers the old floor surface end-to-end. If the original floor had wood grain → the new floor has NO wood grain. If original was tile → NO grout lines visible. If original was painted concrete → that finish is GONE and replaced.`,
+    `CRITICAL — keep everything ELSE in the photo identical:`,
     `- All walls, ceiling, doors, windows unchanged`,
-    `- All furniture, objects, items on the floor preserved in their exact positions`,
-    `- Lighting source positions, shadows angles, perspective unchanged`,
+    `- All furniture, objects, items on the floor preserved in their exact positions and exact same appearance`,
+    `- Lighting source positions, shadow angles, perspective unchanged`,
     `- People or body parts visible unchanged`,
     `- Cables, electronics, boxes, anything on the floor preserved`,
-    `Photorealistic, professional interior photography.`,
+    `Photorealistic, professional interior photography. The result should look like the same room photographed after installing the new epoxy floor.`,
   ].join(" ");
 }
