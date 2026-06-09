@@ -24,6 +24,7 @@ import {
   COLORS,
   FINISHES,
   TEXTURES,
+  getRalColors,
   type Finish,
   type TextureSlug,
 } from "@/lib/visualizer-presets";
@@ -673,19 +674,26 @@ function PickColorStep({
 }) {
   const colors = COLORS[texture];
   const textureDef = TEXTURES[texture];
-  const activeColor = colors.find((c) => c.slug === colorSlug);
   const finishKeys = Object.keys(FINISHES) as Finish[];
 
-  // TOP 4 farby (featured) sa zobrazia hneď, zvyšok skrytý za "Ďalšie farby"
-  // tlačidlom. Lepší UX — user nie je overwhelmnutý 8 farbami pri prvom
-  // pohľade, ale má prístup ku všetkým.
+  // TOP 4 farby (featured) sa zobrazia hneď v 1 rade. Zvyšok + RAL paleta
+  // sú v MODAL POPUPE (žiadny inline-expand aby sa nepushli content dole
+  // — stránka je striktne 100dvh bez scrollu).
   const featuredColors = colors.filter((c) => c.featured);
   const restColors = colors.filter((c) => !c.featured);
-  // Ak user vybral farbu zo "skrytých", picker zostane otvorený.
-  const [showAllColors, setShowAllColors] = React.useState(false);
-  const userPickedHidden =
-    !!colorSlug && restColors.some((c) => c.slug === colorSlug);
-  const isExpanded = showAllColors || userPickedHidden;
+  const ralColors = getRalColors(texture);
+  const [showAllModal, setShowAllModal] = React.useState(false);
+  const activeColor =
+    colors.find((c) => c.slug === colorSlug) ??
+    ralColors.find((c) => c.slug === colorSlug);
+
+  // ESC zatvára modal
+  React.useEffect(() => {
+    if (!showAllModal) return;
+    const onKey = (e: KeyboardEvent) => e.key === "Escape" && setShowAllModal(false);
+    window.addEventListener("keydown", onKey);
+    return () => window.removeEventListener("keydown", onKey);
+  }, [showAllModal]);
 
   return (
     <div className="rounded-3xl bg-white p-4 md:p-6 shadow-[0_10px_40px_rgba(27,36,48,0.08)] ring-1 ring-[#1B2430]/5">
@@ -717,10 +725,12 @@ function PickColorStep({
         </button>
       </div>
 
-      <label className="block text-base md:text-lg font-extrabold text-[#1B2430] mb-3">
+      <label className="block text-sm md:text-base font-extrabold text-[#1B2430] mb-2">
         2. Vyber farbu
       </label>
-      {/* Featured row — top 4 farby, vždy viditeľné */}
+      {/* Featured row — top 4 farby. Fixná výška (h-14 md:h-16) namiesto
+          aspect-square aby swatche neboli obrovské na desktope a finish
+          picker + generate button zostali viditeľné na 1 stránke. */}
       <div className="grid grid-cols-4 gap-2">
         {featuredColors.map((c) => {
           const active = c.slug === colorSlug;
@@ -730,7 +740,7 @@ function PickColorStep({
               type="button"
               onClick={() => onColor(c.slug)}
               title={c.commercialName}
-              className={`group relative aspect-square rounded-xl border-2 transition-all ${
+              className={`group relative h-14 md:h-16 rounded-xl border-2 transition-all ${
                 active
                   ? "border-[#2EA3DC] scale-105 shadow-[0_6px_20px_rgba(46,163,220,0.4)]"
                   : "border-[#1B2430]/10 hover:border-[#2EA3DC]/50"
@@ -748,52 +758,140 @@ function PickColorStep({
         })}
       </div>
 
-      {/* "Ďalšie farby" — expandable sekcia s zvyškom palety. Defaultne skrytá,
-          po kliknutí sa zobrazia všetky ostatné farby v ďalšom rade. */}
-      {restColors.length > 0 && (
-        <>
-          {!isExpanded ? (
-            <button
-              type="button"
-              onClick={() => setShowAllColors(true)}
-              className="mt-2.5 w-full inline-flex items-center justify-center gap-1.5 px-3 py-2 rounded-xl text-xs md:text-sm font-extrabold text-[#2EA3DC] bg-[#2EA3DC]/5 ring-1 ring-[#2EA3DC]/30 hover:bg-[#2EA3DC]/10 hover:ring-[#2EA3DC] transition-colors"
-            >
-              + Ďalšie farby ({restColors.length})
-            </button>
-          ) : (
-            <div className="mt-2.5 grid grid-cols-4 gap-2">
-              {restColors.map((c) => {
-                const active = c.slug === colorSlug;
-                return (
-                  <button
-                    key={c.slug}
-                    type="button"
-                    onClick={() => onColor(c.slug)}
-                    title={c.commercialName}
-                    className={`group relative aspect-square rounded-xl border-2 transition-all ${
-                      active
-                        ? "border-[#2EA3DC] scale-105 shadow-[0_6px_20px_rgba(46,163,220,0.4)]"
-                        : "border-[#1B2430]/10 hover:border-[#2EA3DC]/50"
-                    }`}
-                    style={{ backgroundColor: c.hex }}
-                  >
-                    {active && (
-                      <CheckCircle2
-                        className="absolute top-1 right-1 w-4 h-4 text-white drop-shadow-[0_2px_4px_rgba(0,0,0,0.4)]"
-                        aria-hidden
-                      />
-                    )}
-                  </button>
-                );
-              })}
-            </div>
-          )}
-        </>
+      {/* "Ďalšie farby" — otvára MODAL popup (nie inline expand), aby sa
+          obsah pod ním (finish picker + generate) nepushol mimo viewport.
+          Stránka je striktne 100dvh bez scrollu. */}
+      {(restColors.length > 0 || ralColors.length > 0) && (
+        <button
+          type="button"
+          onClick={() => setShowAllModal(true)}
+          className="mt-2 w-full inline-flex items-center justify-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-extrabold text-[#2EA3DC] bg-[#2EA3DC]/5 ring-1 ring-[#2EA3DC]/30 hover:bg-[#2EA3DC]/10 hover:ring-[#2EA3DC] transition-colors"
+        >
+          + Ďalšie farby ({restColors.length + ralColors.length})
+        </button>
       )}
 
       {activeColor && (
-        <div className="mt-2 text-sm font-extrabold text-[#1B2430]">
+        <div className="mt-1.5 text-xs md:text-sm font-extrabold text-[#1B2430]">
           {activeColor.commercialName}
+        </div>
+      )}
+
+      {/* MODAL — full palette (Featured + ostatné + RAL Classic). */}
+      {showAllModal && (
+        <div
+          role="dialog"
+          aria-modal="true"
+          onClick={() => setShowAllModal(false)}
+          className="fixed inset-0 z-[100] bg-black/70 backdrop-blur-sm flex items-center justify-center p-4 md:p-8"
+        >
+          <div
+            onClick={(e) => e.stopPropagation()}
+            className="bg-white rounded-2xl md:rounded-3xl max-w-3xl w-full max-h-[85vh] overflow-y-auto shadow-2xl"
+          >
+            {/* Header s close button */}
+            <div className="sticky top-0 bg-white px-5 md:px-6 py-4 border-b border-[#1B2430]/10 flex items-center justify-between rounded-t-2xl md:rounded-t-3xl">
+              <div>
+                <h3 className="text-lg md:text-xl font-black text-[#1B2430]">
+                  Vyber farbu z palety
+                </h3>
+                <p className="text-xs md:text-sm font-bold text-[#1B2430]/60 mt-0.5">
+                  {textureDef.label} · klik na vzorku
+                </p>
+              </div>
+              <button
+                type="button"
+                onClick={() => setShowAllModal(false)}
+                aria-label="Zavrieť"
+                className="shrink-0 inline-flex items-center justify-center w-9 h-9 rounded-full bg-[#F8FAFC] hover:bg-[#1B2430] hover:text-white text-[#1B2430] transition-colors"
+              >
+                <X className="w-5 h-5" aria-hidden />
+              </button>
+            </div>
+
+            {/* Vlastné + featured farby (top sekcia) */}
+            <div className="px-5 md:px-6 py-4">
+              <div className="text-[11px] md:text-xs font-extrabold text-[#1B2430]/60 uppercase tracking-wider mb-2">
+                Naša paleta ({colors.length})
+              </div>
+              <div className="grid grid-cols-4 md:grid-cols-6 gap-2">
+                {colors.map((c) => {
+                  const active = c.slug === colorSlug;
+                  return (
+                    <button
+                      key={c.slug}
+                      type="button"
+                      onClick={() => {
+                        onColor(c.slug);
+                        setShowAllModal(false);
+                      }}
+                      title={c.commercialName}
+                      className={`group relative h-16 rounded-xl border-2 transition-all ${
+                        active
+                          ? "border-[#2EA3DC] shadow-[0_6px_20px_rgba(46,163,220,0.4)]"
+                          : "border-[#1B2430]/10 hover:border-[#2EA3DC]/50 hover:scale-105"
+                      }`}
+                      style={{ backgroundColor: c.hex }}
+                    >
+                      {active && (
+                        <CheckCircle2
+                          className="absolute top-1 right-1 w-4 h-4 text-white drop-shadow-[0_2px_4px_rgba(0,0,0,0.4)]"
+                          aria-hidden
+                        />
+                      )}
+                      <span className="absolute inset-x-0 -bottom-5 text-[9px] font-bold text-[#1B2430]/70 text-center truncate px-1">
+                        {c.commercialName}
+                      </span>
+                    </button>
+                  );
+                })}
+              </div>
+            </div>
+
+            {/* RAL Classic sekcia (len pre Hladká) */}
+            {ralColors.length > 0 && (
+              <div className="px-5 md:px-6 pt-4 pb-6 mt-4 border-t border-[#1B2430]/10">
+                <div className="text-[11px] md:text-xs font-extrabold text-[#1B2430]/60 uppercase tracking-wider mb-2 flex items-center gap-2">
+                  RAL Classic ({ralColors.length})
+                  <span className="text-[10px] font-bold text-[#1B2430]/50 normal-case tracking-normal">
+                    štandardná priemyselná paleta
+                  </span>
+                </div>
+                <div className="grid grid-cols-4 md:grid-cols-6 gap-2 mt-3">
+                  {ralColors.map((c) => {
+                    const active = c.slug === colorSlug;
+                    return (
+                      <button
+                        key={c.slug}
+                        type="button"
+                        onClick={() => {
+                          onColor(c.slug);
+                          setShowAllModal(false);
+                        }}
+                        title={c.commercialName}
+                        className={`group relative h-16 rounded-xl border-2 transition-all ${
+                          active
+                            ? "border-[#2EA3DC] shadow-[0_6px_20px_rgba(46,163,220,0.4)]"
+                            : "border-[#1B2430]/10 hover:border-[#2EA3DC]/50 hover:scale-105"
+                        }`}
+                        style={{ backgroundColor: c.hex }}
+                      >
+                        {active && (
+                          <CheckCircle2
+                            className="absolute top-1 right-1 w-4 h-4 text-white drop-shadow-[0_2px_4px_rgba(0,0,0,0.4)]"
+                            aria-hidden
+                          />
+                        )}
+                        <span className="absolute inset-x-0 -bottom-5 text-[9px] font-bold text-[#1B2430]/70 text-center truncate px-1">
+                          {c.commercialName.split(" · ")[0]}
+                        </span>
+                      </button>
+                    );
+                  })}
+                </div>
+              </div>
+            )}
+          </div>
         </div>
       )}
 

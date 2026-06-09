@@ -417,17 +417,85 @@ export const COLORS: Record<TextureSlug, ColorPreset[]> = {
 };
 
 // ════════════════════════════════════════════════════════════════════════
+// RAL CLASSIC PALETTE
+// ════════════════════════════════════════════════════════════════════════
+// Curated subset najpopulárnejších RAL Classic farieb pre epoxidové podlahy.
+// Použité v "Ďalšie farby" modali ako rozšírená paleta. Aplikovateľné LEN
+// na hladkú textúru (Hladká), kde dáva zmysel uniformná farba.
+// Pre metalické/mramor/chips zostávajú vlastné špeciálne presety.
+
+interface RalColor {
+  ral: string; // "RAL 7016"
+  name: string; // "Antracit šedá"
+  hex: string;
+}
+
+const RAL_CLASSIC: RalColor[] = [
+  // Whites / Beiges
+  { ral: "RAL 9010", name: "Čisto biela", hex: "#F7F7F1" },
+  { ral: "RAL 9016", name: "Dopravná biela", hex: "#F1F1F1" },
+  { ral: "RAL 9001", name: "Krémová biela", hex: "#EAE6CA" },
+  { ral: "RAL 1015", name: "Slonová kosť", hex: "#E6D5B8" },
+  { ral: "RAL 1013", name: "Perlovo biela", hex: "#E3D9C6" },
+  // Greys
+  { ral: "RAL 7035", name: "Svetlosivá", hex: "#D7D7D7" },
+  { ral: "RAL 7038", name: "Achátsivá", hex: "#B5B8B1" },
+  { ral: "RAL 7030", name: "Kamennosivá", hex: "#8B8C7A" },
+  { ral: "RAL 7016", name: "Antracitsivá", hex: "#293133" },
+  { ral: "RAL 7021", name: "Čiernosivá", hex: "#23282B" },
+  // Beiges / Browns
+  { ral: "RAL 1001", name: "Béžová", hex: "#D0B084" },
+  { ral: "RAL 8003", name: "Hlinková hnedá", hex: "#7B5141" },
+  { ral: "RAL 8017", name: "Čokoládovo hnedá", hex: "#45322E" },
+  // Blues
+  { ral: "RAL 5010", name: "Encyánovo modrá", hex: "#0E294B" },
+  { ral: "RAL 5015", name: "Nebesky modrá", hex: "#2271B3" },
+  // Greens
+  { ral: "RAL 6018", name: "Žltozelená", hex: "#57A639" },
+  { ral: "RAL 6029", name: "Mätovo zelená", hex: "#20603D" },
+  // Reds
+  { ral: "RAL 3000", name: "Ohňová červená", hex: "#AF2B1E" },
+  { ral: "RAL 3009", name: "Oxidovo červená", hex: "#6D3F36" },
+  // Black
+  { ral: "RAL 9005", name: "Hĺbková čierna", hex: "#0A0A0A" },
+];
+
+/**
+ * Vrcholy RAL Classic palety ako ColorPreset-y pre danú textúru.
+ * Funguje LEN pre "hladka" textúru — ostatné textúry majú vlastné špec.
+ * presety (metalické swirls, marble veining, chips), kde RAL nie je
+ * priamo aplikovateľný.
+ *
+ * Slug formát: "ral-9010" (lowercase, bez medzery).
+ */
+export function getRalColors(texture: TextureSlug): ColorPreset[] {
+  if (texture !== "hladka") return [];
+  return RAL_CLASSIC.map((r) => ({
+    slug: r.ral.toLowerCase().replace(/\s+/g, "-"),
+    commercialName: `${r.ral} · ${r.name}`,
+    hex: r.hex,
+    // Template prompt — bezpečný, jednoduchý, hex-based farebný popis.
+    promptColor: `${r.name.toLowerCase()} color matching ${r.ral} specification, exact hex ${r.hex.toUpperCase()}, smooth and uniform`,
+  }));
+}
+
+// ════════════════════════════════════════════════════════════════════════
 // Helpers
 // ════════════════════════════════════════════════════════════════════════
 
-/** Bezpečne nájde preset podľa textury + color slug-u. */
+/** Bezpečne nájde preset podľa textury + color slug-u.
+ *  Hľadá najprv v hlavných COLORS, potom v RAL paletách. */
 export function getColorPreset(
   texture: string,
   colorSlug: string,
 ): { texture: TextureDef; color: ColorPreset } | null {
   if (!isValidTextureSlug(texture)) return null;
   const tex = TEXTURES[texture];
-  const color = COLORS[texture].find((c) => c.slug === colorSlug);
+  let color = COLORS[texture].find((c) => c.slug === colorSlug);
+  if (!color) {
+    // Fallback do RAL palety
+    color = getRalColors(texture).find((c) => c.slug === colorSlug);
+  }
   if (!color) return null;
   return { texture: tex, color };
 }
