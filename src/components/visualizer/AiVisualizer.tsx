@@ -579,7 +579,10 @@ function PickTextureStep({
       <label className="block text-base md:text-lg font-extrabold text-[#1B2430] mb-3">
         1. Vyber typ podlahy
       </label>
-      <div className="grid grid-cols-2 gap-2.5 md:gap-3">
+      {/* Mobile: 2-col (vertikálny scroll OK). Desktop lg+: 4-col aby všetky
+          4 textúry boli VIDITEĽNÉ NARAZ na 16" laptope — predtým 2-col
+          zaberal toľko šírky že fotky boli obrie a videl si len 2 z 4. */}
+      <div className="grid grid-cols-2 lg:grid-cols-4 gap-2.5 md:gap-3">
         {textureKeys.map((t) => {
           const def = TEXTURES[t];
           const active = t === texture;
@@ -597,7 +600,7 @@ function PickTextureStep({
               {/* Vizuálny náhľad textúry — reálna fotka ak je k dispozícii,
                   inak CSS pattern fallback. */}
               <div
-                className="aspect-[4/3] w-full relative bg-[#F8FAFC]"
+                className="aspect-[4/3] lg:aspect-[3/2] w-full relative bg-[#F8FAFC]"
                 style={def.previewImage ? undefined : def.swatchCss}
               >
                 {def.previewImage && (
