@@ -676,6 +676,17 @@ function PickColorStep({
   const activeColor = colors.find((c) => c.slug === colorSlug);
   const finishKeys = Object.keys(FINISHES) as Finish[];
 
+  // TOP 4 farby (featured) sa zobrazia hneď, zvyšok skrytý za "Ďalšie farby"
+  // tlačidlom. Lepší UX — user nie je overwhelmnutý 8 farbami pri prvom
+  // pohľade, ale má prístup ku všetkým.
+  const featuredColors = colors.filter((c) => c.featured);
+  const restColors = colors.filter((c) => !c.featured);
+  // Ak user vybral farbu zo "skrytých", picker zostane otvorený.
+  const [showAllColors, setShowAllColors] = React.useState(false);
+  const userPickedHidden =
+    !!colorSlug && restColors.some((c) => c.slug === colorSlug);
+  const isExpanded = showAllColors || userPickedHidden;
+
   return (
     <div className="rounded-3xl bg-white p-4 md:p-6 shadow-[0_10px_40px_rgba(27,36,48,0.08)] ring-1 ring-[#1B2430]/5">
       {/* Mini preview + zvolená textúra + back */}
@@ -709,8 +720,9 @@ function PickColorStep({
       <label className="block text-base md:text-lg font-extrabold text-[#1B2430] mb-3">
         2. Vyber farbu
       </label>
+      {/* Featured row — top 4 farby, vždy viditeľné */}
       <div className="grid grid-cols-4 gap-2">
-        {colors.map((c) => {
+        {featuredColors.map((c) => {
           const active = c.slug === colorSlug;
           return (
             <button
@@ -735,6 +747,50 @@ function PickColorStep({
           );
         })}
       </div>
+
+      {/* "Ďalšie farby" — expandable sekcia s zvyškom palety. Defaultne skrytá,
+          po kliknutí sa zobrazia všetky ostatné farby v ďalšom rade. */}
+      {restColors.length > 0 && (
+        <>
+          {!isExpanded ? (
+            <button
+              type="button"
+              onClick={() => setShowAllColors(true)}
+              className="mt-2.5 w-full inline-flex items-center justify-center gap-1.5 px-3 py-2 rounded-xl text-xs md:text-sm font-extrabold text-[#2EA3DC] bg-[#2EA3DC]/5 ring-1 ring-[#2EA3DC]/30 hover:bg-[#2EA3DC]/10 hover:ring-[#2EA3DC] transition-colors"
+            >
+              + Ďalšie farby ({restColors.length})
+            </button>
+          ) : (
+            <div className="mt-2.5 grid grid-cols-4 gap-2">
+              {restColors.map((c) => {
+                const active = c.slug === colorSlug;
+                return (
+                  <button
+                    key={c.slug}
+                    type="button"
+                    onClick={() => onColor(c.slug)}
+                    title={c.commercialName}
+                    className={`group relative aspect-square rounded-xl border-2 transition-all ${
+                      active
+                        ? "border-[#2EA3DC] scale-105 shadow-[0_6px_20px_rgba(46,163,220,0.4)]"
+                        : "border-[#1B2430]/10 hover:border-[#2EA3DC]/50"
+                    }`}
+                    style={{ backgroundColor: c.hex }}
+                  >
+                    {active && (
+                      <CheckCircle2
+                        className="absolute top-1 right-1 w-4 h-4 text-white drop-shadow-[0_2px_4px_rgba(0,0,0,0.4)]"
+                        aria-hidden
+                      />
+                    )}
+                  </button>
+                );
+              })}
+            </div>
+          )}
+        </>
+      )}
+
       {activeColor && (
         <div className="mt-2 text-sm font-extrabold text-[#1B2430]">
           {activeColor.commercialName}

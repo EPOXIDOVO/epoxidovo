@@ -54,6 +54,9 @@ export interface ColorPreset {
   hex: string; // CSS swatch farba (UI iba zobrazenie)
   /** Detailný popis farby pre AI — zahŕňa hex + RAL + textúru. */
   promptColor: string;
+  /** TOP 4 najčastejšie volené farby per textúra — zobrazené v pickeri default,
+   * zvyšok skrytý za "Ďalšie farby" tlačidlom (lepší UX, menej overwhelm). */
+  featured?: boolean;
 }
 
 // ════════════════════════════════════════════════════════════════════════
@@ -159,26 +162,15 @@ export const TEXTURES: Record<TextureSlug, TextureDef> = {
 
 export const COLORS: Record<TextureSlug, ColorPreset[]> = {
   hladka: [
-    {
-      slug: "antracit",
-      commercialName: "Antracit",
-      hex: "#3a3d40",
-      promptColor:
-        "anthracite dark grey color, exact hex #3A3D40, smooth and uniform",
-    },
-    {
-      slug: "pieskovec",
-      commercialName: "Pieskovec",
-      hex: "#d4c5a8",
-      promptColor:
-        "warm sandstone beige color, exact hex #D4C5A8, smooth and uniform",
-    },
+    // TOP 4 (featured: true) — biela, sivá nordická, antracit, pieskovec.
+    // User feedback: na hladkej textúre dominujú tieto 4 najčastejšie voľby.
     {
       slug: "biela-snezna",
       commercialName: "Biela snežná",
       hex: "#f5f5f0",
       promptColor:
         "snow white color, exact hex #F5F5F0, clean and bright",
+      featured: true,
     },
     {
       slug: "seda-nordicka",
@@ -186,6 +178,23 @@ export const COLORS: Record<TextureSlug, ColorPreset[]> = {
       hex: "#8a9094",
       promptColor:
         "nordic cool grey color, exact hex #8A9094, slightly desaturated",
+      featured: true,
+    },
+    {
+      slug: "antracit",
+      commercialName: "Antracit",
+      hex: "#3a3d40",
+      promptColor:
+        "anthracite dark grey color, exact hex #3A3D40, smooth and uniform",
+      featured: true,
+    },
+    {
+      slug: "pieskovec",
+      commercialName: "Pieskovec",
+      hex: "#d4c5a8",
+      promptColor:
+        "warm sandstone beige color, exact hex #D4C5A8, smooth and uniform",
+      featured: true,
     },
     {
       slug: "zemska-hneda",
@@ -217,12 +226,14 @@ export const COLORS: Record<TextureSlug, ColorPreset[]> = {
     },
   ],
   metalicka: [
+    // TOP 4 featured: najdramatickejšie + najčastejšie volené metaliky.
     {
       slug: "modra-hlbka",
       commercialName: "Modrá hĺbka",
       hex: "#1e3a5f",
       promptColor:
         "deep ocean blue with silver metallic swirls, exact base hex #1E3A5F, mirror-like reflections, fluid pearlescent effect",
+      featured: true,
     },
     {
       slug: "strieborna-hmla",
@@ -230,6 +241,7 @@ export const COLORS: Record<TextureSlug, ColorPreset[]> = {
       hex: "#9aa5b1",
       promptColor:
         "silver mist metallic with platinum swirls, exact base hex #9AA5B1, soft pearlescent shimmer",
+      featured: true,
     },
     {
       slug: "zlato-bronzova",
@@ -237,6 +249,7 @@ export const COLORS: Record<TextureSlug, ColorPreset[]> = {
       hex: "#b8895c",
       promptColor:
         "gold-bronze metallic with copper swirls, exact base hex #B8895C, warm luxurious shimmer",
+      featured: true,
     },
     {
       slug: "grafitova",
@@ -244,6 +257,7 @@ export const COLORS: Record<TextureSlug, ColorPreset[]> = {
       hex: "#2c2c30",
       promptColor:
         "graphite black metallic with subtle silver veins, exact base hex #2C2C30, dramatic and elegant",
+      featured: true,
     },
     {
       slug: "champagne",
@@ -275,12 +289,14 @@ export const COLORS: Record<TextureSlug, ColorPreset[]> = {
     },
   ],
   chips: [
+    // TOP 4 featured: klasické chip blendy najčastejšie pre garáže / pivnice.
     {
       slug: "granit-klasik",
       commercialName: "Granit klasik",
       hex: "#9aa0a4",
       promptColor:
         "light grey base color (hex #9AA0A4) with evenly scattered grey, black and white vinyl chips, 50% chip coverage, natural granite look",
+      featured: true,
     },
     {
       slug: "sahara-mix",
@@ -288,6 +304,7 @@ export const COLORS: Record<TextureSlug, ColorPreset[]> = {
       hex: "#d4be9a",
       promptColor:
         "warm beige base color (hex #D4BE9A) with evenly scattered tan, brown and white vinyl chips, 50% chip coverage, desert tones",
+      featured: true,
     },
     {
       slug: "forest-bezova",
@@ -295,6 +312,7 @@ export const COLORS: Record<TextureSlug, ColorPreset[]> = {
       hex: "#c4b094",
       promptColor:
         "light olive-beige base color (hex #C4B094) with evenly scattered green, brown and cream vinyl chips, 50% chip coverage, natural earthy palette",
+      featured: true,
     },
     {
       slug: "carbon-black",
@@ -302,6 +320,7 @@ export const COLORS: Record<TextureSlug, ColorPreset[]> = {
       hex: "#2a2a2a",
       promptColor:
         "deep black base color (hex #2A2A2A) with evenly scattered silver, white and grey vinyl chips, 50% chip coverage, dramatic contrast",
+      featured: true,
     },
     {
       slug: "ocean-blue-mix",
@@ -333,12 +352,14 @@ export const COLORS: Record<TextureSlug, ColorPreset[]> = {
     },
   ],
   mramor: [
+    // TOP 4 featured: klasické mramory najpopulárnejšie v luxusnych interiéroch.
     {
       slug: "carrara-biela",
       commercialName: "Carrara biela",
       hex: "#f0ede5",
       promptColor:
         "white Carrara marble pattern with delicate grey veining, exact base hex #F0EDE5, classic Italian marble look, polished finish",
+      featured: true,
     },
     {
       slug: "onyx-cierna",
@@ -346,6 +367,7 @@ export const COLORS: Record<TextureSlug, ColorPreset[]> = {
       hex: "#1a1a1d",
       promptColor:
         "black onyx marble pattern with white veining, exact base hex #1A1A1D, dramatic luxury look, mirror polish",
+      featured: true,
     },
     {
       slug: "travertino-bez",
@@ -353,6 +375,7 @@ export const COLORS: Record<TextureSlug, ColorPreset[]> = {
       hex: "#d4c4a8",
       promptColor:
         "travertine beige marble pattern with subtle brown veining, exact base hex #D4C4A8, natural warm tones",
+      featured: true,
     },
     {
       slug: "marquina-siva",
@@ -360,6 +383,7 @@ export const COLORS: Record<TextureSlug, ColorPreset[]> = {
       hex: "#5a5a60",
       promptColor:
         "Marquina dark grey marble pattern with white veining, exact base hex #5A5A60, sophisticated contemporary",
+      featured: true,
     },
     {
       slug: "calacatta-zlata",
