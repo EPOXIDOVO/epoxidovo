@@ -80,8 +80,9 @@ export const TEXTURES: Record<TextureSlug, TextureDef> = {
         "linear-gradient(135deg, #4a5160 0%, #6b7385 45%, #4a5160 100%)",
       boxShadow: "inset 0 0 30px rgba(255,255,255,0.15)",
     },
-    previewImage: "/images/realizacie/r-04.jpg",
-    previewObjectPosition: "center 70%",
+    // Rovnaké náhľady ako v portfoliu (CATEGORIES.image v categories.ts)
+    previewImage: "/images/categories/jednofarebne.jpg",
+    previewObjectPosition: "center center",
   },
   chips: {
     slug: "chips",
@@ -116,6 +117,9 @@ export const TEXTURES: Record<TextureSlug, TextureDef> = {
       backgroundPosition:
         "0 0, 4px 4px, 7px 2px, 2px 6px, 5px 1px, 1px 8px, 9px 5px, 6px 3px",
     },
+    // Portfolio náhľad
+    previewImage: "/images/categories/chipsove.jpg",
+    previewObjectPosition: "center center",
   },
   mramor: {
     slug: "mramor",
@@ -133,8 +137,8 @@ export const TEXTURES: Record<TextureSlug, TextureDef> = {
       background:
         "linear-gradient(135deg, #f5f1ea 0%, #e8e2d5 25%, #f5f1ea 30%, #d4cdbf 50%, #f5f1ea 55%, #e8e2d5 80%, #f5f1ea 100%)",
     },
-    previewImage: "/images/realizacie/r-37.webp",
-    previewObjectPosition: "center 70%",
+    previewImage: "/images/categories/mramorove.jpg",
+    previewObjectPosition: "center center",
   },
   metalicka: {
     slug: "metalicka",
@@ -154,8 +158,8 @@ export const TEXTURES: Record<TextureSlug, TextureDef> = {
         "conic-gradient(from 210deg at 30% 50%, #1e3a5f 0deg, #5a8ec4 90deg, #1e3a5f 180deg, #4a6f9e 270deg, #1e3a5f 360deg)",
       filter: "blur(0.3px)",
     },
-    previewImage: "/images/realizacie/r-32.jpg",
-    previewObjectPosition: "center 60%",
+    previewImage: "/images/categories/metalicke.jpg",
+    previewObjectPosition: "center center",
   },
 };
 
