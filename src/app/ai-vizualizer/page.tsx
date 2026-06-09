@@ -20,7 +20,7 @@ export default function AiVizualizerPage() {
     // natívny document scroll → CTA, form atď. sú dosiahnuteľné).
     // Desktop: SiteChrome dáva main h-[100dvh] flex flex-col → flex-1 vyplní
     // zvyšok, overflow-hidden = 1-page UX bez scrollu.
-    <div className="bg-[#F8FAFC] md:flex-1 md:min-h-0 md:overflow-y-auto">
+    <div className="bg-[#F8FAFC] md:flex-1 md:min-h-0 md:overflow-hidden">
       <AiVisualizer />
     </div>
   );

@@ -1208,7 +1208,7 @@ function DemoExample() {
       {/* ─── DESKTOP LAYOUT: fotky MAXIMÁLNE — žiadne separátne labels, len overlay badges ─── */}
       <div className="hidden md:flex md:flex-col md:flex-1 md:min-h-0 md:gap-2">
         {/* Pred fotka — flex-1, label "Pred" ako overlay badge v rohu */}
-        <div className="relative flex-1 min-h-[260px] lg:min-h-[340px] rounded-2xl overflow-hidden bg-[#F8FAFC] ring-1 ring-[#1B2430]/10">
+        <div className="relative flex-1 min-h-[260px] lg:min-h-0 rounded-2xl overflow-hidden bg-[#F8FAFC] ring-1 ring-[#1B2430]/10">
           {/* eslint-disable-next-line @next/next/no-img-element */}
           <img
             src="/images/visualizer-demo/pred.jpg"
@@ -1235,7 +1235,7 @@ function DemoExample() {
         </div>
 
         {/* Po fotka — flex-1, label "Po" ako overlay v rohu */}
-        <div className="relative flex-1 min-h-[260px] lg:min-h-[340px] rounded-2xl overflow-hidden bg-[#F8FAFC] ring-2 ring-[#2EA3DC]">
+        <div className="relative flex-1 min-h-[260px] lg:min-h-0 rounded-2xl overflow-hidden bg-[#F8FAFC] ring-2 ring-[#2EA3DC]">
           {/* eslint-disable-next-line @next/next/no-img-element */}
           <img
             src="/images/visualizer-demo/po.jpg"
