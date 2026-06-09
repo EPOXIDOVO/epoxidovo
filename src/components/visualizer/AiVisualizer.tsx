@@ -429,37 +429,38 @@ function Header({ step }: { step: Step }) {
   );
 
   return (
-    <header className="text-center mb-3 md:mb-3 md:shrink-0">
+    <header className="text-center mb-2 md:mb-2 md:shrink-0">
       {/* AI gradient pill — značí "AI features" v celom UI */}
-      <div className="inline-flex items-center gap-1.5 px-3 py-1 md:px-4 md:py-1.5 rounded-full bg-gradient-to-r from-[#7EC8F0] via-[#6AA8F0] to-[#8B5CF6] text-white text-[10px] md:text-xs font-extrabold uppercase tracking-wider mb-2 md:mb-2 shadow-[0_4px_14px_rgba(139,92,246,0.35)]">
-        <Sparkles className="w-3 h-3 md:w-3.5 md:h-3.5" aria-hidden />
+      <div className="inline-flex items-center gap-1.5 px-3 py-1 md:px-3 md:py-1 rounded-full bg-gradient-to-r from-[#7EC8F0] via-[#6AA8F0] to-[#8B5CF6] text-white text-[10px] md:text-[11px] font-extrabold uppercase tracking-wider mb-2 md:mb-1.5 shadow-[0_4px_14px_rgba(139,92,246,0.35)]">
+        <Sparkles className="w-3 h-3 md:w-3 md:h-3" aria-hidden />
         AI Vizualizácia
       </div>
-      {/* H1 — result step má menší font na desktope (viac priestoru pre obsah) */}
+      {/* H1 — výrazne menší na desktope aby fotky podláh dostali viac vertikálneho
+          priestoru (user feedback: musia byť fotky vyššie, na jednej stránke). */}
       <h1
         className={`font-black tracking-tight text-[#1B2430] ${
-          isResult ? "text-xl md:text-3xl" : "text-xl md:text-5xl"
+          isResult ? "text-xl md:text-2xl" : "text-xl md:text-2xl lg:text-3xl"
         }`}
       >
         {title}
       </h1>
-      {/* Subtitle len pre non-result kroky (result má vlastný realizations pill nižšie) */}
+      {/* Subtitle len na mobile (na desktope zbytočne zaberá vertikálny priestor —
+          stačí H1 a step indicator). */}
       {!isResult && (
-        <p className="mt-1.5 md:mt-3 text-xs md:text-lg font-bold text-[#1B2430]/65 max-w-2xl mx-auto leading-snug md:leading-relaxed">
+        <p className="md:hidden mt-1.5 text-xs font-bold text-[#1B2430]/65 leading-snug">
           {subtitleNode}
         </p>
       )}
-      {/* Step indicator — len pre non-result kroky (result je už hotový, indicator
-          by zbytočne zaberal vertikálne miesto na 16" laptopoch). */}
+      {/* Step indicator — kompaktnejší na desktope */}
       {stepNum > 0 && !isResult && (
-        <div className="mt-3 md:mt-5 flex justify-center gap-1.5 md:gap-2">
+        <div className="mt-2 md:mt-2 flex justify-center gap-1.5">
           {[1, 2, 3].map((n) => (
             <span
               key={n}
-              className={`h-1 md:h-1.5 rounded-full transition-all ${
+              className={`h-1 md:h-1 rounded-full transition-all ${
                 n <= stepNum
-                  ? "w-8 md:w-12 bg-gradient-to-r from-[#7EC8F0] via-[#6AA8F0] to-[#8B5CF6]"
-                  : "w-4 md:w-6 bg-[#1B2430]/15"
+                  ? "w-8 md:w-10 bg-gradient-to-r from-[#7EC8F0] via-[#6AA8F0] to-[#8B5CF6]"
+                  : "w-4 md:w-5 bg-[#1B2430]/15"
               }`}
             />
           ))}
@@ -1142,14 +1143,15 @@ function DemoExample() {
   return (
     <aside
       aria-label="Príklad ako funguje AI vizualizácia"
-      className="flex flex-col rounded-2xl md:rounded-3xl bg-white p-2.5 md:p-5 shadow-[0_10px_40px_rgba(27,36,48,0.08)] ring-1 ring-[#1B2430]/5 md:h-full"
+      className="flex flex-col rounded-2xl md:rounded-3xl bg-white p-2.5 md:p-3 lg:p-4 shadow-[0_10px_40px_rgba(27,36,48,0.08)] ring-1 ring-[#1B2430]/5 md:h-full"
     >
-      {/* Header — kompaktný (väčší na mobile lebo tam je horizontálny strip s viac priestoru) */}
-      <div className="flex items-center gap-1.5 md:gap-1.5 shrink-0">
-        <span className="inline-flex items-center justify-center w-6 h-6 md:w-7 md:h-7 rounded-md bg-gradient-to-br from-[#7EC8F0] via-[#6AA8F0] to-[#8B5CF6] text-white shadow-[0_4px_12px_rgba(139,92,246,0.4)]">
-          <Sparkles className="w-3 h-3 md:w-4 md:h-4" aria-hidden />
+      {/* Header — kompaktný, ešte menší na desktope aby fotky podláh dostali
+          maximálny vertikálny priestor cez flex-1. */}
+      <div className="flex items-center gap-1.5 md:gap-1.5 shrink-0 mb-1.5 md:mb-1.5">
+        <span className="inline-flex items-center justify-center w-6 h-6 md:w-6 md:h-6 rounded-md bg-gradient-to-br from-[#7EC8F0] via-[#6AA8F0] to-[#8B5CF6] text-white shadow-[0_4px_12px_rgba(139,92,246,0.4)]">
+          <Sparkles className="w-3 h-3 md:w-3.5 md:h-3.5" aria-hidden />
         </span>
-        <h3 className="text-xs md:text-sm font-black text-[#1B2430] uppercase tracking-wider">
+        <h3 className="text-xs md:text-xs font-black text-[#1B2430] uppercase tracking-wider">
           Ako to funguje
         </h3>
       </div>
@@ -1221,14 +1223,15 @@ function DemoExample() {
           </div>
         </div>
 
-        {/* Tiny separator s šípkou a AI pillom */}
-        <div className="flex items-center justify-center gap-2 shrink-0 py-0.5">
+        {/* Tiny separator s šípkou a AI pillom — kompaktnejší vertikálne aby
+            fotky dostali viac priestoru. */}
+        <div className="flex items-center justify-center gap-2 shrink-0">
           <span className="h-px flex-1 bg-gradient-to-r from-transparent via-[#8B5CF6]/40 to-[#8B5CF6]/60" aria-hidden />
-          <span className="inline-flex items-center justify-center w-9 h-9 rounded-full bg-gradient-to-br from-[#7EC8F0] via-[#6AA8F0] to-[#8B5CF6] text-white shadow-[0_4px_14px_rgba(139,92,246,0.5)] ring-2 ring-white shrink-0">
-            <ArrowDown className="w-4 h-4" strokeWidth={3} aria-hidden />
+          <span className="inline-flex items-center justify-center w-7 h-7 rounded-full bg-gradient-to-br from-[#7EC8F0] via-[#6AA8F0] to-[#8B5CF6] text-white shadow-[0_4px_14px_rgba(139,92,246,0.5)] ring-2 ring-white shrink-0">
+            <ArrowDown className="w-3.5 h-3.5" strokeWidth={3} aria-hidden />
           </span>
-          <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-white ring-2 ring-[#8B5CF6]/40 text-[#8B5CF6] text-[11px] font-black uppercase tracking-wider shadow-sm shrink-0">
-            <Sparkles className="w-3 h-3" aria-hidden />
+          <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-white ring-2 ring-[#8B5CF6]/40 text-[#8B5CF6] text-[10px] font-black uppercase tracking-wider shadow-sm shrink-0">
+            <Sparkles className="w-2.5 h-2.5" aria-hidden />
             AI · 30 s
           </span>
           <span className="h-px flex-1 bg-gradient-to-l from-transparent via-[#8B5CF6]/40 to-[#8B5CF6]/60" aria-hidden />
@@ -1253,11 +1256,11 @@ function DemoExample() {
         </div>
       </div>
 
-      {/* Krátke upozornenie + link na realizácie — kompaktné */}
-      <div className="mt-2 rounded-lg bg-[#F0851A]/10 ring-1 ring-[#F0851A]/30 px-2.5 py-1.5 shrink-0">
-        <div className="flex items-start gap-1.5">
-          <AlertCircle className="w-3.5 h-3.5 text-[#F0851A] shrink-0 mt-0.5" aria-hidden />
-          <div className="text-[10px] md:text-[11px] font-bold text-[#1B2430] leading-snug">
+      {/* Krátke upozornenie + link na realizácie — kompaktné, single line na desktope */}
+      <div className="mt-1.5 rounded-lg bg-[#F0851A]/10 ring-1 ring-[#F0851A]/30 px-2.5 py-1 shrink-0">
+        <div className="flex items-center gap-1.5">
+          <AlertCircle className="w-3.5 h-3.5 text-[#F0851A] shrink-0" aria-hidden />
+          <div className="text-[10px] md:text-[11px] font-bold text-[#1B2430] leading-tight">
             AI nemusí vždy vygenerovať správny výsledok. Pre istotu si pozri aj{" "}
             <Link
               href="/realizacie"
