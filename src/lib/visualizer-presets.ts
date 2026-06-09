@@ -561,23 +561,29 @@ export function getColorPreset(
     let promptColor: string;
     if (colors.length === 1) {
       promptColor =
-        `metallic epoxy finish with ${colors[0].name.toLowerCase()} base ` +
+        `metallic epoxy floor with ${colors[0].name.toLowerCase()} primary tone ` +
         `(exact hex ${colors[0].hex.toUpperCase()}). ` +
-        `USE THE ADDITIONAL REFERENCE IMAGES (provided after the room photo) as STYLE GUIDE for the swirl pattern — ` +
-        `flowing organic pearlescent swirls of varying tone density, mirror-polished reflective surface, ` +
-        `no chunks, smooth poured-metal aesthetic. Recolor reference pattern to match the ${colors[0].hex.toUpperCase()} base`;
+        `USE THE ADDITIONAL REFERENCE PHOTOS (provided after the room photo) as STYLE GUIDE — ` +
+        `even single-color metallic epoxy is NEVER monotone — natural pigment SETTLES into ` +
+        `flowing tonal variations: lighter highlights and darker shadows blend organically across the floor, ` +
+        `pearlescent shimmer follows the swirl patterns from the references. Mirror-polished, ` +
+        `poured-resin look. Recolor reference style to match base ${colors[0].hex.toUpperCase()}`;
     } else {
       const colorList = colors
         .map((c) => `${c.name.toLowerCase()} (hex ${c.hex.toUpperCase()})`)
         .join(", ");
       promptColor =
-        `metallic epoxy finish with MIXED colors blending together in fluid pearlescent swirls: ${colorList}. ` +
-        `USE THE ADDITIONAL REFERENCE IMAGES (provided after the room photo) as STYLE GUIDE for the swirl flow pattern. ` +
-        `Colors flow organically into each other creating a marbled metallic effect, ` +
-        `60% primary color (${colors[0].name.toLowerCase()}) with ${colors
+        `metallic epoxy floor with MULTIPLE colors that ACTUALLY BLEND TOGETHER like liquid metal poured ` +
+        `and swirled: ${colorList}. ` +
+        `CRITICAL: USE THE REFERENCE PHOTOS (provided after the room photo) as STYLE GUIDE — ` +
+        `colors must FLOW into each other in organic pearlescent swirls, NO sharp boundaries between colors, ` +
+        `NO color blocks — think of pouring different paint pigments and watching them marble. ` +
+        `Lighter and darker tones create depth and movement across the entire floor. ` +
+        `Approximately 50% ${colors[0].name.toLowerCase()} with ${colors
           .slice(1)
           .map((c) => c.name.toLowerCase())
-          .join(" + ")} accents swirling through, mirror-polished pearlescent finish`;
+          .join(" + ")} mixing through in flowing tonal swirls. ` +
+        `Mirror-polished pearlescent surface with strong specular highlights`;
     }
     return {
       texture: tex,
@@ -650,18 +656,25 @@ export function ralSlug(ral: RalColor): string {
 //
 // Hladká + Chipsová: bez referencií (jednoduchšie textúry, generic OK).
 
+// Curated reference fotky — close-up vzorky reálnych mramorov / metalík.
+// Nakopírované z user-ovho desktopu (skutočné realizácie + sample fotky).
+// Mramor: rôzne typy žiliek (jemné/hrubé/rozličné smery)
+// Metalika: dôraz na BLENDED tóny (farby sa miešajú v swirloch — to bola
+//           hlavná pripomienka usera, AI generovala monotónny color)
 const REFERENCE_IMAGES: Record<TextureSlug, string[]> = {
   hladka: [],
   chips: [],
   mramor: [
-    "/images/realizacie/r-11.jpg",
-    "/images/realizacie/r-12.jpg",
-    "/images/realizacie/r-37.webp",
+    "/images/visualizer-refs/mramor1.webp",
+    "/images/visualizer-refs/mramor2.jpg",
+    "/images/visualizer-refs/mramor3.jpg",
+    "/images/visualizer-refs/mramor4.jpg",
   ],
   metalicka: [
-    "/images/realizacie/r-32.jpg",
-    "/images/realizacie/r-33.jpg",
-    "/images/realizacie/r-35.jpg",
+    "/images/visualizer-refs/metalic-blue-silver.jpg", // klasický blue+silver blend
+    "/images/visualizer-refs/metalic1.jpg",
+    "/images/visualizer-refs/metalic5.jpg",
+    "/images/visualizer-refs/metalic7.jpg",
   ],
 };
 
