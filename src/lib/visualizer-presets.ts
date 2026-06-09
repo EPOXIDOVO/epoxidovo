@@ -462,21 +462,33 @@ const RAL_CLASSIC: RalColor[] = [
 
 /**
  * Vrcholy RAL Classic palety ako ColorPreset-y pre danú textúru.
- * Funguje LEN pre "hladka" textúru — ostatné textúry majú vlastné špec.
- * presety (metalické swirls, marble veining, chips), kde RAL nie je
- * priamo aplikovateľný.
+ *
+ * - "hladka": RAL je priama farba podlahy (smooth + uniform).
+ * - "chips":  RAL je BÁZOVÁ farba pod-vrstvy, na ktorej sú rozsypané
+ *             dekoratívne vinyl chipsy v komplementárnych tónoch.
+ * - "metalicka" / "mramor": vlastné špec. presety (swirls / veining),
+ *   RAL nie je sémanticky aplikovateľný → vraciame [].
  *
  * Slug formát: "ral-9010" (lowercase, bez medzery).
  */
 export function getRalColors(texture: TextureSlug): ColorPreset[] {
-  if (texture !== "hladka") return [];
-  return RAL_CLASSIC.map((r) => ({
-    slug: r.ral.toLowerCase().replace(/\s+/g, "-"),
-    commercialName: `${r.ral} · ${r.name}`,
-    hex: r.hex,
-    // Template prompt — bezpečný, jednoduchý, hex-based farebný popis.
-    promptColor: `${r.name.toLowerCase()} color matching ${r.ral} specification, exact hex ${r.hex.toUpperCase()}, smooth and uniform`,
-  }));
+  if (texture !== "hladka" && texture !== "chips") return [];
+
+  return RAL_CLASSIC.map((r) => {
+    const hexUpper = r.hex.toUpperCase();
+    const nameLower = r.name.toLowerCase();
+    // Per-textúra prompt template aby AI vedela ako interpretovať RAL.
+    const promptColor =
+      texture === "hladka"
+        ? `${nameLower} color matching ${r.ral} specification, exact hex ${hexUpper}, smooth and uniform`
+        : `${nameLower} base color matching ${r.ral} specification (exact hex ${hexUpper}) with evenly scattered complementary vinyl chips in matching tones, 50% chip coverage, natural decorative pattern`;
+    return {
+      slug: r.ral.toLowerCase().replace(/\s+/g, "-"),
+      commercialName: `${r.ral} · ${r.name}`,
+      hex: r.hex,
+      promptColor,
+    };
+  });
 }
 
 // ════════════════════════════════════════════════════════════════════════
