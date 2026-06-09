@@ -276,10 +276,12 @@ export function AiVisualizer() {
       <Breadcrumb />
       <Header step={step} />
 
-      {/* STEP: UPLOAD — mobile: vertical stack (upload + mini demo) | desktop: side-by-side,
-          obe vyplnia výšku viewportu (flex-1 + min-h-0). */}
+      {/* STEP: UPLOAD — mobile: vertical stack (upload + mini demo) | desktop: side-by-side.
+          Pomer 1fr:1fr na lg+ aby demo fotky podláh (vpravo) mali toľko priestoru
+          ako upload box — predtým bol 3fr:2fr → demo bolo stlačené a fotky drobné
+          na 16" laptopoch. */}
       {step === "upload" && (
-        <div className="flex flex-col gap-3 md:grid md:grid-cols-[3fr_2fr] md:gap-6 md:items-stretch flex-1 min-h-0 mt-2 md:mt-4">
+        <div className="flex flex-col gap-3 md:grid md:grid-cols-[3fr_2fr] lg:grid-cols-[1fr_1fr] md:gap-6 md:items-stretch flex-1 min-h-0 mt-2 md:mt-4">
           <UploadStep
             onFile={handleFile}
             onClick={() => fileInputRef.current?.click()}
@@ -504,30 +506,30 @@ function UploadStep({
         if (f) onFile(f);
       }}
       onClick={onClick}
-      className={`cursor-pointer rounded-2xl md:rounded-3xl border-2 border-dashed p-6 md:p-10 lg:p-14 text-center transition-all bg-white flex-1 min-h-0 md:h-full flex flex-col items-center justify-center ${
+      className={`cursor-pointer rounded-2xl md:rounded-3xl border-2 border-dashed p-6 md:p-6 lg:p-8 text-center transition-all bg-white flex-1 min-h-0 md:h-full flex flex-col items-center justify-center ${
         dragging
           ? "border-[#2EA3DC] bg-[#2EA3DC]/5 scale-[1.01] shadow-[0_8px_28px_rgba(46,163,220,0.2)]"
           : "border-[#1B2430]/20 hover:border-[#2EA3DC] hover:bg-[#2EA3DC]/5 hover:shadow-[0_8px_28px_rgba(46,163,220,0.15)]"
       }`}
     >
-      <div className="inline-flex items-center justify-center w-16 h-16 md:w-20 md:h-20 rounded-2xl bg-[#2EA3DC] text-white mb-3 md:mb-5 shadow-[0_8px_20px_rgba(46,163,220,0.4)]">
-        <Upload className="w-8 h-8 md:w-9 md:h-9" aria-hidden />
+      <div className="inline-flex items-center justify-center w-16 h-16 md:w-14 md:h-14 lg:w-16 lg:h-16 rounded-2xl bg-[#2EA3DC] text-white mb-3 md:mb-3 shadow-[0_8px_20px_rgba(46,163,220,0.4)]">
+        <Upload className="w-8 h-8 md:w-7 md:h-7 lg:w-8 lg:h-8" aria-hidden />
       </div>
-      <h2 className="text-lg md:text-2xl font-extrabold tracking-tight text-[#1B2430]">
+      <h2 className="text-lg md:text-lg lg:text-xl font-extrabold tracking-tight text-[#1B2430]">
         <span className="md:hidden">Klikni a nahraj fotku</span>
         <span className="hidden md:inline">Klikni alebo presuň fotku miestnosti</span>
       </h2>
-      <p className="mt-1.5 md:mt-2 text-xs md:text-base font-bold text-[#1B2430]/65">
+      <p className="mt-1.5 md:mt-1.5 text-xs md:text-sm font-bold text-[#1B2430]/65">
         JPG, PNG alebo WebP · max 5 MB
       </p>
 
-      {/* Tipy IBA na desktope — na mobile by zaberali príliš veľa priestoru,
-          demo panel s príkladom postačuje. */}
-      <div className="hidden md:block mt-4 md:mt-7 max-w-md mx-auto text-left bg-[#F8FAFC] rounded-2xl p-3 md:p-5 ring-1 ring-[#1B2430]/5">
-        <div className="text-[10px] md:text-xs font-extrabold text-[#1B2430] uppercase tracking-wider mb-1.5 md:mb-2">
+      {/* Tipy IBA na desktope — kompaktnejší padding aby upload box nezaberal
+          celú výšku a demo fotky vpravo mali viac priestoru. */}
+      <div className="hidden md:block mt-3 md:mt-4 max-w-md mx-auto text-left bg-[#F8FAFC] rounded-xl p-3 md:p-3 ring-1 ring-[#1B2430]/5">
+        <div className="text-[10px] md:text-[11px] font-extrabold text-[#1B2430] uppercase tracking-wider mb-1.5">
           💡 Tipy pre najlepší výsledok
         </div>
-        <ul className="space-y-1 md:space-y-1.5 text-[11px] md:text-sm font-bold text-[#1B2430]/70 leading-snug md:leading-relaxed">
+        <ul className="space-y-1 md:space-y-1 text-[11px] md:text-xs font-bold text-[#1B2430]/70 leading-snug">
           <li>• Dobré osvetlenie</li>
           <li>• Aspoň 40 % fotky by mala byť podlaha</li>
           <li>• Predmety, nábytok aj ľudia môžu ostať na fotke</li>
@@ -1206,7 +1208,7 @@ function DemoExample() {
       {/* ─── DESKTOP LAYOUT: fotky MAXIMÁLNE — žiadne separátne labels, len overlay badges ─── */}
       <div className="hidden md:flex md:flex-col md:flex-1 md:min-h-0 md:gap-2">
         {/* Pred fotka — flex-1, label "Pred" ako overlay badge v rohu */}
-        <div className="relative flex-1 min-h-[160px] rounded-2xl overflow-hidden bg-[#F8FAFC] ring-1 ring-[#1B2430]/10">
+        <div className="relative flex-1 min-h-[200px] lg:min-h-[260px] rounded-2xl overflow-hidden bg-[#F8FAFC] ring-1 ring-[#1B2430]/10">
           {/* eslint-disable-next-line @next/next/no-img-element */}
           <img
             src="/images/visualizer-demo/pred.jpg"
@@ -1233,7 +1235,7 @@ function DemoExample() {
         </div>
 
         {/* Po fotka — flex-1, label "Po" ako overlay v rohu */}
-        <div className="relative flex-1 min-h-[160px] rounded-2xl overflow-hidden bg-[#F8FAFC] ring-2 ring-[#2EA3DC]">
+        <div className="relative flex-1 min-h-[200px] lg:min-h-[260px] rounded-2xl overflow-hidden bg-[#F8FAFC] ring-2 ring-[#2EA3DC]">
           {/* eslint-disable-next-line @next/next/no-img-element */}
           <img
             src="/images/visualizer-demo/po.jpg"
