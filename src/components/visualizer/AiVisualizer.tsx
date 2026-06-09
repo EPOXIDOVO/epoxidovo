@@ -1028,10 +1028,12 @@ function ResultStep({
         {/* Disclaimer warning — rovnaký štýl ako v DemoExample pred uploadom.
             User požiadal aby bolo aj v result step jasne povedané že AI nemusí
             vždy vygenerovať správny výsledok + link na reálne realizácie. */}
-        <div className="rounded-lg bg-[#F0851A]/10 ring-1 ring-[#F0851A]/30 px-3 py-2">
-          <div className="flex items-start gap-2">
-            <AlertCircle className="w-4 h-4 text-[#F0851A] shrink-0 mt-0.5" aria-hidden />
-            <div className="text-xs font-bold text-[#1B2430] leading-snug">
+        {/* Disclaimer warning — výraznejší: väčší padding + text aby bolo lepšie
+            vidno aj na desktope (predtým bol takmer prehliadnuteľný vedľa CTA). */}
+        <div className="rounded-xl bg-[#F0851A]/10 ring-2 ring-[#F0851A]/40 px-4 py-3 lg:px-5 lg:py-4">
+          <div className="flex items-start gap-2.5">
+            <AlertCircle className="w-5 h-5 lg:w-6 lg:h-6 text-[#F0851A] shrink-0 mt-0.5" aria-hidden />
+            <div className="text-sm lg:text-base font-bold text-[#1B2430] leading-snug">
               AI nemusí vždy vygenerovať správny výsledok. Pre istotu si pozri aj{" "}
               <Link
                 href="/realizacie"
@@ -1044,48 +1046,49 @@ function ResultStep({
           </div>
         </div>
 
-        {/* 3 secondary buttons — vždy v jednom rade, ikona+label */}
+        {/* 3 secondary buttons — väčšie tlačidlá, ikona vedľa labelu */}
         <div className="grid grid-cols-3 gap-2">
           <button
             type="button"
             onClick={onDownload}
-            className="inline-flex flex-col md:flex-row items-center justify-center gap-1 md:gap-1.5 px-2 py-2.5 rounded-xl bg-[#F8FAFC] text-[#1B2430] font-extrabold text-[11px] md:text-xs ring-1 ring-[#1B2430]/10 hover:bg-white hover:ring-[#2EA3DC] hover:text-[#2EA3DC] hover:shadow-[0_6px_16px_rgba(46,163,220,0.15)] transition-all"
+            className="inline-flex flex-col md:flex-row items-center justify-center gap-1 md:gap-2 px-2 py-3.5 lg:py-4 rounded-xl bg-[#F8FAFC] text-[#1B2430] font-extrabold text-xs md:text-sm ring-1 ring-[#1B2430]/10 hover:bg-white hover:ring-[#2EA3DC] hover:text-[#2EA3DC] hover:shadow-[0_6px_16px_rgba(46,163,220,0.15)] transition-all"
           >
-            <Download className="w-4 h-4 shrink-0" aria-hidden />
+            <Download className="w-4 h-4 md:w-5 md:h-5 shrink-0" aria-hidden />
             <span>Stiahnuť</span>
           </button>
           <button
             type="button"
             onClick={onTryAgain}
-            className="inline-flex flex-col md:flex-row items-center justify-center gap-1 md:gap-1.5 px-2 py-2.5 rounded-xl bg-[#F8FAFC] text-[#1B2430] font-extrabold text-[11px] md:text-xs ring-1 ring-[#1B2430]/10 hover:bg-white hover:ring-[#2EA3DC] hover:text-[#2EA3DC] hover:shadow-[0_6px_16px_rgba(46,163,220,0.15)] transition-all"
+            className="inline-flex flex-col md:flex-row items-center justify-center gap-1 md:gap-2 px-2 py-3.5 lg:py-4 rounded-xl bg-[#F8FAFC] text-[#1B2430] font-extrabold text-xs md:text-sm ring-1 ring-[#1B2430]/10 hover:bg-white hover:ring-[#2EA3DC] hover:text-[#2EA3DC] hover:shadow-[0_6px_16px_rgba(46,163,220,0.15)] transition-all"
           >
-            <RefreshCw className="w-4 h-4 shrink-0" aria-hidden />
+            <RefreshCw className="w-4 h-4 md:w-5 md:h-5 shrink-0" aria-hidden />
             <span className="text-center leading-tight">Iná farba</span>
           </button>
           <button
             type="button"
             onClick={onStartOver}
-            className="inline-flex flex-col md:flex-row items-center justify-center gap-1 md:gap-1.5 px-2 py-2.5 rounded-xl bg-[#F8FAFC] text-[#1B2430] font-extrabold text-[11px] md:text-xs ring-1 ring-[#1B2430]/10 hover:bg-white hover:ring-[#2EA3DC] hover:text-[#2EA3DC] hover:shadow-[0_6px_16px_rgba(46,163,220,0.15)] transition-all"
+            className="inline-flex flex-col md:flex-row items-center justify-center gap-1 md:gap-2 px-2 py-3.5 lg:py-4 rounded-xl bg-[#F8FAFC] text-[#1B2430] font-extrabold text-xs md:text-sm ring-1 ring-[#1B2430]/10 hover:bg-white hover:ring-[#2EA3DC] hover:text-[#2EA3DC] hover:shadow-[0_6px_16px_rgba(46,163,220,0.15)] transition-all"
           >
-            <Upload className="w-4 h-4 shrink-0" aria-hidden />
+            <Upload className="w-4 h-4 md:w-5 md:h-5 shrink-0" aria-hidden />
             <span>Iná fotka</span>
           </button>
         </div>
 
-        {/* CTA na cenovku — flex-1 + flex-col-center na desktope, aby vyplnil
-            zvyšok pravého stĺpca (žiadne prázdne miesto pod boxom). Button
-            zostáva pri spodku. */}
-        <div className="rounded-2xl bg-gradient-to-br from-[#F0851A] to-[#D9760F] p-4 md:p-5 text-center text-white shadow-[0_12px_40px_rgba(240,133,26,0.35)] lg:flex-1 lg:flex lg:flex-col lg:justify-center">
-          <h3 className="text-base md:text-lg lg:text-xl font-black tracking-tight leading-tight">
+        {/* CTA na cenovku — menšie ako predtým (užívateľ chcel ubrať
+            z oranžového aby dáta hore boli väčšie/viditeľnejšie). Stále
+            flex-1 takže vyplní zvyšok výšky pravého stĺpca, len nie
+            tak dominantne. */}
+        <div className="rounded-2xl bg-gradient-to-br from-[#F0851A] to-[#D9760F] p-3 md:p-4 text-center text-white shadow-[0_12px_40px_rgba(240,133,26,0.35)] lg:flex-1 lg:flex lg:flex-col lg:justify-center">
+          <h3 className="text-sm md:text-base lg:text-lg font-black tracking-tight leading-tight">
             Toto je ono! Pošleme ti nezáväznú cenovú ponuku.
           </h3>
-          <p className="mt-1.5 text-xs md:text-sm font-bold text-white/95 leading-snug">
+          <p className="mt-1 text-[11px] md:text-xs lg:text-sm font-bold text-white/95 leading-snug">
             Pripravíme ti kalkuláciu na túto podlahu pre tvoju miestnosť do 24 hodín.
           </p>
           <button
             type="button"
             onClick={onRequestQuote}
-            className="mt-3 lg:mt-4 w-full inline-flex items-center justify-center gap-2 px-4 py-3 rounded-full bg-white text-[#D9760F] font-black text-sm hover:bg-white/95 shadow-[0_8px_24px_rgba(0,0,0,0.18)] transition-all"
+            className="mt-2.5 lg:mt-3 w-full inline-flex items-center justify-center gap-2 px-4 py-2.5 lg:py-3 rounded-full bg-white text-[#D9760F] font-black text-sm hover:bg-white/95 shadow-[0_8px_24px_rgba(0,0,0,0.18)] transition-all"
           >
             <Send className="w-4 h-4" aria-hidden />
             Cenová ponuka
