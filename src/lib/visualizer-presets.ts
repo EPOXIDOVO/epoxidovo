@@ -433,7 +433,7 @@ export const COLORS: Record<TextureSlug, ColorPreset[]> = {
 // na hladkú textúru (Hladká), kde dáva zmysel uniformná farba.
 // Pre metalické/mramor/chips zostávajú vlastné špeciálne presety.
 
-interface RalColor {
+export interface RalColor {
   ral: string; // "RAL 7016"
   name: string; // "Antracit šedá"
   hex: string;
@@ -504,21 +504,117 @@ export function getRalColors(texture: TextureSlug): ColorPreset[] {
 // Helpers
 // ════════════════════════════════════════════════════════════════════════
 
-/** Bezpečne nájde preset podľa textury + color slug-u.
- *  Hľadá najprv v hlavných COLORS, potom v RAL paletách. */
+/**
+ * Bezpečne nájde preset podľa textury + color slug-u.
+ *
+ * Slug formáty (podporované per textúra):
+ * - Hladka / Chips / Mramor (predefinované): jednoduchý slug (napr. "antracit")
+ * - RAL: "ral-9010"
+ * - Mramor compound (báza + žilkovanie): "ral-9010:ral-7016"
+ *   → base = RAL 9010, vein = RAL 7016
+ * - Metalicka compound (zmes 1-3 farieb): "ral-5010+ral-7035+ral-9005"
+ *   → mixované farby v pearlescent swirloch
+ *
+ * Validuje voči predefinovaným zoznamom — prompt injection nemožný.
+ */
 export function getColorPreset(
   texture: string,
   colorSlug: string,
 ): { texture: TextureDef; color: ColorPreset } | null {
   if (!isValidTextureSlug(texture)) return null;
   const tex = TEXTURES[texture];
+
+  // Compound: mramor base:vein
+  if (texture === "mramor" && colorSlug.includes(":")) {
+    const [baseSlug, veinSlug] = colorSlug.split(":");
+    const baseRal = findRalRaw(baseSlug);
+    const veinRal = findRalRaw(veinSlug);
+    if (!baseRal || !veinRal) return null;
+    return {
+      texture: tex,
+      color: {
+        slug: colorSlug,
+        commercialName: `${baseRal.name} · žilky ${veinRal.name}`,
+        hex: baseRal.hex,
+        promptColor:
+          `realistic marble pattern with ${baseRal.name.toLowerCase()} base ` +
+          `(exact hex ${baseRal.hex.toUpperCase()}, matching RAL ${baseRal.ral.replace("RAL ", "")}) ` +
+          `and ${veinRal.name.toLowerCase()} veining ` +
+          `(exact hex ${veinRal.hex.toUpperCase()}, matching RAL ${veinRal.ral.replace("RAL ", "")}). ` +
+          `Fine veins 1-3mm thick running diagonally and curving organically through the surface, ` +
+          `classic Italian marble aesthetic, varying vein opacity for natural look`,
+      },
+    };
+  }
+
+  // Compound: metalicka zmes 1-3 farieb (oddelené +)
+  if (texture === "metalicka" && colorSlug.includes("+")) {
+    const slugs = colorSlug.split("+");
+    if (slugs.length === 0 || slugs.length > 3) return null;
+    const rals = slugs.map((s) => findRalRaw(s));
+    if (rals.some((r) => !r)) return null;
+    const colors = rals as RalColor[];
+    let promptColor: string;
+    if (colors.length === 1) {
+      promptColor =
+        `metallic finish with ${colors[0].name.toLowerCase()} base ` +
+        `(exact hex ${colors[0].hex.toUpperCase()}), flowing organic pearlescent swirls of ` +
+        `varying tone density, mirror-polished reflective surface, no chunks, smooth poured-metal aesthetic`;
+    } else {
+      const colorList = colors
+        .map((c) => `${c.name.toLowerCase()} (hex ${c.hex.toUpperCase()})`)
+        .join(", ");
+      promptColor =
+        `metallic finish with MIXED colors blending together in fluid pearlescent swirls: ${colorList}. ` +
+        `Colors flow organically into each other creating a marbled metallic effect, ` +
+        `60% primary color (${colors[0].name.toLowerCase()}) with ${colors
+          .slice(1)
+          .map((c) => c.name.toLowerCase())
+          .join(" + ")} accents swirling through, mirror-polished pearlescent finish`;
+    }
+    return {
+      texture: tex,
+      color: {
+        slug: colorSlug,
+        commercialName:
+          colors.length === 1
+            ? colors[0].name
+            : `Zmes ${colors.map((c) => c.name).join(" + ")}`,
+        hex: colors[0].hex,
+        promptColor,
+      },
+    };
+  }
+
+  // Single slug — existujúce COLORS alebo RAL paleta
   let color = COLORS[texture].find((c) => c.slug === colorSlug);
   if (!color) {
-    // Fallback do RAL palety
     color = getRalColors(texture).find((c) => c.slug === colorSlug);
   }
   if (!color) return null;
   return { texture: tex, color };
+}
+
+/** Internal helper — nájde RAL farbu podľa slug-u v RAL_CLASSIC katalógu. */
+function findRalRaw(slug: string): RalColor | null {
+  const normalizedSlug = slug.toLowerCase();
+  return (
+    RAL_CLASSIC.find(
+      (r) => r.ral.toLowerCase().replace(/\s+/g, "-") === normalizedSlug,
+    ) ?? null
+  );
+}
+
+/**
+ * Vráti celú RAL paletu pre potreby UI — používa sa v marble/metallic
+ * custom picker-och bez ohľadu na textúru.
+ */
+export function getRalCatalog(): RalColor[] {
+  return RAL_CLASSIC;
+}
+
+export function ralSlug(ral: RalColor): string {
+  return ral.ral.toLowerCase().replace(/\s+/g, "-");
 }
 
 export function isValidTextureSlug(s: string): s is TextureSlug {

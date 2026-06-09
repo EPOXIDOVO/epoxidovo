@@ -24,8 +24,11 @@ import {
   COLORS,
   FINISHES,
   TEXTURES,
+  getRalCatalog,
   getRalColors,
+  ralSlug,
   type Finish,
+  type RalColor,
   type TextureSlug,
 } from "@/lib/visualizer-presets";
 
@@ -664,7 +667,7 @@ function PickColorStep({
   previewUrl: string;
   texture: TextureSlug;
   colorSlug: string | null;
-  onColor: (c: string) => void;
+  onColor: (c: string | null) => void;
   finish: Finish | null;
   onFinish: (f: Finish) => void;
   turnstileToken: string | null;
@@ -725,6 +728,20 @@ function PickColorStep({
         </button>
       </div>
 
+      {/* ═══════════════════════════════════════════════════════════════
+          PER-TEXTÚROVÝ COLOR PICKER:
+          - mramor → 2-step (báza + žilkovanie)
+          - metalicka → multi-select 1-3 farby (zmes)
+          - hladka/chips → single color
+          Renderujem inline aby zostal jeden komponent (a finish/turnstile/
+          generate ostali spoločné nižšie). */}
+
+      {texture === "mramor" ? (
+        <MramorPicker colorSlug={colorSlug} onColor={onColor} />
+      ) : texture === "metalicka" ? (
+        <MetalickaPicker colorSlug={colorSlug} onColor={onColor} />
+      ) : (
+        <>
       <label className="block text-sm md:text-base font-extrabold text-[#1B2430] mb-2">
         2. Vyber farbu
       </label>
@@ -911,6 +928,9 @@ function PickColorStep({
           </div>
         </div>
       )}
+        </>
+      )}
+      {/* ═══════════════ KONIEC PER-TEXTURE COLOR PICKER ═══════════════ */}
 
       {/* Krok 3: Povrchový lak — len finálny topcoat. Žiadny default,
           aktivuje sa modrá až po kliknutí. */}
@@ -964,10 +984,19 @@ function PickColorStep({
       </div>
 
       {/* Primárna akcia — oranžová pill ako "Cenová ponuka" na homepage.
-          Disabled kým user nezvolí farbu, lak alebo Turnstile neprejde. */}
+          Disabled kým user nezvolí farbu, lak alebo Turnstile neprejde.
+          Pre mramor (compound "base:vein"): obe časti musia byť vyplnené. */}
       <button
         type="button"
-        disabled={!turnstileToken || !colorSlug || !finish}
+        disabled={
+          !turnstileToken ||
+          !colorSlug ||
+          !finish ||
+          // Mramor compound: ak chýba báza alebo žilkovanie
+          (texture === "mramor" &&
+            (!colorSlug.includes(":") ||
+              colorSlug.split(":").some((p) => p === "")))
+        }
         onClick={onGenerate}
         className="mt-3 w-full inline-flex items-center justify-center gap-2 px-6 py-3 md:py-3.5 rounded-full bg-[#F0851A] text-white font-extrabold text-sm md:text-base hover:bg-[#D9760F] disabled:opacity-50 disabled:cursor-not-allowed shadow-[0_10px_30px_rgba(240,133,26,0.45)] hover:shadow-[0_14px_40px_rgba(240,133,26,0.6)] transition-all duration-300"
       >
@@ -977,6 +1006,200 @@ function PickColorStep({
       <p className="mt-2 text-[11px] font-bold text-center text-[#1B2430]/50">
         Trvá 20–40 sekúnd · denný limit 3 generácie
       </p>
+    </div>
+  );
+}
+
+/* ═══════════════════════════════════════════════════════════════════════
+ * MramorPicker — 2-krokový výber: bázová farba + farba žiliek.
+ * Compound slug format: "<baseSlug>:<veinSlug>" (napr. "ral-9010:ral-7016")
+ * Posiela onColor LEN keď sú obe vybraté, inak null (generate disabled).
+ * ─────────────────────────────────────────────────────────────────────── */
+function MramorPicker({
+  colorSlug,
+  onColor,
+}: {
+  colorSlug: string | null;
+  onColor: (c: string | null) => void;
+}) {
+  const ral = getRalCatalog();
+  // Parse compound slug
+  const [baseSlug, veinSlug] = (colorSlug ?? "").includes(":")
+    ? (colorSlug as string).split(":")
+    : [null, null];
+
+  const setBase = (slug: string) =>
+    onColor(veinSlug ? `${slug}:${veinSlug}` : `${slug}:`);
+  const setVein = (slug: string) =>
+    onColor(baseSlug ? `${baseSlug}:${slug}` : `:${slug}`);
+
+  const baseRal = ral.find((r) => ralSlug(r) === baseSlug);
+  const veinRal = ral.find((r) => ralSlug(r) === veinSlug);
+
+  return (
+    <div className="space-y-3">
+      <label className="block text-sm md:text-base font-extrabold text-[#1B2430]">
+        2. Vyber farby mramoru
+      </label>
+
+      {/* Bázová farba */}
+      <div>
+        <div className="text-[11px] md:text-xs font-black text-[#1B2430] uppercase tracking-wider mb-1.5">
+          Bázová farba {baseRal && <span className="text-[#2EA3DC] normal-case tracking-normal">· {baseRal.name}</span>}
+        </div>
+        <RalSwatchRow
+          ral={ral}
+          activeSlug={baseSlug}
+          onPick={setBase}
+        />
+      </div>
+
+      {/* Farba žiliek */}
+      <div>
+        <div className="text-[11px] md:text-xs font-black text-[#1B2430] uppercase tracking-wider mb-1.5">
+          Farba žiliek {veinRal && <span className="text-[#2EA3DC] normal-case tracking-normal">· {veinRal.name}</span>}
+        </div>
+        <RalSwatchRow
+          ral={ral}
+          activeSlug={veinSlug}
+          onPick={setVein}
+        />
+      </div>
+
+      {/* Pomôcka */}
+      <p className="text-[11px] md:text-xs font-bold text-[#1B2430]/70 leading-snug">
+        Mramor tipicky vznikne kombináciou 2 farieb — báza je dominantná, žilky tvoria
+        prirodzený vzor cez podlahu (klasicky tmavšie žilky na svetlej báze).
+      </p>
+    </div>
+  );
+}
+
+/* ═══════════════════════════════════════════════════════════════════════
+ * MetalickaPicker — multi-select 1-3 RAL farby ktoré sa zmiešajú.
+ * Compound slug: "<slug1>+<slug2>+<slug3>"
+ * 1 farba = pekný uniformný metalický look, viac = swirled mix.
+ * ─────────────────────────────────────────────────────────────────────── */
+function MetalickaPicker({
+  colorSlug,
+  onColor,
+}: {
+  colorSlug: string | null;
+  onColor: (c: string | null) => void;
+}) {
+  const ral = getRalCatalog();
+  const selected = colorSlug ? colorSlug.split("+").filter(Boolean) : [];
+  const MAX = 3;
+
+  const toggle = (slug: string) => {
+    if (selected.includes(slug)) {
+      const next = selected.filter((s) => s !== slug);
+      onColor(next.length > 0 ? next.join("+") : null);
+    } else {
+      if (selected.length >= MAX) return; // limit
+      const next = [...selected, slug];
+      onColor(next.join("+"));
+    }
+  };
+
+  const selectedRals = selected
+    .map((s) => ral.find((r) => ralSlug(r) === s))
+    .filter(Boolean) as RalColor[];
+
+  return (
+    <div className="space-y-3">
+      <label className="block text-sm md:text-base font-extrabold text-[#1B2430]">
+        2. Vyber 1–3 farby (zmiešajú sa)
+      </label>
+
+      {/* Vybrané farby — chips s × na odstránenie */}
+      {selectedRals.length > 0 && (
+        <div className="flex flex-wrap gap-1.5">
+          {selectedRals.map((r) => (
+            <button
+              key={r.ral}
+              type="button"
+              onClick={() => toggle(ralSlug(r))}
+              className="group inline-flex items-center gap-1.5 pl-1 pr-2 py-1 rounded-full bg-[#2EA3DC]/10 ring-1 ring-[#2EA3DC]/40 text-xs font-extrabold text-[#1B2430] hover:bg-[#2EA3DC]/20"
+            >
+              <span
+                className="inline-block w-4 h-4 rounded-full ring-1 ring-black/20"
+                style={{ backgroundColor: r.hex }}
+              />
+              <span>{r.name}</span>
+              <X className="w-3 h-3 text-[#1B2430]/60 group-hover:text-[#1B2430]" aria-hidden />
+            </button>
+          ))}
+        </div>
+      )}
+
+      {/* RAL palette — toggle (click = add/remove) */}
+      <RalSwatchRow
+        ral={ral}
+        activeSlug={null}
+        selectedSet={new Set(selected)}
+        onPick={toggle}
+        disabled={(slug) => selected.length >= MAX && !selected.includes(slug)}
+      />
+
+      <p className="text-[11px] md:text-xs font-bold text-[#1B2430]/70 leading-snug">
+        {selected.length === 0
+          ? "Vyber aspoň 1 farbu. 1 farba = pekný uniformný metalik, viac farieb = zmiešané swirly."
+          : selected.length === 1
+            ? "1 farba — jednoduchý metalický finish. Pre dramatickejší efekt pridaj ďalšiu."
+            : `${selected.length} farby — AI ich zmieša do pearlescent swirlov.`}
+      </p>
+    </div>
+  );
+}
+
+/* RalSwatchRow — kompaktný horizontálny grid 20 RAL swatches.
+ * Použitý oboma marble + metallic picker-mi. */
+function RalSwatchRow({
+  ral,
+  activeSlug,
+  selectedSet,
+  onPick,
+  disabled,
+}: {
+  ral: RalColor[];
+  activeSlug: string | null;
+  selectedSet?: Set<string>;
+  onPick: (slug: string) => void;
+  disabled?: (slug: string) => boolean;
+}) {
+  return (
+    <div className="grid grid-cols-10 md:grid-cols-10 gap-1.5">
+      {ral.map((r) => {
+        const slug = ralSlug(r);
+        const isActive = slug === activeSlug;
+        const isSelected = selectedSet?.has(slug);
+        const isDisabled = disabled?.(slug) ?? false;
+        return (
+          <button
+            key={r.ral}
+            type="button"
+            onClick={() => onPick(slug)}
+            disabled={isDisabled}
+            title={`${r.ral} · ${r.name}`}
+            className={`relative h-10 md:h-12 lg:h-14 rounded-md border-2 transition-all ${
+              isActive || isSelected
+                ? "border-[#2EA3DC] scale-105 shadow-[0_4px_12px_rgba(46,163,220,0.4)]"
+                : isDisabled
+                  ? "border-[#1B2430]/10 opacity-30 cursor-not-allowed"
+                  : "border-[#1B2430]/10 hover:border-[#2EA3DC]/50 hover:scale-105"
+            }`}
+            style={{ backgroundColor: r.hex }}
+          >
+            {(isActive || isSelected) && (
+              <CheckCircle2
+                className="absolute top-0.5 right-0.5 w-3.5 h-3.5 text-white drop-shadow-[0_2px_4px_rgba(0,0,0,0.4)]"
+                aria-hidden
+              />
+            )}
+          </button>
+        );
+      })}
     </div>
   );
 }
