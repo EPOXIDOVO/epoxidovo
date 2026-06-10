@@ -13,12 +13,6 @@ export function SiteChrome({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();
   const isHome = pathname === "/";
 
-  // /admin and auth routes get bare layout — handled by their own layouts
-  const isBareRoute =
-    pathname.startsWith("/admin") || pathname.startsWith("/auth");
-
-  if (isBareRoute) return <>{children}</>;
-
   // 1-page no-scroll layout pre /ai-vizualizer + /cenova-ponuka
   // (Footer hidden, main fills viewport, žiadny dlhý scroll dolu).
   const is1PageRoute =

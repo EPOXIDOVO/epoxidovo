@@ -1,7 +1,6 @@
 import type { Metadata } from "next";
 import { Container } from "@/components/ui/Container";
 import { Section } from "@/components/ui/Section";
-import { CookieSettingsTrigger } from "@/components/cookies/CookieSettingsTrigger";
 import { SITE } from "@/lib/site";
 
 export const metadata: Metadata = {
@@ -24,8 +23,6 @@ export default function CookiesPage() {
             návštevnosti a marketingové účely. Tieto zásady popisujú, aké
             cookies používame a ako ich môžeš spravovať.
           </p>
-
-          <CookieSettingsTrigger />
 
           <h2 className="text-2xl font-bold mt-12 mb-4">Čo sú cookies?</h2>
           <p className="leading-relaxed mb-6">

@@ -5,12 +5,10 @@ import { Manrope, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import { SITE } from "@/lib/site";
 import { SiteChrome } from "@/components/layout/SiteChrome";
-import { CookieBanner } from "@/components/cookies/CookieBanner";
 import { InitialPreloader } from "@/components/layout/InitialPreloader";
 import { JsonLd } from "@/components/seo/JsonLd";
 import { Analytics } from "@/components/analytics/Analytics";
 import { GlobalClickTracker } from "@/components/analytics/GlobalClickTracker";
-import { getDefaultConsentScript } from "@/lib/consent";
 
 // AiChatWidget je heavy (421 lines, lucide ikony, formulár) — lazy-load
 // kvôli Core Web Vitals (TBT, INP). Bundle sa rozsplitne do vlastného chunku.
@@ -110,13 +108,8 @@ export default function RootLayout({
       suppressHydrationWarning
     >
       <head>
-        {/* Google Consent Mode v2 — default 'denied' pred user volbou */}
-        <Script
-          id="consent-default"
-          strategy="beforeInteractive"
-        >
-          {getDefaultConsentScript()}
-        </Script>
+        {/* TODO: Cookiebot script bude pridaný namiesto vlastného consent
+            módu — id z Cookiebot dashboardu. */}
         {/* Disable pinch-zoom + double-tap zoom on mobile.
             iOS Safari ignoruje viewport user-scalable=no od iOS 10, tak
             chytáme gesture events priamo + double-tap timing detector. */}
@@ -144,7 +137,6 @@ export default function RootLayout({
         </a>
         <InitialPreloader />
         <SiteChrome>{children}</SiteChrome>
-        <CookieBanner />
         <AiChatWidget />
         <JsonLd />
         <Analytics />
