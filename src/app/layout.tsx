@@ -108,8 +108,17 @@ export default function RootLayout({
       suppressHydrationWarning
     >
       <head>
-        {/* TODO: Cookiebot script bude pridaný namiesto vlastného consent
-            módu — id z Cookiebot dashboardu. */}
+        {/* Cookiebot — GDPR consent banner + script auto-blocking.
+            Musí byť v <head> a načítaný PRED ostatným analytics/marketing
+            JS, aby blockingmode=auto vedel zablokovať trackery do udelenia
+            súhlasu. */}
+        <Script
+          id="Cookiebot"
+          src="https://consent.cookiebot.com/uc.js"
+          data-cbid="4f9c479d-c24b-4e27-82b7-2062743b7ce2"
+          data-blockingmode="auto"
+          strategy="beforeInteractive"
+        />
         {/* Disable pinch-zoom + double-tap zoom on mobile.
             iOS Safari ignoruje viewport user-scalable=no od iOS 10, tak
             chytáme gesture events priamo + double-tap timing detector. */}
