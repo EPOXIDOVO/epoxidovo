@@ -33,7 +33,7 @@ export const metadata: Metadata = {
     description: PAGE_DESCRIPTION,
     images: [
       {
-        url: "/opengraph-image",
+        url: "/og-home.jpg",
         width: 1200,
         height: 630,
         alt: "EPOXIDOVO — Epoxidové a polyuretánové podlahy na mieru",
@@ -44,7 +44,7 @@ export const metadata: Metadata = {
     card: "summary_large_image",
     title: "Epoxidové a polyuretánové podlahy na mieru | EPOXIDOVO.SK",
     description: PAGE_DESCRIPTION,
-    images: ["/opengraph-image"],
+    images: ["/og-home.jpg"],
   },
 };
 
