@@ -80,7 +80,7 @@ export const metadata: Metadata = {
     // funguje spoľahlivo pre FB/LinkedIn/WhatsApp link preview.
     images: [
       {
-        url: "/og-home.jpg",
+        url: "/og-home.jpg?v=3",
         width: 1200,
         height: 630,
         alt: "EPOXIDOVO — Epoxidové a polyuretánové podlahy na mieru",
@@ -91,7 +91,7 @@ export const metadata: Metadata = {
     card: "summary_large_image",
     title: SITE.og.title,
     description: SITE.og.description,
-    images: ["/og-home.jpg"],
+    images: ["/og-home.jpg?v=3"],
   },
   robots: {
     index: true,
