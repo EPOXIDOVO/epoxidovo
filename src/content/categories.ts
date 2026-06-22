@@ -47,7 +47,7 @@ export const CATEGORIES: Category[] = [
       "Ručne tvorené žilkovanie pripomínajúce skutočný mramor — každá podlaha je originál. Vytvára pocit luxusného priestoru bez nákladov na pravý kameň.",
     image: "/images/categories/mramorove.jpg",
     driveCategory: "mramorove efekty",
-    priceFrom: 70,
+    priceFrom: 139,
   },
   {
     slug: "metalicke",

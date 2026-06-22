@@ -93,7 +93,7 @@ export const SERVICE_DETAILS: Record<string, ServiceDetail> = {
       "Showroomy a butiky",
       "Kúpeľne a kuchyne",
     ],
-    priceRange: "od 65 €/m²",
+    priceRange: "od 139 €/m²",
     technicalSpecs: [
       { label: "Hrúbka", value: "3–5 mm" },
       { label: "Pochôdznosť", value: "48 h" },
