@@ -96,8 +96,6 @@ export function CategoriesShowcase() {
                         ? "/images/hero/byvanie-v2.webp"
                         : cat.slug === "priemyselne"
                         ? "/images/hero/hala.jpg"
-                        : cat.slug === "metalicke"
-                        ? "/images/realizacie/r-32.jpg"
                         : `/images/categories/${cat.slug}.jpg`
                     }
                     alt={`${cat.name} epoxidová podlaha`}
