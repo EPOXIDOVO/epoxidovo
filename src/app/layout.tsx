@@ -75,11 +75,23 @@ export const metadata: Metadata = {
     siteName: SITE.name,
     title: SITE.og.title,
     description: SITE.og.description,
+    // Static OG image — dynamický next/og ImageResponse na Cloudflare Pages
+    // edge runtime vracia 0 bytov (silent fail). Static .jpg z portfolia
+    // funguje spoľahlivo pre FB/LinkedIn/WhatsApp link preview.
+    images: [
+      {
+        url: "/og-home.jpg",
+        width: 1200,
+        height: 630,
+        alt: "EPOXIDOVO — Epoxidové a polyuretánové podlahy na mieru",
+      },
+    ],
   },
   twitter: {
     card: "summary_large_image",
     title: SITE.og.title,
     description: SITE.og.description,
+    images: ["/og-home.jpg"],
   },
   robots: {
     index: true,
