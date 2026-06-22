@@ -57,4 +57,8 @@ export const REALIZACIE: Realizacia[] = [
   { id: 43, src: "/images/realizacie/r-43.jpg", category: "jednofarebne", space: "hala-firma", alt: "Jednofarebná podlaha v priemyselnej hale" },
   { id: 45, src: "/images/realizacie/r-45.jpg", category: "jednofarebne", space: "hala-firma", alt: "Jednofarebná podlaha v priemyselnej hale" },
   { id: 46, src: "/images/realizacie/r-46.jpg", category: "jednofarebne", space: "hala-firma", alt: "Jednofarebná podlaha v priemyselnej hale", labels: ["⚡ Antistatika (ESD)"] },
+  // Chipsové — pridané z user-ovho desktopu (chips garaz.jpg, chips garaz 2.jpg, chips 3.jpg)
+  { id: 47, src: "/images/realizacie/r-47.jpg", category: "chipsove", space: "garaz", alt: "Chipsová podlaha v garáži" },
+  { id: 48, src: "/images/realizacie/r-48.jpg", category: "chipsove", space: "garaz", alt: "Chipsová podlaha v garáži" },
+  { id: 49, src: "/images/realizacie/r-49.jpg", category: "chipsove", space: "dom", alt: "Chipsová podlaha v bývaní" },
 ];
