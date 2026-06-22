@@ -65,4 +65,6 @@ export const REALIZACIE: Realizacia[] = [
   { id: 50, src: "/images/realizacie/r-50.jpg", category: "chipsove", space: "dom", alt: "Chipsová podlaha v bývaní" },
   { id: 51, src: "/images/realizacie/r-51.jpg", category: "chipsove", space: "dom", alt: "Chipsová podlaha v bývaní" },
   { id: 52, src: "/images/realizacie/r-52.jpg", category: "chipsove", space: "dom", alt: "Chipsová podlaha v bývaní" },
+  // Metalická modrá (rovnaká fotka ako nahľad kategórie, pridaná aj do portfolia)
+  { id: 53, src: "/images/realizacie/r-53.jpg", category: "metalicke", space: "hala-firma", alt: "Metalická modro-hnedá podlaha" },
 ];
