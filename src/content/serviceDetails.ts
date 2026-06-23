@@ -64,7 +64,7 @@ export const SERVICE_DETAILS: Record<string, ServiceDetail> = {
       "Komerčné prevádzky",
       "Pivnice a technické miestnosti",
     ],
-    priceRange: "od 42 €/m²",
+    priceRange: "od 49 €/m²",
     technicalSpecs: [
       { label: "Hrúbka", value: "2–4 mm" },
       { label: "Pochôdznosť", value: "36 h" },

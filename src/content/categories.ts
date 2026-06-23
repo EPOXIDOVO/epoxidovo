@@ -36,7 +36,7 @@ export const CATEGORIES: Category[] = [
       "Farebné vločky (chipsy) zapečené v lesklom epoxide. Skvelo skrývajú nečistoty, sú odolné a vizuálne živé. Top voľba pre garáže, dielne a komerčné priestory.",
     image: "/images/categories/chipsove.jpg",
     driveCategory: "chipsova podlaha",
-    priceFrom: 50,
+    priceFrom: 49,
   },
   {
     slug: "mramorove",

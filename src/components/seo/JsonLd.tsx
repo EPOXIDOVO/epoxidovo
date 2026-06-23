@@ -151,7 +151,7 @@ export function JsonLd() {
         name: "Koľko stojí epoxidová podlaha?",
         acceptedAnswer: {
           "@type": "Answer",
-          text: "Hladká jednofarebná od 70 €/m², chipsová od 50 €/m², mramorová od 139 €/m², metalická od 149 €/m². Priemyselné a polyuretánové podlahy cena na dopyt. Presnú kalkuláciu pripravíme po obhliadke.",
+          text: "Hladká jednofarebná od 70 €/m², chipsová od 49 €/m², mramorová od 139 €/m², metalická od 149 €/m². Priemyselné a polyuretánové podlahy cena na dopyt. Presnú kalkuláciu pripravíme po obhliadke.",
         },
       },
       {
