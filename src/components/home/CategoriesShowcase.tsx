@@ -130,8 +130,9 @@ export function CategoriesShowcase() {
             ))}
           </div>
 
-          {/* CTA: Vzorkovník RAL — kompaktný button tesne pod kartami */}
-          <div className="mt-5 md:mt-6 flex justify-center">
+          {/* CTA: Vzorkovník RAL — button vertikálne v strede medzi kartami
+              a koncom sekcie (mt ~= pb sekcie nižšie). */}
+          <div className="mt-10 md:mt-14 flex justify-center">
             <Link
               href="/vzorkovnik"
               className="inline-flex items-center gap-2 px-6 md:px-7 py-2.5 md:py-3 rounded-full bg-[#3db6e8] text-white font-semibold text-sm md:text-base hover:bg-[#1a8cc4] shadow-[0_6px_20px_rgba(61,182,232,0.4)] hover:-translate-y-0.5 transition-all duration-300"
