@@ -129,6 +129,19 @@ export function CategoriesShowcase() {
               </Link>
             ))}
           </div>
+
+          {/* CTA: Vzorkovník RAL — odkaz na samostatnú stránku s celou paletou */}
+          <div className="mt-10 md:mt-12 flex justify-center">
+            <Link
+              href="/vzorkovnik"
+              className="inline-flex items-center gap-2.5 px-7 md:px-9 py-3.5 md:py-4 rounded-full bg-white text-[#1a1a1a] font-extrabold text-sm md:text-base hover:bg-[#3db6e8] hover:text-white shadow-[0_10px_30px_rgba(0,0,0,0.25)] hover:shadow-[0_14px_40px_rgba(61,182,232,0.55)] hover:-translate-y-0.5 transition-all duration-300"
+            >
+              <span aria-hidden className="inline-flex items-center justify-center w-6 h-6 md:w-7 md:h-7 rounded-md bg-gradient-to-br from-[#3db6e8] via-[#5cb8e8] to-[#1a8cc4] text-white text-xs font-black">
+                R
+              </span>
+              <span>Vzorkovník RAL — pozri všetky farby</span>
+            </Link>
+          </div>
         </Container>
       </section>
     </>
