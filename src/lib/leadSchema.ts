@@ -13,13 +13,12 @@ export const LeadInputSchema = z.object({
     .string()
     .email("Zadaj platnú emailovú adresu")
     .max(200, "Email je príliš dlhý"),
+  // Telefón POVINNÝ — chceme každého leadu vedieť okamžite zavolať.
   phone: z
     .string()
     .min(9, "Zadaj platné telefónne číslo")
     .max(30, "Telefón je príliš dlhý")
-    .regex(/^[+\d\s\-/()]+$/, "Telefón obsahuje nepovolené znaky")
-    .optional()
-    .or(z.literal("")),
+    .regex(/^[+\d\s\-/()]+$/, "Telefón obsahuje nepovolené znaky"),
   spaceType: z
     .enum(["dom", "garaz", "hala-firma", "ine"])
     .optional(),

@@ -50,8 +50,9 @@ export function ContactMessageForm() {
     }
     const hasEmail = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(values.email.trim());
     const hasPhone = /^[+\d\s\-/()]{9,30}$/.test(values.phone.trim());
-    if (!hasEmail && !hasPhone) {
-      setError("Zadaj e-mail alebo telefón (aspoň jedno).");
+    // Telefón POVINNÝ (musíme vedieť okamžite zavolať). Email je voliteľný.
+    if (!hasPhone) {
+      setError("Zadaj platné telefónne číslo.");
       return;
     }
     if (values.message.trim().length < 5) {
@@ -184,10 +185,27 @@ export function ContactMessageForm() {
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
           <div>
             <label
+              htmlFor="msg-phone"
+              className="block text-sm font-semibold text-[var(--color-fg)] mb-1.5"
+            >
+              Telefón *
+            </label>
+            <input
+              id="msg-phone"
+              type="tel"
+              autoComplete="tel"
+              required
+              value={values.phone}
+              onChange={(e) => set("phone", e.target.value)}
+              className={inputCls}
+            />
+          </div>
+          <div>
+            <label
               htmlFor="msg-email"
               className="block text-sm font-semibold text-[var(--color-fg)] mb-1.5"
             >
-              E-mail
+              E-mail <span className="text-[var(--color-fg-muted)] font-normal">(voliteľné)</span>
             </label>
             <input
               id="msg-email"
@@ -198,26 +216,7 @@ export function ContactMessageForm() {
               className={inputCls}
             />
           </div>
-          <div>
-            <label
-              htmlFor="msg-phone"
-              className="block text-sm font-semibold text-[var(--color-fg)] mb-1.5"
-            >
-              Telefón
-            </label>
-            <input
-              id="msg-phone"
-              type="tel"
-              autoComplete="tel"
-              value={values.phone}
-              onChange={(e) => set("phone", e.target.value)}
-              className={inputCls}
-            />
-          </div>
         </div>
-        <p className="text-xs text-[var(--color-fg-muted)] -mt-2">
-          Aspoň jedno z dvojice (e-mail alebo telefón) je povinné.
-        </p>
         <div>
           <label
             htmlFor="msg-message"
