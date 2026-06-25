@@ -191,6 +191,80 @@ export async function POST(req: NextRequest) {
       );
     }
 
+    // 6) Forward to BDSManager CRM webhook (best-effort, non-blocking-ish)
+    //    Ak BDSMANAGER_WEBHOOK_URL nie je nastavený, preskočíme — graceful degrade.
+    if (process.env.BDSMANAGER_WEBHOOK_URL) {
+      try {
+        const serviceLabel: Record<string, string> = {
+          jednofarebne: "Jednofarebná",
+          chipsove: "Chipsová",
+          mramorove: "Mramorová",
+          metalicke: "Metalická",
+          neviem: "",
+        };
+        const spaceLabel: Record<string, string> = {
+          dom: "Dom / byt",
+          garaz: "Garáž",
+          "hala-firma": "Hala / firma",
+          ine: "Iné",
+        };
+        const crmPayload = {
+          name: leadData.name,
+          email: leadData.email,
+          phone: leadData.phone ?? undefined,
+          source_campaign:
+            leadData.utmCampaign ||
+            (leadData.source === "contact_form"
+              ? "Web formulár (epoxidovo.sk)"
+              : leadData.source),
+          priority: "medium" as const,
+          data: {
+            plocha: leadData.area != null ? String(leadData.area) : undefined,
+            typ_podlahy: leadData.service
+              ? serviceLabel[leadData.service] || leadData.service
+              : undefined,
+            priestor: leadData.spaceType
+              ? spaceLabel[leadData.spaceType] || leadData.spaceType
+              : undefined,
+            message: leadData.message ?? undefined,
+            utm_source: leadData.utmSource ?? undefined,
+            utm_medium: leadData.utmMedium ?? undefined,
+            utm_campaign: leadData.utmCampaign ?? undefined,
+            referrer: leadData.referrer ?? undefined,
+            user_agent: leadData.userAgent ?? undefined,
+          },
+        };
+        // Strip undefined data sub-keys (cleaner payload)
+        crmPayload.data = Object.fromEntries(
+          Object.entries(crmPayload.data).filter(([, v]) => v != null),
+        ) as typeof crmPayload.data;
+
+        const controller = new AbortController();
+        const timeout = setTimeout(() => controller.abort(), 4000);
+        const crmRes = await fetch(process.env.BDSMANAGER_WEBHOOK_URL, {
+          method: "POST",
+          signal: controller.signal,
+          headers: {
+            "Content-Type": "application/json",
+            ...(process.env.BDSMANAGER_WEBHOOK_SECRET && {
+              "X-Webhook-Secret": process.env.BDSMANAGER_WEBHOOK_SECRET,
+            }),
+          },
+          body: JSON.stringify(crmPayload),
+        }).finally(() => clearTimeout(timeout));
+        if (!crmRes.ok) {
+          console.warn(
+            "[lead] BDSManager forward non-ok:",
+            crmRes.status,
+            await crmRes.text().catch(() => "<no body>"),
+          );
+        }
+      } catch (crmErr) {
+        console.error("[lead] BDSManager forward failed:", crmErr);
+        // Nezhadzujeme user response — CRM forward je best-effort.
+      }
+    }
+
     return NextResponse.json(
       { ok: true, id: leadId, mode: leadId ? "saved" : "logged" },
       { status: 201 },
