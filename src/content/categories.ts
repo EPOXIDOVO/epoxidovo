@@ -58,7 +58,7 @@ export const CATEGORIES: Category[] = [
       "Pigmenty s metalickým efektom rozohrávajú podlahu pri každom kroku. 3D ilúzia, jedinečný odlesk a wow efekt — pre showroomy, prevádzky aj reprezentačné priestory.",
     image: "/images/categories/metalicke.jpg",
     driveCategory: "metalicke",
-    priceFrom: 149,
+    priceFrom: 129,
   },
   {
     slug: "priemyselne",

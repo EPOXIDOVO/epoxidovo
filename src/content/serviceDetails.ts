@@ -122,7 +122,7 @@ export const SERVICE_DETAILS: Record<string, ServiceDetail> = {
       "Reštaurácie a bary",
       "Galérie a luxusné obývačky",
     ],
-    priceRange: "od 75 €/m²",
+    priceRange: "od 129 €/m²",
     technicalSpecs: [
       { label: "Hrúbka", value: "3–5 mm" },
       { label: "Pochôdznosť", value: "48 h" },
