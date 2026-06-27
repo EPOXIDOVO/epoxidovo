@@ -61,10 +61,10 @@ export const REALIZACIE: Realizacia[] = [
   { id: 47, src: "/images/realizacie/r-47.jpg", category: "chipsove", space: "garaz", alt: "Chipsová podlaha v garáži" },
   { id: 48, src: "/images/realizacie/r-48.jpg", category: "chipsove", space: "garaz", alt: "Chipsová podlaha v garáži" },
   { id: 49, src: "/images/realizacie/r-49.jpg", category: "chipsove", space: "dom", alt: "Chipsová podlaha v bývaní" },
-  // Chipsové batch 2 (1.png, 4 2.png, 7 2.png z desktopu)
-  { id: 50, src: "/images/realizacie/r-50.jpg", category: "chipsove", space: "dom", alt: "Chipsová podlaha v bývaní" },
-  { id: 51, src: "/images/realizacie/r-51.jpg", category: "chipsove", space: "dom", alt: "Chipsová podlaha v bývaní" },
-  { id: 52, src: "/images/realizacie/r-52.jpg", category: "chipsove", space: "dom", alt: "Chipsová podlaha v bývaní" },
+  // Chipsové batch 2 — garáž s before/after + macko mascot
+  { id: 50, src: "/images/realizacie/r-50.jpg", category: "chipsove", space: "garaz", alt: "Chipsová podlaha v garáži" },
+  { id: 51, src: "/images/realizacie/r-51.jpg", category: "chipsove", space: "garaz", alt: "Chipsová podlaha v garáži" },
+  { id: 52, src: "/images/realizacie/r-52.jpg", category: "chipsove", space: "garaz", alt: "Chipsová podlaha v garáži" },
   // Metalická modrá (rovnaká fotka ako nahľad kategórie, pridaná aj do portfolia)
   { id: 53, src: "/images/realizacie/r-53.jpg", category: "metalicke", space: "hala-firma", alt: "Metalická modro-hnedá podlaha" },
 ];
