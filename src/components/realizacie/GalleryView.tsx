@@ -25,6 +25,24 @@ export function GalleryView({ categories, spaceTypes }: GalleryViewProps) {
   const activeSpace = params.get("priestor") || "all";
   const [lightboxIdx, setLightboxIdx] = React.useState<number | null>(null);
 
+  // Pinch-zoom + pan state pre lightbox.
+  // Globálny gesturestart blocker v layout.tsx + viewport userScalable: false
+  // bránia natívnemu pinchu → implementujeme vlastný cez touchevents.
+  const [zoom, setZoom] = React.useState({ scale: 1, x: 0, y: 0 });
+  const gestureRef = React.useRef<{
+    initialDist: number;
+    initialScale: number;
+    panOffsetX: number;
+    panOffsetY: number;
+  } | null>(null);
+  const lastTapRef = React.useRef(0);
+
+  // Reset zoom pri zmene fotky alebo zatvorení lightboxu
+  React.useEffect(() => {
+    setZoom({ scale: 1, x: 0, y: 0 });
+    gestureRef.current = null;
+  }, [lightboxIdx]);
+
   const setFilter = (key: "kategoria" | "priestor", value: string) => {
     const next = new URLSearchParams(params.toString());
     if (value === "all") next.delete(key);
@@ -197,18 +215,105 @@ export function GalleryView({ categories, spaceTypes }: GalleryViewProps) {
           >
             <ChevronRight className="w-7 h-7 md:w-6 md:h-6" aria-hidden />
           </button>
+          {/* Image wrapper s pinch-zoom + pan + double-tap.
+              touchAction: none aby sme zachytili všetky touch eventy.
+              Image samotný má natural object-contain → každá fotka rovnaký
+              dostupný priestor (max 90vh × 95vw), nie aspect-locked container. */}
           <div
-            className="relative max-w-6xl w-full max-h-[85vh] aspect-[4/3]"
+            className="relative flex items-center justify-center w-full h-full max-w-[95vw] max-h-[90vh] overflow-hidden"
+            style={{ touchAction: "none" }}
             onClick={(e) => e.stopPropagation()}
+            onTouchStart={(e) => {
+              if (e.touches.length === 2) {
+                // Pinch start — stop propagation aby parent neradil swipe
+                e.stopPropagation();
+                const t1 = e.touches[0], t2 = e.touches[1];
+                const dist = Math.hypot(t2.clientX - t1.clientX, t2.clientY - t1.clientY);
+                gestureRef.current = {
+                  initialDist: dist,
+                  initialScale: zoom.scale,
+                  panOffsetX: zoom.x,
+                  panOffsetY: zoom.y,
+                };
+              } else if (e.touches.length === 1) {
+                // Double-tap detection (≤300ms between taps)
+                const now = Date.now();
+                if (now - lastTapRef.current < 300) {
+                  e.stopPropagation();
+                  setZoom((z) =>
+                    z.scale === 1 ? { scale: 2.5, x: 0, y: 0 } : { scale: 1, x: 0, y: 0 },
+                  );
+                  lastTapRef.current = 0;
+                  return;
+                }
+                lastTapRef.current = now;
+                if (zoom.scale > 1) {
+                  // Pan start — len keď je zoomnuté
+                  e.stopPropagation();
+                  gestureRef.current = {
+                    initialDist: 0,
+                    initialScale: zoom.scale,
+                    panOffsetX: zoom.x - e.touches[0].clientX,
+                    panOffsetY: zoom.y - e.touches[0].clientY,
+                  };
+                }
+                // ELSE: scale === 1, single finger — nechaj parent handler
+                // spracovať potenciálny swipe pre navigáciu medzi fotkami.
+              }
+            }}
+            onTouchMove={(e) => {
+              const ref = gestureRef.current;
+              if (!ref) return;
+              e.stopPropagation();
+              if (e.touches.length === 2 && ref.initialDist > 0) {
+                // Pinch in progress
+                e.preventDefault();
+                const t1 = e.touches[0], t2 = e.touches[1];
+                const dist = Math.hypot(t2.clientX - t1.clientX, t2.clientY - t1.clientY);
+                const newScale = Math.max(1, Math.min(4, ref.initialScale * (dist / ref.initialDist)));
+                setZoom((z) => ({ ...z, scale: newScale }));
+              } else if (e.touches.length === 1 && ref.initialDist === 0) {
+                // Pan in progress
+                e.preventDefault();
+                setZoom((z) => ({
+                  ...z,
+                  x: e.touches[0].clientX + ref.panOffsetX,
+                  y: e.touches[0].clientY + ref.panOffsetY,
+                }));
+              }
+            }}
+            onTouchEnd={(e) => {
+              gestureRef.current = null;
+              // Ak skončil zoom < 1.1, snap back na 1 (cleanup tiny zoom)
+              if (zoom.scale < 1.1 && zoom.scale > 1) {
+                setZoom({ scale: 1, x: 0, y: 0 });
+              }
+              // Ak používateľ swajpne (1 prst) keď nie je zoomnuté, prejde do navigation
+              // (parent handler na lightbox div) — tu nestoppropagate ak scale === 1
+              if (zoom.scale === 1 && e.touches.length === 0) {
+                // Nezastavíme propagáciu — parent swipe handler funguje
+              }
+            }}
+            onDoubleClick={(e) => {
+              // Desktop double-click = same as double-tap (toggle zoom)
+              e.stopPropagation();
+              setZoom((z) =>
+                z.scale === 1 ? { scale: 2.5, x: 0, y: 0 } : { scale: 1, x: 0, y: 0 },
+              );
+            }}
           >
-            <Image
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img
               src={filtered[lightboxIdx].src}
               alt={filtered[lightboxIdx].alt}
-              fill
-              sizes="100vw"
-              quality={92}
-              className="object-contain"
-              priority
+              className="max-w-full max-h-[90vh] object-contain select-none pointer-events-none"
+              draggable={false}
+              style={{
+                transform: `translate(${zoom.x}px, ${zoom.y}px) scale(${zoom.scale})`,
+                transformOrigin: "center center",
+                transition: gestureRef.current ? "none" : "transform 0.2s ease-out",
+                willChange: "transform",
+              }}
             />
           </div>
           {/* Pager + swipe hint */}
