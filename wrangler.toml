@@ -13,6 +13,12 @@ pages_build_output_dir = ".vercel/output/static"
 #   EMAIL_FROM                    - Sender adresa
 #   ADMIN_EMAILS                  - Comma-separated allowlist
 #   NEXT_PUBLIC_META_PIXEL_ID     - Meta pixel ID (verejný)
+#
+# Voliteľné (CRM forward — leady idú do BDSManager dashboardu obchodníkov):
+#   BDSMANAGER_WEBHOOK_URL        - https://app.najcrm.sk/api/webhook/lead/<source-uuid>
+#                                   (UUID 11111111-1111-1111-1111-111111111111 = web source)
+#   BDSMANAGER_WEBHOOK_SECRET     - random 48-char hex; musí presne sedieť s
+#                                   lead_sources.webhook_secret v BDSManager Supabase DB
 
 # POZNÁMKA o cron joboch:
 # Pages projects nepodporujú "[[triggers.crons]]". Lead follow-up cron
