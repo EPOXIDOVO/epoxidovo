@@ -263,7 +263,14 @@ export async function POST(req: NextRequest) {
   if (isValidTextureSlug(body.texture)) {
     const refPaths = getReferenceImagePaths(body.texture as TextureSlug).slice(0, 2);
     if (refPaths.length > 0) {
-      const origin = `${new URL(req.url).protocol}//${req.headers.get("host") ?? "epoxidovo.sk"}`;
+      // SSRF guard: NEDÔVERUJEME Host headeru — attacker by mohol nastaviť
+      // Host: evil.com a presmerovať fetch ref-image na svoj server.
+      // Použijeme hardcoded production URL, dev fallback iba pre localhost.
+      const reqHost = req.headers.get("host") ?? "";
+      const isLocalhost = reqHost.startsWith("localhost") || reqHost.startsWith("127.");
+      const origin = isLocalhost
+        ? `http://${reqHost}`
+        : "https://epoxidovo.sk";
       try {
         referenceImages = await Promise.all(
           refPaths.map(async (path) => {

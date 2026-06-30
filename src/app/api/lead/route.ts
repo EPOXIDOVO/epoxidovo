@@ -17,8 +17,44 @@ import { rateLimit, getClientIp } from "@/lib/rate-limit";
 // Max payload size — 32 KB stačí na akýkoľvek lead. Bráni DoS cez veľký payload.
 const MAX_BODY_BYTES = 32 * 1024;
 
+/**
+ * Dovolené originy (Origin / Referer header). Curl/Python skripty bez správneho
+ * headera nemôžu spamovať lead form. Browseri ho posielajú automaticky.
+ * Pole je hardcoded — nedôverujeme runtime env, aby attacker nemohol pridať
+ * svoju doménu cez kompromitovaný CF dashboard.
+ */
+const ALLOWED_HOSTS = new Set([
+  "epoxidovo.sk",
+  "www.epoxidovo.sk",
+  "localhost",
+  "127.0.0.1",
+]);
+
+function isAllowedOrigin(req: NextRequest): boolean {
+  const origin = req.headers.get("origin") ?? req.headers.get("referer");
+  if (!origin) return false;
+  try {
+    const host = new URL(origin).hostname;
+    if (ALLOWED_HOSTS.has(host)) return true;
+    if (host.endsWith(".epoxidovo.sk")) return true;
+    if (host.endsWith(".epoxidovo.pages.dev")) return true;
+    return false;
+  } catch {
+    return false;
+  }
+}
+
 export async function POST(req: NextRequest) {
   try {
+    // 0) Origin/Referer check — bloky basic skripty bez správneho headera.
+    //    Spoofovateľné, ale Turnstile + rate limit vrstvy nasledujú.
+    if (!isAllowedOrigin(req)) {
+      return NextResponse.json(
+        { error: "invalid_origin", message: "Neplatný zdroj požiadavky." },
+        { status: 403 },
+      );
+    }
+
     // 0a) Rate limit — 5 attempts / 20 min per IP per endpoint
     const ip = getClientIp(req.headers);
     const rl = rateLimit({
@@ -170,10 +206,10 @@ export async function POST(req: NextRequest) {
         // Pokračujeme aj bez DB — neblokujeme user-a
       }
     } else {
-      console.warn(
-        "[lead] DATABASE_URL not set — lead NOT saved to DB. Lead data:",
-        leadData,
-      );
+      // PII guard: NEVYPISUJEME leadData (email/phone/message) do CF logov.
+      // Logy sú dostupné každému s prístupom k CF Pages dashboardu + Cloudflare
+      // ich uchováva ~7 dní → unnecessary GDPR data exposure.
+      console.warn("[lead] DATABASE_URL not set — lead NOT saved to DB");
     }
 
     // 5) Email cez Resend (ak je RESEND_API_KEY)
@@ -185,10 +221,8 @@ export async function POST(req: NextRequest) {
         console.error("[lead] email send failed:", mailErr);
       }
     } else {
-      console.warn(
-        "[lead] RESEND_API_KEY not set — emails NOT sent. Lead data:",
-        leadData,
-      );
+      // PII guard: nelogujeme leadData (viď komentár vyššie).
+      console.warn("[lead] RESEND_API_KEY not set — emails NOT sent");
     }
 
     // 6) Forward to BDSManager CRM webhook (best-effort, non-blocking-ish)

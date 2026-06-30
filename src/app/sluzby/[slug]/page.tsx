@@ -9,6 +9,7 @@ import { BreadcrumbsJsonLd } from "@/components/seo/BreadcrumbsJsonLd";
 import { CATEGORIES } from "@/content/categories";
 import { SERVICE_DETAILS } from "@/content/serviceDetails";
 import { SITE } from "@/lib/site";
+import { safeJsonLd } from "@/lib/json-ld-safe";
 
 interface PageProps {
   params: Promise<{ slug: string }>;
@@ -87,7 +88,7 @@ export default async function SluzbaDetailPage({ params }: PageProps) {
       />
       <script
         type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(serviceSchema) }}
+        dangerouslySetInnerHTML={{ __html: safeJsonLd(serviceSchema) }}
       />
       {/* Hero */}
       <Section tone="ink" size="lg">

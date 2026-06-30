@@ -9,6 +9,7 @@ import { BreadcrumbsJsonLd } from "@/components/seo/BreadcrumbsJsonLd";
 import { CATEGORIES, SPACE_TYPES } from "@/content/categories";
 import { REALIZACIE } from "@/content/realizacie";
 import { SITE } from "@/lib/site";
+import { safeJsonLd } from "@/lib/json-ld-safe";
 
 const MARQUEE_PHOTOS = [
   "/images/realizacie/r-19.jpg",
@@ -63,7 +64,7 @@ export default function RealizaciePage() {
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{
-          __html: JSON.stringify(itemListSchema),
+          __html: safeJsonLd(itemListSchema),
         }}
       />
       <BreadcrumbsJsonLd

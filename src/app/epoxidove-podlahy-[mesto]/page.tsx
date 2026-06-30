@@ -11,6 +11,7 @@ import { Stats } from "@/components/home/Stats";
 import { CITIES, findCity } from "@/content/cities";
 import { BreadcrumbsJsonLd } from "@/components/seo/BreadcrumbsJsonLd";
 import { SITE } from "@/lib/site";
+import { safeJsonLd } from "@/lib/json-ld-safe";
 
 const MARQUEE_PHOTOS = [
   "/images/realizacie/r-35.jpg",
@@ -101,7 +102,7 @@ export default async function CityPage({ params }: RouteContext) {
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{
-          __html: JSON.stringify(localBusinessSchema),
+          __html: safeJsonLd(localBusinessSchema),
         }}
       />
       <BreadcrumbsJsonLd

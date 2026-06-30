@@ -29,15 +29,23 @@ interface LeadNotifyArgs {
  */
 export async function sendLeadEmails(lead: LeadNotifyArgs) {
   if (!resend) {
-    console.warn(
-      "[email] RESEND_API_KEY not set — skipping email send. Lead:",
-      lead,
-    );
+    console.warn("[email] RESEND_API_KEY not set — skipping email send");
     return { skipped: true };
   }
 
   const fromAddress =
     process.env.EMAIL_FROM ?? `EPOXIDOVO <noreply@${SITE.domain}>`;
+
+  // Sanity-strip CRLF + control znakov z user-controlled stringu pred
+  // vložením do email subject-u. Bráni email-header injection (Resend
+  // pravdepodobne sanitizuje sám, ale defense-in-depth zadarmo).
+  const sanitizeHeaderValue = (s: string) =>
+    Array.from(s)
+      .filter((ch) => ch.charCodeAt(0) >= 0x20)
+      .join("")
+      .slice(0, 200)
+      .trim();
+  const safeName = sanitizeHeaderValue(lead.name);
 
   // ===== 1) Email adminovi =====
   try {
@@ -45,7 +53,7 @@ export async function sendLeadEmails(lead: LeadNotifyArgs) {
       from: fromAddress,
       to: [SITE.contact.email],
       replyTo: lead.email,
-      subject: `🆕 Nový dopyt: ${lead.name}${lead.service ? ` — ${lead.service}` : ""}`,
+      subject: `🆕 Nový dopyt: ${safeName}${lead.service ? ` — ${lead.service}` : ""}`,
       html: adminEmailHtml(lead),
     });
   } catch (err) {

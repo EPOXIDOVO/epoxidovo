@@ -1,4 +1,5 @@
 import { SITE } from "@/lib/site";
+import { safeJsonLd } from "@/lib/json-ld-safe";
 
 /**
  * JSON-LD štruktúrované údaje pre Google.
@@ -185,15 +186,15 @@ export function JsonLd() {
     <>
       <script
         type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(localBusiness) }}
+        dangerouslySetInnerHTML={{ __html: safeJsonLd(localBusiness) }}
       />
       <script
         type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(services) }}
+        dangerouslySetInnerHTML={{ __html: safeJsonLd(services) }}
       />
       <script
         type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(faq) }}
+        dangerouslySetInnerHTML={{ __html: safeJsonLd(faq) }}
       />
     </>
   );
