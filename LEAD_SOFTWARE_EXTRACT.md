@@ -240,3 +240,44 @@ Až keď bude leady-software bežať a tvoji agenti tam vedia loginovať, môže
 **Vytvorené:** 2026-05-25
 **Zdroj:** `/Users/puska/epoxidovo/` commit `daa73de`
 **Cieľ:** `/Users/puska/leady-software/`
+
+---
+
+## TODO — užívateľské pohľady + kalendáre (2026-06-27)
+
+Treba dorobiť 3 rôzne **pohľady** podľa role užívateľa:
+
+### 1. Obchod / sales
+Stav: **ako-tak hotové** (call agent dashboard funguje).
+Doladiť:
+- Filter na vlastné leady vs. tímové
+- Konverzný funnel (lead → obhliadka → ponuka → realizácia)
+- Provízie/štatistiky per agent
+
+### 2. Realizačný tým
+Stav: **chýba úplne.**
+- Zoznam aktívnych realizácií (status = zaplatená záloha → v realizácii)
+- Detail zákazky: kontakt klienta, adresa, typ podlahy, m², materiál čo treba kúpiť
+- Checklist po dňoch (brúsenie, penetrácia, liatie, posyp, lak…)
+- Foto upload z miesta (before/after, problémy)
+- Reporty admin-ovi: dni v realizácii, odpadové množstvo, problémy
+
+### 3. Obhliadkar
+Stav: **chýba úplne.**
+- Tiket s adresou + kontaktom (z lead-u kde obchod naplánoval obhliadku)
+- Formulár: nameraná plocha, stav podkladu (vlhkosť, prasklin, rovinnosť),
+  fotky, návrh riešenia
+- Po vyplnení → automaticky pošle dáta späť obchodníkovi na vypracovanie
+  cenovej ponuky
+
+### 4. Prepojiť kalendáre všetkých rolí
+- Obchod si naplánuje obhliadku → **slot sa zobrazí obhliadkarovi**
+- Obhliadkar potvrdí termín → **lead status update + notifikácia klientovi**
+- Po podpise zmluvy → **realizačný tým dostane termín v svojom kalendári**
+- Centrálny pohľad pre admina: kto, kde, kedy
+- Integrácia: Google Calendar / iCal export pre každú rolu
+
+**Tech voľby na zváženie:**
+- `@fullcalendar/react` pre UI
+- Vlastný `calendar_events` table v Prisma s FK na lead + user
+- Webhook na Google Calendar API pre obojstrannú sync (optional)
