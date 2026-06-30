@@ -2,10 +2,12 @@
 # Dokumentácia: https://developers.cloudflare.com/pages/configuration/headers/
 #
 # Tieto hlavičky sa aplikujú na všetky odpovede z CDN edge.
-# CSP (Content-Security-Policy) zámerne nepridávame — GTM / GA4 / Meta Pixel /
-# Microsoft Clarity / Turnstile používajú inline scripts a externé domény,
-# strict CSP by ich rozbil. Bot Fight Mode + Turnstile + disposable blocker
-# už pokrývajú reálne útoky.
+#
+# CSP — používame "Report-Only" režim: porušenia sa zaznamenajú v devtools
+# console-i ale browser ich NEBLOKUJE. Tým overíme že naša policy nerozbije
+# legit funkčnosť (GTM, GA4, Cookiebot, Meta Pixel, Clarity, Turnstile)
+# pred prepnutím na enforcing mode. Po 1-2 dňoch v produkcii bez warningov
+# prepneme `Content-Security-Policy-Report-Only` na `Content-Security-Policy`.
 
 /*
   # Bráni clickjacking-u (embedovaniu epoxidovo.sk do <iframe> útočníka).
@@ -30,6 +32,19 @@
 
   # Cross-Origin-Opener-Policy — izoluje window od inych origins (chráni pred Spectre).
   Cross-Origin-Opener-Policy: same-origin-allow-popups
+
+  # Content-Security-Policy (Report-Only) — bezpečnostný layer proti XSS.
+  # Allowlist obsahuje LEN reálne 3rd party domény ktoré web aktuálne načítava:
+  #   - googletagmanager.com + google-analytics.com (GTM + GA4)
+  #   - consent.cookiebot.com (Cookiebot consent banner)
+  #   - challenges.cloudflare.com (Turnstile widget)
+  #   - connect.facebook.net + facebook.com (Meta Pixel, načítaný cez GTM)
+  #   - clarity.ms (Microsoft Clarity heatmaps, ak je v GTM)
+  #   - googletagmanager.com NS iframe
+  # 'unsafe-inline' v script-src je nutný pre GTM/Cookiebot init scripts;
+  # nonces by vyžadovali prepis všetkých third-party integrácií.
+  # 'unsafe-eval' nepoužívame — vypnuté pre lepšiu ochranu.
+  Content-Security-Policy-Report-Only: default-src 'self'; script-src 'self' 'unsafe-inline' https://*.googletagmanager.com https://*.google-analytics.com https://consent.cookiebot.com https://*.cookiebot.com https://challenges.cloudflare.com https://*.facebook.net https://*.facebook.com https://*.clarity.ms; style-src 'self' 'unsafe-inline' https://consent.cookiebot.com https://*.cookiebot.com; img-src 'self' data: blob: https:; font-src 'self' data: https:; connect-src 'self' https://*.google-analytics.com https://*.googletagmanager.com https://consent.cookiebot.com https://*.cookiebot.com https://challenges.cloudflare.com https://*.facebook.net https://*.facebook.com https://*.clarity.ms; frame-src 'self' https://www.googletagmanager.com https://challenges.cloudflare.com https://www.facebook.com https://consent.cookiebot.com https://td.doubleclick.net; object-src 'none'; base-uri 'self'; form-action 'self'; frame-ancestors 'none'; upgrade-insecure-requests
 
 # API routes — žiadny cache nikde (browser, CDN, proxy).
 /api/*

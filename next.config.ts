@@ -8,15 +8,14 @@ const nextConfig: NextConfig = {
     // Moderné formáty — Next pošle AVIF / WebP keď ich browser podporuje.
     formats: ["image/avif", "image/webp"],
   },
-  // Cloudflare next-on-pages build je striktnejší než Netlify — preskočíme ESLint
-  // a TS errors aby sme prešli production buildom. Lokálne stále môžeme spúšťať
-  // lint manuálne `npm run lint`.
+  // ESLint warnings skip počas buildu — niekoľko legacy warningov (unescaped
+  // quotes v static texte, react-hooks v modále). Lint manuálne cez `next lint`.
   eslint: {
     ignoreDuringBuilds: true,
   },
-  typescript: {
-    ignoreBuildErrors: true,
-  },
+  // TS errors ENABLED v build pipeline — kód je čistý.
+  // cron-worker má vlastný tsconfig a je excluded v hlavnom tsconfig.json.
+  // Striktný typecheck zachytí type bugs PRED deployom.
 };
 
 export default nextConfig;
