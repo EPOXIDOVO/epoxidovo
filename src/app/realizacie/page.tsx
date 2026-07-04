@@ -112,7 +112,21 @@ export default function RealizaciePage() {
             <div className="inline-block px-5 md:px-14 py-3 md:py-7 rounded-2xl md:rounded-3xl bg-white/[0.06] backdrop-blur-md border border-white/15 shadow-[0_20px_60px_rgba(0,0,0,0.35)]">
               <h1 className="text-2xl sm:text-3xl md:text-5xl lg:text-6xl font-extrabold tracking-tight leading-tight md:whitespace-nowrap">
                 Realizujeme{" "}
-                <span className="text-[#3db6e8]">po celom Slovensku</span>
+                <span className="text-[#3db6e8]">po celom </span>
+                <span
+                  className="inline-block bg-clip-text text-transparent"
+                  style={{
+                    backgroundImage:
+                      "linear-gradient(to bottom, #FFFFFF 0%, #FFFFFF 33.33%, #0B4EA2 33.33%, #0B4EA2 66.66%, #EE1C25 66.66%, #EE1C25 100%)",
+                    // Silnejšia čierna outline + dvojitý drop-shadow — aby biely
+                    // vrchný pruh bol viditeľný aj na svetlej hero fotke.
+                    WebkitTextStroke: "1.5px rgba(0,0,0,0.85)",
+                    filter:
+                      "drop-shadow(0 2px 4px rgba(0,0,0,0.9)) drop-shadow(0 4px 12px rgba(0,0,0,0.6))",
+                  }}
+                >
+                  Slovensku
+                </span>
               </h1>
             </div>
             <nav
