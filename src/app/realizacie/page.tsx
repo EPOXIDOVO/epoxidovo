@@ -120,12 +120,12 @@ export default function RealizaciePage() {
                     // slovenská má opticky výraznejší vrchný biely pás.
                     backgroundImage:
                       "linear-gradient(to bottom, #FFFFFF 0%, #FFFFFF 40%, #0B4EA2 40%, #0B4EA2 70%, #EE1C25 70%, #EE1C25 100%)",
-                    // paint-order kladie stroke ZA fill — outline nezožerie
-                    // vnútro písmena, žiadne artefakty na E/N/U.
-                    paintOrder: "stroke fill",
-                    WebkitTextStroke: "2px #0a0f1e",
+                    // 4-smerný drop-shadow simuluje čistý outline BEZ artefaktov
+                    // vnútri písmen (na rozdiel od -webkit-text-stroke, ktorý sa
+                    // pri background-clip: text renderuje aj vnútri masky).
+                    // Posledný shadow = soft glow pre depth na svetlom pozadí.
                     filter:
-                      "drop-shadow(0 2px 4px rgba(0,0,0,0.9)) drop-shadow(0 4px 12px rgba(0,0,0,0.6))",
+                      "drop-shadow(1px 0 0 #0a0f1e) drop-shadow(-1px 0 0 #0a0f1e) drop-shadow(0 1px 0 #0a0f1e) drop-shadow(0 -1px 0 #0a0f1e) drop-shadow(0 3px 8px rgba(0,0,0,0.75))",
                   }}
                 >
                   Slovensku
