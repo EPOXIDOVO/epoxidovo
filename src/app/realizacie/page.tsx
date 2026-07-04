@@ -116,11 +116,14 @@ export default function RealizaciePage() {
                 <span
                   className="inline-block bg-clip-text text-transparent"
                   style={{
+                    // Viac bielej (40%) aby to nevyzeralo ako ruská vlajka;
+                    // slovenská má opticky výraznejší vrchný biely pás.
                     backgroundImage:
-                      "linear-gradient(to bottom, #FFFFFF 0%, #FFFFFF 33.33%, #0B4EA2 33.33%, #0B4EA2 66.66%, #EE1C25 66.66%, #EE1C25 100%)",
-                    // Silnejšia čierna outline + dvojitý drop-shadow — aby biely
-                    // vrchný pruh bol viditeľný aj na svetlej hero fotke.
-                    WebkitTextStroke: "1.5px rgba(0,0,0,0.85)",
+                      "linear-gradient(to bottom, #FFFFFF 0%, #FFFFFF 40%, #0B4EA2 40%, #0B4EA2 70%, #EE1C25 70%, #EE1C25 100%)",
+                    // paint-order kladie stroke ZA fill — outline nezožerie
+                    // vnútro písmena, žiadne artefakty na E/N/U.
+                    paintOrder: "stroke fill",
+                    WebkitTextStroke: "2px #0a0f1e",
                     filter:
                       "drop-shadow(0 2px 4px rgba(0,0,0,0.9)) drop-shadow(0 4px 12px rgba(0,0,0,0.6))",
                   }}
