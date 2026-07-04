@@ -25,7 +25,7 @@ export const CATEGORIES: Category[] = [
       "Minimalistické riešenie pre tých, čo hľadajú pokoj a poriadok. Hladký monolitický povrch v jednom odtieni — ideálny pre moderné interiéry, kuchyne a obchodné priestory.",
     image: "/images/categories/jednofarebne.jpg",
     driveCategory: "jednofarebna / minimalisticka",
-    priceFrom: 70,
+    priceFrom: 59,
   },
   {
     slug: "chipsove",
