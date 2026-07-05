@@ -4,7 +4,6 @@ import { Section } from "@/components/ui/Section";
 import { ContactHero } from "@/components/contact/ContactHero";
 import { ContactCards } from "@/components/contact/ContactCards";
 import { ContactMessageForm } from "@/components/contact/ContactMessageForm";
-import { MapEmbed } from "@/components/contact/MapEmbed";
 import { BreadcrumbsJsonLd } from "@/components/seo/BreadcrumbsJsonLd";
 import { SITE } from "@/lib/site";
 
@@ -35,11 +34,6 @@ export default function KontaktPage() {
 
           <div className="mt-10 md:mt-14">
             <ContactMessageForm />
-          </div>
-
-          {/* Mapa */}
-          <div className="mt-10 md:mt-14 max-w-3xl mx-auto">
-            <MapEmbed />
           </div>
 
           {/* Firemné údaje */}
