@@ -388,3 +388,19 @@ select,
 .scrollbar-hide::-webkit-scrollbar {
   display: none;
 }
+
+/* ─────────────────────────────────────────────────────────────────
+ * Cookiebot — skryť plávajúci "renew consent" ikon vpravo-dole /
+ * vľavo-dole. Na mobile prekáža a rozbíja UI. GDPR withdraw je
+ * dostupný cez footer link "Cookies" → /cookies (tam je button
+ * "Zmeniť súhlas s cookies", ktorý volá Cookiebot.renew()).
+ * ───────────────────────────────────────────────────────────────── */
+#CookiebotWidget,
+.CookiebotWidget,
+[id^="CybotCookiebotWidget"],
+.CybotCookiebotDialogBodyLevelButtonWrapper #CybotCookiebotDialogBodyEdgeMoreInfoLink {
+  display: none !important;
+  visibility: hidden !important;
+  opacity: 0 !important;
+  pointer-events: none !important;
+}

@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Container } from "@/components/ui/Container";
 import { Section } from "@/components/ui/Section";
+import { CookieRenewButton } from "@/components/cookies/CookieRenewButton";
 import { SITE } from "@/lib/site";
 
 export const metadata: Metadata = {
@@ -23,6 +24,19 @@ export default function CookiesPage() {
             návštevnosti a marketingové účely. Tieto zásady popisujú, aké
             cookies používame a ako ich môžeš spravovať.
           </p>
+
+          {/* Withdraw consent button — nahrádza plávajúci Cookiebot widget,
+              splňuje GDPR požiadavku na jednoduchý withdraw súhlasu. */}
+          <div className="not-prose mb-10 rounded-2xl bg-[var(--color-copper)]/5 border border-[var(--color-copper)]/20 p-5 md:p-6">
+            <h2 className="text-lg md:text-xl font-bold text-[var(--color-fg)] mb-2">
+              Zmena / odvolanie súhlasu
+            </h2>
+            <p className="text-sm text-[var(--color-fg-muted)] leading-relaxed mb-4">
+              Kliknutím na tlačidlo znovu otvoríš cookie banner a môžeš svoje
+              preferencie kedykoľvek zmeniť alebo súhlas úplne odvolať.
+            </p>
+            <CookieRenewButton />
+          </div>
 
           <h2 className="text-2xl font-bold mt-12 mb-4">Čo sú cookies?</h2>
           <p className="leading-relaxed mb-6">
@@ -81,8 +95,8 @@ export default function CookiesPage() {
           <h2 className="text-2xl font-bold mt-10 mb-4">Ako spravovať cookies</h2>
           <ol className="list-decimal list-inside space-y-2 leading-relaxed mb-6">
             <li>
-              Cez tlačidlo <strong>„Spravovať cookies"</strong> hore na tejto
-              stránke
+              Cez tlačidlo <strong>„Zmeniť súhlas s cookies"</strong> hore na
+              tejto stránke — znovu otvorí cookie banner
             </li>
             <li>
               V nastaveniach prehliadača (Chrome, Firefox, Safari…) — môžeš
