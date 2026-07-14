@@ -2,6 +2,7 @@ import type { MetadataRoute } from "next";
 import { SITE } from "@/lib/site";
 import { CATEGORIES } from "@/content/categories";
 import { CITIES } from "@/content/cities";
+import { CERT_LIST } from "@/content/certifications";
 
 export default function sitemap(): MetadataRoute.Sitemap {
   const now = new Date();
@@ -33,5 +34,13 @@ export default function sitemap(): MetadataRoute.Sitemap {
     priority: 0.85,
   }));
 
-  return [...staticPages, ...servicePages, ...cityPages];
+  // Certification landing pages — ESD/HACCP/ATEX/Protišmyk (B2B commercial intent)
+  const certPages: MetadataRoute.Sitemap = CERT_LIST.map((slug) => ({
+    url: `${SITE.url}/podlahy/${slug}`,
+    lastModified: now,
+    changeFrequency: "monthly" as const,
+    priority: 0.85,
+  }));
+
+  return [...staticPages, ...servicePages, ...cityPages, ...certPages];
 }

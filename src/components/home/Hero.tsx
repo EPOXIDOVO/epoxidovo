@@ -24,11 +24,18 @@ import { SamplePicker } from "./SamplePicker";
  * - Spodný oranžový pruh: 3 výhody v horizontálnom layoute (ikona + text)
  */
 
+// Každá badge linkuje na dedikovanú landing page — commercial-intent SEO
+// pre priemyselných klientov (elektronika, potravinárstvo, chémia).
 const FEATURES = [
   {
     icon: ShieldCheck,
     title: "Certifikované riešenia",
-    badges: ["⚡ ESD", "🥗 HACCP", "🔥 ATEX", "🛡 Protišmyk"],
+    badges: [
+      { label: "⚡ ESD", href: "/podlahy/esd" },
+      { label: "🥗 HACCP", href: "/podlahy/haccp" },
+      { label: "🔥 ATEX", href: "/podlahy/atex" },
+      { label: "🛡 Protišmyk", href: "/podlahy/protismyk" },
+    ],
   },
   {
     icon: Brush,
@@ -480,12 +487,13 @@ export function Hero() {
                       {"badges" in f ? (
                         <div className="mt-1.5 md:mt-2 grid grid-cols-2 md:flex md:flex-wrap md:justify-start gap-1 md:gap-2 justify-items-center md:justify-items-stretch">
                           {f.badges?.map((b) => (
-                            <span
-                              key={b}
-                              className="inline-flex items-center justify-center gap-0.5 whitespace-nowrap rounded-full bg-black/40 px-1 md:px-3 py-0.5 md:py-1 text-[9px] md:text-base font-bold md:font-semibold text-white ring-1 ring-white/30 hover:bg-black/60 hover:ring-white/55 transition-colors"
+                            <Link
+                              key={b.label}
+                              href={b.href}
+                              className="inline-flex items-center justify-center gap-0.5 whitespace-nowrap rounded-full bg-black/40 px-1 md:px-3 py-0.5 md:py-1 text-[9px] md:text-base font-bold md:font-semibold text-white ring-1 ring-white/30 hover:bg-black/60 hover:ring-white/55 hover:scale-105 transition-all"
                             >
-                              {b}
-                            </span>
+                              {b.label}
+                            </Link>
                           ))}
                         </div>
                       ) : (
