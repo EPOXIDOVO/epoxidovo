@@ -8,6 +8,7 @@ import { TurnstileWidget } from "@/components/turnstile/TurnstileWidget";
 
 interface State {
   name: string;
+  lastName: string;
   email: string;
   phone: string;
   message: string;
@@ -16,6 +17,7 @@ interface State {
 
 const EMPTY: State = {
   name: "",
+  lastName: "",
   email: "",
   phone: "",
   message: "",
@@ -46,6 +48,10 @@ export function ContactMessageForm() {
 
     if (values.name.trim().length < 2) {
       setError("Zadaj meno.");
+      return;
+    }
+    if (values.lastName.trim().length < 2) {
+      setError("Zadaj priezvisko.");
       return;
     }
     const hasEmail = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(values.email.trim());
@@ -85,6 +91,7 @@ export function ContactMessageForm() {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           name: values.name.trim(),
+          lastName: values.lastName.trim(),
           email: emailForApi,
           phone: values.phone.trim() || undefined,
           message: messageBody,
@@ -165,22 +172,41 @@ export function ContactMessageForm() {
       </div>
 
       <div className="mt-5 space-y-4">
-        <div>
-          <label
-            htmlFor="msg-name"
-            className="block text-sm font-semibold text-[var(--color-fg)] mb-1.5"
-          >
-            Meno *
-          </label>
-          <input
-            id="msg-name"
-            type="text"
-            autoComplete="name"
-            required
-            value={values.name}
-            onChange={(e) => set("name", e.target.value)}
-            className={inputCls}
-          />
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+          <div>
+            <label
+              htmlFor="msg-name"
+              className="block text-sm font-semibold text-[var(--color-fg)] mb-1.5"
+            >
+              Meno *
+            </label>
+            <input
+              id="msg-name"
+              type="text"
+              autoComplete="given-name"
+              required
+              value={values.name}
+              onChange={(e) => set("name", e.target.value)}
+              className={inputCls}
+            />
+          </div>
+          <div>
+            <label
+              htmlFor="msg-lastname"
+              className="block text-sm font-semibold text-[var(--color-fg)] mb-1.5"
+            >
+              Priezvisko *
+            </label>
+            <input
+              id="msg-lastname"
+              type="text"
+              autoComplete="family-name"
+              required
+              value={values.lastName}
+              onChange={(e) => set("lastName", e.target.value)}
+              className={inputCls}
+            />
+          </div>
         </div>
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
           <div>

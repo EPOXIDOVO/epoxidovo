@@ -8,6 +8,7 @@ import { TurnstileWidget } from "@/components/turnstile/TurnstileWidget";
 
 interface FormState {
   name: string;
+  lastName: string;
   phone: string;
   email: string;
   area: string;
@@ -20,6 +21,7 @@ interface FormState {
 
 const EMPTY: FormState = {
   name: "",
+  lastName: "",
   phone: "",
   email: "",
   area: "",
@@ -98,7 +100,11 @@ export function CenovaPonukaForm() {
 
     // Klientská validácia (povinné polia)
     if (values.name.trim().length < 2) {
-      setError("Zadaj meno a priezvisko.");
+      setError("Zadaj meno.");
+      return;
+    }
+    if (values.lastName.trim().length < 2) {
+      setError("Zadaj priezvisko.");
       return;
     }
     if (!/^[+\d\s\-/()]{9,30}$/.test(values.phone.trim())) {
@@ -140,6 +146,7 @@ export function CenovaPonukaForm() {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           name: values.name.trim(),
+          lastName: values.lastName.trim(),
           email: values.email.trim(),
           phone: values.phone.trim(),
           area: areaNum,
@@ -219,14 +226,25 @@ export function CenovaPonukaForm() {
 
       {/* 3-col grid na desktope (kompaktnejšie), 2-col tablet, 1-col mobile */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
-        <FieldWrap label="Meno a priezvisko *" id="cp-name">
+        <FieldWrap label="Meno *" id="cp-name">
           <input
             id="cp-name"
             type="text"
-            autoComplete="name"
+            autoComplete="given-name"
             required
             value={values.name}
             onChange={(e) => set("name", e.target.value)}
+            className={inputCls}
+          />
+        </FieldWrap>
+        <FieldWrap label="Priezvisko *" id="cp-lastname">
+          <input
+            id="cp-lastname"
+            type="text"
+            autoComplete="family-name"
+            required
+            value={values.lastName}
+            onChange={(e) => set("lastName", e.target.value)}
             className={inputCls}
           />
         </FieldWrap>

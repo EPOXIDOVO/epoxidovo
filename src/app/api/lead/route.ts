@@ -170,8 +170,13 @@ export async function POST(req: NextRequest) {
     const userAgent = headers.get("user-agent") ?? null;
     const referrer = headers.get("referer") ?? null;
 
+    // Kombinujeme meno + priezvisko do jedného `name` fieldu — DB / CRM /
+    // email templates majú stále iba `name`. Client posiela oddelene aby sa
+    // priezvisko dalo validovať samostatne (a nemohol tam napísať iba „Ján").
+    const fullName = `${data.name.trim()} ${data.lastName.trim()}`.trim();
+
     const leadData = {
-      name: data.name.trim(),
+      name: fullName,
       email: data.email.trim().toLowerCase(),
       phone: data.phone || null,
       spaceType: data.spaceType || null,
@@ -183,6 +188,7 @@ export async function POST(req: NextRequest) {
             ? Number(data.area)
             : null,
       message: data.message || null,
+      termin: data.termin || null,
       source: data.source || "contact_form",
       utmSource: data.utmSource || null,
       utmMedium: data.utmMedium || null,
@@ -242,6 +248,13 @@ export async function POST(req: NextRequest) {
           "hala-firma": "Hala / firma",
           ine: "Iné",
         };
+        const terminLabel: Record<string, string> = {
+          urgent: "Urgentne (do 1 mesiaca)",
+          "1-3-mesiacov": "1-3 mesiace",
+          "3-6-mesiacov": "3-6 mesiacov",
+          "6-12-mesiacov": "6-12 mesiacov",
+          "zatial-info": "Zatiaľ iba info",
+        };
         const crmPayload = {
           name: leadData.name,
           email: leadData.email,
@@ -259,6 +272,9 @@ export async function POST(req: NextRequest) {
               : undefined,
             priestor: leadData.spaceType
               ? spaceLabel[leadData.spaceType] || leadData.spaceType
+              : undefined,
+            termin: leadData.termin
+              ? terminLabel[leadData.termin] || leadData.termin
               : undefined,
             message: leadData.message ?? undefined,
             utm_source: leadData.utmSource ?? undefined,

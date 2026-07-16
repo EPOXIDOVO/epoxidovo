@@ -5,10 +5,17 @@ import { z } from "zod";
  * Použitie: client (RHF resolver) + server (API validation).
  */
 export const LeadInputSchema = z.object({
+  // Krstné meno — pre potreby oslovenia v emailoch aj CRM.
   name: z
     .string()
     .min(2, "Meno musí mať aspoň 2 znaky")
-    .max(120, "Meno je príliš dlhé"),
+    .max(80, "Meno je príliš dlhé"),
+  // Priezvisko POVINNÉ — chceme mať pri každom leade full identity
+  // pre CRM aj adminovú komunikáciu (nie iba „Ahoj Peter", ale „Peter Kováč").
+  lastName: z
+    .string()
+    .min(2, "Priezvisko musí mať aspoň 2 znaky")
+    .max(80, "Priezvisko je príliš dlhé"),
   email: z
     .string()
     .email("Zadaj platnú emailovú adresu")
@@ -41,6 +48,10 @@ export const LeadInputSchema = z.object({
   message: z
     .string()
     .max(2000, "Správa je príliš dlhá")
+    .optional()
+    .or(z.literal("")),
+  termin: z
+    .enum(["urgent", "1-3-mesiacov", "3-6-mesiacov", "6-12-mesiacov", "zatial-info"])
     .optional()
     .or(z.literal("")),
   // GDPR consent — povinný

@@ -21,6 +21,7 @@ import { TurnstileWidget } from "@/components/turnstile/TurnstileWidget";
 
 type FormFields = {
   name: string;
+  lastName: string;
   phone: string;
   email: string;
   message: string;
@@ -44,6 +45,7 @@ export function ContactForm() {
   } = useForm<FormFields>({
     defaultValues: {
       name: "",
+      lastName: "",
       phone: "",
       email: "",
       message: "",
@@ -63,6 +65,7 @@ export function ContactForm() {
     // Map UI fields → API LeadInput schema
     const payload: LeadInput = LeadInputSchema.parse({
       name: data.name.trim(),
+      lastName: data.lastName.trim(),
       email: data.email,
       phone: data.phone || undefined,
       message: data.message || undefined,
@@ -150,15 +153,26 @@ export function ContactForm() {
       </div>
 
       <div className="mt-6 space-y-4">
-        <Field
-          label="Meno / Názov spoločnosti"
-          autoComplete="name"
-          error={errors.name?.message}
-          {...register("name", {
-            required: "Meno alebo názov spoločnosti je povinný",
-            minLength: { value: 2, message: "Min 2 znaky" },
-          })}
-        />
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+          <Field
+            label="Meno / Názov spoločnosti"
+            autoComplete="given-name"
+            error={errors.name?.message}
+            {...register("name", {
+              required: "Meno alebo názov spoločnosti je povinný",
+              minLength: { value: 2, message: "Min 2 znaky" },
+            })}
+          />
+          <Field
+            label="Priezvisko"
+            autoComplete="family-name"
+            error={errors.lastName?.message}
+            {...register("lastName", {
+              required: "Priezvisko je povinné",
+              minLength: { value: 2, message: "Min 2 znaky" },
+            })}
+          />
+        </div>
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
           <Field
             label="Telefón"
