@@ -188,7 +188,7 @@ export function CenovaPonukaForm() {
           Ďakujeme, ozveme sa do 24 hodín
         </h2>
         <p className="mt-3 text-base md:text-lg text-[var(--color-fg-muted)] leading-relaxed">
-          Tvoj dopyt sme prijali na <strong>info@epoxidovo.sk</strong>. Pripravíme
+          Tvoj dopyt sme prijali na <strong>obchod@epoxidovo.sk</strong>. Pripravíme
           ti cenovú kalkuláciu na mieru a ozveme sa najneskôr do 24 hodín.
         </p>
         <Link

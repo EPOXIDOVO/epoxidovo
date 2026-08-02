@@ -21,7 +21,7 @@ interface LeadNotifyArgs {
 
 /**
  * Pošle 2 emaily naraz:
- * 1) Notifikácia adminovi (info@epoxidovo.sk) — nový lead
+ * 1) Notifikácia obchodníkovi (obchod@epoxidovo.sk) — nový lead
  * 2) Auto-confirm zákazníkovi — potvrdenie že ho dostalo
  *
  * Email templates používajú table-based layout + inline styles pre

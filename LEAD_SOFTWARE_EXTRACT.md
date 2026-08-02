@@ -142,7 +142,7 @@ AUTH_URL=https://leady.your-domain.com
 RESEND_API_KEY=re_...
 EMAIL_FROM="Lead Software <noreply@your-domain.com>"
 CRON_SECRET=<openssl rand -base64 24>
-ADMIN_EMAILS=info@epoxidovo.sk,other@example.com
+ADMIN_EMAILS=obchod@epoxidovo.sk,other@example.com
 ```
 
 ---

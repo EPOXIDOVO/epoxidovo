@@ -16,7 +16,7 @@ export const SITE = {
   contact: {
     phone: "+421 948 143 981",
     phoneRaw: "+421948143981",
-    email: "info@epoxidovo.sk",
+    email: "obchod@epoxidovo.sk",
   },
 
   // Sídlo firmy
