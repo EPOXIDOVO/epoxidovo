@@ -61,20 +61,24 @@ export function CategoriesShowcase() {
             </h2>
           </div>
 
-          {/* Karty s kategóriami */}
+          {/* Karty s kategóriami — každý stĺpec: hlavná karta + 3 farebné
+              varianty (zatiaľ dummy "Čoskoro") + vlastný vzorkovník link */}
           <div className="mt-8 md:mt-16 grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-5 gap-2.5 md:gap-5">
             {CATEGORIES.map((cat, idx) => (
-              <Link
+              <div
                 key={cat.slug}
+                className={`flex flex-col gap-1.5 md:gap-2 ${
+                  idx === 4 ? "col-span-2 md:col-span-1" : ""
+                }`}
+              >
+              <Link
                 href={
                   cat.slug === "priemyselne"
                     ? "/realizacie?priestor=hala-firma"
                     : `/realizacie?kategoria=${cat.slug}`
                 }
                 aria-label={`Pozrieť realizácie — ${cat.name}`}
-                className={`group relative flex flex-col rounded-2xl overflow-hidden bg-[#5c2c18] text-left hover:shadow-[0_18px_40px_rgba(0,0,0,0.35)] hover:-translate-y-1 transition-all duration-500 focus:outline-none focus-visible:ring-2 focus-visible:ring-[#3db6e8] ${
-                  idx === 4 ? "col-span-2 md:col-span-1" : ""
-                }`}
+                className="group relative flex flex-col rounded-2xl overflow-hidden bg-[#5c2c18] text-left hover:shadow-[0_18px_40px_rgba(0,0,0,0.35)] hover:-translate-y-1 transition-all duration-500 focus:outline-none focus-visible:ring-2 focus-visible:ring-[#3db6e8]"
               >
                 {/* Horný blok — kocka + nadpis. Pevná výška. */}
                 <div className="px-3 pt-2.5 pb-2 md:p-7 md:pb-4 h-[96px] md:h-[180px] flex flex-col">
@@ -127,18 +131,30 @@ export function CategoriesShowcase() {
                   </span>
                 </div>
               </Link>
-            ))}
-          </div>
 
-          {/* CTA: Vzorkovník RAL — button vertikálne v strede medzi kartami
-              a koncom sekcie (mt ~= pb sekcie nižšie). */}
-          <div className="mt-10 md:mt-14 flex justify-center">
-            <Link
-              href="/vzorkovnik"
-              className="inline-flex items-center gap-2 px-6 md:px-7 py-2.5 md:py-3 rounded-full bg-[#3db6e8] text-white font-semibold text-sm md:text-base hover:bg-[#1a8cc4] shadow-[0_6px_20px_rgba(61,182,232,0.4)] hover:-translate-y-0.5 transition-all duration-300"
-            >
-              Vzorkovník farieb
-            </Link>
+              {/* 3 farebné varianty — zatiaľ prázdne dummy, fotky doplníme */}
+              {[1, 2, 3].map((n) => (
+                <div
+                  key={n}
+                  aria-hidden
+                  className="relative aspect-[16/9] rounded-xl overflow-hidden bg-[#5c2c18]/70 border-2 border-dashed border-white/20 flex items-center justify-center select-none"
+                >
+                  <span className="text-white/50 text-[11px] md:text-sm font-bold uppercase tracking-wide">
+                    Čoskoro
+                  </span>
+                </div>
+              ))}
+
+              {/* Vzorkovník farieb — vlastný pre každú kategóriu */}
+              <Link
+                href="/vzorkovnik"
+                aria-label={`Vzorkovník farieb — ${cat.name}`}
+                className="inline-flex items-center justify-center px-3 py-2.5 md:py-3 rounded-full bg-[#3db6e8] text-white font-semibold text-[12px] md:text-sm whitespace-nowrap hover:bg-[#1a8cc4] shadow-[0_6px_20px_rgba(61,182,232,0.35)] hover:-translate-y-0.5 transition-all duration-300"
+              >
+                Vzorkovník farieb
+              </Link>
+              </div>
+            ))}
           </div>
         </Container>
       </section>
