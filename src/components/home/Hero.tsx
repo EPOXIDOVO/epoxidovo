@@ -302,28 +302,27 @@ export function Hero() {
               podlahy na mieru
             </h1>
 
-            {/* Mobile: grid 2 cols — Cenová ponuka + Ukážky v 1. rade, AI vizualizácia
-                v 2. rade so šírkou = obidva buttons + gap. Desktop: flex inline 3 buttons. */}
-            <div className="mt-4 md:mt-8 grid grid-cols-2 gap-2 md:flex md:flex-wrap md:justify-center md:gap-3">
+            {/* 2×2 grid na VŠETKÝCH breakpointoch — všetky 4 buttony majú
+                identickú šírku (w-full v gridovej bunke), dva v rade. */}
+            <div className="mt-4 md:mt-8 grid grid-cols-2 gap-2 md:gap-3">
               <Link
                 href="/cenova-ponuka"
-                className="btn btn-primary btn-lg max-md:!w-full max-md:!px-4 max-md:!py-2.5 max-md:!text-[13px]"
+                className="btn btn-primary btn-lg !w-full max-md:!px-4 max-md:!py-2.5 max-md:!text-[13px]"
               >
                 Cenová ponuka
               </Link>
               <button
                 type="button"
                 onClick={() => setPickerOpen(true)}
-                className="btn btn-outline btn-lg max-md:!w-full max-md:!px-4 max-md:!py-2.5 max-md:!text-[13px]"
+                className="btn btn-outline btn-lg !w-full max-md:!px-4 max-md:!py-2.5 max-md:!text-[13px]"
               >
                 <Images className="w-3.5 h-3.5 md:w-4 md:h-4" aria-hidden />
                 Ukážky realizácií
               </button>
-              {/* Mobile 2×2 grid — všetky 4 buttony rovnaká veľkosť, dva v rade.
-                  Pure Tailwind (bez .btn class) aby gradient nemal CSS konflikty. */}
+              {/* Pure Tailwind (bez .btn class) aby gradient nemal CSS konflikty. */}
               <Link
                 href="/ai-vizualizer"
-                className="inline-flex items-center justify-center gap-2 w-full md:w-auto px-4 md:px-7 py-2.5 md:py-3.5 rounded-full bg-gradient-to-r from-[#3db6e8] via-[#7c5ee8] to-[#a855f7] text-white font-semibold text-[13px] md:text-[15px] tracking-tight shadow-[0_8px_24px_rgba(168,85,247,0.5)] hover:shadow-[0_12px_36px_rgba(168,85,247,0.65)] hover:brightness-110 transition-all duration-300"
+                className="inline-flex items-center justify-center gap-2 w-full px-4 md:px-7 py-2.5 md:py-3.5 rounded-full bg-gradient-to-r from-[#3db6e8] via-[#7c5ee8] to-[#a855f7] text-white font-semibold text-[13px] md:text-[15px] tracking-tight shadow-[0_8px_24px_rgba(168,85,247,0.5)] hover:shadow-[0_12px_36px_rgba(168,85,247,0.65)] hover:brightness-110 transition-all duration-300"
               >
                 <Sparkles className="w-3.5 h-3.5 md:w-4 md:h-4" aria-hidden />
                 AI Vizualizácia
@@ -331,7 +330,7 @@ export function Hero() {
               {/* Kúpiť materiál — teaser na /eshop, "Čoskoro" badge kým sa shop nespustí */}
               <Link
                 href="/eshop"
-                className="relative inline-flex items-center justify-center gap-2 w-full md:w-auto px-4 md:px-7 py-2.5 md:py-3.5 rounded-full border-2 border-white/40 bg-white/5 text-white font-semibold text-[13px] md:text-[15px] tracking-tight hover:bg-white/15 hover:border-white/60 transition-all duration-300"
+                className="relative inline-flex items-center justify-center gap-2 w-full px-4 md:px-7 py-2.5 md:py-3.5 rounded-full border-2 border-white/40 bg-white/5 text-white font-semibold text-[13px] md:text-[15px] tracking-tight hover:bg-white/15 hover:border-white/60 transition-all duration-300"
               >
                 <ShoppingBag className="w-3.5 h-3.5 md:w-4 md:h-4" aria-hidden />
                 Kúpiť materiál

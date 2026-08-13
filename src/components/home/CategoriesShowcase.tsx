@@ -145,14 +145,25 @@ export function CategoriesShowcase() {
                 </div>
               ))}
 
-              {/* Vzorkovník farieb — vlastný pre každú kategóriu */}
-              <Link
-                href="/vzorkovnik"
-                aria-label={`Vzorkovník farieb — ${cat.name}`}
-                className="inline-flex items-center justify-center px-3 py-2.5 md:py-3 rounded-full bg-[#3db6e8] text-white font-semibold text-[12px] md:text-sm whitespace-nowrap hover:bg-[#1a8cc4] shadow-[0_6px_20px_rgba(61,182,232,0.35)] hover:-translate-y-0.5 transition-all duration-300"
-              >
-                Vzorkovník farieb
-              </Link>
+              {/* Vzorkovník farieb — RAL vzorkovník platí pre jednofarebné (idx 0)
+                  a priemyselné (idx 4). Stredné 3 kategórie (chips/mramor/metal)
+                  majú vlastné farebné systémy — ich vzorkovník je zatiaľ čoskoro. */}
+              {idx === 0 || idx === 4 ? (
+                <Link
+                  href="/vzorkovnik"
+                  aria-label={`Vzorkovník farieb — ${cat.name}`}
+                  className="inline-flex items-center justify-center px-3 py-2.5 md:py-3 rounded-full bg-[#3db6e8] text-white font-semibold text-[12px] md:text-sm whitespace-nowrap hover:bg-[#1a8cc4] shadow-[0_6px_20px_rgba(61,182,232,0.35)] hover:-translate-y-0.5 transition-all duration-300"
+                >
+                  Vzorkovník farieb
+                </Link>
+              ) : (
+                <div
+                  aria-disabled
+                  className="inline-flex items-center justify-center px-3 py-2.5 md:py-3 rounded-full border-2 border-dashed border-white/25 bg-[#5c2c18]/70 text-white/50 font-bold text-[12px] md:text-sm whitespace-nowrap uppercase tracking-wide select-none cursor-default"
+                >
+                  Čoskoro
+                </div>
+              )}
               </div>
             ))}
           </div>
