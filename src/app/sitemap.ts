@@ -17,6 +17,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
     { url: `${SITE.url}/ochrana-sukromia`, lastModified: now, changeFrequency: "yearly", priority: 0.3 },
     { url: `${SITE.url}/cookies`, lastModified: now, changeFrequency: "yearly", priority: 0.3 },
     { url: `${SITE.url}/podmienky`, lastModified: now, changeFrequency: "yearly", priority: 0.3 },
+    { url: `${SITE.url}/eshop`, lastModified: now, changeFrequency: "monthly", priority: 0.5 },
   ];
 
   const servicePages: MetadataRoute.Sitemap = CATEGORIES.map((cat) => ({
