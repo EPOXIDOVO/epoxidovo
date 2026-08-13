@@ -10,7 +10,7 @@ export const SITE = {
   domain: "epoxidovo.sk",
   url: "https://epoxidovo.sk",
   description:
-    "Ručne tvorené epoxidové a polyuretánové podlahy. Jednofarebné, chipsové, mramorové a metalické. Realizácie v rodinných domoch, garážach a halách po celom Slovensku.",
+    "Ručne tvorené epoxidové a polyuretánové podlahy. Jednofarebné, chipsové a metalické. Realizácie v rodinných domoch, garážach a halách po celom Slovensku.",
   shortDescription: "Epoxidové podlahy s dušou. Každá je originál.",
 
   contact: {

@@ -52,7 +52,6 @@ export const metadata: Metadata = {
     "epoxidové podlahy",
     "polyuretánové podlahy",
     "metalické podlahy",
-    "mramorové podlahy",
     "chipsové podlahy",
     "liate podlahy",
     "podlahy do garáže",

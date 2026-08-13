@@ -35,7 +35,7 @@ export async function generateMetadata({ params }: RouteContext): Promise<Metada
   if (!city) return {};
 
   const title = `Epoxidové podlahy ${city.inCity} | Cenová ponuka zdarma`;
-  const description = `Profesionálne liate epoxidové a polyuretánové podlahy ${city.inCity} a okolí (${city.surroundings.slice(0, 3).join(", ")}…). Jednofarebné, chipsové, mramorové, metalické. 200+ realizácií, 20+ rokov životnosť. Bezplatná obhliadka a cenová ponuka.`;
+  const description = `Profesionálne liate epoxidové a polyuretánové podlahy ${city.inCity} a okolí (${city.surroundings.slice(0, 3).join(", ")}…). Jednofarebné, chipsové, metalické. 200+ realizácií, 20+ rokov životnosť. Bezplatná obhliadka a cenová ponuka.`;
 
   return {
     title,
@@ -235,7 +235,7 @@ export default async function CityPage({ params }: RouteContext) {
             </p>
             <p className="mt-4 text-base md:text-lg text-white/90 leading-relaxed">
               V ponuke máme <strong>jednofarebné</strong>,{" "}
-              <strong>chipsové</strong>, <strong>mramorové</strong> a{" "}
+              <strong>chipsové</strong> a{" "}
               <strong>metalické</strong> epoxidové podlahy. Pre priemysel{" "}
               {city.inCity}{" "}
               poskytujeme certifikované riešenia — <strong>ATEX</strong>,{" "}

@@ -18,7 +18,6 @@ export const metadata: Metadata = {
     "podlahy garáž",
     "priemyselné podlahy",
     "chipsové podlahy",
-    "mramorové podlahy",
     "metalické podlahy",
     "epoxid Ružomberok",
     "epoxid Slovensko",

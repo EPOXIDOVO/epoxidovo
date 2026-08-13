@@ -10,7 +10,7 @@ import { CATEGORIES } from "@/content/categories";
 export const metadata: Metadata = {
   title: "Služby — Typy epoxidových podláh",
   description:
-    "Jednofarebné, chipsové, mramorové a metalické epoxidové podlahy. Ručne tvorené, odolné a originálne — pre domov, garáž alebo firmu.",
+    "Jednofarebné, chipsové a metalické epoxidové podlahy. Ručne tvorené, odolné a originálne — pre domov, garáž alebo firmu.",
   alternates: { canonical: "/sluzby" },
 };
 

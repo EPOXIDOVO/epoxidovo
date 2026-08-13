@@ -1,0 +1,4 @@
+# CF Pages redirects
+# Mramorové podlahy — 2026-08 dočasne vyradené z ponuky; stará service URL
+# presmerovaná na zoznam služieb aby indexované linky nekončili na 404.
+/sluzby/mramorove /sluzby 301

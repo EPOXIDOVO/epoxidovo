@@ -293,7 +293,7 @@ export function KalkulackaClient() {
             </p>
           </div>
 
-          <div className="mt-6 md:mt-10 grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-5 gap-2.5 md:gap-5">
+          <div className="mt-6 md:mt-10 grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-4 gap-2.5 md:gap-5">
             {CATEGORIES.map((cat, idx) => {
               const selected = values.kategoria === cat.slug;
               return (
@@ -302,9 +302,7 @@ export function KalkulackaClient() {
                   type="button"
                   onClick={() => pickCategory(cat.slug)}
                   aria-pressed={selected}
-                  className={`group relative flex flex-col rounded-2xl overflow-hidden bg-[#5c2c18] text-left transition-all duration-300 focus:outline-none focus-visible:ring-2 focus-visible:ring-[#3db6e8] hover:-translate-y-1 hover:shadow-[0_18px_40px_rgba(0,0,0,0.35)] ${
-                    idx === 4 ? "col-span-2 md:col-span-1" : ""
-                  } ${selected ? "ring-4 ring-[#3db6e8] shadow-[0_0_0_4px_rgba(61,182,232,0.3),0_18px_40px_rgba(0,0,0,0.35)]" : ""}`}
+                  className={`group relative flex flex-col rounded-2xl overflow-hidden bg-[#5c2c18] text-left transition-all duration-300 focus:outline-none focus-visible:ring-2 focus-visible:ring-[#3db6e8] hover:-translate-y-1 hover:shadow-[0_18px_40px_rgba(0,0,0,0.35)] ${selected ? "ring-4 ring-[#3db6e8] shadow-[0_0_0_4px_rgba(61,182,232,0.3),0_18px_40px_rgba(0,0,0,0.35)]" : ""}`}
                 >
                   {selected && (
                     <span className="absolute top-2 right-2 z-10 inline-flex items-center justify-center w-7 h-7 rounded-full bg-[#3db6e8] text-white shadow-lg">
@@ -319,7 +317,7 @@ export function KalkulackaClient() {
                       {cat.name === "Jednofarebné" ? "Hladké jednofarebné" : cat.name}
                     </h3>
                   </div>
-                  <div className={`relative overflow-hidden ${idx === 4 ? "aspect-[16/7] md:aspect-[4/3]" : "aspect-[4/3]"}`}>
+                  <div className="relative overflow-hidden aspect-[4/3]">
                     <Image
                       src={
                         cat.slug === "jednofarebne"

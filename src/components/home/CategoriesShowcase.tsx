@@ -63,13 +63,11 @@ export function CategoriesShowcase() {
 
           {/* Karty s kategóriami — každý stĺpec: hlavná karta + 3 farebné
               varianty (zatiaľ dummy "Čoskoro") + vlastný vzorkovník link */}
-          <div className="mt-8 md:mt-16 grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-5 gap-2.5 md:gap-5">
+          <div className="mt-8 md:mt-16 grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-4 gap-2.5 md:gap-5">
             {CATEGORIES.map((cat, idx) => (
               <div
                 key={cat.slug}
-                className={`flex flex-col gap-1.5 md:gap-2 ${
-                  idx === 4 ? "col-span-2 md:col-span-1" : ""
-                }`}
+                className="flex flex-col gap-1.5 md:gap-2"
               >
               <Link
                 href={
@@ -93,7 +91,7 @@ export function CategoriesShowcase() {
                 </div>
 
                 {/* Fotka */}
-                <div className={`relative overflow-hidden ${idx === 4 ? "aspect-[16/7] md:aspect-[4/3]" : "aspect-[4/3] md:aspect-[4/3]"}`}>
+                <div className="relative overflow-hidden aspect-[4/3]">
                   <Image
                     src={
                       cat.slug === "jednofarebne"
@@ -104,11 +102,7 @@ export function CategoriesShowcase() {
                     }
                     alt={`${cat.name} epoxidová podlaha`}
                     fill
-                    sizes={
-                      idx === 4
-                        ? "(max-width: 768px) 100vw, 25vw"
-                        : "(max-width: 768px) 50vw, 25vw"
-                    }
+                    sizes="(max-width: 768px) 50vw, 25vw"
                     quality={85}
                     className="object-cover group-hover:scale-105 transition-transform duration-700"
                   />
@@ -145,10 +139,10 @@ export function CategoriesShowcase() {
                 </div>
               ))}
 
-              {/* Vzorkovník farieb — RAL vzorkovník platí pre jednofarebné (idx 0)
-                  a priemyselné (idx 4). Stredné 3 kategórie (chips/mramor/metal)
-                  majú vlastné farebné systémy — ich vzorkovník je zatiaľ čoskoro. */}
-              {idx === 0 || idx === 4 ? (
+              {/* Vzorkovník farieb — RAL vzorkovník platí pre jednofarebné
+                  a priemyselné. Ostatné kategórie (chips/metal) majú vlastné
+                  farebné systémy — ich vzorkovník je zatiaľ čoskoro. */}
+              {cat.slug === "jednofarebne" || cat.slug === "priemyselne" ? (
                 <Link
                   href="/vzorkovnik"
                   aria-label={`Vzorkovník farieb — ${cat.name}`}

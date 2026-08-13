@@ -110,14 +110,6 @@ export function JsonLd() {
           "@type": "Offer",
           itemOffered: {
             "@type": "Service",
-            name: "Mramorové epoxidové efekty",
-            description: "Ručne tvorené žilkovanie — každá podlaha je originál.",
-          },
-        },
-        {
-          "@type": "Offer",
-          itemOffered: {
-            "@type": "Service",
             name: "Metalické epoxidové podlahy",
             description: "Pigmenty s metalickým efektom — 3D ilúzia hĺbky.",
           },
@@ -136,7 +128,7 @@ export function JsonLd() {
         name: "Ako dlho trvá realizácia epoxidovej podlahy?",
         acceptedAnswer: {
           "@type": "Answer",
-          text: "Bežná podlaha do 50 m² trvá 3–5 dní vrátane prípravy podkladu, aplikácie a vytvrdnutia. Komplikovanejšie projekty (mramorové, metalické s viacerými vrstvami) môžu trvať 5–10 dní.",
+          text: "Bežná podlaha do 50 m² trvá 3–5 dní vrátane prípravy podkladu, aplikácie a vytvrdnutia. Komplikovanejšie projekty (metalické s viacerými vrstvami) môžu trvať 5–10 dní.",
         },
       },
       {
@@ -152,7 +144,7 @@ export function JsonLd() {
         name: "Koľko stojí epoxidová podlaha?",
         acceptedAnswer: {
           "@type": "Answer",
-          text: "Hladká jednofarebná od 59 €/m², chipsová od 49 €/m², mramorová od 139 €/m², metalická od 129 €/m². Priemyselné a polyuretánové podlahy cena na dopyt. Presnú kalkuláciu pripravíme po obhliadke.",
+          text: "Hladká jednofarebná od 59 €/m², chipsová od 49 €/m², metalická od 129 €/m². Priemyselné a polyuretánové podlahy cena na dopyt. Presnú kalkuláciu pripravíme po obhliadke.",
         },
       },
       {

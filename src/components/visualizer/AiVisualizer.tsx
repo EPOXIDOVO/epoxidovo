@@ -560,7 +560,11 @@ function PickTextureStep({
   onTexture: (t: TextureSlug) => void;
   onBack: () => void;
 }) {
-  const textureKeys = Object.keys(TEXTURES) as TextureSlug[];
+  // Mramor je dočasne mimo ponuky (2026-08) — z UI ho skrývame, backend
+  // slug ostáva validný (reverzibilné jedným filtrom).
+  const textureKeys = (Object.keys(TEXTURES) as TextureSlug[]).filter(
+    (t) => t !== "mramor",
+  );
 
   return (
     <div className="rounded-3xl bg-white p-4 md:p-6 shadow-[0_10px_40px_rgba(27,36,48,0.08)] ring-1 ring-[#1B2430]/5">
@@ -587,10 +591,10 @@ function PickTextureStep({
       <label className="block text-base md:text-lg font-extrabold text-[#1B2430] mb-3">
         1. Vyber typ podlahy
       </label>
-      {/* Mobile: 2-col (vertikálny scroll OK). Desktop lg+: 4-col aby všetky
-          4 textúry boli VIDITEĽNÉ NARAZ na 16" laptope — predtým 2-col
-          zaberal toľko šírky že fotky boli obrie a videl si len 2 z 4. */}
-      <div className="grid grid-cols-2 lg:grid-cols-4 gap-2.5 md:gap-3">
+      {/* Mobile: 2-col (vertikálny scroll OK). Desktop lg+: 3-col aby všetky
+          textúry boli VIDITEĽNÉ NARAZ na 16" laptope (mramor je dočasne
+          mimo ponuky, ostali 3). */}
+      <div className="grid grid-cols-2 lg:grid-cols-3 gap-2.5 md:gap-3">
         {textureKeys.map((t) => {
           const def = TEXTURES[t];
           const active = t === texture;

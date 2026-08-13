@@ -25,7 +25,8 @@ const PROJECTS = [
     title: "Mramorová obývačka",
     category: "Mramorové",
     image: "/images/about/foto2.jpg",
-    href: "/realizacie?kategoria=mramorove",
+    // Mramorové sú dočasne mimo ponuky — filter chip neexistuje, link bez filtra
+    href: "/realizacie",
   },
   {
     title: "Garáž s chipsmi",

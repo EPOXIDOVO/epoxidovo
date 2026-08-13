@@ -22,7 +22,7 @@ const MARQUEE_PHOTOS = [
 export const metadata: Metadata = {
   title: "Realizácie — naše práce",
   description:
-    "Prehliadnite si fotky našich realizácií. Filtruj podľa typu priestoru (dom, garáž, hala) alebo kategórie podlahy (jednofarebné, chipsové, mramorové, metalické).",
+    "Prehliadnite si fotky našich realizácií. Filtruj podľa typu priestoru (dom, garáž, hala) alebo kategórie podlahy (jednofarebné, chipsové, metalické).",
   alternates: { canonical: "/realizacie" },
 };
 
