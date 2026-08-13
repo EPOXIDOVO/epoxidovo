@@ -120,7 +120,7 @@ export function Header({ transparentOnTop = false }: HeaderProps) {
               )}
             >
               <ShoppingBag className="w-4 h-4" aria-hidden />
-              <span className="whitespace-nowrap">E-shop</span>
+              <span className="whitespace-nowrap">Kúpiť materiál</span>
               <span className="absolute -top-2 -right-2 px-2 py-0.5 rounded-full bg-[#f97316] text-white text-[10px] font-bold uppercase tracking-wide whitespace-nowrap shadow-[0_2px_8px_rgba(249,115,22,0.5)]">
                 Čoskoro
               </span>
@@ -209,7 +209,7 @@ export function Header({ transparentOnTop = false }: HeaderProps) {
               className="relative inline-flex items-center justify-center gap-2 px-6 py-4 rounded-full border-2 border-zinc-200 text-zinc-400 font-semibold select-none cursor-default"
             >
               <ShoppingBag className="w-4 h-4" aria-hidden />
-              E-shop
+              Kúpiť materiál
               <span className="absolute -top-2 right-4 px-2 py-0.5 rounded-full bg-[#f97316] text-white text-[10px] font-bold uppercase tracking-wide whitespace-nowrap shadow-[0_2px_8px_rgba(249,115,22,0.5)]">
                 Čoskoro
               </span>
