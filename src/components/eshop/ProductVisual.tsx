@@ -91,8 +91,8 @@ export function ProductVisual({
           quality={85}
           className="object-cover"
         />
-        {/* Malé vedro v rohu — stojí na vyliatej podlahe */}
-        <div className={`absolute ${isCardFoto ? "bottom-0.5 right-1 w-[30%]" : "bottom-2 right-3 w-[24%]"}`}>
+        {/* Malé vedro vľavo dole — stojí na vyliatej podlahe */}
+        <div className={`absolute ${isCardFoto ? "bottom-0.5 left-1 w-[30%]" : "bottom-2 left-3 w-[24%]"}`}>
           <div className="relative">
             <VedroSvg accent={fotoAccent} />
             <div
