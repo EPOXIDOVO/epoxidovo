@@ -72,13 +72,30 @@ export function ProductVisual({
 }) {
   const m = material;
 
-  // Oficiálna fotka od výrobcu má prednosť — vyliata podlaha full-bleed
-  // + malé vedro s etiketou v rohu (nech je jasné, že ide o materiál).
+  // Oficiálna fotka od výrobcu má prednosť.
   if (m.foto) {
     const isCardFoto = variant === "card";
-    const fotoAccent =
-      KATEGORIA_STYLE[m.kategoria].gradient.match(/#[0-9a-fA-F]{6}/)?.[0] ??
-      "#3db6e8";
+
+    // Packshot balenia (reálny sud/vrece na bielom pozadí) — čistý contain.
+    if (m.foto_typ !== "vzorka") {
+      return (
+        <div
+          className={`relative overflow-hidden bg-white ${isCardFoto ? "aspect-[4/3]" : "aspect-[4/3] rounded-3xl border border-zinc-200"}`}
+        >
+          <Image
+            src={m.foto}
+            alt={m.nazov}
+            fill
+            sizes={isCardFoto ? "(max-width: 768px) 50vw, 25vw" : "(max-width: 1024px) 100vw, 50vw"}
+            quality={85}
+            className={`object-contain ${isCardFoto ? "p-2" : "p-6"}`}
+          />
+        </div>
+      );
+    }
+
+    // Vzorka vyliateho povrchu full-bleed; ak máme reálny sud (foto_sud),
+    // stojí ako malý inset vľavo dole.
     return (
       <div
         className={`relative overflow-hidden ${isCardFoto ? "aspect-[4/3]" : "aspect-[4/3] rounded-3xl"}`}
@@ -91,28 +108,24 @@ export function ProductVisual({
           quality={85}
           className="object-cover"
         />
-        {/* Malé vedro vľavo dole — stojí na vyliatej podlahe */}
-        <div className={`absolute ${isCardFoto ? "bottom-0.5 left-1 w-[30%]" : "bottom-2 left-3 w-[24%]"}`}>
-          <div className="relative">
-            <VedroSvg accent={fotoAccent} />
-            <div
-              className={`absolute left-1/2 -translate-x-1/2 top-[42%] w-[66%] rounded bg-white/95 shadow-sm px-0.5 py-0.5 text-center`}
-              style={{ border: `1.5px solid ${fotoAccent}` }}
-            >
-              <div
-                className={`font-black uppercase leading-none ${isCardFoto ? "text-[6px]" : "text-[9px]"}`}
-                style={{ color: fotoAccent }}
-              >
-                {m.vyrobca}
-              </div>
-              <div
-                className={`mt-0.5 font-bold text-zinc-800 leading-[1.1] line-clamp-2 ${isCardFoto ? "text-[5px]" : "text-[8px]"}`}
-              >
-                {m.nazov}
-              </div>
+        {m.foto_sud && (
+          <div
+            className={`absolute rounded-xl bg-white shadow-[0_6px_20px_rgba(0,0,0,0.35)] overflow-hidden ${
+              isCardFoto ? "bottom-1.5 left-1.5 w-[34%]" : "bottom-3 left-3 w-[26%]"
+            }`}
+          >
+            <div className="relative aspect-square">
+              <Image
+                src={m.foto_sud}
+                alt={`${m.nazov} — balenie`}
+                fill
+                sizes="20vw"
+                quality={85}
+                className="object-contain p-1"
+              />
             </div>
           </div>
-        </div>
+        )}
       </div>
     );
   }

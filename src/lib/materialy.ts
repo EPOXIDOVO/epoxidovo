@@ -32,6 +32,11 @@ export interface Material {
   technicky_list: string | null;
   typy_podlah: string[] | null;
   foto: string | null;
+  /** "sud" = packshot balenia (biele pozadie, contain);
+   *  "vzorka" = fotka vyliateho povrchu (full-bleed cover). */
+  foto_typ?: "sud" | "vzorka" | null;
+  /** Reálna fotka sudu/balenia ako malý inset na vzorke (vľavo dole). */
+  foto_sud?: string | null;
   foto_zdroj: string | null;
   foto_licencia: string | null;
 }

@@ -36,7 +36,9 @@
       "typy_podlah": null,
       "foto": null,
       "foto_zdroj": null,
-      "foto_licencia": null
+      "foto_licencia": null,
+      "foto_typ": null,
+      "foto_sud": null
     },
     {
       "sku": "SIKAREPAIR-MODUL",
@@ -60,7 +62,9 @@
       "typy_podlah": null,
       "foto": null,
       "foto_zdroj": null,
-      "foto_licencia": null
+      "foto_licencia": null,
+      "foto_typ": null,
+      "foto_sud": null
     },
     {
       "sku": "SF-329",
@@ -84,7 +88,9 @@
       "typy_podlah": null,
       "foto": null,
       "foto_zdroj": null,
-      "foto_licencia": null
+      "foto_licencia": null,
+      "foto_typ": null,
+      "foto_sud": null
     },
     {
       "sku": "SF-83-EPOCEM",
@@ -108,7 +114,9 @@
       "typy_podlah": null,
       "foto": null,
       "foto_zdroj": null,
-      "foto_licencia": null
+      "foto_licencia": null,
+      "foto_typ": null,
+      "foto_sud": null
     },
     {
       "sku": "SIKAGARD-720",
@@ -132,7 +140,9 @@
       "typy_podlah": null,
       "foto": null,
       "foto_zdroj": null,
-      "foto_licencia": null
+      "foto_licencia": null,
+      "foto_typ": null,
+      "foto_sud": null
     },
     {
       "sku": "SF-81-EPOCEM",
@@ -156,7 +166,9 @@
       "typy_podlah": null,
       "foto": null,
       "foto_zdroj": null,
-      "foto_licencia": null
+      "foto_licencia": null,
+      "foto_typ": null,
+      "foto_sud": null
     },
     {
       "sku": "162680",
@@ -180,7 +192,9 @@
       "typy_podlah": null,
       "foto": null,
       "foto_zdroj": null,
-      "foto_licencia": null
+      "foto_licencia": null,
+      "foto_typ": null,
+      "foto_sud": null
     },
     {
       "sku": "SF-400-LEVEL-AT",
@@ -204,7 +218,9 @@
       "typy_podlah": null,
       "foto": null,
       "foto_zdroj": null,
-      "foto_licencia": null
+      "foto_licencia": null,
+      "foto_typ": null,
+      "foto_sud": null
     },
     {
       "sku": "SF-432-DECOCEM-DG",
@@ -228,7 +244,9 @@
       "typy_podlah": null,
       "foto": null,
       "foto_zdroj": null,
-      "foto_licencia": null
+      "foto_licencia": null,
+      "foto_typ": null,
+      "foto_sud": null
     },
     {
       "sku": "SF-432-DECOCEM-LG",
@@ -252,7 +270,9 @@
       "typy_podlah": null,
       "foto": null,
       "foto_zdroj": null,
-      "foto_licencia": null
+      "foto_licencia": null,
+      "foto_typ": null,
+      "foto_sud": null
     },
     {
       "sku": "HARDTOP-70",
@@ -276,7 +296,9 @@
       "typy_podlah": null,
       "foto": null,
       "foto_zdroj": null,
-      "foto_licencia": null
+      "foto_licencia": null,
+      "foto_typ": null,
+      "foto_sud": null
     },
     {
       "sku": "HARDTOP-60",
@@ -300,7 +322,9 @@
       "typy_podlah": null,
       "foto": null,
       "foto_zdroj": null,
-      "foto_licencia": null
+      "foto_licencia": null,
+      "foto_typ": null,
+      "foto_sud": null
     },
     {
       "sku": "HARDTOP-65",
@@ -324,7 +348,9 @@
       "typy_podlah": null,
       "foto": null,
       "foto_zdroj": null,
-      "foto_licencia": null
+      "foto_licencia": null,
+      "foto_typ": null,
+      "foto_sud": null
     },
     {
       "sku": "SCHONOX-HS50",
@@ -348,7 +374,9 @@
       "typy_podlah": null,
       "foto": null,
       "foto_zdroj": null,
-      "foto_licencia": null
+      "foto_licencia": null,
+      "foto_typ": null,
+      "foto_sud": null
     },
     {
       "sku": "SF-54-BOOSTER",
@@ -372,7 +400,9 @@
       "typy_podlah": null,
       "foto": null,
       "foto_zdroj": null,
-      "foto_licencia": null
+      "foto_licencia": null,
+      "foto_typ": null,
+      "foto_sud": null
     },
     {
       "sku": "180050",
@@ -396,7 +426,9 @@
       "typy_podlah": null,
       "foto": null,
       "foto_zdroj": null,
-      "foto_licencia": null
+      "foto_licencia": null,
+      "foto_typ": null,
+      "foto_sud": null
     },
     {
       "sku": "SF-352-FIBRELEVEL",
@@ -420,7 +452,9 @@
       "typy_podlah": null,
       "foto": null,
       "foto_zdroj": null,
-      "foto_licencia": null
+      "foto_licencia": null,
+      "foto_typ": null,
+      "foto_sud": null
     },
     {
       "sku": "SF-432-DECOCEM",
@@ -444,7 +478,9 @@
       "typy_podlah": null,
       "foto": null,
       "foto_zdroj": null,
-      "foto_licencia": null
+      "foto_licencia": null,
+      "foto_typ": null,
+      "foto_sud": null
     },
     {
       "sku": "SF-202-LEVEL",
@@ -468,7 +504,9 @@
       "typy_podlah": null,
       "foto": null,
       "foto_zdroj": null,
-      "foto_licencia": null
+      "foto_licencia": null,
+      "foto_typ": null,
+      "foto_sud": null
     },
     {
       "sku": "SF-201-FIBERLEVEL",
@@ -492,7 +530,9 @@
       "typy_podlah": null,
       "foto": null,
       "foto_zdroj": null,
-      "foto_licencia": null
+      "foto_licencia": null,
+      "foto_typ": null,
+      "foto_sud": null
     },
     {
       "sku": "METALTOP-1",
@@ -516,7 +556,9 @@
       "typy_podlah": null,
       "foto": null,
       "foto_zdroj": null,
-      "foto_licencia": null
+      "foto_licencia": null,
+      "foto_typ": null,
+      "foto_sud": null
     },
     {
       "sku": "ARMORTOP",
@@ -540,7 +582,9 @@
       "typy_podlah": null,
       "foto": null,
       "foto_zdroj": null,
-      "foto_licencia": null
+      "foto_licencia": null,
+      "foto_typ": null,
+      "foto_sud": null
     },
     {
       "sku": "SF-102-LEVEL",
@@ -564,7 +608,9 @@
       "typy_podlah": null,
       "foto": null,
       "foto_zdroj": null,
-      "foto_licencia": null
+      "foto_licencia": null,
+      "foto_typ": null,
+      "foto_sud": null
     },
     {
       "sku": "SYNTOP-800",
@@ -588,7 +634,9 @@
       "typy_podlah": null,
       "foto": null,
       "foto_zdroj": null,
-      "foto_licencia": null
+      "foto_licencia": null,
+      "foto_typ": null,
+      "foto_sud": null
     },
     {
       "sku": "SYNTOP-2",
@@ -612,7 +660,9 @@
       "typy_podlah": null,
       "foto": null,
       "foto_zdroj": null,
-      "foto_licencia": null
+      "foto_licencia": null,
+      "foto_typ": null,
+      "foto_sud": null
     },
     {
       "sku": "SF-2650",
@@ -636,7 +686,9 @@
       "typy_podlah": null,
       "foto": null,
       "foto_zdroj": null,
-      "foto_licencia": null
+      "foto_licencia": null,
+      "foto_typ": null,
+      "foto_sud": null
     },
     {
       "sku": "SF-359N",
@@ -660,7 +712,9 @@
       "typy_podlah": null,
       "foto": null,
       "foto_zdroj": null,
-      "foto_licencia": null
+      "foto_licencia": null,
+      "foto_typ": null,
+      "foto_sud": null
     },
     {
       "sku": "SIKAFLOOR-1590-30",
@@ -684,7 +738,9 @@
       "typy_podlah": null,
       "foto": null,
       "foto_zdroj": null,
-      "foto_licencia": null
+      "foto_licencia": null,
+      "foto_typ": null,
+      "foto_sud": null
     },
     {
       "sku": "SF-262-ASN-THIXO",
@@ -708,7 +764,9 @@
       "typy_podlah": null,
       "foto": null,
       "foto_zdroj": null,
-      "foto_licencia": null
+      "foto_licencia": null,
+      "foto_typ": null,
+      "foto_sud": null
     },
     {
       "sku": "SF-2350-ESD",
@@ -732,7 +790,9 @@
       "typy_podlah": null,
       "foto": null,
       "foto_zdroj": null,
-      "foto_licencia": null
+      "foto_licencia": null,
+      "foto_typ": null,
+      "foto_sud": null
     },
     {
       "sku": "SF-392-ECF",
@@ -756,7 +816,9 @@
       "typy_podlah": null,
       "foto": null,
       "foto_zdroj": null,
-      "foto_licencia": null
+      "foto_licencia": null,
+      "foto_typ": null,
+      "foto_sud": null
     },
     {
       "sku": "SF-392",
@@ -780,7 +842,9 @@
       "typy_podlah": null,
       "foto": null,
       "foto_zdroj": null,
-      "foto_licencia": null
+      "foto_licencia": null,
+      "foto_typ": null,
+      "foto_sud": null
     },
     {
       "sku": "558772",
@@ -804,7 +868,9 @@
       "typy_podlah": null,
       "foto": null,
       "foto_zdroj": null,
-      "foto_licencia": null
+      "foto_licencia": null,
+      "foto_typ": null,
+      "foto_sud": null
     },
     {
       "sku": "SF-2640",
@@ -828,7 +894,9 @@
       "typy_podlah": null,
       "foto": null,
       "foto_zdroj": null,
-      "foto_licencia": null
+      "foto_licencia": null,
+      "foto_typ": null,
+      "foto_sud": null
     },
     {
       "sku": "SIKAFLOOR-3000-21",
@@ -852,7 +920,9 @@
       "typy_podlah": null,
       "foto": null,
       "foto_zdroj": null,
-      "foto_licencia": null
+      "foto_licencia": null,
+      "foto_typ": null,
+      "foto_sud": null
     },
     {
       "sku": "SF-530",
@@ -876,7 +946,9 @@
       "typy_podlah": null,
       "foto": null,
       "foto_zdroj": null,
-      "foto_licencia": null
+      "foto_licencia": null,
+      "foto_typ": null,
+      "foto_sud": null
     },
     {
       "sku": "SF-381-ECF",
@@ -900,7 +972,9 @@
       "typy_podlah": null,
       "foto": null,
       "foto_zdroj": null,
-      "foto_licencia": null
+      "foto_licencia": null,
+      "foto_typ": null,
+      "foto_sud": null
     },
     {
       "sku": "SF-BC375N-AS",
@@ -924,7 +998,9 @@
       "typy_podlah": null,
       "foto": null,
       "foto_zdroj": null,
-      "foto_licencia": null
+      "foto_licencia": null,
+      "foto_typ": null,
+      "foto_sud": null
     },
     {
       "sku": "SF-376",
@@ -948,7 +1024,9 @@
       "typy_podlah": null,
       "foto": null,
       "foto_zdroj": null,
-      "foto_licencia": null
+      "foto_licencia": null,
+      "foto_typ": null,
+      "foto_sud": null
     },
     {
       "sku": "SF-2600",
@@ -972,7 +1050,9 @@
       "typy_podlah": null,
       "foto": null,
       "foto_zdroj": null,
-      "foto_licencia": null
+      "foto_licencia": null,
+      "foto_typ": null,
+      "foto_sud": null
     },
     {
       "sku": "SIKAFLOOR-264-30",
@@ -996,7 +1076,9 @@
       "typy_podlah": null,
       "foto": null,
       "foto_zdroj": null,
-      "foto_licencia": null
+      "foto_licencia": null,
+      "foto_typ": null,
+      "foto_sud": null
     },
     {
       "sku": "SF-381",
@@ -1020,7 +1102,9 @@
       "typy_podlah": null,
       "foto": null,
       "foto_zdroj": null,
-      "foto_licencia": null
+      "foto_licencia": null,
+      "foto_typ": null,
+      "foto_sud": null
     },
     {
       "sku": "SF-262-ASN",
@@ -1044,7 +1128,9 @@
       "typy_podlah": null,
       "foto": null,
       "foto_zdroj": null,
-      "foto_licencia": null
+      "foto_licencia": null,
+      "foto_typ": null,
+      "foto_sud": null
     },
     {
       "sku": "SF-BC375N",
@@ -1068,7 +1154,9 @@
       "typy_podlah": null,
       "foto": null,
       "foto_zdroj": null,
-      "foto_licencia": null
+      "foto_licencia": null,
+      "foto_typ": null,
+      "foto_sud": null
     },
     {
       "sku": "498512",
@@ -1092,7 +1180,9 @@
       "typy_podlah": null,
       "foto": null,
       "foto_zdroj": null,
-      "foto_licencia": null
+      "foto_licencia": null,
+      "foto_typ": null,
+      "foto_sud": null
     },
     {
       "sku": "SF-2510W",
@@ -1116,7 +1206,9 @@
       "typy_podlah": null,
       "foto": null,
       "foto_zdroj": null,
-      "foto_licencia": null
+      "foto_licencia": null,
+      "foto_typ": null,
+      "foto_sud": null
     },
     {
       "sku": "SF-400N",
@@ -1140,7 +1232,9 @@
       "typy_podlah": null,
       "foto": null,
       "foto_zdroj": null,
-      "foto_licencia": null
+      "foto_licencia": null,
+      "foto_typ": null,
+      "foto_sud": null
     },
     {
       "sku": "SF-377",
@@ -1164,7 +1258,9 @@
       "typy_podlah": null,
       "foto": null,
       "foto_zdroj": null,
-      "foto_licencia": null
+      "foto_licencia": null,
+      "foto_typ": null,
+      "foto_sud": null
     },
     {
       "sku": "SF-3310",
@@ -1188,7 +1284,9 @@
       "typy_podlah": null,
       "foto": null,
       "foto_zdroj": null,
-      "foto_licencia": null
+      "foto_licencia": null,
+      "foto_typ": null,
+      "foto_sud": null
     },
     {
       "sku": "SF-220W",
@@ -1212,7 +1310,9 @@
       "typy_podlah": null,
       "foto": null,
       "foto_zdroj": null,
-      "foto_licencia": null
+      "foto_licencia": null,
+      "foto_typ": null,
+      "foto_sud": null
     },
     {
       "sku": "498456",
@@ -1236,7 +1336,9 @@
       "typy_podlah": null,
       "foto": null,
       "foto_zdroj": null,
-      "foto_licencia": null
+      "foto_licencia": null,
+      "foto_typ": null,
+      "foto_sud": null
     },
     {
       "sku": "SF-400N-PLUS",
@@ -1260,7 +1362,9 @@
       "typy_podlah": null,
       "foto": null,
       "foto_zdroj": null,
-      "foto_licencia": null
+      "foto_licencia": null,
+      "foto_typ": null,
+      "foto_sud": null
     },
     {
       "sku": "SCREED-20-EBB",
@@ -1284,7 +1388,9 @@
       "typy_podlah": null,
       "foto": null,
       "foto_zdroj": null,
-      "foto_licencia": null
+      "foto_licencia": null,
+      "foto_typ": null,
+      "foto_sud": null
     },
     {
       "sku": "SF-169",
@@ -1308,7 +1414,9 @@
       "typy_podlah": null,
       "foto": null,
       "foto_zdroj": null,
-      "foto_licencia": null
+      "foto_licencia": null,
+      "foto_typ": null,
+      "foto_sud": null
     },
     {
       "sku": "SF-60-BUSTER",
@@ -1332,7 +1440,9 @@
       "typy_podlah": null,
       "foto": null,
       "foto_zdroj": null,
-      "foto_licencia": null
+      "foto_licencia": null,
+      "foto_typ": null,
+      "foto_sud": null
     },
     {
       "sku": "SF-150-PLUS",
@@ -1356,7 +1466,9 @@
       "typy_podlah": null,
       "foto": null,
       "foto_zdroj": null,
-      "foto_licencia": null
+      "foto_licencia": null,
+      "foto_typ": null,
+      "foto_sud": null
     },
     {
       "sku": "SIKAFLOOR-151",
@@ -1380,7 +1492,9 @@
       "typy_podlah": null,
       "foto": null,
       "foto_zdroj": null,
-      "foto_licencia": null
+      "foto_licencia": null,
+      "foto_typ": null,
+      "foto_sud": null
     },
     {
       "sku": "SF-140W",
@@ -1404,7 +1518,9 @@
       "typy_podlah": null,
       "foto": null,
       "foto_zdroj": null,
-      "foto_licencia": null
+      "foto_licencia": null,
+      "foto_typ": null,
+      "foto_sud": null
     },
     {
       "sku": "498421",
@@ -1428,7 +1544,9 @@
       "typy_podlah": null,
       "foto": null,
       "foto_zdroj": null,
-      "foto_licencia": null
+      "foto_licencia": null,
+      "foto_typ": null,
+      "foto_sud": null
     },
     {
       "sku": "498434",
@@ -1452,7 +1570,9 @@
       "typy_podlah": null,
       "foto": null,
       "foto_zdroj": null,
-      "foto_licencia": null
+      "foto_licencia": null,
+      "foto_typ": null,
+      "foto_sud": null
     },
     {
       "sku": "SF-305W-ESD",
@@ -1476,7 +1596,9 @@
       "typy_podlah": null,
       "foto": null,
       "foto_zdroj": null,
-      "foto_licencia": null
+      "foto_licencia": null,
+      "foto_typ": null,
+      "foto_sud": null
     },
     {
       "sku": "717550",
@@ -1500,7 +1622,9 @@
       "typy_podlah": null,
       "foto": null,
       "foto_zdroj": null,
-      "foto_licencia": null
+      "foto_licencia": null,
+      "foto_typ": null,
+      "foto_sud": null
     },
     {
       "sku": "SIKAGARD-916",
@@ -1524,7 +1648,9 @@
       "typy_podlah": null,
       "foto": null,
       "foto_zdroj": null,
-      "foto_licencia": null
+      "foto_licencia": null,
+      "foto_typ": null,
+      "foto_sud": null
     },
     {
       "sku": "SF-TC442W",
@@ -1548,7 +1674,9 @@
       "typy_podlah": null,
       "foto": null,
       "foto_zdroj": null,
-      "foto_licencia": null
+      "foto_licencia": null,
+      "foto_typ": null,
+      "foto_sud": null
     },
     {
       "sku": "SF-3004W",
@@ -1572,7 +1700,9 @@
       "typy_podlah": null,
       "foto": null,
       "foto_zdroj": null,
-      "foto_licencia": null
+      "foto_licencia": null,
+      "foto_typ": null,
+      "foto_sud": null
     },
     {
       "sku": "SF-TC442W-CLEAR",
@@ -1596,7 +1726,9 @@
       "typy_podlah": null,
       "foto": null,
       "foto_zdroj": null,
-      "foto_licencia": null
+      "foto_licencia": null,
+      "foto_typ": null,
+      "foto_sud": null
     },
     {
       "sku": "SIKAFLOOR-304W-7.5",
@@ -1620,7 +1752,9 @@
       "typy_podlah": null,
       "foto": null,
       "foto_zdroj": null,
-      "foto_licencia": null
+      "foto_licencia": null,
+      "foto_typ": null,
+      "foto_sud": null
     },
     {
       "sku": "PROSEAL-15",
@@ -1644,7 +1778,9 @@
       "typy_podlah": null,
       "foto": null,
       "foto_zdroj": null,
-      "foto_licencia": null
+      "foto_licencia": null,
+      "foto_typ": null,
+      "foto_sud": null
     },
     {
       "sku": "PROSEAL-12",
@@ -1668,7 +1804,9 @@
       "typy_podlah": null,
       "foto": null,
       "foto_zdroj": null,
-      "foto_licencia": null
+      "foto_licencia": null,
+      "foto_typ": null,
+      "foto_sud": null
     },
     {
       "sku": "TS-POLYASTONE-GEL",
@@ -1692,7 +1830,9 @@
       "typy_podlah": null,
       "foto": null,
       "foto_zdroj": null,
-      "foto_licencia": null
+      "foto_licencia": null,
+      "foto_typ": null,
+      "foto_sud": null
     },
     {
       "sku": "TS-POLYASTONE-SPOJIVO",
@@ -1716,7 +1856,9 @@
       "typy_podlah": null,
       "foto": null,
       "foto_zdroj": null,
-      "foto_licencia": null
+      "foto_licencia": null,
+      "foto_typ": null,
+      "foto_sud": null
     },
     {
       "sku": "TS-PURSTONE-ONE",
@@ -1740,7 +1882,9 @@
       "typy_podlah": null,
       "foto": null,
       "foto_zdroj": null,
-      "foto_licencia": null
+      "foto_licencia": null,
+      "foto_typ": null,
+      "foto_sud": null
     },
     {
       "sku": "TS-PURSTONE",
@@ -1764,7 +1908,9 @@
       "typy_podlah": null,
       "foto": null,
       "foto_zdroj": null,
-      "foto_licencia": null
+      "foto_licencia": null,
+      "foto_typ": null,
+      "foto_sud": null
     },
     {
       "sku": "TS-TOPGEL",
@@ -1788,7 +1934,9 @@
       "typy_podlah": null,
       "foto": null,
       "foto_zdroj": null,
-      "foto_licencia": null
+      "foto_licencia": null,
+      "foto_typ": null,
+      "foto_sud": null
     },
     {
       "sku": "TS-EPOSTONE-CLEAR",
@@ -1812,7 +1960,9 @@
       "typy_podlah": null,
       "foto": null,
       "foto_zdroj": null,
-      "foto_licencia": null
+      "foto_licencia": null,
+      "foto_typ": null,
+      "foto_sud": null
     },
     {
       "sku": "TS-TOPWALL",
@@ -1836,7 +1986,9 @@
       "typy_podlah": null,
       "foto": null,
       "foto_zdroj": null,
-      "foto_licencia": null
+      "foto_licencia": null,
+      "foto_typ": null,
+      "foto_sud": null
     },
     {
       "sku": "TS-EPOSTONE",
@@ -1860,7 +2012,9 @@
       "typy_podlah": null,
       "foto": null,
       "foto_zdroj": null,
-      "foto_licencia": null
+      "foto_licencia": null,
+      "foto_typ": null,
+      "foto_sud": null
     },
     {
       "sku": "TS-TOPPUR",
@@ -1884,7 +2038,9 @@
       "typy_podlah": null,
       "foto": null,
       "foto_zdroj": null,
-      "foto_licencia": null
+      "foto_licencia": null,
+      "foto_typ": null,
+      "foto_sud": null
     },
     {
       "sku": "TS-EP22-THIXO",
@@ -1906,9 +2062,10 @@
       "vyzaduje_podklad_mpa": null,
       "technicky_list": null,
       "typy_podlah": null,
-      "foto": null,
-      "foto_zdroj": null,
-      "foto_licencia": null
+      "foto": "/images/eshop/products/TS-EP22-THIXO.jpg",
+      "foto_zdroj": "eshop.topstone.cz — oficiálny e-shop TopStone",
+      "foto_licencia": "produktové fotky výrobcu, použité ako dealer TopStone (stiahnuté 2026-08-14)",
+      "foto_typ": "sud"
     },
     {
       "sku": "TS-PURSTONE-ONE-WALL",
@@ -1932,7 +2089,9 @@
       "typy_podlah": null,
       "foto": null,
       "foto_zdroj": null,
-      "foto_licencia": null
+      "foto_licencia": null,
+      "foto_typ": null,
+      "foto_sud": null
     },
     {
       "sku": "TS-TOPFLEX",
@@ -1956,7 +2115,9 @@
       "typy_podlah": null,
       "foto": null,
       "foto_zdroj": null,
-      "foto_licencia": null
+      "foto_licencia": null,
+      "foto_typ": null,
+      "foto_sud": null
     },
     {
       "sku": "TS-EP13-THIXO",
@@ -1980,7 +2141,9 @@
       "typy_podlah": null,
       "foto": null,
       "foto_zdroj": null,
-      "foto_licencia": null
+      "foto_licencia": null,
+      "foto_typ": null,
+      "foto_sud": null
     },
     {
       "sku": "TS-TOPSTOP",
@@ -2004,7 +2167,9 @@
       "typy_podlah": null,
       "foto": null,
       "foto_zdroj": null,
-      "foto_licencia": null
+      "foto_licencia": null,
+      "foto_typ": null,
+      "foto_sud": null
     },
     {
       "sku": "TS-TOPSTOP-INTERIER",
@@ -2026,9 +2191,10 @@
       "vyzaduje_podklad_mpa": null,
       "technicky_list": null,
       "typy_podlah": null,
-      "foto": null,
-      "foto_zdroj": null,
-      "foto_licencia": null
+      "foto": "/images/eshop/products/TS-TOPSTOP-INTERIER.jpg",
+      "foto_zdroj": "eshop.topstone.cz — oficiálny e-shop TopStone",
+      "foto_licencia": "produktové fotky výrobcu, použité ako dealer TopStone (stiahnuté 2026-08-14)",
+      "foto_typ": "sud"
     },
     {
       "sku": "TS-POLYASTONE-WALL",
@@ -2052,7 +2218,9 @@
       "typy_podlah": null,
       "foto": null,
       "foto_zdroj": null,
-      "foto_licencia": null
+      "foto_licencia": null,
+      "foto_typ": null,
+      "foto_sud": null
     },
     {
       "sku": "TS-DESIGNOVA-PODLAHA-EXCLUSIVE-",
@@ -2076,7 +2244,9 @@
       "typy_podlah": null,
       "foto": "/images/eshop/topstone-metallic/gold.jpg",
       "foto_zdroj": "metalickasterka.cz — oficiálny web TopStone (vzorník EP11 Metallic)",
-      "foto_licencia": "produktové vzorky výrobcu, použité ako dealer TopStone (stiahnuté 2026-08-14)"
+      "foto_licencia": "produktové vzorky výrobcu, použité ako dealer TopStone (stiahnuté 2026-08-14)",
+      "foto_typ": "vzorka",
+      "foto_sud": "/images/eshop/products/TS-EP11.jpg"
     },
     {
       "sku": "TS-DESIGNOVA-PODLAHA-FLEXI-CREA",
@@ -2098,9 +2268,10 @@
       "vyzaduje_podklad_mpa": null,
       "technicky_list": null,
       "typy_podlah": null,
-      "foto": null,
-      "foto_zdroj": null,
-      "foto_licencia": null
+      "foto": "/images/eshop/products/TS-DESIGNOVA-PODLAHA-FLEXI-CREA.jpg",
+      "foto_zdroj": "eshop.topstone.cz — oficiálny e-shop TopStone",
+      "foto_licencia": "produktové fotky výrobcu, použité ako dealer TopStone (stiahnuté 2026-08-14)",
+      "foto_typ": "vzorka"
     },
     {
       "sku": "TS-DESIGNOVA-PODLAHA-FLEXI-MARB",
@@ -2122,9 +2293,10 @@
       "vyzaduje_podklad_mpa": null,
       "technicky_list": null,
       "typy_podlah": null,
-      "foto": null,
-      "foto_zdroj": null,
-      "foto_licencia": null
+      "foto": "/images/eshop/products/TS-DESIGNOVA-PODLAHA-FLEXI-MARB.jpg",
+      "foto_zdroj": "eshop.topstone.cz — oficiálny e-shop TopStone",
+      "foto_licencia": "produktové fotky výrobcu, použité ako dealer TopStone (stiahnuté 2026-08-14)",
+      "foto_typ": "vzorka"
     },
     {
       "sku": "TS-DESIGNOVA-PODLAHA-FLEXI-SF",
@@ -2148,7 +2320,9 @@
       "typy_podlah": null,
       "foto": null,
       "foto_zdroj": null,
-      "foto_licencia": null
+      "foto_licencia": null,
+      "foto_typ": null,
+      "foto_sud": null
     },
     {
       "sku": "TS-TOPLOCK",
@@ -2172,7 +2346,9 @@
       "typy_podlah": null,
       "foto": null,
       "foto_zdroj": null,
-      "foto_licencia": null
+      "foto_licencia": null,
+      "foto_typ": null,
+      "foto_sud": null
     },
     {
       "sku": "TS-DESIGNOVA-PODLAHA-ORIGINAL-C",
@@ -2194,9 +2370,10 @@
       "vyzaduje_podklad_mpa": null,
       "technicky_list": null,
       "typy_podlah": null,
-      "foto": null,
-      "foto_zdroj": null,
-      "foto_licencia": null
+      "foto": "/images/eshop/products/TS-DESIGNOVA-PODLAHA-ORIGINAL-C.jpg",
+      "foto_zdroj": "eshop.topstone.cz — oficiálny e-shop TopStone",
+      "foto_licencia": "produktové fotky výrobcu, použité ako dealer TopStone (stiahnuté 2026-08-14)",
+      "foto_typ": "vzorka"
     },
     {
       "sku": "TS-PURSTONE-WALL",
@@ -2220,7 +2397,9 @@
       "typy_podlah": null,
       "foto": null,
       "foto_zdroj": null,
-      "foto_licencia": null
+      "foto_licencia": null,
+      "foto_typ": null,
+      "foto_sud": null
     },
     {
       "sku": "TS-DESIGNOVA-PODLAHA-ORIGINAL-M",
@@ -2242,9 +2421,10 @@
       "vyzaduje_podklad_mpa": null,
       "technicky_list": null,
       "typy_podlah": null,
-      "foto": null,
-      "foto_zdroj": null,
-      "foto_licencia": null
+      "foto": "/images/eshop/products/TS-DESIGNOVA-PODLAHA-ORIGINAL-M.jpg",
+      "foto_zdroj": "eshop.topstone.cz — oficiálny e-shop TopStone",
+      "foto_licencia": "produktové fotky výrobcu, použité ako dealer TopStone (stiahnuté 2026-08-14)",
+      "foto_typ": "vzorka"
     },
     {
       "sku": "TS-POLYASTONEWALL-DECORMIX-M01-",
@@ -2268,7 +2448,9 @@
       "typy_podlah": null,
       "foto": null,
       "foto_zdroj": null,
-      "foto_licencia": null
+      "foto_licencia": null,
+      "foto_typ": null,
+      "foto_sud": null
     },
     {
       "sku": "TS-POLYASTONE-DECORMIX-M01-M15",
@@ -2292,7 +2474,9 @@
       "typy_podlah": null,
       "foto": null,
       "foto_zdroj": null,
-      "foto_licencia": null
+      "foto_licencia": null,
+      "foto_typ": null,
+      "foto_sud": null
     },
     {
       "sku": "TS-PERLETOVE-KAMIENKY-PEARL-3-5",
@@ -2316,7 +2500,9 @@
       "typy_podlah": null,
       "foto": null,
       "foto_zdroj": null,
-      "foto_licencia": null
+      "foto_licencia": null,
+      "foto_typ": null,
+      "foto_sud": null
     },
     {
       "sku": "TS-TOPTHIX-TIXOTROPNA-PRISADA",
@@ -2340,7 +2526,9 @@
       "typy_podlah": null,
       "foto": null,
       "foto_zdroj": null,
-      "foto_licencia": null
+      "foto_licencia": null,
+      "foto_typ": null,
+      "foto_sud": null
     },
     {
       "sku": "TS-CONCRETO-4-7-M18-MIX-M10-M14",
@@ -2364,7 +2552,9 @@
       "typy_podlah": null,
       "foto": null,
       "foto_zdroj": null,
-      "foto_licencia": null
+      "foto_licencia": null,
+      "foto_typ": null,
+      "foto_sud": null
     },
     {
       "sku": "TS-DESIGNOVA-PODLAHA-ORIGINAL-S",
@@ -2388,7 +2578,9 @@
       "typy_podlah": null,
       "foto": null,
       "foto_zdroj": null,
-      "foto_licencia": null
+      "foto_licencia": null,
+      "foto_typ": null,
+      "foto_sud": null
     },
     {
       "sku": "TS-LITORE-4-7-M19-MIX-M04-M15",
@@ -2412,7 +2604,9 @@
       "typy_podlah": null,
       "foto": null,
       "foto_zdroj": null,
-      "foto_licencia": null
+      "foto_licencia": null,
+      "foto_typ": null,
+      "foto_sud": null
     },
     {
       "sku": "TS-AKCEL",
@@ -2436,7 +2630,9 @@
       "typy_podlah": null,
       "foto": null,
       "foto_zdroj": null,
-      "foto_licencia": null
+      "foto_licencia": null,
+      "foto_typ": null,
+      "foto_sud": null
     },
     {
       "sku": "TS-WALL-DECORMIX-M01-M15",
@@ -2460,7 +2656,9 @@
       "typy_podlah": null,
       "foto": null,
       "foto_zdroj": null,
-      "foto_licencia": null
+      "foto_licencia": null,
+      "foto_typ": null,
+      "foto_sud": null
     },
     {
       "sku": "TS-GRISEO-4-7-M17-MIX-M02-M14",
@@ -2484,7 +2682,9 @@
       "typy_podlah": null,
       "foto": null,
       "foto_zdroj": null,
-      "foto_licencia": null
+      "foto_licencia": null,
+      "foto_typ": null,
+      "foto_sud": null
     },
     {
       "sku": "TS-LATTE-MOGANO-4-7-M21-MIX-M04",
@@ -2508,7 +2708,9 @@
       "typy_podlah": null,
       "foto": null,
       "foto_zdroj": null,
-      "foto_licencia": null
+      "foto_licencia": null,
+      "foto_typ": null,
+      "foto_sud": null
     },
     {
       "sku": "TS-CAMEO-PINK-4-7-M20-MIX-M04-M",
@@ -2532,7 +2734,9 @@
       "typy_podlah": null,
       "foto": null,
       "foto_zdroj": null,
-      "foto_licencia": null
+      "foto_licencia": null,
+      "foto_typ": null,
+      "foto_sud": null
     },
     {
       "sku": "TS-ACRYL-DECORMIX-M01-M15",
@@ -2556,7 +2760,9 @@
       "typy_podlah": null,
       "foto": null,
       "foto_zdroj": null,
-      "foto_licencia": null
+      "foto_licencia": null,
+      "foto_typ": null,
+      "foto_sud": null
     },
     {
       "sku": "TS-PLASTBETON-SP010",
@@ -2580,7 +2786,9 @@
       "typy_podlah": null,
       "foto": null,
       "foto_zdroj": null,
-      "foto_licencia": null
+      "foto_licencia": null,
+      "foto_typ": null,
+      "foto_sud": null
     },
     {
       "sku": "TS-CLEAR-DECORMIX-M01-M15",
@@ -2604,7 +2812,9 @@
       "typy_podlah": null,
       "foto": null,
       "foto_zdroj": null,
-      "foto_licencia": null
+      "foto_licencia": null,
+      "foto_typ": null,
+      "foto_sud": null
     },
     {
       "sku": "TS-ALBUNIGRU-4-7-M16-MIX-M01-M0",
@@ -2628,7 +2838,9 @@
       "typy_podlah": null,
       "foto": null,
       "foto_zdroj": null,
-      "foto_licencia": null
+      "foto_licencia": null,
+      "foto_typ": null,
+      "foto_sud": null
     },
     {
       "sku": "TS-MATTONE-4-7-M22-MIX-M03-M04",
@@ -2652,7 +2864,9 @@
       "typy_podlah": null,
       "foto": null,
       "foto_zdroj": null,
-      "foto_licencia": null
+      "foto_licencia": null,
+      "foto_typ": null,
+      "foto_sud": null
     },
     {
       "sku": "TS-TOPFILLER-EPOXIDOVY-TMEL",
@@ -2676,7 +2890,9 @@
       "typy_podlah": null,
       "foto": null,
       "foto_zdroj": null,
-      "foto_licencia": null
+      "foto_licencia": null,
+      "foto_typ": null,
+      "foto_sud": null
     },
     {
       "sku": "TS-MRAMOR-BROWN-ROYAL-M15-4-7",
@@ -2700,7 +2916,9 @@
       "typy_podlah": null,
       "foto": null,
       "foto_zdroj": null,
-      "foto_licencia": null
+      "foto_licencia": null,
+      "foto_typ": null,
+      "foto_sud": null
     },
     {
       "sku": "TS-MRAMOR-BARDIGLIO-M14-2-4-4-7",
@@ -2724,7 +2942,9 @@
       "typy_podlah": null,
       "foto": null,
       "foto_zdroj": null,
-      "foto_licencia": null
+      "foto_licencia": null,
+      "foto_typ": null,
+      "foto_sud": null
     },
     {
       "sku": "TS-MRAMOR-GRIGIO-CARNICO-M10-2-",
@@ -2748,7 +2968,9 @@
       "typy_podlah": null,
       "foto": null,
       "foto_zdroj": null,
-      "foto_licencia": null
+      "foto_licencia": null,
+      "foto_typ": null,
+      "foto_sud": null
     },
     {
       "sku": "TS-MRAMOR-MARRONE-MOGANO-M05-2-",
@@ -2770,9 +2992,10 @@
       "vyzaduje_podklad_mpa": null,
       "technicky_list": null,
       "typy_podlah": null,
-      "foto": null,
-      "foto_zdroj": null,
-      "foto_licencia": null
+      "foto": "/images/eshop/products/TS-MRAMOR-MARRONE-MOGANO-M05-2-.jpg",
+      "foto_zdroj": "eshop.topstone.cz — oficiálny e-shop TopStone",
+      "foto_licencia": "produktové fotky výrobcu, použité ako dealer TopStone (stiahnuté 2026-08-14)",
+      "foto_typ": "vzorka"
     },
     {
       "sku": "TS-MRAMOR-ARABESCATO-M09-2-4",
@@ -2796,7 +3019,9 @@
       "typy_podlah": null,
       "foto": null,
       "foto_zdroj": null,
-      "foto_licencia": null
+      "foto_licencia": null,
+      "foto_typ": null,
+      "foto_sud": null
     },
     {
       "sku": "TS-MRAMOR-GIALLO-MORI-M13-2-4-4",
@@ -2820,7 +3045,9 @@
       "typy_podlah": null,
       "foto": null,
       "foto_zdroj": null,
-      "foto_licencia": null
+      "foto_licencia": null,
+      "foto_typ": null,
+      "foto_sud": null
     },
     {
       "sku": "TS-MRAMOR-GIALLO-SIENA-M11-2-4-",
@@ -2844,7 +3071,9 @@
       "typy_podlah": null,
       "foto": null,
       "foto_zdroj": null,
-      "foto_licencia": null
+      "foto_licencia": null,
+      "foto_typ": null,
+      "foto_sud": null
     },
     {
       "sku": "TS-MRAMOR-GRIGIO-OCCHIALINO-M08",
@@ -2868,7 +3097,9 @@
       "typy_podlah": null,
       "foto": null,
       "foto_zdroj": null,
-      "foto_licencia": null
+      "foto_licencia": null,
+      "foto_typ": null,
+      "foto_sud": null
     },
     {
       "sku": "TS-MRAMOR-ROSA-CORALLO-M06-2-4-",
@@ -2890,9 +3121,10 @@
       "vyzaduje_podklad_mpa": null,
       "technicky_list": null,
       "typy_podlah": null,
-      "foto": null,
-      "foto_zdroj": null,
-      "foto_licencia": null
+      "foto": "/images/eshop/products/TS-MRAMOR-ROSA-CORALLO-M06-2-4-.jpg",
+      "foto_zdroj": "eshop.topstone.cz — oficiálny e-shop TopStone",
+      "foto_licencia": "produktové fotky výrobcu, použité ako dealer TopStone (stiahnuté 2026-08-14)",
+      "foto_typ": "vzorka"
     },
     {
       "sku": "TS-MRAMOR-ROSA-DEL-GARDA-M12-2-",
@@ -2916,7 +3148,9 @@
       "typy_podlah": null,
       "foto": null,
       "foto_zdroj": null,
-      "foto_licencia": null
+      "foto_licencia": null,
+      "foto_typ": null,
+      "foto_sud": null
     },
     {
       "sku": "TS-MRAMOR-VERDE-ALPI-M07-2-4-4-",
@@ -2940,7 +3174,9 @@
       "typy_podlah": null,
       "foto": null,
       "foto_zdroj": null,
-      "foto_licencia": null
+      "foto_licencia": null,
+      "foto_typ": null,
+      "foto_sud": null
     },
     {
       "sku": "TS-KREMICITA-MUCKA-VMOU",
@@ -2962,9 +3198,10 @@
       "vyzaduje_podklad_mpa": null,
       "technicky_list": null,
       "typy_podlah": null,
-      "foto": null,
-      "foto_zdroj": null,
-      "foto_licencia": null
+      "foto": "/images/eshop/products/piesok.jpg",
+      "foto_zdroj": "eshop.topstone.cz — oficiálny e-shop TopStone",
+      "foto_licencia": "produktové fotky výrobcu, použité ako dealer TopStone (stiahnuté 2026-08-14)",
+      "foto_typ": "sud"
     },
     {
       "sku": "TS-PLNIVO-0-06-0-3-MM-B55",
@@ -2986,9 +3223,10 @@
       "vyzaduje_podklad_mpa": null,
       "technicky_list": null,
       "typy_podlah": null,
-      "foto": null,
-      "foto_zdroj": null,
-      "foto_licencia": null
+      "foto": "/images/eshop/products/piesok.jpg",
+      "foto_zdroj": "eshop.topstone.cz — oficiálny e-shop TopStone",
+      "foto_licencia": "produktové fotky výrobcu, použité ako dealer TopStone (stiahnuté 2026-08-14)",
+      "foto_typ": "sud"
     },
     {
       "sku": "TS-MRAMOR-BIANCO-CARRARA-M02-2-",
@@ -3010,9 +3248,10 @@
       "vyzaduje_podklad_mpa": null,
       "technicky_list": null,
       "typy_podlah": null,
-      "foto": null,
-      "foto_zdroj": null,
-      "foto_licencia": null
+      "foto": "/images/eshop/products/TS-MRAMOR-BIANCO-CARRARA-M02-2-.jpg",
+      "foto_zdroj": "eshop.topstone.cz — oficiálny e-shop TopStone",
+      "foto_licencia": "produktové fotky výrobcu, použité ako dealer TopStone (stiahnuté 2026-08-14)",
+      "foto_typ": "vzorka"
     },
     {
       "sku": "TS-MRAMOR-BOTTICINO-M04-2-4-4-7",
@@ -3034,9 +3273,10 @@
       "vyzaduje_podklad_mpa": null,
       "technicky_list": null,
       "typy_podlah": null,
-      "foto": null,
-      "foto_zdroj": null,
-      "foto_licencia": null
+      "foto": "/images/eshop/products/TS-MRAMOR-BOTTICINO-M04-2-4-4-7.jpg",
+      "foto_zdroj": "eshop.topstone.cz — oficiálny e-shop TopStone",
+      "foto_licencia": "produktové fotky výrobcu, použité ako dealer TopStone (stiahnuté 2026-08-14)",
+      "foto_typ": "vzorka"
     },
     {
       "sku": "TS-MRAMOR-GRIGIO-GHEDI-M23-2-4-",
@@ -3060,7 +3300,9 @@
       "typy_podlah": null,
       "foto": null,
       "foto_zdroj": null,
-      "foto_licencia": null
+      "foto_licencia": null,
+      "foto_typ": null,
+      "foto_sud": null
     },
     {
       "sku": "TS-MRAMOR-MILLEFIORI-M24-2-4-4-",
@@ -3084,7 +3326,9 @@
       "typy_podlah": null,
       "foto": null,
       "foto_zdroj": null,
-      "foto_licencia": null
+      "foto_licencia": null,
+      "foto_typ": null,
+      "foto_sud": null
     },
     {
       "sku": "TS-MRAMOR-NERO-EBANO-M01-2-4-4-",
@@ -3106,9 +3350,10 @@
       "vyzaduje_podklad_mpa": null,
       "technicky_list": null,
       "typy_podlah": null,
-      "foto": null,
-      "foto_zdroj": null,
-      "foto_licencia": null
+      "foto": "/images/eshop/products/TS-MRAMOR-NERO-EBANO-M01-2-4-4-.jpg",
+      "foto_zdroj": "eshop.topstone.cz — oficiálny e-shop TopStone",
+      "foto_licencia": "produktové fotky výrobcu, použité ako dealer TopStone (stiahnuté 2026-08-14)",
+      "foto_typ": "vzorka"
     },
     {
       "sku": "TS-MRAMOR-ROSSO-VERONA-M03-2-4-",
@@ -3130,9 +3375,10 @@
       "vyzaduje_podklad_mpa": null,
       "technicky_list": null,
       "typy_podlah": null,
-      "foto": null,
-      "foto_zdroj": null,
-      "foto_licencia": null
+      "foto": "/images/eshop/products/TS-MRAMOR-ROSSO-VERONA-M03-2-4-.jpg",
+      "foto_zdroj": "eshop.topstone.cz — oficiálny e-shop TopStone",
+      "foto_licencia": "produktové fotky výrobcu, použité ako dealer TopStone (stiahnuté 2026-08-14)",
+      "foto_typ": "vzorka"
     },
     {
       "sku": "TS-FAREBNE-CHIPSY-3-MM-CH01-CH1",
@@ -3156,7 +3402,9 @@
       "typy_podlah": null,
       "foto": null,
       "foto_zdroj": null,
-      "foto_licencia": null
+      "foto_licencia": null,
+      "foto_typ": null,
+      "foto_sud": null
     },
     {
       "sku": "TS-PIESOK-PLASTBETON-KPIS0015-I",
@@ -3178,9 +3426,10 @@
       "vyzaduje_podklad_mpa": null,
       "technicky_list": null,
       "typy_podlah": null,
-      "foto": null,
-      "foto_zdroj": null,
-      "foto_licencia": null
+      "foto": "/images/eshop/products/piesok.jpg",
+      "foto_zdroj": "eshop.topstone.cz — oficiálny e-shop TopStone",
+      "foto_licencia": "produktové fotky výrobcu, použité ako dealer TopStone (stiahnuté 2026-08-14)",
+      "foto_typ": "sud"
     },
     {
       "sku": "TS-KREMICITY-PIESOK-0-1-0-3-MM-",
@@ -3202,9 +3451,10 @@
       "vyzaduje_podklad_mpa": null,
       "technicky_list": null,
       "typy_podlah": null,
-      "foto": null,
-      "foto_zdroj": null,
-      "foto_licencia": null
+      "foto": "/images/eshop/products/piesok.jpg",
+      "foto_zdroj": "eshop.topstone.cz — oficiálny e-shop TopStone",
+      "foto_licencia": "produktové fotky výrobcu, použité ako dealer TopStone (stiahnuté 2026-08-14)",
+      "foto_typ": "sud"
     },
     {
       "sku": "TS-CITYSTONE-LIGHT-4-8-K09",
@@ -3226,9 +3476,10 @@
       "vyzaduje_podklad_mpa": null,
       "technicky_list": null,
       "typy_podlah": null,
-      "foto": null,
-      "foto_zdroj": null,
-      "foto_licencia": null
+      "foto": "/images/eshop/products/TS-CITYSTONE-LIGHT-4-8-K09.jpg",
+      "foto_zdroj": "eshop.topstone.cz — oficiálny e-shop TopStone",
+      "foto_licencia": "produktové fotky výrobcu, použité ako dealer TopStone (stiahnuté 2026-08-14)",
+      "foto_typ": "vzorka"
     },
     {
       "sku": "TS-DK-LIGHT-4-8-DK05",
@@ -3252,7 +3503,9 @@
       "typy_podlah": null,
       "foto": null,
       "foto_zdroj": null,
-      "foto_licencia": null
+      "foto_licencia": null,
+      "foto_typ": null,
+      "foto_sud": null
     },
     {
       "sku": "TS-ELBA-2-8-K05-MIX-K01-K03",
@@ -3274,9 +3527,10 @@
       "vyzaduje_podklad_mpa": null,
       "technicky_list": null,
       "typy_podlah": null,
-      "foto": null,
-      "foto_zdroj": null,
-      "foto_licencia": null
+      "foto": "/images/eshop/products/TS-ELBA-2-8-K05-MIX-K01-K03.jpg",
+      "foto_zdroj": "eshop.topstone.cz — oficiálny e-shop TopStone",
+      "foto_licencia": "produktové fotky výrobcu, použité ako dealer TopStone (stiahnuté 2026-08-14)",
+      "foto_typ": "vzorka"
     },
     {
       "sku": "TS-JAVA-2-8-K04-MIX-K01-K02",
@@ -3298,9 +3552,10 @@
       "vyzaduje_podklad_mpa": null,
       "technicky_list": null,
       "typy_podlah": null,
-      "foto": null,
-      "foto_zdroj": null,
-      "foto_licencia": null
+      "foto": "/images/eshop/products/TS-JAVA-2-8-K04-MIX-K01-K02.jpg",
+      "foto_zdroj": "eshop.topstone.cz — oficiálny e-shop TopStone",
+      "foto_licencia": "produktové fotky výrobcu, použité ako dealer TopStone (stiahnuté 2026-08-14)",
+      "foto_typ": "vzorka"
     },
     {
       "sku": "TS-KORFU-4-8-K06",
@@ -3322,9 +3577,10 @@
       "vyzaduje_podklad_mpa": null,
       "technicky_list": null,
       "typy_podlah": null,
-      "foto": null,
-      "foto_zdroj": null,
-      "foto_licencia": null
+      "foto": "/images/eshop/products/TS-KORFU-4-8-K06.jpg",
+      "foto_zdroj": "eshop.topstone.cz — oficiálny e-shop TopStone",
+      "foto_licencia": "produktové fotky výrobcu, použité ako dealer TopStone (stiahnuté 2026-08-14)",
+      "foto_typ": "vzorka"
     },
     {
       "sku": "TS-KORSIKA-4-8-K03",
@@ -3346,9 +3602,10 @@
       "vyzaduje_podklad_mpa": null,
       "technicky_list": null,
       "typy_podlah": null,
-      "foto": null,
-      "foto_zdroj": null,
-      "foto_licencia": null
+      "foto": "/images/eshop/products/TS-KORSIKA-4-8-K03.jpg",
+      "foto_zdroj": "eshop.topstone.cz — oficiálny e-shop TopStone",
+      "foto_licencia": "produktové fotky výrobcu, použité ako dealer TopStone (stiahnuté 2026-08-14)",
+      "foto_typ": "vzorka"
     },
     {
       "sku": "TS-KRETA-4-8-K02",
@@ -3370,9 +3627,10 @@
       "vyzaduje_podklad_mpa": null,
       "technicky_list": null,
       "typy_podlah": null,
-      "foto": null,
-      "foto_zdroj": null,
-      "foto_licencia": null
+      "foto": "/images/eshop/products/TS-KRETA-4-8-K02.jpg",
+      "foto_zdroj": "eshop.topstone.cz — oficiálny e-shop TopStone",
+      "foto_licencia": "produktové fotky výrobcu, použité ako dealer TopStone (stiahnuté 2026-08-14)",
+      "foto_typ": "vzorka"
     },
     {
       "sku": "TS-MADEIRA-2-5-K01",
@@ -3394,9 +3652,10 @@
       "vyzaduje_podklad_mpa": null,
       "technicky_list": null,
       "typy_podlah": null,
-      "foto": null,
-      "foto_zdroj": null,
-      "foto_licencia": null
+      "foto": "/images/eshop/products/TS-MADEIRA-2-5-K01.jpg",
+      "foto_zdroj": "eshop.topstone.cz — oficiálny e-shop TopStone",
+      "foto_licencia": "produktové fotky výrobcu, použité ako dealer TopStone (stiahnuté 2026-08-14)",
+      "foto_typ": "vzorka"
     },
     {
       "sku": "TS-SANTORINI-2-8-K07-MIX-K01-K0",
@@ -3418,9 +3677,10 @@
       "vyzaduje_podklad_mpa": null,
       "technicky_list": null,
       "typy_podlah": null,
-      "foto": null,
-      "foto_zdroj": null,
-      "foto_licencia": null
+      "foto": "/images/eshop/products/TS-SANTORINI-2-8-K07-MIX-K01-K0.jpg",
+      "foto_zdroj": "eshop.topstone.cz — oficiálny e-shop TopStone",
+      "foto_licencia": "produktové fotky výrobcu, použité ako dealer TopStone (stiahnuté 2026-08-14)",
+      "foto_typ": "vzorka"
     },
     {
       "sku": "TS-KREMICITY-PIESOK-0-6-1-2-MM-",
@@ -3442,9 +3702,10 @@
       "vyzaduje_podklad_mpa": null,
       "technicky_list": null,
       "typy_podlah": null,
-      "foto": null,
-      "foto_zdroj": null,
-      "foto_licencia": null
+      "foto": "/images/eshop/products/piesok.jpg",
+      "foto_zdroj": "eshop.topstone.cz — oficiálny e-shop TopStone",
+      "foto_licencia": "produktové fotky výrobcu, použité ako dealer TopStone (stiahnuté 2026-08-14)",
+      "foto_typ": "sud"
     },
     {
       "sku": "TS-CITYSTONE-DARK-4-8-K08",
@@ -3466,9 +3727,10 @@
       "vyzaduje_podklad_mpa": null,
       "technicky_list": null,
       "typy_podlah": null,
-      "foto": null,
-      "foto_zdroj": null,
-      "foto_licencia": null
+      "foto": "/images/eshop/products/TS-CITYSTONE-DARK-4-8-K08.jpg",
+      "foto_zdroj": "eshop.topstone.cz — oficiálny e-shop TopStone",
+      "foto_licencia": "produktové fotky výrobcu, použité ako dealer TopStone (stiahnuté 2026-08-14)",
+      "foto_typ": "vzorka"
     },
     {
       "sku": "TS-DK-DARK-4-8-DK01",
@@ -3492,7 +3754,9 @@
       "typy_podlah": null,
       "foto": null,
       "foto_zdroj": null,
-      "foto_licencia": null
+      "foto_licencia": null,
+      "foto_typ": null,
+      "foto_sud": null
     },
     {
       "sku": "TS-KREMICITY-PIESOK-0-1-0-6-MM-",
@@ -3514,9 +3778,10 @@
       "vyzaduje_podklad_mpa": null,
       "technicky_list": null,
       "typy_podlah": null,
-      "foto": null,
-      "foto_zdroj": null,
-      "foto_licencia": null
+      "foto": "/images/eshop/products/piesok.jpg",
+      "foto_zdroj": "eshop.topstone.cz — oficiálny e-shop TopStone",
+      "foto_licencia": "produktové fotky výrobcu, použité ako dealer TopStone (stiahnuté 2026-08-14)",
+      "foto_typ": "sud"
     },
     {
       "sku": "TS-KREMICITY-PIESOK-0-3-0-8-MM-",
@@ -3538,9 +3803,10 @@
       "vyzaduje_podklad_mpa": null,
       "technicky_list": null,
       "typy_podlah": null,
-      "foto": null,
-      "foto_zdroj": null,
-      "foto_licencia": null
+      "foto": "/images/eshop/products/piesok.jpg",
+      "foto_zdroj": "eshop.topstone.cz — oficiálny e-shop TopStone",
+      "foto_licencia": "produktové fotky výrobcu, použité ako dealer TopStone (stiahnuté 2026-08-14)",
+      "foto_typ": "sud"
     },
     {
       "sku": "TS-ACRYL-DECOR-PRIMER",
@@ -3562,9 +3828,10 @@
       "vyzaduje_podklad_mpa": null,
       "technicky_list": null,
       "typy_podlah": null,
-      "foto": null,
-      "foto_zdroj": null,
-      "foto_licencia": null
+      "foto": "/images/eshop/products/TS-ACRYL-DECOR-PRIMER.jpg",
+      "foto_zdroj": "eshop.topstone.cz — oficiálny e-shop TopStone",
+      "foto_licencia": "produktové fotky výrobcu, použité ako dealer TopStone (stiahnuté 2026-08-14)",
+      "foto_typ": "sud"
     },
     {
       "sku": "TS-PURSTONE-ONE-VITAL",
@@ -3588,7 +3855,9 @@
       "typy_podlah": null,
       "foto": null,
       "foto_zdroj": null,
-      "foto_licencia": null
+      "foto_licencia": null,
+      "foto_typ": null,
+      "foto_sud": null
     },
     {
       "sku": "TS-PURSTONE-VITAL",
@@ -3612,7 +3881,9 @@
       "typy_podlah": null,
       "foto": null,
       "foto_zdroj": null,
-      "foto_licencia": null
+      "foto_licencia": null,
+      "foto_typ": null,
+      "foto_sud": null
     },
     {
       "sku": "TS-TOPVITAL-PLUS",
@@ -3636,7 +3907,9 @@
       "typy_podlah": null,
       "foto": null,
       "foto_zdroj": null,
-      "foto_licencia": null
+      "foto_licencia": null,
+      "foto_typ": null,
+      "foto_sud": null
     },
     {
       "sku": "TS-TOPVITAL",
@@ -3660,7 +3933,9 @@
       "typy_podlah": null,
       "foto": null,
       "foto_zdroj": null,
-      "foto_licencia": null
+      "foto_licencia": null,
+      "foto_typ": null,
+      "foto_sud": null
     },
     {
       "sku": "TS-PA11-SLOW",
@@ -3684,7 +3959,9 @@
       "typy_podlah": null,
       "foto": null,
       "foto_zdroj": null,
-      "foto_licencia": null
+      "foto_licencia": null,
+      "foto_typ": null,
+      "foto_sud": null
     },
     {
       "sku": "TS-EP11-METALLIC",
@@ -3708,7 +3985,9 @@
       "typy_podlah": null,
       "foto": "/images/eshop/topstone-metallic/sequoia.jpg",
       "foto_zdroj": "metalickasterka.cz — oficiálny web TopStone (vzorník EP11 Metallic)",
-      "foto_licencia": "produktové vzorky výrobcu, použité ako dealer TopStone (stiahnuté 2026-08-14)"
+      "foto_licencia": "produktové vzorky výrobcu, použité ako dealer TopStone (stiahnuté 2026-08-14)",
+      "foto_typ": "vzorka",
+      "foto_sud": "/images/eshop/products/TS-EP11.jpg"
     },
     {
       "sku": "TS-EP11-AS-ESD-STIERKA",
@@ -3730,9 +4009,10 @@
       "vyzaduje_podklad_mpa": null,
       "technicky_list": "https://topstone.cz/data/files/EP11_AS_V1.pdf",
       "typy_podlah": null,
-      "foto": null,
-      "foto_zdroj": null,
-      "foto_licencia": null
+      "foto": "/images/eshop/products/TS-EP11-AS-ESD-STIERKA.jpg",
+      "foto_zdroj": "eshop.topstone.cz — oficiálny e-shop TopStone",
+      "foto_licencia": "produktové fotky výrobcu, použité ako dealer TopStone (stiahnuté 2026-08-14)",
+      "foto_typ": "sud"
     },
     {
       "sku": "TS-PU10",
@@ -3756,7 +4036,9 @@
       "typy_podlah": null,
       "foto": null,
       "foto_zdroj": null,
-      "foto_licencia": null
+      "foto_licencia": null,
+      "foto_typ": null,
+      "foto_sud": null
     },
     {
       "sku": "TS-EP12-TRAFFIC",
@@ -3780,7 +4062,9 @@
       "typy_podlah": null,
       "foto": null,
       "foto_zdroj": null,
-      "foto_licencia": null
+      "foto_licencia": null,
+      "foto_typ": null,
+      "foto_sud": null
     },
     {
       "sku": "TS-EP42",
@@ -3804,7 +4088,9 @@
       "typy_podlah": null,
       "foto": null,
       "foto_zdroj": null,
-      "foto_licencia": null
+      "foto_licencia": null,
+      "foto_typ": null,
+      "foto_sud": null
     },
     {
       "sku": "TS-EP31-THIXO",
@@ -3828,7 +4114,9 @@
       "typy_podlah": null,
       "foto": null,
       "foto_zdroj": null,
-      "foto_licencia": null
+      "foto_licencia": null,
+      "foto_typ": null,
+      "foto_sud": null
     },
     {
       "sku": "TS-PU31-MEMBRANA",
@@ -3852,7 +4140,9 @@
       "typy_podlah": null,
       "foto": null,
       "foto_zdroj": null,
-      "foto_licencia": null
+      "foto_licencia": null,
+      "foto_typ": null,
+      "foto_sud": null
     },
     {
       "sku": "TS-PU11",
@@ -3876,7 +4166,9 @@
       "typy_podlah": null,
       "foto": null,
       "foto_zdroj": null,
-      "foto_licencia": null
+      "foto_licencia": null,
+      "foto_typ": null,
+      "foto_sud": null
     },
     {
       "sku": "TS-EP12",
@@ -3900,7 +4192,9 @@
       "typy_podlah": null,
       "foto": null,
       "foto_zdroj": null,
-      "foto_licencia": null
+      "foto_licencia": null,
+      "foto_typ": null,
+      "foto_sud": null
     },
     {
       "sku": "TS-EP13",
@@ -3924,7 +4218,9 @@
       "typy_podlah": null,
       "foto": null,
       "foto_zdroj": null,
-      "foto_licencia": null
+      "foto_licencia": null,
+      "foto_typ": null,
+      "foto_sud": null
     },
     {
       "sku": "TS-PU32-MEMBRANA",
@@ -3948,7 +4244,9 @@
       "typy_podlah": null,
       "foto": null,
       "foto_zdroj": null,
-      "foto_licencia": null
+      "foto_licencia": null,
+      "foto_typ": null,
+      "foto_sud": null
     },
     {
       "sku": "TS-EP31-EKO",
@@ -3972,7 +4270,9 @@
       "typy_podlah": null,
       "foto": null,
       "foto_zdroj": null,
-      "foto_licencia": null
+      "foto_licencia": null,
+      "foto_typ": null,
+      "foto_sud": null
     },
     {
       "sku": "TS-EP31",
@@ -3996,7 +4296,9 @@
       "typy_podlah": null,
       "foto": null,
       "foto_zdroj": null,
-      "foto_licencia": null
+      "foto_licencia": null,
+      "foto_typ": null,
+      "foto_sud": null
     },
     {
       "sku": "TS-PU11-EKO-HARD",
@@ -4020,7 +4322,9 @@
       "typy_podlah": null,
       "foto": null,
       "foto_zdroj": null,
-      "foto_licencia": null
+      "foto_licencia": null,
+      "foto_typ": null,
+      "foto_sud": null
     },
     {
       "sku": "TS-PU11-EKO-SOFT",
@@ -4044,7 +4348,9 @@
       "typy_podlah": null,
       "foto": null,
       "foto_zdroj": null,
-      "foto_licencia": null
+      "foto_licencia": null,
+      "foto_typ": null,
+      "foto_sud": null
     },
     {
       "sku": "TS-EP11-EKO",
@@ -4066,9 +4372,10 @@
       "vyzaduje_podklad_mpa": null,
       "technicky_list": "https://topstone.cz/data/files/60dc267f527e7.pdf",
       "typy_podlah": null,
-      "foto": null,
-      "foto_zdroj": null,
-      "foto_licencia": null
+      "foto": "/images/eshop/products/TS-EP11-EKO.jpg",
+      "foto_zdroj": "eshop.topstone.cz — oficiálny e-shop TopStone",
+      "foto_licencia": "produktové fotky výrobcu, použité ako dealer TopStone (stiahnuté 2026-08-14)",
+      "foto_typ": "sud"
     },
     {
       "sku": "TS-EP11",
@@ -4090,9 +4397,10 @@
       "vyzaduje_podklad_mpa": null,
       "technicky_list": "https://topstone.cz/data/files/6221be10ca11a.PDF",
       "typy_podlah": null,
-      "foto": null,
-      "foto_zdroj": null,
-      "foto_licencia": null
+      "foto": "/images/eshop/products/TS-EP11.jpg",
+      "foto_zdroj": "eshop.topstone.cz — oficiálny e-shop TopStone",
+      "foto_licencia": "produktové fotky výrobcu, použité ako dealer TopStone (stiahnuté 2026-08-14)",
+      "foto_typ": "sud"
     },
     {
       "sku": "TS-EP13-GARAZOVY-NATER-RAL-7032",
@@ -4116,7 +4424,9 @@
       "typy_podlah": null,
       "foto": null,
       "foto_zdroj": null,
-      "foto_licencia": null
+      "foto_licencia": null,
+      "foto_typ": null,
+      "foto_sud": null
     },
     {
       "sku": "TS-TOPHOLD",
@@ -4140,7 +4450,9 @@
       "typy_podlah": null,
       "foto": null,
       "foto_zdroj": null,
-      "foto_licencia": null
+      "foto_licencia": null,
+      "foto_typ": null,
+      "foto_sud": null
     },
     {
       "sku": "TS-TOPBINDER",
@@ -4164,7 +4476,9 @@
       "typy_podlah": null,
       "foto": null,
       "foto_zdroj": null,
-      "foto_licencia": null
+      "foto_licencia": null,
+      "foto_typ": null,
+      "foto_sud": null
     },
     {
       "sku": "TS-TOPFIX-RAPID",
@@ -4186,9 +4500,10 @@
       "vyzaduje_podklad_mpa": null,
       "technicky_list": "https://topstone.sk/data/files/6659b15211cec.pdf",
       "typy_podlah": null,
-      "foto": null,
-      "foto_zdroj": null,
-      "foto_licencia": null
+      "foto": "/images/eshop/products/TS-TOPFIX-RAPID.jpg",
+      "foto_zdroj": "eshop.topstone.cz — oficiálny e-shop TopStone",
+      "foto_licencia": "produktové fotky výrobcu, použité ako dealer TopStone (stiahnuté 2026-08-14)",
+      "foto_typ": "sud"
     },
     {
       "sku": "TS-PA01-POLYASPARTATOVA-PENETRA",
@@ -4210,9 +4525,10 @@
       "vyzaduje_podklad_mpa": null,
       "technicky_list": "https://topstone.cz/data/files/6605852cbc921.PDF",
       "typy_podlah": null,
-      "foto": null,
-      "foto_zdroj": null,
-      "foto_licencia": null
+      "foto": "/images/eshop/products/TS-PA01-POLYASPARTATOVA-PENETRA.jpg",
+      "foto_zdroj": "eshop.topstone.cz — oficiálny e-shop TopStone",
+      "foto_licencia": "produktové fotky výrobcu, použité ako dealer TopStone (stiahnuté 2026-08-14)",
+      "foto_typ": "sud"
     },
     {
       "sku": "TS-TOPFIX",
@@ -4236,7 +4552,9 @@
       "typy_podlah": null,
       "foto": null,
       "foto_zdroj": null,
-      "foto_licencia": null
+      "foto_licencia": null,
+      "foto_typ": null,
+      "foto_sud": null
     },
     {
       "sku": "TS-EP02-I-IMPREGNACIA",
@@ -4258,9 +4576,10 @@
       "vyzaduje_podklad_mpa": null,
       "technicky_list": "https://topstone.sk/data/files/630769ecc72d5.PDF",
       "typy_podlah": null,
-      "foto": null,
-      "foto_zdroj": null,
-      "foto_licencia": null
+      "foto": "/images/eshop/products/TS-EP02-I-IMPREGNACIA.jpg",
+      "foto_zdroj": "eshop.topstone.cz — oficiálny e-shop TopStone",
+      "foto_licencia": "produktové fotky výrobcu, použité ako dealer TopStone (stiahnuté 2026-08-14)",
+      "foto_typ": "sud"
     },
     {
       "sku": "TS-EP01-R-RYCHLA",
@@ -4282,9 +4601,10 @@
       "vyzaduje_podklad_mpa": null,
       "technicky_list": "https://topstone.cz/data/files/620e0f1740504.PDF",
       "typy_podlah": null,
-      "foto": null,
-      "foto_zdroj": null,
-      "foto_licencia": null
+      "foto": "/images/eshop/products/TS-EP01-R-RYCHLA.jpg",
+      "foto_zdroj": "eshop.topstone.cz — oficiálny e-shop TopStone",
+      "foto_licencia": "produktové fotky výrobcu, použité ako dealer TopStone (stiahnuté 2026-08-14)",
+      "foto_typ": "sud"
     },
     {
       "sku": "TS-EP02-O-NA-ZAMASTENE-BETONY",
@@ -4306,9 +4626,10 @@
       "vyzaduje_podklad_mpa": null,
       "technicky_list": "https://topstone.cz/data/files/620e0f94c8137.PDF",
       "typy_podlah": null,
-      "foto": null,
-      "foto_zdroj": null,
-      "foto_licencia": null
+      "foto": "/images/eshop/products/TS-EP02-O-NA-ZAMASTENE-BETONY.jpg",
+      "foto_zdroj": "eshop.topstone.cz — oficiálny e-shop TopStone",
+      "foto_licencia": "produktové fotky výrobcu, použité ako dealer TopStone (stiahnuté 2026-08-14)",
+      "foto_typ": "sud"
     },
     {
       "sku": "TS-EP01-I-IMPREGNACIA",
@@ -4332,7 +4653,9 @@
       "typy_podlah": null,
       "foto": null,
       "foto_zdroj": null,
-      "foto_licencia": null
+      "foto_licencia": null,
+      "foto_typ": null,
+      "foto_sud": null
     },
     {
       "sku": "TS-EP02",
@@ -4354,9 +4677,10 @@
       "vyzaduje_podklad_mpa": null,
       "technicky_list": "https://topstone.cz/data/files/620e0f4147a84.PDF",
       "typy_podlah": null,
-      "foto": null,
-      "foto_zdroj": null,
-      "foto_licencia": null
+      "foto": "/images/eshop/products/TS-EP02.jpg",
+      "foto_zdroj": "eshop.topstone.cz — oficiálny e-shop TopStone",
+      "foto_licencia": "produktové fotky výrobcu, použité ako dealer TopStone (stiahnuté 2026-08-14)",
+      "foto_typ": "sud"
     },
     {
       "sku": "TS-EP01-R-FARBENA-RAL",
@@ -4378,9 +4702,10 @@
       "vyzaduje_podklad_mpa": null,
       "technicky_list": "https://topstone.cz/data/files/63fdac4790ac3.PDF",
       "typy_podlah": null,
-      "foto": null,
-      "foto_zdroj": null,
-      "foto_licencia": null
+      "foto": "/images/eshop/products/TS-EP01-R-FARBENA-RAL.jpg",
+      "foto_zdroj": "eshop.topstone.cz — oficiálny e-shop TopStone",
+      "foto_licencia": "produktové fotky výrobcu, použité ako dealer TopStone (stiahnuté 2026-08-14)",
+      "foto_typ": "sud"
     },
     {
       "sku": "TS-EP01",
@@ -4404,7 +4729,9 @@
       "typy_podlah": null,
       "foto": null,
       "foto_zdroj": null,
-      "foto_licencia": null
+      "foto_licencia": null,
+      "foto_typ": null,
+      "foto_sud": null
     },
     {
       "sku": "TS-EP02-EKO",
@@ -4426,9 +4753,10 @@
       "vyzaduje_podklad_mpa": null,
       "technicky_list": "https://topstone.cz/data/files/620e0f6a60151.PDF",
       "typy_podlah": null,
-      "foto": null,
-      "foto_zdroj": null,
-      "foto_licencia": null
+      "foto": "/images/eshop/products/TS-EP02-EKO.jpg",
+      "foto_zdroj": "eshop.topstone.cz — oficiálny e-shop TopStone",
+      "foto_licencia": "produktové fotky výrobcu, použité ako dealer TopStone (stiahnuté 2026-08-14)",
+      "foto_typ": "sud"
     },
     {
       "sku": "TS-EP02-FARBENA-RAL",
@@ -4450,9 +4778,10 @@
       "vyzaduje_podklad_mpa": null,
       "technicky_list": "https://topstone.cz/data/files/63fdab7e7ef51.PDF",
       "typy_podlah": null,
-      "foto": null,
-      "foto_zdroj": null,
-      "foto_licencia": null
+      "foto": "/images/eshop/products/TS-EP02-FARBENA-RAL.jpg",
+      "foto_zdroj": "eshop.topstone.cz — oficiálny e-shop TopStone",
+      "foto_licencia": "produktové fotky výrobcu, použité ako dealer TopStone (stiahnuté 2026-08-14)",
+      "foto_typ": "sud"
     },
     {
       "sku": "TS-EP01-EKO",
@@ -4476,7 +4805,9 @@
       "typy_podlah": null,
       "foto": null,
       "foto_zdroj": null,
-      "foto_licencia": null
+      "foto_licencia": null,
+      "foto_typ": null,
+      "foto_sud": null
     },
     {
       "sku": "TS-EP03-AS-ANTISTATICKY-VODIVY-",
@@ -4500,7 +4831,9 @@
       "typy_podlah": null,
       "foto": null,
       "foto_zdroj": null,
-      "foto_licencia": null
+      "foto_licencia": null,
+      "foto_typ": null,
+      "foto_sud": null
     },
     {
       "sku": "TS-EP01-FARBENA-RAL",
@@ -4524,7 +4857,9 @@
       "typy_podlah": null,
       "foto": null,
       "foto_zdroj": null,
-      "foto_licencia": null
+      "foto_licencia": null,
+      "foto_typ": null,
+      "foto_sud": null
     },
     {
       "sku": "TS-EP03-W",
@@ -4546,9 +4881,10 @@
       "vyzaduje_podklad_mpa": null,
       "technicky_list": "https://topstone.cz/data/files/6509660689ead.PDF",
       "typy_podlah": null,
-      "foto": null,
-      "foto_zdroj": null,
-      "foto_licencia": null
+      "foto": "/images/eshop/products/TS-EP03-W.jpg",
+      "foto_zdroj": "eshop.topstone.cz — oficiálny e-shop TopStone",
+      "foto_licencia": "produktové fotky výrobcu, použité ako dealer TopStone (stiahnuté 2026-08-14)",
+      "foto_typ": "sud"
     },
     {
       "sku": "TS-EP03W",
@@ -4570,9 +4906,10 @@
       "vyzaduje_podklad_mpa": null,
       "technicky_list": "https://topstone.cz/data/files/6509660689ead.PDF",
       "typy_podlah": null,
-      "foto": null,
-      "foto_zdroj": null,
-      "foto_licencia": null
+      "foto": "/images/eshop/products/TS-EP03W.jpg",
+      "foto_zdroj": "eshop.topstone.cz — oficiálny e-shop TopStone",
+      "foto_licencia": "produktové fotky výrobcu, použité ako dealer TopStone (stiahnuté 2026-08-14)",
+      "foto_typ": "sud"
     },
     {
       "sku": "TS-EP03-W-EKO",
@@ -4594,9 +4931,10 @@
       "vyzaduje_podklad_mpa": null,
       "technicky_list": "https://topstone.sk/data/files/650acf96814d9.PDF",
       "typy_podlah": null,
-      "foto": null,
-      "foto_zdroj": null,
-      "foto_licencia": null
+      "foto": "/images/eshop/products/TS-EP03-W-EKO.jpg",
+      "foto_zdroj": "eshop.topstone.cz — oficiálny e-shop TopStone",
+      "foto_licencia": "produktové fotky výrobcu, použité ako dealer TopStone (stiahnuté 2026-08-14)",
+      "foto_typ": "sud"
     },
     {
       "sku": "TS-TOPFIX-INTERIER",
@@ -4618,9 +4956,10 @@
       "vyzaduje_podklad_mpa": null,
       "technicky_list": "https://topstone.cz/data/files/6659b0c16be23.pdf",
       "typy_podlah": null,
-      "foto": null,
-      "foto_zdroj": null,
-      "foto_licencia": null
+      "foto": "/images/eshop/products/TS-TOPFIX-INTERIER.jpg",
+      "foto_zdroj": "eshop.topstone.cz — oficiálny e-shop TopStone",
+      "foto_licencia": "produktové fotky výrobcu, použité ako dealer TopStone (stiahnuté 2026-08-14)",
+      "foto_typ": "sud"
     },
     {
       "sku": "TS-PU23-FARBENY-RAL",
@@ -4642,9 +4981,10 @@
       "vyzaduje_podklad_mpa": null,
       "technicky_list": "https://topstone.cz/data/files/66cdb3fb6f563.pdf",
       "typy_podlah": null,
-      "foto": null,
-      "foto_zdroj": null,
-      "foto_licencia": null
+      "foto": "/images/eshop/products/TS-PU23-FARBENY-RAL.jpg",
+      "foto_zdroj": "eshop.topstone.cz — oficiálny e-shop TopStone",
+      "foto_licencia": "produktové fotky výrobcu, použité ako dealer TopStone (stiahnuté 2026-08-14)",
+      "foto_typ": "sud"
     },
     {
       "sku": "TS-EP21-UV",
@@ -4668,7 +5008,9 @@
       "typy_podlah": null,
       "foto": null,
       "foto_zdroj": null,
-      "foto_licencia": null
+      "foto_licencia": null,
+      "foto_typ": null,
+      "foto_sud": null
     },
     {
       "sku": "TS-EP22-PLUS",
@@ -4690,9 +5032,10 @@
       "vyzaduje_podklad_mpa": null,
       "technicky_list": "https://topstone.sk/data/files/60dc292b4a282.pdf",
       "typy_podlah": null,
-      "foto": null,
-      "foto_zdroj": null,
-      "foto_licencia": null
+      "foto": "/images/eshop/products/TS-EP22-PLUS.jpg",
+      "foto_zdroj": "eshop.topstone.cz — oficiálny e-shop TopStone",
+      "foto_licencia": "produktové fotky výrobcu, použité ako dealer TopStone (stiahnuté 2026-08-14)",
+      "foto_typ": "sud"
     },
     {
       "sku": "TS-EP22-VRCHNY-LAK",
@@ -4714,9 +5057,10 @@
       "vyzaduje_podklad_mpa": null,
       "technicky_list": "https://topstone.cz/data/files/652d1279b7368.PDF",
       "typy_podlah": null,
-      "foto": null,
-      "foto_zdroj": null,
-      "foto_licencia": null
+      "foto": "/images/eshop/products/TS-EP22-VRCHNY-LAK.jpg",
+      "foto_zdroj": "eshop.topstone.cz — oficiálny e-shop TopStone",
+      "foto_licencia": "produktové fotky výrobcu, použité ako dealer TopStone (stiahnuté 2026-08-14)",
+      "foto_typ": "sud"
     },
     {
       "sku": "TS-PU23",
@@ -4738,9 +5082,10 @@
       "vyzaduje_podklad_mpa": null,
       "technicky_list": "https://topstone.cz/data/files/6526a1536afb2.PDF",
       "typy_podlah": null,
-      "foto": null,
-      "foto_zdroj": null,
-      "foto_licencia": null
+      "foto": "/images/eshop/products/TS-PU23.jpg",
+      "foto_zdroj": "eshop.topstone.cz — oficiálny e-shop TopStone",
+      "foto_licencia": "produktové fotky výrobcu, použité ako dealer TopStone (stiahnuté 2026-08-14)",
+      "foto_typ": "sud"
     },
     {
       "sku": "TS-PU25",
@@ -4764,7 +5109,9 @@
       "typy_podlah": null,
       "foto": null,
       "foto_zdroj": null,
-      "foto_licencia": null
+      "foto_licencia": null,
+      "foto_typ": null,
+      "foto_sud": null
     },
     {
       "sku": "TS-PU23-1-FARBENY-RAL",
@@ -4786,9 +5133,10 @@
       "vyzaduje_podklad_mpa": null,
       "technicky_list": "https://topstone.cz/data/files/66cdb47d5b88a.pdf",
       "typy_podlah": null,
-      "foto": null,
-      "foto_zdroj": null,
-      "foto_licencia": null
+      "foto": "/images/eshop/products/TS-PU23-1-FARBENY-RAL.jpg",
+      "foto_zdroj": "eshop.topstone.cz — oficiálny e-shop TopStone",
+      "foto_licencia": "produktové fotky výrobcu, použité ako dealer TopStone (stiahnuté 2026-08-14)",
+      "foto_typ": "sud"
     },
     {
       "sku": "TS-PU26-LESKLY-RAL",
@@ -4812,7 +5160,9 @@
       "typy_podlah": null,
       "foto": null,
       "foto_zdroj": null,
-      "foto_licencia": null
+      "foto_licencia": null,
+      "foto_typ": null,
+      "foto_sud": null
     },
     {
       "sku": "TS-PU24",
@@ -4836,7 +5186,9 @@
       "typy_podlah": null,
       "foto": null,
       "foto_zdroj": null,
-      "foto_licencia": null
+      "foto_licencia": null,
+      "foto_typ": null,
+      "foto_sud": null
     },
     {
       "sku": "TS-PU23-1",
@@ -4858,9 +5210,10 @@
       "vyzaduje_podklad_mpa": null,
       "technicky_list": "https://topstone.sk/data/files/652794c1b4614.PDF",
       "typy_podlah": null,
-      "foto": null,
-      "foto_zdroj": null,
-      "foto_licencia": null
+      "foto": "/images/eshop/products/TS-PU23-1.jpg",
+      "foto_zdroj": "eshop.topstone.cz — oficiálny e-shop TopStone",
+      "foto_licencia": "produktové fotky výrobcu, použité ako dealer TopStone (stiahnuté 2026-08-14)",
+      "foto_typ": "sud"
     }
   ]
 }

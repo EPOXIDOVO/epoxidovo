@@ -53,9 +53,11 @@ if (fs.existsSync(DEST)) {
   try {
     const prev = JSON.parse(fs.readFileSync(DEST, "utf8"));
     for (const p of prev.produkty ?? []) {
-      if (p.foto || p.foto_zdroj || p.foto_licencia) {
+      if (p.foto || p.foto_zdroj || p.foto_licencia || p.foto_typ || p.foto_sud) {
         prevFoto.set(p.sku, {
           foto: p.foto ?? null,
+          foto_typ: p.foto_typ ?? null,
+          foto_sud: p.foto_sud ?? null,
           foto_zdroj: p.foto_zdroj ?? null,
           foto_licencia: p.foto_licencia ?? null,
         });
@@ -106,7 +108,13 @@ const out = {
   pocet: produkty.length,
   produkty: produkty.map((p) => ({
     ...p,
-    ...(prevFoto.get(p.sku) ?? { foto: p.foto ?? null, foto_zdroj: p.foto_zdroj ?? null, foto_licencia: p.foto_licencia ?? null }),
+    ...(prevFoto.get(p.sku) ?? {
+      foto: p.foto ?? null,
+      foto_typ: p.foto_typ ?? null,
+      foto_sud: p.foto_sud ?? null,
+      foto_zdroj: p.foto_zdroj ?? null,
+      foto_licencia: p.foto_licencia ?? null,
+    }),
   })),
 };
 
