@@ -2074,9 +2074,9 @@
       "vyzaduje_podklad_mpa": null,
       "technicky_list": null,
       "typy_podlah": null,
-      "foto": null,
-      "foto_zdroj": null,
-      "foto_licencia": null
+      "foto": "/images/eshop/topstone-metallic/gold.jpg",
+      "foto_zdroj": "metalickasterka.cz — oficiálny web TopStone (vzorník EP11 Metallic)",
+      "foto_licencia": "produktové vzorky výrobcu, použité ako dealer TopStone (stiahnuté 2026-08-14)"
     },
     {
       "sku": "TS-DESIGNOVA-PODLAHA-FLEXI-CREA",
@@ -3706,9 +3706,9 @@
       "vyzaduje_podklad_mpa": null,
       "technicky_list": "https://topstone.cz/data/files/6221bba79d804.PDF",
       "typy_podlah": null,
-      "foto": null,
-      "foto_zdroj": null,
-      "foto_licencia": null
+      "foto": "/images/eshop/topstone-metallic/sequoia.jpg",
+      "foto_zdroj": "metalickasterka.cz — oficiálny web TopStone (vzorník EP11 Metallic)",
+      "foto_licencia": "produktové vzorky výrobcu, použité ako dealer TopStone (stiahnuté 2026-08-14)"
     },
     {
       "sku": "TS-EP11-AS-ESD-STIERKA",

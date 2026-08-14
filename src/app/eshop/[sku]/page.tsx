@@ -15,6 +15,10 @@ import {
   referencnaFotka,
 } from "@/lib/materialy";
 import { ProductVisual } from "@/components/eshop/ProductVisual";
+import {
+  TOPSTONE_METALLIC_VZORY,
+  METALLIC_VZORY_SKUS,
+} from "@/content/topstone-metallic-vzory";
 import { BaleniaKalkulacka } from "./BaleniaKalkulacka";
 
 interface PageProps {
@@ -265,6 +269,42 @@ export default async function ProduktPage({ params }: PageProps) {
               )}
             </div>
           </div>
+
+          {/* TopStone EP11 Metallic — oficiálny vzorník výrobcu */}
+          {METALLIC_VZORY_SKUS.includes(m.sku) && (
+            <div className="mt-12">
+              <h2 className="text-2xl md:text-3xl font-extrabold tracking-tight text-zinc-900">
+                Vyberte si z jedinečných vzorov
+              </h2>
+              <p className="mt-2 text-sm md:text-base text-zinc-600 max-w-3xl">
+                Oficiálne vzory výrobcu TopStone — takto vyzerá vyliata
+                metalická stierka. Každá realizácia je originál, vzor sa nedá
+                zopakovať 1:1.
+              </p>
+              <div className="mt-5 grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-3">
+                {TOPSTONE_METALLIC_VZORY.map((v) => (
+                  <figure key={v.slug} className="group">
+                    <div className="relative aspect-square rounded-xl overflow-hidden">
+                      <Image
+                        src={v.image}
+                        alt={`TopStone EP11 Metallic — vzor ${v.nazov}`}
+                        fill
+                        sizes="(max-width: 768px) 50vw, 16vw"
+                        quality={75}
+                        className="object-cover group-hover:scale-105 transition-transform duration-500"
+                      />
+                    </div>
+                    <figcaption className="mt-1.5 text-center text-xs md:text-sm font-bold text-zinc-800">
+                      {v.nazov}
+                    </figcaption>
+                  </figure>
+                ))}
+              </div>
+              <p className="mt-3 text-[11px] text-zinc-400">
+                Zdroj vzorov: metalickasterka.cz (TopStone)
+              </p>
+            </div>
+          )}
 
           {/* Kremičitý piesok — povinný doplnok k hlavným vrstvám */}
           {piesky.length > 0 && (
