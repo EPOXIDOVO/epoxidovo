@@ -5,14 +5,14 @@ import { EshopClient } from "./EshopClient";
 import { MATERIALY } from "@/lib/materialy";
 
 export const metadata: Metadata = {
-  title: "E-shop — epoxidové materiály Sika a TopStone",
+  title: "E-shop — epoxidové materiály Sika, TopStone, Arturo a UZIN",
   description:
-    "Profesionálne epoxidové materiály, ktoré používame na vlastných realizáciách — penetrácie, hlavné vrstvy, vrchné laky, pigmenty, chipsy a kremičité piesky. Sika a TopStone, konečné ceny.",
+    "Profesionálne epoxidové materiály, ktoré používame na vlastných realizáciách — penetrácie, hlavné vrstvy, vrchné laky, nivelačné hmoty, pigmenty, chipsy a kremičité piesky. Sika, TopStone, Arturo a UZIN, konečné ceny.",
   alternates: { canonical: "/eshop" },
 };
 
 /**
- * E-shop — katalóg materiálov (Sika + TopStone) z CRM exportu.
+ * E-shop — katalóg materiálov (Sika + TopStone z CRM, Arturo + UZIN z HA-UZ cenníkov).
  * Ceny sú finálne (neplatiteľ DPH). Objednávka zatiaľ cez telefón/email
  * z detailu produktu — bez košíka.
  */
@@ -42,7 +42,7 @@ export default function EshopPage() {
             <span className="text-[#3db6e8]">na epoxidové podlahy</span>
           </h1>
           <p className="mt-4 text-lg text-white/80 max-w-2xl mx-auto leading-relaxed">
-            {MATERIALY.length} produktov Sika a TopStone — presne tie, ktoré
+            {MATERIALY.length} produktov Sika, TopStone, Arturo a UZIN — presne tie, ktoré
             používame na vlastných realizáciách. Konečné ceny, predaj v celých
             baleniach.
           </p>

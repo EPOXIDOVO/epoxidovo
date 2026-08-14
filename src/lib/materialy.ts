@@ -1,15 +1,25 @@
 import data from "@/content/materialy.json";
+import extra from "@/content/materialy-extra.json";
 
 /**
- * Materiály na predaj (Sika + TopStone) — dáta z CRM exportu.
- * Zdroj pravdy: NajCRM /admin/materialy. Refresh: `node scripts/import-materialy.mjs`.
+ * Materiály na predaj — dva zdroje:
+ *  - materialy.json       — Sika + TopStone z CRM exportu
+ *                           (refresh: `node scripts/import-materialy.mjs`)
+ *  - materialy-extra.json — Arturo + UZIN z HA-UZ VOC cenníkov
+ *                           (refresh: `node scripts/import-hauz.mjs`)
+ * CRM re-import sa extra súboru nedotýka a naopak.
  *
  * Ceny sú FINÁLNE — firma je neplatiteľ DPH, nikde nezobrazujeme „bez DPH"
  * ani nepočítame DPH. Pevné ceny (cena_pevna) sa nikdy neprepočítavajú.
  */
 
-export type Kategoria = "Penetrácia" | "Hlavná vrstva" | "Vrchný lak" | "Doplnok";
-export type Vyrobca = "Sika" | "TopStone";
+export type Kategoria =
+  | "Penetrácia"
+  | "Hlavná vrstva"
+  | "Vrchný lak"
+  | "Nivelačná hmota"
+  | "Doplnok";
+export type Vyrobca = "Sika" | "TopStone" | "Arturo" | "UZIN";
 
 export interface Material {
   sku: string;
@@ -41,16 +51,20 @@ export interface Material {
   foto_licencia: string | null;
 }
 
-export const MATERIALY: Material[] = data.produkty as Material[];
+export const MATERIALY: Material[] = [
+  ...(data.produkty as Material[]),
+  ...(extra.produkty as Material[]),
+];
 export const MATERIALY_SNAPSHOT: string = data.vygenerovane as string;
 
 export const KATEGORIE: Kategoria[] = [
   "Penetrácia",
   "Hlavná vrstva",
   "Vrchný lak",
+  "Nivelačná hmota",
   "Doplnok",
 ];
-export const VYROBCOVIA: Vyrobca[] = ["Sika", "TopStone"];
+export const VYROBCOVIA: Vyrobca[] = ["Sika", "TopStone", "Arturo", "UZIN"];
 
 export function getMaterial(sku: string): Material | undefined {
   return MATERIALY.find((m) => m.sku === sku);
@@ -85,6 +99,10 @@ export const KATEGORIA_STYLE: Record<
   "Vrchný lak": {
     gradient: "linear-gradient(135deg, #a855f7 0%, #4c1d95 100%)",
     emoji: "💧",
+  },
+  "Nivelačná hmota": {
+    gradient: "linear-gradient(135deg, #64748b 0%, #1e293b 100%)",
+    emoji: "🏗️",
   },
   "Doplnok": {
     gradient: "linear-gradient(135deg, #eab308 0%, #713f12 100%)",
