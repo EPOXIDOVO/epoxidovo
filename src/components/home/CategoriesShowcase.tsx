@@ -19,6 +19,31 @@ import { CATEGORIES } from "@/content/categories";
  * - Poradie kariet z briefu: Jednofarebné → Chipsové → Mramorové → Metalické
  */
 
+// Farebné varianty pod hlavnou kartou — 3 fotky iných farieb toho istého
+// typu podlahy. Vlastné realizácie + oficiálne TopStone vzory (metalické).
+const VARIANT_PHOTOS: Record<string, { src: string; alt: string }[]> = {
+  jednofarebne: [
+    { src: "/images/realizacie/r-28.jpg", alt: "Jednofarebná podlaha — antracitová" },
+    { src: "/images/realizacie/r-19.jpg", alt: "Jednofarebná podlaha — svetlá modro-sivá" },
+    { src: "/images/realizacie/r-46.jpg", alt: "Jednofarebná podlaha — béžová" },
+  ],
+  chipsove: [
+    { src: "/images/realizacie/r-47.jpg", alt: "Chipsová podlaha — krémová" },
+    { src: "/images/realizacie/r-49.jpg", alt: "Chipsová podlaha — sivá" },
+    { src: "/images/realizacie/r-52.jpg", alt: "Chipsová podlaha — modro-sivá" },
+  ],
+  metalicke: [
+    { src: "/images/eshop/topstone-metallic/azuro.jpg", alt: "Metalická podlaha — Azuro modrá" },
+    { src: "/images/eshop/topstone-metallic/gold.jpg", alt: "Metalická podlaha — Gold zlatá" },
+    { src: "/images/eshop/topstone-metallic/moose-green.jpg", alt: "Metalická podlaha — Moose green zelená" },
+  ],
+  priemyselne: [
+    { src: "/images/realizacie/r-20.jpg", alt: "Priemyselná podlaha — modrá hala" },
+    { src: "/images/realizacie/r-22.jpg", alt: "Priemyselná podlaha — zelená hala" },
+    { src: "/images/realizacie/r-17.jpg", alt: "Priemyselná podlaha — béžová hala" },
+  ],
+};
+
 // Kocka so 1-5 bodkami — biely zaoblený štvorček s tmavými bodkami
 function DiceIcon({ pips }: { pips: 1 | 2 | 3 | 4 | 5 }) {
   const positions: Record<number, [number, number][]> = {
@@ -126,16 +151,20 @@ export function CategoriesShowcase() {
                 </div>
               </Link>
 
-              {/* 3 farebné varianty — zatiaľ prázdne dummy, fotky doplníme */}
-              {[1, 2, 3].map((n) => (
+              {/* 3 farebné varianty toho istého typu podlahy */}
+              {(VARIANT_PHOTOS[cat.slug] ?? []).map((v) => (
                 <div
-                  key={n}
-                  aria-hidden
-                  className="relative aspect-[16/9] rounded-xl overflow-hidden bg-[#5c2c18]/70 border-2 border-dashed border-white/20 flex items-center justify-center select-none"
+                  key={v.src}
+                  className="relative aspect-[16/9] rounded-xl overflow-hidden"
                 >
-                  <span className="text-white/50 text-[11px] md:text-sm font-bold uppercase tracking-wide">
-                    Čoskoro
-                  </span>
+                  <Image
+                    src={v.src}
+                    alt={v.alt}
+                    fill
+                    sizes="(max-width: 768px) 50vw, 25vw"
+                    quality={75}
+                    className="object-cover"
+                  />
                 </div>
               ))}
 
