@@ -3,6 +3,7 @@ import { SITE } from "@/lib/site";
 import { CATEGORIES } from "@/content/categories";
 import { CITIES } from "@/content/cities";
 import { CERT_LIST } from "@/content/certifications";
+import { MATERIALY } from "@/lib/materialy";
 
 export default function sitemap(): MetadataRoute.Sitemap {
   const now = new Date();
@@ -44,5 +45,13 @@ export default function sitemap(): MetadataRoute.Sitemap {
     priority: 0.85,
   }));
 
-  return [...staticPages, ...servicePages, ...cityPages, ...certPages];
+  // E-shop produkty (Sika + TopStone) — 202 stránok s Product schema
+  const productPages: MetadataRoute.Sitemap = MATERIALY.map((m) => ({
+    url: `${SITE.url}/eshop/${m.sku}`,
+    lastModified: now,
+    changeFrequency: "monthly" as const,
+    priority: 0.6,
+  }));
+
+  return [...staticPages, ...servicePages, ...cityPages, ...certPages, ...productPages];
 }

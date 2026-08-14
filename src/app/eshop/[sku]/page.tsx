@@ -1,0 +1,308 @@
+import type { Metadata } from "next";
+import { notFound } from "next/navigation";
+import Image from "next/image";
+import Link from "next/link";
+import { ArrowRight, FileText, Mail, Phone } from "lucide-react";
+import { Container } from "@/components/ui/Container";
+import { BreadcrumbsJsonLd } from "@/components/seo/BreadcrumbsJsonLd";
+import { SITE } from "@/lib/site";
+import { safeJsonLd } from "@/lib/json-ld-safe";
+import {
+  MATERIALY,
+  getMaterial,
+  PIESOK_SKUS,
+  PU_2MM_SKUS,
+  referencnaFotka,
+} from "@/lib/materialy";
+import { ProductVisual } from "@/components/eshop/ProductVisual";
+import { BaleniaKalkulacka } from "./BaleniaKalkulacka";
+
+interface PageProps {
+  params: Promise<{ sku: string }>;
+}
+
+export function generateStaticParams() {
+  return MATERIALY.map((m) => ({ sku: m.sku }));
+}
+
+export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
+  const { sku } = await params;
+  const m = getMaterial(sku);
+  if (!m) return {};
+  const desc = [
+    `${m.nazov} — ${m.kategoria.toLowerCase()}, ${m.vyrobca}.`,
+    m.balenie ? `Balenie ${m.balenie}.` : null,
+    m.pokryje_m2_z_balenia != null ? `Vystačí na ${m.pokryje_m2_z_balenia} m².` : null,
+    `Konečná cena ${m.cena_eur_s_dph.toFixed(2)} €.`,
+  ]
+    .filter(Boolean)
+    .join(" ");
+  return {
+    title: `${m.nazov} — ${m.cena_eur_s_dph.toFixed(2)} €`,
+    description: desc,
+    alternates: { canonical: `/eshop/${m.sku}` },
+  };
+}
+
+function fmt(n: number): string {
+  return n.toFixed(2).replace(".", ",");
+}
+
+export default async function ProduktPage({ params }: PageProps) {
+  const { sku } = await params;
+  const m = getMaterial(sku);
+  if (!m) notFound();
+
+  const refFoto = referencnaFotka(m);
+  const jePu = PU_2MM_SKUS.includes(m.sku);
+  const piesky = m.kategoria === "Hlavná vrstva"
+    ? PIESOK_SKUS.map((s) => getMaterial(s)).filter(
+        (p): p is NonNullable<typeof p> => p != null,
+      )
+    : [];
+
+  // Technické údaje — riadok sa zobrazí LEN keď hodnota existuje
+  const techRows: { label: string; value: string }[] = [];
+  if (m.spracovatelnost_min != null)
+    techRows.push({ label: "Spracovateľnosť po zmiešaní", value: `${m.spracovatelnost_min} min` });
+  if (m.dalsia_vrstva_od_h != null || m.dalsia_vrstva_do_h != null) {
+    const od = m.dalsia_vrstva_od_h;
+    const doH = m.dalsia_vrstva_do_h;
+    techRows.push({
+      label: "Ďalšia vrstva",
+      value: od != null && doH != null ? `po ${od}–${doH} h` : od != null ? `po ${od} h` : `do ${doH} h`,
+    });
+  }
+  if (m.pochodzne_h != null)
+    techRows.push({ label: "Pochôdzne", value: `po ${m.pochodzne_h} h` });
+  if (m.plne_vytvrdnute_dni != null)
+    techRows.push({ label: "Plné vytvrdnutie", value: `${m.plne_vytvrdnute_dni} dní` });
+  if (m.vyzaduje_podklad_mpa != null)
+    techRows.push({ label: "Pevnosť podkladu min.", value: `${m.vyzaduje_podklad_mpa} MPa` });
+
+  // Product JSON-LD — cena je konečná (neplatiteľ DPH)
+  const productSchema = {
+    "@context": "https://schema.org",
+    "@type": "Product",
+    "@id": `${SITE.url}/eshop/${m.sku}/#product`,
+    name: m.nazov,
+    sku: m.sku,
+    brand: { "@type": "Brand", name: m.vyrobca },
+    category: m.kategoria,
+    url: `${SITE.url}/eshop/${m.sku}`,
+    offers: {
+      "@type": "Offer",
+      priceCurrency: "EUR",
+      price: m.cena_eur_s_dph,
+      availability: "https://schema.org/InStock",
+      seller: { "@type": "Organization", name: SITE.legalName, url: SITE.url },
+    },
+  };
+
+  const mailSubject = encodeURIComponent(`Objednávka: ${m.nazov} (${m.sku})`);
+
+  return (
+    <>
+      <BreadcrumbsJsonLd
+        items={[
+          { name: "Domov", path: "/" },
+          { name: "E-shop", path: "/eshop" },
+          { name: m.nazov, path: `/eshop/${m.sku}` },
+        ]}
+      />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: safeJsonLd(productSchema) }}
+      />
+
+      <div className="bg-[#f7f7f4] min-h-screen">
+        <Container size="xl" className="pt-24 md:pt-32 pb-14 md:pb-20">
+          <Link
+            href="/eshop"
+            className="inline-flex items-center gap-2 text-xs font-medium uppercase tracking-[0.2em] text-zinc-500 hover:text-zinc-900 transition-colors"
+          >
+            <ArrowRight className="w-3 h-3 rotate-180" aria-hidden />
+            Späť na katalóg
+          </Link>
+
+          <div className="mt-6 grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-12 items-start">
+            {/* Vizuál — vedro na fotke našej reálnej podlahy */}
+            <div className="space-y-4">
+              <div className="relative">
+                <ProductVisual material={m} variant="detail" />
+                <span className="absolute top-4 left-4 px-3 py-1 rounded-full bg-black/45 backdrop-blur-sm text-white text-xs font-bold uppercase tracking-wide">
+                  {m.vyrobca}
+                </span>
+                {!m.foto && (
+                  <span className="absolute top-4 right-4 px-2.5 py-1 rounded-full bg-black/35 backdrop-blur-sm text-white/85 text-[10px] font-semibold">
+                    Ilustračný obrázok
+                  </span>
+                )}
+              </div>
+
+              {refFoto && (
+                <figure className="relative aspect-[16/9] rounded-3xl overflow-hidden">
+                  <Image
+                    src={refFoto.src}
+                    alt={refFoto.label}
+                    fill
+                    sizes="(max-width: 1024px) 100vw, 50vw"
+                    quality={85}
+                    className="object-cover"
+                  />
+                  <figcaption className="absolute bottom-0 inset-x-0 bg-gradient-to-t from-black/75 to-transparent px-4 pt-8 pb-3 text-white text-sm font-semibold">
+                    {refFoto.label}
+                  </figcaption>
+                </figure>
+              )}
+            </div>
+
+            {/* Info */}
+            <div>
+              <div className="text-xs font-semibold uppercase tracking-wide text-[#3db6e8]">
+                {m.kategoria} · {m.vyrobca} · SKU {m.sku}
+              </div>
+              <h1 className="mt-2 text-3xl md:text-4xl font-extrabold tracking-tight text-zinc-900 leading-tight">
+                {m.nazov}
+              </h1>
+              {m.balenie && (
+                <div className="mt-1.5 text-zinc-500 font-medium">
+                  Balenie: {m.balenie}
+                </div>
+              )}
+
+              {/* Cena + vystačí na X m² — najdôležitejšie údaje veľké vedľa seba */}
+              <div className="mt-6 flex flex-wrap items-stretch gap-3">
+                <div className="rounded-2xl bg-zinc-900 text-white px-6 py-4">
+                  <div className="text-xs uppercase tracking-wide text-white/60 font-semibold">
+                    Konečná cena
+                  </div>
+                  <div className="mt-0.5 text-3xl md:text-4xl font-extrabold">
+                    {fmt(m.cena_eur_s_dph)} €
+                  </div>
+                </div>
+                {m.pokryje_m2_z_balenia != null && (
+                  <div className="rounded-2xl bg-[#3db6e8] text-white px-6 py-4">
+                    <div className="text-xs uppercase tracking-wide text-white/75 font-semibold">
+                      Vystačí na
+                    </div>
+                    <div className="mt-0.5 text-3xl md:text-4xl font-extrabold">
+                      {m.pokryje_m2_z_balenia} m²
+                    </div>
+                  </div>
+                )}
+              </div>
+              {m.spotreba_kg_m2 != null && (
+                <p className="mt-2 text-sm text-zinc-500">
+                  Spotreba ~{String(m.spotreba_kg_m2).replace(".", ",")} kg/m²
+                  {m.spotreba_poznamka ? ` — ${m.spotreba_poznamka}` : ""}
+                </p>
+              )}
+
+              {/* Objednávka — bez košíka, telefón/email s prefillnutým SKU */}
+              <div className="mt-6 flex flex-wrap gap-3">
+                <a
+                  href={`tel:${SITE.contact.phoneRaw}`}
+                  className="inline-flex items-center gap-2 px-6 py-3.5 rounded-full bg-[#f97316] text-white font-bold hover:bg-[#ea580c] shadow-[0_10px_28px_rgba(249,115,22,0.45)] transition-colors"
+                >
+                  <Phone className="w-4 h-4" aria-hidden />
+                  Objednať: {SITE.contact.phone}
+                </a>
+                <a
+                  href={`mailto:${SITE.contact.email}?subject=${mailSubject}`}
+                  className="inline-flex items-center gap-2 px-6 py-3.5 rounded-full border-2 border-zinc-300 text-zinc-800 font-bold hover:border-zinc-500 hover:bg-white transition-colors"
+                >
+                  <Mail className="w-4 h-4" aria-hidden />
+                  Objednať emailom
+                </a>
+              </div>
+
+              {/* Kalkulačka balení */}
+              {m.spotreba_kg_m2 != null && m.balenie_kg != null && (
+                <div className="mt-6">
+                  <BaleniaKalkulacka
+                    spotrebaKgM2={m.spotreba_kg_m2}
+                    balenieKg={m.balenie_kg}
+                    cenaEur={m.cena_eur_s_dph}
+                    jePu2mm={jePu}
+                  />
+                </div>
+              )}
+
+              {/* Technické údaje — len vyplnené riadky */}
+              {techRows.length > 0 && (
+                <details className="mt-6 rounded-2xl border border-zinc-200 bg-white overflow-hidden group">
+                  <summary className="cursor-pointer px-5 py-4 font-bold text-zinc-900 hover:bg-zinc-50 list-none flex items-center justify-between">
+                    Technické údaje
+                    <span className="text-[#3db6e8] group-open:rotate-45 transition-transform text-xl leading-none" aria-hidden>
+                      +
+                    </span>
+                  </summary>
+                  <dl className="px-5 pb-5 pt-1 border-t border-zinc-100">
+                    {techRows.map((r) => (
+                      <div
+                        key={r.label}
+                        className="flex items-baseline justify-between gap-4 py-2 border-b border-zinc-50 last:border-0"
+                      >
+                        <dt className="text-sm text-zinc-500">{r.label}</dt>
+                        <dd className="text-sm font-bold text-zinc-900 text-right">{r.value}</dd>
+                      </div>
+                    ))}
+                  </dl>
+                </details>
+              )}
+
+              {m.technicky_list && (
+                <a
+                  href={m.technicky_list}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="mt-4 inline-flex items-center gap-2 text-sm font-semibold text-[#3db6e8] hover:text-[#1a8cc4] hover:underline"
+                >
+                  <FileText className="w-4 h-4" aria-hidden />
+                  Technický list výrobcu (PDF)
+                </a>
+              )}
+            </div>
+          </div>
+
+          {/* Kremičitý piesok — povinný doplnok k hlavným vrstvám */}
+          {piesky.length > 0 && (
+            <div className="mt-12 rounded-3xl bg-amber-50 border border-amber-200 p-6 md:p-8">
+              <h2 className="text-xl md:text-2xl font-extrabold text-zinc-900">
+                Nezabudni na kremičitý piesok
+              </h2>
+              <p className="mt-2 text-sm md:text-base text-zinc-700 leading-relaxed max-w-3xl">
+                Spotreba živice v technickom liste je <strong>bez piesku</strong>.
+                Na každý 1&nbsp;mm hrúbky stierky treba navyše{" "}
+                <strong>~0,7–0,9 kg/m² kremičitého piesku</strong> — bez neho
+                podlahu neurobíš.
+              </p>
+              <div className="mt-4 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
+                {piesky.map((p) => (
+                  <Link
+                    key={p.sku}
+                    href={`/eshop/${p.sku}`}
+                    className="flex items-center justify-between gap-3 rounded-xl bg-white border border-amber-200 px-4 py-3 hover:border-amber-400 hover:shadow transition-all"
+                  >
+                    <div>
+                      <div className="text-sm font-bold text-zinc-900 leading-snug">
+                        {p.nazov}
+                      </div>
+                      {p.balenie && (
+                        <div className="text-xs text-zinc-500">{p.balenie}</div>
+                      )}
+                    </div>
+                    <div className="shrink-0 text-sm font-extrabold text-zinc-900">
+                      {fmt(p.cena_eur_s_dph)} €
+                    </div>
+                  </Link>
+                ))}
+              </div>
+            </div>
+          )}
+        </Container>
+      </div>
+    </>
+  );
+}
