@@ -25,12 +25,12 @@ const VARIANT_PHOTOS: Record<string, { src: string; alt: string }[]> = {
   jednofarebne: [
     { src: "/images/realizacie/r-28.jpg", alt: "Jednofarebná podlaha — antracitová" },
     { src: "/images/realizacie/r-19.jpg", alt: "Jednofarebná podlaha — svetlá modro-sivá" },
-    { src: "/images/realizacie/r-46.jpg", alt: "Jednofarebná podlaha — béžová" },
+    { src: "/images/realizacie/r-17.jpg", alt: "Jednofarebná podlaha — svetlosivá" },
   ],
   chipsove: [
     { src: "/images/realizacie/r-47.jpg", alt: "Chipsová podlaha — krémová" },
     { src: "/images/realizacie/r-49.jpg", alt: "Chipsová podlaha — sivá" },
-    { src: "/images/realizacie/r-52.jpg", alt: "Chipsová podlaha — modro-sivá" },
+    { src: "/images/realizacie/r-48.jpg", alt: "Chipsová podlaha — svetlosivá lesklá" },
   ],
   metalicke: [
     { src: "/images/eshop/topstone-metallic/azuro.jpg", alt: "Metalická podlaha — Azuro modrá" },
@@ -40,7 +40,7 @@ const VARIANT_PHOTOS: Record<string, { src: string; alt: string }[]> = {
   priemyselne: [
     { src: "/images/realizacie/r-20.jpg", alt: "Priemyselná podlaha — modrá hala" },
     { src: "/images/realizacie/r-22.jpg", alt: "Priemyselná podlaha — zelená hala" },
-    { src: "/images/realizacie/r-17.jpg", alt: "Priemyselná podlaha — béžová hala" },
+    { src: "/images/realizacie/r-46.jpg", alt: "Priemyselná podlaha — béžová hala" },
   ],
 };
 
