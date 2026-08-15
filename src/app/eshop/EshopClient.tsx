@@ -5,18 +5,14 @@ import Link from "next/link";
 import { Search, X } from "lucide-react";
 import { Container } from "@/components/ui/Container";
 import { ProductVisual } from "@/components/eshop/ProductVisual";
-import {
-  MATERIALY,
-  KATEGORIE,
-  VYROBCOVIA,
-  type Kategoria,
-  type Vyrobca,
-} from "@/lib/materialy";
+import { MATERIALY, VYROBCOVIA, type Vyrobca, type Material } from "@/lib/materialy";
 
 /**
- * Katalóg materiálov — filtre (kategória + výrobca) a vyhľadávanie.
+ * Katalóg materiálov — vľavo stĺpec Dodávateľ, hore obsahové kategórie
+ * odvodené z názvov (surová `kategoria` má len 5 hodnôt a Doplnok je vrece
+ * so 137 položkami — pre zákazníka delíme jemnejšie).
  * Search matchuje názov AJ SKU — ľudia hľadajú „264", nie celý názov.
- * 202 položiek → filtrovanie čisto client-side, žiadny server round-trip.
+ * 352 položiek → filtrovanie čisto client-side, žiadny server round-trip.
  */
 
 function normalize(s: string): string {
@@ -26,29 +22,146 @@ function normalize(s: string): string {
     .replace(/[̀-ͯ]/g, "");
 }
 
+/** Obsahové kategórie pre horné záložky — prvé pravidlo, ktoré sedí, vyhráva. */
+const OBSAH_KATEGORIE: { id: string; label: string; test: (m: Material) => boolean }[] = [
+  {
+    id: "naradie",
+    label: "Náradie a pomôcky",
+    test: (m) =>
+      /valec|valce|s.tetec|drz.iak|gumova. stierka|teleskopick|sitko|obuv|maskovacia|plechovka|vedro|kol.ik|vla.kna|pa.ska/.test(normalize(m.nazov)),
+  },
+  {
+    id: "chipsy",
+    label: "Chipsy a posypy",
+    test: (m) => /chips|flakes|vloc.k|perlet|pearl/.test(normalize(m.nazov)),
+  },
+  {
+    id: "piesky",
+    label: "Piesky a plnivá",
+    test: (m) => /piesok|mu.c.ka|plnivo|plastbet/.test(normalize(m.nazov)),
+  },
+  {
+    id: "vsypy",
+    label: "Vsypy do betónu",
+    test: (m) => /armortop|syntop|metaltop/.test(normalize(m.nazov)),
+  },
+  {
+    id: "kamenny-koberec",
+    label: "Kamenný koberec",
+    test: (m) =>
+      /mramor|decormix|polyastone|purstone|epostone|topgel|toppur|topflex|toplock|topwall|designova|acryl decor|madeira|kre.ta|korfu|korsika|ja.va|elba|santorini|citystone|albunigru|cameo|concreto|griseo|latte|litore|mattone|\bdk (dark|light)/.test(normalize(m.nazov)),
+  },
+  {
+    id: "prisady",
+    label: "Prísady a tmely",
+    test: (m) =>
+      /thixo|stellmittel|stelmiddel|akcelera|accelerator|booster|tmel|topfiller|topstop|malta|buster/.test(normalize(m.nazov)),
+  },
+  {
+    id: "nivelacie",
+    label: "Nivelácie",
+    test: (m) =>
+      m.kategoria === "Nivelačná hmota" ||
+      /level|fibrelevel|fiberlevel|decocem|scho.nox|nivelac/.test(normalize(m.nazov)),
+  },
+  {
+    id: "potery",
+    label: "Potery a opravy betónu",
+    test: (m) => /hardtop|epocem|repair|tekuta. podloz.ka|sikagard/.test(normalize(m.nazov)),
+  },
+  { id: "penetracie", label: "Penetrácie", test: (m) => m.kategoria === "Penetrácia" },
+  { id: "hlavne", label: "Hlavné vrstvy", test: (m) => m.kategoria === "Hlavná vrstva" },
+  { id: "laky", label: "Vrchné laky", test: (m) => m.kategoria === "Vrchný lak" },
+  { id: "ostatne", label: "Ostatné", test: () => true },
+];
+
+function obsahKategoria(m: Material): string {
+  return OBSAH_KATEGORIE.find((k) => k.test(m))!.id;
+}
+
+/** Čo produktu chýba na dorobenie (admin pohľad, ?admin=1). */
+function chybaZoznam(m: Material): string[] {
+  const chyba: string[] = [];
+  if (!m.foto) chyba.push("fotka");
+  if (!m.cena_eur_s_dph || m.cena_eur_s_dph <= 0) chyba.push("cena");
+  if (m.spotreba_kg_m2 == null && m.kategoria !== "Doplnok") chyba.push("spotreba");
+  if (!m.technicky_list) chyba.push("tech. list");
+  return chyba;
+}
+
+type AdminFilter = "vsetko-chyba" | "fotka" | "cena" | "spotreba" | "tech. list" | null;
+
 export function EshopClient() {
-  const [kategoria, setKategoria] = React.useState<Kategoria | null>(null);
+  const [obsah, setObsah] = React.useState<string | null>(null);
   const [vyrobca, setVyrobca] = React.useState<Vyrobca | null>(null);
   const [query, setQuery] = React.useState("");
+  const [admin, setAdmin] = React.useState(false);
+  const [adminFilter, setAdminFilter] = React.useState<AdminFilter>(null);
+
+  // Admin režim cez ?admin=1 (statický export — čítame location, nie useSearchParams)
+  React.useEffect(() => {
+    setAdmin(new URLSearchParams(window.location.search).get("admin") === "1");
+  }, []);
 
   const filtered = React.useMemo(() => {
     const q = normalize(query.trim());
-    return MATERIALY.filter((m) => {
-      if (kategoria && m.kategoria !== kategoria) return false;
+    const base = MATERIALY.filter((m) => {
+      if (obsah && obsahKategoria(m) !== obsah) return false;
       if (vyrobca && m.vyrobca !== vyrobca) return false;
       if (q) {
         const hay = normalize(`${m.nazov} ${m.sku}`);
         if (!hay.includes(q)) return false;
       }
+      if (admin && adminFilter) {
+        const ch = chybaZoznam(m);
+        if (adminFilter === "vsetko-chyba" ? ch.length === 0 : !ch.includes(adminFilter)) return false;
+      }
       return true;
     });
-  }, [kategoria, vyrobca, query]);
+    if (admin && adminFilter) {
+      return [...base].sort((a, b) => chybaZoznam(b).length - chybaZoznam(a).length);
+    }
+    return base;
+  }, [obsah, vyrobca, query, admin, adminFilter]);
+
+  const vyrobcaCounts = React.useMemo(() => {
+    const c = new Map<Vyrobca, number>();
+    for (const m of MATERIALY) c.set(m.vyrobca, (c.get(m.vyrobca) ?? 0) + 1);
+    return c;
+  }, []);
+
+  const obsahCounts = React.useMemo(() => {
+    const c = new Map<string, number>();
+    for (const m of MATERIALY) {
+      const k = obsahKategoria(m);
+      c.set(k, (c.get(k) ?? 0) + 1);
+    }
+    return c;
+  }, []);
+
+  const adminCounts = React.useMemo(() => {
+    if (!admin) return null;
+    const c = { "vsetko-chyba": 0, fotka: 0, cena: 0, spotreba: 0, "tech. list": 0 };
+    for (const m of MATERIALY) {
+      const ch = chybaZoznam(m);
+      if (ch.length) c["vsetko-chyba"]++;
+      for (const x of ch) c[x as keyof typeof c]++;
+    }
+    return c;
+  }, [admin]);
 
   const chipCls = (active: boolean) =>
     `px-3.5 md:px-4 py-2 rounded-full text-[13px] md:text-sm font-semibold whitespace-nowrap transition-colors border-2 ${
       active
         ? "bg-[#3db6e8] border-[#3db6e8] text-white"
         : "bg-white border-zinc-200 text-zinc-700 hover:border-[#3db6e8] hover:text-[#3db6e8]"
+    }`;
+
+  const sideCls = (active: boolean) =>
+    `w-full text-left px-3.5 py-2.5 rounded-xl text-sm font-semibold transition-colors flex items-center justify-between gap-2 ${
+      active
+        ? "bg-[#3db6e8] text-white"
+        : "text-zinc-700 hover:bg-white hover:text-[#1a8cc4]"
     }`;
 
   return (
@@ -79,84 +192,157 @@ export function EshopClient() {
         )}
       </div>
 
-      {/* Filtre */}
+      {/* Horné záložky — obsahové kategórie */}
       <div className="mt-5 flex flex-wrap items-center justify-center gap-2">
-        <button type="button" onClick={() => setKategoria(null)} className={chipCls(kategoria === null)}>
-          Všetky kategórie
+        <button type="button" onClick={() => setObsah(null)} className={chipCls(obsah === null)}>
+          Všetko
         </button>
-        {KATEGORIE.map((k) => (
-          <button key={k} type="button" onClick={() => setKategoria(kategoria === k ? null : k)} className={chipCls(kategoria === k)}>
-            {k}
-          </button>
-        ))}
-      </div>
-      <div className="mt-2.5 flex flex-wrap items-center justify-center gap-2">
-        <button type="button" onClick={() => setVyrobca(null)} className={chipCls(vyrobca === null)}>
-          Všetci výrobcovia
-        </button>
-        {VYROBCOVIA.map((v) => (
-          <button key={v} type="button" onClick={() => setVyrobca(vyrobca === v ? null : v)} className={chipCls(vyrobca === v)}>
-            {v}
+        {OBSAH_KATEGORIE.filter((k) => (obsahCounts.get(k.id) ?? 0) > 0).map((k) => (
+          <button
+            key={k.id}
+            type="button"
+            onClick={() => setObsah(obsah === k.id ? null : k.id)}
+            className={chipCls(obsah === k.id)}
+          >
+            {k.label}
           </button>
         ))}
       </div>
 
-      <p className="mt-5 text-center text-sm text-zinc-500">
-        {filtered.length === MATERIALY.length
-          ? `${MATERIALY.length} produktov`
-          : `${filtered.length} z ${MATERIALY.length} produktov`}
-      </p>
-
-      {/* Grid */}
-      {filtered.length === 0 ? (
-        <div className="mt-10 text-center text-zinc-500">
-          Nič sme nenašli. Skús iný výraz — alebo nám{" "}
-          <Link href="/kontakt" className="text-[#3db6e8] font-semibold hover:underline">
-            napíš
-          </Link>
-          , materiál vieme objednať.
-        </div>
-      ) : (
-        <div className="mt-6 grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3 md:gap-5">
-          {filtered.map((m) => {
-            return (
-              <Link
-                key={m.sku}
-                href={`/eshop/${m.sku}`}
-                className="group rounded-2xl border border-zinc-200 bg-white overflow-hidden hover:shadow-[0_14px_36px_rgba(0,0,0,0.12)] hover:-translate-y-0.5 transition-all duration-300 focus:outline-none focus-visible:ring-2 focus-visible:ring-[#3db6e8]"
-              >
-                {/* Vizuál — vedro na fotke našej podlahy (ProductVisual);
-                    keď pribudne oficiálna produktovka (pole foto), prebije ho */}
-                <div className="relative">
-                  <ProductVisual material={m} variant="card" />
-                  <span className="absolute top-2 left-2 px-2 py-0.5 rounded-full bg-black/45 backdrop-blur-sm text-white text-[10px] md:text-[11px] font-bold uppercase tracking-wide">
-                    {m.vyrobca}
-                  </span>
-                  {m.pokryje_m2_z_balenia != null && (
-                    <span className="absolute bottom-2 right-2 px-2 py-1 rounded-lg bg-white/95 text-[#1a1a1a] text-[11px] md:text-xs font-bold shadow">
-                      vystačí na {m.pokryje_m2_z_balenia} m²
-                    </span>
-                  )}
-                </div>
-                <div className="p-3 md:p-4">
-                  <div className="text-[10px] md:text-[11px] font-semibold uppercase tracking-wide text-[#3db6e8]">
-                    {m.kategoria}
-                  </div>
-                  <h2 className="mt-0.5 text-[13px] md:text-[15px] font-bold text-zinc-900 leading-snug line-clamp-2 group-hover:text-[#1a8cc4] transition-colors">
-                    {m.nazov}
-                  </h2>
-                  {m.balenie && (
-                    <div className="mt-0.5 text-[11px] md:text-xs text-zinc-500">{m.balenie}</div>
-                  )}
-                  <div className="mt-1.5 text-base md:text-lg font-extrabold text-zinc-900">
-                    {m.cena_eur_s_dph.toFixed(2).replace(".", ",")} €
-                  </div>
-                </div>
-              </Link>
-            );
-          })}
+      {/* Admin filter „na dorobenie" — viditeľný len s ?admin=1 */}
+      {admin && adminCounts && (
+        <div className="mt-2.5 flex flex-wrap items-center justify-center gap-2">
+          <span className="text-xs font-bold uppercase tracking-wide text-amber-600">🛠 Admin:</span>
+          {([
+            ["vsetko-chyba", `Na dorobenie (${adminCounts["vsetko-chyba"]})`],
+            ["fotka", `Chýba fotka (${adminCounts.fotka})`],
+            ["cena", `Chýba cena (${adminCounts.cena})`],
+            ["spotreba", `Chýba spotreba (${adminCounts.spotreba})`],
+            ["tech. list", `Chýba tech. list (${adminCounts["tech. list"]})`],
+          ] as [AdminFilter, string][]).map(([f, label]) => (
+            <button
+              key={f}
+              type="button"
+              onClick={() => setAdminFilter(adminFilter === f ? null : f)}
+              className={`px-3.5 py-2 rounded-full text-[13px] font-semibold whitespace-nowrap transition-colors border-2 ${
+                adminFilter === f
+                  ? "bg-amber-500 border-amber-500 text-white"
+                  : "bg-white border-amber-300 text-amber-700 hover:border-amber-500 hover:bg-amber-50"
+              }`}
+            >
+              {label}
+            </button>
+          ))}
         </div>
       )}
+
+      {/* Ľavý stĺpec Dodávateľ + grid */}
+      <div className="mt-6 lg:grid lg:grid-cols-[200px_1fr] lg:gap-6 lg:items-start">
+        {/* Dodávateľ — desktop sticky stĺpec */}
+        <aside className="hidden lg:block sticky top-24 rounded-2xl bg-[#f2f2ef] p-3">
+          <div className="px-2 pb-2 text-xs font-bold uppercase tracking-wide text-zinc-500">
+            Dodávateľ
+          </div>
+          <nav className="space-y-1" aria-label="Filter podľa dodávateľa">
+            <button type="button" onClick={() => setVyrobca(null)} className={sideCls(vyrobca === null)}>
+              <span>Všetci</span>
+              <span className="text-xs opacity-70 tnum">{MATERIALY.length}</span>
+            </button>
+            {VYROBCOVIA.map((v) => (
+              <button
+                key={v}
+                type="button"
+                onClick={() => setVyrobca(vyrobca === v ? null : v)}
+                className={sideCls(vyrobca === v)}
+              >
+                <span>{v}</span>
+                <span className="text-xs opacity-70 tnum">{vyrobcaCounts.get(v) ?? 0}</span>
+              </button>
+            ))}
+          </nav>
+        </aside>
+
+        <div>
+          {/* Dodávateľ — mobil chips */}
+          <div className="lg:hidden flex flex-wrap items-center justify-center gap-2">
+            <button type="button" onClick={() => setVyrobca(null)} className={chipCls(vyrobca === null)}>
+              Všetci dodávatelia
+            </button>
+            {VYROBCOVIA.map((v) => (
+              <button
+                key={v}
+                type="button"
+                onClick={() => setVyrobca(vyrobca === v ? null : v)}
+                className={chipCls(vyrobca === v)}
+              >
+                {v}
+              </button>
+            ))}
+          </div>
+
+          <p className="mt-4 lg:mt-0 text-center lg:text-left text-sm text-zinc-500">
+            {filtered.length === MATERIALY.length
+              ? `${MATERIALY.length} produktov`
+              : `${filtered.length} z ${MATERIALY.length} produktov`}
+          </p>
+
+          {/* Grid */}
+          {filtered.length === 0 ? (
+            <div className="mt-10 text-center text-zinc-500">
+              Nič sme nenašli. Skús iný výraz — alebo nám{" "}
+              <Link href="/kontakt" className="text-[#3db6e8] font-semibold hover:underline">
+                napíš
+              </Link>
+              , materiál vieme objednať.
+            </div>
+          ) : (
+            <div className="mt-4 grid grid-cols-2 md:grid-cols-3 xl:grid-cols-4 gap-3 md:gap-5">
+              {filtered.map((m) => {
+                return (
+                  <Link
+                    key={m.sku}
+                    href={`/eshop/${m.sku}`}
+                    className="group rounded-2xl border border-zinc-200 bg-white overflow-hidden hover:shadow-[0_14px_36px_rgba(0,0,0,0.12)] hover:-translate-y-0.5 transition-all duration-300 focus:outline-none focus-visible:ring-2 focus-visible:ring-[#3db6e8]"
+                  >
+                    {/* Vizuál — vedro na fotke našej podlahy (ProductVisual);
+                        keď pribudne oficiálna produktovka (pole foto), prebije ho */}
+                    <div className="relative">
+                      <ProductVisual material={m} variant="card" />
+                      <span className="absolute top-2 left-2 px-2 py-0.5 rounded-full bg-black/45 backdrop-blur-sm text-white text-[10px] md:text-[11px] font-bold uppercase tracking-wide">
+                        {m.vyrobca}
+                      </span>
+                      {m.pokryje_m2_z_balenia != null && (
+                        <span className="absolute bottom-2 right-2 px-2 py-1 rounded-lg bg-white/95 text-[#1a1a1a] text-[11px] md:text-xs font-bold shadow">
+                          vystačí na {m.pokryje_m2_z_balenia} m²
+                        </span>
+                      )}
+                      {admin && chybaZoznam(m).length > 0 && (
+                        <span className="absolute top-2 right-2 px-2 py-0.5 rounded-full bg-red-600 text-white text-[10px] font-bold whitespace-nowrap shadow">
+                          {chybaZoznam(m).join(" · ")}
+                        </span>
+                      )}
+                    </div>
+                    <div className="p-3 md:p-4">
+                      <div className="text-[10px] md:text-[11px] font-semibold uppercase tracking-wide text-[#3db6e8]">
+                        {OBSAH_KATEGORIE.find((k) => k.id === obsahKategoria(m))?.label}
+                      </div>
+                      <h2 className="mt-0.5 text-[13px] md:text-[15px] font-bold text-zinc-900 leading-snug line-clamp-2 group-hover:text-[#1a8cc4] transition-colors">
+                        {m.nazov}
+                      </h2>
+                      {m.balenie && (
+                        <div className="mt-0.5 text-[11px] md:text-xs text-zinc-500">{m.balenie}</div>
+                      )}
+                      <div className="mt-1.5 text-base md:text-lg font-extrabold text-zinc-900">
+                        {m.cena_eur_s_dph.toFixed(2).replace(".", ",")} €
+                      </div>
+                    </div>
+                  </Link>
+                );
+              })}
+            </div>
+          )}
+        </div>
+      </div>
     </Container>
   );
 }

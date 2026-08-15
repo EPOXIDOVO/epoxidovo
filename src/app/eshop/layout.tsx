@@ -1,4 +1,5 @@
 import { CursorAura } from "@/components/ui/CursorAura";
+import { MedvedB2B } from "@/components/eshop/MedvedB2B";
 
 /**
  * Katalóg zdieľa interakčný podpis e-shopu (cursor aura).
@@ -12,6 +13,7 @@ export default function EshopLayout({
   return (
     <>
       <CursorAura />
+      <MedvedB2B />
       {children}
     </>
   );
