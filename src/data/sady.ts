@@ -22,7 +22,8 @@ export const SADY: Sada[] = [
     systemId: "garaz-jednofarebna-epoxid",
     areaM2: 20,
     reservePct: 5,
-    image: "/images/hero/garaz.webp",
+    // jednofarebná podlaha — fotka musí sedieť s popisom (garaz.webp je metalická)
+    image: "/images/categories/jednofarebne.jpg",
     description:
       "Kompletný materiál na jednofarebnú epoxidovú podlahu v garáži pre 1 auto — penetrácia, epoxid v dvoch vrstvách, protišmykový presyp + náradie.",
   },

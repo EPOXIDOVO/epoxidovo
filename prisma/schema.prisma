@@ -29,6 +29,7 @@ model Lead {
   spaceType   String?  // dom | garaz | hala-firma
   service     String?  // jednofarebne | chipsove | mramorove | metalicke | nezvolene
   area        Int?     // m² približne
+  termin      String?  // urgent | 1-3-mesiacov | 3-6-mesiacov | 6-12-mesiacov | zatial-info
   message     String?  @db.Text
 
   // Tracking

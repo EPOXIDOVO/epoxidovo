@@ -39,7 +39,7 @@ export function SadaCard({
           alt={sada.name}
           fill
           sizes="(max-width: 768px) 100vw, 50vw"
-          quality={80}
+          quality={85}
           className="object-cover hover:scale-[1.04] transition-transform duration-700"
         />
         <span className="absolute top-3 left-3 px-3 py-1 rounded-full bg-[#0e1a3b]/80 backdrop-blur-sm text-white text-xs font-bold uppercase tracking-wide">
@@ -90,7 +90,7 @@ export function SadaCard({
           </ul>
         </div>
 
-        <div className="mt-4 pt-4 border-t border-[#f0f0ee] flex items-center justify-between gap-3">
+        <div className="mt-4 pt-4 border-t border-[#f0f0ee] flex flex-wrap items-center justify-between gap-3">
           <div>
             <div className="tnum text-xl md:text-2xl font-extrabold text-[#0e1a3b]">
               {priceLabel}
@@ -108,7 +108,7 @@ export function SadaCard({
               setAdded(true);
               setTimeout(() => setAdded(false), 2500);
             }}
-            className={`press-scale inline-flex items-center gap-2 px-5 py-3 rounded-full font-bold text-white transition-colors ${
+            className={`press-scale inline-flex items-center gap-2 px-5 py-3 rounded-full font-bold text-white whitespace-nowrap transition-colors ${
               added
                 ? "bg-emerald-600"
                 : "bg-[#f97316] hover:bg-[#ea580c] shadow-[0_10px_28px_rgba(249,115,22,0.4)]"

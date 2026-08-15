@@ -34,14 +34,15 @@ export function Reveal({
     if (r.top < window.innerHeight * 0.92) return;
 
     el.classList.add("reveal-init");
+    const show = () => {
+      el.classList.add("reveal-in");
+      el.classList.remove("reveal-init");
+    };
     const io = new IntersectionObserver(
       (entries) => {
         for (const entry of entries) {
           if (entry.isIntersecting) {
-            window.setTimeout(() => {
-              el.classList.add("reveal-in");
-              el.classList.remove("reveal-init");
-            }, delay);
+            window.setTimeout(show, delay);
             io.disconnect();
           }
         }
@@ -49,7 +50,13 @@ export function Reveal({
       { rootMargin: "0px 0px -8% 0px", threshold: 0.05 },
     );
     io.observe(el);
-    return () => io.disconnect();
+    // Poistka: keby IO nikdy nevystrelil (headless render, print, bot),
+    // obsah sa po 2,5 s odhalí sám — sekcia nikdy neostane prázdna.
+    const failsafe = window.setTimeout(show, 2500 + delay);
+    return () => {
+      io.disconnect();
+      window.clearTimeout(failsafe);
+    };
   }, [delay]);
 
   return (

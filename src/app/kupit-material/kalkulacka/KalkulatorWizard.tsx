@@ -286,7 +286,7 @@ export function KalkulatorWizard({ initialMiesto }: { initialMiesto?: string }) 
                         alt=""
                         fill
                         sizes="(max-width: 640px) 50vw, 200px"
-                        quality={70}
+                        quality={75}
                         className="object-cover"
                         aria-hidden
                       />
@@ -461,7 +461,7 @@ export function KalkulatorWizard({ initialMiesto }: { initialMiesto?: string }) 
                           alt=""
                           fill
                           sizes="(max-width: 640px) 50vw, 260px"
-                          quality={70}
+                          quality={75}
                           className="object-cover"
                           aria-hidden
                         />
@@ -797,7 +797,7 @@ export function KalkulatorWizard({ initialMiesto }: { initialMiesto?: string }) 
                 data-magnetic
                 onClick={goNext}
                 disabled={!canNext}
-                className="press-scale inline-flex items-center gap-2 px-7 py-3 rounded-full bg-[#3db6e8] text-white font-bold disabled:opacity-40 hover:bg-[#1a8cc4] shadow-[0_8px_24px_rgba(61,182,232,0.4)] transition-colors"
+                className="press-scale inline-flex items-center gap-2 px-7 py-3 rounded-full bg-[#3db6e8] text-white font-bold whitespace-nowrap hover:bg-[#1a8cc4] shadow-[0_8px_24px_rgba(61,182,232,0.4)] transition-colors disabled:bg-[#dfe3ec] disabled:text-[#98a0b6] disabled:shadow-none disabled:cursor-not-allowed"
               >
                 {step === 4 ? (
                   <><Calculator className="w-4 h-4" aria-hidden /> Vypočítať</>
@@ -818,13 +818,13 @@ export function KalkulatorWizard({ initialMiesto }: { initialMiesto?: string }) 
               alt={vzhlad ? `Náhľad povrchu: ${VZHLADY.find((v) => v.id === vzhlad)?.label}` : "Náhľad realizácie"}
               fill
               sizes="400px"
-              quality={80}
+              quality={85}
               className="object-cover step-in"
             />
             <div aria-hidden className="absolute inset-0 bg-gradient-to-t from-[#0a0f1e]/80 via-transparent to-transparent" />
             <div className="absolute bottom-0 inset-x-0 p-5 text-white">
               <div className="text-xs font-semibold uppercase tracking-wide text-white/60">
-                Tvoj výber
+                {miesto || vzhlad || areaM2 > 0 ? "Tvoj výber" : "Z našich realizácií"}
               </div>
               <ul className="mt-1.5 space-y-1 text-sm font-semibold">
                 {miesto && <li>📍 {MIESTA.find((m) => m.id === miesto)?.label}</li>}

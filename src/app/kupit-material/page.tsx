@@ -154,10 +154,10 @@ export default function KupitMaterialPage() {
             <Link
               href="/kupit-material/kalkulacka"
               data-magnetic
-              className="press-scale relative inline-flex items-center gap-3 px-9 md:px-12 py-4 md:py-5 rounded-full bg-[#f97316] text-white font-extrabold text-lg md:text-xl shadow-[0_14px_40px_rgba(249,115,22,0.55)] hover:bg-[#ea580c] transition-colors"
+              className="press-scale relative inline-flex items-center gap-3 px-7 md:px-12 py-4 md:py-5 rounded-full bg-[#f97316] text-white font-extrabold text-lg md:text-xl shadow-[0_14px_40px_rgba(249,115,22,0.55)] hover:bg-[#ea580c] transition-colors whitespace-nowrap"
             >
-              <Calculator className="w-6 h-6" aria-hidden />
-              Spustiť kalkulátor materiálu
+              <Calculator className="w-6 h-6 shrink-0" aria-hidden />
+              Spustiť kalkulátor<span className="hidden sm:inline"> materiálu</span>
             </Link>
           </div>
           <p className="mt-4 text-sm text-white/60">
