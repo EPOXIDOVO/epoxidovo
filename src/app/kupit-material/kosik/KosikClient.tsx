@@ -317,7 +317,17 @@ export function KosikClient({ paymentMethods }: { paymentMethods: PaymentMethod[
 
         <label className="mt-3 flex items-start gap-2 text-xs text-zinc-500 cursor-pointer">
           <input type="checkbox" checked={consent} onChange={(e) => setConsent(e.target.checked)} className="mt-0.5 w-4 h-4 accent-[#3db6e8]" />
-          <span>Súhlasím so spracovaním osobných údajov na vybavenie objednávky. *</span>
+          <span>
+            Súhlasím so spracovaním osobných údajov na vybavenie objednávky a s{" "}
+            <a href="/obchodne-podmienky" target="_blank" className="text-[#3db6e8] underline">
+              obchodnými podmienkami
+            </a>
+            ; potvrdzujem oboznámenie s{" "}
+            <a href="/odstupenie-od-zmluvy" target="_blank" className="text-[#3db6e8] underline">
+              poučením o odstúpení od zmluvy
+            </a>
+            . *
+          </span>
         </label>
 
         <div className="mt-3 flex justify-center">

@@ -82,6 +82,17 @@ export default function OchranaSukromiaPage() {
             <li>Daňové doklady: <strong>10 rokov</strong></li>
           </ul>
 
+          <h2 className="text-2xl font-bold mt-10 mb-4">5a. Nákup v e-shope</h2>
+          <p className="leading-relaxed mb-3">
+            Pri objednávke v e-shope navyše spracúvame fakturačné údaje
+            (meno, priezvisko, adresa, pri firmách IČO/DIČ), doručovaciu adresu
+            a údaje o objednanom tovare — právnym základom je{" "}
+            <strong>plnenie zmluvy</strong> (čl. 6 ods. 1 písm. b GDPR) a{" "}
+            <strong>zákonná povinnosť</strong> vedenia účtovníctva (čl. 6 ods. 1
+            písm. c). Účtovné doklady uchovávame 10 rokov. Pri žiadosti o B2B účet
+            spracúvame názov firmy, IČO a kontaktné údaje počas trvania spolupráce.
+          </p>
+
           <h2 className="text-2xl font-bold mt-10 mb-4">6. Príjemcovia údajov</h2>
           <p className="leading-relaxed mb-3">
             Údaje neposkytujeme tretím stranám okrem nasledujúcich spracovateľov:
@@ -92,6 +103,8 @@ export default function OchranaSukromiaPage() {
             <li><strong>Neon Inc.</strong> — databáza dopytov (EÚ región)</li>
             <li><strong>Google LLC</strong> — analytika (iba s tvojím súhlasom v cookies)</li>
             <li><strong>Meta Platforms</strong> — marketingový pixel (iba s tvojím súhlasom)</li>
+            <li><strong>Dopravca zásielky</strong> (kuriérska spoločnosť) — meno, adresa a telefón na doručenie objednávky</li>
+            <li><strong>Stripe Payments Europe, Ltd.</strong> — spracovanie platby kartou (ak zvolíš platbu kartou); údaje o karte vidí len Stripe, k nám sa nedostanú</li>
           </ul>
 
           <h2 className="text-2xl font-bold mt-10 mb-4">7. Tvoje práva</h2>

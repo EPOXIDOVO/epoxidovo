@@ -1,11 +1,13 @@
 "use client";
 
 import * as React from "react";
-import { Check } from "lucide-react";
+import { Check, Building2 } from "lucide-react";
 import { TurnstileWidget } from "@/components/turnstile/TurnstileWidget";
 
 const inputCls =
   "block w-full appearance-none px-4 py-3 rounded-xl border border-zinc-300 bg-white focus:outline-none focus:ring-2 focus:ring-[#3db6e8] focus:border-transparent text-sm text-zinc-900 placeholder:text-zinc-400";
+
+type Navrh = { nazov: string; ico: string; adresa: string };
 
 export function B2bForm() {
   const [firma, setFirma] = React.useState("");
@@ -16,6 +18,47 @@ export function B2bForm() {
   const [token, setToken] = React.useState<string | null>(null);
   const [state, setState] = React.useState<"idle" | "sending" | "ok" | "err">("idle");
   const [errMsg, setErrMsg] = React.useState<string | null>(null);
+
+  // Predikcia z Registra právnických osôb — spoločný dropdown pre obe polia.
+  const [navrhy, setNavrhy] = React.useState<Navrh[]>([]);
+  const [openPre, setOpenPre] = React.useState<"firma" | "ico" | null>(null);
+  const debounceRef = React.useRef<number | null>(null);
+  const boxRef = React.useRef<HTMLDivElement>(null);
+
+  const hladaj = (q: string, pole: "firma" | "ico") => {
+    if (debounceRef.current) window.clearTimeout(debounceRef.current);
+    if (q.trim().length < 3) {
+      setNavrhy([]);
+      setOpenPre(null);
+      return;
+    }
+    debounceRef.current = window.setTimeout(async () => {
+      try {
+        const res = await fetch(`/api/b2b/lookup?q=${encodeURIComponent(q.trim())}`);
+        const json = (await res.json()) as { results?: Navrh[] };
+        setNavrhy(json.results ?? []);
+        setOpenPre(json.results?.length ? pole : null);
+      } catch {
+        setNavrhy([]);
+        setOpenPre(null);
+      }
+    }, 300);
+  };
+
+  React.useEffect(() => {
+    const zavri = (e: MouseEvent) => {
+      if (boxRef.current && !boxRef.current.contains(e.target as Node)) setOpenPre(null);
+    };
+    document.addEventListener("mousedown", zavri);
+    return () => document.removeEventListener("mousedown", zavri);
+  }, []);
+
+  const vyber = (n: Navrh) => {
+    setFirma(n.nazov);
+    setIco(n.ico);
+    setNavrhy([]);
+    setOpenPre(null);
+  };
 
   const valid =
     firma.trim().length >= 2 &&
@@ -66,14 +109,70 @@ export function B2bForm() {
     );
   }
 
+  const dropdown = (pole: "firma" | "ico") =>
+    openPre === pole &&
+    navrhy.length > 0 && (
+      <ul
+        className="absolute z-30 left-0 right-0 top-full mt-1 rounded-xl border border-zinc-200 bg-white shadow-[0_14px_40px_rgba(0,0,0,0.15)] overflow-hidden max-h-72 overflow-y-auto"
+        role="listbox"
+        aria-label="Návrhy firiem z registra"
+      >
+        {navrhy.map((n) => (
+          <li key={n.ico}>
+            <button
+              type="button"
+              onClick={() => vyber(n)}
+              className="w-full text-left px-4 py-2.5 hover:bg-[#e3f3fb] transition-colors flex items-start gap-2.5"
+            >
+              <Building2 className="w-4 h-4 mt-0.5 shrink-0 text-[#3db6e8]" aria-hidden />
+              <span>
+                <span className="block text-sm font-bold text-zinc-900">{n.nazov}</span>
+                <span className="block text-xs text-zinc-500">
+                  IČO {n.ico}
+                  {n.adresa ? ` · ${n.adresa}` : ""}
+                </span>
+              </span>
+            </button>
+          </li>
+        ))}
+      </ul>
+    );
+
   return (
-    <div className="rounded-3xl bg-white p-6 md:p-8 shadow-[0_18px_50px_rgba(0,0,0,0.1)]">
+    <div ref={boxRef} className="rounded-3xl bg-white p-6 md:p-8 shadow-[0_18px_50px_rgba(0,0,0,0.1)]">
       <div className="absolute -left-[9999px]" aria-hidden>
         <input tabIndex={-1} autoComplete="off" value={website} onChange={(e) => setWebsite(e.target.value)} />
       </div>
       <div className="space-y-3">
-        <input placeholder="Názov firmy *" value={firma} onChange={(e) => setFirma(e.target.value)} className={inputCls} aria-label="Názov firmy" />
-        <input placeholder="IČO *" inputMode="numeric" value={ico} onChange={(e) => setIco(e.target.value)} className={inputCls} aria-label="IČO" />
+        <div className="relative">
+          <input
+            placeholder="Názov firmy *"
+            value={firma}
+            onChange={(e) => {
+              setFirma(e.target.value);
+              hladaj(e.target.value, "firma");
+            }}
+            autoComplete="off"
+            className={inputCls}
+            aria-label="Názov firmy"
+          />
+          {dropdown("firma")}
+        </div>
+        <div className="relative">
+          <input
+            placeholder="IČO *"
+            inputMode="numeric"
+            value={ico}
+            onChange={(e) => {
+              setIco(e.target.value);
+              hladaj(e.target.value, "ico");
+            }}
+            autoComplete="off"
+            className={inputCls}
+            aria-label="IČO"
+          />
+          {dropdown("ico")}
+        </div>
         <input type="email" placeholder="E-mail *" value={email} onChange={(e) => setEmail(e.target.value)} className={inputCls} aria-label="E-mail" />
         <input type="tel" placeholder="Telefón *" value={phone} onChange={(e) => setPhone(e.target.value)} className={inputCls} aria-label="Telefón" />
       </div>

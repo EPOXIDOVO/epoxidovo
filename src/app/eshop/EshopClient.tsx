@@ -236,14 +236,14 @@ export function EshopClient() {
         </div>
       )}
 
-      {/* Ľavý stĺpec Dodávateľ + grid */}
+      {/* Ľavý stĺpec Výrobca + grid */}
       <div className="mt-6 lg:grid lg:grid-cols-[200px_1fr] lg:gap-6 lg:items-start">
-        {/* Dodávateľ — desktop sticky stĺpec */}
+        {/* Výrobca — desktop sticky stĺpec */}
         <aside className="hidden lg:block sticky top-24 rounded-2xl bg-[#f2f2ef] p-3">
           <div className="px-2 pb-2 text-xs font-bold uppercase tracking-wide text-zinc-500">
-            Dodávateľ
+            Výrobca
           </div>
-          <nav className="space-y-1" aria-label="Filter podľa dodávateľa">
+          <nav className="space-y-1" aria-label="Filter podľa výrobcu">
             <button type="button" onClick={() => setVyrobca(null)} className={sideCls(vyrobca === null)}>
               <span>Všetci</span>
               <span className="text-xs opacity-70 tnum">{MATERIALY.length}</span>
@@ -263,10 +263,10 @@ export function EshopClient() {
         </aside>
 
         <div>
-          {/* Dodávateľ — mobil chips */}
+          {/* Výrobca — mobil chips */}
           <div className="lg:hidden flex flex-wrap items-center justify-center gap-2">
             <button type="button" onClick={() => setVyrobca(null)} className={chipCls(vyrobca === null)}>
-              Všetci dodávatelia
+              Všetci výrobcovia
             </button>
             {VYROBCOVIA.map((v) => (
               <button

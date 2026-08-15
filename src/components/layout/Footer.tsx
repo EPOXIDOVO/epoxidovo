@@ -19,6 +19,9 @@ const FOOTER_NAV = [
   { href: "/sluzby", label: "Služby" },
   { href: "/kontakt", label: "Kontakty" },
   { href: "/ochrana-sukromia", label: "Zásady ochrany osobných údajov" },
+  { href: "/obchodne-podmienky", label: "Obchodné podmienky" },
+  { href: "/reklamacny-poriadok", label: "Reklamačný poriadok" },
+  { href: "/odstupenie-od-zmluvy", label: "Odstúpenie od zmluvy" },
   { href: "/cookies", label: "Cookies" },
 ];
 
