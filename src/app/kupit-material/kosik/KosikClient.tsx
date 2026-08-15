@@ -227,7 +227,7 @@ export function KosikClient({ paymentMethods }: { paymentMethods: PaymentMethod[
                   className="w-8 h-8 inline-flex items-center justify-center rounded-full border border-zinc-200 hover:bg-zinc-100"
                   aria-label="Viac"><Plus className="w-3.5 h-3.5" aria-hidden /></button>
               </div>
-              <div className="w-24 text-right font-extrabold text-sm shrink-0">
+              <div className="tnum w-24 text-right font-extrabold text-sm shrink-0">
                 {l.lineTotal != null ? fmt(l.lineTotal) : (
                   <span className="text-amber-600 font-semibold">na dopyt</span>
                 )}
@@ -297,10 +297,10 @@ export function KosikClient({ paymentMethods }: { paymentMethods: PaymentMethod[
 
         <textarea placeholder="Poznámka k objednávke" value={note} onChange={(e) => setNote(e.target.value)} rows={2} className={`${inputCls} mt-3 resize-none`} aria-label="Poznámka" />
 
-        <div className="mt-4 rounded-xl bg-zinc-900 text-white p-4">
+        <div className="mt-4 rounded-xl bg-[#0e1a3b] text-white p-4">
           <div className="flex items-baseline justify-between">
             <span className="font-bold text-sm">{hasOnRequest ? "Medzisúčet" : "Spolu"}</span>
-            <span className="text-2xl font-extrabold">{fmt(subtotal)}</span>
+            <span className="tnum text-2xl font-extrabold">{fmt(subtotal)}</span>
           </div>
           {hasOnRequest && (
             <p className="mt-1 text-xs text-amber-300">
