@@ -19,13 +19,22 @@ export function AdminLogin() {
       const res = await fetch("/api/admin/auth/request", { method: "POST" });
       const json = (await res.json()) as { ok?: boolean; message?: string; devCode?: string; token?: string };
       if (!res.ok || !json.ok) throw new Error(json.message ?? "nepodarilo sa");
+      // DEV (localhost): kód máme rovno v odpovedi → prihlás bez opisovania
+      if (json.devCode && json.token) {
+        setStav("Prihlasujem…");
+        const v = await fetch("/api/admin/auth/verify", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ code: json.devCode, token: json.token }),
+        });
+        const vj = (await v.json()) as { ok?: boolean; message?: string };
+        if (!v.ok || !vj.ok) throw new Error(vj.message ?? "prihlásenie zlyhalo");
+        window.location.reload();
+        return;
+      }
       setToken(json.token ?? "");
       setFaza("kod");
-      setStav(
-        json.devCode
-          ? `DEV režim — kód: ${json.devCode}`
-          : "Kód sme poslali na admin e-mail. Platí 10 minút.",
-      );
+      setStav("Kód sme poslali na admin e-mail. Platí 10 minút.");
     } catch (e) {
       setStav(e instanceof Error ? e.message : "Chyba — skús znova.");
     } finally {
