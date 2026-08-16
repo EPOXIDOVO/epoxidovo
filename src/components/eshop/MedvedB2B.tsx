@@ -8,13 +8,13 @@ import { X } from "lucide-react";
 /**
  * Easter egg — hlava maskota s bublinou „veľkoobchodné ceny".
  * Sedí vľavo dole (WhatsApp bublina má pravý roh), klik vedie na B2B
- * registráciu. Dá sa zavrieť; voľba drží v sessionStorage, nech neotravuje.
+ * registráciu. Krížik ju schová len na aktuálnej stránke — pri ďalšom
+ * načítaní sa vráti, aby ju zákazník o pár klikov neskôr znova videl.
  */
 export function MedvedB2B() {
   const [hidden, setHidden] = React.useState(true);
 
   React.useEffect(() => {
-    if (sessionStorage.getItem("medved-b2b-zavrety") === "1") return;
     const t = setTimeout(() => setHidden(false), 1800);
     return () => clearTimeout(t);
   }, []);
@@ -48,10 +48,7 @@ export function MedvedB2B() {
       </Link>
       <button
         type="button"
-        onClick={() => {
-          sessionStorage.setItem("medved-b2b-zavrety", "1");
-          setHidden(true);
-        }}
+        onClick={() => setHidden(true)}
         aria-label="Zavrieť bublinu"
         className="pointer-events-auto -ml-1 mb-16 w-6 h-6 inline-flex items-center justify-center rounded-full bg-white/90 border border-zinc-200 text-zinc-400 hover:text-zinc-700 hover:bg-white shadow transition-colors"
       >
