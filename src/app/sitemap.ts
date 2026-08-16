@@ -21,8 +21,9 @@ export default function sitemap(): MetadataRoute.Sitemap {
     { url: `${SITE.url}/reklamacny-poriadok`, lastModified: now, changeFrequency: "yearly", priority: 0.3 },
     { url: `${SITE.url}/odstupenie-od-zmluvy`, lastModified: now, changeFrequency: "yearly", priority: 0.3 },
     { url: `${SITE.url}/eshop`, lastModified: now, changeFrequency: "monthly", priority: 0.5 },
+    { url: `${SITE.url}/eshop/znacky`, lastModified: now, changeFrequency: "monthly", priority: 0.4 },
     { url: `${SITE.url}/kalkulacka`, lastModified: now, changeFrequency: "monthly", priority: 0.8 },
-    { url: `${SITE.url}/kupit-material/kalkulacka`, lastModified: now, changeFrequency: "monthly", priority: 0.7 },
+    { url: `${SITE.url}/navrhni-podlahu`, lastModified: now, changeFrequency: "monthly", priority: 0.8 },
     { url: `${SITE.url}/kupit-material/b2b`, lastModified: now, changeFrequency: "yearly", priority: 0.4 },
   ];
 

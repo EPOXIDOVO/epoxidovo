@@ -8,7 +8,7 @@ import { KonfiguratorClient } from "./KonfiguratorClient";
 export const metadata: Metadata = {
   title: "Navrhni si podlahu — skladba, spotreba a cena za minútu",
   description:
-    "Odpovedz na 6 otázok a dostaneš presnú skladbu vrstiev, spotrebu materiálu aj cenu. Epoxidové a polyuretánové podlahy, steny aj schody — interiér aj exteriér.",
+    "Odpovedz na pár otázok a dostaneš presnú skladbu vrstiev, spotrebu materiálu aj cenu. Epoxidové a polyuretánové podlahy, steny aj schody — interiér aj exteriér.",
   alternates: { canonical: "/navrhni-podlahu" },
 };
 
@@ -27,7 +27,7 @@ export default function NavrhniPodlahuPage() {
             Navrhni si podlahu
           </h1>
           <p className="mt-2 text-[#4a5478] max-w-2xl">
-            Odpovedz na 6 otázok a dostaneš presnú skladbu vrstiev, spotrebu
+            Odpovedz na pár otázok a dostaneš presnú skladbu vrstiev, spotrebu
             materiálu aj cenu. Trvá to minútu.
           </p>
         </Container>
