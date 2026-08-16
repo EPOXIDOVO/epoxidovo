@@ -28,38 +28,76 @@ export default function EshopPage() {
           { name: "E-shop", path: "/eshop" },
         ]}
       />
-      {/* ── VIDEO HERO — nahraj public/video/eshop-hero.mp4 a hrá; dovtedy poster ── */}
-      <section className="relative isolate overflow-hidden bg-[#0a0f1e] text-white">
-        <video
-          className="absolute inset-0 w-full h-full object-cover opacity-60"
-          autoPlay
-          muted
-          loop
-          playsInline
-          poster="/images/categories/metalicke.jpg"
-        >
-          <source src="/video/eshop-hero.mp4" type="video/mp4" />
-        </video>
-        <div aria-hidden className="absolute inset-0 bg-gradient-to-t from-[#0a0f1e] via-[#0a0f1e]/40 to-[#0a0f1e]/70" />
-        <Container size="xl" className="relative pt-28 md:pt-40 pb-16 md:pb-24 text-center">
-          <h1 className="text-3xl sm:text-4xl md:text-6xl font-extrabold tracking-tight leading-tight" style={{ textWrap: "balance" }}>
-            Materiály a náradie
-            <br />
-            <span className="text-[#3db6e8]">na epoxidové podlahy</span>
-          </h1>
-          <p className="mt-4 text-lg text-white/80 max-w-2xl mx-auto leading-relaxed">
-            {MATERIALY.length} produktov Sika, TopStone, Arturo a UZIN — presne tie, ktoré
-            používame na vlastných realizáciách. Konečné ceny, predaj v celých
-            baleniach.
-          </p>
-          <a
-            href="#katalog"
-            className="mt-8 inline-flex items-center gap-2 px-8 py-4 rounded-full bg-[#f97316] text-white font-extrabold text-lg hover:bg-[#ea580c] shadow-[0_14px_40px_rgba(249,115,22,0.5)] transition-colors"
-          >
-            Prezrieť celý katalóg
-            <ArrowDown className="w-5 h-5" aria-hidden />
-          </a>
+      {/* ── MENU KATEGÓRIÍ (štýl Epodex — svetlé, pod hlavičkou) ── */}
+      <nav aria-label="Kategórie e-shopu" className="bg-white border-b border-zinc-200">
+        <Container size="xl" className="pt-20 md:pt-24 pb-3">
+          <div className="flex flex-wrap items-center justify-center gap-x-6 gap-y-2 text-[15px] font-semibold">
+            <a href="/eshop#katalog" className="text-zinc-900 hover:text-[#1a8cc4] transition-colors">Obchod</a>
+            <a href="/eshop?skupina=hlavne#katalog" className="text-zinc-900 hover:text-[#1a8cc4] transition-colors">Epoxidové živice</a>
+            <a href="/eshop?skupina=kamenny-koberec#katalog" className="text-zinc-900 hover:text-[#1a8cc4] transition-colors">Kamenný koberec</a>
+            <a href="/eshop?skupina=priprava#katalog" className="text-zinc-900 hover:text-[#1a8cc4] transition-colors">Príprava podkladu</a>
+            <a href="/eshop?skupina=naradie#katalog" className="text-zinc-900 hover:text-[#1a8cc4] transition-colors">Náradie</a>
+            <span className="inline-flex items-center gap-1.5 text-zinc-400 select-none cursor-default whitespace-nowrap">
+              Mikrocement
+              <span className="px-1.5 py-0.5 rounded-full bg-[#f97316] text-white text-[9px] font-bold uppercase">čoskoro</span>
+            </span>
+            <span className="inline-flex items-center gap-1.5 text-zinc-400 select-none cursor-default whitespace-nowrap">
+              Farby
+              <span className="px-1.5 py-0.5 rounded-full bg-[#f97316] text-white text-[9px] font-bold uppercase">čoskoro</span>
+            </span>
+            <span className="inline-flex items-center gap-1.5 text-zinc-400 select-none cursor-default whitespace-nowrap">
+              Dekoratívne steny
+              <span className="px-1.5 py-0.5 rounded-full bg-[#f97316] text-white text-[9px] font-bold uppercase">čoskoro</span>
+            </span>
+          </div>
         </Container>
+      </nav>
+
+      {/* ── DVOJITÉ VIDEO HERO (štýl Epodex) ── */}
+      <section className="bg-white">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-1.5 p-1.5">
+          {[
+            {
+              video: "/video/eshop-hero-a.mp4",
+              poster: "/images/categories/metalicke.jpg",
+              nadpis: "Nalej si vlastnú podlahu",
+              popis: "Materiály a návody pre šikovné ruky",
+              cta: "Prezrieť katalóg",
+              href: "/eshop#katalog",
+            },
+            {
+              video: "/video/eshop-hero-b.mp4",
+              poster: "/images/hero/byvanie-v2.webp",
+              nadpis: "Profesionálna realizácia",
+              popis: "Prevezmeme váš projekt od podkladu po lak",
+              cta: "Nezáväzná cenová ponuka",
+              href: "/cenova-ponuka",
+            },
+          ].map((v) => (
+            <a key={v.video} href={v.href} className="group relative block aspect-[16/10] overflow-hidden">
+              <video
+                className="absolute inset-0 w-full h-full object-cover"
+                autoPlay
+                muted
+                loop
+                playsInline
+                poster={v.poster}
+              >
+                <source src={v.video} type="video/mp4" />
+              </video>
+              <div aria-hidden className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent" />
+              <div className="absolute bottom-0 inset-x-0 p-6 md:p-10 text-center text-white">
+                <h2 className="text-2xl md:text-4xl font-extrabold tracking-tight" style={{ textWrap: "balance" }}>
+                  {v.nadpis}
+                </h2>
+                <p className="mt-1 text-white/85 md:text-lg">{v.popis}</p>
+                <span className="mt-4 inline-flex items-center gap-2 px-6 py-3 rounded-full bg-white text-[#0e1a3b] font-bold group-hover:bg-[#f97316] group-hover:text-white transition-colors">
+                  {v.cta}
+                </span>
+              </div>
+            </a>
+          ))}
+        </div>
       </section>
 
       {/* ── KATEGÓRIOVÉ DLAŽDICE (štýl Epodex) — fotka, pill, podlinky ── */}

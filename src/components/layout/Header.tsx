@@ -109,19 +109,23 @@ export function Header({ transparentOnTop = false }: HeaderProps) {
               <Sparkles className="w-4 h-4" aria-hidden />
               <span className="whitespace-nowrap">AI Vizualizácia</span>
             </Link>
-            {/* Kúpiť materiál → e-shop */}
-            <Link
-              href="/eshop"
+            {/* Kúpiť materiál — čoskoro, NEklikateľné kým e-shop oficiálne nespustíme.
+                /eshop žije, ale navigácia naň zatiaľ nevedie. */}
+            <div
+              aria-disabled
               className={cn(
-                "inline-flex items-center gap-2 px-4 lg:px-5 py-2.5 rounded-full border-2 font-semibold text-sm lg:text-base transition-colors",
+                "relative inline-flex items-center gap-2 px-4 lg:px-5 py-2.5 rounded-full border-2 font-semibold text-sm lg:text-base select-none cursor-default",
                 isTransparent
-                  ? "border-white/40 text-white hover:bg-white/10"
-                  : "border-[#f97316] text-[#f97316] hover:bg-[#f97316] hover:text-white",
+                  ? "border-white/25 text-white/60"
+                  : "border-zinc-200 text-zinc-400",
               )}
             >
               <ShoppingBag className="w-4 h-4" aria-hidden />
               <span className="whitespace-nowrap">Kúpiť materiál</span>
-            </Link>
+              <span className="absolute -top-2 -right-2 px-2 py-0.5 rounded-full bg-[#f97316] text-white text-[10px] font-bold uppercase tracking-wide whitespace-nowrap shadow-[0_2px_8px_rgba(249,115,22,0.5)]">
+                Čoskoro
+              </span>
+            </div>
           </div>
 
           {/* Mobile hamburger — výrazne vpravo hore */}
@@ -200,15 +204,17 @@ export function Header({ transparentOnTop = false }: HeaderProps) {
               <Phone className="w-4 h-4" aria-hidden />
               Kontakt
             </Link>
-            {/* Kúpiť materiál → e-shop */}
-            <Link
-              href="/eshop"
-              onClick={() => setOpen(false)}
-              className="inline-flex items-center justify-center gap-2 px-6 py-4 rounded-full border-2 border-[#f97316] text-[#f97316] font-semibold hover:bg-[#f97316] hover:text-white transition-colors"
+            {/* Kúpiť materiál — čoskoro, NEklikateľné */}
+            <div
+              aria-disabled
+              className="relative inline-flex items-center justify-center gap-2 px-6 py-4 rounded-full border-2 border-zinc-200 text-zinc-400 font-semibold select-none cursor-default"
             >
               <ShoppingBag className="w-4 h-4" aria-hidden />
               Kúpiť materiál
-            </Link>
+              <span className="absolute -top-2 right-4 px-2 py-0.5 rounded-full bg-[#f97316] text-white text-[10px] font-bold uppercase tracking-wide whitespace-nowrap shadow-[0_2px_8px_rgba(249,115,22,0.5)]">
+                Čoskoro
+              </span>
+            </div>
           </nav>
         </div>
       </header>
