@@ -187,9 +187,9 @@ export default function EshopPage() {
 
     trust: (
       /* Tenký trust pás — medzi videom a kategóriami, jeden riadok */
-      <section className="bg-white">
+      <section className="bg-[#f2f5f9] border-y border-zinc-200">
         <Container size="xl">
-          <div className="flex flex-wrap items-center justify-center gap-x-7 gap-y-0.5 py-2 border-b border-zinc-200">
+          <div className="flex flex-wrap items-center justify-center gap-x-8 gap-y-1 py-2.5">
             {[
               "Presný rozpis materiálu na tvoje m²",
               "Návod krok za krokom",
@@ -197,9 +197,9 @@ export default function EshopPage() {
             ].map((t) => (
               <span
                 key={t}
-                className="inline-flex items-center gap-1.5 text-[13px] font-semibold text-[#4a5478] whitespace-nowrap"
+                className="inline-flex items-center gap-2 text-[15px] font-bold text-[#0e1a3b] whitespace-nowrap"
               >
-                <Check className="w-3.5 h-3.5 text-[#16a34a] shrink-0" aria-hidden />
+                <Check className="w-4 h-4 text-[#16a34a] shrink-0" strokeWidth={3} aria-hidden />
                 {t}
               </span>
             ))}
