@@ -7,6 +7,7 @@ import { Container } from "@/components/ui/Container";
 import { ProductVisual } from "@/components/eshop/ProductVisual";
 import { MATERIALY, VYROBCOVIA, type Vyrobca, type Material } from "@/lib/materialy";
 import { OBSAH_KATEGORIE, obsahKategoria, normalize } from "@/lib/obsah-kategorie";
+import { VYROBCA_LOGO } from "@/lib/vyrobca-logo";
 
 /**
  * Katalóg materiálov — vľavo stĺpec Dodávateľ, hore obsahové kategórie
@@ -192,7 +193,11 @@ export function EshopClient() {
                 onClick={() => setVyrobca(vyrobca === v ? null : v)}
                 className={sideCls(vyrobca === v)}
               >
-                <span>{v}</span>
+                <span className="inline-flex items-center gap-2">
+                  {/* eslint-disable-next-line @next/next/no-img-element */}
+                  <img src={VYROBCA_LOGO[v]} alt="" className={`h-4 w-auto ${vyrobca === v ? "brightness-0 invert" : ""}`} />
+                  {v}
+                </span>
                 <span className="text-xs opacity-70 tnum">{vyrobcaCounts.get(v) ?? 0}</span>
               </button>
             ))}
@@ -210,8 +215,10 @@ export function EshopClient() {
                 key={v}
                 type="button"
                 onClick={() => setVyrobca(vyrobca === v ? null : v)}
-                className={chipCls(vyrobca === v)}
+                className={`${chipCls(vyrobca === v)} inline-flex items-center gap-1.5`}
               >
+                {/* eslint-disable-next-line @next/next/no-img-element */}
+                <img src={VYROBCA_LOGO[v]} alt="" className={`h-4 w-auto ${vyrobca === v ? "brightness-0 invert" : ""}`} />
                 {v}
               </button>
             ))}

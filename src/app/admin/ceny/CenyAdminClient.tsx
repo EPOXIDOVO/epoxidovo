@@ -5,6 +5,7 @@ import { Search, Save, RotateCcw, X } from "lucide-react";
 import { Container } from "@/components/ui/Container";
 import { MATERIALY, VYROBCOVIA, CENA_Z_IMPORTU, type Vyrobca, type Material } from "@/lib/materialy";
 import { OBSAH_KATEGORIE, obsahKategoria } from "@/lib/obsah-kategorie";
+import { VYROBCA_LOGO } from "@/lib/vyrobca-logo";
 import cenyOverride from "@/content/ceny-override.json";
 
 /**
@@ -245,7 +246,9 @@ export function CenyAdminClient() {
           Všetci ({MATERIALY.length})
         </button>
         {VYROBCOVIA.map((v) => (
-          <button key={v} type="button" onClick={() => setVyrobca(vyrobca === v ? null : v)} className={chip(vyrobca === v)}>
+          <button key={v} type="button" onClick={() => setVyrobca(vyrobca === v ? null : v)} className={`${chip(vyrobca === v)} inline-flex items-center gap-1.5`}>
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img src={VYROBCA_LOGO[v]} alt="" className={`h-4 w-auto ${vyrobca === v ? "brightness-0 invert" : ""}`} />
             {v} ({vyrobcaCounts.get(v) ?? 0})
           </button>
         ))}
@@ -309,13 +312,13 @@ export function CenyAdminClient() {
         <table className="w-full text-sm" style={{ fontVariantNumeric: "tabular-nums" }}>
           <thead>
             <tr className="text-left text-xs uppercase tracking-wide text-zinc-500 border-b-2 border-zinc-100">
-              <th className="px-4 py-3">Produkt</th>
-              <th className="px-4 py-3">Balenie</th>
-              <th className="px-4 py-3 text-right">Objednané</th>
-              <th className="px-4 py-3 text-right">Nákup s DPH / bez</th>
-              <th className="px-4 py-3 text-right">Predaj</th>
-              <th className="px-4 py-3 text-right">Zisk / ks</th>
-              <th className="px-4 py-3 text-right w-40">Nová cena (€)</th>
+              <th className="px-4 py-3 whitespace-nowrap">Produkt</th>
+              <th className="px-4 py-3 whitespace-nowrap">Balenie</th>
+              <th className="px-4 py-3 text-right whitespace-nowrap">Objednané</th>
+              <th className="px-4 py-3 text-right whitespace-nowrap">Nákup s/bez DPH</th>
+              <th className="px-4 py-3 text-right whitespace-nowrap">Predaj</th>
+              <th className="px-4 py-3 text-right whitespace-nowrap">Marža / ks</th>
+              <th className="px-4 py-3 text-right w-40 whitespace-nowrap">Nová cena (€)</th>
               <th className="px-4 py-3 w-10" />
             </tr>
           </thead>
@@ -335,9 +338,12 @@ export function CenyAdminClient() {
                     <div className="font-semibold text-zinc-900">
                       {varianty.length > 1 ? zakladNazov : m.nazov}
                     </div>
-                    <div className="text-xs text-zinc-400">
+                    <div className="text-xs text-zinc-400 flex items-center gap-1.5">
                       <span className="font-mono">{m.sku}</span>
-                      <span className="ml-1.5">· {m.vyrobca}</span>
+                      <span>·</span>
+                      {/* eslint-disable-next-line @next/next/no-img-element */}
+                      <img src={VYROBCA_LOGO[m.vyrobca]} alt="" className="h-3.5 w-auto" />
+                      <span>{m.vyrobca}</span>
                     </div>
                   </td>
                   <td className="px-4 py-2 whitespace-nowrap">
@@ -385,9 +391,14 @@ export function CenyAdminClient() {
                   </td>
                   <td className="px-4 py-2 text-right whitespace-nowrap">
                     {zisk != null ? (
-                      <span className={`font-extrabold ${zisk >= 0 ? "text-emerald-700" : "text-red-600"}`}>
-                        {zisk >= 0 ? "+" : ""}{fmt.format(zisk)} €
-                      </span>
+                      <>
+                        <span className={`font-extrabold ${zisk >= 0 ? "text-emerald-700" : "text-red-600"}`}>
+                          {zisk >= 0 ? "+" : ""}{fmt.format(zisk)} €
+                        </span>
+                        <span className="block text-xs text-zinc-400">
+                          {fmt.format((zisk / m.cena_eur_s_dph) * 100)} % z predaja
+                        </span>
+                      </>
                     ) : (
                       <span className="text-zinc-300">—</span>
                     )}
@@ -427,7 +438,7 @@ export function CenyAdminClient() {
       <p className="mt-3 text-xs text-zinc-400">
         {zoznam.length} z {MATERIALY.length} produktov v {skupiny.length} riadkoch
         · ručných cien: {Object.keys(overrides).length}
-        · Zisk = predaj − nákup s DPH (neplatiteľ DPH; pred daňou z príjmu)
+        · Marža = predaj − nákup s DPH (DPH z nákupu je náklad, sme neplatiteľ; pred daňou z príjmu)
       </p>
     </Container>
   );
