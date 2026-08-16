@@ -156,10 +156,10 @@ export function KosikClient({ paymentMethods }: { paymentMethods: PaymentMethod[
           </a>
         </p>
         <Link
-          href="/kupit-material"
+          href="/eshop"
           className="mt-6 inline-flex px-6 py-3 rounded-full bg-zinc-100 font-semibold text-zinc-800 hover:bg-zinc-200 transition-colors"
         >
-          Späť na materiály
+          Späť do e-shopu
         </Link>
       </div>
     );
@@ -171,10 +171,10 @@ export function KosikClient({ paymentMethods }: { paymentMethods: PaymentMethod[
         <ShoppingCart className="w-12 h-12 mx-auto text-zinc-300" aria-hidden />
         <h2 className="mt-4 text-2xl font-extrabold text-zinc-900">Košík je prázdny</h2>
         <p className="mt-2 text-zinc-600">
-          Naplň ho kalkulátorom — vypočíta presne toľko materiálu, koľko treba.
+          Navrhni si podlahu — vypočítame presne toľko materiálu, koľko treba.
         </p>
         <Link
-          href="/kupit-material/kalkulacka"
+          href="/navrhni-podlahu"
           className="mt-6 inline-flex px-7 py-3.5 rounded-full bg-[#f97316] text-white font-bold hover:bg-[#ea580c] transition-colors"
         >
           Spustiť kalkulátor

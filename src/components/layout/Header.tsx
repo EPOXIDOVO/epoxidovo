@@ -2,7 +2,7 @@
 
 import * as React from "react";
 import Link from "next/link";
-import { Menu, X, Images, Phone, Home, Sparkles, ShoppingBag } from "lucide-react";
+import { Menu, X, Images, Phone, Home, Sparkles, ShoppingBag, Ruler } from "lucide-react";
 import { Container } from "@/components/ui/Container";
 import { SamplePicker } from "@/components/home/SamplePicker";
 import { SITE } from "@/lib/site";
@@ -102,6 +102,16 @@ export function Header({ transparentOnTop = false }: HeaderProps) {
               <Images className="w-4 h-4" aria-hidden />
               Ukážky realizácií
             </button>
+            <Link
+              href="/navrhni-podlahu"
+              className={cn(
+                "inline-flex items-center gap-2 px-4 lg:px-5 py-2.5 rounded-full font-semibold text-sm lg:text-base transition-colors whitespace-nowrap",
+                "bg-[#e3f3fb] text-[#0e1a3b] hover:bg-[#3db6e8] hover:text-white",
+              )}
+            >
+              <Ruler className="w-4 h-4" aria-hidden />
+              Navrhni si podlahu
+            </Link>
             <Link
               href="/ai-vizualizer"
               className="inline-flex items-center gap-2 px-4 lg:px-5 py-2.5 rounded-full bg-gradient-to-r from-[#3db6e8] to-[#a855f7] text-white font-semibold text-sm lg:text-base shadow-[0_6px_20px_rgba(168,85,247,0.4)] hover:from-[#1a8cc4] hover:to-[#9333ea] hover:shadow-[0_8px_24px_rgba(168,85,247,0.55)] hover:-translate-y-0.5 transition-all duration-300"
@@ -203,6 +213,14 @@ export function Header({ transparentOnTop = false }: HeaderProps) {
             >
               <Phone className="w-4 h-4" aria-hidden />
               Kontakt
+            </Link>
+            <Link
+              href="/navrhni-podlahu"
+              onClick={() => setOpen(false)}
+              className="inline-flex items-center justify-center gap-2 px-6 py-4 rounded-full bg-[#e3f3fb] text-[#0e1a3b] font-semibold hover:bg-[#3db6e8] hover:text-white transition-colors"
+            >
+              <Ruler className="w-4 h-4" aria-hidden />
+              Navrhni si podlahu
             </Link>
             {/* Kúpiť materiál — čoskoro, NEklikateľné */}
             <div

@@ -117,56 +117,77 @@ export default function EshopPage() {
     ),
 
     hero: (
-      /* Video hero — rovnaká šírka ako ostatné bloky (Container) */
-      <section className="bg-white">
-        <Container size="xl" className="pt-4">
-          <a
-            href="/kupit-material/kalkulacka"
-            className="group relative block h-[58vh] min-h-[420px] max-h-[640px] overflow-hidden rounded-3xl"
-          >
-            <video
-              className="absolute inset-0 w-full h-full object-cover"
-              autoPlay
-              muted
-              loop
-              playsInline
-              poster="/images/categories/metalicke.jpg"
+      /* Full-bleed hero — bez bielych okrajov a zaoblenia, text vľavo.
+         Video na mobile nenačítavame (dáta) a pri reduced-motion tiež nie. */
+      <section className="relative isolate w-full overflow-hidden min-h-[440px] md:min-h-[520px] flex items-end">
+        <Image
+          src="/images/categories/metalicke.jpg"
+          alt=""
+          fill
+          sizes="100vw"
+          quality={85}
+          priority
+          className="object-cover"
+        />
+        <video
+          className="hidden md:block motion-reduce:md:hidden absolute inset-0 w-full h-full object-cover"
+          autoPlay
+          muted
+          loop
+          playsInline
+          preload="metadata"
+          poster="/images/categories/metalicke.jpg"
+        >
+          <source src="/video/eshop-hero-a.mp4" type="video/mp4" />
+        </video>
+        {/* gradient zľava — text sedí na tmavom, fotka ostáva vidieť vpravo */}
+        <div
+          aria-hidden
+          className="absolute inset-0"
+          style={{
+            background:
+              "linear-gradient(90deg, rgba(0,0,0,0.75) 0%, rgba(0,0,0,0.6) 45%, rgba(0,0,0,0.25) 100%)",
+          }}
+        />
+        <Container size="xl" className="relative py-10 md:py-14">
+          <div className="max-w-xl text-white">
+            <h2
+              className="text-3xl md:text-5xl font-extrabold tracking-tight"
+              style={{ textWrap: "balance", textShadow: "0 2px 14px rgba(0,0,0,0.7)" }}
             >
-              <source src="/video/eshop-hero-a.mp4" type="video/mp4" />
-            </video>
-            {/* tmavý scrim namiesto tieňov na písme — text je čitateľný
-                aj na svetlom videe a neplávajú okolo neho fleky */}
-            <div aria-hidden className="absolute inset-0 bg-gradient-to-t from-black via-black/75 via-40% to-black/15" />
-            <div className="absolute inset-x-0 bottom-0 p-6 md:p-10 text-center text-white">
-              <h2
-                className="text-2xl md:text-5xl font-extrabold tracking-tight"
-                style={{ textWrap: "balance", textShadow: "0 2px 14px rgba(0,0,0,0.8)" }}
+              Prvú podlahu zvládneš aj sám
+            </h2>
+            <p
+              className="mt-3 text-lg md:text-xl font-medium text-white leading-snug"
+              style={{ textShadow: "0 2px 10px rgba(0,0,0,0.8)" }}
+            >
+              Presné množstvá na tvoje m², návod krok za krokom a poradenstvo
+              na telefóne. Podlahy aj steny.
+            </p>
+            <div className="mt-6 flex flex-wrap gap-3">
+              <a
+                href="/navrhni-podlahu"
+                className="inline-flex items-center gap-2 px-7 py-3.5 rounded-full bg-[#f97316] text-white font-extrabold text-base md:text-lg shadow-[0_12px_32px_rgba(249,115,22,0.5)] hover:bg-[#ea580c] transition-colors whitespace-nowrap"
               >
-                Prvú podlahu zvládneš aj sám
-              </h2>
-              <p
-                className="mt-3 mx-auto max-w-xl text-lg md:text-2xl font-medium text-white leading-snug"
-                style={{ textShadow: "0 2px 10px rgba(0,0,0,0.85)" }}
+                Navrhni si podlahu →
+              </a>
+              <a
+                href="/eshop#katalog"
+                className="inline-flex items-center gap-2 px-7 py-3.5 rounded-full border-2 border-white/80 text-white font-bold text-base md:text-lg hover:bg-white hover:text-[#0e1a3b] transition-colors whitespace-nowrap"
               >
-                Presné množstvá na tvoje m², návod krok za krokom a poradenstvo
-                na telefóne. Podlahy aj steny.
-              </p>
-              <div className="mt-4 flex flex-wrap items-center justify-center gap-2">
-                {["Presný rozpis materiálu", "Návod krok za krokom", "Poradíme počas liatia"].map((t) => (
-                  <span
-                    key={t}
-                    className="inline-flex items-center gap-1.5 px-4 py-2 rounded-full bg-black/65 border border-white/30 text-white text-sm font-semibold whitespace-nowrap backdrop-blur-[2px]"
-                  >
-                    <Check className="w-3.5 h-3.5" aria-hidden />
-                    {t}
-                  </span>
-                ))}
-              </div>
-              <span className="mt-5 inline-flex items-center gap-2 px-8 py-4 rounded-full bg-[#f97316] text-white font-extrabold text-base md:text-lg shadow-[0_12px_32px_rgba(249,115,22,0.5)] group-hover:bg-[#ea580c] transition-colors">
-                Spočítaj si materiál na svoju plochu
-              </span>
+                Prezrieť katalóg
+              </a>
             </div>
-          </a>
+            {/* odrážky až pod tlačidlami — neodďaľujú klik */}
+            <ul className="mt-5 flex flex-wrap gap-x-5 gap-y-1.5 text-[13px] text-white/90">
+              {["Presný rozpis materiálu", "Návod krok za krokom", "Poradíme počas liatia"].map((t) => (
+                <li key={t} className="inline-flex items-center gap-1.5">
+                  <Check className="w-3.5 h-3.5 shrink-0" aria-hidden />
+                  {t}
+                </li>
+              ))}
+            </ul>
+          </div>
         </Container>
       </section>
     ),
