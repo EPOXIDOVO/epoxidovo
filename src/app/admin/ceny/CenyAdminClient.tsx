@@ -5,7 +5,7 @@ import { Search, Save, X } from "lucide-react";
 import { Container } from "@/components/ui/Container";
 import { ProductVisual } from "@/components/eshop/ProductVisual";
 import { MATERIALY, VYROBCOVIA, CENA_Z_IMPORTU, type Vyrobca, type Material } from "@/lib/materialy";
-import { OBSAH_KATEGORIE, obsahKategoria, obsahLabel } from "@/lib/obsah-kategorie";
+import { OBSAH_KATEGORIE, SKUPINY, obsahKategoria, obsahLabel, skupinaPreObsah } from "@/lib/obsah-kategorie";
 import { VYROBCA_LOGO } from "@/lib/vyrobca-logo";
 import cenyOverride from "@/content/ceny-override.json";
 
@@ -56,6 +56,7 @@ export function CenyAdminClient() {
   const [drafts, setDrafts] = React.useState<Record<string, string>>({});
   const [query, setQuery] = React.useState("");
   const [vyrobca, setVyrobca] = React.useState<Vyrobca | null>(null);
+  const [skupina, setSkupina] = React.useState<string | null>(null);
   const [obsah, setObsah] = React.useState<string | null>(null);
   const [lenOverride, setLenOverride] = React.useState(false);
   const [online, setOnline] = React.useState<boolean | null>(null);
@@ -85,12 +86,14 @@ export function CenyAdminClient() {
     const q = query.trim().toLowerCase();
     return MATERIALY.filter((m) => {
       if (vyrobca && m.vyrobca !== vyrobca) return false;
-      if (obsah && obsahKategoria(m) !== obsah) return false;
+      const kat = obsahKategoria(m);
+      if (obsah && kat !== obsah) return false;
+      if (!obsah && skupina && skupinaPreObsah(kat) !== skupina) return false;
       if (lenOverride && overrides[m.sku] == null && drafts[m.sku] == null) return false;
       if (!q) return true;
       return `${m.nazov} ${m.sku}`.toLowerCase().includes(q);
     });
-  }, [query, vyrobca, obsah, lenOverride, drafts, overrides]);
+  }, [query, vyrobca, skupina, obsah, lenOverride, drafts, overrides]);
 
   /** Zlúč varianty balení — po filtroch, najväčšie balenie default. */
   const skupiny = React.useMemo(() => {
@@ -236,22 +239,52 @@ export function CenyAdminClient() {
         />
       </div>
 
-      {/* Kategórie */}
+      {/* Skupiny podľa skladby podlahy */}
       <div className="mt-4 flex flex-wrap items-center justify-center gap-2">
-        <button type="button" onClick={() => setObsah(null)} className={chipCls(obsah === null)}>
+        <button
+          type="button"
+          onClick={() => { setSkupina(null); setObsah(null); }}
+          className={chipCls(skupina === null)}
+        >
           Všetko
         </button>
-        {OBSAH_KATEGORIE.filter((k) => (obsahCounts.get(k.id) ?? 0) > 0).map((k) => (
-          <button
-            key={k.id}
-            type="button"
-            onClick={() => setObsah(obsah === k.id ? null : k.id)}
-            className={chipCls(obsah === k.id)}
-          >
-            {k.label} ({obsahCounts.get(k.id)})
-          </button>
-        ))}
+        {SKUPINY.map((sk, i) => {
+          const count = sk.deti.reduce((n, d) => n + (obsahCounts.get(d) ?? 0), 0);
+          if (count === 0) return null;
+          return (
+            <button
+              key={sk.id}
+              type="button"
+              onClick={() => {
+                setObsah(null);
+                setSkupina(skupina === sk.id ? null : sk.id);
+              }}
+              className={chipCls(skupina === sk.id)}
+            >
+              {i + 1 <= 5 ? `${i + 1}. ` : ""}{sk.label} ({count})
+            </button>
+          );
+        })}
       </div>
+      {skupina && (SKUPINY.find((sk) => sk.id === skupina)?.deti.length ?? 0) > 1 && (
+        <div className="mt-2.5 flex flex-wrap items-center justify-center gap-2">
+          {SKUPINY.find((sk) => sk.id === skupina)!.deti
+            .filter((d) => (obsahCounts.get(d) ?? 0) > 0)
+            .map((d) => {
+              const k = OBSAH_KATEGORIE.find((x) => x.id === d)!;
+              return (
+                <button
+                  key={d}
+                  type="button"
+                  onClick={() => setObsah(obsah === d ? null : d)}
+                  className={chipCls(obsah === d)}
+                >
+                  {k.label} ({obsahCounts.get(d)})
+                </button>
+              );
+            })}
+        </div>
+      )}
 
       {/* Admin lišta: ručné ceny + uložiť */}
       <div className="mt-4 flex flex-wrap items-center justify-center gap-4">

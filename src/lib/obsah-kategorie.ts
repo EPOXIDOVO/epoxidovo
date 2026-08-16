@@ -89,3 +89,50 @@ export function obsahKategoria(m: Material): string {
 export function obsahLabel(id: string): string {
   return OBSAH_KATEGORIE.find((k) => k.id === id)?.label ?? id;
 }
+
+/**
+ * Horná úroveň — 7 skupín zoradených podľa toho, ako sa podlaha stavia:
+ * priprav → napenetruj → nalej → zalakuj → ozdob (+ prísady a náradie).
+ * Deti odkazujú na id z OBSAH_KATEGORIE; „ostatne" (mostíky, membrány)
+ * patrí k príprave podkladu.
+ */
+export const SKUPINY: { id: string; label: string; popis: string; deti: string[] }[] = [
+  {
+    id: "priprava",
+    label: "Príprava podkladu",
+    popis:
+      "Prvý krok každej podlahy — vyrovnanie nivelačkou, oprava zničeného betónu, vsypy do čerstvých betónov aj spojovacie mostíky a membrány. Rovný a pevný podklad je polovica úspechu.",
+    deti: ["nivelacie", "potery", "vsypy", "ostatne"],
+  },
+  { id: "penetracie", label: "Penetrácie", popis: "", deti: ["penetracie"] },
+  { id: "hlavne", label: "Hlavné vrstvy", popis: "", deti: ["hlavne"] },
+  { id: "laky", label: "Vrchné laky", popis: "", deti: ["laky"] },
+  {
+    id: "dekoracia",
+    label: "Dekorácia",
+    popis:
+      "Chipsy, perleťové kamienky a kompletný systém kamenného koberca — kamene aj spojivá. Dizajn, protišmyk a povrchy príjemné naboso.",
+    deti: ["chipsy", "kamenny-koberec"],
+  },
+  {
+    id: "prisady",
+    label: "Prísady a plnivá",
+    popis:
+      "Kremičité piesky, plnivá, tixotropné prísady, urýchľovače a tmely — drobnosti, ktoré menia spotrebu, protišmyk aj rýchlosť vytvrdnutia.",
+    deti: ["prisady", "piesky"],
+  },
+  { id: "naradie", label: "Náradie", popis: "", deti: ["naradie"] },
+];
+
+/** Skupina, do ktorej patrí obsahová kategória. */
+export function skupinaPreObsah(obsahId: string): string {
+  return SKUPINY.find((s) => s.deti.includes(obsahId))?.id ?? "priprava";
+}
+
+/** Popis skupiny — vlastný, alebo popis jediného dieťaťa. */
+export function skupinaPopis(id: string): string {
+  const sk = SKUPINY.find((s) => s.id === id);
+  if (!sk) return "";
+  if (sk.popis) return sk.popis;
+  return OBSAH_KATEGORIE.find((k) => k.id === sk.deti[0])?.popis ?? "";
+}

@@ -6,7 +6,7 @@ import { Search, X } from "lucide-react";
 import { Container } from "@/components/ui/Container";
 import { ProductVisual } from "@/components/eshop/ProductVisual";
 import { MATERIALY, VYROBCOVIA, type Vyrobca, type Material } from "@/lib/materialy";
-import { OBSAH_KATEGORIE, obsahKategoria, normalize } from "@/lib/obsah-kategorie";
+import { OBSAH_KATEGORIE, SKUPINY, obsahKategoria, skupinaPreObsah, skupinaPopis, normalize } from "@/lib/obsah-kategorie";
 import { VYROBCA_LOGO } from "@/lib/vyrobca-logo";
 
 /**
@@ -30,6 +30,7 @@ function chybaZoznam(m: Material): string[] {
 type AdminFilter = "vsetko-chyba" | "fotka" | "cena" | "spotreba" | "tech. list" | null;
 
 export function EshopClient() {
+  const [skupina, setSkupina] = React.useState<string | null>(null);
   const [obsah, setObsah] = React.useState<string | null>(null);
   const [vyrobca, setVyrobca] = React.useState<Vyrobca | null>(null);
   const [query, setQuery] = React.useState("");
@@ -44,7 +45,9 @@ export function EshopClient() {
   const filtered = React.useMemo(() => {
     const q = normalize(query.trim());
     const base = MATERIALY.filter((m) => {
-      if (obsah && obsahKategoria(m) !== obsah) return false;
+      const kat = obsahKategoria(m);
+      if (obsah && kat !== obsah) return false;
+      if (!obsah && skupina && skupinaPreObsah(kat) !== skupina) return false;
       if (vyrobca && m.vyrobca !== vyrobca) return false;
       if (q) {
         const hay = normalize(`${m.nazov} ${m.sku}`);
@@ -60,7 +63,7 @@ export function EshopClient() {
       return [...base].sort((a, b) => chybaZoznam(b).length - chybaZoznam(a).length);
     }
     return base;
-  }, [obsah, vyrobca, query, admin, adminFilter]);
+  }, [obsah, skupina, vyrobca, query, admin, adminFilter]);
 
   const vyrobcaCounts = React.useMemo(() => {
     const c = new Map<Vyrobca, number>();
@@ -130,27 +133,56 @@ export function EshopClient() {
         )}
       </div>
 
-      {/* Horné záložky — obsahové kategórie */}
+      {/* Horné záložky — skupiny podľa skladby podlahy */}
       <div className="mt-5 flex flex-wrap items-center justify-center gap-2">
-        <button type="button" onClick={() => setObsah(null)} className={chipCls(obsah === null)}>
+        <button
+          type="button"
+          onClick={() => { setSkupina(null); setObsah(null); }}
+          className={chipCls(skupina === null)}
+        >
           Všetko
         </button>
-        {OBSAH_KATEGORIE.filter((k) => (obsahCounts.get(k.id) ?? 0) > 0).map((k) => (
+        {SKUPINY.map((sk, i) => (
           <button
-            key={k.id}
+            key={sk.id}
             type="button"
-            onClick={() => setObsah(obsah === k.id ? null : k.id)}
-            className={chipCls(obsah === k.id)}
+            onClick={() => {
+              setObsah(null);
+              setSkupina(skupina === sk.id ? null : sk.id);
+            }}
+            className={chipCls(skupina === sk.id)}
           >
-            {k.label}
+            {i + 1 <= 5 ? `${i + 1}. ` : ""}{sk.label}
           </button>
         ))}
       </div>
+      {/* Druhá úroveň — deti aktívnej skupiny (len ak ich je viac) */}
+      {skupina && (SKUPINY.find((sk) => sk.id === skupina)?.deti.length ?? 0) > 1 && (
+        <div className="mt-2.5 flex flex-wrap items-center justify-center gap-2">
+          {SKUPINY.find((sk) => sk.id === skupina)!.deti
+            .filter((d) => (obsahCounts.get(d) ?? 0) > 0)
+            .map((d) => {
+              const k = OBSAH_KATEGORIE.find((x) => x.id === d)!;
+              return (
+                <button
+                  key={d}
+                  type="button"
+                  onClick={() => setObsah(obsah === d ? null : d)}
+                  className={chipCls(obsah === d)}
+                >
+                  {k.label}
+                </button>
+              );
+            })}
+        </div>
+      )}
 
       {/* Popis zvolenej kategórie — pomôcka pre zákazníka aj SEO */}
-      {obsah && (
+      {(obsah || skupina) && (
         <p className="mt-4 max-w-3xl mx-auto text-center text-sm text-[#4a5478] leading-relaxed bg-white border border-zinc-200 rounded-2xl px-5 py-3.5">
-          {OBSAH_KATEGORIE.find((k) => k.id === obsah)?.popis}
+          {obsah
+            ? OBSAH_KATEGORIE.find((k) => k.id === obsah)?.popis
+            : skupinaPopis(skupina!)}
         </p>
       )}
 
