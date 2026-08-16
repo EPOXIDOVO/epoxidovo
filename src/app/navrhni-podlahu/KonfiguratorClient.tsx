@@ -72,6 +72,16 @@ function DiceIcon({ pips }: { pips: 1 | 2 | 3 | 4 | 5 }) {
   );
 }
 
+/** Vzhľad → slug vzorkovníka pre daný typ podlahy. */
+const VZORKOVNIK_SLUG: Record<string, string> = {
+  jednofarebna: "jednofarebne",
+  chipsy: "chipsove",
+  metalik: "metalicke",
+  marble: "mramorove",
+  beton_look: "beton-look",
+  priemyselna: "priemyselne",
+};
+
 const SESSION_KEY = "epx-konfigurator-v1";
 
 type KrokId = "co" | "kde" | "priestor" | "podklad" | "stav" | "plocha" | "vzhlad" | "finis";
@@ -556,83 +566,83 @@ export function KonfiguratorClient() {
                       const foto = FOTO_VZHLAD[m.id];
                       return (
                         <div key={m.id} className="flex flex-col gap-2 md:gap-2.5">
-                        <button
-                          type="button"
-                          disabled={!m.dostupny}
-                          title={m.dovod}
-                          onClick={() => m.dostupny && vyberADalej({ vzhlad: m.id })}
-                          className={`group relative flex flex-col rounded-2xl overflow-hidden bg-[#5c2c18] text-left transition-all duration-300 focus:outline-none focus-visible:ring-2 focus-visible:ring-[#3db6e8] ${
-                            m.dostupny
-                              ? "hover:-translate-y-1 hover:shadow-[0_18px_40px_rgba(0,0,0,0.35)]"
-                              : "opacity-50 cursor-not-allowed"
-                          } ${
-                            vybrata
-                              ? "ring-4 ring-[#3db6e8] shadow-[0_0_0_4px_rgba(61,182,232,0.3),0_18px_40px_rgba(0,0,0,0.35)]"
-                              : ""
-                          }`}
-                        >
-                          {vybrata && (
-                            <span className="absolute top-2 right-2 z-10 inline-flex items-center justify-center w-7 h-7 rounded-full bg-[#3db6e8] text-white shadow-lg">
-                              <Check className="w-5 h-5" aria-hidden />
-                            </span>
-                          )}
-                          <div className="px-3 pt-3 pb-2.5 md:px-4 md:pt-4 md:pb-3 flex flex-col">
-                            <div className="w-6 h-6 md:w-8 md:h-8 mb-1.5 md:mb-2 rounded-md bg-white text-[#5c2c18] group-hover:text-[#3db6e8] flex items-center justify-center p-1 md:p-1.5 transition-colors duration-500 shrink-0">
-                              <DiceIcon pips={((idx % 5) + 1) as 1 | 2 | 3 | 4 | 5} />
-                            </div>
-                            <h3 className="text-[14px] leading-[1.12] md:text-lg lg:text-xl font-black text-white tracking-tight md:leading-[1.05] line-clamp-2">
-                              {m.label}
-                            </h3>
-                          </div>
-                          <div className="relative overflow-hidden h-[120px] md:h-[clamp(104px,15.5vh,190px)] bg-[#4a2313]">
-                            {foto?.src ? (
-                              <Image
-                                src={foto.src}
-                                alt=""
-                                fill
-                                sizes="(max-width: 768px) 50vw, 25vw"
-                                quality={85}
-                                className="object-cover group-hover:scale-105 transition-transform duration-700"
-                              />
-                            ) : (
-                              <span className="absolute inset-0 flex items-center justify-center px-3 text-center text-[11px] font-semibold text-white/60">
-                                Fotka sa dopĺňa
-                              </span>
-                            )}
-                          </div>
-                        </button>
-
-                          {/* dve varianty toho istého typu — ako stĺpce na webe */}
-                          {(GALERIA_VZHLAD[m.id] ?? [null, null]).map((src, i) => (
-                            <button
-                              key={i}
-                              type="button"
-                              disabled={!m.dostupny}
-                              onClick={() => m.dostupny && vyberADalej({ vzhlad: m.id })}
-                              className={`relative block w-full h-[86px] md:h-[clamp(74px,10.8vh,150px)] rounded-xl overflow-hidden ${
-                                src ? "" : "border border-dashed border-zinc-300 bg-zinc-100"
-                              } ${m.dostupny ? "" : "opacity-50 cursor-not-allowed"}`}
+                          {/* celý stĺpec je JEDNA odpoveď — klik kdekoľvek vyberie tento vzhľad */}
+                          <button
+                            type="button"
+                            disabled={!m.dostupny}
+                            title={m.dovod}
+                            onClick={() => m.dostupny && vyberADalej({ vzhlad: m.id })}
+                            className={`group relative flex flex-col gap-2 md:gap-2.5 rounded-2xl p-1.5 -m-1.5 text-left transition-all duration-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-[#3db6e8] ${
+                              m.dostupny
+                                ? "hover:bg-[#e3f3fb] hover:ring-2 hover:ring-[#3db6e8]"
+                                : "opacity-50 cursor-not-allowed"
+                            } ${vybrata ? "bg-[#e3f3fb] ring-2 ring-[#3db6e8]" : ""}`}
+                          >
+                            <span
+                              className={`relative flex flex-col rounded-2xl overflow-hidden bg-[#5c2c18] transition-transform duration-300 ${
+                                m.dostupny ? "group-hover:-translate-y-0.5" : ""
+                              }`}
                             >
-                              {src ? (
-                                <Image
-                                  src={src}
-                                  alt=""
-                                  fill
-                                  sizes="(max-width: 768px) 50vw, 17vw"
-                                  quality={75}
-                                  className="object-cover"
-                                />
-                              ) : (
-                                <span className="absolute inset-0 flex items-center justify-center text-[11px] font-semibold text-zinc-400">
-                                  Fotka sa dopĺňa
+                              {vybrata && (
+                                <span className="absolute top-2 right-2 z-10 inline-flex items-center justify-center w-7 h-7 rounded-full bg-[#3db6e8] text-white shadow-lg">
+                                  <Check className="w-5 h-5" aria-hidden />
                                 </span>
                               )}
-                            </button>
-                          ))}
+                              <span className="px-3 pt-3 pb-2.5 md:px-4 md:pt-4 md:pb-3 flex flex-col">
+                                <span className="w-6 h-6 md:w-8 md:h-8 mb-1.5 md:mb-2 rounded-md bg-white text-[#5c2c18] group-hover:text-[#3db6e8] flex items-center justify-center p-1 md:p-1.5 transition-colors duration-500 shrink-0">
+                                  <DiceIcon pips={((idx % 5) + 1) as 1 | 2 | 3 | 4 | 5} />
+                                </span>
+                                <h3 className="text-[14px] leading-[1.12] md:text-lg lg:text-xl font-black text-white tracking-tight md:leading-[1.05] line-clamp-2">
+                                  {m.label}
+                                </h3>
+                              </span>
+                              <span className="relative block overflow-hidden h-[120px] md:h-[clamp(104px,15.5vh,190px)] bg-[#4a2313]">
+                                {foto?.src ? (
+                                  <Image
+                                    src={foto.src}
+                                    alt=""
+                                    fill
+                                    sizes="(max-width: 768px) 50vw, 25vw"
+                                    quality={85}
+                                    className="object-cover group-hover:scale-105 transition-transform duration-700"
+                                  />
+                                ) : (
+                                  <span className="absolute inset-0 flex items-center justify-center px-3 text-center text-[11px] font-semibold text-white/60">
+                                    Fotka sa dopĺňa
+                                  </span>
+                                )}
+                              </span>
+                            </span>
 
-                          {/* pod každým stĺpcom vlastný vzorkovník — sú to iné podlahy */}
+                            {/* dve varianty toho istého typu — ako stĺpce na webe */}
+                            {(GALERIA_VZHLAD[m.id] ?? [null, null]).map((src, i) => (
+                              <span
+                                key={i}
+                                className={`relative block w-full h-[86px] md:h-[clamp(74px,10.8vh,150px)] rounded-xl overflow-hidden ${
+                                  src ? "" : "border border-dashed border-zinc-300 bg-zinc-100"
+                                }`}
+                              >
+                                {src ? (
+                                  <Image
+                                    src={src}
+                                    alt=""
+                                    fill
+                                    sizes="(max-width: 768px) 50vw, 17vw"
+                                    quality={75}
+                                    className="object-cover"
+                                  />
+                                ) : (
+                                  <span className="absolute inset-0 flex items-center justify-center text-[11px] font-semibold text-zinc-400">
+                                    Fotka sa dopĺňa
+                                  </span>
+                                )}
+                              </span>
+                            ))}
+                          </button>
+
+                          {/* vzorkovník práve tohto typu podlahy */}
                           <Link
-                            href="/vzorkovnik"
+                            href={`/vzorkovnik?typ=${VZORKOVNIK_SLUG[m.id] ?? ""}`}
                             aria-label={`Celý vzorkovník — ${m.label}`}
                             className="inline-flex items-center justify-center px-3 py-2 md:py-2.5 rounded-full bg-[#3db6e8] text-white font-semibold text-[12px] md:text-sm whitespace-nowrap hover:bg-[#1a8cc4] shadow-[0_6px_20px_rgba(61,182,232,0.35)] hover:-translate-y-0.5 transition-all duration-300"
                           >
