@@ -39,7 +39,21 @@ export function EshopClient() {
 
   // Admin režim cez ?admin=1 (statický export — čítame location, nie useSearchParams)
   React.useEffect(() => {
-    setAdmin(new URLSearchParams(window.location.search).get("admin") === "1");
+    const q = new URLSearchParams(window.location.search);
+    setAdmin(q.get("admin") === "1");
+    // deep-linky z kategóriových dlaždíc: /eshop?skupina=hlavne&kat=nivelacie
+    const sk = q.get("skupina");
+    const kt = q.get("kat");
+    if (sk && SKUPINY.some((x) => x.id === sk)) setSkupina(sk);
+    if (kt && OBSAH_KATEGORIE.some((x) => x.id === kt)) {
+      setObsah(kt);
+      if (!sk) setSkupina(skupinaPreObsah(kt));
+    }
+    if (sk || kt) {
+      setTimeout(() => {
+        document.getElementById("katalog")?.scrollIntoView({ behavior: "smooth", block: "start" });
+      }, 150);
+    }
   }, []);
 
   // Poradie podľa predajnosti — bestsellery dopredu, zvyšok v pôvodnom poradí

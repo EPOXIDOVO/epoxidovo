@@ -4,7 +4,7 @@ import { BreadcrumbsJsonLd } from "@/components/seo/BreadcrumbsJsonLd";
 import { EshopClient } from "./EshopClient";
 import { MATERIALY } from "@/lib/materialy";
 import Image from "next/image";
-import { Phone } from "lucide-react";
+import { Phone, ChevronRight, ArrowDown } from "lucide-react";
 import { SITE } from "@/lib/site";
 
 export const metadata: Metadata = {
@@ -28,18 +28,21 @@ export default function EshopPage() {
           { name: "E-shop", path: "/eshop" },
         ]}
       />
-      {/* Hero */}
+      {/* ── VIDEO HERO — nahraj public/video/eshop-hero.mp4 a hrá; dovtedy poster ── */}
       <section className="relative isolate overflow-hidden bg-[#0a0f1e] text-white">
-        <div
-          aria-hidden
-          className="pointer-events-none absolute inset-0"
-          style={{
-            background:
-              "radial-gradient(70% 60% at 50% 0%, rgba(61,182,232,0.22), transparent 75%)",
-          }}
-        />
-        <Container size="xl" className="pt-24 md:pt-32 pb-10 md:pb-14 relative text-center">
-          <h1 className="text-3xl sm:text-4xl md:text-5xl font-extrabold tracking-tight leading-tight">
+        <video
+          className="absolute inset-0 w-full h-full object-cover opacity-60"
+          autoPlay
+          muted
+          loop
+          playsInline
+          poster="/images/categories/metalicke.jpg"
+        >
+          <source src="/video/eshop-hero.mp4" type="video/mp4" />
+        </video>
+        <div aria-hidden className="absolute inset-0 bg-gradient-to-t from-[#0a0f1e] via-[#0a0f1e]/40 to-[#0a0f1e]/70" />
+        <Container size="xl" className="relative pt-28 md:pt-40 pb-16 md:pb-24 text-center">
+          <h1 className="text-3xl sm:text-4xl md:text-6xl font-extrabold tracking-tight leading-tight" style={{ textWrap: "balance" }}>
             Materiály a náradie
             <br />
             <span className="text-[#3db6e8]">na epoxidové podlahy</span>
@@ -49,10 +52,105 @@ export default function EshopPage() {
             používame na vlastných realizáciách. Konečné ceny, predaj v celých
             baleniach.
           </p>
+          <a
+            href="#katalog"
+            className="mt-8 inline-flex items-center gap-2 px-8 py-4 rounded-full bg-[#f97316] text-white font-extrabold text-lg hover:bg-[#ea580c] shadow-[0_14px_40px_rgba(249,115,22,0.5)] transition-colors"
+          >
+            Prezrieť celý katalóg
+            <ArrowDown className="w-5 h-5" aria-hidden />
+          </a>
         </Container>
       </section>
 
-      <div className="bg-[#f7f7f4]">
+      {/* ── KATEGÓRIOVÉ DLAŽDICE (štýl Epodex) — fotka, pill, podlinky ── */}
+      <section className="bg-white">
+        <Container size="xl" className="py-10 md:py-14">
+          <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-4">
+            {[
+              {
+                label: "EPOXIDOVÉ ŽIVICE",
+                img: "/images/categories/metalicke.jpg",
+                linky: [
+                  { text: "Penetrácie", href: "/eshop?skupina=penetracie#katalog" },
+                  { text: "Hlavné vrstvy a nátery", href: "/eshop?skupina=hlavne#katalog" },
+                  { text: "Vrchné laky", href: "/eshop?skupina=laky#katalog" },
+                ],
+              },
+              {
+                label: "KAMENNÝ KOBEREC",
+                img: "/images/categories/mramorove.jpg",
+                linky: [
+                  { text: "Kamene a spojivá", href: "/eshop?skupina=kamenny-koberec#katalog" },
+                  { text: "Chipsy a posypy", href: "/eshop?kat=chipsy#katalog" },
+                ],
+              },
+              {
+                label: "PRÍPRAVA PODKLADU",
+                img: "/images/categories/jednofarebne.jpg",
+                linky: [
+                  { text: "Nivelácie a potery", href: "/eshop?skupina=priprava#katalog" },
+                  { text: "Prísady a plnivá", href: "/eshop?skupina=prisady#katalog" },
+                ],
+              },
+              {
+                label: "NÁRADIE",
+                img: "/images/realizacie/r-35.jpg",
+                linky: [
+                  { text: "Valce, stierky a pomôcky", href: "/eshop?skupina=naradie#katalog" },
+                ],
+              },
+              { label: "MIKROCEMENT", img: "/images/hero/byvanie-v2.webp", coskoro: true },
+              { label: "FARBY A DEKORATÍVNE STENY", img: "/images/realizacie/r-17.jpg", coskoro: true },
+            ].map((d) => (
+              <div
+                key={d.label}
+                className={`relative rounded-3xl overflow-hidden border border-zinc-200 bg-white flex flex-col ${d.coskoro ? "select-none" : ""}`}
+              >
+                <div className="relative aspect-[16/10]">
+                  <Image
+                    src={d.img}
+                    alt=""
+                    fill
+                    sizes="(max-width: 640px) 100vw, (max-width: 1280px) 50vw, 33vw"
+                    quality={85}
+                    className={`object-cover ${d.coskoro ? "grayscale-[0.5] opacity-70" : ""}`}
+                  />
+                  <span className="absolute top-4 left-4 px-4 py-1.5 rounded-xl bg-white shadow text-[#0e1a3b] text-xs md:text-sm font-extrabold tracking-wide">
+                    {d.label}
+                  </span>
+                  {d.coskoro && (
+                    <span className="absolute top-4 right-4 px-3 py-1 rounded-full bg-[#f97316] text-white text-xs font-bold uppercase tracking-wide shadow">
+                      Čoskoro
+                    </span>
+                  )}
+                </div>
+                <div className="divide-y divide-zinc-100">
+                  {d.coskoro ? (
+                    <div className="flex items-center justify-between px-5 py-3.5 text-sm font-semibold text-zinc-400 cursor-default">
+                      Pripravujeme
+                    </div>
+                  ) : (
+                    d.linky!.map((l) => (
+                      // plné <a> (nie next/Link) — navigácia na tú istú stránku
+                      // musí re-mountnúť katalóg, aby sa deep-link aplikoval
+                      <a
+                        key={l.text}
+                        href={l.href}
+                        className="flex items-center justify-between px-5 py-3.5 text-sm font-semibold text-zinc-800 hover:bg-[#e3f3fb]/50 hover:text-[#1a8cc4] transition-colors"
+                      >
+                        {l.text}
+                        <ChevronRight className="w-4 h-4 text-zinc-400" aria-hidden />
+                      </a>
+                    ))
+                  )}
+                </div>
+              </div>
+            ))}
+          </div>
+        </Container>
+      </section>
+
+      <div id="katalog" className="bg-[#f7f7f4] scroll-mt-20">
         <EshopClient />
       </div>
 
