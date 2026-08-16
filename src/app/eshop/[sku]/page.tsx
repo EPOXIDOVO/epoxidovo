@@ -21,6 +21,10 @@ import {
 } from "@/content/topstone-metallic-vzory";
 import { BaleniaKalkulacka } from "./BaleniaKalkulacka";
 import { HrubkaKalkulacka } from "./HrubkaKalkulacka";
+import { RalNahlad } from "./RalNahlad";
+import { KombinujSystem } from "./KombinujSystem";
+import { PorovnanieCien } from "./PorovnanieCien";
+import { PridatDoKosika, type SkladbaPolozka } from "./PridatDoKosika";
 
 interface PageProps {
   params: Promise<{ sku: string }>;
@@ -60,6 +64,38 @@ export default async function ProduktPage({ params }: PageProps) {
 
   const refFoto = referencnaFotka(m);
   const jePu = PU_2MM_SKUS.includes(m.sku);
+
+  // Odporúčaná skladba do košíka — vrstvy od rovnakého výrobcu v poradí
+  // aplikácie; vrchný lak sa nepridáva, ak JE produkt poslednou vrstvou.
+  const doKosika: SkladbaPolozka = {
+    sku: m.sku,
+    nazov: m.nazov,
+    cena: m.cena_eur_s_dph,
+    foto: m.foto,
+    krok:
+      m.kategoria === "Penetrácia"
+        ? "1. Penetrácia"
+        : m.kategoria === "Vrchný lak"
+          ? "3. Vrchný lak"
+          : "2. Hlavná vrstva",
+  };
+  const prvy = (kat: string): SkladbaPolozka | null => {
+    const p = MATERIALY.find(
+      (x) => x.vyrobca === m.vyrobca && x.kategoria === kat && x.sku !== m.sku && x.cena_eur_s_dph > 0,
+    );
+    return p
+      ? { sku: p.sku, nazov: p.nazov, cena: p.cena_eur_s_dph, foto: p.foto,
+          krok: kat === "Penetrácia" ? "1. Penetrácia" : kat === "Vrchný lak" ? "3. Vrchný lak" : "2. Hlavná vrstva" }
+      : null;
+  };
+  let skladba: SkladbaPolozka[] = [doKosika];
+  if (m.kategoria === "Hlavná vrstva") {
+    skladba = [prvy("Penetrácia"), doKosika, prvy("Vrchný lak")].filter(Boolean) as SkladbaPolozka[];
+  } else if (m.kategoria === "Penetrácia") {
+    skladba = [doKosika, prvy("Hlavná vrstva"), prvy("Vrchný lak")].filter(Boolean) as SkladbaPolozka[];
+  } else if (m.kategoria === "Vrchný lak") {
+    skladba = [prvy("Penetrácia"), prvy("Hlavná vrstva"), doKosika].filter(Boolean) as SkladbaPolozka[];
+  }
   const piesky = m.kategoria === "Hlavná vrstva"
     ? PIESOK_SKUS.map((s) => getMaterial(s)).filter(
         (p): p is NonNullable<typeof p> => p != null,
@@ -145,7 +181,9 @@ export default async function ProduktPage({ params }: PageProps) {
                 )}
               </div>
 
-              {refFoto && (
+              {refFoto && m.kategoria === "Hlavná vrstva" ? (
+                <RalNahlad fotoSrc={refFoto.src} fotoLabel={refFoto.label} />
+              ) : refFoto ? (
                 <figure className="relative aspect-[16/9] rounded-3xl overflow-hidden">
                   <Image
                     src={refFoto.src}
@@ -159,7 +197,7 @@ export default async function ProduktPage({ params }: PageProps) {
                     {refFoto.label}
                   </figcaption>
                 </figure>
-              )}
+              ) : null}
             </div>
 
             {/* Info */}
@@ -204,11 +242,14 @@ export default async function ProduktPage({ params }: PageProps) {
                 </p>
               )}
 
-              {/* Objednávka — bez košíka, telefón/email s prefillnutým SKU */}
+              {/* Objednávka — košík (s ponukou skladby) + telefón/email */}
               <div className="mt-6 flex flex-wrap gap-3">
+                {m.cena_eur_s_dph > 0 && (
+                  <PridatDoKosika produkt={doKosika} skladba={skladba} />
+                )}
                 <a
                   href={`tel:${SITE.contact.phoneRaw}`}
-                  className="inline-flex items-center gap-2 px-6 py-3.5 rounded-full bg-[#f97316] text-white font-bold hover:bg-[#ea580c] shadow-[0_10px_28px_rgba(249,115,22,0.45)] transition-colors"
+                  className="inline-flex items-center gap-2 px-6 py-3.5 rounded-full border-2 border-zinc-300 text-zinc-800 font-bold hover:border-zinc-500 hover:bg-white transition-colors"
                 >
                   <Phone className="w-4 h-4" aria-hidden />
                   Objednať: {SITE.contact.phone}
@@ -243,6 +284,31 @@ export default async function ProduktPage({ params }: PageProps) {
                   />
                 </div>
               ) : null}
+
+              <PorovnanieCien sku={m.sku} nasaCena={m.cena_eur_s_dph} />
+
+              <KombinujSystem m={m} />
+
+              {/* Postup aplikácie — obsah doplní user zo svojho generátora
+                  (NajCRM podklady); zatiaľ len viditeľný vypnutý button */}
+              <section className="mt-8 rounded-2xl border border-zinc-200 bg-zinc-50 p-5">
+                <h2 className="text-lg font-extrabold text-zinc-900">
+                  📋 Postup aplikácie
+                </h2>
+                <p className="mt-1 text-sm text-zinc-500 max-w-xl">
+                  Krok za krokom, ako {m.nazov} správne namiešať a aplikovať —
+                  z našej realizačnej praxe. Pripravujeme.
+                </p>
+                <button
+                  type="button"
+                  disabled
+                  aria-disabled="true"
+                  title="Pripravujeme"
+                  className="mt-3 inline-flex items-center gap-2 px-6 py-3 rounded-full border-2 border-zinc-200 font-bold text-zinc-400 cursor-not-allowed whitespace-nowrap"
+                >
+                  Zobraziť postup aplikácie (čoskoro)
+                </button>
+              </section>
 
               {/* Technické údaje — len vyplnené riadky */}
               {techRows.length > 0 && (

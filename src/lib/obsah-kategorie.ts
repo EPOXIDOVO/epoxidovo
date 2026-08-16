@@ -107,19 +107,13 @@ export const SKUPINY: { id: string; label: string; popis: string; deti: string[]
   { id: "penetracie", label: "Penetrácie", popis: "", deti: ["penetracie"] },
   { id: "hlavne", label: "Hlavné vrstvy", popis: "", deti: ["hlavne"] },
   { id: "laky", label: "Vrchné laky", popis: "", deti: ["laky"] },
-  {
-    id: "dekoracia",
-    label: "Dekorácia",
-    popis:
-      "Chipsy, perleťové kamienky a kompletný systém kamenného koberca — kamene aj spojivá. Dizajn, protišmyk a povrchy príjemné naboso.",
-    deti: ["chipsy", "kamenny-koberec"],
-  },
+  { id: "kamenny-koberec", label: "Kamenný koberec", popis: "", deti: ["kamenny-koberec"] },
   {
     id: "prisady",
     label: "Prísady a plnivá",
     popis:
-      "Kremičité piesky, plnivá, tixotropné prísady, urýchľovače a tmely — drobnosti, ktoré menia spotrebu, protišmyk aj rýchlosť vytvrdnutia.",
-    deti: ["prisady", "piesky"],
+      "Kremičité piesky, plnivá, dekoračné chipsy, tixotropné prísady, urýchľovače a tmely — drobnosti, ktoré menia spotrebu, protišmyk, dizajn aj rýchlosť vytvrdnutia.",
+    deti: ["prisady", "piesky", "chipsy"],
   },
   { id: "naradie", label: "Náradie", popis: "", deti: ["naradie"] },
 ];

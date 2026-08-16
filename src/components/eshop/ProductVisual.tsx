@@ -1,5 +1,5 @@
 import Image from "next/image";
-import type { Material } from "@/lib/materialy";
+import { referencnaFotka, type Material } from "@/lib/materialy";
 
 /**
  * Produktový vizuál e-shopu.
@@ -24,6 +24,14 @@ export function ProductVisual({
   const m = material;
   const isCard = variant === "card";
 
+  // Hover fotka na karte: vlastná foto_hover, dummy = realizačná fotka
+  // podlahy pri hlavných vrstvách (kým si user nenahrá produktové hover fotky).
+  const hoverSrc =
+    isCard
+      ? m.foto_hover ??
+        (m.kategoria === "Hlavná vrstva" ? referencnaFotka(m)?.src ?? null : null)
+      : null;
+
   if (m.foto) {
     // Packshot balenia (reálny sud/vrece na bielom pozadí) — čistý contain.
     if (m.foto_typ !== "vzorka") {
@@ -37,8 +45,18 @@ export function ProductVisual({
             fill
             sizes={isCard ? "(max-width: 768px) 50vw, 25vw" : "(max-width: 1024px) 100vw, 50vw"}
             quality={85}
-            className={`object-contain ${isCard ? "p-2" : "p-6"}`}
+            className={`object-contain ${isCard ? "p-2" : "p-6"} ${hoverSrc ? "transition-opacity duration-300 group-hover:opacity-0" : ""}`}
           />
+          {hoverSrc && (
+            <Image
+              src={hoverSrc}
+              alt=""
+              fill
+              sizes="(max-width: 768px) 50vw, 25vw"
+              quality={85}
+              className="object-cover opacity-0 transition-opacity duration-300 group-hover:opacity-100"
+            />
+          )}
         </div>
       );
     }

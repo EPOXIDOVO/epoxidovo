@@ -1,3 +1,5 @@
+import { CartProvider } from "@/lib/cart";
+import { Toaster } from "@/components/ui/Toast";
 import { CursorAura } from "@/components/ui/CursorAura";
 import { MedvedB2B } from "@/components/eshop/MedvedB2B";
 
@@ -12,9 +14,12 @@ export default function EshopLayout({
 }) {
   return (
     <>
-      <CursorAura />
-      <MedvedB2B />
-      {children}
+      <CartProvider>
+        <CursorAura />
+        <MedvedB2B />
+        <Toaster />
+        {children}
+      </CartProvider>
     </>
   );
 }

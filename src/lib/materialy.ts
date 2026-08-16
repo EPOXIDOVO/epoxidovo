@@ -1,6 +1,7 @@
 import data from "@/content/materialy.json";
 import extra from "@/content/materialy-extra.json";
 import cenyOverride from "@/content/ceny-override.json";
+import tlLokalne from "@/content/tl-lokalne.json";
 
 /**
  * Materiály na predaj — dva zdroje:
@@ -48,6 +49,8 @@ export interface Material {
   foto_typ?: "sud" | "vzorka" | null;
   /** Reálna fotka sudu/balenia ako malý inset na vzorke (vľavo dole). */
   foto_sud?: string | null;
+  /** Fotka, na ktorú sa karta prepne pri hoveri (user si nahrá vlastné). */
+  foto_hover?: string | null;
   foto_zdroj: string | null;
   foto_licencia: string | null;
 }
@@ -69,11 +72,16 @@ export const CENA_Z_IMPORTU: Record<string, { cena: number; pevna: boolean }> =
 export const MATERIALY: Material[] = [
   ...(data.produkty as Material[]),
   ...(extra.produkty as Material[]),
-].map((m) =>
-  CENY_OVERRIDE[m.sku] != null
-    ? { ...m, cena_eur_s_dph: CENY_OVERRIDE[m.sku], cena_pevna: true }
-    : m,
-);
+].map((m) => ({
+  ...m,
+  ...(CENY_OVERRIDE[m.sku] != null
+    ? { cena_eur_s_dph: CENY_OVERRIDE[m.sku], cena_pevna: true }
+    : null),
+  // lokálne kópie technických listov — button otvára PDF z našej domény
+  ...((tlLokalne.tl as Record<string, string>)[m.sku]
+    ? { technicky_list: (tlLokalne.tl as Record<string, string>)[m.sku] }
+    : null),
+}));
 export const MATERIALY_SNAPSHOT: string = data.vygenerovane as string;
 
 export const KATEGORIE: Kategoria[] = [

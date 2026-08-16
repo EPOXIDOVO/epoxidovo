@@ -42,6 +42,19 @@ export function EshopClient() {
     setAdmin(new URLSearchParams(window.location.search).get("admin") === "1");
   }, []);
 
+  // Poradie podľa predajnosti — bestsellery dopredu, zvyšok v pôvodnom poradí
+  const [predajnost, setPredajnost] = React.useState<Map<string, number>>(new Map());
+  React.useEffect(() => {
+    fetch("/api/eshop/poradie")
+      .then((r) => (r.ok ? r.json() : null))
+      .then((j: { poradie?: string[] } | null) => {
+        if (j?.poradie?.length) {
+          setPredajnost(new Map(j.poradie.map((sku, i) => [sku, i])));
+        }
+      })
+      .catch(() => {});
+  }, []);
+
   const filtered = React.useMemo(() => {
     const q = normalize(query.trim());
     const base = MATERIALY.filter((m) => {
@@ -62,8 +75,15 @@ export function EshopClient() {
     if (admin && adminFilter) {
       return [...base].sort((a, b) => chybaZoznam(b).length - chybaZoznam(a).length);
     }
+    if (predajnost.size > 0) {
+      // stabilný sort — nepredávané ostávajú v pôvodnom poradí za bestsellermi
+      return [...base].sort(
+        (a, b) =>
+          (predajnost.get(a.sku) ?? Infinity) - (predajnost.get(b.sku) ?? Infinity),
+      );
+    }
     return base;
-  }, [obsah, skupina, vyrobca, query, admin, adminFilter]);
+  }, [obsah, skupina, vyrobca, query, admin, adminFilter, predajnost]);
 
   const vyrobcaCounts = React.useMemo(() => {
     const c = new Map<Vyrobca, number>();
@@ -191,7 +211,7 @@ export function EshopClient() {
             }}
             className={chipCls(skupina === sk.id)}
           >
-            {i + 1 <= 5 ? `${i + 1}. ` : ""}{sk.label}
+            {i + 1 <= 4 ? `${i + 1}. ` : ""}{sk.label}
           </button>
         ))}
       </div>

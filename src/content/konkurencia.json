@@ -1,0 +1,278 @@
+{
+ "_aktualizovane": "2026-08-16",
+ "_poznamka": "Ceny konkurencie s DPH za rovnaké balenie; CZK prepočítané kurzom 25,2. Zdroj: verejné e-shopy.",
+ "produkty": {
+  "498512": [
+   {
+    "obchod": "chemieprostavbu.cz",
+    "url": "https://www.chemieprostavbu.cz/sikafloor-161/",
+    "cena_eur": 518.57
+   },
+   {
+    "obchod": "centrostav.cz",
+    "url": "https://centrostav.cz/?code=150634&page=produkt",
+    "cena_eur": 574.76
+   }
+  ],
+  "SIKAFLOOR-151": [
+   {
+    "obchod": "ahesshop.cz",
+    "url": "https://www.ahesshop.cz/en/podlahy/1773-sikafloor-151-30kg-7612895588308.html",
+    "cena_eur": 480.25
+   },
+   {
+    "obchod": "chemieprostavbu.cz",
+    "url": "https://www.chemieprostavbu.cz/sikafloor-151-epoxidovy-primer-vyrovnavaci-sterka-a-malta/",
+    "cena_eur": 268.89
+   }
+  ],
+  "SIKAFLOOR-264-30": [
+   {
+    "obchod": "chemieprostavbu.cz",
+    "url": "https://www.chemieprostavbu.cz/sikafloor-264-plus-podlahovy-nater-pro-vyrobni-haly/",
+    "cena_eur": 312.1
+   },
+   {
+    "obchod": "montana.sk",
+    "url": "https://www.montana.sk/sika-sikafloor-264n-ral-7035-30-kg-p14136.html",
+    "cena_eur": 325.0
+   }
+  ],
+  "SF-150-PLUS": [
+   {
+    "obchod": "montana.sk",
+    "url": "https://www.montana.sk/sika-sikafloor-150-a-b-25kg-p14133.html",
+    "cena_eur": 350.0
+   }
+  ],
+  "SF-102-LEVEL": [
+   {
+    "obchod": "chemieprostavbu.cz",
+    "url": "https://www.chemieprostavbu.cz/sikafloor-102-level-25-kg/",
+    "cena_eur": 23.91
+   },
+   {
+    "obchod": "ahesshop.cz",
+    "url": "https://www.ahesshop.cz/en/podlahy/819-sikafloor-102-level-7612895367811.html",
+    "cena_eur": 24.97
+   }
+  ],
+  "SF-202-LEVEL": [
+   {
+    "obchod": "chemieprostavbu.cz",
+    "url": "https://www.chemieprostavbu.cz/sikafloor-202-level-25-kg--samonivelacni-vyrovnavaci-sterka--1-15-mm/",
+    "cena_eur": 33.13
+   },
+   {
+    "obchod": "ahesshop.cz",
+    "url": "https://www.ahesshop.cz/en/podlahy/848-sikafloor-202-level-7612895389523.html",
+    "cena_eur": 34.81
+   }
+  ],
+  "SF-432-DECOCEM": [
+   {
+    "obchod": "chemieprostavbu.cz",
+    "url": "https://www.chemieprostavbu.cz/sikafloor-432-decocem--prumyslova-a-dekorativni-samonivelacni-podlahova-sterka-na-bazi-cementu/",
+    "cena_eur": 60.98
+   }
+  ],
+  "SF-432-DECOCEM-DG": [
+   {
+    "obchod": "chemieprostavbu.cz",
+    "url": "https://www.chemieprostavbu.cz/sikafloor-432-decocem--prumyslova-a-dekorativni-samonivelacni-podlahova-sterka-na-bazi-cementu/",
+    "cena_eur": 60.98
+   }
+  ],
+  "SF-432-DECOCEM-LG": [
+   {
+    "obchod": "chemieprostavbu.cz",
+    "url": "https://www.chemieprostavbu.cz/sikafloor-432-decocem--prumyslova-a-dekorativni-samonivelacni-podlahova-sterka-na-bazi-cementu/",
+    "cena_eur": 60.98
+   }
+  ],
+  "SIKAGARD-720": [
+   {
+    "obchod": "chemieprostavbu.cz",
+    "url": "https://www.chemieprostavbu.cz/sikagard--720-epocem--21-kg-malta-pro-vyrovnani-povrchu--betonu/",
+    "cena_eur": 142.13
+   }
+  ],
+  "SF-81-EPOCEM": [
+   {
+    "obchod": "chemieprostavbu.cz",
+    "url": "https://www.chemieprostavbu.cz/sikafloor-81-ec-23kg/",
+    "cena_eur": 120.04
+   },
+   {
+    "obchod": "ahesshop.cz",
+    "url": "https://www.ahesshop.cz/en/podlahy/925-sikafloor-81-epocem-23kg-7612895525037.html",
+    "cena_eur": 142.46
+   }
+  ],
+  "SF-83-EPOCEM": [
+   {
+    "obchod": "ahesshop.cz",
+    "url": "https://www.ahesshop.cz/en/podlahy/931-sikafloor-83-epocem-56kg.html",
+    "cena_eur": 188.22
+   }
+  ],
+  "SIKAREPAIR-MODUL": [
+   {
+    "obchod": "ahesshop.cz",
+    "url": "https://www.ahesshop.cz/en/podlahy/453-sika-repair-sikafloor-epocem-modul-40kg-7611237126383.html",
+    "cena_eur": 553.14
+   }
+  ],
+  "SF-140W": [
+   {
+    "obchod": "ahesshop.cz",
+    "url": "https://www.ahesshop.cz/en/podlahy/7310-sikafloor-140-w-trowelingprimer-9kg-ab-7612895864259.html",
+    "cena_eur": 206.56
+   }
+  ],
+  "SF-2510W": [
+   {
+    "obchod": "montana.sk",
+    "url": "https://www.montana.sk/sika-sikafloor-2510-w-ab-ral-7035-garage-20kg-p18607.html",
+    "cena_eur": 275.0
+   },
+   {
+    "obchod": "chemieprostavbu.cz",
+    "url": "https://www.chemieprostavbu.cz/sikafloor-2510-w--epoxidovy-nater-na-vodni-bazi-s-nizkymi-emisemi-voc/",
+    "cena_eur": 333.71
+   }
+  ],
+  "SF-2600": [
+   {
+    "obchod": "chemieprostavbu.cz",
+    "url": "https://www.chemieprostavbu.cz/sikafloor-2600-2/",
+    "cena_eur": 393.73
+   }
+  ],
+  "SF-2650": [
+   {
+    "obchod": "ahesshop.cz",
+    "url": "https://www.ahesshop.cz/en/sikafloor/7320-1924-sikafloor-2650-30kg-ab-7612895872544.html",
+    "cena_eur": 1118.53
+   }
+  ],
+  "SIKAFLOOR-1590-30": [
+   {
+    "obchod": "ahesshop.cz",
+    "url": "https://www.ahesshop.cz/en/podlahy/7510-sikafloor-1590-7612895863214.html",
+    "cena_eur": 898.43
+   }
+  ],
+  "SF-329": [
+   {
+    "obchod": "ahesshop.cz",
+    "url": "https://www.ahesshop.cz/en/podlahy/7514-sikafloor-329-7612894908664.html",
+    "cena_eur": 484.15
+   }
+  ],
+  "SF-376": [
+   {
+    "obchod": "ahesshop.cz",
+    "url": "https://www.ahesshop.cz/en/podlahy/1668-sikafloor-376-7612895532462.html",
+    "cena_eur": 613.93
+   }
+  ],
+  "SF-377": [
+   {
+    "obchod": "ahesshop.cz",
+    "url": "https://www.ahesshop.cz/en/podlahy/1669-sikafloor-377-7611237018664.html",
+    "cena_eur": 436.7
+   }
+  ],
+  "SIKAFLOOR-304W-7.5": [
+   {
+    "obchod": "chemieprostavbu.cz",
+    "url": "https://www.chemieprostavbu.cz/sikafloor-304-w-je-2komponentni-polyuretanova--uzaviraci-vrstva-s-matnym-vzhledem/",
+    "cena_eur": 326.51
+   }
+  ],
+  "SF-400N-PLUS": [
+   {
+    "obchod": "chemieprostavbu.cz",
+    "url": "https://www.chemieprostavbu.cz/sikafloor-400-n-elastic-ral-7032-6kg-pu-venkovni-nater/",
+    "cena_eur": 152.45
+   }
+  ],
+  "PROSEAL-15": [
+   {
+    "obchod": "ahesshop.cz",
+    "url": "https://www.ahesshop.cz/en/podlahy/7523-sikafloor-proseal-15-cz-15l-7612655150677.html",
+    "cena_eur": 235.37
+   }
+  ],
+  "PROSEAL-12": [
+   {
+    "obchod": "ahesshop.cz",
+    "url": "https://www.ahesshop.cz/en/podlahy/948-sikafloor-proseal-12-15l-7612894794229.html",
+    "cena_eur": 175.28
+   },
+   {
+    "obchod": "montana.sk",
+    "url": "https://www.montana.sk/sika-sikafloor-proseal-12-15l-p14135.html",
+    "cena_eur": 120.0
+   }
+  ],
+  "SF-54-BOOSTER": [
+   {
+    "obchod": "ahesshop.cz",
+    "url": "https://www.ahesshop.cz/en/podlahy/7515-sikafloor-54-booster-600ml-7612655179463.html",
+    "cena_eur": 36.32
+   }
+  ],
+  "SYNTOP-2": [
+   {
+    "obchod": "dek.cz",
+    "url": "https://www.dek.cz/produkty/detail/3320100597-sikafloor-2-syntop-natural-25kg",
+    "cena_eur": 17.26
+   },
+   {
+    "obchod": "chemieprostavbu.cz",
+    "url": "https://www.chemieprostavbu.cz/sikafloor-2-syntop--vsyp-pro-pancerove-betonove-podlahy-s-vysokou-provozni-zatezi/",
+    "cena_eur": 26.89
+   },
+   {
+    "obchod": "montana.sk",
+    "url": "https://www.montana.sk/sika-sikafloor-2-syntop-natural-25kg-p17518.html",
+    "cena_eur": 12.75
+   }
+  ],
+  "162680": [
+   {
+    "obchod": "montana.sk",
+    "url": "https://www.montana.sk/sika-sikafloor-level-30-25-kg-p17519.html",
+    "cena_eur": 39.5
+   }
+  ],
+  "SF-201-FIBERLEVEL": [
+   {
+    "obchod": "stavbaren.sk",
+    "url": "https://www.stavbaren.sk/sika-nivelitfloor-floor-201-fiberlevel-samonivelizacny-cementovy-poter-balenie-20-kg/",
+    "cena_eur": 19.9
+   },
+   {
+    "obchod": "montana.sk",
+    "url": "https://www.montana.sk/sika-sikafloor-201-level-20-kg-p18240.html",
+    "cena_eur": 20.5
+   }
+  ],
+  "SF-352-FIBRELEVEL": [
+   {
+    "obchod": "majstrik.sk",
+    "url": "https://www.majstrik.sk/sikafloor-352-fibrelevel-nivelacna-vystuzena-vyrovnavacia-stierka-pre-vrstvu-3-30mm",
+    "cena_eur": 23.99
+   }
+  ],
+  "TS-EP11": [
+   {
+    "obchod": "eshop.topstone.sk",
+    "url": "https://eshop.topstone.sk/topstone-ep11-25.html",
+    "cena_eur": 270.75
+   }
+  ]
+ }
+}

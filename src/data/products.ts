@@ -561,6 +561,39 @@ export const PRODUCTS: Product[] = [
   },
 ];
 
+import { getMaterial, type Material } from "@/lib/materialy";
+
+/** Adaptér: materiál z katalógu (materialy.json) ako Product — vďaka nemu
+ *  sa dá do košíka pridať CELÝ katalóg, nie len kurátorské PRODUCTS.
+ *  Chémia je hazardous (ADR pri doprave), doplnky/náradie nie. */
+export function materialAkoProduct(m: Material): Product {
+  const kategoriaMap: Record<Material["kategoria"], ProductCategory> = {
+    "Penetrácia": "penetracia",
+    "Hlavná vrstva": "hlavna-vrstva",
+    "Vrchný lak": "vrchny-lak",
+    "Nivelačná hmota": "nivelacia",
+    "Doplnok": "doplnok",
+  };
+  return {
+    id: m.sku,
+    skuRef: m.sku,
+    brand: m.vyrobca,
+    name: m.nazov,
+    category: kategoriaMap[m.kategoria],
+    packSize: m.balenie_kg ?? 1,
+    packUnit: m.balenie_kg != null ? "kg" : "ks",
+    priceRetail: m.cena_eur_s_dph > 0 ? m.cena_eur_s_dph : null,
+    priceTrade: null,
+    hazardous: m.kategoria !== "Doplnok",
+    images: m.foto ? [m.foto] : [],
+    description: "",
+    feedEnabled: false,
+  };
+}
+
 export function getProduct(id: string): Product | undefined {
-  return PRODUCTS.find((p) => p.id === id);
+  const p = PRODUCTS.find((x) => x.id === id);
+  if (p) return p;
+  const m = getMaterial(id);
+  return m ? materialAkoProduct(m) : undefined;
 }

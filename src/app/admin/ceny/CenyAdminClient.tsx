@@ -261,7 +261,7 @@ export function CenyAdminClient() {
               }}
               className={chipCls(skupina === sk.id)}
             >
-              {i + 1 <= 5 ? `${i + 1}. ` : ""}{sk.label} ({count})
+              {i + 1 <= 4 ? `${i + 1}. ` : ""}{sk.label} ({count})
             </button>
           );
         })}
