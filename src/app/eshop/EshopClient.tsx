@@ -80,6 +80,24 @@ export function EshopClient() {
     return c;
   }, []);
 
+  /** Kategórie zodpovedajúce hľadanému výrazu — ponúkame nad výsledkami. */
+  const kategorieNavrhy = React.useMemo(() => {
+    const q = normalize(query.trim());
+    if (q.length < 2) return [];
+    const out: { id: string; label: string; skupinaId: string; obsahId: string | null }[] = [];
+    for (const sk of SKUPINY) {
+      if (normalize(sk.label).includes(q)) {
+        out.push({ id: `sk-${sk.id}`, label: sk.label, skupinaId: sk.id, obsahId: null });
+      }
+    }
+    for (const k of OBSAH_KATEGORIE) {
+      if (k.id !== "ostatne" && normalize(k.label).includes(q)) {
+        out.push({ id: k.id, label: k.label, skupinaId: skupinaPreObsah(k.id), obsahId: k.id });
+      }
+    }
+    return out.slice(0, 5);
+  }, [query]);
+
   const adminCounts = React.useMemo(() => {
     if (!admin) return null;
     const c = { "vsetko-chyba": 0, fotka: 0, cena: 0, spotreba: 0, "tech. list": 0 };
@@ -133,6 +151,27 @@ export function EshopClient() {
         )}
       </div>
 
+      {/* Návrhy kategórií pri písaní — klik rozklikne skupinu aj podkategóriu */}
+      {kategorieNavrhy.length > 0 && (
+        <div className="mt-2.5 flex flex-wrap items-center justify-center gap-1.5">
+          <span className="text-xs font-semibold text-zinc-400">Kategórie:</span>
+          {kategorieNavrhy.map((n) => (
+            <button
+              key={n.id}
+              type="button"
+              onClick={() => {
+                setSkupina(n.skupinaId);
+                setObsah(n.obsahId);
+                setQuery("");
+              }}
+              className="px-3 py-1.5 rounded-full text-xs font-bold bg-[#e3f3fb] text-[#1a6e9c] hover:bg-[#1a8cc4] hover:text-white transition-colors"
+            >
+              📂 {n.label}
+            </button>
+          ))}
+        </div>
+      )}
+
       {/* Horné záložky — skupiny podľa skladby podlahy */}
       <div className="mt-5 flex flex-wrap items-center justify-center gap-2">
         <button
@@ -158,22 +197,31 @@ export function EshopClient() {
       </div>
       {/* Druhá úroveň — deti aktívnej skupiny (len ak ich je viac) */}
       {skupina && (SKUPINY.find((sk) => sk.id === skupina)?.deti.length ?? 0) > 1 && (
-        <div className="mt-2.5 flex flex-wrap items-center justify-center gap-2">
-          {SKUPINY.find((sk) => sk.id === skupina)!.deti
-            .filter((d) => (obsahCounts.get(d) ?? 0) > 0)
-            .map((d) => {
-              const k = OBSAH_KATEGORIE.find((x) => x.id === d)!;
-              return (
-                <button
-                  key={d}
-                  type="button"
-                  onClick={() => setObsah(obsah === d ? null : d)}
-                  className={chipCls(obsah === d)}
-                >
-                  {k.label}
-                </button>
-              );
-            })}
+        <div className="mt-2.5 flex justify-center">
+          <div className="inline-flex flex-wrap items-center justify-center gap-1.5 rounded-2xl bg-[#e3f3fb] px-3 py-2">
+            <span className="text-[11px] font-bold uppercase tracking-wide text-[#1a6e9c] mr-1">
+              ↳ {SKUPINY.find((sk) => sk.id === skupina)!.label}:
+            </span>
+            {SKUPINY.find((sk) => sk.id === skupina)!.deti
+              .filter((d) => (obsahCounts.get(d) ?? 0) > 0)
+              .map((d) => {
+                const k = OBSAH_KATEGORIE.find((x) => x.id === d)!;
+                return (
+                  <button
+                    key={d}
+                    type="button"
+                    onClick={() => setObsah(obsah === d ? null : d)}
+                    className={`px-3 py-1.5 rounded-full text-xs font-semibold whitespace-nowrap transition-colors ${
+                      obsah === d
+                        ? "bg-[#1a8cc4] text-white"
+                        : "bg-white text-[#1a6e9c] hover:bg-[#d3ecf9]"
+                    }`}
+                  >
+                    {k.label}
+                  </button>
+                );
+              })}
+          </div>
         </div>
       )}
 

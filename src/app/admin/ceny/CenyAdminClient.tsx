@@ -267,22 +267,31 @@ export function CenyAdminClient() {
         })}
       </div>
       {skupina && (SKUPINY.find((sk) => sk.id === skupina)?.deti.length ?? 0) > 1 && (
-        <div className="mt-2.5 flex flex-wrap items-center justify-center gap-2">
-          {SKUPINY.find((sk) => sk.id === skupina)!.deti
-            .filter((d) => (obsahCounts.get(d) ?? 0) > 0)
-            .map((d) => {
-              const k = OBSAH_KATEGORIE.find((x) => x.id === d)!;
-              return (
-                <button
-                  key={d}
-                  type="button"
-                  onClick={() => setObsah(obsah === d ? null : d)}
-                  className={chipCls(obsah === d)}
-                >
-                  {k.label} ({obsahCounts.get(d)})
-                </button>
-              );
-            })}
+        <div className="mt-2.5 flex justify-center">
+          <div className="inline-flex flex-wrap items-center justify-center gap-1.5 rounded-2xl bg-[#e3f3fb] px-3 py-2">
+            <span className="text-[11px] font-bold uppercase tracking-wide text-[#1a6e9c] mr-1">
+              ↳ {SKUPINY.find((sk) => sk.id === skupina)!.label}:
+            </span>
+            {SKUPINY.find((sk) => sk.id === skupina)!.deti
+              .filter((d) => (obsahCounts.get(d) ?? 0) > 0)
+              .map((d) => {
+                const k = OBSAH_KATEGORIE.find((x) => x.id === d)!;
+                return (
+                  <button
+                    key={d}
+                    type="button"
+                    onClick={() => setObsah(obsah === d ? null : d)}
+                    className={`px-3 py-1.5 rounded-full text-xs font-semibold whitespace-nowrap transition-colors ${
+                      obsah === d
+                        ? "bg-[#1a8cc4] text-white"
+                        : "bg-white text-[#1a6e9c] hover:bg-[#d3ecf9]"
+                    }`}
+                  >
+                    {k.label} ({obsahCounts.get(d)})
+                  </button>
+                );
+              })}
+          </div>
         </div>
       )}
 
