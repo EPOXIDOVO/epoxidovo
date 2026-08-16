@@ -5,7 +5,7 @@ import Link from "next/link";
 import { Search, X } from "lucide-react";
 import { Container } from "@/components/ui/Container";
 import { ProductVisual } from "@/components/eshop/ProductVisual";
-import { MATERIALY, VYROBCOVIA, type Vyrobca, type Material } from "@/lib/materialy";
+import { MATERIALY, type Material } from "@/lib/materialy";
 import { OBSAH_KATEGORIE, SKUPINY, obsahKategoria, skupinaPreObsah, skupinaPopis, normalize } from "@/lib/obsah-kategorie";
 import { VYROBCA_LOGO } from "@/lib/vyrobca-logo";
 
@@ -32,7 +32,6 @@ type AdminFilter = "vsetko-chyba" | "fotka" | "cena" | "spotreba" | "tech. list"
 export function EshopClient() {
   const [skupina, setSkupina] = React.useState<string | null>(null);
   const [obsah, setObsah] = React.useState<string | null>(null);
-  const [vyrobca, setVyrobca] = React.useState<Vyrobca | null>(null);
   const [query, setQuery] = React.useState("");
   const [admin, setAdmin] = React.useState(false);
   const [adminFilter, setAdminFilter] = React.useState<AdminFilter>(null);
@@ -77,7 +76,6 @@ export function EshopClient() {
       const kat = obsahKategoria(m);
       if (obsah && kat !== obsah) return false;
       if (!obsah && skupina && skupinaPreObsah(kat) !== skupina) return false;
-      if (vyrobca && m.vyrobca !== vyrobca) return false;
       if (q) {
         const hay = normalize(`${m.nazov} ${m.sku}`);
         if (!hay.includes(q)) return false;
@@ -99,13 +97,7 @@ export function EshopClient() {
       );
     }
     return base;
-  }, [obsah, skupina, vyrobca, query, admin, adminFilter, predajnost]);
-
-  const vyrobcaCounts = React.useMemo(() => {
-    const c = new Map<Vyrobca, number>();
-    for (const m of MATERIALY) c.set(m.vyrobca, (c.get(m.vyrobca) ?? 0) + 1);
-    return c;
-  }, []);
+  }, [obsah, skupina, query, admin, adminFilter, predajnost]);
 
   const obsahCounts = React.useMemo(() => {
     const c = new Map<string, number>();
@@ -150,13 +142,6 @@ export function EshopClient() {
       active
         ? "bg-[#3db6e8] border-[#3db6e8] text-white"
         : "bg-white border-zinc-200 text-zinc-700 hover:border-[#3db6e8] hover:text-[#3db6e8]"
-    }`;
-
-  const sideCls = (active: boolean) =>
-    `w-full text-left px-3.5 py-2.5 rounded-xl text-sm font-semibold transition-colors flex items-center justify-between gap-2 ${
-      active
-        ? "bg-[#3db6e8] text-white"
-        : "text-zinc-700 hover:bg-white hover:text-[#1a8cc4]"
     }`;
 
   return (
@@ -298,55 +283,10 @@ export function EshopClient() {
       )}
 
       {/* Ľavý stĺpec Výrobca + grid */}
-      <div className="mt-6 lg:grid lg:grid-cols-[235px_1fr] lg:gap-6 lg:items-start">
-        {/* Výrobca — desktop sticky stĺpec */}
-        <aside className="hidden lg:block sticky top-24 rounded-2xl bg-[#f2f2ef] p-3">
-          <div className="px-2 pb-2 text-xs font-bold uppercase tracking-wide text-zinc-500">
-            Výrobca
-          </div>
-          <nav className="space-y-1" aria-label="Filter podľa výrobcu">
-            <button type="button" onClick={() => setVyrobca(null)} className={sideCls(vyrobca === null)}>
-              <span>Všetci</span>
-              <span className="text-xs opacity-70 tnum">{MATERIALY.length}</span>
-            </button>
-            {VYROBCOVIA.map((v) => (
-              <button
-                key={v}
-                type="button"
-                onClick={() => setVyrobca(vyrobca === v ? null : v)}
-                className={sideCls(vyrobca === v)}
-              >
-                <span className="inline-flex items-center gap-2">
-                  {/* eslint-disable-next-line @next/next/no-img-element */}
-                  <img src={VYROBCA_LOGO[v]} alt="" className={`h-6 w-14 object-contain object-left ${vyrobca === v ? "brightness-0 invert" : ""}`} />
-                  {v}
-                </span>
-                <span className="text-xs opacity-70 tnum">{vyrobcaCounts.get(v) ?? 0}</span>
-              </button>
-            ))}
-          </nav>
-        </aside>
-
+      {/* Filter podľa výrobcu je dočasne vypnutý — vrátime ho neskôr
+          (logá značiek ostávajú na kartách produktov). */}
+      <div className="mt-6">
         <div>
-          {/* Výrobca — mobil chips */}
-          <div className="lg:hidden flex flex-wrap items-center justify-center gap-2">
-            <button type="button" onClick={() => setVyrobca(null)} className={chipCls(vyrobca === null)}>
-              Všetci výrobcovia
-            </button>
-            {VYROBCOVIA.map((v) => (
-              <button
-                key={v}
-                type="button"
-                onClick={() => setVyrobca(vyrobca === v ? null : v)}
-                className={`${chipCls(vyrobca === v)} inline-flex items-center gap-1.5`}
-              >
-                {/* eslint-disable-next-line @next/next/no-img-element */}
-                <img src={VYROBCA_LOGO[v]} alt="" className={`h-5 w-auto max-w-20 object-contain ${vyrobca === v ? "brightness-0 invert" : ""}`} />
-                {v}
-              </button>
-            ))}
-          </div>
-
           <p className="mt-4 lg:mt-0 text-center lg:text-left text-sm text-zinc-500">
             {filtered.length === MATERIALY.length
               ? `${MATERIALY.length} produktov`

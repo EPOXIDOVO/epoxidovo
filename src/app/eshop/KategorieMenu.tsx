@@ -50,7 +50,7 @@ export function KategorieMenu() {
   return (
     <nav aria-label="Kategórie e-shopu" className="bg-white border-b border-zinc-200 relative z-40">
       <Container size="xl" className="py-2.5">
-        <div className="flex flex-wrap items-center justify-center gap-x-4 gap-y-2 text-[14px]">
+        <div className="flex flex-nowrap items-center justify-start lg:justify-center gap-x-4 text-[13.5px] overflow-x-auto no-scrollbar">
           {POLOZKY.map((p) =>
             p.coskoro ? (
               <span key={p.label} className="font-bold text-zinc-400 select-none cursor-default whitespace-nowrap">

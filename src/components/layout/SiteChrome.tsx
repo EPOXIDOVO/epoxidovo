@@ -23,7 +23,7 @@ export function SiteChrome({ children }: { children: React.ReactNode }) {
     return (
       <>
         <EshopHeader />
-        <main id="main" className="flex-1 pt-[104px] md:pt-[108px]">
+        <main id="main" className="flex-1 pt-[74px]">
           {children}
         </main>
         <Footer />

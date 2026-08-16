@@ -611,3 +611,7 @@ select,
 @media (prefers-reduced-motion: reduce) {
   .admin-wiggle { animation: none; }
 }
+
+/* Vodorovne scrollovateľné menu bez viditeľnej lišty (pás kategórií e-shopu) */
+.no-scrollbar { scrollbar-width: none; -ms-overflow-style: none; }
+.no-scrollbar::-webkit-scrollbar { display: none; }

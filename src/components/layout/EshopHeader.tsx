@@ -3,8 +3,7 @@
 import * as React from "react";
 import Link from "next/link";
 import Image from "next/image";
-import { Search, ShoppingCart, Building2, Phone, Mail } from "lucide-react";
-import { SITE } from "@/lib/site";
+import { Search, ShoppingCart, Building2 } from "lucide-react";
 
 /**
  * Obchodná hlavička pre /eshop a /kupit-material — ako Epodex/GymBeam:
@@ -48,26 +47,6 @@ export function EshopHeader() {
 
   return (
     <header className="fixed top-0 inset-x-0 z-50 bg-white shadow-[0_1px_0_rgba(0,0,0,0.06)]">
-      {/* tenký pruh */}
-      <div className="bg-[#0e1a3b] text-white text-xs">
-        <div className="max-w-7xl mx-auto px-4 py-1.5 flex items-center justify-between gap-3">
-          <div className="flex items-center gap-4">
-            <a href={`tel:${SITE.contact.phoneRaw}`} className="inline-flex items-center gap-1.5 hover:text-[#6fcded] transition-colors whitespace-nowrap">
-              <Phone className="w-3 h-3" aria-hidden />
-              {SITE.contact.phone}
-            </a>
-            <a href={`mailto:${SITE.contact.email}`} className="hidden sm:inline-flex items-center gap-1.5 hover:text-[#6fcded] transition-colors">
-              <Mail className="w-3 h-3" aria-hidden />
-              {SITE.contact.email}
-            </a>
-          </div>
-          <Link href="/" className="inline-flex items-center gap-1.5 font-semibold hover:text-[#6fcded] transition-colors whitespace-nowrap">
-            <Building2 className="w-3 h-3" aria-hidden />
-            Sme aj realizačná firma →
-          </Link>
-        </div>
-      </div>
-
       {/* logo + search + košík */}
       <div className="max-w-7xl mx-auto px-4 py-3 flex items-center gap-4 md:gap-8">
         <Link href="/eshop" aria-label="E-shop EPOXIDOVO" className="shrink-0 flex items-center gap-2">
