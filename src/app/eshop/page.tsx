@@ -103,7 +103,7 @@ export default function EshopPage() {
                 )}
                 <span className="min-w-0">
                   <span className="block text-[15px] font-extrabold uppercase tracking-wide whitespace-nowrap">{u.cislo}</span>
-                  <span className="block text-[13px] text-white/85 whitespace-nowrap">
+                  <span className="block text-[13px] font-medium text-white whitespace-nowrap">
                     {u.text}
                     {jeLink ? " →" : ""}
                   </span>
