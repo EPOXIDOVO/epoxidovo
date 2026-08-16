@@ -13,6 +13,7 @@ import {
   Phone,
   Printer,
   Clock,
+  Pencil,
 } from "lucide-react";
 import { Container } from "@/components/ui/Container";
 import { useCart } from "@/lib/cart";
@@ -391,61 +392,98 @@ export function KonfiguratorClient() {
               <>
                 <h2 className="text-2xl md:text-3xl font-extrabold text-[#0e1a3b]">Aký je to priestor?</h2>
                 <p className="mt-1 text-[#4a5478]">Určuje záťaž, ktorú musí podlaha zniesť.</p>
-                <div className="mt-5 grid grid-cols-2 md:grid-cols-3 gap-3">
+                <div className="mt-5 grid grid-cols-2 md:grid-cols-4 gap-3">
                   {(PRIESTORY[`${volba.co}-${volba.kde}`] ?? []).map((m) => {
+                    /* „Iné" nie je dlaždica — je to rovno pole na napísanie */
+                    if (m.id === "ine") {
+                      const vyplnene = (volba.priestorPopis ?? "").trim().length > 1;
+                      return (
+                        <div
+                          key={m.id}
+                          className={`relative h-[132px] rounded-2xl border-2 border-dashed bg-white p-3 flex flex-col justify-between transition-colors ${
+                            vyplnene ? "border-[#3db6e8] bg-[#f4fbfe]" : "border-zinc-300"
+                          } focus-within:border-[#3db6e8]`}
+                        >
+                          <span className="inline-flex items-center gap-1.5 text-[11px] font-black uppercase tracking-wide text-zinc-400">
+                            <Pencil className="w-3.5 h-3.5" aria-hidden />
+                            Iné
+                          </span>
+                          <label htmlFor="priestor-iny" className="sr-only">
+                            Napíš, o aký priestor ide
+                          </label>
+                          <input
+                            id="priestor-iny"
+                            type="text"
+                            value={volba.priestorPopis ?? ""}
+                            onChange={(e) =>
+                              uprav({ priestor: "ine", priestorPopis: e.target.value })
+                            }
+                            placeholder="napíš aký…"
+                            className="w-full bg-transparent border-b-2 border-zinc-200 focus:border-[#3db6e8] outline-none py-1.5 text-sm font-bold text-[#0e1a3b] placeholder:text-zinc-400 placeholder:font-medium transition-colors"
+                          />
+                          <span className="text-[11px] leading-snug text-zinc-400">
+                            Napr. pivnica, telocvičňa, ambulancia
+                          </span>
+                        </div>
+                      );
+                    }
+
                     const dovod = nevhodnyPriestor(volba, m.id);
+                    const vybraty = volba.priestor === m.id;
+                    const foto = FOTO_PRIESTOR[m.id];
                     return (
                       <button
                         key={m.id}
                         type="button"
                         disabled={!!dovod}
-                        title={dovod ?? undefined}
-                        onClick={() =>
-                          !dovod &&
-                          (m.id === "ine"
-                            ? uprav({ priestor: "ine" })
-                            : vyberADalej({ priestor: m.id, priestorPopis: null }))
-                        }
-                        className={`${dlazdicaCls(volba.priestor === m.id, !dovod, true)} overflow-hidden`}
+                        onClick={() => !dovod && vyberADalej({ priestor: m.id, priestorPopis: null })}
+                        className={`group relative h-[132px] rounded-2xl overflow-hidden text-left transition-all duration-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-[#3db6e8] ${
+                          dovod
+                            ? "cursor-not-allowed bg-zinc-100 border-2 border-zinc-200"
+                            : `ring-2 hover:-translate-y-0.5 ${
+                                vybraty
+                                  ? "ring-[#3db6e8] shadow-[0_10px_28px_rgba(61,182,232,0.3)]"
+                                  : "ring-transparent hover:ring-[#3db6e8]"
+                              }`
+                        }`}
                       >
-                        {!dovod && <FotoPozadie n={FOTO_PRIESTOR[m.id]} />}
-                        <span className="relative">
-                          <span className="block font-extrabold">{m.label}</span>
-                          {dovod && <span className="block text-[11px] leading-snug mt-1">{dovod}</span>}
+                        {!dovod && foto?.src && (
+                          <Image
+                            src={foto.src}
+                            alt=""
+                            fill
+                            sizes="(max-width: 768px) 50vw, 25vw"
+                            quality={85}
+                            className="object-cover transition-transform duration-500 group-hover:scale-105"
+                          />
+                        )}
+                        {!dovod && (
+                          <span
+                            aria-hidden
+                            className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/25 to-transparent"
+                          />
+                        )}
+                        {vybraty && (
+                          <span className="absolute top-2 right-2 z-10 inline-flex items-center justify-center w-6 h-6 rounded-full bg-[#3db6e8] text-white shadow">
+                            <Check className="w-4 h-4" aria-hidden />
+                          </span>
+                        )}
+                        <span
+                          className={`absolute inset-x-0 bottom-0 p-3 ${
+                            dovod ? "text-zinc-500" : "text-white"
+                          }`}
+                        >
+                          <span className="block font-extrabold leading-tight drop-shadow-[0_1px_6px_rgba(0,0,0,0.6)]">
+                            {m.label}
+                          </span>
+                          {dovod && (
+                            <span className="block text-[11px] leading-snug mt-1">{dovod}</span>
+                          )}
                         </span>
                       </button>
                     );
                   })}
                 </div>
-                {volba.priestor === "ine" && (
-                  <div className="mt-4">
-                    <label
-                      htmlFor="priestor-iny"
-                      className="block text-sm font-bold text-[#0e1a3b] mb-1.5"
-                    >
-                      Napíš, o aký priestor ide
-                    </label>
-                    <input
-                      id="priestor-iny"
-                      type="text"
-                      autoFocus
-                      value={volba.priestorPopis ?? ""}
-                      onChange={(e) => uprav({ priestorPopis: e.target.value })}
-                      placeholder="napr. pivnica, telocvičňa, ambulancia, kuchyňa reštaurácie…"
-                      className="w-full px-4 py-3 rounded-2xl border-2 border-zinc-200 text-[#0e1a3b] placeholder:text-zinc-400 focus:outline-none focus:border-[#3db6e8] transition-colors"
-                    />
-                    <p className="mt-1.5 text-xs text-[#6b7390]">
-                      Podľa toho vieme skladbu doladiť — napíš aj to, čo po podlahe chodí.
-                    </p>
-                  </div>
-                )}
-
-                <p className="mt-4 text-sm text-[#4a5478]">
-                  Môj prípad tu nie je →{" "}
-                  <Link href="/kontakt" className="font-bold text-[#1a8cc4] hover:underline">
-                    napíš nám
-                  </Link>
-                </p>
               </>
             )}
 
