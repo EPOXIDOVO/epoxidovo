@@ -2,7 +2,7 @@
 
 import * as React from "react";
 import Link from "next/link";
-import { Search, X } from "lucide-react";
+import { Search, X, ChevronDown } from "lucide-react";
 import { Container } from "@/components/ui/Container";
 import { ProductVisual } from "@/components/eshop/ProductVisual";
 import { MATERIALY, type Material } from "@/lib/materialy";
@@ -33,6 +33,9 @@ export function EshopClient() {
   const [skupina, setSkupina] = React.useState<string | null>(null);
   const [obsah, setObsah] = React.useState<string | null>(null);
   const [query, setQuery] = React.useState("");
+  // Koľko produktov je vidno — 4 rady po 4 = 16, ďalšie cez „Zobraziť viac"
+  const KROK = 16;
+  const [limit, setLimit] = React.useState(KROK);
   const [admin, setAdmin] = React.useState(false);
   const [adminFilter, setAdminFilter] = React.useState<AdminFilter>(null);
 
@@ -69,6 +72,10 @@ export function EshopClient() {
       })
       .catch(() => {});
   }, []);
+
+  React.useEffect(() => {
+    setLimit(KROK);
+  }, [query, skupina, obsah, adminFilter]);
 
   const filtered = React.useMemo(() => {
     const q = normalize(query.trim());
@@ -288,7 +295,9 @@ export function EshopClient() {
       <div className="mt-6">
         <div>
           <p className="mt-4 lg:mt-0 text-center lg:text-left text-sm text-zinc-500">
-            {filtered.length === MATERIALY.length
+            {filtered.length > limit
+              ? `Zobrazených ${limit} z ${filtered.length} produktov`
+              : filtered.length === MATERIALY.length
               ? `${MATERIALY.length} produktov`
               : `${filtered.length} z ${MATERIALY.length} produktov`}
           </p>
@@ -304,7 +313,7 @@ export function EshopClient() {
             </div>
           ) : (
             <div className="mt-4 grid grid-cols-2 md:grid-cols-3 xl:grid-cols-4 gap-3 md:gap-5">
-              {filtered.map((m) => {
+              {filtered.slice(0, limit).map((m) => {
                 return (
                   <Link
                     key={m.sku}
@@ -343,6 +352,22 @@ export function EshopClient() {
                   </Link>
                 );
               })}
+            </div>
+          )}
+
+          {filtered.length > limit && (
+            <div className="mt-8 flex flex-col items-center gap-2">
+              <button
+                type="button"
+                onClick={() => setLimit((n) => n + KROK)}
+                className="press-scale inline-flex items-center gap-2 px-8 py-3.5 rounded-full bg-[#0e1a3b] text-white font-bold hover:bg-[#1a8cc4] transition-colors whitespace-nowrap"
+              >
+                Zobraziť viac produktov
+                <ChevronDown className="w-4 h-4" aria-hidden />
+              </button>
+              <span className="text-xs text-zinc-400 tabular-nums">
+                {limit} z {filtered.length}
+              </span>
             </div>
           )}
         </div>
