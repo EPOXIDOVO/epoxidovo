@@ -5,7 +5,7 @@ import Link from "next/link";
 import { Search, X, ChevronDown } from "lucide-react";
 import { Container } from "@/components/ui/Container";
 import { ProductVisual } from "@/components/eshop/ProductVisual";
-import { MATERIALY, type Material, type Vyrobca } from "@/lib/materialy";
+import { MATERIALY, VYROBCOVIA, type Material, type Vyrobca } from "@/lib/materialy";
 import { OBSAH_KATEGORIE, SKUPINY, obsahKategoria, skupinaPreObsah, skupinaPopis, normalize } from "@/lib/obsah-kategorie";
 import { VYROBCA_LOGO } from "@/lib/vyrobca-logo";
 
@@ -29,7 +29,7 @@ function chybaZoznam(m: Material): string[] {
 
 type AdminFilter = "vsetko-chyba" | "fotka" | "cena" | "spotreba" | "tech. list" | null;
 
-export function EshopClient() {
+export function EshopClient({ sidebarVyrobcov = false }: { sidebarVyrobcov?: boolean } = {}) {
   const [skupina, setSkupina] = React.useState<string | null>(null);
   const [obsah, setObsah] = React.useState<string | null>(null);
   const [query, setQuery] = React.useState("");
@@ -111,6 +111,12 @@ export function EshopClient() {
     return base;
   }, [obsah, skupina, vyrobca, query, admin, adminFilter, predajnost]);
 
+  const vyrobcaCounts = React.useMemo(() => {
+    const c = new Map<string, number>();
+    for (const m of MATERIALY) c.set(m.vyrobca, (c.get(m.vyrobca) ?? 0) + 1);
+    return c;
+  }, []);
+
   const obsahCounts = React.useMemo(() => {
     const c = new Map<string, number>();
     for (const m of MATERIALY) {
@@ -148,6 +154,13 @@ export function EshopClient() {
     }
     return c;
   }, [admin]);
+
+  const sideCls = (active: boolean) =>
+    `w-full text-left px-3.5 py-2.5 rounded-xl text-sm font-semibold transition-colors flex items-center justify-between gap-2 ${
+      active
+        ? "bg-[#3db6e8] text-white"
+        : "text-zinc-700 hover:bg-white hover:text-[#1a8cc4]"
+    }`;
 
   const chipCls = (active: boolean) =>
     `px-3.5 md:px-4 py-2 rounded-full text-[13px] md:text-sm font-semibold whitespace-nowrap transition-colors border-2 ${
@@ -295,10 +308,60 @@ export function EshopClient() {
       )}
 
       {/* Ľavý stĺpec Výrobca + grid */}
-      {/* Filter podľa výrobcu je dočasne vypnutý — vrátime ho neskôr
-          (logá značiek ostávajú na kartách produktov). */}
-      <div className="mt-6">
+      {/* Bočný stĺpec výrobcov — len na /eshop/znacky (prop sidebarVyrobcov) */}
+      <div className={sidebarVyrobcov ? "mt-6 lg:grid lg:grid-cols-[235px_1fr] lg:gap-6 lg:items-start" : "mt-6"}>
+        {sidebarVyrobcov && (
+          <aside className="hidden lg:block sticky top-24 rounded-2xl bg-[#f2f2ef] p-3">
+            <div className="px-2 pb-2 text-xs font-bold uppercase tracking-wide text-zinc-500">
+              Výrobca
+            </div>
+            <nav className="space-y-1" aria-label="Filter podľa výrobcu">
+              <button type="button" onClick={() => setVyrobca(null)} className={sideCls(vyrobca === null)}>
+                <span>Všetci</span>
+                <span className="text-xs opacity-70 tnum">{MATERIALY.length}</span>
+              </button>
+              {VYROBCOVIA.map((v) => (
+                <button
+                  key={v}
+                  type="button"
+                  onClick={() => setVyrobca(vyrobca === v ? null : v)}
+                  className={sideCls(vyrobca === v)}
+                >
+                  <span className="inline-flex items-center gap-2">
+                    {/* eslint-disable-next-line @next/next/no-img-element */}
+                    <img
+                      src={VYROBCA_LOGO[v]}
+                      alt=""
+                      className={`h-6 w-14 object-contain object-left ${vyrobca === v ? "brightness-0 invert" : ""}`}
+                    />
+                    {v}
+                  </span>
+                  <span className="text-xs opacity-70 tnum">{vyrobcaCounts.get(v) ?? 0}</span>
+                </button>
+              ))}
+            </nav>
+          </aside>
+        )}
         <div>
+          {sidebarVyrobcov && (
+            <div className="lg:hidden flex flex-wrap items-center justify-center gap-2 mb-4">
+              <button type="button" onClick={() => setVyrobca(null)} className={chipCls(vyrobca === null)}>
+                Všetci výrobcovia
+              </button>
+              {VYROBCOVIA.map((v) => (
+                <button
+                  key={v}
+                  type="button"
+                  onClick={() => setVyrobca(vyrobca === v ? null : v)}
+                  className={`${chipCls(vyrobca === v)} inline-flex items-center gap-1.5`}
+                >
+                  {/* eslint-disable-next-line @next/next/no-img-element */}
+                  <img src={VYROBCA_LOGO[v]} alt="" className={`h-5 w-auto max-w-20 object-contain ${vyrobca === v ? "brightness-0 invert" : ""}`} />
+                  {v}
+                </button>
+              ))}
+            </div>
+          )}
           {vyrobca && (
             <div className="mb-3 flex justify-center lg:justify-start">
               <button
