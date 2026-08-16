@@ -1,5 +1,6 @@
 import data from "@/content/materialy.json";
 import extra from "@/content/materialy-extra.json";
+import cenyOverride from "@/content/ceny-override.json";
 
 /**
  * Materiály na predaj — dva zdroje:
@@ -51,10 +52,18 @@ export interface Material {
   foto_licencia: string | null;
 }
 
+/** Ručné cenové override-y (src/content/ceny-override.json, editor /admin/ceny).
+ *  Prebijú cenu z importu a označia ju ako pevnú — import ich neprepíše. */
+const CENY_OVERRIDE: Record<string, number> = cenyOverride.ceny;
+
 export const MATERIALY: Material[] = [
   ...(data.produkty as Material[]),
   ...(extra.produkty as Material[]),
-];
+].map((m) =>
+  CENY_OVERRIDE[m.sku] != null
+    ? { ...m, cena_eur_s_dph: CENY_OVERRIDE[m.sku], cena_pevna: true }
+    : m,
+);
 export const MATERIALY_SNAPSHOT: string = data.vygenerovane as string;
 
 export const KATEGORIE: Kategoria[] = [

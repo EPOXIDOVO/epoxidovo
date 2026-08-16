@@ -3,7 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "dev": "next dev",
+    "dev": "node scripts/ceny-admin.mjs & next dev",
     "build": "prisma generate && next build",
     "postinstall": "prisma generate",
     "start": "next start",
@@ -11,7 +11,8 @@
     "pages:build": "prisma generate && npx @cloudflare/next-on-pages",
     "pages:preview": "npm run pages:build && wrangler pages dev .vercel/output/static",
     "pages:deploy": "npm run pages:build && wrangler pages deploy .vercel/output/static",
-    "test": "vitest run"
+    "test": "vitest run",
+    "ceny-admin": "node scripts/ceny-admin.mjs"
   },
   "dependencies": {
     "@anthropic-ai/sdk": "^0.95.1",
