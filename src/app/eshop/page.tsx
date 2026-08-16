@@ -174,12 +174,6 @@ export default function EshopPage() {
                   >
                     Zisti, aký materiál potrebuješ →
                   </a>
-                  <a
-                    href="/eshop#katalog"
-                    className="inline-flex items-center gap-2 px-7 py-3.5 rounded-full border-2 border-white/80 text-white font-bold text-base md:text-lg hover:bg-white hover:text-[#0e1a3b] transition-colors whitespace-nowrap"
-                  >
-                    Prezrieť katalóg
-                  </a>
                 </div>
               </div>
             </div>
