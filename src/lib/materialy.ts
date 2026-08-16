@@ -56,6 +56,16 @@ export interface Material {
  *  Prebijú cenu z importu a označia ju ako pevnú — import ich neprepíše. */
 const CENY_OVERRIDE: Record<string, number> = cenyOverride.ceny;
 
+/** Pôvodné ceny z importu (PRED override) — z nich sa dá spätne odvodiť nákup:
+ *  vzorec cenotvorby je predaj = nákup s DPH ÷ 0,735, takže
+ *  nákup s DPH = importná cena × 0,735 (neplatí pre cena_pevna z CRM). */
+export const CENA_Z_IMPORTU: Record<string, { cena: number; pevna: boolean }> =
+  Object.fromEntries(
+    [...(data.produkty as Material[]), ...(extra.produkty as Material[])].map(
+      (m) => [m.sku, { cena: m.cena_eur_s_dph, pevna: !!m.cena_pevna }],
+    ),
+  );
+
 export const MATERIALY: Material[] = [
   ...(data.produkty as Material[]),
   ...(extra.produkty as Material[]),

@@ -3,7 +3,7 @@
 import * as React from "react";
 import { Search, Save, RotateCcw, X } from "lucide-react";
 import { Container } from "@/components/ui/Container";
-import { MATERIALY, VYROBCOVIA, type Vyrobca } from "@/lib/materialy";
+import { MATERIALY, VYROBCOVIA, CENA_Z_IMPORTU, type Vyrobca, type Material } from "@/lib/materialy";
 import { OBSAH_KATEGORIE, obsahKategoria } from "@/lib/obsah-kategorie";
 import cenyOverride from "@/content/ceny-override.json";
 
@@ -12,7 +12,11 @@ import cenyOverride from "@/content/ceny-override.json";
  * zapisovač (scripts/ceny-admin.mjs, port 8798). Funguje len na localhoste;
  * v produkcii sa ceny menia commitom tohto súboru.
  *
- * Override prebije cenu z CRM importu a označí ju ako pevnú (cena_pevna).
+ * Produkty líšiace sa len balením (rovnaký názov bez zátvoriek) sú zlúčené
+ * do jedného riadku s dropdownom balení. Nákup s/bez DPH je odvodený z
+ * importnej ceny (nákup s DPH = import × 0,735 — vzorec cenotvorby);
+ * zisk = aktuálny predaj − nákup s DPH (sme neplatiteľ, DPH z nákupu
+ * je náklad, daň z príjmu sa neráta).
  */
 
 const ADMIN_API = "http://localhost:8798";
@@ -29,18 +33,26 @@ type Stats = {
   posledne: { id: string; kedy: string; meno: string; suma: number; platba: string; kusov: number }[];
 };
 
-export function CenyAdminClient() {
-  // pôvodné ceny z importu (bez override) — na výpočet rozdielu a reset
-  const povodne = React.useMemo(() => {
-    const o = cenyOverride.ceny as Record<string, number>;
-    return new Map(
-      MATERIALY.map((m) => [
-        m.sku,
-        o[m.sku] != null ? null : m.cena_eur_s_dph, // null = pôvodnú nepoznáme (už len v CRM)
-      ]),
-    );
-  }, []);
+/** Kľúč variantovej skupiny — názov bez zátvorkových častí + výrobca. */
+function skupinaKey(m: Material): string {
+  const base = m.nazov.replace(/\s*\([^)]*\)/g, "").trim().toLowerCase();
+  return `${m.vyrobca}::${base}`;
+}
 
+/** Label variantu v dropdown-e: balenie + prípadná kategória farby (kat. A/B). */
+function variantLabel(m: Material): string {
+  const kat = m.nazov.match(/kat\.\s*([A-Z])/i)?.[1];
+  return (m.balenie ?? m.sku) + (kat ? ` · kat. ${kat.toUpperCase()}` : "");
+}
+
+/** Nákup s DPH z importnej ceny (vzorec ÷0,735); null = fixná cena z CRM, nákup nepoznáme. */
+function nakupSDph(sku: string): number | null {
+  const zaklad = CENA_Z_IMPORTU[sku];
+  if (!zaklad || zaklad.pevna) return null;
+  return Math.round(zaklad.cena * 0.735 * 100) / 100;
+}
+
+export function CenyAdminClient() {
   const [drafts, setDrafts] = React.useState<Record<string, string>>({});
   const [query, setQuery] = React.useState("");
   const [vyrobca, setVyrobca] = React.useState<Vyrobca | null>(null);
@@ -48,8 +60,8 @@ export function CenyAdminClient() {
   const [lenOverride, setLenOverride] = React.useState(false);
   const [online, setOnline] = React.useState<boolean | null>(null);
   const [stav, setStav] = React.useState<string | null>(null);
-
   const [stats, setStats] = React.useState<Stats | null>(null);
+  const [variant, setVariant] = React.useState<Record<string, string>>({});
 
   React.useEffect(() => {
     fetch(`${ADMIN_API}/ping`)
@@ -80,6 +92,22 @@ export function CenyAdminClient() {
     });
   }, [query, vyrobca, obsah, lenOverride, drafts, overrides]);
 
+  /** Zlúč varianty balení — zoskupenie robíme až po filtroch. */
+  const skupiny = React.useMemo(() => {
+    const g = new Map<string, Material[]>();
+    for (const m of zoznam) {
+      const k = skupinaKey(m);
+      const arr = g.get(k);
+      if (arr) arr.push(m);
+      else g.set(k, [m]);
+    }
+    // v skupine najväčšie balenie prvé — to je default variant
+    for (const arr of g.values()) {
+      arr.sort((a, b) => (b.balenie_kg ?? 0) - (a.balenie_kg ?? 0));
+    }
+    return [...g.entries()];
+  }, [zoznam]);
+
   const vyrobcaCounts = React.useMemo(() => {
     const c = new Map<string, number>();
     for (const m of MATERIALY) c.set(m.vyrobca, (c.get(m.vyrobca) ?? 0) + 1);
@@ -96,13 +124,6 @@ export function CenyAdminClient() {
     return c;
   }, [vyrobca]);
 
-  const chip = (active: boolean) =>
-    `px-3 py-1.5 rounded-full text-[13px] font-semibold whitespace-nowrap transition-colors border-2 ${
-      active
-        ? "bg-[#3db6e8] border-[#3db6e8] text-white"
-        : "bg-white border-zinc-200 text-zinc-700 hover:border-[#3db6e8] hover:text-[#3db6e8]"
-    }`;
-
   const zmeny = Object.entries(drafts).filter(([sku, v]) => {
     const cur = overrides[sku] ?? null;
     const parsed = v === "" ? null : Number(v.replace(",", "."));
@@ -114,7 +135,7 @@ export function CenyAdminClient() {
     const nove: Record<string, number> = { ...overrides };
     for (const [sku, v] of Object.entries(drafts)) {
       if (v === "" || v == null) {
-        delete nove[sku]; // prázdne pole = zruš override, platí cena z CRM
+        delete nove[sku];
         continue;
       }
       const n = Number(v.replace(",", "."));
@@ -143,6 +164,13 @@ export function CenyAdminClient() {
     }
   };
 
+  const chip = (active: boolean) =>
+    `px-3 py-1.5 rounded-full text-[13px] font-semibold whitespace-nowrap transition-colors border-2 ${
+      active
+        ? "bg-[#3db6e8] border-[#3db6e8] text-white"
+        : "bg-white border-zinc-200 text-zinc-700 hover:border-[#3db6e8] hover:text-[#3db6e8]"
+    }`;
+
   return (
     <Container size="xl" className="py-10">
       <h1 className="text-3xl font-extrabold tracking-tight text-[#0e1a3b]">
@@ -151,7 +179,8 @@ export function CenyAdminClient() {
       <p className="mt-1.5 text-sm text-zinc-500 max-w-2xl">
         Zmena ceny tu vytvorí ručný override — prebije cenu z CRM importu a
         označí ju ako pevnú. Prázdne pole = override zrušiť (vráti sa cena z
-        CRM). Ukladanie funguje len na localhoste.
+        CRM). Produkty s viacerými baleniami majú dropdown. Ukladanie funguje
+        len na localhoste.
       </p>
       {online === false && (
         <p className="mt-3 text-sm font-semibold text-red-600 bg-red-50 rounded-lg p-3">
@@ -282,25 +311,53 @@ export function CenyAdminClient() {
             <tr className="text-left text-xs uppercase tracking-wide text-zinc-500 border-b-2 border-zinc-100">
               <th className="px-4 py-3">Produkt</th>
               <th className="px-4 py-3">Balenie</th>
-              <th className="px-4 py-3">Výrobca</th>
               <th className="px-4 py-3 text-right">Objednané</th>
-              <th className="px-4 py-3 text-right">Aktuálna cena</th>
-              <th className="px-4 py-3 text-right w-44">Nová cena (€)</th>
+              <th className="px-4 py-3 text-right">Nákup s DPH / bez</th>
+              <th className="px-4 py-3 text-right">Predaj</th>
+              <th className="px-4 py-3 text-right">Zisk / ks</th>
+              <th className="px-4 py-3 text-right w-40">Nová cena (€)</th>
               <th className="px-4 py-3 w-10" />
             </tr>
           </thead>
           <tbody>
-            {zoznam.map((m) => {
+            {skupiny.map(([key, varianty]) => {
+              const m =
+                varianty.find((v) => v.sku === variant[key]) ?? varianty[0];
               const jeOverride = overrides[m.sku] != null;
               const draft = drafts[m.sku];
+              const nakupS = nakupSDph(m.sku);
+              const nakupBez = nakupS != null ? nakupS / 1.23 : null;
+              const zisk = nakupS != null ? m.cena_eur_s_dph - nakupS : null;
+              const zakladNazov = m.nazov.replace(/\s*\([^)]*\)/g, "").trim();
               return (
-                <tr key={m.sku} className="border-b border-zinc-100 last:border-0 hover:bg-zinc-50">
+                <tr key={key} className="border-b border-zinc-100 last:border-0 hover:bg-zinc-50">
                   <td className="px-4 py-2">
-                    <div className="font-semibold text-zinc-900">{m.nazov}</div>
-                    <div className="text-xs text-zinc-400 font-mono">{m.sku}</div>
+                    <div className="font-semibold text-zinc-900">
+                      {varianty.length > 1 ? zakladNazov : m.nazov}
+                    </div>
+                    <div className="text-xs text-zinc-400">
+                      <span className="font-mono">{m.sku}</span>
+                      <span className="ml-1.5">· {m.vyrobca}</span>
+                    </div>
                   </td>
-                  <td className="px-4 py-2 text-zinc-500 whitespace-nowrap">{m.balenie}</td>
-                  <td className="px-4 py-2 text-zinc-500">{m.vyrobca}</td>
+                  <td className="px-4 py-2 whitespace-nowrap">
+                    {varianty.length > 1 ? (
+                      <select
+                        value={m.sku}
+                        onChange={(e) => setVariant((s) => ({ ...s, [key]: e.target.value }))}
+                        aria-label={`Balenie pre ${zakladNazov}`}
+                        className="px-2.5 py-1.5 rounded-lg border border-[#3db6e8]/60 bg-[#e3f3fb]/40 text-sm font-semibold text-[#0e1a3b] focus:outline-none focus:border-[#3db6e8] cursor-pointer"
+                      >
+                        {varianty.map((v) => (
+                          <option key={v.sku} value={v.sku}>
+                            {variantLabel(v)}
+                          </option>
+                        ))}
+                      </select>
+                    ) : (
+                      <span className="text-zinc-500">{m.balenie}</span>
+                    )}
+                  </td>
                   <td className="px-4 py-2 text-right whitespace-nowrap">
                     {kusyPerSku.get(m.sku) ? (
                       <span className="font-bold text-emerald-700">{kusyPerSku.get(m.sku)} ks</span>
@@ -309,11 +366,30 @@ export function CenyAdminClient() {
                     )}
                   </td>
                   <td className="px-4 py-2 text-right whitespace-nowrap">
+                    {nakupS != null ? (
+                      <>
+                        <span className="font-semibold text-zinc-700">{fmt.format(nakupS)} €</span>
+                        <span className="block text-xs text-zinc-400">{fmt.format(nakupBez!)} € bez DPH</span>
+                      </>
+                    ) : (
+                      <span className="text-zinc-300" title="Fixná cena z CRM — nákupku nepoznáme">—</span>
+                    )}
+                  </td>
+                  <td className="px-4 py-2 text-right whitespace-nowrap">
                     <span className="font-bold">{fmt.format(m.cena_eur_s_dph)} €</span>
                     {jeOverride && (
                       <span className="ml-1.5 px-1.5 py-0.5 rounded bg-amber-100 text-amber-700 text-[10px] font-bold uppercase">
                         ručná
                       </span>
+                    )}
+                  </td>
+                  <td className="px-4 py-2 text-right whitespace-nowrap">
+                    {zisk != null ? (
+                      <span className={`font-extrabold ${zisk >= 0 ? "text-emerald-700" : "text-red-600"}`}>
+                        {zisk >= 0 ? "+" : ""}{fmt.format(zisk)} €
+                      </span>
+                    ) : (
+                      <span className="text-zinc-300">—</span>
                     )}
                   </td>
                   <td className="px-4 py-2 text-right">
@@ -326,7 +402,7 @@ export function CenyAdminClient() {
                         setDrafts((d) => ({ ...d, [m.sku]: e.target.value }))
                       }
                       aria-label={`Nová cena pre ${m.nazov}`}
-                      className="w-32 px-3 py-1.5 rounded-lg border border-zinc-300 text-right focus:outline-none focus:border-[#3db6e8] focus:ring-1 focus:ring-[#3db6e8]"
+                      className="w-28 px-3 py-1.5 rounded-lg border border-zinc-300 text-right focus:outline-none focus:border-[#3db6e8] focus:ring-1 focus:ring-[#3db6e8]"
                     />
                   </td>
                   <td className="px-2 py-2">
@@ -349,8 +425,9 @@ export function CenyAdminClient() {
         </table>
       </div>
       <p className="mt-3 text-xs text-zinc-400">
-        {zoznam.length} z {MATERIALY.length} produktov · ručných cien:{" "}
-        {Object.keys(overrides).length}
+        {zoznam.length} z {MATERIALY.length} produktov v {skupiny.length} riadkoch
+        · ručných cien: {Object.keys(overrides).length}
+        · Zisk = predaj − nákup s DPH (neplatiteľ DPH; pred daňou z príjmu)
       </p>
     </Container>
   );
