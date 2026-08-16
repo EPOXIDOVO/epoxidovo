@@ -49,50 +49,33 @@ export default function EshopPage() {
         </Container>
       </nav>
 
-      {/* ── DVOJITÉ VIDEO HERO (štýl Epodex) ── */}
+      {/* ── VIDEO HERO — jedno, na celú šírku ── */}
       <section className="bg-white">
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-1.5 p-1.5">
-          {[
-            {
-              video: "/video/eshop-hero-a.mp4",
-              poster: "/images/categories/metalicke.jpg",
-              nadpis: "Nalej si vlastnú podlahu",
-              popis: "Materiály a návody pre šikovné ruky",
-              cta: "Prezrieť katalóg",
-              href: "/eshop#katalog",
-            },
-            {
-              video: "/video/eshop-hero-b.mp4",
-              poster: "/images/hero/byvanie-v2.webp",
-              nadpis: "Profesionálna realizácia",
-              popis: "Prevezmeme váš projekt od podkladu po lak",
-              cta: "Nezáväzná cenová ponuka",
-              href: "/cenova-ponuka",
-            },
-          ].map((v) => (
-            <a key={v.video} href={v.href} className="group relative block h-[40vh] min-h-[300px] max-h-[440px] overflow-hidden">
-              <video
-                className="absolute inset-0 w-full h-full object-cover"
-                autoPlay
-                muted
-                loop
-                playsInline
-                poster={v.poster}
-              >
-                <source src={v.video} type="video/mp4" />
-              </video>
-              <div aria-hidden className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent" />
-              <div className="absolute bottom-0 inset-x-0 p-5 md:p-7 text-center text-white">
-                <h2 className="text-xl md:text-3xl font-extrabold tracking-tight" style={{ textWrap: "balance" }}>
-                  {v.nadpis}
-                </h2>
-                <p className="mt-1 text-white/85 md:text-lg">{v.popis}</p>
-                <span className="mt-4 inline-flex items-center gap-2 px-6 py-3 rounded-full bg-white text-[#0e1a3b] font-bold group-hover:bg-[#f97316] group-hover:text-white transition-colors">
-                  {v.cta}
-                </span>
-              </div>
-            </a>
-          ))}
+        <div className="p-1.5">
+          <a href="/eshop#katalog" className="group relative block h-[40vh] min-h-[300px] max-h-[440px] overflow-hidden">
+            <video
+              className="absolute inset-0 w-full h-full object-cover"
+              autoPlay
+              muted
+              loop
+              playsInline
+              poster="/images/categories/metalicke.jpg"
+            >
+              <source src="/video/eshop-hero-a.mp4" type="video/mp4" />
+            </video>
+            <div aria-hidden className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent" />
+            <div className="absolute bottom-0 inset-x-0 p-5 md:p-7 text-center text-white">
+              <h2 className="text-xl md:text-3xl font-extrabold tracking-tight" style={{ textWrap: "balance" }}>
+                Nalej si vlastnú podlahu
+              </h2>
+              <p className="mt-1 text-white/85 md:text-lg">
+                Dáme ti presný návod, spotreby aj podporu na telefóne — s nami to zvládneš aj sám
+              </p>
+              <span className="mt-4 inline-flex items-center gap-2 px-6 py-3 rounded-full bg-white text-[#0e1a3b] font-bold group-hover:bg-[#f97316] group-hover:text-white transition-colors">
+                Prezrieť katalóg
+              </span>
+            </div>
+          </a>
         </div>
       </section>
 
@@ -192,6 +175,74 @@ export default function EshopPage() {
                 </div>
               </div>
             ))}
+          </div>
+        </Container>
+      </section>
+
+
+      {/* ── ZÁKAZNÍCKY SERVIS + REALIZAČNÁ FIRMA (štýl Epodex) ── */}
+      <section className="bg-[#f7f7f4]">
+        <Container size="xl" className="py-10 md:py-14">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div className="rounded-3xl border border-zinc-200 bg-white p-6 md:p-8 flex items-center gap-5">
+              <Image
+                src="/images/eshop/medved-hlava.png"
+                alt=""
+                width={112}
+                height={112}
+                quality={85}
+                className="w-24 h-24 md:w-28 md:h-28 shrink-0 rounded-full ring-4 ring-[#e3f3fb]"
+              />
+              <div className="min-w-0">
+                <div className="text-xs font-bold uppercase tracking-wide text-[#1a8cc4]">
+                  Zákaznícky servis
+                </div>
+                <h2 className="mt-1 text-xl md:text-2xl font-extrabold text-[#0e1a3b]" style={{ textWrap: "balance" }}>
+                  Máš otázky? Rád ti pomôžem!
+                </h2>
+                <p className="mt-1 text-sm text-zinc-500">
+                  Skladby, spotreby aj postup — poradíme zadarmo. Po–Pi 8:00–17:00.
+                </p>
+                <div className="mt-3 flex flex-wrap gap-x-5 gap-y-1.5 text-sm font-bold">
+                  <a href={`tel:${SITE.contact.phoneRaw}`} className="inline-flex items-center gap-1.5 text-[#0e1a3b] hover:text-[#1a8cc4] transition-colors whitespace-nowrap">
+                    <Phone className="w-4 h-4 text-[#16a34a]" aria-hidden />
+                    {SITE.contact.phone}
+                  </a>
+                  <a href={`mailto:${SITE.contact.email}`} className="text-[#1a8cc4] hover:underline whitespace-nowrap">
+                    {SITE.contact.email}
+                  </a>
+                </div>
+              </div>
+            </div>
+
+            <div className="rounded-3xl border border-zinc-200 bg-white p-6 md:p-8 flex items-center gap-5">
+              <Image
+                src="/images/site/logo_v2.png"
+                alt="EPOXIDOVO logo"
+                width={112}
+                height={99}
+                quality={85}
+                className="w-24 md:w-28 h-auto shrink-0"
+              />
+              <div className="min-w-0">
+                <div className="text-xs font-bold uppercase tracking-wide text-[#1a8cc4]">
+                  Sme aj realizačná firma
+                </div>
+                <h2 className="mt-1 text-xl md:text-2xl font-extrabold text-[#0e1a3b]" style={{ textWrap: "balance" }}>
+                  Nechceš liať sám? Urobíme to za teba.
+                </h2>
+                <p className="mt-1 text-sm text-zinc-500">
+                  Ten istý materiál lejeme dennodenne na realizáciách po celom
+                  Slovensku — {SITE.legalName}, Ružomberok.
+                </p>
+                <a
+                  href="/cenova-ponuka"
+                  className="mt-3 inline-flex items-center gap-2 px-5 py-2.5 rounded-full bg-[#f97316] text-white font-bold text-sm hover:bg-[#ea580c] transition-colors whitespace-nowrap"
+                >
+                  Nezáväzná cenová ponuka
+                </a>
+              </div>
+            </div>
           </div>
         </Container>
       </section>
