@@ -116,9 +116,8 @@ export const VZHLADY_PODLAHA = [
   { id: "chipsy", label: "Chipsové" },
   { id: "metalik", label: "Metalické" },
   { id: "marble", label: "Mramorové" },
+  { id: "beton_look", label: "Betón Look" },
   { id: "priemyselna", label: "Priemyselné" },
-  { id: "beton_look", label: "Arturo betón look" },
-  { id: "kamenny_koberec", label: "Kamenný koberec" },
 ];
 
 export const VZHLADY_STENA = [

@@ -13,7 +13,6 @@ import {
   Phone,
   Printer,
   Clock,
-  Ruler,
 } from "lucide-react";
 import { Container } from "@/components/ui/Container";
 import { useCart } from "@/lib/cart";
@@ -41,7 +40,7 @@ import {
 } from "@/lib/konfigurator/rules";
 import type { Co, Kde, System } from "@/lib/konfigurator/systemy";
 import { efektivnaPlocha, fmtEur, plochaSchodov, prepocitaj } from "@/lib/konfigurator/vypocet";
-import { EFEKTY, FOTO_CO, FOTO_PRIESTOR, FOTO_VZHLAD, RAL_ZAKLADNE, type Nahlad } from "./fotky";
+import { EFEKTY, FOTO_PRIESTOR, FOTO_VZHLAD, GALERIA_VZHLAD, RAL_ZAKLADNE, type Nahlad } from "./fotky";
 
 /**
  * Konfigurátor „Navrhni si podlahu" — 8 krokov s vetvením.
@@ -76,12 +75,6 @@ function DiceIcon({ pips }: { pips: 1 | 2 | 3 | 4 | 5 }) {
 const SESSION_KEY = "epx-konfigurator-v1";
 
 type KrokId = "co" | "kde" | "priestor" | "podklad" | "stav" | "plocha" | "vzhlad" | "finis";
-
-const CO_MOZNOSTI: { id: Co; label: string; tab: string; popis: string }[] = [
-  { id: "podlaha", label: "Podlahu", tab: "Podlaha", popis: "Liata podlaha do interiéru aj exteriéru" },
-  { id: "stena", label: "Stenu", tab: "Stena", popis: "Mikrocement, náter alebo dekoratívny efekt" },
-  { id: "schody", label: "Schody", tab: "Schody", popis: "Nášľapy, podstupnice a protišmyk" },
-];
 
 const KDE_MOZNOSTI: { id: Kde; label: string; popis: string }[] = [
   { id: "interier", label: "Interiér", popis: "Vnútri, bez priameho slnka a mrazu" },
@@ -199,13 +192,8 @@ export function KonfiguratorClient() {
     }
   })();
 
-  /* ── náhľad vpravo: vzhľad > priestor > čo ── */
-  const nahlad: Nahlad = React.useMemo(() => {
-    if (volba.vzhlad && FOTO_VZHLAD[volba.vzhlad]) return FOTO_VZHLAD[volba.vzhlad];
-    if (volba.priestor && FOTO_PRIESTOR[volba.priestor]) return FOTO_PRIESTOR[volba.priestor];
-    if (volba.co && FOTO_CO[volba.co]) return FOTO_CO[volba.co];
-    return FOTO_CO.podlaha;
-  }, [volba.vzhlad, volba.priestor, volba.co]);
+  /** Vzhľady pre aktuálnu vetvu — používa sa aj na určenie posledného stĺpca. */
+  const zoznamVzhladov = dostupnostVzhladov(volba);
 
   const blok = blokujePodklad(volba);
 
@@ -300,7 +288,7 @@ export function KonfiguratorClient() {
 
   return (
     <Container size="xl" className="py-8 md:py-12">
-      <div className="lg:grid lg:grid-cols-[1fr_400px] lg:gap-8 lg:items-start">
+      <div>
         <div>
           {/* progress */}
           <div className="flex items-center gap-3">
@@ -561,14 +549,14 @@ export function KonfiguratorClient() {
                 </p>
 
                 {/* karty 1:1 so sekciou „Čo všetko vieme vyčarovať" na webe */}
-                <div className="mt-5 rounded-3xl bg-[var(--color-copper)] p-3 md:p-5">
-                  <div className="grid grid-cols-2 lg:grid-cols-3 gap-2.5 md:gap-4">
-                    {dostupnostVzhladov(volba).map((m, idx) => {
+                <div className="mt-5">
+                  <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-2.5 md:gap-4">
+                    {zoznamVzhladov.map((m, idx) => {
                       const vybrata = volba.vzhlad === m.id;
                       const foto = FOTO_VZHLAD[m.id];
                       return (
+                        <div key={m.id} className="flex flex-col gap-2.5 md:gap-4">
                         <button
-                          key={m.id}
                           type="button"
                           disabled={!m.dostupny}
                           title={m.dovod}
@@ -616,6 +604,44 @@ export function KonfiguratorClient() {
                             )}
                           </div>
                         </button>
+
+                          {/* dve varianty toho istého typu — ako stĺpce na webe */}
+                          {(GALERIA_VZHLAD[m.id] ?? [null, null]).map((src, i) => (
+                            <button
+                              key={i}
+                              type="button"
+                              disabled={!m.dostupny}
+                              onClick={() => m.dostupny && vyberADalej({ vzhlad: m.id })}
+                              className={`relative block w-full aspect-[16/9] rounded-xl overflow-hidden ${
+                                src ? "" : "border border-dashed border-zinc-300 bg-zinc-100"
+                              } ${m.dostupny ? "" : "opacity-50 cursor-not-allowed"}`}
+                            >
+                              {src ? (
+                                <Image
+                                  src={src}
+                                  alt=""
+                                  fill
+                                  sizes="(max-width: 768px) 50vw, 17vw"
+                                  quality={75}
+                                  className="object-cover"
+                                />
+                              ) : (
+                                <span className="absolute inset-0 flex items-center justify-center text-[11px] font-semibold text-zinc-400">
+                                  Fotka sa dopĺňa
+                                </span>
+                              )}
+                            </button>
+                          ))}
+
+                          {/* pod každým stĺpcom vlastný vzorkovník — sú to iné podlahy */}
+                          <Link
+                            href="/vzorkovnik"
+                            aria-label={`Celý vzorkovník — ${m.label}`}
+                            className="inline-flex items-center justify-center px-3 py-2.5 md:py-3 rounded-full bg-[#3db6e8] text-white font-semibold text-[12px] md:text-sm whitespace-nowrap hover:bg-[#1a8cc4] shadow-[0_6px_20px_rgba(61,182,232,0.35)] hover:-translate-y-0.5 transition-all duration-300"
+                          >
+                            Celý vzorkovník
+                          </Link>
+                        </div>
                       );
                     })}
                   </div>
@@ -654,43 +680,6 @@ export function KonfiguratorClient() {
           </div>
         </div>
 
-        {/* ── náhľadový panel ── */}
-        <aside className="hidden lg:block sticky top-28 space-y-3">
-          <NahladPanel n={nahlad} />
-          <div className="rounded-2xl bg-[#f7f6f3] p-4 text-sm">
-            <div className="text-xs font-bold uppercase tracking-wide text-[#6b7390]">Tvoj výber</div>
-            <ul className="mt-2 space-y-1 font-semibold text-[#0e1a3b]">
-              {volba.kde && <li>{KDE_MOZNOSTI.find((c) => c.id === volba.kde)?.label}</li>}
-              {volba.priestor && (
-                <li>{(PRIESTORY[`${volba.co}-${volba.kde}`] ?? []).find((p) => p.id === volba.priestor)?.label}</li>
-              )}
-              {volba.podklad && (
-                <li>{dostupnePodklady(volba.co).find((p) => p.id === volba.podklad)?.label}</li>
-              )}
-              {efektivnaPlocha(volba) != null && (
-                <li className="tabular-nums">{efektivnaPlocha(volba)} m²</li>
-              )}
-            </ul>
-            {/* živý prepočet pri kroku s plochou — panel neostane prázdny */}
-            {krok === "plocha" && efektivnaPlocha(volba) != null && (
-              <div className="mt-3 pt-3 border-t border-zinc-200 text-[#4a5478] space-y-1">
-                <div className="flex items-center gap-2">
-                  <Ruler className="w-4 h-4 text-[#3db6e8]" aria-hidden />
-                  <span className="tabular-nums">{efektivnaPlocha(volba)} m²</span>
-                </div>
-                <div className="flex items-center gap-2">
-                  <Clock className="w-4 h-4 text-[#3db6e8]" aria-hidden />
-                  orientačne {Math.max(2, Math.round((efektivnaPlocha(volba) ?? 0) / 8))}–
-                  {Math.max(3, Math.round((efektivnaPlocha(volba) ?? 0) / 6))} hodín liatia
-                </div>
-                <div className="flex items-center gap-2">
-                  <Check className="w-4 h-4 text-[#16a34a]" aria-hidden />
-                  cca {trebaNivelaciu(volba) ? 4 : 3} dni s technologickými prestávkami
-                </div>
-              </div>
-            )}
-          </div>
-        </aside>
       </div>
     </Container>
   );
@@ -706,25 +695,6 @@ function FotoPozadie({ n }: { n?: Nahlad }) {
       {/* biely závoj len dole pod textom — fotka hore musí byť vidieť */}
       <span aria-hidden className="absolute inset-0 bg-gradient-to-t from-white via-white/75 to-white/5" />
     </>
-  );
-}
-
-function NahladPanel({ n }: { n: Nahlad }) {
-  return (
-    <figure className="relative aspect-[4/5] rounded-3xl overflow-hidden shadow-[0_18px_50px_rgba(14,26,59,0.18)] bg-zinc-200">
-      {n.src ? (
-        <Image src={n.src} alt={n.label} fill sizes="400px" quality={85} className="object-cover" />
-      ) : (
-        <div className="absolute inset-0 flex flex-col items-center justify-center gap-2 p-6 text-center bg-zinc-200">
-          <span className="text-4xl" aria-hidden>📷</span>
-          <span className="font-bold text-zinc-600">{n.label}</span>
-          <span className="text-xs text-zinc-500">Sem patrí: {n.chyba}</span>
-        </div>
-      )}
-      <figcaption className="absolute bottom-0 inset-x-0 bg-gradient-to-t from-black/75 to-transparent px-4 pt-8 pb-3 text-white text-sm font-semibold">
-        {n.label}
-      </figcaption>
-    </figure>
   );
 }
 

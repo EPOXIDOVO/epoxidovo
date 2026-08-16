@@ -45,11 +45,28 @@ export const FOTO_VZHLAD: Record<string, Nahlad> = {
   metalik: F("/images/categories/metalicke.jpg", "Metalické"),
   marble: F("/images/categories/mramorove.jpg", "Mramorové"),
   priemyselna: F("/images/hero/hala.jpg", "Priemyselné"),
-  beton_look: CHYBA("Arturo betón look", "Fotka dekoratívneho betónového povrchu Arturo"),
+  beton_look: CHYBA("Betón Look", "Fotka dekoratívneho betónového povrchu (Arturo)"),
   kamenny_koberec: CHYBA("Kamenný koberec", "Fotka kamenného koberca"),
   mikrocement: CHYBA("Mikrocement", "Fotka mikrocementovej steny"),
   epoxidovy_nater: CHYBA("Epoxidový náter na stenu", "Fotka natretej steny v prevádzke"),
   dekor: CHYBA("Dekoratívny efekt", "Fotka dekoratívnej stierky na stene"),
+};
+
+/**
+ * Dve doplnkové fotky pod každou kartou vzhľadu (stĺpec ako na webe).
+ * null = prázdne miesto, UI ukáže čakajúci rámik. Sem doplň reálne fotky.
+ */
+export const GALERIA_VZHLAD: Record<string, (string | null)[]> = {
+  // rovnaké varianty ako v sekcii „Čo všetko vieme vyčarovať" na webe
+  jednofarebna: ["/images/realizacie/r-28.jpg", "/images/realizacie/r-19.jpg"],
+  chipsy: ["/images/realizacie/r-47.jpg", "/images/realizacie/r-49.jpg"],
+  metalik: [
+    "/images/eshop/topstone-metallic/azuro.jpg",
+    "/images/eshop/topstone-metallic/gold.jpg",
+  ],
+  marble: [null, null],
+  beton_look: [null, null],
+  priemyselna: ["/images/realizacie/r-20.jpg", "/images/realizacie/r-22.jpg"],
 };
 
 /** Metalické a marble efekty — reálne vzorky TopStone. */
