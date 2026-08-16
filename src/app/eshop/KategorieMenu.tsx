@@ -25,10 +25,6 @@ const POLOZKY: {
   {
     label: "Kamenný koberec 🪨",
     href: "/eshop?skupina=kamenny-koberec#katalog",
-    deti: [
-      { label: "Kamene a spojivá", href: "/eshop?skupina=kamenny-koberec#katalog" },
-      { label: "Chipsy a posypy", href: "/eshop?kat=chipsy#katalog" },
-    ],
   },
   {
     label: "Príprava podkladu 🏗️",
@@ -42,7 +38,7 @@ const POLOZKY: {
   },
   { label: "Náradie 🛠️", href: "/eshop?skupina=naradie#katalog" },
   { label: "Mikrocement 🧊", coskoro: true },
-  { label: "Nátery na betón 🎨", href: "/eshop?skupina=hlavne#katalog" },
+  { label: "Nátery na betón 🎨", coskoro: true },
   { label: "Dekoratívne steny 🖌️", coskoro: true },
 ];
 

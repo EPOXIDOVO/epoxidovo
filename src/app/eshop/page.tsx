@@ -43,15 +43,13 @@ const DLAZDICE: Record<
       { text: "Penetrácie", href: "/eshop?skupina=penetracie#katalog" },
       { text: "Hlavné vrstvy a nátery", href: "/eshop?skupina=hlavne#katalog" },
       { text: "Vrchné laky", href: "/eshop?skupina=laky#katalog" },
+      { text: "Chipsy a posypy", href: "/eshop?kat=chipsy#katalog" },
     ],
   },
   koberec: {
     label: "KAMENNÝ KOBEREC",
     img: "/images/categories/mramorove.jpg",
-    linky: [
-      { text: "Kamene a spojivá", href: "/eshop?skupina=kamenny-koberec#katalog" },
-      { text: "Chipsy a posypy", href: "/eshop?kat=chipsy#katalog" },
-    ],
+    linky: [{ text: "Kamene a spojivá", href: "/eshop?skupina=kamenny-koberec#katalog" }],
   },
   priprava: {
     label: "PRÍPRAVA PODKLADU",

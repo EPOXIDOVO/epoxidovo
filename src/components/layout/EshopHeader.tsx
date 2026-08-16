@@ -67,7 +67,7 @@ export function EshopHeader() {
             type="search"
             value={q}
             onChange={(e) => setQ(e.target.value)}
-            placeholder="Hľadaj v obchode — napr. „264“ alebo „piesok“"
+            placeholder="Hľadaj v obchode — napr. „nivelácia“ alebo „metalická epoxidová podlaha“"
             aria-label="Hľadať v obchode"
             className="w-full pl-11 pr-4 py-2.5 rounded-full border-2 border-zinc-200 bg-zinc-50 text-sm text-zinc-900 placeholder:text-zinc-400 focus:outline-none focus:border-[#3db6e8] focus:bg-white transition-colors"
           />
