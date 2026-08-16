@@ -22,27 +22,47 @@ export function B2bForm() {
   // Predikcia z Registra právnických osôb — spoločný dropdown pre obe polia.
   const [navrhy, setNavrhy] = React.useState<Navrh[]>([]);
   const [openPre, setOpenPre] = React.useState<"firma" | "ico" | null>(null);
+  const [hladam, setHladam] = React.useState(false);
   const debounceRef = React.useRef<number | null>(null);
+  const abortRef = React.useRef<AbortController | null>(null);
+  const seqRef = React.useRef(0);
   const boxRef = React.useRef<HTMLDivElement>(null);
 
   const hladaj = (q: string, pole: "firma" | "ico") => {
     if (debounceRef.current) window.clearTimeout(debounceRef.current);
     if (q.trim().length < 3) {
+      abortRef.current?.abort();
       setNavrhy([]);
       setOpenPre(null);
+      setHladam(false);
       return;
     }
     debounceRef.current = window.setTimeout(async () => {
+      // zruš predchádzajúci request — register je pomalý a staré odpovede
+      // by prepísali novšie
+      abortRef.current?.abort();
+      const ctrl = new AbortController();
+      abortRef.current = ctrl;
+      const moje = ++seqRef.current;
+      setHladam(true);
+      setOpenPre(pole);
       try {
-        const res = await fetch(`/api/b2b/lookup?q=${encodeURIComponent(q.trim())}`);
+        const res = await fetch(`/api/b2b/lookup?q=${encodeURIComponent(q.trim())}`, {
+          signal: ctrl.signal,
+        });
         const json = (await res.json()) as { results?: Navrh[] };
+        if (moje !== seqRef.current) return; // medzitým odišiel novší dopyt
         setNavrhy(json.results ?? []);
         setOpenPre(json.results?.length ? pole : null);
-      } catch {
+        setHladam(false);
+      } catch (e) {
+        if ((e as Error).name === "AbortError") return;
+        if (moje !== seqRef.current) return;
         setNavrhy([]);
         setOpenPre(null);
+        setHladam(false);
       }
-    }, 300);
+    }, 400);
   };
 
   React.useEffect(() => {
@@ -111,12 +131,18 @@ export function B2bForm() {
 
   const dropdown = (pole: "firma" | "ico") =>
     openPre === pole &&
-    navrhy.length > 0 && (
+    (hladam || navrhy.length > 0) && (
       <ul
         className="absolute z-30 left-0 right-0 top-full mt-1 rounded-xl border border-zinc-200 bg-white shadow-[0_14px_40px_rgba(0,0,0,0.15)] overflow-hidden max-h-72 overflow-y-auto"
         role="listbox"
         aria-label="Návrhy firiem z registra"
       >
+        {hladam && (
+          <li className="px-4 py-2.5 text-sm text-zinc-500 flex items-center gap-2">
+            <span className="inline-block w-3.5 h-3.5 rounded-full border-2 border-[#3db6e8] border-t-transparent animate-spin" aria-hidden />
+            Hľadám v registri firiem…
+          </li>
+        )}
         {navrhy.map((n) => (
           <li key={n.ico}>
             <button
