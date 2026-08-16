@@ -121,7 +121,7 @@ export default function EshopPage() {
       <section className="bg-white">
         <Container size="xl" className="pt-4">
           <a
-            href="/eshop#katalog"
+            href="/kupit-material/kalkulacka"
             className="group relative block h-[58vh] min-h-[420px] max-h-[640px] overflow-hidden rounded-3xl"
           >
             <video
@@ -134,32 +134,33 @@ export default function EshopPage() {
             >
               <source src="/video/eshop-hero-a.mp4" type="video/mp4" />
             </video>
-            <div aria-hidden className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/45 to-black/20" />
+            {/* tmavý scrim namiesto tieňov na písme — text je čitateľný
+                aj na svetlom videe a neplávajú okolo neho fleky */}
+            <div aria-hidden className="absolute inset-0 bg-gradient-to-t from-black/92 via-black/55 to-black/15" />
             <div className="absolute inset-x-0 bottom-0 p-6 md:p-10 text-center text-white">
               <h2
-                className="text-2xl md:text-5xl font-extrabold tracking-tight drop-shadow-[0_2px_12px_rgba(0,0,0,0.6)]"
+                className="text-2xl md:text-5xl font-extrabold tracking-tight"
                 style={{ textWrap: "balance" }}
               >
                 Prvú podlahu zvládneš aj sám
               </h2>
-              <p className="mt-3 mx-auto max-w-2xl text-[15px] md:text-lg text-white/90 leading-relaxed drop-shadow-[0_1px_8px_rgba(0,0,0,0.6)]">
-                Nie je to žiadna veda — vypočítame ti presné množstvá na tvoje m²,
-                pošleme návod krok za krokom a keď pri liatí zaváhaš, dvihneme
-                telefón. Materiál dostaneš ten istý, aký sami lejeme na zákazkách.
+              <p className="mt-3 mx-auto max-w-xl text-base md:text-xl text-white/90 leading-snug">
+                Presné množstvá na tvoje m², návod krok za krokom a poradenstvo
+                na telefóne. Podlahy aj steny.
               </p>
               <div className="mt-4 flex flex-wrap items-center justify-center gap-2">
                 {["Presný rozpis materiálu", "Návod krok za krokom", "Poradíme počas liatia"].map((t) => (
                   <span
                     key={t}
-                    className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full bg-white/15 backdrop-blur-sm border border-white/25 text-[13px] font-semibold whitespace-nowrap"
+                    className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full bg-black/40 border border-white/20 text-[13px] font-semibold whitespace-nowrap"
                   >
                     <Check className="w-3.5 h-3.5" aria-hidden />
                     {t}
                   </span>
                 ))}
               </div>
-              <span className="mt-5 inline-flex items-center gap-2 px-7 py-3.5 rounded-full bg-[#f97316] text-white font-extrabold text-base md:text-lg shadow-[0_12px_32px_rgba(249,115,22,0.5)] group-hover:bg-[#ea580c] transition-colors">
-                Prezrieť katalóg
+              <span className="mt-5 inline-flex items-center gap-2 px-8 py-4 rounded-full bg-[#f97316] text-white font-extrabold text-base md:text-lg shadow-[0_12px_32px_rgba(249,115,22,0.5)] group-hover:bg-[#ea580c] transition-colors">
+                Spočítaj si materiál na svoju plochu
               </span>
             </div>
           </a>
