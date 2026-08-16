@@ -40,7 +40,7 @@ export const FOTO_PRIESTOR: Record<string, Nahlad> = {
 };
 
 export const FOTO_VZHLAD: Record<string, Nahlad> = {
-  jednofarebna: F("/images/hero/byvanie-v2.webp", "Hladké jednofarebné"),
+  jednofarebna: F("/images/hero/byvanie-v2.webp", "Jednofarebné"),
   chipsy: F("/images/categories/chipsove.jpg", "Chipsové"),
   metalik: F("/images/categories/metalicke.jpg", "Metalické"),
   marble: F("/images/categories/mramorove.jpg", "Mramorové"),

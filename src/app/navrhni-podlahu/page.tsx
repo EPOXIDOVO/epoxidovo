@@ -22,11 +22,11 @@ export default function NavrhniPodlahuPage() {
         ]}
       />
       <div className="bg-[#f7f7f4] min-h-screen">
-        <Container size="xl" className="pt-8 md:pt-10">
-          <h1 className="text-3xl md:text-4xl font-extrabold tracking-tight text-[#0e1a3b]">
+        <Container size="xl" className="pt-5 md:pt-6">
+          <h1 className="text-2xl md:text-3xl font-extrabold tracking-tight text-[#0e1a3b]">
             Zisti, aký materiál potrebuješ
           </h1>
-          <p className="mt-2 text-[#4a5478] max-w-2xl">
+          <p className="mt-1 text-sm md:text-base text-[#4a5478] max-w-2xl">
             Odpovedz na pár otázok a dostaneš presnú skladbu vrstiev, spotrebu
             materiálu aj cenu. Trvá to minútu.
           </p>

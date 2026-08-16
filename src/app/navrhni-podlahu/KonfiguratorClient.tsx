@@ -287,7 +287,7 @@ export function KonfiguratorClient() {
   }
 
   return (
-    <Container size="xl" className="py-8 md:py-12">
+    <Container size="xl" className="pt-3 pb-8 md:pt-4 md:pb-10">
       <div>
         <div>
           {/* progress */}
@@ -550,12 +550,12 @@ export function KonfiguratorClient() {
 
                 {/* karty 1:1 so sekciou „Čo všetko vieme vyčarovať" na webe */}
                 <div className="mt-5">
-                  <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-2.5 md:gap-4">
+                  <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-2.5 md:gap-3">
                     {zoznamVzhladov.map((m, idx) => {
                       const vybrata = volba.vzhlad === m.id;
                       const foto = FOTO_VZHLAD[m.id];
                       return (
-                        <div key={m.id} className="flex flex-col gap-2.5 md:gap-4">
+                        <div key={m.id} className="flex flex-col gap-2 md:gap-2.5">
                         <button
                           type="button"
                           disabled={!m.dostupny}
@@ -576,18 +576,15 @@ export function KonfiguratorClient() {
                               <Check className="w-5 h-5" aria-hidden />
                             </span>
                           )}
-                          <div className="px-3 pt-2.5 pb-2 md:p-5 md:pb-3 min-h-[76px] md:min-h-[124px] flex flex-col">
-                            <div className="w-6 h-6 md:w-9 md:h-9 mb-1 md:mb-3 rounded-md bg-white text-[#5c2c18] group-hover:text-[#3db6e8] flex items-center justify-center p-1 md:p-1.5 transition-colors duration-500 shrink-0">
+                          <div className="px-3 pt-3 pb-2.5 md:px-4 md:pt-4 md:pb-3 flex flex-col">
+                            <div className="w-6 h-6 md:w-8 md:h-8 mb-1.5 md:mb-2 rounded-md bg-white text-[#5c2c18] group-hover:text-[#3db6e8] flex items-center justify-center p-1 md:p-1.5 transition-colors duration-500 shrink-0">
                               <DiceIcon pips={((idx % 5) + 1) as 1 | 2 | 3 | 4 | 5} />
                             </div>
-                            <h3 className="text-[15px] leading-[1.12] md:text-xl font-black text-white tracking-tight md:leading-[1.05]">
+                            <h3 className="text-[14px] leading-[1.12] md:text-lg lg:text-xl font-black text-white tracking-tight md:leading-[1.05] line-clamp-2">
                               {m.label}
                             </h3>
-                            {!m.dostupny && (
-                              <span className="mt-1 text-[11px] leading-snug text-white/80">{m.dovod}</span>
-                            )}
                           </div>
-                          <div className="relative overflow-hidden aspect-[4/3] bg-[#4a2313]">
+                          <div className="relative overflow-hidden h-[120px] md:h-[clamp(104px,15.5vh,190px)] bg-[#4a2313]">
                             {foto?.src ? (
                               <Image
                                 src={foto.src}
@@ -612,7 +609,7 @@ export function KonfiguratorClient() {
                               type="button"
                               disabled={!m.dostupny}
                               onClick={() => m.dostupny && vyberADalej({ vzhlad: m.id })}
-                              className={`relative block w-full aspect-[16/9] rounded-xl overflow-hidden ${
+                              className={`relative block w-full h-[86px] md:h-[clamp(74px,10.8vh,150px)] rounded-xl overflow-hidden ${
                                 src ? "" : "border border-dashed border-zinc-300 bg-zinc-100"
                               } ${m.dostupny ? "" : "opacity-50 cursor-not-allowed"}`}
                             >
@@ -637,7 +634,7 @@ export function KonfiguratorClient() {
                           <Link
                             href="/vzorkovnik"
                             aria-label={`Celý vzorkovník — ${m.label}`}
-                            className="inline-flex items-center justify-center px-3 py-2.5 md:py-3 rounded-full bg-[#3db6e8] text-white font-semibold text-[12px] md:text-sm whitespace-nowrap hover:bg-[#1a8cc4] shadow-[0_6px_20px_rgba(61,182,232,0.35)] hover:-translate-y-0.5 transition-all duration-300"
+                            className="inline-flex items-center justify-center px-3 py-2 md:py-2.5 rounded-full bg-[#3db6e8] text-white font-semibold text-[12px] md:text-sm whitespace-nowrap hover:bg-[#1a8cc4] shadow-[0_6px_20px_rgba(61,182,232,0.35)] hover:-translate-y-0.5 transition-all duration-300"
                           >
                             Celý vzorkovník
                           </Link>
@@ -655,16 +652,19 @@ export function KonfiguratorClient() {
             )}
           </div>
 
-          {/* navigácia */}
-          <div className="mt-8 flex items-center justify-between">
-            <button
-              type="button"
-              onClick={naspat}
-              disabled={krokIndex === 0}
-              className="inline-flex items-center gap-2 px-5 py-3 rounded-full border-2 border-zinc-200 font-semibold text-[#4a5478] disabled:opacity-40 hover:border-zinc-400 transition-colors"
-            >
-              <ArrowLeft className="w-4 h-4" aria-hidden /> Späť
-            </button>
+          {/* navigácia — na prvom kroku netreba, Späť by aj tak nefungovalo */}
+          <div className={`flex items-center justify-between ${krokIndex === 0 ? "mt-4" : "mt-8"}`}>
+            {krokIndex === 0 ? (
+              <span />
+            ) : (
+              <button
+                type="button"
+                onClick={naspat}
+                className="inline-flex items-center gap-2 px-5 py-3 rounded-full border-2 border-zinc-200 font-semibold text-[#4a5478] hover:border-zinc-400 transition-colors"
+              >
+                <ArrowLeft className="w-4 h-4" aria-hidden /> Späť
+              </button>
+            )}
             {/* Ďalej len tam, kde nie je auto-advance */}
             {(["stav", "plocha", "finis"] as KrokId[]).includes(krok) && (
               <button
