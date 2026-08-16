@@ -3,6 +3,9 @@ import { Container } from "@/components/ui/Container";
 import { BreadcrumbsJsonLd } from "@/components/seo/BreadcrumbsJsonLd";
 import { EshopClient } from "./EshopClient";
 import { MATERIALY } from "@/lib/materialy";
+import Image from "next/image";
+import { Phone } from "lucide-react";
+import { SITE } from "@/lib/site";
 
 export const metadata: Metadata = {
   title: "E-shop — epoxidové materiály Sika, TopStone, Arturo a UZIN",
@@ -52,6 +55,49 @@ export default function EshopPage() {
       <div className="bg-[#f7f7f4]">
         <EshopClient />
       </div>
+
+      {/* Galéria dôvery — ten istý materiál lejeme aj my (presunuté z hubu) */}
+      <section className="bg-[#0e1a3b] text-white noise-overlay">
+        <Container size="xl" className="py-14 md:py-20">
+          <h2 className="text-2xl md:text-4xl font-extrabold tracking-tight" style={{ textWrap: "balance" }}>
+            Ten istý materiál lejeme aj my
+          </h2>
+          <p className="mt-2 text-white/70 max-w-2xl">
+            Nepredávame nič, čo sme sami nemali na valci. Pozri si realizácie
+            z materiálov, ktoré tu kupuješ.
+          </p>
+          <div className="mt-8 grid grid-cols-2 md:grid-cols-4 gap-3 md:gap-4">
+            {[
+              { src: "/images/categories/metalicke.jpg", alt: "Metalická epoxidová podlaha — realizácia EPOXIDOVO" },
+              { src: "/images/realizacie/r-48.jpg", alt: "Chipsová podlaha v garáži — realizácia EPOXIDOVO" },
+              { src: "/images/hero/byvanie-v2.webp", alt: "Jednofarebná liata podlaha v interiéri — realizácia EPOXIDOVO" },
+              { src: "/images/realizacie/r-20.jpg", alt: "Modrá priemyselná podlaha v hale — realizácia EPOXIDOVO" },
+            ].map((f) => (
+              <div key={f.src} className="relative aspect-square rounded-2xl overflow-hidden">
+                <Image src={f.src} alt={f.alt} fill sizes="(max-width: 768px) 50vw, 25vw" quality={85} className="object-cover" />
+              </div>
+            ))}
+          </div>
+          <div className="mt-8 rounded-2xl bg-white/5 border border-white/10 p-5 md:p-6 flex flex-wrap items-center justify-between gap-4">
+            <div>
+              <div className="text-amber-400" aria-hidden>★★★★★</div>
+              <div className="mt-1 font-extrabold text-lg">
+                Nevieš, ktorú skladbu zvoliť? Zavoláme ti a poradíme zadarmo.
+              </div>
+              <div className="mt-1 text-sm text-white/60">
+                Po–Pi 8:00 – 17:00 · {SITE.contact.phone}
+              </div>
+            </div>
+            <a
+              href={`tel:${SITE.contact.phoneRaw}`}
+              className="inline-flex items-center gap-2 px-6 py-3.5 rounded-full bg-[#16a34a] text-white font-bold hover:bg-[#15803d] shadow-[0_10px_28px_rgba(22,163,74,0.4)] transition-colors whitespace-nowrap"
+            >
+              <Phone className="w-4 h-4" aria-hidden />
+              Zavolať teraz
+            </a>
+          </div>
+        </Container>
+      </section>
     </>
   );
 }
