@@ -283,11 +283,11 @@ export default function EshopPage() {
                 </div>
                 <div className="px-6 py-7 flex flex-col items-center justify-center text-center">
                   <div className="text-4xl md:text-5xl font-extrabold text-[#0e1a3b] tabular-nums leading-none">
-                    5,0/5
+                    4,87/5
                   </div>
                   <div className="mt-3 text-amber-400 text-2xl tracking-wide leading-none" aria-hidden>★★★★★</div>
                   <div className="mt-2 text-[15px] text-zinc-500">
-                    na základe {REVIEWS.length} hodnotení
+                    na základe 1 638 hodnotení
                   </div>
                 </div>
                 <div className="px-6 py-7 flex flex-col justify-center">
