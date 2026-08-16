@@ -9,6 +9,7 @@ import { InitialPreloader } from "@/components/layout/InitialPreloader";
 import { JsonLd } from "@/components/seo/JsonLd";
 import { Analytics } from "@/components/analytics/Analytics";
 import { GlobalClickTracker } from "@/components/analytics/GlobalClickTracker";
+import { CursorAura } from "@/components/ui/CursorAura";
 
 // AiChatWidget je heavy (421 lines, lucide ikony, formulár) — lazy-load
 // kvôli Core Web Vitals (TBT, INP). Bundle sa rozsplitne do vlastného chunku.
@@ -156,6 +157,7 @@ export default function RootLayout({
           Preskočiť na obsah
         </a>
         <InitialPreloader />
+        <CursorAura />
         <SiteChrome>{children}</SiteChrome>
         <AiChatWidget />
         <JsonLd />

@@ -1,6 +1,5 @@
 import type { Metadata } from "next";
 import { CartProvider } from "@/lib/cart";
-import { CursorAura } from "@/components/ui/CursorAura";
 import { Toaster } from "@/components/ui/Toast";
 
 export const metadata: Metadata = {
@@ -23,7 +22,6 @@ export default function KupitMaterialLayout({
 }) {
   return (
     <CartProvider>
-      <CursorAura />
       <Toaster />
       {children}
     </CartProvider>

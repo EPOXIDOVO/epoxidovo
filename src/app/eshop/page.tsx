@@ -74,7 +74,7 @@ export default function EshopPage() {
               href: "/cenova-ponuka",
             },
           ].map((v) => (
-            <a key={v.video} href={v.href} className="group relative block aspect-[16/10] overflow-hidden">
+            <a key={v.video} href={v.href} className="group relative block h-[40vh] min-h-[300px] max-h-[440px] overflow-hidden">
               <video
                 className="absolute inset-0 w-full h-full object-cover"
                 autoPlay
@@ -86,8 +86,8 @@ export default function EshopPage() {
                 <source src={v.video} type="video/mp4" />
               </video>
               <div aria-hidden className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent" />
-              <div className="absolute bottom-0 inset-x-0 p-6 md:p-10 text-center text-white">
-                <h2 className="text-2xl md:text-4xl font-extrabold tracking-tight" style={{ textWrap: "balance" }}>
+              <div className="absolute bottom-0 inset-x-0 p-5 md:p-7 text-center text-white">
+                <h2 className="text-xl md:text-3xl font-extrabold tracking-tight" style={{ textWrap: "balance" }}>
                   {v.nadpis}
                 </h2>
                 <p className="mt-1 text-white/85 md:text-lg">{v.popis}</p>
@@ -195,7 +195,7 @@ export default function EshopPage() {
       {/* Galéria dôvery — ten istý materiál lejeme aj my (presunuté z hubu) */}
       <section className="bg-[#0e1a3b] text-white noise-overlay">
         <Container size="xl" className="py-14 md:py-20">
-          <h2 className="text-2xl md:text-4xl font-extrabold tracking-tight" style={{ textWrap: "balance" }}>
+          <h2 className="text-xl md:text-3xl font-extrabold tracking-tight" style={{ textWrap: "balance" }}>
             Ten istý materiál lejeme aj my
           </h2>
           <p className="mt-2 text-white/70 max-w-2xl">
