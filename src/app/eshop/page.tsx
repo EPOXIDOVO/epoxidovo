@@ -330,10 +330,10 @@ export default function EshopPage() {
               </div>
             </div>
             <a
-              href="/cenova-ponuka"
+              href="/"
               className="inline-flex items-center gap-2 px-6 py-3 rounded-full bg-[#f97316] text-white font-bold hover:bg-[#ea580c] transition-colors whitespace-nowrap"
             >
-              Nezáväzná cenová ponuka
+              Prejsť na realizačnú stránku →
             </a>
           </div>
         </Container>
