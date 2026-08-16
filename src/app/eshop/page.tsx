@@ -384,7 +384,7 @@ export default function EshopPage() {
 
     katalog: (
       <div id="katalog" className="bg-[#f7f7f4] scroll-mt-20">
-        <EshopClient />
+        <EshopClient sidebarVyrobcov />
       </div>
     ),
 
