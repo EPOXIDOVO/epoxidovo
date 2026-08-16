@@ -147,6 +147,13 @@ export function EshopClient() {
         ))}
       </div>
 
+      {/* Popis zvolenej kategórie — pomôcka pre zákazníka aj SEO */}
+      {obsah && (
+        <p className="mt-4 max-w-3xl mx-auto text-center text-sm text-[#4a5478] leading-relaxed bg-white border border-zinc-200 rounded-2xl px-5 py-3.5">
+          {OBSAH_KATEGORIE.find((k) => k.id === obsah)?.popis}
+        </p>
+      )}
+
       {/* Admin filter „na dorobenie" — viditeľný len s ?admin=1 */}
       {admin && adminCounts && (
         <div className="mt-2.5 flex flex-wrap items-center justify-center gap-2">
@@ -257,11 +264,6 @@ export function EshopClient() {
                         <img src={VYROBCA_LOGO[m.vyrobca]} alt="" className="h-4.5 w-auto max-w-16 object-contain" />
                         {m.vyrobca}
                       </span>
-                      {m.pokryje_m2_z_balenia != null && (
-                        <span className="absolute bottom-2 right-2 px-2 py-1 rounded-lg bg-white/95 text-[#1a1a1a] text-[11px] md:text-xs font-bold shadow">
-                          vystačí na {m.pokryje_m2_z_balenia} m²
-                        </span>
-                      )}
                       {admin && chybaZoznam(m).length > 0 && (
                         <span className="absolute top-2 right-2 px-2 py-0.5 rounded-full bg-red-600 text-white text-[10px] font-bold whitespace-nowrap shadow">
                           {chybaZoznam(m).join(" · ")}

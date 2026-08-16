@@ -20,6 +20,7 @@ import {
   METALLIC_VZORY_SKUS,
 } from "@/content/topstone-metallic-vzory";
 import { BaleniaKalkulacka } from "./BaleniaKalkulacka";
+import { HrubkaKalkulacka } from "./HrubkaKalkulacka";
 
 interface PageProps {
   params: Promise<{ sku: string }>;
@@ -221,8 +222,18 @@ export default async function ProduktPage({ params }: PageProps) {
                 </a>
               </div>
 
-              {/* Kalkulačka balení */}
-              {m.spotreba_kg_m2 != null && m.balenie_kg != null && (
+              {/* Kalkulačka — hlavné vrstvy majú výber hrúbky (náter/1mm/2mm),
+                  penetrácie a ostatné jednoduchý prepočet balení */}
+              {m.kategoria === "Hlavná vrstva" && m.balenie_kg != null ? (
+                <div className="mt-6">
+                  <HrubkaKalkulacka
+                    balenieKg={m.balenie_kg}
+                    cenaEur={m.cena_eur_s_dph}
+                    jePu2mm={jePu}
+                    cenaJeFinalna={!!m.cena_pevna}
+                  />
+                </div>
+              ) : m.spotreba_kg_m2 != null && m.balenie_kg != null ? (
                 <div className="mt-6">
                   <BaleniaKalkulacka
                     spotrebaKgM2={m.spotreba_kg_m2}
@@ -231,7 +242,7 @@ export default async function ProduktPage({ params }: PageProps) {
                     jePu2mm={jePu}
                   />
                 </div>
-              )}
+              ) : null}
 
               {/* Technické údaje — len vyplnené riadky */}
               {techRows.length > 0 && (
