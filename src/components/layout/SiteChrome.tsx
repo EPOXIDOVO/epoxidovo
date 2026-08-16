@@ -14,10 +14,14 @@ export function SiteChrome({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();
   const isHome = pathname === "/";
 
-  // Obchodná časť (/eshop, /kupit-material) má vlastnú commerce hlavičku
-  // ako Epodex/GymBeam — logo + search + košík, bez servisných CTA.
+  // Obchodná časť má vlastnú commerce hlavičku ako Epodex/GymBeam — logo +
+  // search + košík, bez servisných CTA. Patrí sem aj konfigurátor a
+  // vzorkovník, lebo z nich vedie cesta do košíka, nie do dopytu.
   const isShop =
-    pathname.startsWith("/eshop") || pathname.startsWith("/kupit-material");
+    pathname.startsWith("/eshop") ||
+    pathname.startsWith("/kupit-material") ||
+    pathname.startsWith("/navrhni-podlahu") ||
+    pathname.startsWith("/vzorkovnik");
 
   if (isShop) {
     return (
