@@ -155,6 +155,7 @@ export function KonfiguratorClient() {
     setKrokIndex((n) => n + 1);
   };
 
+
   /* ── validácia kroku ── */
   const mozeDalej = (() => {
     switch (krok) {
@@ -193,6 +194,10 @@ export function KonfiguratorClient() {
     return dostupneSystemy(volba).find((s) => s.id === systemId) ?? null;
   }, [systemId, volba]);
 
+  /** Pre niektoré kombinácie (napr. kamenný koberec) systém zatiaľ nemáme —
+   *  namiesto prázdnej obrazovky ponúkni návrh na mieru. */
+  const bezSystemu = hotovo && !system;
+
   const vysledok = React.useMemo(() => {
     if (!system) return null;
     const skladba = postavSkladbu(volba, system);
@@ -208,6 +213,41 @@ export function KonfiguratorClient() {
           ? "border-[#3db6e8] bg-[#e3f3fb] shadow-[0_8px_24px_rgba(61,182,232,0.25)]"
           : "border-zinc-200 bg-white hover:border-[#3db6e8] hover:-translate-y-0.5"
     }`;
+
+  if (bezSystemu) {
+    return (
+      <Container size="md" className="py-12">
+        <div className="rounded-3xl bg-white border border-zinc-200 p-8 text-center shadow-[0_18px_50px_rgba(0,0,0,0.08)]">
+          <div className="inline-flex items-center justify-center w-14 h-14 rounded-full bg-[#e3f3fb] text-[#1a8cc4] mb-4">
+            <Info className="w-7 h-7" aria-hidden />
+          </div>
+          <h2 className="text-2xl font-extrabold text-[#0e1a3b]">
+            Túto skladbu navrhneme osobne
+          </h2>
+          <p className="mt-2 text-[#4a5478] max-w-lg mx-auto">
+            Pre kombináciu, ktorú si zvolil, nemáme hotový systém v konfigurátore —
+            býva to pri kamennom koberci a atypických zadaniach. Napíš nám alebo
+            zavolaj a navrhneme skladbu na mieru, zvyčajne do jedného dňa.
+          </p>
+          <div className="mt-6 flex flex-wrap justify-center gap-3">
+            <Link
+              href="/cenova-ponuka"
+              className="inline-flex items-center gap-2 px-6 py-3.5 rounded-full bg-[#f97316] text-white font-bold hover:bg-[#ea580c] transition-colors"
+            >
+              Chcem návrh na mieru
+            </Link>
+            <button
+              type="button"
+              onClick={() => setHotovo(false)}
+              className="inline-flex items-center gap-2 px-6 py-3.5 rounded-full border-2 border-zinc-200 font-bold text-[#4a5478] hover:border-zinc-400 transition-colors"
+            >
+              <ArrowLeft className="w-4 h-4" aria-hidden /> Zmeniť voľbu
+            </button>
+          </div>
+        </div>
+      </Container>
+    );
+  }
 
   if (hotovo && system && vysledok) {
     return (
