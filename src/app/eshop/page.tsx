@@ -161,8 +161,8 @@ export default function EshopPage() {
                   className="mt-3 text-lg md:text-xl font-medium text-white leading-snug"
                   style={{ textShadow: "0 2px 10px rgba(0,0,0,0.8)" }}
                 >
-                  Dostaneš presný návod, ako aplikovať každý materiál krok za
-                  krokom — aj spotreby na tvoje m² a poradenstvo na telefóne.
+                  Dostaneš presný návod, ako aplikovať každý materiál správne
+                  krok za krokom, aj poradenstvo na telefóne v cene!
                 </p>
                 <div className="mt-6 flex flex-wrap gap-3">
                   <a
