@@ -133,15 +133,31 @@ export default function EshopPage() {
             >
               <source src="/video/eshop-hero-a.mp4" type="video/mp4" />
             </video>
-            <div aria-hidden className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent" />
-            <div className="absolute bottom-0 inset-x-0 p-6 md:p-10 text-center text-white">
-              <h2 className="text-2xl md:text-4xl font-extrabold tracking-tight" style={{ textWrap: "balance" }}>
-                Nalej si vlastnú podlahu
+            <div aria-hidden className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/45 to-black/20" />
+            <div className="absolute inset-x-0 bottom-0 p-6 md:p-10 text-center text-white">
+              <h2
+                className="text-2xl md:text-5xl font-extrabold tracking-tight drop-shadow-[0_2px_12px_rgba(0,0,0,0.6)]"
+                style={{ textWrap: "balance" }}
+              >
+                Prvú podlahu zvládneš aj sám
               </h2>
-              <p className="mt-1 text-white/85 md:text-lg">
-                Dáme ti presný návod, spotreby aj podporu na telefóne — s nami to zvládneš aj sám
+              <p className="mt-3 mx-auto max-w-2xl text-[15px] md:text-lg text-white/90 leading-relaxed drop-shadow-[0_1px_8px_rgba(0,0,0,0.6)]">
+                Nie je to žiadna veda — vypočítame ti presné množstvá na tvoje m²,
+                pošleme návod krok za krokom a keď pri liatí zaváhaš, dvihneme
+                telefón. Materiál dostaneš ten istý, aký sami lejeme na zákazkách.
               </p>
-              <span className="mt-4 inline-flex items-center gap-2 px-6 py-3 rounded-full bg-white text-[#0e1a3b] font-bold group-hover:bg-[#f97316] group-hover:text-white transition-colors">
+              <div className="mt-4 flex flex-wrap items-center justify-center gap-2">
+                {["Presný rozpis materiálu", "Návod krok za krokom", "Poradíme počas liatia"].map((t) => (
+                  <span
+                    key={t}
+                    className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full bg-white/15 backdrop-blur-sm border border-white/25 text-[13px] font-semibold whitespace-nowrap"
+                  >
+                    <Check className="w-3.5 h-3.5" aria-hidden />
+                    {t}
+                  </span>
+                ))}
+              </div>
+              <span className="mt-5 inline-flex items-center gap-2 px-7 py-3.5 rounded-full bg-[#f97316] text-white font-extrabold text-base md:text-lg shadow-[0_12px_32px_rgba(249,115,22,0.5)] group-hover:bg-[#ea580c] transition-colors">
                 Prezrieť katalóg
               </span>
             </div>
