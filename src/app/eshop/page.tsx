@@ -172,7 +172,7 @@ export default function EshopPage() {
                     href="/navrhni-podlahu"
                     className="inline-flex items-center gap-2 px-7 py-3.5 rounded-full bg-[#f97316] text-white font-extrabold text-base md:text-lg shadow-[0_12px_32px_rgba(249,115,22,0.5)] hover:bg-[#ea580c] transition-colors whitespace-nowrap"
                   >
-                    Navrhni si podlahu →
+                    Zisti, aký materiál potrebuješ →
                   </a>
                   <a
                     href="/eshop#katalog"
