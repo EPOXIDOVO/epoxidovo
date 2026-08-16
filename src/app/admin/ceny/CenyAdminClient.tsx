@@ -21,6 +21,13 @@ const fmt = new Intl.NumberFormat("sk-SK", {
   maximumFractionDigits: 2,
 });
 
+type Stats = {
+  objednavok: number;
+  trzbaSpolu: number;
+  produkty: { sku: string; kusov: number; objednavok: number; trzba: number }[];
+  posledne: { id: string; kedy: string; meno: string; suma: number; platba: string; kusov: number }[];
+};
+
 export function CenyAdminClient() {
   // pôvodné ceny z importu (bez override) — na výpočet rozdielu a reset
   const povodne = React.useMemo(() => {
@@ -39,11 +46,23 @@ export function CenyAdminClient() {
   const [online, setOnline] = React.useState<boolean | null>(null);
   const [stav, setStav] = React.useState<string | null>(null);
 
+  const [stats, setStats] = React.useState<Stats | null>(null);
+
   React.useEffect(() => {
     fetch(`${ADMIN_API}/ping`)
       .then((r) => setOnline(r.ok))
       .catch(() => setOnline(false));
+    fetch("/api/admin/stats")
+      .then((r) => (r.ok ? r.json() : null))
+      .then((j) => j?.ok && setStats(j))
+      .catch(() => {});
   }, []);
+
+  const kusyPerSku = React.useMemo(() => {
+    const m = new Map<string, number>();
+    for (const p of stats?.produkty ?? []) m.set(p.sku, p.kusov);
+    return m;
+  }, [stats]);
 
   const overrides = cenyOverride.ceny as Record<string, number>;
 
@@ -113,6 +132,55 @@ export function CenyAdminClient() {
         </p>
       )}
 
+      {/* Štatistiky objednávok */}
+      {stats && (
+        <div className="mt-5 grid grid-cols-2 md:grid-cols-4 gap-3">
+          <div className="rounded-2xl bg-white border border-zinc-200 p-4">
+            <div className="text-xs uppercase tracking-wide text-zinc-500 font-bold">Objednávok</div>
+            <div className="mt-1 text-2xl font-extrabold text-[#0e1a3b]" style={{ fontVariantNumeric: "tabular-nums" }}>
+              {stats.objednavok}
+            </div>
+          </div>
+          <div className="rounded-2xl bg-white border border-zinc-200 p-4">
+            <div className="text-xs uppercase tracking-wide text-zinc-500 font-bold">Tržba spolu</div>
+            <div className="mt-1 text-2xl font-extrabold text-emerald-700" style={{ fontVariantNumeric: "tabular-nums" }}>
+              {fmt.format(stats.trzbaSpolu)} €
+            </div>
+          </div>
+          <div className="rounded-2xl bg-white border border-zinc-200 p-4 col-span-2">
+            <div className="text-xs uppercase tracking-wide text-zinc-500 font-bold">Top produkty (ks)</div>
+            <div className="mt-1 text-sm font-semibold text-[#0e1a3b] truncate">
+              {stats.produkty.length === 0
+                ? "Zatiaľ žiadne objednávky"
+                : [...stats.produkty]
+                    .sort((a, b) => b.kusov - a.kusov)
+                    .slice(0, 3)
+                    .map((p) => `${p.sku} (${p.kusov})`)
+                    .join(" · ")}
+            </div>
+          </div>
+        </div>
+      )}
+      {stats && stats.posledne.length > 0 && (
+        <details className="mt-3 rounded-2xl bg-white border border-zinc-200 p-4">
+          <summary className="text-sm font-bold text-[#1a8cc4] cursor-pointer">
+            Posledné objednávky ({stats.posledne.length})
+          </summary>
+          <ul className="mt-2 space-y-1 text-sm" style={{ fontVariantNumeric: "tabular-nums" }}>
+            {stats.posledne.map((o) => (
+              <li key={o.id} className="flex flex-wrap gap-x-3 text-zinc-600">
+                <span className="font-mono text-xs text-zinc-400">{o.id}</span>
+                <span>{new Date(o.kedy).toLocaleString("sk-SK")}</span>
+                <span className="font-semibold text-zinc-900">{o.meno}</span>
+                <span>{o.kusov} ks</span>
+                <span className="font-bold">{fmt.format(o.suma)} €</span>
+                <span className="text-zinc-400">{o.platba}</span>
+              </li>
+            ))}
+          </ul>
+        </details>
+      )}
+
       <div className="mt-5 flex flex-wrap items-center gap-3">
         <div className="relative flex-1 min-w-64 max-w-md">
           <Search className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-zinc-400" aria-hidden />
@@ -156,6 +224,7 @@ export function CenyAdminClient() {
               <th className="px-4 py-3">Produkt</th>
               <th className="px-4 py-3">Balenie</th>
               <th className="px-4 py-3">Výrobca</th>
+              <th className="px-4 py-3 text-right">Objednané</th>
               <th className="px-4 py-3 text-right">Aktuálna cena</th>
               <th className="px-4 py-3 text-right w-44">Nová cena (€)</th>
               <th className="px-4 py-3 w-10" />
@@ -173,6 +242,13 @@ export function CenyAdminClient() {
                   </td>
                   <td className="px-4 py-2 text-zinc-500 whitespace-nowrap">{m.balenie}</td>
                   <td className="px-4 py-2 text-zinc-500">{m.vyrobca}</td>
+                  <td className="px-4 py-2 text-right whitespace-nowrap">
+                    {kusyPerSku.get(m.sku) ? (
+                      <span className="font-bold text-emerald-700">{kusyPerSku.get(m.sku)} ks</span>
+                    ) : (
+                      <span className="text-zinc-300">0</span>
+                    )}
+                  </td>
                   <td className="px-4 py-2 text-right whitespace-nowrap">
                     <span className="font-bold">{fmt.format(m.cena_eur_s_dph)} €</span>
                     {jeOverride && (

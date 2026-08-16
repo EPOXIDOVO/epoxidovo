@@ -1,5 +1,10 @@
 import { PrismaClient } from "@prisma/client";
 import { PrismaNeon } from "@prisma/adapter-neon";
+import { neonConfig } from "@neondatabase/serverless";
+
+// Jednoduché query idú cez HTTP fetch — WebSocket v lokálnom dev edge runtime
+// nefunguje (v CF Workers produkcii áno, tam sa použije na transakcie).
+neonConfig.poolQueryViaFetch = true;
 
 /**
  * Singleton Prisma client kompatibilný s Cloudflare Workers / Pages edge runtime.

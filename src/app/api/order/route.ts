@@ -224,6 +224,35 @@ export async function POST(req: NextRequest) {
       note: note || null,
     });
 
+    // Štatistiky (/admin/ceny) — best-effort zápis; e-mail je primárny kanál,
+    // výpadok DB nesmie objednávku zhodiť.
+    try {
+      const { prisma } = await import("@/lib/prisma");
+      await prisma.eshopOrder.create({
+        data: {
+          id: orderId,
+          name,
+          email,
+          phone,
+          subtotalEur: subtotal,
+          shippingId,
+          paymentId: payment.id,
+          hasOnRequest,
+          note: note || null,
+          items: {
+            create: lines.map((l) => ({
+              sku: l.product.id,
+              nazov: l.product.name,
+              qty: l.qty,
+              cenaEur: l.product.priceRetail ?? null,
+            })),
+          },
+        },
+      });
+    } catch (dbErr) {
+      console.error("[order] zápis do DB zlyhal (objednávka odišla mailom):", dbErr);
+    }
+
     // Stripe redirect pri platbe kartou
     if (payment.id === "karta") {
       const session = await createStripeCheckoutSession({

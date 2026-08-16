@@ -199,3 +199,32 @@ model VisualizerGeneration {
   @@index([createdAt])
   @@index([ok])
 }
+
+/// E-shop objednávka — zapisuje /api/order po odoslaní e-mailov (best-effort;
+/// e-mail je primárny kanál, DB slúži na štatistiky v /admin/ceny).
+model EshopOrder {
+  id           String           @id
+  createdAt    DateTime         @default(now())
+  name         String
+  email        String
+  phone        String
+  subtotalEur  Float
+  shippingId   String
+  paymentId    String
+  hasOnRequest Boolean          @default(false)
+  note         String?
+  items        EshopOrderItem[]
+}
+
+model EshopOrderItem {
+  id      String     @id @default(cuid())
+  orderId String
+  order   EshopOrder @relation(fields: [orderId], references: [id], onDelete: Cascade)
+  sku     String
+  nazov   String
+  qty     Int
+  /// cena za kus v čase objednávky; null = položka „na dopyt"
+  cenaEur Float?
+
+  @@index([sku])
+}
