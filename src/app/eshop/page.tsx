@@ -186,36 +186,22 @@ export default function EshopPage() {
     ),
 
     trust: (
-      /* Trust badge pás — medzi videom a kategóriami, tam je reálne vidieť */
+      /* Tenký trust pás — medzi videom a kategóriami, jeden riadok */
       <section className="bg-white">
-        <Container size="xl" className="py-6 md:py-8">
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
+        <Container size="xl">
+          <div className="flex flex-wrap items-center justify-center gap-x-7 gap-y-0.5 py-2 border-b border-zinc-200">
             {[
-              {
-                nadpis: "Presný rozpis materiálu",
-                popis: "Vieš presne, čo a koľko kúpiť — bez zvyšných vedier.",
-              },
-              {
-                nadpis: "Návod krok za krokom",
-                popis: "Ku každému materiálu postup aplikácie od prípravy po lak.",
-              },
-              {
-                nadpis: "Poradíme počas liatia",
-                popis: "Zaseknem sa? Dvihneme telefón aj počas víkendu.",
-              },
+              "Presný rozpis materiálu na tvoje m²",
+              "Návod krok za krokom",
+              "Poradíme aj počas liatia",
             ].map((t) => (
-              <div
-                key={t.nadpis}
-                className="flex items-start gap-3 rounded-2xl border border-zinc-200 bg-[#f7f6f3] px-5 py-4"
+              <span
+                key={t}
+                className="inline-flex items-center gap-1.5 text-[13px] font-semibold text-[#4a5478] whitespace-nowrap"
               >
-                <span className="w-9 h-9 shrink-0 inline-flex items-center justify-center rounded-full bg-[#16a34a] text-white">
-                  <Check className="w-5 h-5" aria-hidden />
-                </span>
-                <span className="min-w-0">
-                  <span className="block font-extrabold text-[#0e1a3b]">{t.nadpis}</span>
-                  <span className="block text-sm text-[#4a5478] leading-snug">{t.popis}</span>
-                </span>
-              </div>
+                <Check className="w-3.5 h-3.5 text-[#16a34a] shrink-0" aria-hidden />
+                {t}
+              </span>
             ))}
           </div>
         </Container>
