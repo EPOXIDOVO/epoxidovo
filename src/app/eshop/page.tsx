@@ -117,76 +117,106 @@ export default function EshopPage() {
     ),
 
     hero: (
-      /* Full-bleed hero — bez bielych okrajov a zaoblenia, text vľavo.
-         Video na mobile nenačítavame (dáta) a pri reduced-motion tiež nie. */
-      <section className="relative isolate w-full overflow-hidden min-h-[440px] md:min-h-[520px] flex items-end">
-        <Image
-          src="/images/categories/metalicke.jpg"
-          alt=""
-          fill
-          sizes="100vw"
-          quality={85}
-          priority
-          className="object-cover"
-        />
-        <video
-          className="hidden md:block motion-reduce:md:hidden absolute inset-0 w-full h-full object-cover"
-          autoPlay
-          muted
-          loop
-          playsInline
-          preload="metadata"
-          poster="/images/categories/metalicke.jpg"
-        >
-          <source src="/video/eshop-hero-a.mp4" type="video/mp4" />
-        </video>
-        {/* gradient zľava — text sedí na tmavom, fotka ostáva vidieť vpravo */}
-        <div
-          aria-hidden
-          className="absolute inset-0"
-          style={{
-            background:
-              "linear-gradient(90deg, rgba(0,0,0,0.75) 0%, rgba(0,0,0,0.6) 45%, rgba(0,0,0,0.25) 100%)",
-          }}
-        />
-        <Container size="xl" className="relative py-10 md:py-14">
-          <div className="max-w-xl text-white">
-            <h2
-              className="text-3xl md:text-5xl font-extrabold tracking-tight"
-              style={{ textWrap: "balance", textShadow: "0 2px 14px rgba(0,0,0,0.7)" }}
+      /* Video hero — s odsadením od okrajov, text vľavo */
+      <section className="bg-white">
+        <Container size="xl" className="pt-4">
+          <div className="relative isolate overflow-hidden rounded-3xl min-h-[420px] md:min-h-[500px] flex items-end">
+            <Image
+              src="/images/categories/metalicke.jpg"
+              alt=""
+              fill
+              sizes="100vw"
+              quality={85}
+              priority
+              className="object-cover"
+            />
+            <video
+              className="hidden md:block motion-reduce:md:hidden absolute inset-0 w-full h-full object-cover"
+              autoPlay
+              muted
+              loop
+              playsInline
+              preload="metadata"
+              poster="/images/categories/metalicke.jpg"
             >
-              Prvú podlahu zvládneš aj sám
-            </h2>
-            <p
-              className="mt-3 text-lg md:text-xl font-medium text-white leading-snug"
-              style={{ textShadow: "0 2px 10px rgba(0,0,0,0.8)" }}
-            >
-              Presné množstvá na tvoje m², návod krok za krokom a poradenstvo
-              na telefóne. Podlahy aj steny.
-            </p>
-            <div className="mt-6 flex flex-wrap gap-3">
-              <a
-                href="/navrhni-podlahu"
-                className="inline-flex items-center gap-2 px-7 py-3.5 rounded-full bg-[#f97316] text-white font-extrabold text-base md:text-lg shadow-[0_12px_32px_rgba(249,115,22,0.5)] hover:bg-[#ea580c] transition-colors whitespace-nowrap"
-              >
-                Navrhni si podlahu →
-              </a>
-              <a
-                href="/eshop#katalog"
-                className="inline-flex items-center gap-2 px-7 py-3.5 rounded-full border-2 border-white/80 text-white font-bold text-base md:text-lg hover:bg-white hover:text-[#0e1a3b] transition-colors whitespace-nowrap"
-              >
-                Prezrieť katalóg
-              </a>
+              <source src="/video/eshop-hero-a.mp4" type="video/mp4" />
+            </video>
+            <div
+              aria-hidden
+              className="absolute inset-0"
+              style={{
+                background:
+                  "linear-gradient(90deg, rgba(0,0,0,0.78) 0%, rgba(0,0,0,0.6) 45%, rgba(0,0,0,0.25) 100%)",
+              }}
+            />
+            <div className="relative w-full p-6 md:p-10">
+              <div className="max-w-xl text-white">
+                <h2
+                  className="text-3xl md:text-5xl font-extrabold tracking-tight"
+                  style={{ textWrap: "balance", textShadow: "0 2px 14px rgba(0,0,0,0.7)" }}
+                >
+                  Prvú podlahu zvládneš aj sám!
+                </h2>
+                <p
+                  className="mt-3 text-lg md:text-xl font-medium text-white leading-snug"
+                  style={{ textShadow: "0 2px 10px rgba(0,0,0,0.8)" }}
+                >
+                  Dostaneš presný návod, ako aplikovať každý materiál krok za
+                  krokom — aj spotreby na tvoje m² a poradenstvo na telefóne.
+                </p>
+                <div className="mt-6 flex flex-wrap gap-3">
+                  <a
+                    href="/navrhni-podlahu"
+                    className="inline-flex items-center gap-2 px-7 py-3.5 rounded-full bg-[#f97316] text-white font-extrabold text-base md:text-lg shadow-[0_12px_32px_rgba(249,115,22,0.5)] hover:bg-[#ea580c] transition-colors whitespace-nowrap"
+                  >
+                    Navrhni si podlahu →
+                  </a>
+                  <a
+                    href="/eshop#katalog"
+                    className="inline-flex items-center gap-2 px-7 py-3.5 rounded-full border-2 border-white/80 text-white font-bold text-base md:text-lg hover:bg-white hover:text-[#0e1a3b] transition-colors whitespace-nowrap"
+                  >
+                    Prezrieť katalóg
+                  </a>
+                </div>
+              </div>
             </div>
-            {/* odrážky až pod tlačidlami — neodďaľujú klik */}
-            <ul className="mt-5 flex flex-wrap gap-x-5 gap-y-1.5 text-[13px] text-white/90">
-              {["Presný rozpis materiálu", "Návod krok za krokom", "Poradíme počas liatia"].map((t) => (
-                <li key={t} className="inline-flex items-center gap-1.5">
-                  <Check className="w-3.5 h-3.5 shrink-0" aria-hidden />
-                  {t}
-                </li>
-              ))}
-            </ul>
+          </div>
+        </Container>
+      </section>
+    ),
+
+    trust: (
+      /* Trust badge pás — medzi videom a kategóriami, tam je reálne vidieť */
+      <section className="bg-white">
+        <Container size="xl" className="py-6 md:py-8">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
+            {[
+              {
+                nadpis: "Presný rozpis materiálu",
+                popis: "Vieš presne, čo a koľko kúpiť — bez zvyšných vedier.",
+              },
+              {
+                nadpis: "Návod krok za krokom",
+                popis: "Ku každému materiálu postup aplikácie od prípravy po lak.",
+              },
+              {
+                nadpis: "Poradíme počas liatia",
+                popis: "Zaseknem sa? Dvihneme telefón aj počas víkendu.",
+              },
+            ].map((t) => (
+              <div
+                key={t.nadpis}
+                className="flex items-start gap-3 rounded-2xl border border-zinc-200 bg-[#f7f6f3] px-5 py-4"
+              >
+                <span className="w-9 h-9 shrink-0 inline-flex items-center justify-center rounded-full bg-[#16a34a] text-white">
+                  <Check className="w-5 h-5" aria-hidden />
+                </span>
+                <span className="min-w-0">
+                  <span className="block font-extrabold text-[#0e1a3b]">{t.nadpis}</span>
+                  <span className="block text-sm text-[#4a5478] leading-snug">{t.popis}</span>
+                </span>
+              </div>
+            ))}
           </div>
         </Container>
       </section>
