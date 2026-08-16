@@ -221,8 +221,8 @@ export default function EshopPage() {
     ),
 
     servis: (
-      /* Zákaznícky servis + dôveryhodnosť (štýl Epodex) — foto na pozadí,
-         karta agenta vľavo, panel so štatistikami a recenziou vpravo */
+      /* Zákaznícky servis + dôveryhodnosť (podľa Epodexu) — fotka na pozadí,
+         karta tímu vľavo (foto cez celú šírku), panel s číslami vpravo. */
       <section className="relative isolate bg-[#0e1a3b]">
         <Image
           src="/images/hero/byvanie-v2.webp"
@@ -232,35 +232,38 @@ export default function EshopPage() {
           quality={85}
           className="object-cover opacity-25"
         />
-        <Container size="xl" className="relative py-12 md:py-16">
+        <Container size="xl" className="relative py-10 md:py-12">
           <div className="grid grid-cols-1 lg:grid-cols-[300px_1fr] gap-5 items-stretch">
-            {/* Karta agenta */}
+            {/* Karta tímu */}
             <div className="rounded-2xl bg-white shadow-[0_18px_50px_rgba(0,0,0,0.25)] overflow-hidden flex flex-col">
-              <div className="relative aspect-[4/3] bg-[#e3f3fb]">
+              <div className="relative h-44 bg-[#e3f3fb] shrink-0">
                 <Image
                   src="/images/eshop/medved-hlava.png"
                   alt=""
                   fill
                   sizes="300px"
                   quality={85}
-                  className="object-contain p-4"
+                  className="object-contain p-2"
                 />
               </div>
-              <div className="p-5 text-center">
-                <div className="font-extrabold text-[#0e1a3b]">Tím EPOXIDOVO</div>
-                <p className="mt-1 text-sm text-zinc-500">
+              <div className="flex-1 p-5 flex flex-col justify-center">
+                <div className="text-lg font-extrabold text-[#0e1a3b] text-center">
+                  Tím EPOXIDOVO
+                </div>
+                <p className="mt-1 text-[15px] text-zinc-500 text-center">
                   Máš otázky? Radi ti pomôžeme!
                 </p>
-                <div className="mt-4 space-y-2.5 text-sm">
-                  <a href={`tel:${SITE.contact.phoneRaw}`} className="flex items-center justify-center gap-2 font-bold text-[#0e1a3b] hover:text-[#1a8cc4] transition-colors">
-                    <span className="w-7 h-7 shrink-0 inline-flex items-center justify-center rounded-full bg-[#16a34a] text-white">
-                      <Phone className="w-3.5 h-3.5" aria-hidden />
+                {/* ikony pod sebou lícujú — bloky majú rovnakú šírku ikony */}
+                <div className="mt-4 mx-auto w-fit space-y-2.5">
+                  <a href={`tel:${SITE.contact.phoneRaw}`} className="flex items-center gap-3 text-[15px] font-bold text-[#0e1a3b] hover:text-[#1a8cc4] transition-colors">
+                    <span className="w-8 h-8 shrink-0 inline-flex items-center justify-center rounded-full bg-[#3db6e8] text-white">
+                      <Phone className="w-4 h-4" aria-hidden />
                     </span>
                     {SITE.contact.phone}
                   </a>
-                  <a href={`mailto:${SITE.contact.email}`} className="flex items-center justify-center gap-2 text-zinc-600 hover:text-[#1a8cc4] transition-colors">
-                    <span className="w-7 h-7 shrink-0 inline-flex items-center justify-center rounded-full bg-[#3db6e8] text-white">
-                      <Mail className="w-3.5 h-3.5" aria-hidden />
+                  <a href={`mailto:${SITE.contact.email}`} className="flex items-center gap-3 text-[15px] text-zinc-600 hover:text-[#1a8cc4] transition-colors">
+                    <span className="w-8 h-8 shrink-0 inline-flex items-center justify-center rounded-full bg-[#3db6e8] text-white">
+                      <Mail className="w-4 h-4" aria-hidden />
                     </span>
                     {SITE.contact.email}
                   </a>
@@ -271,34 +274,38 @@ export default function EshopPage() {
             {/* Panel s číslami a recenziou */}
             <div className="rounded-2xl bg-white shadow-[0_18px_50px_rgba(0,0,0,0.25)] overflow-hidden flex flex-col">
               <div className="flex-1 grid grid-cols-1 md:grid-cols-3 divide-y md:divide-y-0 md:divide-x divide-zinc-200">
-                <div className="p-6 text-center flex flex-col items-center justify-center">
-                  <div className="text-3xl md:text-4xl font-extrabold text-[#0e1a3b] tabular-nums">50 000+</div>
-                  <div className="mt-2 text-2xl" aria-hidden>🤝</div>
-                  <div className="mt-1 text-sm text-zinc-500">spokojných zákazníkov</div>
+                <div className="px-6 py-7 flex flex-col items-center justify-center text-center">
+                  <div className="text-4xl md:text-5xl font-extrabold text-[#0e1a3b] tabular-nums leading-none">
+                    50 000+
+                  </div>
+                  <div className="mt-3 text-2xl" aria-hidden>🤝</div>
+                  <div className="mt-2 text-[15px] text-zinc-500">spokojných zákazníkov</div>
                 </div>
-                <div className="p-6 text-center flex flex-col items-center justify-center">
-                  <div className="text-3xl md:text-4xl font-extrabold text-[#0e1a3b] tabular-nums">5,0/5</div>
-                  <div className="mt-2 text-amber-400 text-lg tracking-wide" aria-hidden>★★★★★</div>
-                  <div className="mt-1 text-sm text-zinc-500">
+                <div className="px-6 py-7 flex flex-col items-center justify-center text-center">
+                  <div className="text-4xl md:text-5xl font-extrabold text-[#0e1a3b] tabular-nums leading-none">
+                    5,0/5
+                  </div>
+                  <div className="mt-3 text-amber-400 text-2xl tracking-wide leading-none" aria-hidden>★★★★★</div>
+                  <div className="mt-2 text-[15px] text-zinc-500">
                     na základe {REVIEWS.length} hodnotení
                   </div>
                 </div>
-                <div className="p-6">
-                  <div className="text-sm font-bold text-[#1a8cc4]">Najnovšie recenzie</div>
-                  <p className="mt-2 text-sm text-zinc-600 leading-relaxed line-clamp-3">
+                <div className="px-6 py-7 flex flex-col justify-center">
+                  <div className="text-[15px] font-bold text-[#1a8cc4]">Najnovšie recenzie</div>
+                  <p className="mt-2 text-[15px] text-zinc-600 leading-relaxed line-clamp-4">
                     {REVIEWS[0].text}
                   </p>
-                  <div className="mt-2 text-xs text-zinc-400">
+                  <div className="mt-2 text-[13px] text-zinc-400">
                     {REVIEWS[0].name} · {REVIEWS[0].location}
                   </div>
-                  <a href="/realizacie" className="mt-2 inline-flex items-center gap-1 text-sm font-bold text-[#1a8cc4] hover:underline">
+                  <a href="/realizacie" className="mt-2 inline-flex items-center gap-1 text-[15px] font-bold text-[#1a8cc4] hover:underline">
                     zobraziť viac hodnotení »
                   </a>
                 </div>
               </div>
               <div className="bg-[#3db6e8] text-white grid grid-cols-1 sm:grid-cols-3 divide-y sm:divide-y-0 sm:divide-x divide-white/20">
                 {["Konečné ceny bez prekvapení", "Materiál, ktorý sami lejeme", "Poradenstvo zadarmo"].map((t) => (
-                  <div key={t} className="px-4 py-3 flex items-center justify-center gap-2 font-bold text-sm text-center">
+                  <div key={t} className="px-4 py-3.5 flex items-center justify-center gap-2 font-bold text-[15px] text-center">
                     <Check className="w-4 h-4 shrink-0" aria-hidden />
                     {t}
                   </div>
@@ -307,8 +314,8 @@ export default function EshopPage() {
             </div>
           </div>
 
-          {/* Sme aj realizačná firma — pás pod tým */}
-          <div className="mt-5 rounded-2xl bg-white/10 border border-white/15 backdrop-blur-sm p-5 md:p-6 flex flex-wrap items-center justify-between gap-4 text-white">
+          {/* Sme aj realizačná firma */}
+          <div className="mt-5 rounded-2xl bg-white/10 border border-white/15 backdrop-blur-sm p-5 flex flex-wrap items-center justify-between gap-4 text-white">
             <div className="flex items-center gap-4 min-w-0">
               <Image
                 src="/images/site/logo_v2.png"
@@ -316,11 +323,11 @@ export default function EshopPage() {
                 width={80}
                 height={71}
                 quality={85}
-                className="w-16 h-auto shrink-0"
+                className="w-14 h-auto shrink-0"
               />
               <div className="min-w-0">
                 <div className="font-extrabold text-lg">Nechceš liať sám? Urobíme to za teba.</div>
-                <div className="mt-0.5 text-sm text-white/70">
+                <div className="mt-0.5 text-[15px] text-white/70">
                   Sme aj realizačná firma — {SITE.legalName}, Ružomberok.
                 </div>
               </div>
