@@ -102,8 +102,8 @@ export default function EshopPage() {
                   <span className="text-2xl" aria-hidden>{"ikona" in u ? u.ikona : null}</span>
                 )}
                 <span className="min-w-0">
-                  <span className="block text-sm font-extrabold uppercase tracking-wide whitespace-nowrap">{u.cislo}</span>
-                  <span className="block text-xs text-white/60 whitespace-nowrap">
+                  <span className="block text-[15px] font-extrabold uppercase tracking-wide whitespace-nowrap">{u.cislo}</span>
+                  <span className="block text-[13px] text-white/85 whitespace-nowrap">
                     {u.text}
                     {jeLink ? " →" : ""}
                   </span>
