@@ -6,9 +6,10 @@ import { KategorieMenu } from "./KategorieMenu";
 import { SekciaObal, DlazdicaObal, AdminLayoutPanel, type Layout } from "./AdminLayout";
 import { MATERIALY } from "@/lib/materialy";
 import Image from "next/image";
-import { Phone, ChevronRight } from "lucide-react";
+import { Phone, Mail, Check, ChevronRight } from "lucide-react";
 import { SITE } from "@/lib/site";
 import eshopLayout from "@/content/eshop-layout.json";
+import { REVIEWS } from "@/content/reviews";
 
 export const metadata: Metadata = {
   title: "E-shop — epoxidové materiály Sika, TopStone, Arturo a UZIN",
@@ -79,13 +80,17 @@ export default function EshopPage() {
         <Container size="xl" className="py-4">
           <div className="grid grid-cols-2 lg:grid-cols-4 gap-x-6 gap-y-3">
             {[
-              { ikona: "🏆", cislo: "50 000+ m²", text: "naliatych podláh" },
-              { ikona: "🚚", cislo: "Expedícia do 24 h", text: "v pracovné dni" },
+              { ikona: "🏆", cislo: "50 000+", text: "spokojných zákazníkov" },
+              { img: "/images/eshop/medved-hlava.png", cislo: "Sme aj realizačná firma", text: "podlahy lejeme dennodenne" },
               { ikona: "📦", cislo: "350+ produktov", text: "4 top značky skladom" },
               { ikona: "📞", cislo: "Poradenstvo zadarmo", text: "od reálnych realizátorov" },
             ].map((u) => (
               <div key={u.cislo} className="flex items-center gap-3 justify-center lg:justify-start">
-                <span className="text-2xl" aria-hidden>{u.ikona}</span>
+                {"img" in u && u.img ? (
+                  <Image src={u.img} alt="" width={40} height={40} quality={85} className="w-9 h-9 rounded-full shrink-0" />
+                ) : (
+                  <span className="text-2xl" aria-hidden>{"ikona" in u ? u.ikona : null}</span>
+                )}
                 <span className="min-w-0">
                   <span className="block text-sm font-extrabold uppercase tracking-wide whitespace-nowrap">{u.cislo}</span>
                   <span className="block text-xs text-white/60 whitespace-nowrap">{u.text}</span>
@@ -145,7 +150,7 @@ export default function EshopPage() {
                     <div
                       className={`relative rounded-3xl overflow-hidden border border-zinc-200 bg-white flex flex-col h-full ${d.coskoro ? "select-none" : ""}`}
                     >
-                      <div className="relative aspect-[13/14]">
+                      <div className="relative aspect-[4/3]">
                         <Image
                           src={d.img}
                           alt=""
@@ -154,7 +159,7 @@ export default function EshopPage() {
                           quality={85}
                           className={`object-cover ${d.coskoro ? "grayscale-[0.5] opacity-70" : ""}`}
                         />
-                        <span className="absolute top-4 left-4 px-4 py-1.5 rounded-xl bg-white shadow text-[#0e1a3b] text-xs md:text-sm font-extrabold tracking-wide">
+                        <span className="absolute top-3 left-3 px-3 py-1 rounded-lg bg-white shadow text-[#0e1a3b] text-[11px] md:text-xs font-extrabold tracking-wide">
                           {d.label}
                         </span>
                         {d.coskoro && (
@@ -169,13 +174,13 @@ export default function EshopPage() {
                             width={340}
                             height={280}
                             quality={85}
-                            className="absolute bottom-2 left-1/2 -translate-x-1/2 h-[58%] w-auto object-contain drop-shadow-[0_14px_24px_rgba(0,0,0,0.45)]"
+                            className="absolute bottom-1 left-1/2 -translate-x-1/2 h-[66%] w-auto object-contain drop-shadow-[0_12px_20px_rgba(0,0,0,0.4)]"
                           />
                         )}
                       </div>
                       <div className="divide-y divide-zinc-100">
                         {d.coskoro ? (
-                          <div className="flex items-center justify-between px-5 py-3.5 text-sm font-semibold text-zinc-400 cursor-default">
+                          <div className="flex items-center justify-between px-4 py-2.5 text-[13px] font-semibold text-zinc-400 cursor-default">
                             Pripravujeme
                           </div>
                         ) : (
@@ -185,7 +190,7 @@ export default function EshopPage() {
                             <a
                               key={l.text}
                               href={l.href}
-                              className="flex items-center justify-between px-5 py-3.5 text-sm font-semibold text-zinc-800 hover:bg-[#e3f3fb]/50 hover:text-[#1a8cc4] transition-colors"
+                              className="flex items-center justify-between px-4 py-2.5 text-[13px] font-semibold text-zinc-800 hover:bg-[#e3f3fb]/50 hover:text-[#1a8cc4] transition-colors"
                             >
                               {l.text}
                               <ChevronRight className="w-4 h-4 text-zinc-400" aria-hidden />
@@ -203,68 +208,116 @@ export default function EshopPage() {
     ),
 
     servis: (
-      <section className="bg-[#f7f7f4]">
-        <Container size="xl" className="py-10 md:py-14">
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <div className="rounded-3xl border border-zinc-200 bg-white p-6 md:p-8 flex items-center gap-5">
-              <Image
-                src="/images/eshop/medved-hlava.png"
-                alt=""
-                width={112}
-                height={112}
-                quality={85}
-                className="w-24 h-24 md:w-28 md:h-28 shrink-0 rounded-full ring-4 ring-[#e3f3fb]"
-              />
-              <div className="min-w-0">
-                <div className="text-xs font-bold uppercase tracking-wide text-[#1a8cc4]">
-                  Zákaznícky servis
-                </div>
-                <h2 className="mt-1 text-xl md:text-2xl font-extrabold text-[#0e1a3b]" style={{ textWrap: "balance" }}>
-                  Máš otázky? Rád ti pomôžem!
-                </h2>
+      /* Zákaznícky servis + dôveryhodnosť (štýl Epodex) — foto na pozadí,
+         karta agenta vľavo, panel so štatistikami a recenziou vpravo */
+      <section className="relative isolate bg-[#0e1a3b]">
+        <Image
+          src="/images/hero/byvanie-v2.webp"
+          alt=""
+          fill
+          sizes="100vw"
+          quality={85}
+          className="object-cover opacity-25"
+        />
+        <Container size="xl" className="relative py-12 md:py-16">
+          <div className="grid grid-cols-1 lg:grid-cols-[300px_1fr] gap-5 items-stretch">
+            {/* Karta agenta */}
+            <div className="rounded-2xl bg-white shadow-[0_18px_50px_rgba(0,0,0,0.25)] overflow-hidden flex flex-col">
+              <div className="relative aspect-[4/3] bg-[#e3f3fb]">
+                <Image
+                  src="/images/eshop/medved-hlava.png"
+                  alt=""
+                  fill
+                  sizes="300px"
+                  quality={85}
+                  className="object-contain p-4"
+                />
+              </div>
+              <div className="p-5 text-center">
+                <div className="font-extrabold text-[#0e1a3b]">Tím EPOXIDOVO</div>
                 <p className="mt-1 text-sm text-zinc-500">
-                  Skladby, spotreby aj postup — poradíme zadarmo. Po–Pi 8:00–17:00.
+                  Máš otázky? Radi ti pomôžeme!
                 </p>
-                <div className="mt-3 flex flex-wrap gap-x-5 gap-y-1.5 text-sm font-bold">
-                  <a href={`tel:${SITE.contact.phoneRaw}`} className="inline-flex items-center gap-1.5 text-[#0e1a3b] hover:text-[#1a8cc4] transition-colors whitespace-nowrap">
-                    <Phone className="w-4 h-4 text-[#16a34a]" aria-hidden />
+                <div className="mt-4 space-y-2.5 text-sm">
+                  <a href={`tel:${SITE.contact.phoneRaw}`} className="flex items-center justify-center gap-2 font-bold text-[#0e1a3b] hover:text-[#1a8cc4] transition-colors">
+                    <span className="w-7 h-7 shrink-0 inline-flex items-center justify-center rounded-full bg-[#16a34a] text-white">
+                      <Phone className="w-3.5 h-3.5" aria-hidden />
+                    </span>
                     {SITE.contact.phone}
                   </a>
-                  <a href={`mailto:${SITE.contact.email}`} className="text-[#1a8cc4] hover:underline whitespace-nowrap">
+                  <a href={`mailto:${SITE.contact.email}`} className="flex items-center justify-center gap-2 text-zinc-600 hover:text-[#1a8cc4] transition-colors">
+                    <span className="w-7 h-7 shrink-0 inline-flex items-center justify-center rounded-full bg-[#3db6e8] text-white">
+                      <Mail className="w-3.5 h-3.5" aria-hidden />
+                    </span>
                     {SITE.contact.email}
                   </a>
                 </div>
               </div>
             </div>
 
-            <div className="rounded-3xl border border-zinc-200 bg-white p-6 md:p-8 flex items-center gap-5">
+            {/* Panel s číslami a recenziou */}
+            <div className="rounded-2xl bg-white shadow-[0_18px_50px_rgba(0,0,0,0.25)] overflow-hidden flex flex-col">
+              <div className="flex-1 grid grid-cols-1 md:grid-cols-3 divide-y md:divide-y-0 md:divide-x divide-zinc-200">
+                <div className="p-6 text-center flex flex-col items-center justify-center">
+                  <div className="text-3xl md:text-4xl font-extrabold text-[#0e1a3b] tabular-nums">50 000+</div>
+                  <div className="mt-2 text-2xl" aria-hidden>🤝</div>
+                  <div className="mt-1 text-sm text-zinc-500">spokojných zákazníkov</div>
+                </div>
+                <div className="p-6 text-center flex flex-col items-center justify-center">
+                  <div className="text-3xl md:text-4xl font-extrabold text-[#0e1a3b] tabular-nums">5,0/5</div>
+                  <div className="mt-2 text-amber-400 text-lg tracking-wide" aria-hidden>★★★★★</div>
+                  <div className="mt-1 text-sm text-zinc-500">
+                    na základe {REVIEWS.length} hodnotení
+                  </div>
+                </div>
+                <div className="p-6">
+                  <div className="text-sm font-bold text-[#1a8cc4]">Najnovšie recenzie</div>
+                  <p className="mt-2 text-sm text-zinc-600 leading-relaxed line-clamp-3">
+                    {REVIEWS[0].text}
+                  </p>
+                  <div className="mt-2 text-xs text-zinc-400">
+                    {REVIEWS[0].name} · {REVIEWS[0].location}
+                  </div>
+                  <a href="/realizacie" className="mt-2 inline-flex items-center gap-1 text-sm font-bold text-[#1a8cc4] hover:underline">
+                    zobraziť viac hodnotení »
+                  </a>
+                </div>
+              </div>
+              <div className="bg-[#3db6e8] text-white grid grid-cols-1 sm:grid-cols-3 divide-y sm:divide-y-0 sm:divide-x divide-white/20">
+                {["Konečné ceny bez prekvapení", "Materiál, ktorý sami lejeme", "Poradenstvo zadarmo"].map((t) => (
+                  <div key={t} className="px-4 py-3 flex items-center justify-center gap-2 font-bold text-sm text-center">
+                    <Check className="w-4 h-4 shrink-0" aria-hidden />
+                    {t}
+                  </div>
+                ))}
+              </div>
+            </div>
+          </div>
+
+          {/* Sme aj realizačná firma — pás pod tým */}
+          <div className="mt-5 rounded-2xl bg-white/10 border border-white/15 backdrop-blur-sm p-5 md:p-6 flex flex-wrap items-center justify-between gap-4 text-white">
+            <div className="flex items-center gap-4 min-w-0">
               <Image
                 src="/images/site/logo_v2.png"
                 alt="EPOXIDOVO logo"
-                width={112}
-                height={99}
+                width={80}
+                height={71}
                 quality={85}
-                className="w-24 md:w-28 h-auto shrink-0"
+                className="w-16 h-auto shrink-0"
               />
               <div className="min-w-0">
-                <div className="text-xs font-bold uppercase tracking-wide text-[#1a8cc4]">
-                  Sme aj realizačná firma
+                <div className="font-extrabold text-lg">Nechceš liať sám? Urobíme to za teba.</div>
+                <div className="mt-0.5 text-sm text-white/70">
+                  Sme aj realizačná firma — {SITE.legalName}, Ružomberok.
                 </div>
-                <h2 className="mt-1 text-xl md:text-2xl font-extrabold text-[#0e1a3b]" style={{ textWrap: "balance" }}>
-                  Nechceš liať sám? Urobíme to za teba.
-                </h2>
-                <p className="mt-1 text-sm text-zinc-500">
-                  Ten istý materiál lejeme dennodenne na realizáciách po celom
-                  Slovensku — {SITE.legalName}, Ružomberok.
-                </p>
-                <a
-                  href="/cenova-ponuka"
-                  className="mt-3 inline-flex items-center gap-2 px-5 py-2.5 rounded-full bg-[#f97316] text-white font-bold text-sm hover:bg-[#ea580c] transition-colors whitespace-nowrap"
-                >
-                  Nezáväzná cenová ponuka
-                </a>
               </div>
             </div>
+            <a
+              href="/cenova-ponuka"
+              className="inline-flex items-center gap-2 px-6 py-3 rounded-full bg-[#f97316] text-white font-bold hover:bg-[#ea580c] transition-colors whitespace-nowrap"
+            >
+              Nezáväzná cenová ponuka
+            </a>
           </div>
         </Container>
       </section>

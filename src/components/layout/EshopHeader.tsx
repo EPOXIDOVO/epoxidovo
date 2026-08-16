@@ -2,7 +2,6 @@
 
 import * as React from "react";
 import Link from "next/link";
-import Image from "next/image";
 import { Search, ShoppingCart, Building2 } from "lucide-react";
 
 /**
@@ -49,9 +48,8 @@ export function EshopHeader() {
     <header className="fixed top-0 inset-x-0 z-50 bg-white shadow-[0_1px_0_rgba(0,0,0,0.06)]">
       {/* logo + search + košík */}
       <div className="max-w-7xl mx-auto px-4 py-3 flex items-center gap-4 md:gap-8">
-        <Link href="/eshop" aria-label="E-shop EPOXIDOVO" className="shrink-0 flex items-center gap-2">
-          <Image src="/images/site/logo_v2.png" alt="" width={44} height={39} quality={85} className="w-10 h-auto" />
-          <span className="hidden sm:block text-xl font-extrabold tracking-tight text-[#0e1a3b]">
+        <Link href="/eshop" aria-label="E-shop EPOXIDOVO" className="shrink-0">
+          <span className="text-xl md:text-2xl font-extrabold tracking-tight text-[#0e1a3b] whitespace-nowrap">
             EPOXID<span className="text-[#3db6e8]">OVO</span>.SK
           </span>
         </Link>

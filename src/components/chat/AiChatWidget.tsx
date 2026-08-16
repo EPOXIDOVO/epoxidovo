@@ -35,22 +35,30 @@ export function AiChatWidget() {
   const [hintReady, setHintReady] = React.useState(false);
   const [hintHidden, setHintHidden] = React.useState(false);
 
-  // Hint bublina — "Napíšte nám na WhatsApp" sa zobrazí cca 1.5s po
-  // load, zmizne pri scrolle alebo po 5s.
+  // Hint bublina „Sme na telefóne" — bliká raz za 15 s, ale LEN v pracovnom
+  // čase 8:00–16:00 (mimo neho by sľubovala dostupnosť, ktorú nemáme).
   React.useEffect(() => {
-    const mobile = window.matchMedia("(max-width: 767px)").matches;
-    const showDelay = mobile ? 15000 : 1500;
-    const hideDelay = mobile ? 17000 : 5000;
-    const showTimer = setTimeout(() => setHintReady(true), showDelay);
-    const hideTimer = setTimeout(() => setHintHidden(true), hideDelay);
-    const onScroll = () => {
-      if (window.scrollY > 50) setHintHidden(true);
+    const vPracovnomCase = () => {
+      const h = new Date().getHours();
+      return h >= 8 && h < 16;
     };
-    window.addEventListener("scroll", onScroll, { passive: true });
+    let hideTimer: number | undefined;
+    const cyklus = () => {
+      if (!vPracovnomCase()) {
+        setHintReady(false);
+        setHintHidden(true);
+        return;
+      }
+      setHintHidden(false);
+      setHintReady(true);
+      hideTimer = window.setTimeout(() => setHintHidden(true), 5000);
+    };
+    const prvy = window.setTimeout(cyklus, 1500);
+    const interval = window.setInterval(cyklus, 15000);
     return () => {
-      clearTimeout(showTimer);
-      clearTimeout(hideTimer);
-      window.removeEventListener("scroll", onScroll);
+      window.clearTimeout(prvy);
+      window.clearTimeout(hideTimer);
+      window.clearInterval(interval);
     };
   }, []);
 
@@ -78,7 +86,7 @@ export function AiChatWidget() {
       {/* Hint bublina vedľa FAB tlačidla */}
       {showHint && (
         <div className="mb-1 mr-1 max-w-[220px] rounded-2xl bg-white px-4 py-2.5 text-sm font-semibold text-zinc-900 shadow-[0_10px_30px_rgba(0,0,0,0.25)] ring-1 ring-black/10 animate-[fadeInUp_0.25s_ease-out]">
-          Napíšte nám na WhatsApp 👋
+          Sme na telefóne — napíš nám 👋
           <div className="absolute -bottom-1.5 right-6 h-3 w-3 rotate-45 bg-white ring-1 ring-black/10" />
         </div>
       )}
