@@ -156,7 +156,7 @@ export function EshopClient({ sidebarVyrobcov = false }: { sidebarVyrobcov?: boo
   }, [admin]);
 
   const sideCls = (active: boolean) =>
-    `w-full text-left px-3.5 py-2.5 rounded-xl text-sm font-semibold transition-colors flex items-center justify-between gap-2 ${
+    `w-full text-left px-4 py-3 rounded-xl text-[15px] font-semibold transition-colors flex items-center justify-between gap-3 ${
       active
         ? "bg-[#3db6e8] text-white"
         : "text-zinc-700 hover:bg-white hover:text-[#1a8cc4]"
@@ -309,13 +309,13 @@ export function EshopClient({ sidebarVyrobcov = false }: { sidebarVyrobcov?: boo
 
       {/* Ľavý stĺpec Výrobca + grid */}
       {/* Bočný stĺpec výrobcov — len na /eshop/znacky (prop sidebarVyrobcov) */}
-      <div className={sidebarVyrobcov ? "mt-6 lg:grid lg:grid-cols-[235px_1fr] lg:gap-6 lg:items-start" : "mt-6"}>
+      <div className={sidebarVyrobcov ? "mt-6 lg:grid lg:grid-cols-[300px_1fr] lg:gap-6 lg:items-start" : "mt-6"}>
         {sidebarVyrobcov && (
-          <aside className="hidden lg:block sticky top-24 rounded-2xl bg-[#f2f2ef] p-3">
-            <div className="px-2 pb-2 text-xs font-bold uppercase tracking-wide text-zinc-500">
+          <aside className="hidden lg:block sticky top-24 rounded-2xl bg-[#f2f2ef] p-4">
+            <div className="px-2 pb-3 text-[13px] font-bold uppercase tracking-wide text-zinc-500">
               Výrobca
             </div>
-            <nav className="space-y-1" aria-label="Filter podľa výrobcu">
+            <nav className="space-y-1.5" aria-label="Filter podľa výrobcu">
               <button type="button" onClick={() => setVyrobca(null)} className={sideCls(vyrobca === null)}>
                 <span>Všetci</span>
                 <span className="text-xs opacity-70 tnum">{MATERIALY.length}</span>
@@ -327,12 +327,12 @@ export function EshopClient({ sidebarVyrobcov = false }: { sidebarVyrobcov?: boo
                   onClick={() => setVyrobca(vyrobca === v ? null : v)}
                   className={sideCls(vyrobca === v)}
                 >
-                  <span className="inline-flex items-center gap-2">
+                  <span className="inline-flex items-center gap-3">
                     {/* eslint-disable-next-line @next/next/no-img-element */}
                     <img
                       src={VYROBCA_LOGO[v]}
                       alt=""
-                      className={`h-6 w-14 object-contain object-left ${vyrobca === v ? "brightness-0 invert" : ""}`}
+                      className={`h-9 w-20 object-contain object-left ${vyrobca === v ? "brightness-0 invert" : ""}`}
                     />
                     {v}
                   </span>
