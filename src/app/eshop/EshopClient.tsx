@@ -44,12 +44,14 @@ export function EshopClient() {
     // deep-linky z kategóriových dlaždíc: /eshop?skupina=hlavne&kat=nivelacie
     const sk = q.get("skupina");
     const kt = q.get("kat");
+    const hq = q.get("q");
+    if (hq) setQuery(hq);
     if (sk && SKUPINY.some((x) => x.id === sk)) setSkupina(sk);
     if (kt && OBSAH_KATEGORIE.some((x) => x.id === kt)) {
       setObsah(kt);
       if (!sk) setSkupina(skupinaPreObsah(kt));
     }
-    if (sk || kt) {
+    if (sk || kt || hq) {
       setTimeout(() => {
         document.getElementById("katalog")?.scrollIntoView({ behavior: "smooth", block: "start" });
       }, 150);

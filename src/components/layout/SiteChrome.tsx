@@ -3,6 +3,7 @@
 import * as React from "react";
 import { usePathname } from "next/navigation";
 import { Header } from "./Header";
+import { EshopHeader } from "./EshopHeader";
 import { Footer } from "./Footer";
 
 /**
@@ -12,6 +13,23 @@ import { Footer } from "./Footer";
 export function SiteChrome({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();
   const isHome = pathname === "/";
+
+  // Obchodná časť (/eshop, /kupit-material) má vlastnú commerce hlavičku
+  // ako Epodex/GymBeam — logo + search + košík, bez servisných CTA.
+  const isShop =
+    pathname.startsWith("/eshop") || pathname.startsWith("/kupit-material");
+
+  if (isShop) {
+    return (
+      <>
+        <EshopHeader />
+        <main id="main" className="flex-1 pt-[104px] md:pt-[108px]">
+          {children}
+        </main>
+        <Footer />
+      </>
+    );
+  }
 
   // 1-page no-scroll layout pre /ai-vizualizer + /cenova-ponuka
   // (Footer hidden, main fills viewport, žiadny dlhý scroll dolu).
