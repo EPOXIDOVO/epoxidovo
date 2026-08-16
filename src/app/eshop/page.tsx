@@ -81,11 +81,20 @@ export default function EshopPage() {
           <div className="grid grid-cols-2 lg:grid-cols-4 gap-x-6 gap-y-3">
             {[
               { ikona: "🏆", cislo: "50 000+", text: "spokojných zákazníkov" },
-              { img: "/images/eshop/medved-hlava.png", cislo: "Sme aj realizačná firma", text: "podlahy lejeme dennodenne" },
+              { img: "/images/eshop/medved-hlava.png", cislo: "Sme aj realizačná firma", text: "podlahy lejeme dennodenne", href: "/" },
               { ikona: "📦", cislo: "350+ produktov", text: "4 top značky skladom" },
               { ikona: "📞", cislo: "Poradenstvo zadarmo", text: "od reálnych realizátorov" },
-            ].map((u) => (
-              <div key={u.cislo} className="flex items-center gap-3 justify-center lg:justify-start">
+            ].map((u) => {
+              const jeLink = "href" in u && !!u.href;
+              const Obal = (jeLink ? "a" : "div") as "a" | "div";
+              return (
+              <Obal
+                key={u.cislo}
+                {...(jeLink ? { href: (u as { href: string }).href } : {})}
+                className={`flex items-center gap-3 justify-center lg:justify-start ${
+                  jeLink ? "hover:text-[#6fcded] transition-colors" : ""
+                }`}
+              >
                 {"img" in u && u.img ? (
                   <Image src={u.img} alt="" width={40} height={40} quality={85} className="w-9 h-9 rounded-full shrink-0" />
                 ) : (
@@ -93,10 +102,14 @@ export default function EshopPage() {
                 )}
                 <span className="min-w-0">
                   <span className="block text-sm font-extrabold uppercase tracking-wide whitespace-nowrap">{u.cislo}</span>
-                  <span className="block text-xs text-white/60 whitespace-nowrap">{u.text}</span>
+                  <span className="block text-xs text-white/60 whitespace-nowrap">
+                    {u.text}
+                    {jeLink ? " →" : ""}
+                  </span>
                 </span>
-              </div>
-            ))}
+              </Obal>
+              );
+            })}
           </div>
         </Container>
       </section>
