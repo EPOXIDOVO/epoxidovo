@@ -248,7 +248,7 @@ export function CenyAdminClient() {
         {VYROBCOVIA.map((v) => (
           <button key={v} type="button" onClick={() => setVyrobca(vyrobca === v ? null : v)} className={`${chip(vyrobca === v)} inline-flex items-center gap-1.5`}>
             {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img src={VYROBCA_LOGO[v]} alt="" className={`h-4 w-auto ${vyrobca === v ? "brightness-0 invert" : ""}`} />
+            <img src={VYROBCA_LOGO[v]} alt="" className={`h-5 w-auto max-w-20 object-contain ${vyrobca === v ? "brightness-0 invert" : ""}`} />
             {v} ({vyrobcaCounts.get(v) ?? 0})
           </button>
         ))}
@@ -342,7 +342,7 @@ export function CenyAdminClient() {
                       <span className="font-mono">{m.sku}</span>
                       <span>·</span>
                       {/* eslint-disable-next-line @next/next/no-img-element */}
-                      <img src={VYROBCA_LOGO[m.vyrobca]} alt="" className="h-3.5 w-auto" />
+                      <img src={VYROBCA_LOGO[m.vyrobca]} alt="" className="h-4 w-auto max-w-14 object-contain" />
                       <span>{m.vyrobca}</span>
                     </div>
                   </td>

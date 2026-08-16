@@ -175,7 +175,7 @@ export function EshopClient() {
       )}
 
       {/* Ľavý stĺpec Výrobca + grid */}
-      <div className="mt-6 lg:grid lg:grid-cols-[200px_1fr] lg:gap-6 lg:items-start">
+      <div className="mt-6 lg:grid lg:grid-cols-[235px_1fr] lg:gap-6 lg:items-start">
         {/* Výrobca — desktop sticky stĺpec */}
         <aside className="hidden lg:block sticky top-24 rounded-2xl bg-[#f2f2ef] p-3">
           <div className="px-2 pb-2 text-xs font-bold uppercase tracking-wide text-zinc-500">
@@ -195,7 +195,7 @@ export function EshopClient() {
               >
                 <span className="inline-flex items-center gap-2">
                   {/* eslint-disable-next-line @next/next/no-img-element */}
-                  <img src={VYROBCA_LOGO[v]} alt="" className={`h-4 w-auto ${vyrobca === v ? "brightness-0 invert" : ""}`} />
+                  <img src={VYROBCA_LOGO[v]} alt="" className={`h-6 w-14 object-contain object-left ${vyrobca === v ? "brightness-0 invert" : ""}`} />
                   {v}
                 </span>
                 <span className="text-xs opacity-70 tnum">{vyrobcaCounts.get(v) ?? 0}</span>
@@ -218,7 +218,7 @@ export function EshopClient() {
                 className={`${chipCls(vyrobca === v)} inline-flex items-center gap-1.5`}
               >
                 {/* eslint-disable-next-line @next/next/no-img-element */}
-                <img src={VYROBCA_LOGO[v]} alt="" className={`h-4 w-auto ${vyrobca === v ? "brightness-0 invert" : ""}`} />
+                <img src={VYROBCA_LOGO[v]} alt="" className={`h-5 w-auto max-w-20 object-contain ${vyrobca === v ? "brightness-0 invert" : ""}`} />
                 {v}
               </button>
             ))}
@@ -254,7 +254,7 @@ export function EshopClient() {
                       <ProductVisual material={m} variant="card" />
                       <span className="absolute top-2 left-2 inline-flex items-center gap-1.5 px-2 py-0.5 rounded-full bg-white/95 shadow text-[#0e1a3b] text-[10px] md:text-[11px] font-bold uppercase tracking-wide">
                         {/* eslint-disable-next-line @next/next/no-img-element */}
-                        <img src={VYROBCA_LOGO[m.vyrobca]} alt="" className="h-3.5 w-auto" />
+                        <img src={VYROBCA_LOGO[m.vyrobca]} alt="" className="h-4.5 w-auto max-w-16 object-contain" />
                         {m.vyrobca}
                       </span>
                       {m.pokryje_m2_z_balenia != null && (
