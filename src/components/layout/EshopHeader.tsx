@@ -28,7 +28,11 @@ function precitajPocet(): number {
   }
 }
 
-export function EshopHeader() {
+/**
+ * @param bezVyhladavania - v konfigurátore a vzorkovníku search len rozptyľuje,
+ *   zákazník je uprostred rozhodovania. Miesto po ňom vyplní tichý odkaz späť.
+ */
+export function EshopHeader({ bezVyhladavania = false }: { bezVyhladavania?: boolean } = {}) {
   const [pocet, setPocet] = React.useState(0);
   const [q, setQ] = React.useState("");
 
@@ -54,6 +58,14 @@ export function EshopHeader() {
           </span>
         </Link>
 
+        {bezVyhladavania ? (
+          <Link
+            href="/eshop"
+            className="flex-1 text-sm font-bold text-zinc-500 hover:text-[#1a8cc4] transition-colors whitespace-nowrap"
+          >
+            ← Späť do obchodu
+          </Link>
+        ) : (
         <form
           action="/eshop"
           className="flex-1 relative"
@@ -72,6 +84,7 @@ export function EshopHeader() {
             className="w-full pl-11 pr-4 py-2.5 rounded-full border-2 border-zinc-200 bg-zinc-50 text-sm text-zinc-900 placeholder:text-zinc-400 focus:outline-none focus:border-[#3db6e8] focus:bg-white transition-colors"
           />
         </form>
+        )}
 
         <div className="shrink-0 flex items-center gap-2">
           <Link

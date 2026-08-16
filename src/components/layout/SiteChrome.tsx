@@ -23,10 +23,15 @@ export function SiteChrome({ children }: { children: React.ReactNode }) {
     pathname.startsWith("/navrhni-podlahu") ||
     pathname.startsWith("/vzorkovnik");
 
+  // v konfigurátore a vzorkovníku je zákazník uprostred rozhodovania —
+  // vyhľadávanie ho len odvádza inam
+  const bezVyhladavania =
+    pathname.startsWith("/navrhni-podlahu") || pathname.startsWith("/vzorkovnik");
+
   if (isShop) {
     return (
       <>
-        <EshopHeader />
+        <EshopHeader bezVyhladavania={bezVyhladavania} />
         <main id="main" className="flex-1 pt-[74px]">
           {children}
         </main>

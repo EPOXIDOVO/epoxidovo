@@ -224,8 +224,10 @@ export function KonfiguratorClient() {
   }, [system, volba]);
 
   /* ── UI kúsky ── */
-  const dlazdicaCls = (aktivna: boolean, dostupna = true) =>
-    `relative min-h-[120px] rounded-2xl border-2 p-4 text-left transition-all duration-150 flex flex-col justify-end ${
+  const dlazdicaCls = (aktivna: boolean, dostupna = true, sFotkou = false) =>
+    `relative rounded-2xl border-2 p-4 text-left transition-all duration-150 flex flex-col ${
+      sFotkou ? "min-h-[120px] justify-end" : "min-h-[84px] justify-center"
+    } ${
       !dostupna
         ? "border-zinc-200 bg-zinc-100 text-zinc-400 cursor-not-allowed"
         : aktivna
@@ -298,8 +300,16 @@ export function KonfiguratorClient() {
 
   return (
     <Container size="xl" className="pt-3 pb-8 md:pt-4 md:pb-10">
-      <div>
-        <div>
+      {/* prvý krok je galéria na celú šírku, ďalšie otázky sedia v užšom
+          vycentrovanom paneli — inak sa dve dlaždice stratia v prázdnej ploche */}
+      <div className={krok === "vzhlad" ? "" : "max-w-3xl mx-auto"}>
+        <div
+          className={
+            krok === "vzhlad"
+              ? ""
+              : "rounded-3xl border border-zinc-200 bg-white p-6 md:p-8 shadow-[0_10px_40px_rgba(14,26,59,0.06)]"
+          }
+        >
           {/* progress */}
           <div className="flex items-center gap-3">
             <div className="flex-1 flex gap-1.5">
@@ -365,7 +375,7 @@ export function KonfiguratorClient() {
                         disabled={!!dovod}
                         title={dovod ?? undefined}
                         onClick={() => !dovod && vyberADalej({ priestor: m.id })}
-                        className={`${dlazdicaCls(volba.priestor === m.id, !dovod)} overflow-hidden`}
+                        className={`${dlazdicaCls(volba.priestor === m.id, !dovod, true)} overflow-hidden`}
                       >
                         {!dovod && <FotoPozadie n={FOTO_PRIESTOR[m.id]} />}
                         <span className="relative">
