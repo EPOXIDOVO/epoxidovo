@@ -33,7 +33,8 @@ export type Volba = {
 };
 
 export const PREDVOLENA_VOLBA: Volba = {
-  co: null,
+  // podlaha je predvolená — prvý krok ponúka rovno podlahové vzhľady
+  co: "podlaha",
   kde: null,
   priestor: null,
   podklad: null,
@@ -109,11 +110,14 @@ export function dostupnePodklady(co: Co | null) {
   });
 }
 
+/** Názvy sedia s kategóriami na webe — zákazník hľadá to isté slovo. */
 export const VZHLADY_PODLAHA = [
-  { id: "jednofarebna", label: "Jednofarebná" },
-  { id: "chipsy", label: "Chipsy" },
-  { id: "metalik", label: "Metalik" },
-  { id: "marble", label: "Marble efekt" },
+  { id: "jednofarebna", label: "Jednofarebné" },
+  { id: "chipsy", label: "Chipsové" },
+  { id: "metalik", label: "Metalické" },
+  { id: "marble", label: "Mramorové" },
+  { id: "priemyselna", label: "Priemyselné" },
+  { id: "beton_look", label: "Arturo betón look" },
   { id: "kamenny_koberec", label: "Kamenný koberec" },
 ];
 
@@ -170,6 +174,10 @@ export function dostupnostVzhladov(volba: Volba): {
     if (vz.id === "metalik" && volba.priestor === "garaz") {
       return { ...vz, dostupny: false, dovod: "Do garáže neodporúčame — pneumatiky a bodové zaťaženie efekt poškodia." };
     }
+    // 3b — dekoratívny betón look je interiérový, vonku nevydrží mráz
+    if (vz.id === "beton_look" && volba.kde === "exterier") {
+      return { ...vz, dostupny: false, dovod: "Betón look je do interiéru — vonku ho mráz a vlhkosť rozrušia." };
+    }
     // 9 — mikrocement na podlahu v exteriéri nie
     if (vz.id === "mikrocement" && volba.kde === "exterier") {
       return { ...vz, dostupny: false, dovod: "V exteriéri mikrocement neponúkame — nezvláda mráz a stálu vlhkosť." };
@@ -183,6 +191,36 @@ export function dostupnostVzhladov(volba: Volba): {
     }
     return { ...vz, dostupny: true };
   });
+}
+
+/**
+ * Opačný smer pravidiel 3 a 3b — vzhľad sa vyberá ako prvý, takže ďalšie
+ * kroky treba obmedziť podľa neho. Vracia dôvod, ak sa možnosť nedá zvoliť.
+ */
+export function dostupnostKde(volba: Volba): {
+  id: Kde;
+  dostupny: boolean;
+  dovod?: string;
+}[] {
+  const lenInterier = ["metalik", "marble", "beton_look", "mikrocement"];
+  return (["interier", "exterier"] as Kde[]).map((id) => {
+    if (id === "exterier" && volba.vzhlad && lenInterier.includes(volba.vzhlad)) {
+      return {
+        id,
+        dostupny: false,
+        dovod: "Tento vzhľad je iba do interiéru — vonku ho zničí UV a mráz.",
+      };
+    }
+    return { id, dostupny: true };
+  });
+}
+
+/** Priestory, ktoré sa k zvolenému vzhľadu hodia (pravidlo 5 naopak). */
+export function nevhodnyPriestor(volba: Volba, priestor: string): string | null {
+  if (volba.vzhlad === "metalik" && priestor === "garaz") {
+    return "Metalický efekt do garáže neodporúčame — pneumatiky a bodové zaťaženie ho poškodia.";
+  }
+  return null;
 }
 
 /**

@@ -6,7 +6,7 @@ import { Toaster } from "@/components/ui/Toast";
 import { KonfiguratorClient } from "./KonfiguratorClient";
 
 export const metadata: Metadata = {
-  title: "Navrhni si podlahu — skladba, spotreba a cena za minútu",
+  title: "Zisti, aký materiál potrebuješ — skladba, spotreba a cena",
   description:
     "Odpovedz na pár otázok a dostaneš presnú skladbu vrstiev, spotrebu materiálu aj cenu. Epoxidové a polyuretánové podlahy, steny aj schody — interiér aj exteriér.",
   alternates: { canonical: "/navrhni-podlahu" },
@@ -18,13 +18,13 @@ export default function NavrhniPodlahuPage() {
       <BreadcrumbsJsonLd
         items={[
           { name: "Domov", path: "/" },
-          { name: "Navrhni si podlahu", path: "/navrhni-podlahu" },
+          { name: "Zisti, aký materiál potrebuješ", path: "/navrhni-podlahu" },
         ]}
       />
       <div className="bg-[#f7f7f4] min-h-screen">
         <Container size="xl" className="pt-8 md:pt-10">
           <h1 className="text-3xl md:text-4xl font-extrabold tracking-tight text-[#0e1a3b]">
-            Navrhni si podlahu
+            Zisti, aký materiál potrebuješ
           </h1>
           <p className="mt-2 text-[#4a5478] max-w-2xl">
             Odpovedz na pár otázok a dostaneš presnú skladbu vrstiev, spotrebu

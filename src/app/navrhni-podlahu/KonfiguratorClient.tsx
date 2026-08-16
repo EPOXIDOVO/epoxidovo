@@ -28,6 +28,8 @@ import {
   blokujePodklad,
   dostupnePodklady,
   dostupnostVzhladov,
+  dostupnostKde,
+  nevhodnyPriestor,
   dostupneSystemy,
   postavSkladbu,
   protismykVynuteny,
@@ -57,10 +59,10 @@ const SESSION_KEY = "epx-konfigurator-v1";
 
 type KrokId = "co" | "kde" | "priestor" | "podklad" | "stav" | "plocha" | "vzhlad" | "finis";
 
-const CO_MOZNOSTI: { id: Co; label: string; popis: string }[] = [
-  { id: "podlaha", label: "Podlahu", popis: "Liata podlaha do interiéru aj exteriéru" },
-  { id: "stena", label: "Stenu", popis: "Mikrocement, náter alebo dekoratívny efekt" },
-  { id: "schody", label: "Schody", popis: "Nášľapy, podstupnice a protišmyk" },
+const CO_MOZNOSTI: { id: Co; label: string; tab: string; popis: string }[] = [
+  { id: "podlaha", label: "Podlahu", tab: "Podlaha", popis: "Liata podlaha do interiéru aj exteriéru" },
+  { id: "stena", label: "Stenu", tab: "Stena", popis: "Mikrocement, náter alebo dekoratívny efekt" },
+  { id: "schody", label: "Schody", tab: "Schody", popis: "Nášľapy, podstupnice a protišmyk" },
 ];
 
 const KDE_MOZNOSTI: { id: Kde; label: string; popis: string }[] = [
@@ -127,9 +129,10 @@ export function KonfiguratorClient() {
 
   /* ── zoznam krokov podľa vetvy ── */
   const kroky = React.useMemo<KrokId[]>(() => {
-    const z: KrokId[] = ["co", "kde"];
+    // vzhľad je landing — zákazník najprv vidí, akú podlahu môže mať
+    const z: KrokId[] = ["vzhlad", "kde"];
     if (volba.co !== "schody") z.push("priestor");
-    z.push("podklad", "stav", "plocha", "vzhlad", "finis");
+    z.push("podklad", "stav", "plocha", "finis");
     return z;
   }, [volba.co]);
 
@@ -300,28 +303,6 @@ export function KonfiguratorClient() {
 
           <div key={krok} className="mt-6 motion-safe:animate-[fadeIn_180ms_ease-out]">
             {/* ── KROK 1: čo riešiš ── */}
-            {krok === "co" && (
-              <>
-                <h2 className="text-2xl md:text-3xl font-extrabold text-[#0e1a3b]">Čo riešiš?</h2>
-                <p className="mt-1 text-[#4a5478]">Podľa toho vyberieme celý ďalší postup.</p>
-                <div className="mt-5 grid grid-cols-2 md:grid-cols-3 gap-3">
-                  {CO_MOZNOSTI.map((m) => (
-                    <button
-                      key={m.id}
-                      type="button"
-                      onClick={() => vyberADalej({ co: m.id, priestor: null, podklad: null, vzhlad: null })}
-                      className={`${dlazdicaCls(volba.co === m.id)} overflow-hidden`}
-                    >
-                      <FotoPozadie n={FOTO_CO[m.id]} />
-                      <span className="relative">
-                        <span className="block font-extrabold text-[#0e1a3b]">{m.label}</span>
-                        <span className="block text-xs text-[#4a5478] mt-0.5">{m.popis}</span>
-                      </span>
-                    </button>
-                  ))}
-                </div>
-              </>
-            )}
 
             {/* ── KROK 2: interiér / exteriér ── */}
             {krok === "kde" && (
@@ -331,17 +312,24 @@ export function KonfiguratorClient() {
                   Vonku platia iné pravidlá — UV, mráz a povinný protišmyk.
                 </p>
                 <div className="mt-5 grid grid-cols-2 gap-3">
-                  {KDE_MOZNOSTI.map((m) => (
-                    <button
-                      key={m.id}
-                      type="button"
-                      onClick={() => vyberADalej({ kde: m.id, priestor: null, vzhlad: null })}
-                      className={dlazdicaCls(volba.kde === m.id)}
-                    >
-                      <span className="block font-extrabold text-[#0e1a3b]">{m.label}</span>
-                      <span className="block text-xs text-[#4a5478] mt-0.5">{m.popis}</span>
-                    </button>
-                  ))}
+                  {KDE_MOZNOSTI.map((m) => {
+                    const d = dostupnostKde(volba).find((x) => x.id === m.id)!;
+                    return (
+                      <button
+                        key={m.id}
+                        type="button"
+                        disabled={!d.dostupny}
+                        title={d.dovod}
+                        onClick={() => d.dostupny && vyberADalej({ kde: m.id, priestor: null })}
+                        className={dlazdicaCls(volba.kde === m.id, d.dostupny)}
+                      >
+                        <span className="block font-extrabold">{m.label}</span>
+                        <span className="block text-xs mt-0.5 leading-snug">
+                          {d.dostupny ? m.popis : d.dovod}
+                        </span>
+                      </button>
+                    );
+                  })}
                 </div>
               </>
             )}
@@ -352,17 +340,25 @@ export function KonfiguratorClient() {
                 <h2 className="text-2xl md:text-3xl font-extrabold text-[#0e1a3b]">Aký je to priestor?</h2>
                 <p className="mt-1 text-[#4a5478]">Určuje záťaž, ktorú musí podlaha zniesť.</p>
                 <div className="mt-5 grid grid-cols-2 md:grid-cols-3 gap-3">
-                  {(PRIESTORY[`${volba.co}-${volba.kde}`] ?? []).map((m) => (
-                    <button
-                      key={m.id}
-                      type="button"
-                      onClick={() => vyberADalej({ priestor: m.id, vzhlad: null })}
-                      className={`${dlazdicaCls(volba.priestor === m.id)} overflow-hidden`}
-                    >
-                      <FotoPozadie n={FOTO_PRIESTOR[m.id]} />
-                      <span className="relative font-extrabold text-[#0e1a3b]">{m.label}</span>
-                    </button>
-                  ))}
+                  {(PRIESTORY[`${volba.co}-${volba.kde}`] ?? []).map((m) => {
+                    const dovod = nevhodnyPriestor(volba, m.id);
+                    return (
+                      <button
+                        key={m.id}
+                        type="button"
+                        disabled={!!dovod}
+                        title={dovod ?? undefined}
+                        onClick={() => !dovod && vyberADalej({ priestor: m.id })}
+                        className={`${dlazdicaCls(volba.priestor === m.id, !dovod)} overflow-hidden`}
+                      >
+                        {!dovod && <FotoPozadie n={FOTO_PRIESTOR[m.id]} />}
+                        <span className="relative">
+                          <span className="block font-extrabold">{m.label}</span>
+                          {dovod && <span className="block text-[11px] leading-snug mt-1">{dovod}</span>}
+                        </span>
+                      </button>
+                    );
+                  })}
                 </div>
                 <p className="mt-4 text-sm text-[#4a5478]">
                   Môj prípad tu nie je →{" "}
@@ -539,11 +535,34 @@ export function KonfiguratorClient() {
             {/* ── KROK 7: vzhľad ── */}
             {krok === "vzhlad" && (
               <>
-                <h2 className="text-2xl md:text-3xl font-extrabold text-[#0e1a3b]">Aký vzhľad?</h2>
+                <h2 className="text-2xl md:text-3xl font-extrabold text-[#0e1a3b]">
+                  Akú podlahu chceš?
+                </h2>
                 <p className="mt-1 text-[#4a5478]">
-                  Nedostupné možnosti nechávame vidieť aj s dôvodom, prečo sa nedajú.
+                  Vyber vzhľad a my dopočítame celú skladbu, spotrebu aj cenu.
                 </p>
-                <div className="mt-5 grid grid-cols-2 md:grid-cols-3 gap-3">
+
+                {/* podlaha / stena / schody — mení, aké vzhľady sa ponúkajú */}
+                <div className="mt-4 inline-flex rounded-full bg-[#eef1f6] p-1">
+                  {CO_MOZNOSTI.map((m) => (
+                    <button
+                      key={m.id}
+                      type="button"
+                      onClick={() =>
+                        uprav({ co: m.id, vzhlad: null, priestor: null, podklad: null })
+                      }
+                      className={`px-4 py-1.5 rounded-full text-sm font-bold whitespace-nowrap transition-colors ${
+                        volba.co === m.id
+                          ? "bg-white text-[#0e1a3b] shadow-sm"
+                          : "text-[#6b7390] hover:text-[#0e1a3b]"
+                      }`}
+                    >
+                      {m.tab}
+                    </button>
+                  ))}
+                </div>
+
+                <div className="mt-4 grid grid-cols-2 md:grid-cols-3 gap-3">
                   {dostupnostVzhladov(volba).map((m) => (
                     <button
                       key={m.id}
@@ -551,7 +570,7 @@ export function KonfiguratorClient() {
                       disabled={!m.dostupny}
                       title={m.dovod}
                       onClick={() => m.dostupny && vyberADalej({ vzhlad: m.id })}
-                      className={`${dlazdicaCls(volba.vzhlad === m.id, m.dostupny)} overflow-hidden`}
+                      className={`${dlazdicaCls(volba.vzhlad === m.id, m.dostupny)} overflow-hidden min-h-[104px]`}
                     >
                       {m.dostupny && <FotoPozadie n={FOTO_VZHLAD[m.id]} />}
                       <span className="relative">
@@ -646,8 +665,9 @@ function FotoPozadie({ n }: { n?: Nahlad }) {
   if (!n?.src) return null;
   return (
     <>
-      <Image src={n.src} alt="" fill sizes="200px" quality={75} className="object-cover" />
-      <span aria-hidden className="absolute inset-0 bg-gradient-to-t from-white via-white/85 to-white/40" />
+      <Image src={n.src} alt="" fill sizes="300px" quality={85} className="object-cover" />
+      {/* biely závoj len dole pod textom — fotka hore musí byť vidieť */}
+      <span aria-hidden className="absolute inset-0 bg-gradient-to-t from-white via-white/75 to-white/5" />
     </>
   );
 }

@@ -106,7 +106,8 @@ export const SYSTEMY: System[] = [
       kde: ["interier"],
       priestor: ["garaz", "dielna", "pivnica", "hala", "predajna", "telocvicna"],
       podklad: ["beton", "cem_poter", "anhydrit", "stary_nater", "neviem"],
-      vzhlad: ["jednofarebna"],
+      // priemyselný vzhľad = ten istý tvrdý jednofarebný povrch
+      vzhlad: ["jednofarebna", "priemyselna"],
     },
     vrstvy: [
       v(1, "Penetrácia", PRODUKT.sf151, { prestavkaHodiny: 12 }),
@@ -222,7 +223,7 @@ export const SYSTEMY: System[] = [
       kde: ["exterier"],
       priestor: ["terasa", "vonkajsia_garaz", "rampa", "bazen"],
       podklad: ["beton", "cem_poter", "stary_nater", "neviem"],
-      vzhlad: ["jednofarebna", "chipsy"],
+      vzhlad: ["jednofarebna", "chipsy", "priemyselna"],
     },
     vrstvy: [
       v(1, "Penetrácia", PRODUKT.sf151, { prestavkaHodiny: 12 }),
