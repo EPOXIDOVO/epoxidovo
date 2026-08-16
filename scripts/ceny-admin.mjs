@@ -16,6 +16,7 @@ import { fileURLToPath } from "node:url";
 const PORT = 8798;
 const ROOT = path.dirname(path.dirname(fileURLToPath(import.meta.url)));
 const FILE = path.join(ROOT, "src/content/ceny-override.json");
+const LAYOUT = path.join(ROOT, "src/content/eshop-layout.json");
 
 const CORS = {
   "Access-Control-Allow-Origin": "*",
@@ -31,6 +32,36 @@ const server = http.createServer((req, res) => {
   if (req.method === "GET" && req.url === "/ping") {
     res.writeHead(200, { ...CORS, "Content-Type": "application/json" });
     return res.end(JSON.stringify({ ok: true }));
+  }
+  if (req.method === "POST" && req.url === "/layout") {
+    let body = "";
+    req.on("data", (c) => (body += c));
+    req.on("end", () => {
+      try {
+        const parsed = JSON.parse(body);
+        for (const k of ["sekcie", "skryteSekcie", "dlazdice", "skryteDlazdice"]) {
+          if (!Array.isArray(parsed[k]) || !parsed[k].every((x) => typeof x === "string")) {
+            throw new Error(`neplatné pole ${k}`);
+          }
+        }
+        const out = {
+          _komentar:
+            "Poradie a viditeľnosť blokov e-shopu — upravuje sa v admin režime (/eshop?admin=1), ukladá lokálny zapisovač.",
+          sekcie: parsed.sekcie,
+          skryteSekcie: parsed.skryteSekcie,
+          dlazdice: parsed.dlazdice,
+          skryteDlazdice: parsed.skryteDlazdice,
+        };
+        fs.writeFileSync(LAYOUT, JSON.stringify(out, null, 1) + "\n");
+        res.writeHead(200, { ...CORS, "Content-Type": "application/json" });
+        res.end(JSON.stringify({ ok: true }));
+        console.log("[ceny-admin] layout uložený");
+      } catch (e) {
+        res.writeHead(400, { ...CORS, "Content-Type": "application/json" });
+        res.end(JSON.stringify({ ok: false, message: String(e.message ?? e) }));
+      }
+    });
+    return;
   }
   if (req.method === "POST" && req.url === "/save") {
     let body = "";

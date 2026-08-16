@@ -598,3 +598,16 @@ select,
 /* Wizard krok — slide+fade prechod */
 .step-in { animation: fadeInUp 0.38s var(--ease-out-expo) both; }
 @media (prefers-reduced-motion: reduce) { .step-in { animation: none; } }
+
+/* ── Admin „jiggle" režim e-shopu (/eshop?admin=1) ── */
+@keyframes admin-wiggle {
+  0% { transform: rotate(-0.22deg); }
+  50% { transform: rotate(0.22deg); }
+  100% { transform: rotate(-0.22deg); }
+}
+.admin-wiggle {
+  animation: admin-wiggle 0.35s ease-in-out infinite;
+}
+@media (prefers-reduced-motion: reduce) {
+  .admin-wiggle { animation: none; }
+}

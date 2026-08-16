@@ -1,0 +1,21 @@
+{
+ "_komentar": "Poradie a viditeľnosť blokov e-shopu — upravuje sa v admin režime (/eshop?admin=1), ukladá lokálny zapisovač.",
+ "sekcie": [
+  "vyhody",
+  "hero",
+  "dlazdice",
+  "servis",
+  "katalog",
+  "galeria"
+ ],
+ "skryteSekcie": [],
+ "dlazdice": [
+  "zivice",
+  "koberec",
+  "priprava",
+  "naradie",
+  "mikrocement",
+  "farby"
+ ],
+ "skryteDlazdice": []
+}
