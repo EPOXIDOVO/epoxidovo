@@ -103,7 +103,7 @@ export default function EshopPage() {
         <Container size="xl" className="pt-4">
           <a
             href="/eshop#katalog"
-            className="group relative block h-[38vh] min-h-[280px] max-h-[420px] overflow-hidden rounded-3xl"
+            className="group relative block h-[58vh] min-h-[420px] max-h-[640px] overflow-hidden rounded-3xl"
           >
             <video
               className="absolute inset-0 w-full h-full object-cover"
@@ -116,8 +116,8 @@ export default function EshopPage() {
               <source src="/video/eshop-hero-a.mp4" type="video/mp4" />
             </video>
             <div aria-hidden className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent" />
-            <div className="absolute bottom-0 inset-x-0 p-5 md:p-7 text-center text-white">
-              <h2 className="text-xl md:text-3xl font-extrabold tracking-tight" style={{ textWrap: "balance" }}>
+            <div className="absolute bottom-0 inset-x-0 p-6 md:p-10 text-center text-white">
+              <h2 className="text-2xl md:text-4xl font-extrabold tracking-tight" style={{ textWrap: "balance" }}>
                 Nalej si vlastnú podlahu
               </h2>
               <p className="mt-1 text-white/85 md:text-lg">
