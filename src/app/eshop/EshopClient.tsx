@@ -252,7 +252,9 @@ export function EshopClient() {
                         keď pribudne oficiálna produktovka (pole foto), prebije ho */}
                     <div className="relative">
                       <ProductVisual material={m} variant="card" />
-                      <span className="absolute top-2 left-2 px-2 py-0.5 rounded-full bg-black/45 backdrop-blur-sm text-white text-[10px] md:text-[11px] font-bold uppercase tracking-wide">
+                      <span className="absolute top-2 left-2 inline-flex items-center gap-1.5 px-2 py-0.5 rounded-full bg-white/95 shadow text-[#0e1a3b] text-[10px] md:text-[11px] font-bold uppercase tracking-wide">
+                        {/* eslint-disable-next-line @next/next/no-img-element */}
+                        <img src={VYROBCA_LOGO[m.vyrobca]} alt="" className="h-3.5 w-auto" />
                         {m.vyrobca}
                       </span>
                       {m.pokryje_m2_z_balenia != null && (
