@@ -120,7 +120,10 @@ export default function EshopPage() {
       /* Video hero — s odsadením od okrajov, text vľavo */
       <section className="bg-white">
         <Container size="xl" className="pt-4">
-          <div className="relative isolate overflow-hidden rounded-3xl min-h-[460px] md:min-h-[min(78vh,820px)] flex items-end">
+          {/* Výška naviazaná na okno: nad videom je hlavička + pásy (~210 px),
+              pod ním bubliny (~72 px) — zvyšok nechávame na kúsok dlaždíc,
+              aby zákazník videl kategórie bez scrollovania. */}
+          <div className="relative isolate overflow-hidden rounded-3xl min-h-[440px] md:min-h-[clamp(300px,calc(100vh_-_445px),720px)] flex items-end">
             <Image
               src="/images/categories/metalicke.jpg"
               alt=""
@@ -210,7 +213,7 @@ export default function EshopPage() {
 
     dlazdice: (
       <section className="bg-white">
-        <div className="px-3 md:px-6 py-8 md:py-12">
+        <div className="px-3 md:px-6 pt-5 md:pt-6 pb-8 md:pb-12">
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 md:gap-4">
             {layout.dlazdice
               .filter((id) => !layout.skryteDlazdice.includes(id) && DLAZDICE[id])
