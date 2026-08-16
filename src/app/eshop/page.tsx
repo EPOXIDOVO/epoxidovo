@@ -30,7 +30,7 @@ export default function EshopPage() {
       />
       {/* ── MENU KATEGÓRIÍ (štýl Epodex — svetlé, pod hlavičkou) ── */}
       <nav aria-label="Kategórie e-shopu" className="bg-white border-b border-zinc-200">
-        <Container size="xl" className="pt-[88px] md:pt-[96px] pb-2.5">
+        <Container size="xl" className="py-2.5">
           <div className="flex flex-wrap items-center justify-center gap-x-4 gap-y-2 text-[14px]">
             <a href="/eshop?skupina=hlavne#katalog" className="font-bold text-zinc-900 hover:text-[#1a8cc4] transition-colors">Epoxidové a polyuretánové živice 🧪</a>
             <a href="/eshop?skupina=kamenny-koberec#katalog" className="font-bold text-zinc-900 hover:text-[#1a8cc4] transition-colors">Kamenný koberec 🪨</a>
