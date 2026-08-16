@@ -33,6 +33,19 @@ type Stats = {
   posledne: { id: string; kedy: string; meno: string; suma: number; platba: string; kusov: number }[];
 };
 
+/** Produkt, ktorému ešte niečo chýba — fotka alebo cena. */
+function trebaDorobit(m: Material): boolean {
+  return (!m.foto && !m.foto_sud) || !m.cena_eur_s_dph;
+}
+
+/** Čo presne chýba — do štítku na karte. */
+function comChyba(m: Material): string | null {
+  const ch: string[] = [];
+  if (!m.foto && !m.foto_sud) ch.push("fotka");
+  if (!m.cena_eur_s_dph) ch.push("cena");
+  return ch.length ? `Chýba ${ch.join(" + ")}` : null;
+}
+
 /** Kľúč variantovej skupiny — názov bez zátvorkových častí + výrobca. */
 function skupinaKey(m: Material): string {
   const base = m.nazov.replace(/\s*\([^)]*\)/g, "").trim().toLowerCase();
@@ -59,6 +72,7 @@ export function CenyAdminClient() {
   const [skupina, setSkupina] = React.useState<string | null>(null);
   const [obsah, setObsah] = React.useState<string | null>(null);
   const [lenOverride, setLenOverride] = React.useState(false);
+  const [lenDorobit, setLenDorobit] = React.useState(false);
   const [online, setOnline] = React.useState<boolean | null>(null);
   const [stav, setStav] = React.useState<string | null>(null);
   const [stats, setStats] = React.useState<Stats | null>(null);
@@ -90,10 +104,17 @@ export function CenyAdminClient() {
       if (obsah && kat !== obsah) return false;
       if (!obsah && skupina && skupinaPreObsah(kat) !== skupina) return false;
       if (lenOverride && overrides[m.sku] == null && drafts[m.sku] == null) return false;
+      if (lenDorobit && !trebaDorobit(m)) return false;
       if (!q) return true;
       return `${m.nazov} ${m.sku}`.toLowerCase().includes(q);
     });
-  }, [query, vyrobca, skupina, obsah, lenOverride, drafts, overrides]);
+  }, [query, vyrobca, skupina, obsah, lenOverride, lenDorobit, drafts, overrides]);
+
+  /** Koľko produktov v aktuálnom výbere ešte niečo potrebuje. */
+  const chybaCount = React.useMemo(
+    () => MATERIALY.filter((m) => (!vyrobca || m.vyrobca === vyrobca) && trebaDorobit(m)).length,
+    [vyrobca],
+  );
 
   /** Zlúč varianty balení — po filtroch, najväčšie balenie default. */
   const skupiny = React.useMemo(() => {
@@ -306,6 +327,15 @@ export function CenyAdminClient() {
           />
           Len ručné ceny ({Object.keys(overrides).length})
         </label>
+        <label className="inline-flex items-center gap-2 text-sm font-semibold text-zinc-700 cursor-pointer">
+          <input
+            type="checkbox"
+            checked={lenDorobit}
+            onChange={(e) => setLenDorobit(e.target.checked)}
+            className="w-4 h-4 accent-[#f97316]"
+          />
+          Len čo treba dorobiť ({chybaCount})
+        </label>
         <button
           type="button"
           onClick={uloz}
@@ -401,6 +431,11 @@ export function CenyAdminClient() {
                     {kusov > 0 && (
                       <span className="absolute bottom-2 right-2 px-2 py-0.5 rounded-full bg-emerald-600 text-white text-[10px] font-bold shadow">
                         {kusov} ks predané
+                      </span>
+                    )}
+                    {comChyba(m) && (
+                      <span className="absolute bottom-2 left-2 px-2 py-0.5 rounded-full bg-[#f97316] text-white text-[10px] font-bold shadow whitespace-nowrap">
+                        {comChyba(m)}
                       </span>
                     )}
                   </div>
