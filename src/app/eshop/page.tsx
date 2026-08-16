@@ -136,15 +136,18 @@ export default function EshopPage() {
             </video>
             {/* tmavý scrim namiesto tieňov na písme — text je čitateľný
                 aj na svetlom videe a neplávajú okolo neho fleky */}
-            <div aria-hidden className="absolute inset-0 bg-gradient-to-t from-black/92 via-black/55 to-black/15" />
+            <div aria-hidden className="absolute inset-0 bg-gradient-to-t from-black via-black/75 via-40% to-black/15" />
             <div className="absolute inset-x-0 bottom-0 p-6 md:p-10 text-center text-white">
               <h2
                 className="text-2xl md:text-5xl font-extrabold tracking-tight"
-                style={{ textWrap: "balance" }}
+                style={{ textWrap: "balance", textShadow: "0 2px 14px rgba(0,0,0,0.8)" }}
               >
                 Prvú podlahu zvládneš aj sám
               </h2>
-              <p className="mt-3 mx-auto max-w-xl text-base md:text-xl text-white/90 leading-snug">
+              <p
+                className="mt-3 mx-auto max-w-xl text-lg md:text-2xl font-medium text-white leading-snug"
+                style={{ textShadow: "0 2px 10px rgba(0,0,0,0.85)" }}
+              >
                 Presné množstvá na tvoje m², návod krok za krokom a poradenstvo
                 na telefóne. Podlahy aj steny.
               </p>
@@ -152,7 +155,7 @@ export default function EshopPage() {
                 {["Presný rozpis materiálu", "Návod krok za krokom", "Poradíme počas liatia"].map((t) => (
                   <span
                     key={t}
-                    className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full bg-black/40 border border-white/20 text-[13px] font-semibold whitespace-nowrap"
+                    className="inline-flex items-center gap-1.5 px-4 py-2 rounded-full bg-black/65 border border-white/30 text-white text-sm font-semibold whitespace-nowrap backdrop-blur-[2px]"
                   >
                     <Check className="w-3.5 h-3.5" aria-hidden />
                     {t}
