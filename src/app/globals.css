@@ -615,3 +615,9 @@ select,
 /* Vodorovne scrollovateľné menu bez viditeľnej lišty (pás kategórií e-shopu) */
 .no-scrollbar { scrollbar-width: none; -ms-overflow-style: none; }
 .no-scrollbar::-webkit-scrollbar { display: none; }
+
+/* Prelínanie rotujúcich recenzií */
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(4px); }
+  to { opacity: 1; transform: translateY(0); }
+}

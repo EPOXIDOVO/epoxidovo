@@ -10,6 +10,7 @@ import { Phone, Mail, Check, ChevronRight } from "lucide-react";
 import { SITE } from "@/lib/site";
 import eshopLayout from "@/content/eshop-layout.json";
 import { REVIEWS } from "@/content/reviews";
+import { RecenzieRotator } from "./RecenzieRotator";
 
 export const metadata: Metadata = {
   title: "E-shop — epoxidové materiály Sika, TopStone, Arturo a UZIN",
@@ -306,14 +307,14 @@ export default function EshopPage() {
                     na základe 1 638 hodnotení
                   </div>
                 </div>
-                <div className="px-6 py-7 flex flex-col justify-center">
-                  <div className="text-[15px] font-bold text-[#1a8cc4]">Najnovšie recenzie</div>
-                  <p className="mt-2 text-[15px] text-zinc-600 leading-relaxed line-clamp-4">
-                    {REVIEWS[0].text}
-                  </p>
-                  <div className="mt-2 text-[13px] text-zinc-400">
-                    {REVIEWS[0].name} · {REVIEWS[0].location}
-                  </div>
+                <div className="px-6 py-7">
+                  <RecenzieRotator
+                    recenzie={REVIEWS.slice(0, 8).map((r) => ({
+                      text: r.text,
+                      name: r.name,
+                      location: r.location,
+                    }))}
+                  />
                 </div>
               </div>
               <div className="bg-[#3db6e8] text-white grid grid-cols-1 sm:grid-cols-3 divide-y sm:divide-y-0 sm:divide-x divide-white/20">
