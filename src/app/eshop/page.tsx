@@ -30,24 +30,20 @@ export default function EshopPage() {
       />
       {/* ── MENU KATEGÓRIÍ (štýl Epodex — svetlé, pod hlavičkou) ── */}
       <nav aria-label="Kategórie e-shopu" className="bg-white border-b border-zinc-200">
-        <Container size="xl" className="pt-20 md:pt-24 pb-3">
-          <div className="flex flex-wrap items-center justify-center gap-x-6 gap-y-2 text-[15px] font-semibold">
-            <a href="/eshop#katalog" className="text-zinc-900 hover:text-[#1a8cc4] transition-colors">Obchod</a>
-            <a href="/eshop?skupina=hlavne#katalog" className="text-zinc-900 hover:text-[#1a8cc4] transition-colors">Epoxidové živice</a>
-            <a href="/eshop?skupina=kamenny-koberec#katalog" className="text-zinc-900 hover:text-[#1a8cc4] transition-colors">Kamenný koberec</a>
-            <a href="/eshop?skupina=priprava#katalog" className="text-zinc-900 hover:text-[#1a8cc4] transition-colors">Príprava podkladu</a>
-            <a href="/eshop?skupina=naradie#katalog" className="text-zinc-900 hover:text-[#1a8cc4] transition-colors">Náradie</a>
-            <span className="inline-flex items-center gap-1.5 text-zinc-400 select-none cursor-default whitespace-nowrap">
-              Mikrocement
-              <span className="px-1.5 py-0.5 rounded-full bg-[#f97316] text-white text-[9px] font-bold uppercase">čoskoro</span>
+        <Container size="xl" className="pt-[88px] md:pt-[96px] pb-2.5">
+          <div className="flex flex-wrap items-center justify-center gap-x-4 gap-y-2 text-[14px]">
+            <a href="/eshop?skupina=hlavne#katalog" className="font-bold text-zinc-900 hover:text-[#1a8cc4] transition-colors">Epoxidové a polyuretánové živice 🧪</a>
+            <a href="/eshop?skupina=kamenny-koberec#katalog" className="font-bold text-zinc-900 hover:text-[#1a8cc4] transition-colors">Kamenný koberec 🪨</a>
+            <a href="/eshop?skupina=priprava#katalog" className="font-bold text-zinc-900 hover:text-[#1a8cc4] transition-colors">Príprava podkladu 🏗️</a>
+            <a href="/eshop?skupina=naradie#katalog" className="font-bold text-zinc-900 hover:text-[#1a8cc4] transition-colors">Náradie 🛠️</a>
+            <span className="font-bold text-zinc-400 select-none cursor-default whitespace-nowrap">
+              Mikrocement 🧊
+              <span className="inline-block align-super -ml-0.5 px-1 py-px rounded-full bg-[#f97316] text-white text-[8px] font-bold uppercase leading-none">čoskoro</span>
             </span>
-            <span className="inline-flex items-center gap-1.5 text-zinc-400 select-none cursor-default whitespace-nowrap">
-              Farby
-              <span className="px-1.5 py-0.5 rounded-full bg-[#f97316] text-white text-[9px] font-bold uppercase">čoskoro</span>
-            </span>
-            <span className="inline-flex items-center gap-1.5 text-zinc-400 select-none cursor-default whitespace-nowrap">
-              Dekoratívne steny
-              <span className="px-1.5 py-0.5 rounded-full bg-[#f97316] text-white text-[9px] font-bold uppercase">čoskoro</span>
+            <a href="/eshop?skupina=hlavne#katalog" className="font-bold text-zinc-900 hover:text-[#1a8cc4] transition-colors">Nátery na betón 🎨</a>
+            <span className="font-bold text-zinc-400 select-none cursor-default whitespace-nowrap">
+              Dekoratívne steny 🖌️
+              <span className="inline-block align-super -ml-0.5 px-1 py-px rounded-full bg-[#f97316] text-white text-[8px] font-bold uppercase leading-none">čoskoro</span>
             </span>
           </div>
         </Container>
@@ -106,8 +102,9 @@ export default function EshopPage() {
           <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-4">
             {[
               {
-                label: "EPOXIDOVÉ ŽIVICE",
+                label: "EPOXIDOVÉ A PU ŽIVICE",
                 img: "/images/categories/metalicke.jpg",
+                packshot: "/images/produkty/sika/sikafloor-264-30.png",
                 linky: [
                   { text: "Penetrácie", href: "/eshop?skupina=penetracie#katalog" },
                   { text: "Hlavné vrstvy a nátery", href: "/eshop?skupina=hlavne#katalog" },
@@ -125,6 +122,7 @@ export default function EshopPage() {
               {
                 label: "PRÍPRAVA PODKLADU",
                 img: "/images/categories/jednofarebne.jpg",
+                packshot: "/images/eshop/level30-cutout.png",
                 linky: [
                   { text: "Nivelácie a potery", href: "/eshop?skupina=priprava#katalog" },
                   { text: "Prísady a plnivá", href: "/eshop?skupina=prisady#katalog" },
@@ -160,6 +158,16 @@ export default function EshopPage() {
                     <span className="absolute top-4 right-4 px-3 py-1 rounded-full bg-[#f97316] text-white text-xs font-bold uppercase tracking-wide shadow">
                       Čoskoro
                     </span>
+                  )}
+                  {"packshot" in d && d.packshot && (
+                    <Image
+                      src={d.packshot}
+                      alt=""
+                      width={340}
+                      height={280}
+                      quality={85}
+                      className="absolute bottom-0 left-1/2 -translate-x-1/2 h-[72%] w-auto object-contain drop-shadow-[0_14px_24px_rgba(0,0,0,0.45)]"
+                    />
                   )}
                 </div>
                 <div className="divide-y divide-zinc-100">
