@@ -28,6 +28,26 @@ export const SADY: Sada[] = [
       "Kompletný materiál na jednofarebnú epoxidovú podlahu v garáži pre 1 auto — penetrácia, epoxid v dvoch vrstvách, protišmykový presyp + náradie.",
   },
   {
+    id: "sada-garaz-40",
+    name: "Sada: Garáž 40 m² — jednofarebný epoxid",
+    systemId: "garaz-jednofarebna-epoxid",
+    areaM2: 40,
+    reservePct: 5,
+    image: "/images/realizacie/r-20.jpg",
+    description:
+      "Rovnaká skladba ako 20 m² sada, nadimenzovaná na dvojgaráž — penetrácia, epoxid v dvoch vrstvách, protišmykový presyp + náradie.",
+  },
+  {
+    id: "sada-dielna-30",
+    name: "Sada: Dielňa 30 m² — chipsová epoxidová podlaha",
+    systemId: "chipsova-epoxid",
+    areaM2: 30,
+    reservePct: 5,
+    image: "/images/realizacie/r-48.jpg",
+    description:
+      "Odolná chipsová podlaha do dielne — penetrácia, farebný epoxid, dekoračné chipsy a matný uzatvárací lak + náradie.",
+  },
+  {
     id: "sada-byt-80",
     name: "Sada: Byt 80 m² — liata podlaha Marble FX",
     systemId: "marble-fx",

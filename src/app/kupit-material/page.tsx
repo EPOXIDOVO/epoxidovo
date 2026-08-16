@@ -85,11 +85,16 @@ export default function KupitMaterialPage() {
       sada,
       items,
       obsah,
-      priceLabel: calc.priceIsFinal
-        ? `${calc.priceSubtotal.toFixed(2).replace(".", ",")} €`
-        : `od ${calc.priceSubtotal.toFixed(2).replace(".", ",")} €`,
+      priceEur: calc.priceSubtotal,
+      priceIsFinal: calc.priceIsFinal,
     };
   });
+
+  // Sady zo zadania, pre ktoré zatiaľ nemáme reálny systém/dáta — nevykresľujeme,
+  // žiadne placeholder ceny. Doplnia sa, keď pribudne systém do systems.ts.
+  console.log(
+    "TODO sady (chýba reálny systém): Terasa 15 m² protišmyk, Schody (cena za balenie)",
+  );
 
   return (
     <>
@@ -220,8 +225,8 @@ export default function KupitMaterialPage() {
       </section>
 
       {/* ── SADY ── */}
-      <section className="bg-white">
-        <Container size="xl" className="py-14 md:py-20">
+      <section className="bg-[#F7F6F3]">
+        <div className="max-w-6xl mx-auto px-4 py-16 md:py-20">
           <Reveal>
             <div className="flex items-center gap-3">
               <Package className="w-7 h-7 text-[#3db6e8]" aria-hidden />
@@ -234,19 +239,22 @@ export default function KupitMaterialPage() {
               do košíka.
             </p>
           </Reveal>
-          <div className="mt-8 grid grid-cols-1 md:grid-cols-2 gap-6">
-            {sadyData.map(({ sada, items, obsah, priceLabel }, i) => (
-              <Reveal key={sada.id} delay={i * 80}>
-                <SadaCard
-                  sada={sada}
-                  items={items}
-                  obsah={obsah}
-                  priceLabel={priceLabel}
-                />
-              </Reveal>
-            ))}
+          <div className={sadyData.length < 3 ? "max-w-3xl" : undefined}>
+            <div className="mt-8 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 items-stretch">
+              {sadyData.map(({ sada, items, obsah, priceEur, priceIsFinal }, i) => (
+                <Reveal key={sada.id} delay={i * 80} className="h-full">
+                  <SadaCard
+                    sada={sada}
+                    items={items}
+                    obsah={obsah}
+                    priceEur={priceEur}
+                    priceIsFinal={priceIsFinal}
+                  />
+                </Reveal>
+              ))}
+            </div>
           </div>
-        </Container>
+        </div>
       </section>
 
       {/* ── GALÉRIA DÔVERY ── */}
