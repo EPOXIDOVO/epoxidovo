@@ -5,7 +5,7 @@ import Link from "next/link";
 import { Search, X, ChevronDown } from "lucide-react";
 import { Container } from "@/components/ui/Container";
 import { ProductVisual } from "@/components/eshop/ProductVisual";
-import { MATERIALY, type Material } from "@/lib/materialy";
+import { MATERIALY, type Material, type Vyrobca } from "@/lib/materialy";
 import { OBSAH_KATEGORIE, SKUPINY, obsahKategoria, skupinaPreObsah, skupinaPopis, normalize } from "@/lib/obsah-kategorie";
 import { VYROBCA_LOGO } from "@/lib/vyrobca-logo";
 
@@ -33,6 +33,8 @@ export function EshopClient() {
   const [skupina, setSkupina] = React.useState<string | null>(null);
   const [obsah, setObsah] = React.useState<string | null>(null);
   const [query, setQuery] = React.useState("");
+  // značka z URL (?vyrobca=Sika) — stránka /eshop/znacky sem odkazuje
+  const [vyrobca, setVyrobca] = React.useState<Vyrobca | null>(null);
   // Koľko produktov je vidno — 4 rady po 4 = 16, ďalšie cez „Zobraziť viac"
   const KROK = 16;
   const [limit, setLimit] = React.useState(KROK);
@@ -48,12 +50,14 @@ export function EshopClient() {
     const kt = q.get("kat");
     const hq = q.get("q");
     if (hq) setQuery(hq);
+    const vy = q.get("vyrobca");
+    if (vy) setVyrobca(vy as Vyrobca);
     if (sk && SKUPINY.some((x) => x.id === sk)) setSkupina(sk);
     if (kt && OBSAH_KATEGORIE.some((x) => x.id === kt)) {
       setObsah(kt);
       if (!sk) setSkupina(skupinaPreObsah(kt));
     }
-    if (sk || kt || hq) {
+    if (sk || kt || hq || q.get("vyrobca")) {
       setTimeout(() => {
         document.getElementById("katalog")?.scrollIntoView({ behavior: "smooth", block: "start" });
       }, 150);
@@ -75,11 +79,12 @@ export function EshopClient() {
 
   React.useEffect(() => {
     setLimit(KROK);
-  }, [query, skupina, obsah, adminFilter]);
+  }, [query, skupina, obsah, vyrobca, adminFilter]);
 
   const filtered = React.useMemo(() => {
     const q = normalize(query.trim());
     const base = MATERIALY.filter((m) => {
+      if (vyrobca && m.vyrobca !== vyrobca) return false;
       const kat = obsahKategoria(m);
       if (obsah && kat !== obsah) return false;
       if (!obsah && skupina && skupinaPreObsah(kat) !== skupina) return false;
@@ -104,7 +109,7 @@ export function EshopClient() {
       );
     }
     return base;
-  }, [obsah, skupina, query, admin, adminFilter, predajnost]);
+  }, [obsah, skupina, vyrobca, query, admin, adminFilter, predajnost]);
 
   const obsahCounts = React.useMemo(() => {
     const c = new Map<string, number>();
@@ -294,6 +299,18 @@ export function EshopClient() {
           (logá značiek ostávajú na kartách produktov). */}
       <div className="mt-6">
         <div>
+          {vyrobca && (
+            <div className="mb-3 flex justify-center lg:justify-start">
+              <button
+                type="button"
+                onClick={() => setVyrobca(null)}
+                className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-[#3db6e8] text-white text-sm font-bold hover:bg-[#1a8cc4] transition-colors"
+              >
+                Značka: {vyrobca}
+                <X className="w-4 h-4" aria-hidden />
+              </button>
+            </div>
+          )}
           <p className="mt-4 lg:mt-0 text-center lg:text-left text-sm text-zinc-500">
             {filtered.length > limit
               ? `Zobrazených ${limit} z ${filtered.length} produktov`

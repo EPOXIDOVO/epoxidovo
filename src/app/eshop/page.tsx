@@ -80,10 +80,10 @@ export default function EshopPage() {
         <Container size="xl" className="py-4">
           <div className="grid grid-cols-2 lg:grid-cols-4 gap-x-6 gap-y-3">
             {[
-              { ikona: "🏆", cislo: "50 000+", text: "spokojných zákazníkov" },
+              { ikona: "🏆", cislo: "50 000+", text: "spokojných zákazníkov", href: "#dovera" },
               { img: "/images/eshop/medved-hlava.png", cislo: "Sme aj realizačná firma", text: "podlahy lejeme dennodenne", href: "/" },
-              { ikona: "📦", cislo: "350+ produktov", text: "4 top značky skladom" },
-              { ikona: "📞", cislo: "Poradenstvo zadarmo", text: "od reálnych realizátorov" },
+              { ikona: "📦", cislo: "350+ produktov", text: "4 top značky skladom", href: "/eshop/znacky" },
+              { ikona: "📞", cislo: "Poradenstvo zadarmo", text: "od reálnych realizátorov", href: "/kontakt" },
             ].map((u) => {
               const jeLink = "href" in u && !!u.href;
               const Obal = (jeLink ? "a" : "div") as "a" | "div";
@@ -91,8 +91,8 @@ export default function EshopPage() {
               <Obal
                 key={u.cislo}
                 {...(jeLink ? { href: (u as { href: string }).href } : {})}
-                className={`flex items-center gap-3 justify-center lg:justify-start ${
-                  jeLink ? "hover:text-[#6fcded] transition-colors" : ""
+                className={`flex items-center gap-3 justify-center lg:justify-start rounded-xl px-3 py-2 -mx-1 transition-colors ${
+                  jeLink ? "hover:bg-white/10 hover:text-[#6fcded] cursor-pointer" : ""
                 }`}
               >
                 {"img" in u && u.img ? (
@@ -223,7 +223,7 @@ export default function EshopPage() {
     servis: (
       /* Zákaznícky servis + dôveryhodnosť (podľa Epodexu) — fotka na pozadí,
          karta tímu vľavo (foto cez celú šírku), panel s číslami vpravo. */
-      <section className="relative isolate bg-[#0e1a3b]">
+      <section id="dovera" className="relative isolate bg-[#0e1a3b] scroll-mt-24">
         <Image
           src="/images/hero/byvanie-v2.webp"
           alt=""
