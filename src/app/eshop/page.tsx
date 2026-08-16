@@ -298,9 +298,6 @@ export default function EshopPage() {
                   <div className="mt-2 text-[13px] text-zinc-400">
                     {REVIEWS[0].name} · {REVIEWS[0].location}
                   </div>
-                  <a href="/realizacie" className="mt-2 inline-flex items-center gap-1 text-[15px] font-bold text-[#1a8cc4] hover:underline">
-                    zobraziť viac hodnotení »
-                  </a>
                 </div>
               </div>
               <div className="bg-[#3db6e8] text-white grid grid-cols-1 sm:grid-cols-3 divide-y sm:divide-y-0 sm:divide-x divide-white/20">
