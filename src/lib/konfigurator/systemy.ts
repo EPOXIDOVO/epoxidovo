@@ -104,7 +104,7 @@ export const SYSTEMY: System[] = [
     podmienky: {
       co: ["podlaha", "schody"],
       kde: ["interier"],
-      priestor: ["garaz", "dielna", "pivnica", "hala", "predajna", "telocvicna"],
+      priestor: ["garaz", "priemysel", "ine"],
       podklad: ["beton", "cem_poter", "anhydrit", "stary_nater", "neviem"],
       // priemyselný vzhľad = ten istý tvrdý jednofarebný povrch
       vzhlad: ["jednofarebna", "priemyselna"],
@@ -126,7 +126,7 @@ export const SYSTEMY: System[] = [
     podmienky: {
       co: ["podlaha", "schody"],
       kde: ["interier"],
-      priestor: ["byt_dom", "predajna", "telocvicna"],
+      priestor: ["byt_dom", "ine"],
       podklad: ["beton", "cem_poter", "anhydrit", "neviem"],
       vzhlad: ["jednofarebna"],
     },
@@ -148,7 +148,7 @@ export const SYSTEMY: System[] = [
     podmienky: {
       co: ["podlaha"],
       kde: ["interier"],
-      priestor: ["byt_dom", "predajna", "hala"],
+      priestor: ["byt_dom", "priemysel", "ine"],
       podklad: ["beton", "cem_poter", "anhydrit", "neviem"],
       vzhlad: ["metalik"],
     },
@@ -173,7 +173,7 @@ export const SYSTEMY: System[] = [
     podmienky: {
       co: ["podlaha"],
       kde: ["interier"],
-      priestor: ["byt_dom", "predajna"],
+      priestor: ["byt_dom", "ine"],
       podklad: ["beton", "cem_poter", "anhydrit", "neviem"],
       vzhlad: ["marble"],
     },
@@ -195,7 +195,7 @@ export const SYSTEMY: System[] = [
     podmienky: {
       co: ["podlaha", "schody"],
       kde: ["interier"],
-      priestor: ["garaz", "dielna", "pivnica", "byt_dom", "hala"],
+      priestor: ["garaz", "priemysel", "byt_dom", "ine"],
       podklad: ["beton", "cem_poter", "anhydrit", "stary_nater", "neviem"],
       vzhlad: ["chipsy"],
     },
@@ -221,7 +221,7 @@ export const SYSTEMY: System[] = [
     podmienky: {
       co: ["podlaha", "schody"],
       kde: ["exterier"],
-      priestor: ["terasa", "vonkajsia_garaz", "rampa", "bazen"],
+      priestor: ["terasa", "vonkajsia_garaz", "rampa", "ine"],
       podklad: ["beton", "cem_poter", "stary_nater", "neviem"],
       vzhlad: ["jednofarebna", "chipsy", "priemyselna"],
     },

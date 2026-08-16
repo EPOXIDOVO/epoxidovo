@@ -18,8 +18,10 @@ export const FOTO_CO: Record<string, Nahlad> = {
 };
 
 export const FOTO_PRIESTOR: Record<string, Nahlad> = {
-  byt_dom: F("/images/hero/byvanie-v2.webp", "Byt / dom"),
+  byt_dom: F("/images/hero/byvanie-v2.webp", "Bývanie"),
   garaz: F("/images/hero/garaz.webp", "Garáž"),
+  priemysel: F("/images/realizacie/r-20.jpg", "Priemysel"),
+  ine: CHYBA("Iné", "Priestor, ktorý zákazník opíše sám"),
   hala: F("/images/realizacie/r-20.jpg", "Hala, sklad"),
   dielna: F("/images/realizacie/r-48.jpg", "Dielňa"),
   predajna: F("/images/hero/byvanie-kitchen.jpg", "Predajňa, kancelária"),

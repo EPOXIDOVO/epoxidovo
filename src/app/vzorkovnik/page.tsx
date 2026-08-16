@@ -70,6 +70,11 @@ const TYPY: Record<
     popis: "Dekoračné vločky, ktoré sa sypú do čerstvej vrstvy. Kombinujú sa so základnou farbou z RAL.",
     zdroj: "chipsy",
   },
+  "kamenny-koberec": {
+    nadpis: "Vzorkovník — kamenný koberec",
+    popis: "Mramorové a kremičité kamienky spájané živicou. Vzorkovník kameňov ti pošleme poštou.",
+    zdroj: "priprava",
+  },
   "beton-look": {
     nadpis: "Vzorkovník — betón look",
     popis: "Vzorkovník pripravujeme. Napíš nám a pošleme ti reálne vzorky poštou.",

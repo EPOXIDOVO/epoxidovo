@@ -16,6 +16,8 @@ export type Volba = {
   co: Co | null;
   kde: Kde | null;
   priestor: string | null;
+  /** Voľný popis, keď zákazník zvolí „Iné". */
+  priestorPopis: string | null;
   podklad: string | null;
   stav: Stav | null;
   priznaky: Priznak[];
@@ -37,6 +39,7 @@ export const PREDVOLENA_VOLBA: Volba = {
   co: "podlaha",
   kde: null,
   priestor: null,
+  priestorPopis: null,
   podklad: null,
   stav: null,
   priznaky: [],
@@ -62,19 +65,16 @@ export const CENA_ZOSIVANIE_EUR = 20;
 
 export const PRIESTORY: Record<string, { id: string; label: string }[]> = {
   "podlaha-interier": [
-    { id: "byt_dom", label: "Byt / dom" },
+    { id: "byt_dom", label: "Bývanie" },
     { id: "garaz", label: "Garáž" },
-    { id: "pivnica", label: "Pivnica, technická miestnosť" },
-    { id: "predajna", label: "Predajňa, kancelária" },
-    { id: "dielna", label: "Dielňa" },
-    { id: "hala", label: "Hala, sklad" },
-    { id: "telocvicna", label: "Telocvičňa" },
+    { id: "priemysel", label: "Priemysel" },
+    { id: "ine", label: "Iné" },
   ],
   "podlaha-exterier": [
     { id: "terasa", label: "Terasa, balkón" },
     { id: "vonkajsia_garaz", label: "Vonkajšia garáž, prístrešok" },
     { id: "rampa", label: "Rampa, nájazd" },
-    { id: "bazen", label: "Bazénové okolie" },
+    { id: "ine", label: "Iné" },
   ],
   "stena-interier": [
     { id: "kupelna", label: "Kúpeľňa" },
@@ -118,6 +118,7 @@ export const VZHLADY_PODLAHA = [
   { id: "marble", label: "Mramorové" },
   { id: "beton_look", label: "Betón Look" },
   { id: "priemyselna", label: "Priemyselné" },
+  { id: "kamenny_koberec", label: "Kamenný koberec" },
 ];
 
 export const VZHLADY_STENA = [

@@ -80,6 +80,7 @@ const VZORKOVNIK_SLUG: Record<string, string> = {
   marble: "mramorove",
   beton_look: "beton-look",
   priemyselna: "priemyselne",
+  kamenny_koberec: "kamenny-koberec",
 };
 
 const SESSION_KEY = "epx-konfigurator-v1";
@@ -188,7 +189,9 @@ export function KonfiguratorClient() {
       case "kde":
         return !!volba.kde;
       case "priestor":
-        return !!volba.priestor;
+        return volba.priestor === "ine"
+          ? (volba.priestorPopis ?? "").trim().length > 1
+          : !!volba.priestor;
       case "podklad":
         return !!volba.podklad;
       case "stav":
@@ -345,7 +348,6 @@ export function KonfiguratorClient() {
                         key={m.id}
                         type="button"
                         disabled={!d.dostupny}
-                        title={d.dovod}
                         onClick={() => d.dostupny && vyberADalej({ kde: m.id, priestor: null })}
                         className={dlazdicaCls(volba.kde === m.id, d.dostupny)}
                       >
@@ -357,6 +359,30 @@ export function KonfiguratorClient() {
                     );
                   })}
                 </div>
+
+                {/* keď je exteriér zablokovaný, nenechaj zákazníka v slepej uličke */}
+                {dostupnostKde(volba).some((d) => !d.dostupny) && (
+                  <div className="mt-4 rounded-2xl border border-amber-200 bg-amber-50 p-4">
+                    <p className="text-sm text-[#0e1a3b] leading-relaxed">
+                      <strong className="font-extrabold">Prečo vonku nie:</strong> UV žiarenie
+                      rozloží živicu v efekte, farba zožltne a povrch skriedovatie. Mráz a voda
+                      navyše pracujú s podkladom, takže tenká dekoratívna vrstva popraská.
+                      Do exteriéru lejeme polyuretánové systémy a kamenné koberce — sú
+                      UV stabilné, pružné a priepustné pre vodu.
+                    </p>
+                    <button
+                      type="button"
+                      onClick={() => {
+                        uprav({ kde: "exterier", vzhlad: null, priestor: null });
+                        setKrokIndex(0);
+                      }}
+                      className="mt-3 inline-flex items-center gap-2 px-5 py-2.5 rounded-full bg-[#0e1a3b] text-white font-bold text-sm hover:bg-[#1a2b57] transition-colors whitespace-nowrap"
+                    >
+                      Pozrieť vhodné typy do exteriéru
+                      <ArrowRight className="w-4 h-4" aria-hidden />
+                    </button>
+                  </div>
+                )}
               </>
             )}
 
@@ -374,7 +400,12 @@ export function KonfiguratorClient() {
                         type="button"
                         disabled={!!dovod}
                         title={dovod ?? undefined}
-                        onClick={() => !dovod && vyberADalej({ priestor: m.id })}
+                        onClick={() =>
+                          !dovod &&
+                          (m.id === "ine"
+                            ? uprav({ priestor: "ine" })
+                            : vyberADalej({ priestor: m.id, priestorPopis: null }))
+                        }
                         className={`${dlazdicaCls(volba.priestor === m.id, !dovod, true)} overflow-hidden`}
                       >
                         {!dovod && <FotoPozadie n={FOTO_PRIESTOR[m.id]} />}
@@ -386,6 +417,29 @@ export function KonfiguratorClient() {
                     );
                   })}
                 </div>
+                {volba.priestor === "ine" && (
+                  <div className="mt-4">
+                    <label
+                      htmlFor="priestor-iny"
+                      className="block text-sm font-bold text-[#0e1a3b] mb-1.5"
+                    >
+                      Napíš, o aký priestor ide
+                    </label>
+                    <input
+                      id="priestor-iny"
+                      type="text"
+                      autoFocus
+                      value={volba.priestorPopis ?? ""}
+                      onChange={(e) => uprav({ priestorPopis: e.target.value })}
+                      placeholder="napr. pivnica, telocvičňa, ambulancia, kuchyňa reštaurácie…"
+                      className="w-full px-4 py-3 rounded-2xl border-2 border-zinc-200 text-[#0e1a3b] placeholder:text-zinc-400 focus:outline-none focus:border-[#3db6e8] transition-colors"
+                    />
+                    <p className="mt-1.5 text-xs text-[#6b7390]">
+                      Podľa toho vieme skladbu doladiť — napíš aj to, čo po podlahe chodí.
+                    </p>
+                  </div>
+                )}
+
                 <p className="mt-4 text-sm text-[#4a5478]">
                   Môj prípad tu nie je →{" "}
                   <Link href="/kontakt" className="font-bold text-[#1a8cc4] hover:underline">
@@ -570,7 +624,7 @@ export function KonfiguratorClient() {
 
                 {/* karty 1:1 so sekciou „Čo všetko vieme vyčarovať" na webe */}
                 <div className="mt-5">
-                  <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-2.5 md:gap-3">
+                  <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-7 gap-2 md:gap-2.5">
                     {zoznamVzhladov.map((m, idx) => {
                       const vybrata = volba.vzhlad === m.id;
                       const foto = FOTO_VZHLAD[m.id];
@@ -598,7 +652,7 @@ export function KonfiguratorClient() {
                                   <Check className="w-5 h-5" aria-hidden />
                                 </span>
                               )}
-                              <span className="px-3 pt-3 pb-2.5 md:px-4 md:pt-4 md:pb-3 flex flex-col">
+                              <span className="px-3 pt-3 pb-2.5 md:px-4 md:pt-4 md:pb-3 flex flex-col min-h-[84px] md:min-h-[112px]">
                                 <span className="w-6 h-6 md:w-8 md:h-8 mb-1.5 md:mb-2 rounded-md bg-white text-[#5c2c18] group-hover:text-[#3db6e8] flex items-center justify-center p-1 md:p-1.5 transition-colors duration-500 shrink-0">
                                   <DiceIcon pips={((idx % 5) + 1) as 1 | 2 | 3 | 4 | 5} />
                                 </span>
@@ -686,7 +740,8 @@ export function KonfiguratorClient() {
               </button>
             )}
             {/* Ďalej len tam, kde nie je auto-advance */}
-            {(["stav", "plocha", "finis"] as KrokId[]).includes(krok) && (
+            {((["stav", "plocha", "finis"] as KrokId[]).includes(krok) ||
+              (krok === "priestor" && volba.priestor === "ine")) && (
               <button
                 type="button"
                 onClick={dalej}
