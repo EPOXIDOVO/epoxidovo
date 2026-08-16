@@ -54,11 +54,13 @@ export async function POST(req: NextRequest) {
     const email = typeof body.email === "string" ? body.email.trim() : "";
     const phone = typeof body.phone === "string" ? body.phone.trim() : "";
 
-    if (firma.length < 2) {
-      return NextResponse.json({ error: "validation", message: "Zadaj názov firmy." }, { status: 400 });
+    // Firma aj IČO sú VOLITEĽNÉ — registrovať sa môže aj súkromná osoba
+    // (stavia si sám). Formát kontrolujeme, len keď je pole vyplnené.
+    if (firma && firma.length < 2) {
+      return NextResponse.json({ error: "validation", message: "Názov firmy je príliš krátky." }, { status: 400 });
     }
-    if (!/^\d{6,8}$/.test(ico)) {
-      return NextResponse.json({ error: "validation", message: "Zadaj platné IČO (6–8 číslic)." }, { status: 400 });
+    if (ico && !/^\d{6,8}$/.test(ico)) {
+      return NextResponse.json({ error: "validation", message: "Zadaj platné IČO (6–8 číslic), alebo pole nechaj prázdne." }, { status: 400 });
     }
     if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
       return NextResponse.json({ error: "validation", message: "Zadaj platný e-mail." }, { status: 400 });
@@ -83,12 +85,12 @@ export async function POST(req: NextRequest) {
         from: process.env.EMAIL_FROM ?? `EPOXIDOVO <noreply@${SITE.domain}>`,
         to: [SITE.contact.email],
         replyTo: email,
-        subject: `🏢 B2B registrácia: ${firma} (IČO ${ico})`,
+        subject: `🏢 B2B registrácia: ${firma || "súkromná osoba"}${ico ? ` (IČO ${ico})` : ""}`,
         html: `
           <h2 style="font-family:Arial">Nová B2B žiadosť</h2>
           <p style="font-family:Arial;font-size:14px">
-            <strong>${esc(firma)}</strong><br/>
-            IČO: ${esc(ico)}<br/>
+            <strong>${esc(firma || "Súkromná osoba (bez firmy)")}</strong><br/>
+            ${ico ? `IČO: ${esc(ico)}<br/>` : ""}
             ${esc(email)} · ${esc(phone)}
           </p>
           <p style="font-family:Arial;font-size:13px;color:#666">

@@ -80,9 +80,11 @@ export function B2bForm() {
     setOpenPre(null);
   };
 
+  // Firma a IČO voliteľné — aj súkromná osoba, čo si robí dom sama
+  const icoCiste = ico.replace(/\s/g, "");
   const valid =
-    firma.trim().length >= 2 &&
-    /^\d{6,8}$/.test(ico.replace(/\s/g, "")) &&
+    (firma.trim() === "" || firma.trim().length >= 2) &&
+    (icoCiste === "" || /^\d{6,8}$/.test(icoCiste)) &&
     /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email.trim()) &&
     /^[+\d\s\-/()]{9,30}$/.test(phone.trim());
 
@@ -172,7 +174,7 @@ export function B2bForm() {
       <div className="space-y-3">
         <div className="relative">
           <input
-            placeholder="Názov firmy *"
+            placeholder="Názov firmy (nepovinné)"
             value={firma}
             onChange={(e) => {
               setFirma(e.target.value);
@@ -186,7 +188,7 @@ export function B2bForm() {
         </div>
         <div className="relative">
           <input
-            placeholder="IČO *"
+            placeholder="IČO (nepovinné)"
             inputMode="numeric"
             value={ico}
             onChange={(e) => {

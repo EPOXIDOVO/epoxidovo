@@ -32,9 +32,9 @@ export default function B2bPage() {
             Veľkoobchodné ceny
           </h1>
           <p className="mt-3 text-center text-zinc-600 max-w-xl mx-auto">
-            Robíte podlahy, alebo len nakupujete viac? Zaregistrujte firmu cez
-            IČO — po overení a schválení získate veľkoobchodné podmienky a
-            prioritnú dostupnosť materiálu.
+            Robíte podlahy, nakupujete viac, alebo si staviate sám? Firma cez
+            IČO aj súkromná osoba — po overení a schválení získate
+            veľkoobchodné podmienky a prioritnú dostupnosť materiálu.
           </p>
           <div className="mt-8 max-w-md mx-auto">
             <B2bForm />
