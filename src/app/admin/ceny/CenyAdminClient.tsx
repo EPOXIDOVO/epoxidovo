@@ -3,7 +3,8 @@
 import * as React from "react";
 import { Search, Save, RotateCcw, X } from "lucide-react";
 import { Container } from "@/components/ui/Container";
-import { MATERIALY } from "@/lib/materialy";
+import { MATERIALY, VYROBCOVIA, type Vyrobca } from "@/lib/materialy";
+import { OBSAH_KATEGORIE, obsahKategoria } from "@/lib/obsah-kategorie";
 import cenyOverride from "@/content/ceny-override.json";
 
 /**
@@ -42,6 +43,8 @@ export function CenyAdminClient() {
 
   const [drafts, setDrafts] = React.useState<Record<string, string>>({});
   const [query, setQuery] = React.useState("");
+  const [vyrobca, setVyrobca] = React.useState<Vyrobca | null>(null);
+  const [obsah, setObsah] = React.useState<string | null>(null);
   const [lenOverride, setLenOverride] = React.useState(false);
   const [online, setOnline] = React.useState<boolean | null>(null);
   const [stav, setStav] = React.useState<string | null>(null);
@@ -69,11 +72,36 @@ export function CenyAdminClient() {
   const zoznam = React.useMemo(() => {
     const q = query.trim().toLowerCase();
     return MATERIALY.filter((m) => {
+      if (vyrobca && m.vyrobca !== vyrobca) return false;
+      if (obsah && obsahKategoria(m) !== obsah) return false;
       if (lenOverride && overrides[m.sku] == null && drafts[m.sku] == null) return false;
       if (!q) return true;
       return `${m.nazov} ${m.sku}`.toLowerCase().includes(q);
     });
-  }, [query, lenOverride, drafts, overrides]);
+  }, [query, vyrobca, obsah, lenOverride, drafts, overrides]);
+
+  const vyrobcaCounts = React.useMemo(() => {
+    const c = new Map<string, number>();
+    for (const m of MATERIALY) c.set(m.vyrobca, (c.get(m.vyrobca) ?? 0) + 1);
+    return c;
+  }, []);
+
+  const obsahCounts = React.useMemo(() => {
+    const c = new Map<string, number>();
+    for (const m of MATERIALY) {
+      if (vyrobca && m.vyrobca !== vyrobca) continue;
+      const k = obsahKategoria(m);
+      c.set(k, (c.get(k) ?? 0) + 1);
+    }
+    return c;
+  }, [vyrobca]);
+
+  const chip = (active: boolean) =>
+    `px-3 py-1.5 rounded-full text-[13px] font-semibold whitespace-nowrap transition-colors border-2 ${
+      active
+        ? "bg-[#3db6e8] border-[#3db6e8] text-white"
+        : "bg-white border-zinc-200 text-zinc-700 hover:border-[#3db6e8] hover:text-[#3db6e8]"
+    }`;
 
   const zmeny = Object.entries(drafts).filter(([sku, v]) => {
     const cur = overrides[sku] ?? null;
@@ -181,7 +209,38 @@ export function CenyAdminClient() {
         </details>
       )}
 
-      <div className="mt-5 flex flex-wrap items-center gap-3">
+      {/* Výrobca */}
+      <div className="mt-5 flex flex-wrap items-center gap-2">
+        <span className="text-xs font-bold uppercase tracking-wide text-zinc-400 mr-1">Výrobca:</span>
+        <button type="button" onClick={() => setVyrobca(null)} className={chip(vyrobca === null)}>
+          Všetci ({MATERIALY.length})
+        </button>
+        {VYROBCOVIA.map((v) => (
+          <button key={v} type="button" onClick={() => setVyrobca(vyrobca === v ? null : v)} className={chip(vyrobca === v)}>
+            {v} ({vyrobcaCounts.get(v) ?? 0})
+          </button>
+        ))}
+      </div>
+
+      {/* Typ produktu */}
+      <div className="mt-2.5 flex flex-wrap items-center gap-2">
+        <span className="text-xs font-bold uppercase tracking-wide text-zinc-400 mr-1">Typ:</span>
+        <button type="button" onClick={() => setObsah(null)} className={chip(obsah === null)}>
+          Všetko
+        </button>
+        {OBSAH_KATEGORIE.filter((k) => (obsahCounts.get(k.id) ?? 0) > 0).map((k) => (
+          <button
+            key={k.id}
+            type="button"
+            onClick={() => setObsah(obsah === k.id ? null : k.id)}
+            className={chip(obsah === k.id)}
+          >
+            {k.label} ({obsahCounts.get(k.id)})
+          </button>
+        ))}
+      </div>
+
+      <div className="mt-4 flex flex-wrap items-center gap-3">
         <div className="relative flex-1 min-w-64 max-w-md">
           <Search className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-zinc-400" aria-hidden />
           <input
