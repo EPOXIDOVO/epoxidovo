@@ -55,6 +55,24 @@ import { EFEKTY, FOTO_CO, FOTO_PRIESTOR, FOTO_VZHLAD, RAL_ZAKLADNE, type Nahlad 
  * karty už nie je relevantný).
  */
 
+/** Kocka s bodkami — rovnaká ikona ako v sekcii „Čo všetko vieme vyčarovať". */
+function DiceIcon({ pips }: { pips: 1 | 2 | 3 | 4 | 5 }) {
+  const positions: Record<number, [number, number][]> = {
+    1: [[2.5, 2.5]],
+    2: [[1.5, 1.5], [3.5, 3.5]],
+    3: [[1.5, 1.5], [2.5, 2.5], [3.5, 3.5]],
+    4: [[1.5, 1.5], [3.5, 1.5], [1.5, 3.5], [3.5, 3.5]],
+    5: [[1.5, 1.5], [3.5, 1.5], [2.5, 2.5], [1.5, 3.5], [3.5, 3.5]],
+  };
+  return (
+    <svg viewBox="0 0 5 5" className="w-full h-full" fill="currentColor" aria-hidden>
+      {positions[pips].map(([x, y], i) => (
+        <circle key={i} cx={x} cy={y} r={0.42} />
+      ))}
+    </svg>
+  );
+}
+
 const SESSION_KEY = "epx-konfigurator-v1";
 
 type KrokId = "co" | "kde" | "priestor" | "podklad" | "stav" | "plocha" | "vzhlad" | "finis";
@@ -542,45 +560,65 @@ export function KonfiguratorClient() {
                   Vyber vzhľad a my dopočítame celú skladbu, spotrebu aj cenu.
                 </p>
 
-                {/* podlaha / stena / schody — mení, aké vzhľady sa ponúkajú */}
-                <div className="mt-4 inline-flex rounded-full bg-[#eef1f6] p-1">
-                  {CO_MOZNOSTI.map((m) => (
-                    <button
-                      key={m.id}
-                      type="button"
-                      onClick={() =>
-                        uprav({ co: m.id, vzhlad: null, priestor: null, podklad: null })
-                      }
-                      className={`px-4 py-1.5 rounded-full text-sm font-bold whitespace-nowrap transition-colors ${
-                        volba.co === m.id
-                          ? "bg-white text-[#0e1a3b] shadow-sm"
-                          : "text-[#6b7390] hover:text-[#0e1a3b]"
-                      }`}
-                    >
-                      {m.tab}
-                    </button>
-                  ))}
-                </div>
-
-                <div className="mt-4 grid grid-cols-2 md:grid-cols-3 gap-3">
-                  {dostupnostVzhladov(volba).map((m) => (
-                    <button
-                      key={m.id}
-                      type="button"
-                      disabled={!m.dostupny}
-                      title={m.dovod}
-                      onClick={() => m.dostupny && vyberADalej({ vzhlad: m.id })}
-                      className={`${dlazdicaCls(volba.vzhlad === m.id, m.dostupny)} overflow-hidden min-h-[104px]`}
-                    >
-                      {m.dostupny && <FotoPozadie n={FOTO_VZHLAD[m.id]} />}
-                      <span className="relative">
-                        <span className="block font-extrabold">{m.label}</span>
-                        {!m.dostupny && (
-                          <span className="block text-[11px] leading-snug mt-1">{m.dovod}</span>
-                        )}
-                      </span>
-                    </button>
-                  ))}
+                {/* karty 1:1 so sekciou „Čo všetko vieme vyčarovať" na webe */}
+                <div className="mt-5 rounded-3xl bg-[var(--color-copper)] p-3 md:p-5">
+                  <div className="grid grid-cols-2 lg:grid-cols-3 gap-2.5 md:gap-4">
+                    {dostupnostVzhladov(volba).map((m, idx) => {
+                      const vybrata = volba.vzhlad === m.id;
+                      const foto = FOTO_VZHLAD[m.id];
+                      return (
+                        <button
+                          key={m.id}
+                          type="button"
+                          disabled={!m.dostupny}
+                          title={m.dovod}
+                          onClick={() => m.dostupny && vyberADalej({ vzhlad: m.id })}
+                          className={`group relative flex flex-col rounded-2xl overflow-hidden bg-[#5c2c18] text-left transition-all duration-300 focus:outline-none focus-visible:ring-2 focus-visible:ring-[#3db6e8] ${
+                            m.dostupny
+                              ? "hover:-translate-y-1 hover:shadow-[0_18px_40px_rgba(0,0,0,0.35)]"
+                              : "opacity-50 cursor-not-allowed"
+                          } ${
+                            vybrata
+                              ? "ring-4 ring-[#3db6e8] shadow-[0_0_0_4px_rgba(61,182,232,0.3),0_18px_40px_rgba(0,0,0,0.35)]"
+                              : ""
+                          }`}
+                        >
+                          {vybrata && (
+                            <span className="absolute top-2 right-2 z-10 inline-flex items-center justify-center w-7 h-7 rounded-full bg-[#3db6e8] text-white shadow-lg">
+                              <Check className="w-5 h-5" aria-hidden />
+                            </span>
+                          )}
+                          <div className="px-3 pt-2.5 pb-2 md:p-5 md:pb-3 min-h-[76px] md:min-h-[124px] flex flex-col">
+                            <div className="w-6 h-6 md:w-9 md:h-9 mb-1 md:mb-3 rounded-md bg-white text-[#5c2c18] group-hover:text-[#3db6e8] flex items-center justify-center p-1 md:p-1.5 transition-colors duration-500 shrink-0">
+                              <DiceIcon pips={((idx % 5) + 1) as 1 | 2 | 3 | 4 | 5} />
+                            </div>
+                            <h3 className="text-[15px] leading-[1.12] md:text-xl font-black text-white tracking-tight md:leading-[1.05]">
+                              {m.label}
+                            </h3>
+                            {!m.dostupny && (
+                              <span className="mt-1 text-[11px] leading-snug text-white/80">{m.dovod}</span>
+                            )}
+                          </div>
+                          <div className="relative overflow-hidden aspect-[4/3] bg-[#4a2313]">
+                            {foto?.src ? (
+                              <Image
+                                src={foto.src}
+                                alt=""
+                                fill
+                                sizes="(max-width: 768px) 50vw, 25vw"
+                                quality={85}
+                                className="object-cover group-hover:scale-105 transition-transform duration-700"
+                              />
+                            ) : (
+                              <span className="absolute inset-0 flex items-center justify-center px-3 text-center text-[11px] font-semibold text-white/60">
+                                Fotka sa dopĺňa
+                              </span>
+                            )}
+                          </div>
+                        </button>
+                      );
+                    })}
+                  </div>
                 </div>
               </>
             )}
@@ -622,7 +660,6 @@ export function KonfiguratorClient() {
           <div className="rounded-2xl bg-[#f7f6f3] p-4 text-sm">
             <div className="text-xs font-bold uppercase tracking-wide text-[#6b7390]">Tvoj výber</div>
             <ul className="mt-2 space-y-1 font-semibold text-[#0e1a3b]">
-              {volba.co && <li>{CO_MOZNOSTI.find((c) => c.id === volba.co)?.label}</li>}
               {volba.kde && <li>{KDE_MOZNOSTI.find((c) => c.id === volba.kde)?.label}</li>}
               {volba.priestor && (
                 <li>{(PRIESTORY[`${volba.co}-${volba.kde}`] ?? []).find((p) => p.id === volba.priestor)?.label}</li>
