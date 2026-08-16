@@ -30,6 +30,8 @@ const DLAZDICE: Record<
   {
     label: string;
     img: string;
+    /** Klik na fotku dlaždice otvorí rovno túto kategóriu. */
+    href?: string;
     packshot?: string;
     linky?: { text: string; href: string }[];
     coskoro?: boolean;
@@ -37,6 +39,7 @@ const DLAZDICE: Record<
 > = {
   zivice: {
     label: "EPOXIDOVÉ A PU ŽIVICE",
+    href: "/eshop?skupina=hlavne#katalog",
     img: "/images/categories/metalicke.jpg",
     packshot: "/images/produkty/sika/sikafloor-264-30.png",
     linky: [
@@ -48,11 +51,13 @@ const DLAZDICE: Record<
   },
   koberec: {
     label: "KAMENNÝ KOBEREC",
+    href: "/eshop?skupina=kamenny-koberec#katalog",
     img: "/images/categories/mramorove.jpg",
     linky: [{ text: "Kamene a spojivá", href: "/eshop?skupina=kamenny-koberec#katalog" }],
   },
   priprava: {
     label: "PRÍPRAVA PODKLADU",
+    href: "/eshop?skupina=priprava#katalog",
     img: "/images/categories/jednofarebne.jpg",
     packshot: "/images/eshop/level30-cutout.png",
     linky: [
@@ -62,12 +67,25 @@ const DLAZDICE: Record<
   },
   naradie: {
     label: "NÁRADIE",
+    href: "/eshop?skupina=naradie#katalog",
     img: "/images/realizacie/r-35.jpg",
     linky: [{ text: "Valce, stierky a pomôcky", href: "/eshop?skupina=naradie#katalog" }],
   },
   mikrocement: { label: "MIKROCEMENT", img: "/images/hero/byvanie-v2.webp", coskoro: true },
   farby: { label: "FARBY A DEKORATÍVNE STENY", img: "/images/realizacie/r-17.jpg", coskoro: true },
 };
+
+/** Fotka dlaždice — odkaz, ak kategória existuje; inak obyčajný rám. */
+function FotkaObal({ href, children }: { href?: string; children: React.ReactNode }) {
+  const cls = "group/foto relative block aspect-[4/3] overflow-hidden";
+  return href ? (
+    <a href={href} className={cls}>
+      {children}
+    </a>
+  ) : (
+    <div className={cls}>{children}</div>
+  );
+}
 
 export default function EshopPage() {
   const layout = eshopLayout as Layout;
@@ -95,7 +113,10 @@ export default function EshopPage() {
                 }`}
               >
                 {"img" in u && u.img ? (
-                  <Image src={u.img} alt="" width={40} height={40} quality={85} className="w-9 h-9 rounded-full shrink-0" />
+                  /* maskot má vlastné modré koliesko — biely prstenec ho oddelí od tmavého pásu */
+                  <span className="w-12 h-12 shrink-0 rounded-full overflow-hidden bg-white ring-2 ring-white/80">
+                    <Image src={u.img} alt="" width={96} height={96} quality={92} className="w-full h-full object-cover" />
+                  </span>
                 ) : (
                   <span className="text-2xl" aria-hidden>{"ikona" in u ? u.ikona : null}</span>
                 )}
@@ -216,14 +237,15 @@ export default function EshopPage() {
                     <div
                       className={`relative rounded-3xl overflow-hidden border border-zinc-200 bg-white flex flex-col h-full ${d.coskoro ? "select-none" : ""}`}
                     >
-                      <div className="relative aspect-[4/3]">
+                      {/* fotka aj štítok sú klikateľné — vedú rovno do kategórie */}
+                      <FotkaObal href={d.coskoro ? undefined : d.href}>
                         <Image
                           src={d.img}
                           alt=""
                           fill
                           sizes="(max-width: 640px) 100vw, (max-width: 1280px) 50vw, 33vw"
                           quality={85}
-                          className={`object-cover ${d.coskoro ? "grayscale-[0.5] opacity-70" : ""}`}
+                          className={`object-cover transition-transform duration-500 ${d.coskoro ? "grayscale-[0.5] opacity-70" : "group-hover/foto:scale-[1.04]"}`}
                         />
                         <span className="absolute top-3 left-3 px-3 py-1 rounded-lg bg-white shadow text-[#0e1a3b] text-[11px] md:text-xs font-extrabold tracking-wide">
                           {d.label}
@@ -243,7 +265,7 @@ export default function EshopPage() {
                             className="absolute bottom-1 left-1/2 -translate-x-1/2 h-[66%] w-auto object-contain drop-shadow-[0_12px_20px_rgba(0,0,0,0.4)]"
                           />
                         )}
-                      </div>
+                      </FotkaObal>
                       <div className="divide-y divide-zinc-100">
                         {d.coskoro ? (
                           <div className="flex items-center justify-between px-4 py-2.5 text-[13px] font-semibold text-zinc-400 cursor-default">
