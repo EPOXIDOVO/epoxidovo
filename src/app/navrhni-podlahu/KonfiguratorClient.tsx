@@ -42,6 +42,8 @@ import {
 } from "@/lib/konfigurator/rules";
 import type { Co, Kde, System } from "@/lib/konfigurator/systemy";
 import { efektivnaPlocha, fmtEur, plochaSchodov, prepocitaj } from "@/lib/konfigurator/vypocet";
+import { SITE } from "@/lib/site";
+import { TurnstileWidget } from "@/components/turnstile/TurnstileWidget";
 import { EFEKTY, FOTO_PRIESTOR, FOTO_VZHLAD, GALERIA_VZHLAD, RAL_ZAKLADNE, type Nahlad } from "./fotky";
 
 /**
@@ -846,6 +848,7 @@ function OdfotPodklad({ volba }: { volba: Volba }) {
   const [telefon, setTelefon] = React.useState("");
   const [email, setEmail] = React.useState("");
   const [suhlas, setSuhlas] = React.useState(false);
+  const [turnstileToken, setTurnstileToken] = React.useState<string | null>(null);
   const [posiela, setPosiela] = React.useState(false);
   const [hotovo, setHotovo] = React.useState(false);
   const [chyba, setChyba] = React.useState<string | null>(null);
@@ -865,6 +868,7 @@ function OdfotPodklad({ volba }: { volba: Volba }) {
     telefon.trim().length > 8 &&
     email.includes("@") &&
     suhlas &&
+    !!turnstileToken &&
     !posiela;
 
   const posli = async () => {
@@ -880,6 +884,7 @@ function OdfotPodklad({ volba }: { volba: Volba }) {
           email: email.trim(),
           phone: telefon.trim(),
           consent: true,
+          turnstileToken,
           source: "konfigurator_podklad",
           message: [
             "Z konfigurátora — zákazník nevie určiť podklad.",
@@ -889,14 +894,44 @@ function OdfotPodklad({ volba }: { volba: Volba }) {
               ? `Priestor: ${volba.priestor === "ine" ? volba.priestorPopis : volba.priestor}`
               : null,
             foto
-              ? `Zákazník odfotil podklad (${nazovSuboru ?? "fotka"}) — vypýtať pri hovore.`
-              : "Fotku zatiaľ nepriložil.",
+              ? `Fotku podkladu posielame e-mailom na ${SITE.contact.email}.`
+              : "Fotku nepriložil.",
           ]
             .filter(Boolean)
             .join(" · "),
         }),
       });
       if (!r.ok) throw new Error(String(r.status));
+
+      // fotka ide zvlášť — lead API má 32 kB limit, obrázok sa doň nezmestí
+      if (foto) {
+        const rf = await fetch("/api/podklad-foto", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            meno: meno.trim(),
+            priezvisko: priezvisko.trim(),
+            email: email.trim(),
+            telefon: telefon.trim(),
+            fotoNazov: nazovSuboru ?? "podklad.jpg",
+            foto,
+            kontext: [
+              volba.vzhlad ? `Vzhľad: ${volba.vzhlad}` : null,
+              volba.kde ? `Kde: ${volba.kde}` : null,
+              volba.priestor
+                ? `Priestor: ${volba.priestor === "ine" ? volba.priestorPopis : volba.priestor}`
+                : null,
+            ]
+              .filter(Boolean)
+              .join(" · "),
+          }),
+        });
+        if (!rf.ok) {
+          setChyba(
+            "Dopyt sme prijali, ale fotku sa nepodarilo odoslať. Zavoláme ti a vypýtame si ju.",
+          );
+        }
+      }
       setHotovo(true);
     } catch {
       setChyba("Odoslanie zlyhalo. Skús to prosím znova alebo nám zavolaj.");
@@ -995,6 +1030,13 @@ function OdfotPodklad({ volba }: { volba: Volba }) {
           .
         </span>
       </label>
+
+      <div className="mt-3">
+        <TurnstileWidget
+          onVerify={setTurnstileToken}
+          onExpire={() => setTurnstileToken(null)}
+        />
+      </div>
 
       {chyba && <p className="mt-2 text-sm font-semibold text-red-600">{chyba}</p>}
 

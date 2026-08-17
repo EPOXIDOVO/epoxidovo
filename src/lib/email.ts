@@ -555,3 +555,44 @@ function escapeHtml(s: string): string {
     .replace(/"/g, "&quot;")
     .replace(/'/g, "&#039;");
 }
+
+/**
+ * Fotka podkladu z konfigurátora — príde ako príloha na info@, aby sa dalo
+ * hneď posúdiť, na čo sa bude liať. Bez RESEND_API_KEY sa ticho preskočí.
+ */
+export async function sendPodkladFotoEmail(args: {
+  meno: string;
+  priezvisko: string;
+  email: string;
+  telefon: string;
+  kontext: string;
+  fotoBase64: string;
+  fotoNazov: string;
+}) {
+  if (!resend) {
+    console.warn("[email] RESEND_API_KEY not set — fotka podkladu neodoslaná");
+    return { skipped: true };
+  }
+  const fromAddress = process.env.EMAIL_FROM ?? `EPOXIDOVO <noreply@${SITE.domain}>`;
+  const bezpecne = (t: string) =>
+    t.replace(/[<>&]/g, (c) => ({ "<": "&lt;", ">": "&gt;", "&": "&amp;" })[c] ?? c);
+
+  await resend.emails.send({
+    from: fromAddress,
+    to: [SITE.contact.email],
+    replyTo: args.email,
+    subject: `Fotka podkladu — ${bezpecne(args.meno)} ${bezpecne(args.priezvisko)}`,
+    html: `
+      <h2 style="font-family:Arial,sans-serif">Zákazník nevie určiť podklad</h2>
+      <p style="font-family:Arial,sans-serif">
+        <strong>${bezpecne(args.meno)} ${bezpecne(args.priezvisko)}</strong><br>
+        Telefón: <a href="tel:${bezpecne(args.telefon)}">${bezpecne(args.telefon)}</a><br>
+        E-mail: <a href="mailto:${bezpecne(args.email)}">${bezpecne(args.email)}</a>
+      </p>
+      <p style="font-family:Arial,sans-serif">${bezpecne(args.kontext)}</p>
+      <p style="font-family:Arial,sans-serif;color:#666">Fotka podkladu je v prílohe.</p>
+    `,
+    attachments: [{ filename: args.fotoNazov, content: args.fotoBase64 }],
+  });
+  return { ok: true };
+}
