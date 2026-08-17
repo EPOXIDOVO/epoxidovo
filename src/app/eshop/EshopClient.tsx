@@ -17,6 +17,18 @@ import { VYROBCA_LOGO } from "@/lib/vyrobca-logo";
  * 352 položiek → filtrovanie čisto client-side, žiadny server round-trip.
  */
 
+/** Kľúč variantovej skupiny — názov bez zátvorkových častí + výrobca. */
+function skupinaKey(m: Material): string {
+  const base = m.nazov.replace(/\s*\([^)]*\)/g, "").trim().toLowerCase();
+  return `${m.vyrobca}::${base}`;
+}
+
+/** Label variantu: balenie (+ farebná kategória, ak ju názov nesie). */
+function variantLabel(m: Material): string {
+  const kat = m.nazov.match(/kat\.\s*([A-Z])/i)?.[1];
+  return (m.balenie ?? m.sku) + (kat ? ` · kat. ${kat.toUpperCase()}` : "");
+}
+
 /** Čo produktu chýba na dorobenie (admin pohľad, ?admin=1). */
 function chybaZoznam(m: Material): string[] {
   const chyba: string[] = [];
@@ -38,6 +50,8 @@ export function EshopClient({ sidebarVyrobcov = false }: { sidebarVyrobcov?: boo
   // Koľko produktov je vidno — 4 rady po 4 = 16, ďalšie cez „Zobraziť viac"
   const KROK = 16;
   const [limit, setLimit] = React.useState(KROK);
+  /** Zvolené balenie pre karty s viacerými variantmi (kľúč skupiny → SKU). */
+  const [variant, setVariant] = React.useState<Record<string, string>>({});
   const [admin, setAdmin] = React.useState(false);
   const [adminFilter, setAdminFilter] = React.useState<AdminFilter>(null);
 
@@ -110,6 +124,23 @@ export function EshopClient({ sidebarVyrobcov = false }: { sidebarVyrobcov?: boo
     }
     return base;
   }, [obsah, skupina, vyrobca, query, admin, adminFilter, predajnost]);
+
+  /** Karty zlúčené podľa produktu — rôzne balenia sú varianty v dropdown-e. */
+  const skupinyKariet = React.useMemo(() => {
+    const mapa = new Map<string, { key: string; varianty: Material[] }>();
+    for (const m of filtered) {
+      const k = skupinaKey(m);
+      const g = mapa.get(k);
+      if (g) g.varianty.push(m);
+      else mapa.set(k, { key: k, varianty: [m] });
+    }
+    // najmenšie balenie ako prvé — zákazník väčšinou kupuje to
+    for (const g of mapa.values()) {
+      g.varianty.sort((a, b) => (a.cena_eur_s_dph ?? 0) - (b.cena_eur_s_dph ?? 0));
+    }
+    return [...mapa.values()];
+  }, [filtered]);
+
 
   const vyrobcaCounts = React.useMemo(() => {
     const c = new Map<string, number>();
@@ -395,8 +426,8 @@ export function EshopClient({ sidebarVyrobcov = false }: { sidebarVyrobcov?: boo
             </div>
           )}
           <p className="mt-4 lg:mt-0 text-center lg:text-left text-sm text-zinc-500">
-            {filtered.length > limit
-              ? `Zobrazených ${limit} z ${filtered.length} produktov`
+            {skupinyKariet.length > limit
+              ? `Zobrazených ${limit} z ${skupinyKariet.length} produktov`
               : filtered.length === MATERIALY.length
               ? `${MATERIALY.length} produktov`
               : `${filtered.length} z ${MATERIALY.length} produktov`}
@@ -413,12 +444,16 @@ export function EshopClient({ sidebarVyrobcov = false }: { sidebarVyrobcov?: boo
             </div>
           ) : (
             <div className="mt-4 grid grid-cols-2 md:grid-cols-3 xl:grid-cols-4 gap-3 md:gap-5">
-              {filtered.slice(0, limit).map((m) => {
+              {skupinyKariet.slice(0, limit).map((g) => {
+                const m = g.varianty.find((v) => v.sku === variant[g.key]) ?? g.varianty[0];
                 return (
+                  <div
+                    key={g.key}
+                    className="group rounded-2xl border border-zinc-200 bg-white overflow-hidden hover:shadow-[0_14px_36px_rgba(0,0,0,0.12)] hover:-translate-y-0.5 transition-all duration-300"
+                  >
                   <Link
-                    key={m.sku}
                     href={`/eshop/${m.sku}`}
-                    className="group rounded-2xl border border-zinc-200 bg-white overflow-hidden hover:shadow-[0_14px_36px_rgba(0,0,0,0.12)] hover:-translate-y-0.5 transition-all duration-300 focus:outline-none focus-visible:ring-2 focus-visible:ring-[#3db6e8]"
+                    className="block focus:outline-none focus-visible:ring-2 focus-visible:ring-[#3db6e8]"
                   >
                     {/* Vizuál — vedro na fotke našej podlahy (ProductVisual);
                         keď pribudne oficiálna produktovka (pole foto), prebije ho */}
@@ -442,20 +477,38 @@ export function EshopClient({ sidebarVyrobcov = false }: { sidebarVyrobcov?: boo
                       <h2 className="mt-0.5 text-[13px] md:text-[15px] font-bold text-zinc-900 leading-snug line-clamp-2 group-hover:text-[#1a8cc4] transition-colors">
                         {m.nazov}
                       </h2>
-                      {m.balenie && (
-                        <div className="mt-0.5 text-[11px] md:text-xs text-zinc-500">{m.balenie}</div>
+                    </div>
+                  </Link>
+                    <div className="px-3 md:px-4 pb-3 md:pb-4 -mt-1">
+                      {g.varianty.length > 1 ? (
+                        <select
+                          value={m.sku}
+                          onChange={(e) => setVariant((v) => ({ ...v, [g.key]: e.target.value }))}
+                          aria-label="Veľkosť balenia"
+                          className="w-full px-2.5 py-1.5 rounded-lg border border-zinc-300 bg-white text-[11px] md:text-xs font-semibold text-zinc-700 focus:outline-none focus:border-[#3db6e8]"
+                        >
+                          {g.varianty.map((v) => (
+                            <option key={v.sku} value={v.sku}>
+                              {variantLabel(v)} · {v.cena_eur_s_dph.toFixed(2).replace(".", ",")} €
+                            </option>
+                          ))}
+                        </select>
+                      ) : (
+                        m.balenie && (
+                          <div className="text-[11px] md:text-xs text-zinc-500">{m.balenie}</div>
+                        )
                       )}
                       <div className="mt-1.5 text-base md:text-lg font-extrabold text-zinc-900">
                         {m.cena_eur_s_dph.toFixed(2).replace(".", ",")} €
                       </div>
                     </div>
-                  </Link>
+                  </div>
                 );
               })}
             </div>
           )}
 
-          {filtered.length > limit && (
+          {skupinyKariet.length > limit && (
             <div className="mt-8 flex flex-col items-center gap-2">
               <button
                 type="button"
@@ -466,7 +519,7 @@ export function EshopClient({ sidebarVyrobcov = false }: { sidebarVyrobcov?: boo
                 <ChevronDown className="w-4 h-4" aria-hidden />
               </button>
               <span className="text-xs text-zinc-400 tabular-nums">
-                {limit} z {filtered.length}
+                {limit} z {skupinyKariet.length}
               </span>
             </div>
           )}
