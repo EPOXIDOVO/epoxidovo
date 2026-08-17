@@ -52,14 +52,13 @@ const DLAZDICE: Record<
   koberec: {
     label: "KAMENNÝ KOBEREC",
     href: "/eshop?skupina=kamenny-koberec#katalog",
-    img: "/images/categories/mramorove.jpg",
+    img: "/images/eshop/products/TS-KORFU-4-8-K06.jpg",
     linky: [{ text: "Kamene a spojivá", href: "/eshop?skupina=kamenny-koberec#katalog" }],
   },
   priprava: {
     label: "PRÍPRAVA PODKLADU",
     href: "/eshop?skupina=priprava#katalog",
-    img: "/images/categories/jednofarebne.jpg",
-    packshot: "/images/eshop/level30-cutout.png",
+    img: "/images/realizacie/r-26.jpg",
     linky: [
       { text: "Nivelácie a potery", href: "/eshop?skupina=priprava#katalog" },
       { text: "Prísady a plnivá", href: "/eshop?skupina=prisady#katalog" },
