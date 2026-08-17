@@ -112,11 +112,11 @@ export function dostupnePodklady(co: Co | null) {
 
 /** Názvy sedia s kategóriami na webe — zákazník hľadá to isté slovo. */
 export const VZHLADY_PODLAHA = [
-  { id: "jednofarebna", label: "Jednofarebné" },
-  { id: "chipsy", label: "Chipsové" },
   { id: "metalik", label: "Metalické" },
   { id: "marble", label: "Mramorové" },
   { id: "beton_look", label: "Betón Look" },
+  { id: "jednofarebna", label: "Jednofarebné" },
+  { id: "chipsy", label: "Chipsové" },
   { id: "priemyselna", label: "Priemyselné" },
   { id: "kamenny_koberec", label: "Kamenný koberec" },
 ];
