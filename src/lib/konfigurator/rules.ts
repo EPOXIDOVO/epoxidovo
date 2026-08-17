@@ -97,7 +97,6 @@ const PODKLADY_VSETKY = [
   { id: "dlazba", label: "Existujúca keramická dlažba" },
   { id: "sadrokarton", label: "Sadrokartón / omietka" },
   { id: "stary_nater", label: "Staré nátery" },
-  { id: "drevo", label: "Drevo / OSB" },
   { id: "neviem", label: "Neviem" },
 ];
 

@@ -14,6 +14,7 @@ import {
   Printer,
   Clock,
   Pencil,
+  Camera,
 } from "lucide-react";
 import { Container } from "@/components/ui/Container";
 import { useCart } from "@/lib/cart";
@@ -147,7 +148,7 @@ export function KonfiguratorClient() {
     if (volba.kde) q.set("kde", volba.kde);
     if (volba.plochaM2) q.set("m2", String(volba.plochaM2));
     const url = q.toString() ? `?${q}` : window.location.pathname;
-    window.history.replaceState(null, "", url);
+    window.history.replaceState(window.history.state, "", url);
   }, [volba]);
 
   /* ── zoznam krokov podľa vetvy ── */
@@ -167,19 +168,46 @@ export function KonfiguratorClient() {
   /** Auto-advance po jednovýberovom kroku (~250 ms). */
   const vyberADalej = (patch: Partial<Volba>) => {
     uprav(patch);
-    window.setTimeout(() => setKrokIndex((n) => Math.min(n + 1, kroky.length - 1)), 250);
+    window.setTimeout(() => {
+      const dalsi = Math.min(krokIndex + 1, kroky.length - 1);
+      setKrokIndex(dalsi);
+      window.history.pushState({ epxKrok: dalsi }, "");
+    }, 250);
   };
 
-  const naspat = () => setKrokIndex((n) => Math.max(0, n - 1));
+  /** Posun vpred zapíše krok do histórie — späť v prehliadači tak vráti
+   *  o otázku, nie preč z konfigurátora. */
+  const chodNaKrok = (n: number) => {
+    setKrokIndex(n);
+    window.history.pushState({ epxKrok: n }, "");
+  };
+
+  /** Späť necháme na prehliadač, aby sedeli obe cesty (tlačidlo aj myš). */
+  const naspat = () => {
+    if (window.history.state?.epxKrok != null) window.history.back();
+    else setKrokIndex((n) => Math.max(0, n - 1));
+  };
+
   const dalej = () => {
     if (posledny) {
       const systemy = dostupneSystemy(volba);
       setSystemId(systemy[0]?.id ?? null);
       setHotovo(true);
+      window.history.pushState({ epxKrok: krokIndex, epxHotovo: true }, "");
       return;
     }
-    setKrokIndex((n) => n + 1);
+    chodNaKrok(krokIndex + 1);
   };
+
+  React.useEffect(() => {
+    const naPopstate = (e: PopStateEvent) => {
+      const st = e.state as { epxKrok?: number; epxHotovo?: boolean } | null;
+      setHotovo(!!st?.epxHotovo);
+      setKrokIndex(typeof st?.epxKrok === "number" ? st.epxKrok : 0);
+    };
+    window.addEventListener("popstate", naPopstate);
+    return () => window.removeEventListener("popstate", naPopstate);
+  }, []);
 
 
   /* ── validácia kroku ── */
@@ -497,13 +525,18 @@ export function KonfiguratorClient() {
                     <button
                       key={m.id}
                       type="button"
-                      onClick={() => (m.id === "drevo" ? uprav({ podklad: m.id }) : vyberADalej({ podklad: m.id }))}
+                      onClick={() =>
+                        m.id === "neviem"
+                          ? uprav({ podklad: m.id })
+                          : vyberADalej({ podklad: m.id })
+                      }
                       className={dlazdicaCls(volba.podklad === m.id)}
                     >
                       <span className="font-extrabold text-[#0e1a3b]">{m.label}</span>
                     </button>
                   ))}
                 </div>
+                {volba.podklad === "neviem" && <OdfotPodklad volba={volba} />}
                 {blok && (
                   <div className="mt-5 rounded-2xl border-2 border-amber-300 bg-amber-50 p-5">
                     <div className="flex items-center gap-2 font-extrabold text-amber-900">
@@ -798,18 +831,187 @@ export function KonfiguratorClient() {
   );
 }
 
-/* ── Pomocné komponenty ─────────────────────────────────────────── */
+/**
+ * „Neviem, aký mám podklad" — zákazník ho odfotí a pošle nám to ako lead.
+ *
+ * Fotka sa zatiaľ NEODOSIELA na server (lead API má 32 kB limit a nemáme
+ * úložisko) — ide len do náhľadu a do správy sa zapíše, že ju zákazník má
+ * pripravenú. Keď pribudne upload (R2 / Cloudinary), doplní sa sem.
+ */
+function OdfotPodklad({ volba }: { volba: Volba }) {
+  const [foto, setFoto] = React.useState<string | null>(null);
+  const [nazovSuboru, setNazovSuboru] = React.useState<string | null>(null);
+  const [meno, setMeno] = React.useState("");
+  const [priezvisko, setPriezvisko] = React.useState("");
+  const [telefon, setTelefon] = React.useState("");
+  const [email, setEmail] = React.useState("");
+  const [suhlas, setSuhlas] = React.useState(false);
+  const [posiela, setPosiela] = React.useState(false);
+  const [hotovo, setHotovo] = React.useState(false);
+  const [chyba, setChyba] = React.useState<string | null>(null);
 
-function FotoPozadie({ n }: { n?: Nahlad }) {
-  if (!n?.src) return null;
+  const vyberFotku = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const f = e.target.files?.[0];
+    if (!f) return;
+    setNazovSuboru(f.name);
+    const r = new FileReader();
+    r.onload = () => setFoto(typeof r.result === "string" ? r.result : null);
+    r.readAsDataURL(f);
+  };
+
+  const mozePoslat =
+    meno.trim().length > 1 &&
+    priezvisko.trim().length > 1 &&
+    telefon.trim().length > 8 &&
+    email.includes("@") &&
+    suhlas &&
+    !posiela;
+
+  const posli = async () => {
+    setPosiela(true);
+    setChyba(null);
+    try {
+      const r = await fetch("/api/lead", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          name: meno.trim(),
+          lastName: priezvisko.trim(),
+          email: email.trim(),
+          phone: telefon.trim(),
+          consent: true,
+          source: "konfigurator_podklad",
+          message: [
+            "Z konfigurátora — zákazník nevie určiť podklad.",
+            volba.vzhlad ? `Vzhľad: ${volba.vzhlad}` : null,
+            volba.kde ? `Kde: ${volba.kde}` : null,
+            volba.priestor
+              ? `Priestor: ${volba.priestor === "ine" ? volba.priestorPopis : volba.priestor}`
+              : null,
+            foto
+              ? `Zákazník odfotil podklad (${nazovSuboru ?? "fotka"}) — vypýtať pri hovore.`
+              : "Fotku zatiaľ nepriložil.",
+          ]
+            .filter(Boolean)
+            .join(" · "),
+        }),
+      });
+      if (!r.ok) throw new Error(String(r.status));
+      setHotovo(true);
+    } catch {
+      setChyba("Odoslanie zlyhalo. Skús to prosím znova alebo nám zavolaj.");
+    } finally {
+      setPosiela(false);
+    }
+  };
+
+  if (hotovo) {
+    return (
+      <div className="mt-5 rounded-2xl border-2 border-emerald-300 bg-emerald-50 p-5">
+        <div className="flex items-center gap-2 font-extrabold text-emerald-900">
+          <Check className="w-5 h-5" aria-hidden />
+          Máme to, ozveme sa ti
+        </div>
+        <p className="mt-1.5 text-sm text-emerald-900/80">
+          Pozrieme sa na podklad a zavoláme ti, čo naň sadne. Ak si odfotil, maj
+          fotku po ruke — vypýtame si ju pri hovore.
+        </p>
+      </div>
+    );
+  }
+
   return (
-    <>
-      <Image src={n.src} alt="" fill sizes="300px" quality={85} className="object-cover" />
-      {/* biely závoj len dole pod textom — fotka hore musí byť vidieť */}
-      <span aria-hidden className="absolute inset-0 bg-gradient-to-t from-white via-white/75 to-white/5" />
-    </>
+    <div className="mt-5 rounded-2xl border-2 border-[#3db6e8] bg-[#f4fbfe] p-5">
+      <div className="flex items-center gap-2 font-extrabold text-[#0e1a3b]">
+        <Camera className="w-5 h-5 text-[#1a8cc4]" aria-hidden />
+        Odfoť podklad a my ti povieme, čo naň sadne
+      </div>
+      <p className="mt-1.5 text-sm text-[#4a5478]">
+        Netreba nič merať. Odfoť podlahu z výšky pása, ideálne aj detail praskliny
+        alebo starého náteru.
+      </p>
+
+      <div className="mt-4 flex flex-wrap items-center gap-3">
+        <label className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full bg-[#0e1a3b] text-white font-bold text-sm cursor-pointer hover:bg-[#1a2b57] transition-colors whitespace-nowrap">
+          <Camera className="w-4 h-4" aria-hidden />
+          {foto ? "Zmeniť fotku" : "Odfotiť / vybrať fotku"}
+          <input
+            type="file"
+            accept="image/*"
+            capture="environment"
+            onChange={vyberFotku}
+            className="sr-only"
+          />
+        </label>
+        {foto && (
+          <span className="relative w-16 h-16 rounded-xl overflow-hidden ring-2 ring-white shadow">
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img src={foto} alt="Náhľad podkladu" className="w-full h-full object-cover" />
+          </span>
+        )}
+      </div>
+
+      <div className="mt-4 grid grid-cols-1 sm:grid-cols-2 gap-3">
+        <input
+          value={meno}
+          onChange={(e) => setMeno(e.target.value)}
+          placeholder="Meno"
+          className="px-4 py-3 rounded-xl border-2 border-zinc-200 bg-white text-[#0e1a3b] placeholder:text-zinc-400 focus:outline-none focus:border-[#3db6e8] transition-colors"
+        />
+        <input
+          value={priezvisko}
+          onChange={(e) => setPriezvisko(e.target.value)}
+          placeholder="Priezvisko"
+          className="px-4 py-3 rounded-xl border-2 border-zinc-200 bg-white text-[#0e1a3b] placeholder:text-zinc-400 focus:outline-none focus:border-[#3db6e8] transition-colors"
+        />
+        <input
+          value={telefon}
+          onChange={(e) => setTelefon(e.target.value)}
+          inputMode="tel"
+          placeholder="Telefón"
+          className="px-4 py-3 rounded-xl border-2 border-zinc-200 bg-white text-[#0e1a3b] placeholder:text-zinc-400 focus:outline-none focus:border-[#3db6e8] transition-colors"
+        />
+        <input
+          value={email}
+          onChange={(e) => setEmail(e.target.value)}
+          inputMode="email"
+          placeholder="E-mail"
+          className="px-4 py-3 rounded-xl border-2 border-zinc-200 bg-white text-[#0e1a3b] placeholder:text-zinc-400 focus:outline-none focus:border-[#3db6e8] transition-colors"
+        />
+      </div>
+
+      <label className="mt-3 flex items-start gap-2.5 text-sm text-[#4a5478] cursor-pointer">
+        <input
+          type="checkbox"
+          checked={suhlas}
+          onChange={(e) => setSuhlas(e.target.checked)}
+          className="mt-0.5 w-4 h-4 accent-[#3db6e8]"
+        />
+        <span>
+          Súhlasím so spracovaním údajov na účel odpovede podľa{" "}
+          <Link href="/ochrana-sukromia" className="font-bold text-[#1a8cc4] hover:underline">
+            ochrany súkromia
+          </Link>
+          .
+        </span>
+      </label>
+
+      {chyba && <p className="mt-2 text-sm font-semibold text-red-600">{chyba}</p>}
+
+      <button
+        type="button"
+        onClick={posli}
+        disabled={!mozePoslat}
+        className="mt-4 inline-flex items-center gap-2 px-6 py-3 rounded-full bg-[#f97316] text-white font-bold hover:bg-[#ea580c] disabled:bg-[#dfe3ec] disabled:text-[#98a0b6] disabled:cursor-not-allowed transition-colors whitespace-nowrap"
+      >
+        Poslať a ozvite sa mi
+        <ArrowRight className="w-4 h-4" aria-hidden />
+      </button>
+    </div>
   );
 }
+
+/* ── Pomocné komponenty ─────────────────────────────────────────── */
 
 function ZRozmerov({ onSet }: { onSet: (m2: number) => void }) {
   const [open, setOpen] = React.useState(false);
