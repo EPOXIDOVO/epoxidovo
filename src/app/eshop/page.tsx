@@ -398,9 +398,8 @@ export default function EshopPage() {
                 className="w-14 h-auto shrink-0"
               />
               <div className="min-w-0">
-                <div className="font-extrabold text-lg">Nechceš liať sám? Urobíme to za teba.</div>
-                <div className="mt-0.5 text-[15px] text-white/70">
-                  Sme aj realizačná firma — {SITE.legalName}, Ružomberok.
+                <div className="font-extrabold text-lg">
+                  Sme aj realizačná firma — {SITE.legalName}
                 </div>
               </div>
             </div>
