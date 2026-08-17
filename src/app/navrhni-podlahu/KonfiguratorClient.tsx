@@ -474,6 +474,13 @@ export function KonfiguratorClient() {
                             onChange={(e) =>
                               uprav({ priestor: "ine", priestorPopis: e.target.value })
                             }
+                            onKeyDown={(e) => {
+                              // Enter = Ďalej, nech sa nemusí siahať po myši
+                              if (e.key === "Enter" && (volba.priestorPopis ?? "").trim().length > 1) {
+                                e.preventDefault();
+                                dalej();
+                              }
+                            }}
                             placeholder="napíš aký…"
                             className="w-full bg-transparent border-b-2 border-zinc-200 focus:border-[#3db6e8] outline-none py-1.5 text-sm font-bold text-[#0e1a3b] placeholder:text-zinc-400 placeholder:font-medium transition-colors"
                           />
@@ -684,6 +691,12 @@ export function KonfiguratorClient() {
                         max={100000}
                         value={volba.plochaM2 ?? ""}
                         onChange={(e) => uprav({ plochaM2: Number(e.target.value) || null })}
+                        onKeyDown={(e) => {
+                          if (e.key === "Enter" && efektivnaPlocha(volba) != null) {
+                            e.preventDefault();
+                            dalej();
+                          }
+                        }}
                         placeholder="napr. 45"
                         className="w-40 px-4 py-3 rounded-xl border-2 border-zinc-200 text-lg font-bold focus:outline-none focus:border-[#3db6e8]"
                       />
