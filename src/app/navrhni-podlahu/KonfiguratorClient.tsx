@@ -181,6 +181,21 @@ export function KonfiguratorClient() {
   };
 
   /** Späť necháme na prehliadač, aby sedeli obe cesty (tlačidlo aj myš). */
+  /**
+   * Výber vzhľadu. Ak už vieme, či je to interiér alebo exteriér (zákazník
+   * prišiel cez „Pozrieť vhodné typy do exteriéru"), tú otázku preskočíme —
+   * nemá zmysel pýtať sa ho druhýkrát na to isté.
+   */
+  const vyberVzhlad = (id: string) => {
+    uprav({ vzhlad: id });
+    window.setTimeout(() => {
+      const doPriestoru = kroky.indexOf("priestor");
+      const n = volba.kde && doPriestoru > 0 ? doPriestoru : 1;
+      setKrokIndex(Math.min(n, kroky.length - 1));
+      window.history.pushState({ epxKrok: Math.min(n, kroky.length - 1) }, "");
+    }, 250);
+  };
+
   const naspat = () => {
     if (window.history.state?.epxKrok != null) window.history.back();
     else setKrokIndex((n) => Math.max(0, n - 1));
@@ -702,7 +717,7 @@ export function KonfiguratorClient() {
                             type="button"
                             disabled={!m.dostupny}
                             title={m.dovod}
-                            onClick={() => m.dostupny && vyberADalej({ vzhlad: m.id })}
+                            onClick={() => m.dostupny && vyberVzhlad(m.id)}
                             className={`group relative flex flex-col gap-2 md:gap-2.5 rounded-2xl p-1.5 -m-1.5 text-left transition-all duration-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-[#3db6e8] ${
                               m.dostupny
                                 ? "hover:bg-[#e3f3fb] hover:ring-2 hover:ring-[#3db6e8]"
