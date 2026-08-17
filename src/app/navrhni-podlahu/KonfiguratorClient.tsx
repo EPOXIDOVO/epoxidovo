@@ -1167,9 +1167,9 @@ function Finis({ volba, uprav }: { volba: Volba; uprav: (p: Partial<Volba>) => v
       )}
 
       <div className="mt-6">
-        <div className="text-sm font-bold text-[#4a5478] mb-2">Povrch</div>
+        <div className="text-sm font-bold text-[#4a5478] mb-2">Lak</div>
         <div className="flex gap-2">
-          {(["mat", "polomat", "lesk"] as const).map((p) => (
+          {(["mat", "lesk"] as const).map((p) => (
             <button
               key={p}
               type="button"
@@ -1209,27 +1209,6 @@ function Finis({ volba, uprav }: { volba: Volba; uprav: (p: Partial<Volba>) => v
           </span>
         </span>
       </label>
-
-      {/* rezerva až tu, na konci */}
-      <div className="mt-6">
-        <div className="flex items-center justify-between">
-          <span className="text-sm font-bold text-[#4a5478]">Rezerva materiálu</span>
-          <span className="font-extrabold text-[#0e1a3b] tabular-nums">{volba.rezervaPercent} %</span>
-        </div>
-        <input
-          type="range"
-          min={5}
-          max={15}
-          step={1}
-          value={volba.rezervaPercent}
-          onChange={(e) => uprav({ rezervaPercent: Number(e.target.value) })}
-          className="slider-aura mt-2 w-full"
-          style={{ ["--fill" as string]: `${((volba.rezervaPercent - 5) / 10) * 100}%` }}
-        />
-        <p className="mt-1 text-xs text-[#6b7390]">
-          Odporúčame 10 % na strihy, dorovnanie a prípadnú opravu.
-        </p>
-      </div>
 
       {trebaNivelaciu(volba) && (
         <div className="mt-6">

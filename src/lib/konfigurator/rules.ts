@@ -27,8 +27,9 @@ export type Volba = {
   sirkaSchodovCm: number | null;
   vzhlad: string | null;
   odtien: string | null;
-  povrch: "mat" | "polomat" | "lesk";
+  povrch: "mat" | "lesk";
   protismyk: boolean;
+  /** Rezerva na strihy a dorovnanie — fixných 10 %, zákazník ju nenastavuje. */
   rezervaPercent: number;
   hrubkaNivelacieMm: number;
   pocetPrasklin: number;
