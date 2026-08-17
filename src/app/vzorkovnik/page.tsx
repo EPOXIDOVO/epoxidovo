@@ -1,3 +1,7 @@
+// ?typ= robí zo stránky dynamickú route — Cloudflare Pages ju bez tohto
+// odmietne zbuildovať (a spadne celý deploy, nielen táto stránka).
+export const runtime = "edge";
+
 import type { Metadata } from "next";
 import Link from "next/link";
 import Image from "next/image";
