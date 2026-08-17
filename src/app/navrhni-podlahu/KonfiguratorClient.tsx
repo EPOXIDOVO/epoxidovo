@@ -1079,6 +1079,7 @@ function OdfotPodklad({ volba }: { volba: Volba }) {
 
 function Finis({ volba, uprav }: { volba: Volba; uprav: (p: Partial<Volba>) => void }) {
   const jeRal = volba.vzhlad === "jednofarebna" || volba.vzhlad === "epoxidovy_nater";
+  const jeMramor = volba.vzhlad === "marble";
   const vynuteny = protismykVynuteny(volba);
 
   React.useEffect(() => {
@@ -1092,24 +1093,53 @@ function Finis({ volba, uprav }: { volba: Volba; uprav: (p: Partial<Volba>) => v
 
       {jeRal ? (
         <div className="mt-5">
-          <label className="block text-sm font-bold text-[#4a5478] mb-1.5">Odtieň RAL</label>
-          <select
-            value={volba.odtien ?? ""}
-            onChange={(e) => uprav({ odtien: e.target.value || null })}
-            className="w-full max-w-md px-4 py-3 rounded-xl border-2 border-zinc-200 font-semibold focus:outline-none focus:border-[#3db6e8]"
-          >
-            <option value="">— vyber odtieň —</option>
-            {/* rovnaké poradie aj skupiny ako vzorkovník na /vzorkovnik */}
-            {RAL_GROUPS.map((g) => (
-              <optgroup key={g.key} label={g.label}>
-                {RAL_CLASSIC_FULL.filter((r: RalSwatch) => r.skupina === g.key).map((r: RalSwatch) => (
-                  <option key={r.kod} value={r.kod}>
-                    {r.kod} — {r.nazov}
-                  </option>
-                ))}
-              </optgroup>
-            ))}
-          </select>
+          <div className="flex items-baseline justify-between gap-3 mb-2">
+            <label className="block text-sm font-bold text-[#4a5478]">
+              Odtieň RAL
+              {volba.odtien && (
+                <span className="ml-2 font-extrabold text-[#0e1a3b]">
+                  {volba.odtien} — {RAL_CLASSIC_FULL.find((r: RalSwatch) => r.kod === volba.odtien)?.nazov}
+                </span>
+              )}
+            </label>
+            <Link href="/vzorkovnik?typ=jednofarebne" className="text-xs font-bold text-[#1a8cc4] hover:underline whitespace-nowrap">
+              Celý vzorkovník →
+            </Link>
+          </div>
+          {/* rovnaké farby aj poradie ako vzorkovník na /vzorkovnik */}
+          <div className="max-h-[220px] overflow-y-auto pr-1 rounded-xl border-2 border-zinc-200 p-3">
+            {RAL_GROUPS.map((g) => {
+              const farby = RAL_CLASSIC_FULL.filter((r: RalSwatch) => r.skupina === g.key);
+              if (!farby.length) return null;
+              return (
+                <div key={g.key} className="mb-3 last:mb-0">
+                  <div className="text-[11px] font-bold uppercase tracking-wide text-zinc-400 mb-1.5">
+                    {g.label}
+                  </div>
+                  <div className="grid grid-cols-6 sm:grid-cols-8 md:grid-cols-10 gap-1.5">
+                    {farby.map((r: RalSwatch) => (
+                      <button
+                        key={r.kod}
+                        type="button"
+                        title={`${r.kod} — ${r.nazov}`}
+                        onClick={() => uprav({ odtien: r.kod })}
+                        className={`group relative rounded-md overflow-hidden ring-1 transition-all ${
+                          volba.odtien === r.kod
+                            ? "ring-2 ring-[#3db6e8] scale-105 shadow-md"
+                            : "ring-[#1B2430]/10 hover:ring-[#3db6e8]"
+                        }`}
+                      >
+                        <span className="block aspect-square" style={{ backgroundColor: r.hex }} />
+                        <span className="block text-[9px] font-black text-[#1B2430] text-center leading-tight py-0.5">
+                          {r.kod.replace("RAL ", "")}
+                        </span>
+                      </button>
+                    ))}
+                  </div>
+                </div>
+              );
+            })}
+          </div>
           {volba.odtien && !RAL_ZAKLADNE.includes(volba.odtien) && (
             <span className="mt-2 inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-amber-100 text-amber-800 text-xs font-bold">
               <Clock className="w-3.5 h-3.5" aria-hidden />
@@ -1117,7 +1147,20 @@ function Finis({ volba, uprav }: { volba: Volba; uprav: (p: Partial<Volba>) => v
             </span>
           )}
         </div>
+      ) : jeMramor ? (
+        <div className="mt-5 rounded-2xl border-2 border-dashed border-amber-300 bg-amber-50 p-5">
+          <div className="flex items-center gap-2 font-extrabold text-amber-900">
+            <AlertTriangle className="w-5 h-5" aria-hidden />
+            Vzorkovník mramoru ešte nemáme nahraný
+          </div>
+          <p className="mt-1.5 text-sm text-amber-900/80">
+            Pri mramore sa vyberá podklad a k nemu farba žiliek — to je vlastný
+            katalóg výrobcu, nie RAL. Nahraj ho a doplníme sem výber rovnako ako
+            pri RAL. Zatiaľ ti odtiene odsúhlasíme telefonicky pred objednávkou.
+          </p>
+        </div>
       ) : (
+
         <div className="mt-5">
           <div className="text-sm font-bold text-[#4a5478] mb-2">Efekt</div>
           <div className="grid grid-cols-3 md:grid-cols-6 gap-2">

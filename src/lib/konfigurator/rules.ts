@@ -270,7 +270,7 @@ export function varovania(volba: Volba): Varovanie[] {
       typ: "blokujuce",
       nadpis: "Podozrenie na vlhkosť — pred objednávkou meranie",
       text: "Podklad si najprv odmeraj vlhkomerom. Podľa použitého materiálu musí byť zvyšková vlhkosť pod 4 až 6 % — ak je v podklade vzlínajúca vlhkosť, para nemá kadiaľ uniknúť a podlaha sa po čase odtrhne od podkladu aj s kusmi betónu. Merací prístroj ti požičiame alebo prídeme odmerať.",
-      cta: { label: "Dohodnúť meranie", href: "/kontakt" },
+      cta: { label: "Pozrieť vlhkomery", href: "/eshop?kat=vlhkomery#katalog" },
     });
   }
   if (volba.podklad === "anhydrit") {
@@ -280,12 +280,36 @@ export function varovania(volba: Volba): Varovanie[] {
       text: "Anhydritový poter treba prebrúsiť (odstrániť šlem) a povysávať. Vlhkosť max 0,5 % CM.",
     });
   }
+  if (volba.stav === "vyrazne") {
+    out.push({
+      typ: "vystraha",
+      nadpis: "Výrazne nerovný podklad — najprv prebrúsiť",
+      text: "Pri väčších nerovnostiach a spádoch nestačí naliať niveláciu na to, čo tam je. Plochu treba najprv prebrúsiť diamantovou brúskou (zrezať hrbole, otvoriť póry, odstrániť cementové mlieko), povysávať a až potom penetrovať. Bez toho sa nivelácia uchytí nerovnomerne a v tenkých miestach popraská.",
+      cta: { label: "Pozrieť brúsky", href: "/eshop?kat=brusky#katalog" },
+    });
+  }
+  if (volba.stav === "mierne") {
+    out.push({
+      typ: "info",
+      nadpis: "Mierne nerovný podklad — počítaj s niveláciou",
+      text: "Drobné vlny a prechody liata vrstva neschová, naopak ich zvýrazní. Niveláciu sme ti do skladby pridali — vo výsledku si ju vieš odškrtnúť, ak si podkladom istý.",
+      cta: { label: "Nivelácie a potery", href: "/eshop?kat=nivelacie#katalog" },
+    });
+  }
+  if (volba.priznaky.includes("praskliny")) {
+    out.push({
+      typ: "info",
+      nadpis: "Praskliny — zošiť pred liatím",
+      text: "Prasklinu treba rozrezať do V, vyčistiť, priečne vložiť sponky a zaliať opravnou maltou. Ak sa preskočí, prasklina si cestu cez novú vrstvu nájde do pár mesiacov.",
+      cta: { label: "Materiál na opravy betónu", href: "/eshop?kat=potery#katalog" },
+    });
+  }
   if (volba.priznaky.includes("mastne")) {
     out.push({
       typ: "info",
       nadpis: "Mastné škvrny — treba prebrúsiť",
       text: "Olej a mastnota bránia prídržnosti — živica sa na ne nechytí. Pred aplikáciou treba prebrúsiť celý povrch, nielen škvrny, aby bola plocha rovnomerne otvorená a nasiakavá. Brúsi sa diamantovou brúskou s odsávaním.",
-      cta: { label: "Pozrieť brúsky a náradie", href: "/eshop?skupina=naradie#katalog" },
+      cta: { label: "Pozrieť brúsky", href: "/eshop?kat=brusky#katalog" },
     });
   }
   return out;

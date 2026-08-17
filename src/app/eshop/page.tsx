@@ -99,7 +99,7 @@ export default function EshopPage() {
             {[
               { ikona: "🏆", cislo: "50 000+", text: "spokojných zákazníkov", href: "#dovera" },
               { img: "/images/eshop/medved-hlava.png", cislo: "Sme aj realizačná firma", text: "podlahy lejeme dennodenne", href: "/" },
-              { ikona: "📦", cislo: "350+ produktov", text: "4 top značky skladom", href: "/eshop/znacky" },
+              { ikona: "📦", cislo: "350+ produktov", text: "4 top značky skladom", href: "/eshop#katalog" },
               { ikona: "📞", cislo: "Poradenstvo zadarmo", text: "od reálnych realizátorov", href: "/kontakt" },
             ].map((u) => {
               const jeLink = "href" in u && !!u.href;

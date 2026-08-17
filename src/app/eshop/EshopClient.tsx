@@ -328,12 +328,16 @@ export function EshopClient({ sidebarVyrobcov = false }: { sidebarVyrobcov?: boo
                   className={sideCls(vyrobca === v)}
                 >
                   <span className="inline-flex items-center gap-3">
-                    {/* eslint-disable-next-line @next/next/no-img-element */}
-                    <img
-                      src={VYROBCA_LOGO[v]}
-                      alt=""
-                      className={`h-9 w-20 object-contain object-left ${vyrobca === v ? "brightness-0 invert" : ""}`}
-                    />
+                    {/* na aktívnom modrom riadku dáme logu biely podklad —
+                        inak by farebné logo (Sika, UZIN) zaniklo */}
+                    <span
+                      className={`inline-flex items-center h-9 w-20 shrink-0 rounded-md ${
+                        vyrobca === v ? "bg-white px-1.5" : ""
+                      }`}
+                    >
+                      {/* eslint-disable-next-line @next/next/no-img-element */}
+                      <img src={VYROBCA_LOGO[v]} alt="" className="h-7 w-full object-contain object-left" />
+                    </span>
                     {v}
                   </span>
                   <span className="text-xs opacity-70 tnum">{vyrobcaCounts.get(v) ?? 0}</span>

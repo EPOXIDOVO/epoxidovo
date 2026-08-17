@@ -36,7 +36,15 @@ const POLOZKY: {
       { label: "Prísady a plnivá", href: "/eshop?skupina=prisady#katalog" },
     ],
   },
-  { label: "Náradie 🛠️", href: "/eshop?skupina=naradie#katalog" },
+  {
+    label: "Náradie 🛠️",
+    href: "/eshop?skupina=naradie#katalog",
+    deti: [
+      { label: "Valce, stierky a pomôcky", href: "/eshop?kat=naradie#katalog" },
+      { label: "Brúsky", href: "/eshop?kat=brusky#katalog" },
+      { label: "Vlhkomery", href: "/eshop?kat=vlhkomery#katalog" },
+    ],
+  },
   { label: "Mikrocement 🧊", coskoro: true },
   { label: "Nátery na betón 🎨", coskoro: true },
   { label: "Dekoratívne steny 🖌️", coskoro: true },

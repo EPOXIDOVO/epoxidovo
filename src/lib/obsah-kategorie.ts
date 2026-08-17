@@ -16,6 +16,20 @@ export function normalize(s: string): string {
 
 export const OBSAH_KATEGORIE: { id: string; label: string; popis: string; test: (m: Material) => boolean }[] = [
   {
+    id: "brusky",
+    label: "Brúsky",
+    popis:
+      "Diamantové brúsky a nadstavce na prebrúsenie podkladu — bez otvorených pórov sa živica nechytí. Ponuku dopĺňame.",
+    test: (m) => /bruska|brusky|diamantov. kot|frezka/.test(normalize(m.nazov)),
+  },
+  {
+    id: "vlhkomery",
+    label: "Vlhkomery",
+    popis:
+      "Meranie zvyškovej vlhkosti podkladu pred liatím. Nad limitom podlaha po čase odskočí od podkladu. Ponuku dopĺňame.",
+    test: (m) => /vlhkomer|merac vlhkosti|cm pristroj/.test(normalize(m.nazov)),
+  },
+  {
     id: "naradie",
     label: "Náradie a pomôcky",
     popis:
@@ -115,7 +129,7 @@ export const SKUPINY: { id: string; label: string; popis: string; deti: string[]
       "Kremičité piesky, plnivá, tixotropné prísady, urýchľovače a tmely — drobnosti, ktoré menia spotrebu, protišmyk, dizajn aj rýchlosť vytvrdnutia. Dekoračné chipsy nájdeš pri epoxidových živiciach.",
     deti: ["prisady", "piesky"],
   },
-  { id: "naradie", label: "Náradie", popis: "", deti: ["naradie"] },
+  { id: "naradie", label: "Náradie", popis: "", deti: ["naradie", "brusky", "vlhkomery"] },
 ];
 
 /** Skupina, do ktorej patrí obsahová kategória. */
