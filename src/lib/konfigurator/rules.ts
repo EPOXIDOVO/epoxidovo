@@ -269,7 +269,7 @@ export function varovania(volba: Volba): Varovanie[] {
     out.push({
       typ: "blokujuce",
       nadpis: "Podozrenie na vlhkosť — pred objednávkou meranie",
-      text: "Zvyšková vlhkosť musí byť najviac 4 % CM. Bez merania CM prístrojom materiál neobjednávaj — vlhkosť odtrhne celú vrstvu od podkladu.",
+      text: "Podklad si najprv odmeraj vlhkomerom. Podľa použitého materiálu musí byť zvyšková vlhkosť pod 4 až 6 % — ak je v podklade vzlínajúca vlhkosť, para nemá kadiaľ uniknúť a podlaha sa po čase odtrhne od podkladu aj s kusmi betónu. Merací prístroj ti požičiame alebo prídeme odmerať.",
       cta: { label: "Dohodnúť meranie", href: "/kontakt" },
     });
   }
@@ -283,8 +283,9 @@ export function varovania(volba: Volba): Varovanie[] {
   if (volba.priznaky.includes("mastne")) {
     out.push({
       typ: "info",
-      nadpis: "Mastné škvrny — príprava navyše",
-      text: "Olej a mastnota bránia prídržnosti. Rieši sa odmastením alebo frézovaním — rozsah určíme pri obhliadke.",
+      nadpis: "Mastné škvrny — treba prebrúsiť",
+      text: "Olej a mastnota bránia prídržnosti — živica sa na ne nechytí. Pred aplikáciou treba prebrúsiť celý povrch, nielen škvrny, aby bola plocha rovnomerne otvorená a nasiakavá. Brúsi sa diamantovou brúskou s odsávaním.",
+      cta: { label: "Pozrieť brúsky a náradie", href: "/eshop?skupina=naradie#katalog" },
     });
   }
   return out;

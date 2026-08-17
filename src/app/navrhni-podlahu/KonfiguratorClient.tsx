@@ -19,13 +19,10 @@ import {
 import { Container } from "@/components/ui/Container";
 import { useCart } from "@/lib/cart";
 import { showToast } from "@/components/ui/Toast";
-import { RAL_CLASSIC_FULL, type RalSwatch } from "@/content/ral-classic";
+import { RAL_CLASSIC_FULL, RAL_GROUPS, type RalSwatch } from "@/content/ral-classic";
 import {
   PREDVOLENA_VOLBA,
   PRIESTORY,
-  MIN_NIVELACIA_MM,
-  MAX_NIVELACIA_MM,
-  CENA_ZOSIVANIE_EUR,
   blokujePodklad,
   dostupnePodklady,
   dostupnostVzhladov,
@@ -34,7 +31,6 @@ import {
   dostupneSystemy,
   postavSkladbu,
   protismykVynuteny,
-  trebaNivelaciu,
   varovania,
   type Volba,
   type Priznak,
@@ -44,7 +40,7 @@ import type { Co, Kde, System } from "@/lib/konfigurator/systemy";
 import { efektivnaPlocha, fmtEur, plochaSchodov, prepocitaj } from "@/lib/konfigurator/vypocet";
 import { SITE } from "@/lib/site";
 import { TurnstileWidget } from "@/components/turnstile/TurnstileWidget";
-import { EFEKTY, FOTO_PRIESTOR, FOTO_VZHLAD, GALERIA_VZHLAD, RAL_ZAKLADNE, type Nahlad } from "./fotky";
+import { EFEKTY, FOTO_PRIESTOR, FOTO_VZHLAD, GALERIA_VZHLAD, RAL_ZAKLADNE } from "./fotky";
 
 /**
  * Konfigurátor „Navrhni si podlahu" — 8 krokov s vetvením.
@@ -251,11 +247,23 @@ export function KonfiguratorClient() {
    *  namiesto prázdnej obrazovky ponúkni návrh na mieru. */
   const bezSystemu = hotovo && !system;
 
+  /** Niveláciu rátame len ak ju zákazník naozaj chce — mení dni aj cenu. */
+  const [sNivelaciou, setSNivelaciou] = React.useState(true);
+
   const vysledok = React.useMemo(() => {
     if (!system) return null;
-    const skladba = postavSkladbu(volba, system);
+    const cela = postavSkladbu(volba, system);
+    const skladba = sNivelaciou
+      ? cela
+      : cela.filter((v) => !/nivelác/i.test(v.nazov) && !/prebrúsenie nivelácie/i.test(v.nazov));
     return prepocitaj(skladba, volba);
-  }, [system, volba]);
+  }, [system, volba, sNivelaciou]);
+
+  /** Má vôbec skladba niveláciu? Podľa toho ukážeme prepínač. */
+  const maNivelaciu = React.useMemo(
+    () => (system ? postavSkladbu(volba, system).some((v) => /nivelác/i.test(v.nazov)) : false),
+    [system, volba],
+  );
 
   /* ── UI kúsky ── */
   const dlazdicaCls = (aktivna: boolean, dostupna = true, sFotkou = false) =>
@@ -313,6 +321,9 @@ export function KonfiguratorClient() {
         vysledok={vysledok}
         onZmenit={() => setHotovo(false)}
         onSystem={setSystemId}
+        maNivelaciu={maNivelaciu}
+        sNivelaciou={sNivelaciou}
+        onNivelacia={setSNivelaciou}
         onDoKosika={() => {
           const polozky = vysledok.riadky
             .filter((r) => !r.bezMaterialu && r.pocetBaleni && r.produktSku)
@@ -608,9 +619,6 @@ export function KonfiguratorClient() {
                         onChange={(e) => uprav({ pocetPrasklin: Math.max(1, Number(e.target.value)) })}
                         className="w-20 px-3 py-1.5 rounded-lg border border-zinc-300 text-right"
                       />
-                      <span className="text-sm text-[#6b7390]">
-                        × {CENA_ZOSIVANIE_EUR} € zošívanie
-                      </span>
                     </div>
                   )}
                 </div>
@@ -679,7 +687,6 @@ export function KonfiguratorClient() {
                       />
                       <span className="font-semibold text-[#4a5478]">m²</span>
                     </div>
-                    <ZRozmerov onSet={(m2) => uprav({ plochaM2: m2 })} />
                   </>
                 )}
               </>
@@ -1055,47 +1062,6 @@ function OdfotPodklad({ volba }: { volba: Volba }) {
 
 /* ── Pomocné komponenty ─────────────────────────────────────────── */
 
-function ZRozmerov({ onSet }: { onSet: (m2: number) => void }) {
-  const [open, setOpen] = React.useState(false);
-  const [d, setD] = React.useState("");
-  const [s, setS] = React.useState("");
-  React.useEffect(() => {
-    const dd = Number(d);
-    const ss = Number(s);
-    if (dd > 0 && ss > 0) onSet(Math.round(dd * ss * 100) / 100);
-  }, [d, s, onSet]);
-  return (
-    <div className="mt-3">
-      <button
-        type="button"
-        onClick={() => setOpen((v) => !v)}
-        className="text-sm font-bold text-[#1a8cc4] hover:underline"
-      >
-        Nemám zmerané — vypočítať z rozmerov
-      </button>
-      {open && (
-        <div className="mt-2 flex items-center gap-2">
-          <input
-            type="number"
-            value={d}
-            onChange={(e) => setD(e.target.value)}
-            placeholder="dĺžka (m)"
-            className="w-32 px-3 py-2 rounded-lg border border-zinc-300"
-          />
-          <span className="text-zinc-400">×</span>
-          <input
-            type="number"
-            value={s}
-            onChange={(e) => setS(e.target.value)}
-            placeholder="šírka (m)"
-            className="w-32 px-3 py-2 rounded-lg border border-zinc-300"
-          />
-        </div>
-      )}
-    </div>
-  );
-}
-
 function Finis({ volba, uprav }: { volba: Volba; uprav: (p: Partial<Volba>) => void }) {
   const jeRal = volba.vzhlad === "jednofarebna" || volba.vzhlad === "epoxidovy_nater";
   const vynuteny = protismykVynuteny(volba);
@@ -1118,20 +1084,16 @@ function Finis({ volba, uprav }: { volba: Volba; uprav: (p: Partial<Volba>) => v
             className="w-full max-w-md px-4 py-3 rounded-xl border-2 border-zinc-200 font-semibold focus:outline-none focus:border-[#3db6e8]"
           >
             <option value="">— vyber odtieň —</option>
-            <optgroup label="Základná trieda (skladom, bežná cena)">
-              {RAL_CLASSIC_FULL.filter((r: RalSwatch) => RAL_ZAKLADNE.includes(r.kod)).map((r: RalSwatch) => (
-                <option key={r.kod} value={r.kod}>
-                  {r.kod} — {r.nazov}
-                </option>
-              ))}
-            </optgroup>
-            <optgroup label="Pastelová trieda (na objednávku)">
-              {RAL_CLASSIC_FULL.filter((r: RalSwatch) => !RAL_ZAKLADNE.includes(r.kod)).map((r: RalSwatch) => (
-                <option key={r.kod} value={r.kod}>
-                  {r.kod} — {r.nazov}
-                </option>
-              ))}
-            </optgroup>
+            {/* rovnaké poradie aj skupiny ako vzorkovník na /vzorkovnik */}
+            {RAL_GROUPS.map((g) => (
+              <optgroup key={g.key} label={g.label}>
+                {RAL_CLASSIC_FULL.filter((r: RalSwatch) => r.skupina === g.key).map((r: RalSwatch) => (
+                  <option key={r.kod} value={r.kod}>
+                    {r.kod} — {r.nazov}
+                  </option>
+                ))}
+              </optgroup>
+            ))}
           </select>
           {volba.odtien && !RAL_ZAKLADNE.includes(volba.odtien) && (
             <span className="mt-2 inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-amber-100 text-amber-800 text-xs font-bold">
@@ -1205,34 +1167,11 @@ function Finis({ volba, uprav }: { volba: Volba; uprav: (p: Partial<Volba>) => v
               ? volba.co === "schody"
                 ? "Na schodoch povinný — mokrý hladký nášľap je nebezpečný, preto sa nedá odobrať."
                 : "V exteriéri povinný — mokrý hladký povrch je klzký, preto sa nedá odobrať."
-              : "Posyp kremičitým pieskom do vrchnej vrstvy."}
+              : "Posyp kremičitým pieskom do vrchnej vrstvy. Zabezpečí silný protišmyk — vhodné do parkingov, garáží, kuchýň, umyvární a všade, kde býva na podlahe mokro."}
           </span>
         </span>
       </label>
 
-      {trebaNivelaciu(volba) && (
-        <div className="mt-6">
-          <div className="flex items-center justify-between">
-            <span className="text-sm font-bold text-[#4a5478]">Hrúbka nivelácie</span>
-            <span className="font-extrabold text-[#0e1a3b] tabular-nums">{volba.hrubkaNivelacieMm} mm</span>
-          </div>
-          <input
-            type="range"
-            min={MIN_NIVELACIA_MM}
-            max={MAX_NIVELACIA_MM}
-            step={1}
-            value={volba.hrubkaNivelacieMm}
-            onChange={(e) => uprav({ hrubkaNivelacieMm: Number(e.target.value) })}
-            className="slider-aura mt-2 w-full"
-            style={{
-              ["--fill" as string]: `${((volba.hrubkaNivelacieMm - MIN_NIVELACIA_MM) / (MAX_NIVELACIA_MM - MIN_NIVELACIA_MM)) * 100}%`,
-            }}
-          />
-          <p className="mt-1 text-xs text-[#6b7390]">
-            Minimum {MIN_NIVELACIA_MM} mm — pri menšej hrúbke materiál degraduje a praská.
-          </p>
-        </div>
-      )}
     </>
   );
 }
@@ -1248,6 +1187,9 @@ function Vysledok({
   onSystem,
   onDoKosika,
   pridane,
+  maNivelaciu,
+  sNivelaciou,
+  onNivelacia,
 }: {
   volba: Volba;
   system: System;
@@ -1257,6 +1199,9 @@ function Vysledok({
   onSystem: (id: string) => void;
   onDoKosika: () => void;
   pridane: boolean;
+  maNivelaciu: boolean;
+  sNivelaciou: boolean;
+  onNivelacia: (v: boolean) => void;
 }) {
   const zhrnutie = [
     volba.co === "podlaha" ? "Podlaha" : volba.co === "stena" ? "Stena" : "Schody",
@@ -1447,7 +1392,23 @@ function Vysledok({
             </div>
             <p className="mt-3 text-[11px] text-[#6b7390]">
               Prestávky sú technologické — vrstva musí vytvrdnúť, inak sa ďalšia neuchytí.
+              S urýchľovačom Sikafloor-54 Booster sa dajú skrátiť.
             </p>
+            {maNivelaciu && (
+              <label className="mt-3 flex items-start gap-2.5 text-xs text-[#4a5478] cursor-pointer border-t border-zinc-100 pt-3">
+                <input
+                  type="checkbox"
+                  checked={sNivelaciou}
+                  onChange={(e) => onNivelacia(e.target.checked)}
+                  className="mt-0.5 w-4 h-4 accent-[#3db6e8]"
+                />
+                <span>
+                  <span className="block font-bold text-[#0e1a3b]">Počítať s niveláciou</span>
+                  Odporúčame ju podľa stavu podkladu. Bez nej je skladba lacnejšia a hotová
+                  skôr — ale len ak je podklad naozaj rovný.
+                </span>
+              </label>
+            )}
           </div>
 
           <div className="print:hidden space-y-2">
