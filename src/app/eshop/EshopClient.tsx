@@ -6,7 +6,7 @@ import { Search, X, ChevronDown } from "lucide-react";
 import { Container } from "@/components/ui/Container";
 import { ProductVisual } from "@/components/eshop/ProductVisual";
 import { MATERIALY, VYROBCOVIA, type Material, type Vyrobca } from "@/lib/materialy";
-import { OBSAH_KATEGORIE, SKUPINY, obsahKategoria, obsahLabel, skupinaPreObsah, skupinaPopis, normalize } from "@/lib/obsah-kategorie";
+import { OBSAH_KATEGORIE, SKUPINY, obsahKategoria, obsahLabel, skupinaPreObsah, normalize } from "@/lib/obsah-kategorie";
 import { VYROBCA_LOGO } from "@/lib/vyrobca-logo";
 
 /**
@@ -294,15 +294,6 @@ export function EshopClient({ sidebarVyrobcov = false }: { sidebarVyrobcov?: boo
               })}
           </div>
         </div>
-      )}
-
-      {/* Popis zvolenej kategórie — pomôcka pre zákazníka aj SEO */}
-      {(obsah || skupina) && (
-        <p className="mt-4 max-w-3xl mx-auto text-center text-sm text-[#4a5478] leading-relaxed bg-white border border-zinc-200 rounded-2xl px-5 py-3.5">
-          {obsah
-            ? OBSAH_KATEGORIE.find((k) => k.id === obsah)?.popis
-            : skupinaPopis(skupina!)}
-        </p>
       )}
 
       {/* Admin filter „na dorobenie" — viditeľný len s ?admin=1 */}
