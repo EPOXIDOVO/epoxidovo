@@ -6,7 +6,7 @@ import { Search, X, ChevronDown } from "lucide-react";
 import { Container } from "@/components/ui/Container";
 import { ProductVisual } from "@/components/eshop/ProductVisual";
 import { MATERIALY, VYROBCOVIA, type Material, type Vyrobca } from "@/lib/materialy";
-import { OBSAH_KATEGORIE, SKUPINY, obsahKategoria, skupinaPreObsah, skupinaPopis, normalize } from "@/lib/obsah-kategorie";
+import { OBSAH_KATEGORIE, SKUPINY, obsahKategoria, obsahLabel, skupinaPreObsah, skupinaPopis, normalize } from "@/lib/obsah-kategorie";
 import { VYROBCA_LOGO } from "@/lib/vyrobca-logo";
 
 /**
@@ -228,17 +228,42 @@ export function EshopClient({ sidebarVyrobcov = false }: { sidebarVyrobcov?: boo
           Všetko
         </button>
         {SKUPINY.map((sk, i) => (
-          <button
-            key={sk.id}
-            type="button"
-            onClick={() => {
-              setObsah(null);
-              setSkupina(skupina === sk.id ? null : sk.id);
-            }}
-            className={chipCls(skupina === sk.id)}
-          >
-            {i + 1 <= 4 ? `${i + 1}. ` : ""}{sk.label}
-          </button>
+          /* hover otvorí podkategórie — rovnako ako pás v hlavičke */
+          <span key={sk.id} className="relative group">
+            <button
+              type="button"
+              onClick={() => {
+                setObsah(null);
+                setSkupina(skupina === sk.id ? null : sk.id);
+              }}
+              className={chipCls(skupina === sk.id)}
+            >
+              {i + 1 <= 4 ? `${i + 1}. ` : ""}{sk.label}
+            </button>
+            {sk.deti.length > 1 && (
+              <span className="absolute left-1/2 -translate-x-1/2 top-full pt-2 hidden group-hover:block z-40">
+                <span className="block min-w-52 rounded-2xl border border-zinc-200 bg-white shadow-[0_18px_50px_rgba(0,0,0,0.14)] p-1.5">
+                  {sk.deti.map((d) => (
+                    <button
+                      key={d}
+                      type="button"
+                      onClick={() => {
+                        setSkupina(sk.id);
+                        setObsah(d);
+                      }}
+                      className={`block w-full text-left rounded-xl px-3.5 py-2 text-sm font-semibold transition-colors whitespace-nowrap ${
+                        obsah === d
+                          ? "bg-[#3db6e8] text-white"
+                          : "text-zinc-700 hover:bg-[#e3f3fb] hover:text-[#1a8cc4]"
+                      }`}
+                    >
+                      {obsahLabel(d)}
+                    </button>
+                  ))}
+                </span>
+              </span>
+            )}
+          </span>
         ))}
       </div>
       {/* Druhá úroveň — deti aktívnej skupiny (len ak ich je viac) */}
