@@ -74,12 +74,12 @@ export function KategorieMenu() {
                 </a>
                 {/* dropdown — CSS hover, most cez pt-2 nech pri prejazde nezmizne */}
                 <span className="absolute left-1/2 -translate-x-1/2 top-full pt-2 hidden group-hover:block z-50">
-                  <span className="block min-w-56 rounded-2xl border border-zinc-200 bg-white shadow-[0_18px_50px_rgba(0,0,0,0.14)] py-2">
+                  <span className="block min-w-56 rounded-2xl border border-zinc-200 bg-white shadow-[0_18px_50px_rgba(0,0,0,0.14)] p-1.5">
                     {p.deti.map((d) => (
                       <a
                         key={d.label}
                         href={d.href}
-                        className="block px-4 py-2 text-sm font-semibold text-zinc-700 hover:bg-[#e3f3fb]/60 hover:text-[#1a8cc4] transition-colors whitespace-nowrap"
+                        className="block rounded-xl px-3.5 py-2 text-sm font-semibold text-zinc-700 hover:bg-[#e3f3fb] hover:text-[#1a8cc4] transition-colors whitespace-nowrap"
                       >
                         {d.label}
                       </a>
