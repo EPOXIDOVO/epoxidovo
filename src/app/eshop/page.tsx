@@ -29,7 +29,8 @@ const DLAZDICE: Record<
   string,
   {
     label: string;
-    img: string;
+    /** Bez fotky vykreslíme neutrálny panel — radšej prázdno ako iný produkt. */
+    img?: string;
     /** Klik na fotku dlaždice otvorí rovno túto kategóriu. */
     href?: string;
     packshot?: string;
@@ -52,13 +53,13 @@ const DLAZDICE: Record<
   koberec: {
     label: "KAMENNÝ KOBEREC",
     href: "/eshop?skupina=kamenny-koberec#katalog",
-    img: "/images/eshop/products/TS-KORFU-4-8-K06.jpg",
+    img: "/images/eshop/products/TS-MRAMOR-BIANCO-CARRARA-M02-2-.jpg",
     linky: [{ text: "Kamene a spojivá", href: "/eshop?skupina=kamenny-koberec#katalog" }],
   },
   priprava: {
     label: "PRÍPRAVA PODKLADU",
     href: "/eshop?skupina=priprava#katalog",
-    img: "/images/realizacie/r-26.jpg",
+    packshot: "/images/eshop/level30-cutout.png",
     linky: [
       { text: "Nivelácie a potery", href: "/eshop?skupina=priprava#katalog" },
       { text: "Prísady a plnivá", href: "/eshop?skupina=prisady#katalog" },
@@ -67,7 +68,6 @@ const DLAZDICE: Record<
   naradie: {
     label: "NÁRADIE",
     href: "/eshop?skupina=naradie#katalog",
-    img: "/images/realizacie/r-35.jpg",
     linky: [{ text: "Valce, stierky a pomôcky", href: "/eshop?skupina=naradie#katalog" }],
   },
   mikrocement: { label: "MIKROCEMENT", img: "/images/hero/byvanie-v2.webp", coskoro: true },
@@ -238,14 +238,19 @@ export default function EshopPage() {
                     >
                       {/* fotka aj štítok sú klikateľné — vedú rovno do kategórie */}
                       <FotkaObal href={d.coskoro ? undefined : d.href}>
-                        <Image
-                          src={d.img}
-                          alt=""
-                          fill
-                          sizes="(max-width: 640px) 100vw, (max-width: 1280px) 50vw, 33vw"
-                          quality={85}
-                          className={`object-cover transition-transform duration-500 ${d.coskoro ? "grayscale-[0.5] opacity-70" : "group-hover/foto:scale-[1.04]"}`}
-                        />
+                        {d.img ? (
+                          <Image
+                            src={d.img}
+                            alt=""
+                            fill
+                            sizes="(max-width: 640px) 100vw, (max-width: 1280px) 50vw, 33vw"
+                            quality={85}
+                            className={`object-cover transition-transform duration-500 ${d.coskoro ? "grayscale-[0.5] opacity-70" : "group-hover/foto:scale-[1.04]"}`}
+                          />
+                        ) : (
+                          /* fotku ešte nemáme — radšej čistá plocha ako iný produkt */
+                          <span className="absolute inset-0 bg-[#eef1f6]" aria-hidden />
+                        )}
                         <span className="absolute top-3 left-3 px-3 py-1 rounded-lg bg-white shadow text-[#0e1a3b] text-[11px] md:text-xs font-extrabold tracking-wide">
                           {d.label}
                         </span>
@@ -325,7 +330,7 @@ export default function EshopPage() {
                   Tím EPOXIDOVO
                 </div>
                 <p className="mt-1 text-[15px] text-zinc-500 text-center">
-                  Máš otázky? Radi ti pomôžeme!
+                  Pýtaj sa realizačnej firmy — podlahy lejeme sami a poradíme ti, čo naozaj sadne.
                 </p>
                 {/* ikony pod sebou lícujú — bloky majú rovnakú šírku ikony */}
                 <div className="mt-4 mx-auto w-fit space-y-2.5">
