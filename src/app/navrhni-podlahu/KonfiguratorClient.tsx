@@ -608,19 +608,6 @@ export function KonfiguratorClient() {
                       <span className="font-semibold text-[#0e1a3b]">{p.label}</span>
                     </label>
                   ))}
-                  {volba.priznaky.includes("praskliny") && (
-                    <div className="flex items-center gap-3 rounded-xl bg-[#f7f6f3] px-4 py-3">
-                      <span className="text-sm font-semibold text-[#4a5478]">Koľko prasklín?</span>
-                      <input
-                        type="number"
-                        min={1}
-                        max={200}
-                        value={volba.pocetPrasklin}
-                        onChange={(e) => uprav({ pocetPrasklin: Math.max(1, Number(e.target.value)) })}
-                        className="w-20 px-3 py-1.5 rounded-lg border border-zinc-300 text-right"
-                      />
-                    </div>
-                  )}
                 </div>
               </>
             )}
@@ -1355,10 +1342,9 @@ function Vysledok({
               {vysledok.maNaDopyt && "od "}
               {fmtEur(vysledok.cenaMaterialu)} €
             </div>
-            {vysledok.cenaSluzieb > 0 && (
-              <div className="mt-2 flex justify-between text-sm text-white/80">
-                <span>Zošívanie prasklín ({volba.pocetPrasklin} ×)</span>
-                <span className="tabular-nums">{fmtEur(vysledok.cenaSluzieb)} €</span>
+            {volba.priznaky.includes("praskliny") && (
+              <div className="mt-2 text-sm text-white/70 leading-snug">
+                Zošívanie prasklín doceníme po obhliadke — závisí od ich počtu a hĺbky.
               </div>
             )}
             <div className="mt-3 pt-3 border-t border-white/15 flex justify-between items-baseline">

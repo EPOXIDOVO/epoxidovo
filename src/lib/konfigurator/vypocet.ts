@@ -7,7 +7,7 @@
  */
 
 import { getMaterial } from "@/lib/materialy";
-import { CENA_ZOSIVANIE_EUR, type SkladbaPolozka, type Volba } from "./rules";
+import { type SkladbaPolozka, type Volba } from "./rules";
 
 export type Riadok = {
   poradie: number;
@@ -101,9 +101,9 @@ export function prepocitaj(skladba: SkladbaPolozka[], volba: Volba): {
 
   const cenaMaterialu =
     Math.round(riadky.reduce((s, r) => s + (r.cenaSpolu ?? 0), 0) * 100) / 100;
-  const cenaSluzieb = volba.priznaky.includes("praskliny")
-    ? volba.pocetPrasklin * CENA_ZOSIVANIE_EUR
-    : 0;
+  // Zošívanie prasklín sa už neoceňuje v konfigurátore — počet ani hĺbku
+  // zákazník spoľahlivo neurčí, docení sa pri obhliadke.
+  const cenaSluzieb = 0;
   // technologické prestávky → dni (8 h pracovný deň, prestávky bežia aj cez noc)
   const hodiny = riadky.reduce((s, r) => s + (r.prestavkaHodiny ?? 0), 0);
   const dniRealizacie = Math.max(1, Math.ceil(hodiny / 24) + 1);
