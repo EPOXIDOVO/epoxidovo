@@ -63,6 +63,12 @@ export const PRODUKT = {
   sf3000: { sku: "SIKAFLOOR-3000-21", nazov: "Sikafloor-3000", spotreba: 1.5, balenie: 20 },
   sf3000fx: { sku: "558772", nazov: "Sikafloor-3000 FX", spotreba: 2.8, balenie: 20 },
   lak304w: { sku: "SIKAFLOOR-304W-7.5", nazov: "Sikafloor-304W Matt", spotreba: 0.13, balenie: 7.5 },
+  /* TopStone rad — dizajnové podlahy. Spotreby podľa systémov v NajCRM:
+     EP02 penetrácia 2 vrstvy (2 × 0,4), EP11 báza 1,22, EP22 Plus 1,19 (2 vrstvy).
+     Lak je TopStone EP22, nie Sikafloor-305/304 — Sika lak patrí k Sika systémom. */
+  tsEp02: { sku: "TS-EP02", nazov: "TopStone EP02 penetrácia", spotreba: 0.8, balenie: 30 },
+  tsEp11: { sku: "TS-EP11-METALLIC", nazov: "TopStone EP11 Metallic", spotreba: 1.22, balenie: 20 },
+  tsEp22: { sku: "TS-EP22-PLUS", nazov: "TopStone EP22 Plus", spotreba: 1.19, balenie: 20 },
   piesok: {
     sku: "TS-KREMICITY-PIESOK-0-3-0-8-MM-",
     nazov: "Kremičitý piesok 0,3–0,8 mm",
@@ -138,7 +144,7 @@ export const SYSTEMY: System[] = [
   },
   {
     id: "metalik-premium",
-    nazov: "Premium Metalik — dizajnový efekt",
+    nazov: "TopStone METALIC — dizajnový efekt",
     trieda: "premium",
     vlastnosti: [
       "Hĺbkový metalický efekt, každá podlaha originál",
@@ -153,17 +159,14 @@ export const SYSTEMY: System[] = [
       vzhlad: ["metalik"],
     },
     vrstvy: [
-      v(1, "Penetrácia", PRODUKT.sf151, { prestavkaHodiny: 12 }),
-      v(2, "Hlavná vrstva (metalická)", PRODUKT.sf3000fx, {
-        prestavkaHodiny: 24,
-        poznamka: "Spotreba platí pre hrúbku 2 mm",
-      }),
-      v(3, "Vrchný lak", PRODUKT.lak304w, { prestavkaHodiny: 24, poznamka: "2 vrstvy" }),
+      v(1, "Penetrácia", PRODUKT.tsEp02, { prestavkaHodiny: 12, poznamka: "2 vrstvy" }),
+      v(2, "Metalická báza", PRODUKT.tsEp11, { prestavkaHodiny: 24 }),
+      v(3, "Vrchný lak", PRODUKT.tsEp22, { prestavkaHodiny: 24, poznamka: "2 vrstvy" }),
     ],
   },
   {
     id: "marble-premium",
-    nazov: "Premium Marble — mramorový efekt",
+    nazov: "TopStone Mramor — mramorový efekt",
     trieda: "premium",
     vlastnosti: [
       "Jemná mramorová kresba na mieru",
@@ -178,9 +181,9 @@ export const SYSTEMY: System[] = [
       vzhlad: ["marble"],
     },
     vrstvy: [
-      v(1, "Penetrácia", PRODUKT.sf151, { prestavkaHodiny: 12 }),
-      v(2, "Hlavná vrstva (marble)", PRODUKT.sf3310, { prestavkaHodiny: 24 }),
-      v(3, "Vrchný lak", PRODUKT.lak304w, { prestavkaHodiny: 24, poznamka: "2 vrstvy" }),
+      v(1, "Penetrácia", PRODUKT.tsEp02, { prestavkaHodiny: 12, poznamka: "2 vrstvy" }),
+      v(2, "Mramorová báza", PRODUKT.tsEp11, { prestavkaHodiny: 24, poznamka: "viacfarebné ťahanie" }),
+      v(3, "Vrchný lak", PRODUKT.tsEp22, { prestavkaHodiny: 24, poznamka: "2 vrstvy" }),
     ],
   },
   {
