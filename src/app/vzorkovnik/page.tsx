@@ -11,6 +11,7 @@ import { RAL_CLASSIC_FULL, RAL_GROUPS } from "@/content/ral-classic";
 import { MATERIALY } from "@/lib/materialy";
 import { obsahKategoria } from "@/lib/obsah-kategorie";
 import { ARTURO_FARBY, ARTURO_TYPY } from "@/content/arturo-farby";
+import { ArturoGrid } from "./ArturoGrid";
 
 export const metadata: Metadata = {
   title: "Vzorkovník farieb — RAL Classic",
@@ -241,33 +242,7 @@ export default async function VzorkovnikPage({
           </div>
         )}
 
-        {zdroj === "arturo" && (
-          <div className="space-y-8">
-            {ARTURO_TYPY.filter((t) => arturoFarby.some((f) => f.typ === t)).map((t) => (
-              <div key={t}>
-                <h2 className="text-sm font-black uppercase tracking-wide text-[#1B2430]/50 mb-3">{t}</h2>
-                <div className="grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-6 gap-3 md:gap-4">
-                  {arturoFarby.filter((f) => f.typ === t).map((f) => (
-                    <div key={`${f.typ}-${f.nazov}`} className="group">
-                      <div className="relative aspect-square rounded-xl overflow-hidden ring-1 ring-[#1B2430]/10 group-hover:ring-[#3db6e8] transition-all">
-                        <Image
-                          src={f.obrazok}
-                          alt={`Arturo ${f.typ} ${f.nazov}`}
-                          fill
-                          sizes="(max-width: 768px) 50vw, 17vw"
-                          quality={85}
-                          className="object-cover group-hover:scale-105 transition-transform duration-500"
-                        />
-                      </div>
-                      <div className="mt-1.5 text-[13px] font-bold text-[#1B2430] leading-snug">{f.nazov}</div>
-                      {f.sku && <div className="text-[11px] text-[#1B2430]/50">{f.sku}</div>}
-                    </div>
-                  ))}
-                </div>
-              </div>
-            ))}
-          </div>
-        )}
+        {zdroj === "arturo" && <ArturoGrid typy={ARTURO_TYPY} farby={arturoFarby} />}
 
         {zdroj === "priprava" && (
           <div className="rounded-2xl border border-zinc-200 bg-[#f7f6f3] p-6 md:p-8 text-center">
