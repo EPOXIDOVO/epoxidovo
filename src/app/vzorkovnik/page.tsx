@@ -10,6 +10,7 @@ import { BreadcrumbsJsonLd } from "@/components/seo/BreadcrumbsJsonLd";
 import { RAL_CLASSIC_FULL, RAL_GROUPS } from "@/content/ral-classic";
 import { MATERIALY } from "@/lib/materialy";
 import { obsahKategoria } from "@/lib/obsah-kategorie";
+import { ARTURO_FARBY, ARTURO_TYPY } from "@/content/arturo-farby";
 
 export const metadata: Metadata = {
   title: "Vzorkovník farieb — RAL Classic",
@@ -47,7 +48,7 @@ const METALICKE = [
  */
 const TYPY: Record<
   string,
-  { nadpis: string; popis: string; zdroj: "ral" | "efekty" | "chipsy" | "priprava" }
+  { nadpis: string; popis: string; zdroj: "ral" | "efekty" | "chipsy" | "arturo" | "priprava" }
 > = {
   jednofarebne: {
     nadpis: "Vzorkovník — jednofarebné podlahy",
@@ -74,6 +75,11 @@ const TYPY: Record<
     popis: "Dekoračné vločky, ktoré sa sypú do čerstvej vrstvy. Kombinujú sa so základnou farbou z RAL.",
     zdroj: "chipsy",
   },
+  arturo: {
+    nadpis: "Vzorkovník — Arturo",
+    popis: "Kompletná farebná škála Arturo — 68 odtieňov v radoch Unicolor, Concrete look, Mistral, Microcement a Concreta.",
+    zdroj: "arturo",
+  },
   "kamenny-koberec": {
     nadpis: "Vzorkovník — kamenný koberec",
     popis: "Mramorové a kremičité kamienky spájané živicou. Vzorkovník kameňov ti pošleme poštou.",
@@ -81,8 +87,8 @@ const TYPY: Record<
   },
   "beton-look": {
     nadpis: "Vzorkovník — betón look",
-    popis: "Vzorkovník pripravujeme. Napíš nám a pošleme ti reálne vzorky poštou.",
-    zdroj: "priprava",
+    popis: "Dekoratívne betónové povrchy Arturo — rady Concrete look, Mistral a Concreta.",
+    zdroj: "arturo",
   },
 };
 
@@ -98,6 +104,12 @@ export default async function VzorkovnikPage({
 
   const chipsy = MATERIALY.filter((m) => obsahKategoria(m) === "chipsy");
 
+  /* betón look ukazuje len betónové rady, „arturo" celú škálu */
+  const arturoFarby =
+    typ === "beton-look"
+      ? ARTURO_FARBY.filter((f) => f.typ === "Concrete look" || f.typ === "Mistral" || f.typ === "Concreta")
+      : ARTURO_FARBY;
+
   const pocet =
     zdroj === "ral"
       ? `${ORDERED_COLORS.length} RAL Classic odtieňov`
@@ -105,7 +117,9 @@ export default async function VzorkovnikPage({
         ? `${METALICKE.length} efektov`
         : zdroj === "chipsy"
           ? `${chipsy.length} posypov`
-          : "";
+          : zdroj === "arturo"
+            ? `${arturoFarby.length} odtieňov`
+            : "";
 
   return (
     <div className="bg-white">
@@ -223,6 +237,34 @@ export default async function VzorkovnikPage({
                   {m.nazov}
                 </div>
               </Link>
+            ))}
+          </div>
+        )}
+
+        {zdroj === "arturo" && (
+          <div className="space-y-8">
+            {ARTURO_TYPY.filter((t) => arturoFarby.some((f) => f.typ === t)).map((t) => (
+              <div key={t}>
+                <h2 className="text-sm font-black uppercase tracking-wide text-[#1B2430]/50 mb-3">{t}</h2>
+                <div className="grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-6 gap-3 md:gap-4">
+                  {arturoFarby.filter((f) => f.typ === t).map((f) => (
+                    <div key={`${f.typ}-${f.nazov}`} className="group">
+                      <div className="relative aspect-square rounded-xl overflow-hidden ring-1 ring-[#1B2430]/10 group-hover:ring-[#3db6e8] transition-all">
+                        <Image
+                          src={f.obrazok}
+                          alt={`Arturo ${f.typ} ${f.nazov}`}
+                          fill
+                          sizes="(max-width: 768px) 50vw, 17vw"
+                          quality={85}
+                          className="object-cover group-hover:scale-105 transition-transform duration-500"
+                        />
+                      </div>
+                      <div className="mt-1.5 text-[13px] font-bold text-[#1B2430] leading-snug">{f.nazov}</div>
+                      {f.sku && <div className="text-[11px] text-[#1B2430]/50">{f.sku}</div>}
+                    </div>
+                  ))}
+                </div>
+              </div>
             ))}
           </div>
         )}
