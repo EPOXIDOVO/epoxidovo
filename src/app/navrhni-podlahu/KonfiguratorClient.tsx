@@ -78,7 +78,8 @@ const VZORKOVNIK_SLUG: Record<string, string> = {
   chipsy: "chipsove",
   metalik: "metalicke",
   marble: "mramorove",
-  beton_look: "beton-look",
+  // betón look = rad Concrete look, ten je vo vzorkovníku Arturo
+  beton_look: "arturo",
   priemyselna: "priemyselne",
   kamenny_koberec: "kamenny-koberec",
 };

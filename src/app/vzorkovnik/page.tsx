@@ -86,11 +86,6 @@ const TYPY: Record<
     popis: "Mramorové a kremičité kamienky spájané živicou. Vzorkovník kameňov ti pošleme poštou.",
     zdroj: "priprava",
   },
-  "beton-look": {
-    nadpis: "Vzorkovník — betón look",
-    popis: "Dekoratívne betónové povrchy Arturo — rady Concrete look, Mistral a Concreta.",
-    zdroj: "arturo",
-  },
 };
 
 export default async function VzorkovnikPage({
@@ -105,11 +100,7 @@ export default async function VzorkovnikPage({
 
   const chipsy = MATERIALY.filter((m) => obsahKategoria(m) === "chipsy");
 
-  /* betón look ukazuje len betónové rady, „arturo" celú škálu */
-  const arturoFarby =
-    typ === "beton-look"
-      ? ARTURO_FARBY.filter((f) => f.typ === "Concrete look" || f.typ === "Mistral" || f.typ === "Concreta")
-      : ARTURO_FARBY;
+  const arturoFarby = ARTURO_FARBY;
 
   const pocet =
     zdroj === "ral"
