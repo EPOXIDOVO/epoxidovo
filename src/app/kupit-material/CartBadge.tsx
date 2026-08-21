@@ -11,7 +11,7 @@ export function CartBadge() {
   return (
     <Link
       href="/kupit-material/kosik"
-      className="fixed bottom-5 left-5 z-50 inline-flex items-center gap-2.5 px-5 py-3.5 rounded-full bg-[#f97316] text-white font-bold shadow-[0_14px_40px_rgba(249,115,22,0.55)] hover:bg-[#ea580c] hover:-translate-y-0.5 transition-all"
+      className="fixed bottom-5 left-5 z-50 inline-flex items-center gap-2.5 px-5 py-3.5 rounded-full bg-[#ea580c] text-white font-bold shadow-[0_14px_40px_rgba(249,115,22,0.55)] hover:bg-[#c2410c] hover:-translate-y-0.5 transition-all"
     >
       <ShoppingCart className="w-5 h-5" aria-hidden />
       Košík ({count}) · {subtotal.toFixed(2).replace(".", ",")} €

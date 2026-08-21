@@ -81,7 +81,7 @@ export function HrubkaKalkulacka({
   return (
     <div className="rounded-2xl border border-zinc-200 bg-zinc-50 p-5">
       <div className="flex items-center gap-2 font-bold text-zinc-900">
-        <Calculator className="w-5 h-5 text-[#3db6e8]" aria-hidden />
+        <Calculator className="w-5 h-5 text-[#12729f]" aria-hidden />
         Koľko kúpiť na moje m²?
       </div>
       <p className="mt-1 text-xs text-zinc-500">
@@ -105,7 +105,7 @@ export function HrubkaKalkulacka({
           >
             <span className="flex items-center justify-between gap-2">
               <span className="font-bold text-sm text-zinc-900 inline-flex items-center gap-1.5">
-                {rezimId === r.id && <Check className="w-4 h-4 text-[#3db6e8]" aria-hidden />}
+                {rezimId === r.id && <Check className="w-4 h-4 text-[#12729f]" aria-hidden />}
                 {r.nazov}
               </span>
               <span className="text-xs font-semibold text-zinc-500 whitespace-nowrap tabular-nums">

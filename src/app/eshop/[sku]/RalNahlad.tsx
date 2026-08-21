@@ -73,7 +73,7 @@ export function RalNahlad({
       </div>
       <div className="p-3.5 flex flex-wrap items-center gap-2.5">
         <span className="inline-flex items-center gap-1.5 text-sm font-bold text-zinc-900">
-          <Palette className="w-4 h-4 text-[#3db6e8]" aria-hidden />
+          <Palette className="w-4 h-4 text-[#12729f]" aria-hidden />
           Odtieň RAL:
         </span>
         <select

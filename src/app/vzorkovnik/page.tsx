@@ -131,12 +131,12 @@ export default async function VzorkovnikPage({
           >
             <ol className="inline-flex items-center gap-1.5">
               <li>
-                <Link href="/" className="hover:text-[#3db6e8] transition-colors">
+                <Link href="/" className="hover:text-[#12729f] transition-colors">
                   Domov
                 </Link>
               </li>
               <li aria-hidden className="text-[#1B2430]/30">/</li>
-              <li className="text-[#3db6e8]">Vzorkovník farieb</li>
+              <li className="text-[#12729f]">Vzorkovník farieb</li>
             </ol>
           </nav>
           <div className="flex items-baseline justify-between gap-4 flex-wrap">
@@ -158,7 +158,7 @@ export default async function VzorkovnikPage({
               href={`/vzorkovnik?typ=${slug}`}
               className={`px-3.5 py-1.5 rounded-full text-sm font-bold whitespace-nowrap transition-colors ${
                 typ === slug
-                  ? "bg-[#3db6e8] text-white"
+                  ? "bg-[#3db6e8] text-[#0e1a3b]"
                   : "bg-zinc-100 text-[#1B2430]/70 hover:bg-zinc-200"
               }`}
             >
@@ -243,7 +243,7 @@ export default async function VzorkovnikPage({
             </p>
             <Link
               href="/kontakt"
-              className="mt-4 inline-flex items-center gap-2 px-6 py-3 rounded-full bg-[#3db6e8] text-white font-bold text-sm hover:bg-[#1a8cc4] transition-colors"
+              className="mt-4 inline-flex items-center gap-2 px-6 py-3 rounded-full bg-[#3db6e8] text-[#0e1a3b] font-bold text-sm hover:bg-[#1a8cc4] transition-colors"
             >
               Vypýtať vzorky
             </Link>

@@ -189,7 +189,7 @@ export function EshopClient({ sidebarVyrobcov = false }: { sidebarVyrobcov?: boo
   const sideCls = (active: boolean) =>
     `w-full text-left px-4 py-3 rounded-xl text-[15px] font-semibold transition-colors flex items-center justify-between gap-3 ${
       active
-        ? "bg-[#3db6e8] text-white"
+        ? "bg-[#3db6e8] text-[#0e1a3b]"
         : "text-zinc-700 hover:bg-white hover:text-[#1a8cc4]"
     }`;
 
@@ -197,7 +197,7 @@ export function EshopClient({ sidebarVyrobcov = false }: { sidebarVyrobcov?: boo
     `px-3.5 md:px-4 py-2 rounded-full text-[13px] md:text-sm font-semibold whitespace-nowrap transition-colors border-2 ${
       active
         ? "bg-[#3db6e8] border-[#3db6e8] text-white"
-        : "bg-white border-zinc-200 text-zinc-700 hover:border-[#3db6e8] hover:text-[#3db6e8]"
+        : "bg-white border-zinc-200 text-zinc-700 hover:border-[#3db6e8] hover:text-[#12729f]"
     }`;
 
   return (
@@ -284,7 +284,7 @@ export function EshopClient({ sidebarVyrobcov = false }: { sidebarVyrobcov?: boo
                       }}
                       className={`block w-full text-left rounded-xl px-3.5 py-2 text-sm font-semibold transition-colors whitespace-nowrap ${
                         obsah === d
-                          ? "bg-[#3db6e8] text-white"
+                          ? "bg-[#3db6e8] text-[#0e1a3b]"
                           : "text-zinc-700 hover:bg-[#e3f3fb] hover:text-[#1a8cc4]"
                       }`}
                     >
@@ -418,7 +418,7 @@ export function EshopClient({ sidebarVyrobcov = false }: { sidebarVyrobcov?: boo
               <button
                 type="button"
                 onClick={() => setVyrobca(null)}
-                className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-[#3db6e8] text-white text-sm font-bold hover:bg-[#1a8cc4] transition-colors"
+                className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-[#3db6e8] text-[#0e1a3b] text-sm font-bold hover:bg-[#1a8cc4] transition-colors"
               >
                 Značka: {vyrobca}
                 <X className="w-4 h-4" aria-hidden />
@@ -437,7 +437,7 @@ export function EshopClient({ sidebarVyrobcov = false }: { sidebarVyrobcov?: boo
           {filtered.length === 0 ? (
             <div className="mt-10 text-center text-zinc-500">
               Nič sme nenašli. Skús iný výraz — alebo nám{" "}
-              <Link href="/kontakt" className="text-[#3db6e8] font-semibold hover:underline">
+              <Link href="/kontakt" className="text-[#12729f] font-semibold hover:underline">
                 napíš
               </Link>
               , materiál vieme objednať.
@@ -471,7 +471,7 @@ export function EshopClient({ sidebarVyrobcov = false }: { sidebarVyrobcov?: boo
                       )}
                     </div>
                     <div className="p-3 md:p-4">
-                      <div className="text-[10px] md:text-[11px] font-semibold uppercase tracking-wide text-[#3db6e8]">
+                      <div className="text-[10px] md:text-[11px] font-semibold uppercase tracking-wide text-[#12729f]">
                         {OBSAH_KATEGORIE.find((k) => k.id === obsahKategoria(m))?.label}
                       </div>
                       <h2 className="mt-0.5 text-[13px] md:text-[15px] font-bold text-zinc-900 leading-snug line-clamp-2 group-hover:text-[#1a8cc4] transition-colors">

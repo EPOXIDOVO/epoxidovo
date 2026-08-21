@@ -32,7 +32,7 @@ export function KombinujSystem({ m }: { m: Material }) {
   return (
     <section className="mt-10">
       <h2 className="flex items-center gap-2 text-xl font-extrabold text-zinc-900">
-        <Layers className="w-5 h-5 text-[#3db6e8]" aria-hidden />
+        <Layers className="w-5 h-5 text-[#12729f]" aria-hidden />
         Poskladaj celý systém
       </h2>
       <p className="mt-1 text-sm text-zinc-500 max-w-2xl">

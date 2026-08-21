@@ -96,13 +96,22 @@ export function ProductVisual({
     );
   }
 
-  // Bez fotky — čistý neutrálny placeholder, žiadne kreslené náhrady.
+  // Bez fotky — neutrálny obrys obalu s logom značky. Zákazníkovi to
+  // nesmie vyzerať ako chyba, preto žiadne interné poznámky.
   return (
     <div
-      className={`relative overflow-hidden bg-zinc-100 flex items-center justify-center ${isCard ? "aspect-[4/3]" : "aspect-[4/3] rounded-3xl border border-zinc-200"}`}
+      className={`relative overflow-hidden bg-gradient-to-b from-zinc-50 to-zinc-100 flex flex-col items-center justify-center gap-2 ${isCard ? "aspect-[4/3]" : "aspect-[4/3] rounded-3xl border border-zinc-200"}`}
     >
-      <span className="text-zinc-400 text-[11px] md:text-sm font-bold uppercase tracking-wide text-center px-3">
-        Dorob ty
+      <svg viewBox="0 0 48 56" aria-hidden className="w-10 h-12 md:w-12 md:h-14 text-zinc-300">
+        <path
+          d="M10 14h28a2 2 0 0 1 2 2v36a2 2 0 0 1-2 2H10a2 2 0 0 1-2-2V16a2 2 0 0 1 2-2Z"
+          fill="none" stroke="currentColor" strokeWidth="2.5"
+        />
+        <path d="M18 14V8a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v6" fill="none" stroke="currentColor" strokeWidth="2.5" />
+        <path d="M14 26h20M14 34h20" stroke="currentColor" strokeWidth="2" strokeLinecap="round" />
+      </svg>
+      <span className="text-zinc-400 text-[10px] md:text-[11px] font-bold uppercase tracking-wide text-center px-3">
+        {m.vyrobca}
       </span>
     </div>
   );

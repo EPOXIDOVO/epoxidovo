@@ -22,7 +22,7 @@ export function MedvedB2B() {
   if (hidden) return null;
 
   return (
-    <div className="fixed bottom-4 left-4 z-40 flex items-end gap-2 pointer-events-none">
+    <div className="hidden md:flex fixed bottom-4 left-4 z-40 items-end gap-2 pointer-events-none">
       <Link
         href="/kupit-material/b2b"
         aria-label="Veľkoobchodné ceny pre firmy — registrácia"

@@ -98,7 +98,7 @@ export function SadaCard({
             className={`press-scale w-full sm:w-auto inline-flex items-center justify-center gap-2 px-4 py-3 rounded-full font-bold text-white whitespace-nowrap transition-colors ${
               added
                 ? "bg-emerald-600"
-                : "bg-[#f97316] hover:bg-[#ea580c] shadow-[0_10px_28px_rgba(249,115,22,0.4)]"
+                : "bg-[#ea580c] hover:bg-[#c2410c] shadow-[0_10px_28px_rgba(249,115,22,0.4)]"
             }`}
           >
             {added ? (

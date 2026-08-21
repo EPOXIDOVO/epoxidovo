@@ -69,7 +69,7 @@ export function PridatDoKosika({
       <button
         type="button"
         onClick={() => (skladba.length > 1 ? setOpen(true) : pridaj([produkt]))}
-        className="inline-flex items-center gap-2 px-6 py-3.5 rounded-full bg-[#f97316] text-white font-extrabold hover:bg-[#ea580c] shadow-[0_10px_28px_rgba(249,115,22,0.4)] transition-colors whitespace-nowrap"
+        className="inline-flex items-center gap-2 px-6 py-3.5 rounded-full bg-[#ea580c] text-white font-extrabold hover:bg-[#c2410c] shadow-[0_10px_28px_rgba(249,115,22,0.4)] transition-colors whitespace-nowrap"
       >
         {pridane ? (
           <>
@@ -165,7 +165,7 @@ export function PridatDoKosika({
               <button
                 type="button"
                 onClick={() => pridaj(skladba.filter((s) => vybrane.has(s.sku)))}
-                className="flex-1 inline-flex items-center justify-center gap-2 px-5 py-3.5 rounded-full bg-[#f97316] text-white font-extrabold hover:bg-[#ea580c] transition-colors whitespace-nowrap"
+                className="flex-1 inline-flex items-center justify-center gap-2 px-5 py-3.5 rounded-full bg-[#ea580c] text-white font-extrabold hover:bg-[#c2410c] transition-colors whitespace-nowrap"
               >
                 <ShoppingCart className="w-4 h-4" aria-hidden />
                 Pridať vybrané ({fmt.format(sumaVybranych)} €)

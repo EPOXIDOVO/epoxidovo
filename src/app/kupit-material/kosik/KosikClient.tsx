@@ -151,7 +151,7 @@ export function KosikClient({ paymentMethods }: { paymentMethods: PaymentMethod[
         <p className="mt-4 text-sm text-zinc-500 bg-blue-50 rounded-xl p-3">
           <strong>Nejde to podľa predstáv? Zavolajte nám, dokončíme to za vás.</strong>
           <br />
-          <a href={`tel:${SITE.contact.phoneRaw}`} className="font-bold text-[#3db6e8]">
+          <a href={`tel:${SITE.contact.phoneRaw}`} className="font-bold text-[#12729f]">
             {SITE.contact.phone}
           </a>
         </p>
@@ -171,13 +171,13 @@ export function KosikClient({ paymentMethods }: { paymentMethods: PaymentMethod[
         <ShoppingCart className="w-12 h-12 mx-auto text-zinc-300" aria-hidden />
         <h2 className="mt-4 text-2xl font-extrabold text-zinc-900">Košík je prázdny</h2>
         <p className="mt-2 text-zinc-600">
-          Navrhni si podlahu — vypočítame presne toľko materiálu, koľko treba.
+          Odpovedz na pár otázok a vypočítame presne toľko materiálu, koľko treba.
         </p>
         <Link
           href="/navrhni-podlahu"
-          className="mt-6 inline-flex px-7 py-3.5 rounded-full bg-[#f97316] text-white font-bold hover:bg-[#ea580c] transition-colors"
+          className="mt-6 inline-flex px-7 py-3.5 rounded-full bg-[#ea580c] text-white font-bold hover:bg-[#c2410c] transition-colors"
         >
-          Spustiť kalkulátor
+          Zisti, aký materiál potrebuješ
         </Link>
       </div>
     );
@@ -319,11 +319,11 @@ export function KosikClient({ paymentMethods }: { paymentMethods: PaymentMethod[
           <input type="checkbox" checked={consent} onChange={(e) => setConsent(e.target.checked)} className="mt-0.5 w-4 h-4 accent-[#3db6e8]" />
           <span>
             Súhlasím so spracovaním osobných údajov na vybavenie objednávky a s{" "}
-            <a href="/obchodne-podmienky" target="_blank" className="text-[#3db6e8] underline">
+            <a href="/obchodne-podmienky" target="_blank" className="text-[#12729f] underline">
               obchodnými podmienkami
             </a>
             ; potvrdzujem oboznámenie s{" "}
-            <a href="/odstupenie-od-zmluvy" target="_blank" className="text-[#3db6e8] underline">
+            <a href="/odstupenie-od-zmluvy" target="_blank" className="text-[#12729f] underline">
               poučením o odstúpení od zmluvy
             </a>
             . *
@@ -342,7 +342,7 @@ export function KosikClient({ paymentMethods }: { paymentMethods: PaymentMethod[
           type="button"
           onClick={submit}
           disabled={state === "sending" || !valid || !token}
-          className="mt-4 w-full px-6 py-4 rounded-full bg-[#f97316] text-white font-extrabold text-base hover:bg-[#ea580c] disabled:opacity-50 disabled:cursor-not-allowed shadow-[0_12px_36px_rgba(249,115,22,0.5)] transition-colors"
+          className="mt-4 w-full px-6 py-4 rounded-full bg-[#ea580c] text-white font-extrabold text-base hover:bg-[#c2410c] disabled:opacity-50 disabled:cursor-not-allowed shadow-[0_12px_36px_rgba(249,115,22,0.5)] transition-colors"
         >
           {state === "sending"
             ? "Odosielam…"
@@ -353,7 +353,7 @@ export function KosikClient({ paymentMethods }: { paymentMethods: PaymentMethod[
 
         <p className="mt-3 text-center text-xs text-zinc-500">
           <Phone className="inline w-3 h-3" aria-hidden /> Nejde to podľa predstáv?{" "}
-          <a href={`tel:${SITE.contact.phoneRaw}`} className="font-bold text-[#3db6e8]">
+          <a href={`tel:${SITE.contact.phoneRaw}`} className="font-bold text-[#12729f]">
             {SITE.contact.phone}
           </a>{" "}
           — dokončíme to za vás.

@@ -59,7 +59,7 @@ export function KategorieMenu() {
             p.coskoro ? (
               <span key={p.label} className="font-bold text-zinc-400 select-none cursor-default whitespace-nowrap">
                 {p.label}
-                <span className="inline-block align-super -ml-0.5 px-1 py-px rounded-full bg-[#f97316] text-white text-[8px] font-bold uppercase leading-none">
+                <span className="inline-block align-super -ml-0.5 px-1 py-px rounded-full bg-[#ea580c] text-white text-[8px] font-bold uppercase leading-none">
                   čoskoro
                 </span>
               </span>

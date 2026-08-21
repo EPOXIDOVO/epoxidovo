@@ -29,7 +29,7 @@ export function BaleniaKalkulacka({
   return (
     <div className="rounded-2xl border border-zinc-200 bg-zinc-50 p-5">
       <div className="flex items-center gap-2 font-bold text-zinc-900">
-        <Calculator className="w-5 h-5 text-[#3db6e8]" aria-hidden />
+        <Calculator className="w-5 h-5 text-[#12729f]" aria-hidden />
         Koľko balení potrebujem?
       </div>
       {jePu2mm && (

@@ -85,7 +85,7 @@ export function AiChatWidget() {
     <div className="fixed bottom-5 right-5 md:bottom-6 md:right-6 z-[80] flex flex-col items-end gap-2">
       {/* Hint bublina vedľa FAB tlačidla */}
       {showHint && (
-        <div className="mb-1 mr-1 max-w-[220px] rounded-2xl bg-white px-4 py-2.5 text-sm font-semibold text-zinc-900 shadow-[0_10px_30px_rgba(0,0,0,0.25)] ring-1 ring-black/10 animate-[fadeInUp_0.25s_ease-out]">
+        <div className="hidden md:block mb-1 mr-1 max-w-[220px] rounded-2xl bg-white px-4 py-2.5 text-sm font-semibold text-zinc-900 shadow-[0_10px_30px_rgba(0,0,0,0.25)] ring-1 ring-black/10 animate-[fadeInUp_0.25s_ease-out]">
           Sme na telefóne — napíš nám 👋
           <div className="absolute -bottom-1.5 right-6 h-3 w-3 rotate-45 bg-white ring-1 ring-black/10" />
         </div>

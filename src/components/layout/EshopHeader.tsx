@@ -52,7 +52,7 @@ export function EshopHeader({ bezVyhladavania = false }: { bezVyhladavania?: boo
   return (
     <header className="fixed top-0 inset-x-0 z-50 bg-white shadow-[0_1px_0_rgba(0,0,0,0.06)]">
       {/* kontaktný pás — telefón vľavo, e-mail vpravo (štýl Epodex) */}
-      <div className="bg-[#3db6e8] text-white">
+      <div className="bg-[#3db6e8] text-[#0e1a3b]">
         <div className="max-w-7xl mx-auto px-4 py-1.5 flex items-center justify-between gap-4 text-[13px] font-semibold">
           <a
             href={`tel:${SITE.contact.phoneRaw}`}
@@ -74,7 +74,7 @@ export function EshopHeader({ bezVyhladavania = false }: { bezVyhladavania?: boo
       <div className="max-w-7xl mx-auto px-4 py-3 flex items-center gap-4 md:gap-8">
         <Link href="/eshop" aria-label="E-shop EPOXIDOVO" className="shrink-0">
           <span className="text-xl md:text-2xl font-extrabold tracking-tight text-[#0e1a3b] whitespace-nowrap">
-            EPOXID<span className="text-[#3db6e8]">OVO</span>.SK
+            EPOXID<span className="text-[#12729f]">OVO</span>.SK
           </span>
         </Link>
 
@@ -121,7 +121,7 @@ export function EshopHeader({ bezVyhladavania = false }: { bezVyhladavania?: boo
           >
             <ShoppingCart className="w-5 h-5" aria-hidden />
             {pocet > 0 && (
-              <span className="absolute -top-1 -right-1 min-w-5 h-5 px-1 inline-flex items-center justify-center rounded-full bg-[#f97316] text-white text-[11px] font-bold tabular-nums">
+              <span className="absolute -top-1 -right-1 min-w-5 h-5 px-1 inline-flex items-center justify-center rounded-full bg-[#ea580c] text-white text-[11px] font-bold tabular-nums">
                 {pocet}
               </span>
             )}

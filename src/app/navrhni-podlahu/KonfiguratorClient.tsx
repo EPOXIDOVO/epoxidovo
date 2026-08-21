@@ -311,7 +311,7 @@ export function KonfiguratorClient() {
           <div className="mt-6 flex flex-wrap justify-center gap-3">
             <Link
               href="/cenova-ponuka"
-              className="inline-flex items-center gap-2 px-6 py-3.5 rounded-full bg-[#f97316] text-white font-bold hover:bg-[#ea580c] transition-colors"
+              className="inline-flex items-center gap-2 px-6 py-3.5 rounded-full bg-[#ea580c] text-white font-bold hover:bg-[#c2410c] transition-colors"
             >
               Chcem návrh na mieru
             </Link>
@@ -528,7 +528,7 @@ export function KonfiguratorClient() {
                           />
                         )}
                         {vybraty && (
-                          <span className="absolute top-2 right-2 z-10 inline-flex items-center justify-center w-6 h-6 rounded-full bg-[#3db6e8] text-white shadow">
+                          <span className="absolute top-2 right-2 z-10 inline-flex items-center justify-center w-6 h-6 rounded-full bg-[#3db6e8] text-[#0e1a3b] shadow">
                             <Check className="w-4 h-4" aria-hidden />
                           </span>
                         )}
@@ -582,7 +582,7 @@ export function KonfiguratorClient() {
                     <p className="mt-1.5 text-sm text-amber-900/90">{blok}</p>
                     <Link
                       href="/cenova-ponuka"
-                      className="mt-3 inline-flex items-center gap-2 px-5 py-2.5 rounded-full bg-[#f97316] text-white font-bold text-sm hover:bg-[#ea580c] transition-colors"
+                      className="mt-3 inline-flex items-center gap-2 px-5 py-2.5 rounded-full bg-[#ea580c] text-white font-bold text-sm hover:bg-[#c2410c] transition-colors"
                     >
                       Objednať obhliadku
                     </Link>
@@ -744,12 +744,12 @@ export function KonfiguratorClient() {
                               }`}
                             >
                               {vybrata && (
-                                <span className="absolute top-2 right-2 z-10 inline-flex items-center justify-center w-7 h-7 rounded-full bg-[#3db6e8] text-white shadow-lg">
+                                <span className="absolute top-2 right-2 z-10 inline-flex items-center justify-center w-7 h-7 rounded-full bg-[#3db6e8] text-[#0e1a3b] shadow-lg">
                                   <Check className="w-5 h-5" aria-hidden />
                                 </span>
                               )}
                               <span className="px-3 pt-3 pb-2.5 md:px-4 md:pt-4 md:pb-3 flex flex-col min-h-[84px] md:min-h-[112px]">
-                                <span className="w-6 h-6 md:w-8 md:h-8 mb-1.5 md:mb-2 rounded-md bg-white text-[#5c2c18] group-hover:text-[#3db6e8] flex items-center justify-center p-1 md:p-1.5 transition-colors duration-500 shrink-0">
+                                <span className="w-6 h-6 md:w-8 md:h-8 mb-1.5 md:mb-2 rounded-md bg-white text-[#5c2c18] group-hover:text-[#12729f] flex items-center justify-center p-1 md:p-1.5 transition-colors duration-500 shrink-0">
                                   <DiceIcon pips={((idx % 5) + 1) as 1 | 2 | 3 | 4 | 5} />
                                 </span>
                                 <h3 className="text-[14px] leading-[1.12] md:text-lg lg:text-xl font-black text-white tracking-tight md:leading-[1.05] line-clamp-2">
@@ -804,7 +804,7 @@ export function KonfiguratorClient() {
                           <Link
                             href={`/vzorkovnik?typ=${VZORKOVNIK_SLUG[m.id] ?? ""}`}
                             aria-label={`Celý vzorkovník — ${m.label}`}
-                            className="inline-flex items-center justify-center px-3 py-2 md:py-2.5 rounded-full bg-[#3db6e8] text-white font-semibold text-[12px] md:text-sm whitespace-nowrap hover:bg-[#1a8cc4] shadow-[0_6px_20px_rgba(61,182,232,0.35)] hover:-translate-y-0.5 transition-all duration-300"
+                            className="inline-flex items-center justify-center px-3 py-2 md:py-2.5 rounded-full bg-[#3db6e8] text-[#0e1a3b] font-semibold text-[12px] md:text-sm whitespace-nowrap hover:bg-[#1a8cc4] shadow-[0_6px_20px_rgba(61,182,232,0.35)] hover:-translate-y-0.5 transition-all duration-300"
                           >
                             Celý vzorkovník
                           </Link>
@@ -842,7 +842,7 @@ export function KonfiguratorClient() {
                 type="button"
                 onClick={dalej}
                 disabled={!mozeDalej || !!blok}
-                className="inline-flex items-center gap-2 px-7 py-3 rounded-full bg-[#3db6e8] text-white font-bold whitespace-nowrap hover:bg-[#1a8cc4] disabled:bg-[#dfe3ec] disabled:text-[#98a0b6] disabled:cursor-not-allowed transition-colors"
+                className="inline-flex items-center gap-2 px-7 py-3 rounded-full bg-[#3db6e8] text-[#0e1a3b] font-bold whitespace-nowrap hover:bg-[#1a8cc4] disabled:bg-[#dfe3ec] disabled:text-[#98a0b6] disabled:cursor-not-allowed transition-colors"
               >
                 {posledny ? "Zobraziť skladbu" : "Ďalej"}
                 <ArrowRight className="w-4 h-4" aria-hidden />
@@ -1067,7 +1067,7 @@ function OdfotPodklad({ volba }: { volba: Volba }) {
         type="button"
         onClick={posli}
         disabled={!mozePoslat}
-        className="mt-4 inline-flex items-center gap-2 px-6 py-3 rounded-full bg-[#f97316] text-white font-bold hover:bg-[#ea580c] disabled:bg-[#dfe3ec] disabled:text-[#98a0b6] disabled:cursor-not-allowed transition-colors whitespace-nowrap"
+        className="mt-4 inline-flex items-center gap-2 px-6 py-3 rounded-full bg-[#ea580c] text-white font-bold hover:bg-[#c2410c] disabled:bg-[#dfe3ec] disabled:text-[#98a0b6] disabled:cursor-not-allowed transition-colors whitespace-nowrap"
       >
         Poslať a ozvite sa mi
         <ArrowRight className="w-4 h-4" aria-hidden />
@@ -1305,7 +1305,7 @@ function Vysledok({
         >
           <div className="flex items-center gap-2 font-extrabold text-[#0e1a3b]">
             {v.typ === "info" ? (
-              <Info className="w-5 h-5 text-[#3db6e8]" aria-hidden />
+              <Info className="w-5 h-5 text-[#12729f]" aria-hidden />
             ) : (
               <AlertTriangle className={`w-5 h-5 ${v.typ === "blokujuce" ? "text-red-600" : "text-amber-600"}`} aria-hidden />
             )}
@@ -1432,7 +1432,7 @@ function Vysledok({
           {/* C — časová os */}
           <div className="rounded-2xl border border-zinc-200 bg-white p-5">
             <div className="flex items-center gap-2 font-extrabold text-[#0e1a3b]">
-              <Clock className="w-5 h-5 text-[#3db6e8]" aria-hidden />
+              <Clock className="w-5 h-5 text-[#12729f]" aria-hidden />
               Realizácia zaberie ~{vysledok.dniRealizacie} dni
             </div>
             <div className="mt-3 space-y-2">
@@ -1473,7 +1473,7 @@ function Vysledok({
             <button
               type="button"
               onClick={onDoKosika}
-              className="press-scale w-full inline-flex items-center justify-center gap-2 px-6 py-4 rounded-full bg-[#f97316] text-white font-extrabold hover:bg-[#ea580c] shadow-[0_10px_28px_rgba(249,115,22,0.4)] transition-colors"
+              className="press-scale w-full inline-flex items-center justify-center gap-2 px-6 py-4 rounded-full bg-[#ea580c] text-white font-extrabold hover:bg-[#c2410c] shadow-[0_10px_28px_rgba(249,115,22,0.4)] transition-colors"
             >
               {pridane ? (
                 <>

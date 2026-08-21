@@ -94,12 +94,12 @@ export default function EshopPage() {
       /* USP pás — prečo kupovať u nás (štýl GymBeam) */
       <section className="bg-[#0e1a3b] text-white">
         <Container size="xl" className="py-4">
-          <div className="grid grid-cols-2 lg:grid-cols-4 gap-x-6 gap-y-3">
+          <div className="grid grid-cols-2 lg:grid-cols-4 gap-x-3 md:gap-x-6 gap-y-2">
             {[
-              { ikona: "🏆", cislo: "50 000+", text: "spokojných zákazníkov", href: "#dovera" },
-              { img: "/images/eshop/medved-hlava.png", cislo: "Sme aj realizačná firma", text: "podlahy lejeme dennodenne", href: "/" },
-              { ikona: "📦", cislo: "350+ produktov", text: "4 top značky skladom", href: "/eshop#katalog" },
-              { ikona: "📞", cislo: "Poradenstvo zadarmo", text: "od reálnych realizátorov", href: "/kontakt" },
+              { ikona: "🏆", cislo: "50 000+", kratky: "50 000+ zákazníkov", text: "spokojných zákazníkov", href: "#dovera" },
+              { img: "/images/eshop/medved-hlava.png", cislo: "Sme aj realizačná firma", kratky: "Realizačná firma", text: "podlahy lejeme dennodenne", href: "/" },
+              { ikona: "📦", cislo: "350+ produktov", kratky: "350+ produktov", text: "4 top značky skladom", href: "/eshop#katalog" },
+              { ikona: "📞", cislo: "Poradenstvo zadarmo", kratky: "Poradenstvo zadarmo", text: "od reálnych realizátorov", href: "/kontakt" },
             ].map((u) => {
               const jeLink = "href" in u && !!u.href;
               const Obal = (jeLink ? "a" : "div") as "a" | "div";
@@ -113,15 +113,21 @@ export default function EshopPage() {
               >
                 {"img" in u && u.img ? (
                   /* maskot má vlastné modré koliesko — biely prstenec ho oddelí od tmavého pásu */
-                  <span className="w-12 h-12 shrink-0 rounded-full overflow-hidden bg-white ring-2 ring-white/80">
+                  <span className="w-8 h-8 md:w-12 md:h-12 shrink-0 rounded-full overflow-hidden bg-white ring-2 ring-white/80">
                     <Image src={u.img} alt="" width={96} height={96} quality={92} className="w-full h-full object-cover" />
                   </span>
                 ) : (
-                  <span className="text-2xl" aria-hidden>{"ikona" in u ? u.ikona : null}</span>
+                  <span className="text-lg md:text-2xl" aria-hidden>{"ikona" in u ? u.ikona : null}</span>
                 )}
                 <span className="min-w-0">
-                  <span className="block text-[15px] font-extrabold uppercase tracking-wide whitespace-nowrap">{u.cislo}</span>
-                  <span className="block text-[13px] font-medium text-white whitespace-nowrap">
+                  {/* na mobile jeden krátky riadok, na desktope číslo + popis */}
+                  <span className="block md:hidden text-[11px] font-extrabold uppercase tracking-wide leading-tight">
+                    {u.kratky}
+                  </span>
+                  <span className="hidden md:block text-[15px] font-extrabold uppercase tracking-wide leading-tight">
+                    {u.cislo}
+                  </span>
+                  <span className="hidden md:block text-[13px] font-medium text-white/80 leading-snug">
                     {u.text}
                     {jeLink ? " →" : ""}
                   </span>
@@ -188,7 +194,7 @@ export default function EshopPage() {
                 <div className="mt-6 flex flex-wrap gap-3">
                   <a
                     href="/navrhni-podlahu"
-                    className="inline-flex items-center gap-2 px-7 py-3.5 rounded-full bg-[#f97316] text-white font-extrabold text-base md:text-lg shadow-[0_12px_32px_rgba(249,115,22,0.5)] hover:bg-[#ea580c] transition-colors whitespace-nowrap"
+                    className="inline-flex items-center gap-2 px-7 py-3.5 rounded-full bg-[#ea580c] text-white font-extrabold text-base md:text-lg shadow-[0_12px_32px_rgba(249,115,22,0.5)] hover:bg-[#c2410c] transition-colors whitespace-nowrap"
                   >
                     Zisti, aký materiál potrebuješ →
                   </a>
@@ -255,7 +261,7 @@ export default function EshopPage() {
                           {d.label}
                         </span>
                         {d.coskoro && (
-                          <span className="absolute top-4 right-4 px-3 py-1 rounded-full bg-[#f97316] text-white text-xs font-bold uppercase tracking-wide shadow">
+                          <span className="absolute top-4 right-4 px-3 py-1 rounded-full bg-[#ea580c] text-white text-xs font-bold uppercase tracking-wide shadow">
                             Čoskoro
                           </span>
                         )}
@@ -335,13 +341,13 @@ export default function EshopPage() {
                 {/* ikony pod sebou lícujú — bloky majú rovnakú šírku ikony */}
                 <div className="mt-4 mx-auto w-fit space-y-2.5">
                   <a href={`tel:${SITE.contact.phoneRaw}`} className="flex items-center gap-3 text-[15px] font-bold text-[#0e1a3b] hover:text-[#1a8cc4] transition-colors">
-                    <span className="w-8 h-8 shrink-0 inline-flex items-center justify-center rounded-full bg-[#3db6e8] text-white">
+                    <span className="w-8 h-8 shrink-0 inline-flex items-center justify-center rounded-full bg-[#3db6e8] text-[#0e1a3b]">
                       <Phone className="w-4 h-4" aria-hidden />
                     </span>
                     {SITE.contact.phone}
                   </a>
                   <a href={`mailto:${SITE.contact.email}`} className="flex items-center gap-3 text-[15px] text-zinc-600 hover:text-[#1a8cc4] transition-colors">
-                    <span className="w-8 h-8 shrink-0 inline-flex items-center justify-center rounded-full bg-[#3db6e8] text-white">
+                    <span className="w-8 h-8 shrink-0 inline-flex items-center justify-center rounded-full bg-[#3db6e8] text-[#0e1a3b]">
                       <Mail className="w-4 h-4" aria-hidden />
                     </span>
                     {SITE.contact.email}
@@ -379,7 +385,7 @@ export default function EshopPage() {
                   />
                 </div>
               </div>
-              <div className="bg-[#3db6e8] text-white grid grid-cols-1 sm:grid-cols-3 divide-y sm:divide-y-0 sm:divide-x divide-white/20">
+              <div className="bg-[#3db6e8] text-[#0e1a3b] grid grid-cols-1 sm:grid-cols-3 divide-y sm:divide-y-0 sm:divide-x divide-white/20">
                 {["Konečné ceny bez prekvapení", "Materiál, ktorý sami lejeme", "Poradenstvo zadarmo"].map((t) => (
                   <div key={t} className="px-4 py-3.5 flex items-center justify-center gap-2 font-bold text-[15px] text-center">
                     <Check className="w-4 h-4 shrink-0" aria-hidden />
@@ -409,7 +415,7 @@ export default function EshopPage() {
             </div>
             <a
               href="/"
-              className="inline-flex items-center gap-2 px-6 py-3 rounded-full bg-[#f97316] text-white font-bold hover:bg-[#ea580c] transition-colors whitespace-nowrap"
+              className="inline-flex items-center gap-2 px-6 py-3 rounded-full bg-[#ea580c] text-white font-bold hover:bg-[#c2410c] transition-colors whitespace-nowrap"
             >
               Prejsť na realizačnú stránku →
             </a>

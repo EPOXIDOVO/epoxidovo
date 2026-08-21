@@ -26,7 +26,9 @@ export default function KosikPage() {
         ]}
       />
       <div className="bg-[#f7f7f4] min-h-screen">
-        <Container size="xl" className="pt-24 md:pt-32 pb-16">
+        <Container size="xl" className="pt-8 md:pt-12 pb-16">
+          {/* stránka musí mať h1 — pre čítačky aj SEO */}
+          <h1 className="sr-only">Košík</h1>
           <KosikClient paymentMethods={paymentMethods} />
         </Container>
       </div>

@@ -152,7 +152,7 @@ export function B2bForm() {
               onClick={() => vyber(n)}
               className="w-full text-left px-4 py-2.5 hover:bg-[#e3f3fb] transition-colors flex items-start gap-2.5"
             >
-              <Building2 className="w-4 h-4 mt-0.5 shrink-0 text-[#3db6e8]" aria-hidden />
+              <Building2 className="w-4 h-4 mt-0.5 shrink-0 text-[#12729f]" aria-hidden />
               <span>
                 <span className="block text-sm font-bold text-zinc-900">{n.nazov}</span>
                 <span className="block text-xs text-zinc-500">
@@ -212,7 +212,7 @@ export function B2bForm() {
         type="button"
         onClick={submit}
         disabled={state === "sending" || !valid || !token}
-        className="mt-4 w-full px-6 py-4 rounded-full bg-[#3db6e8] text-white font-extrabold hover:bg-[#1a8cc4] disabled:opacity-50 transition-colors"
+        className="mt-4 w-full px-6 py-4 rounded-full bg-[#3db6e8] text-[#0e1a3b] font-extrabold hover:bg-[#1a8cc4] disabled:opacity-50 transition-colors"
       >
         {state === "sending" ? "Odosielam…" : "Požiadať o B2B účet"}
       </button>

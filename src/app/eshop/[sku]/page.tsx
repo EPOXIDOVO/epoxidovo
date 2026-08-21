@@ -202,7 +202,7 @@ export default async function ProduktPage({ params }: PageProps) {
 
             {/* Info */}
             <div>
-              <div className="text-xs font-semibold uppercase tracking-wide text-[#3db6e8]">
+              <div className="text-xs font-semibold uppercase tracking-wide text-[#12729f]">
                 {m.kategoria} · {m.vyrobca} · SKU {m.sku}
               </div>
               <h1 className="mt-2 text-3xl md:text-4xl font-extrabold tracking-tight text-zinc-900 leading-tight">
@@ -225,7 +225,7 @@ export default async function ProduktPage({ params }: PageProps) {
                   </div>
                 </div>
                 {m.pokryje_m2_z_balenia != null && (
-                  <div className="rounded-2xl bg-[#3db6e8] text-white px-6 py-4">
+                  <div className="rounded-2xl bg-[#3db6e8] text-[#0e1a3b] px-6 py-4">
                     <div className="text-xs uppercase tracking-wide text-white/75 font-semibold">
                       Vystačí na
                     </div>
@@ -315,7 +315,7 @@ export default async function ProduktPage({ params }: PageProps) {
                 <details className="mt-6 rounded-2xl border border-zinc-200 bg-white overflow-hidden group">
                   <summary className="cursor-pointer px-5 py-4 font-bold text-zinc-900 hover:bg-zinc-50 list-none flex items-center justify-between">
                     Technické údaje
-                    <span className="text-[#3db6e8] group-open:rotate-45 transition-transform text-xl leading-none" aria-hidden>
+                    <span className="text-[#12729f] group-open:rotate-45 transition-transform text-xl leading-none" aria-hidden>
                       +
                     </span>
                   </summary>
@@ -338,7 +338,7 @@ export default async function ProduktPage({ params }: PageProps) {
                   href={m.technicky_list}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="mt-4 inline-flex items-center gap-2 text-sm font-semibold text-[#3db6e8] hover:text-[#1a8cc4] hover:underline"
+                  className="mt-4 inline-flex items-center gap-2 text-sm font-semibold text-[#12729f] hover:text-[#1a8cc4] hover:underline"
                 >
                   <FileText className="w-4 h-4" aria-hidden />
                   Technický list výrobcu (PDF)
