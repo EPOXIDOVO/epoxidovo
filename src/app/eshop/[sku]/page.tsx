@@ -41,7 +41,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   const desc = [
     `${m.nazov} — ${m.kategoria.toLowerCase()}, ${m.vyrobca}.`,
     m.balenie ? `Balenie ${m.balenie}.` : null,
-    m.pokryje_m2_z_balenia != null ? `Vystačí na ${m.pokryje_m2_z_balenia} m².` : null,
+    m.pokryje_m2_z_balenia != null ? `Vystačí na ${String(m.pokryje_m2_z_balenia).replace(".", ",")} m².` : null,
     `Konečná cena ${m.cena_eur_s_dph.toFixed(2)} €.`,
   ]
     .filter(Boolean)
@@ -157,7 +157,7 @@ export default async function ProduktPage({ params }: PageProps) {
       />
 
       <div className="bg-[#f7f7f4] min-h-screen">
-        <Container size="xl" className="pt-24 md:pt-32 pb-14 md:pb-20">
+        <Container size="xl" className="pt-6 md:pt-10 pb-14 md:pb-20">
           <Link
             href="/eshop"
             className="inline-flex items-center gap-2 text-xs font-medium uppercase tracking-[0.2em] text-zinc-500 hover:text-zinc-900 transition-colors"
@@ -226,11 +226,11 @@ export default async function ProduktPage({ params }: PageProps) {
                 </div>
                 {m.pokryje_m2_z_balenia != null && (
                   <div className="rounded-2xl bg-[#3db6e8] text-[#0e1a3b] px-6 py-4">
-                    <div className="text-xs uppercase tracking-wide text-white/75 font-semibold">
+                    <div className="text-xs uppercase tracking-wide text-[#0e1a3b]/70 font-semibold">
                       Vystačí na
                     </div>
                     <div className="mt-0.5 text-3xl md:text-4xl font-extrabold">
-                      {m.pokryje_m2_z_balenia} m²
+                      {String(m.pokryje_m2_z_balenia).replace(".", ",")} m²
                     </div>
                   </div>
                 )}
