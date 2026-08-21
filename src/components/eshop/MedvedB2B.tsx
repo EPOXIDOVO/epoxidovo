@@ -41,7 +41,7 @@ export function MedvedB2B() {
         <span className="relative mb-6 rounded-2xl rounded-bl-sm bg-white px-4 py-2.5 shadow-[0_10px_30px_rgba(0,0,0,0.18)] border border-zinc-200 text-[13px] leading-snug text-[#0e1a3b] group-hover:border-[#3db6e8] transition-colors whitespace-nowrap">
           <strong className="font-extrabold">Firma? Kupuješ viac?</strong>
           <br />
-          <span className="text-[#1a8cc4] font-bold underline underline-offset-2">
+          <span className="text-[#12729f] font-bold underline underline-offset-2">
             Vybav si veľkoobchodné ceny
           </span>
         </span>

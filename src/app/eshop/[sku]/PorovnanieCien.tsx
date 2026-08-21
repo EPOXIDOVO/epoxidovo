@@ -46,7 +46,7 @@ export function PorovnanieCien({ sku, nasaCena }: { sku: string; nasaCena: numbe
                 <span className="tabular-nums text-zinc-500 line-through">
                   {fmt.format(z.cena_eur)} €
                 </span>
-                <span className="px-2 py-0.5 rounded-full bg-emerald-600 text-white text-xs font-bold whitespace-nowrap">
+                <span className="px-2 py-0.5 rounded-full bg-emerald-700 text-white text-xs font-bold whitespace-nowrap">
                   u nás o {diff} % lacnejšie
                 </span>
               </li>

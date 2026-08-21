@@ -178,12 +178,12 @@ export default function EshopPage() {
             />
             <div className="relative w-full p-6 md:p-10">
               <div className="max-w-xl text-white">
-                <h2
+                <h1
                   className="text-3xl md:text-5xl font-extrabold tracking-tight"
                   style={{ textWrap: "balance", textShadow: "0 2px 14px rgba(0,0,0,0.7)" }}
                 >
                   Prvú podlahu zvládneš aj sám!
-                </h2>
+                </h1>
                 <p
                   className="mt-3 text-lg md:text-xl font-medium text-white leading-snug"
                   style={{ textShadow: "0 2px 10px rgba(0,0,0,0.8)" }}
