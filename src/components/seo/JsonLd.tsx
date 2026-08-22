@@ -122,61 +122,16 @@ export function JsonLd() {
     },
   };
 
-  // FAQ schema — pomáha pri rich snippets v Google
-  const faq = {
-    "@context": "https://schema.org",
-    "@type": "FAQPage",
-    mainEntity: [
-      {
-        "@type": "Question",
-        name: "Ako dlho trvá realizácia epoxidovej podlahy?",
-        acceptedAnswer: {
-          "@type": "Answer",
-          text: "Bežná podlaha do 50 m² trvá 3–5 dní vrátane prípravy podkladu, aplikácie a vytvrdnutia. Komplikovanejšie projekty (metalické s viacerými vrstvami) môžu trvať 5–10 dní.",
-        },
-      },
-      {
-        "@type": "Question",
-        name: "Aká je životnosť epoxidovej podlahy?",
-        acceptedAnswer: {
-          "@type": "Answer",
-          text: "Pri správnej realizácii a údržbe je životnosť epoxidovej podlahy 20+ rokov. Odoláva oderom, chemikáliám, oleju aj záťaži.",
-        },
-      },
-      {
-        "@type": "Question",
-        name: "Koľko stojí epoxidová podlaha?",
-        acceptedAnswer: {
-          "@type": "Answer",
-          text: "Hladká jednofarebná od 59 €/m², chipsová od 49 €/m², metalická od 129 €/m². Priemyselné a polyuretánové podlahy cena na dopyt. Presnú kalkuláciu pripravíme po obhliadke.",
-        },
-      },
-      {
-        "@type": "Question",
-        name: "Realizujete po celom Slovensku?",
-        acceptedAnswer: {
-          "@type": "Answer",
-          text: "Áno, realizujeme epoxidové a polyuretánové podlahy po celom Slovensku — od Bratislavy po Košice. Sídlo máme v Ružomberku.",
-        },
-      },
-      {
-        "@type": "Question",
-        name: "Aký podklad treba pre epoxidovú podlahu?",
-        acceptedAnswer: {
-          "@type": "Answer",
-          text: "Najvhodnejší je nový betón vyzretý aspoň 28 dní. Starý betón treba prebrúsiť a otestovať. Existujúcu podlahu (dlažba, vinyl) zvyčajne treba odstrániť. Stav posúdime pri obhliadke.",
-        },
-      },
-      {
-        "@type": "Question",
-        name: "Sú epoxidové podlahy vhodné do kuchyne?",
-        acceptedAnswer: {
-          "@type": "Answer",
-          text: "Áno, bez špár, hygienicky čisté, ľahko sa udržiavajú (mokrý mop). Sú vhodné aj do kúpeľní (s anti-slip variantom), kuchýň aj gastro prevádzok.",
-        },
-      },
-    ],
-  };
+  /**
+   * POZOR: globálny FAQPage tu BOL, ale bol emitovaný na každej stránke webu
+   * vrátane tých, kde tie otázky vizuálne nie sú (Google vyžaduje, aby FAQ
+   * schema zodpovedala obsahu viditeľnému na stránke) — a na /kurz a
+   * /podlahy/* vznikali dva FAQPage uzly na jednej URL.
+   *
+   * FAQ schema teraz žije len tam, kde je aj viditeľné FAQ:
+   * /kurz, /en/epoxy-flooring-course a /podlahy/[cert].
+   * Ak pribudne FAQ sekcia na homepage, vráť sem FAQPage len pre "/".
+   */
 
   // Organization — knowledge panel; prepojené s LocalBusiness cez @id
   const organization = {
@@ -218,34 +173,14 @@ export function JsonLd() {
     "@id": `${SITE.url}/#website`,
     url: SITE.url,
     name: SITE.name,
-    publisher: { "@id": `${SITE.url}/#organization` },
-    inLanguage: "sk-SK",
+    alternateName: SITE.legalName,
+    description: SITE.description,
+    publisher: { "@id": `${SITE.url}/#business` },
+    // Web je primárne po slovensky, kurzová landing má aj EN verziu.
+    inLanguage: ["sk-SK", "en"],
     potentialAction: {
       "@type": "SearchAction",
       target: { "@type": "EntryPoint", urlTemplate: `${SITE.url}/eshop?q={search_term_string}#katalog` },
-      "query-input": "required name=search_term_string",
-    },
-  };
-
-  // WebSite node — kotva pre isPartOf na podstránkach + Sitelinks searchbox.
-  // /eshop?q=<dopyt> reálne funguje (EshopClient číta ?q), takže SearchAction
-  // nie je fikcia.
-  const website = {
-    "@context": "https://schema.org",
-    "@type": "WebSite",
-    "@id": `${SITE.url}/#website`,
-    url: SITE.url,
-    name: SITE.name,
-    alternateName: SITE.legalName,
-    description: SITE.description,
-    inLanguage: ["sk-SK", "en"],
-    publisher: { "@id": `${SITE.url}/#business` },
-    potentialAction: {
-      "@type": "SearchAction",
-      target: {
-        "@type": "EntryPoint",
-        urlTemplate: `${SITE.url}/eshop?q={search_term_string}`,
-      },
       "query-input": "required name=search_term_string",
     },
   };
@@ -279,10 +214,6 @@ export function JsonLd() {
     <>
       <script
         type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: safeJsonLd(website) }}
-      />
-      <script
-        type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: safeJsonLd(academy) }}
       />
       <script
@@ -300,10 +231,6 @@ export function JsonLd() {
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: safeJsonLd(services) }}
-      />
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: safeJsonLd(faq) }}
       />
     </>
   );

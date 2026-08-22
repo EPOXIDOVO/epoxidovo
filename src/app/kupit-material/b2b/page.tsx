@@ -6,7 +6,7 @@ import { B2bForm } from "./B2bForm";
 export const metadata: Metadata = {
   title: "B2B — veľkoobchodné ceny",
   description:
-    "Registrácia firmy cez IČO — pre realizačné firmy aj každého, kto nakupuje viac. Po schválení získate veľkoobchodné podmienky na materiály Sika, TopStone, Arturo a UZIN.",
+    "Registrácia firmy cez IČO — pre realizačné firmy aj každého, kto nakupuje viac. Po schválení získate veľkoobchodné ceny materiálov Sika a TopStone.",
   alternates: { canonical: "/kupit-material/b2b" },
 };
 

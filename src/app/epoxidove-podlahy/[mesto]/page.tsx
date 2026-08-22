@@ -34,8 +34,10 @@ export async function generateMetadata({ params }: RouteContext): Promise<Metada
   const city = findCity(mesto);
   if (!city) return {};
 
-  const title = `Epoxidové podlahy ${city.inCity} | Cenová ponuka zdarma`;
-  const description = `Profesionálne liate epoxidové a polyuretánové podlahy ${city.inCity} a okolí (${city.surroundings.slice(0, 3).join(", ")}…). Jednofarebné, chipsové, metalické. 200+ realizácií, 20+ rokov životnosť. Bezplatná obhliadka a cenová ponuka.`;
+  // Pozor na dĺžky: title do ~60 znakov (template pridá „| EPOXIDOVO"),
+  // description do ~160 znakov, inak Google odsekne v SERP-e.
+  const title = `Epoxidové podlahy ${city.inCity}`;
+  const description = `Liate epoxidové a polyuretánové podlahy ${city.inCity} a okolí — jednofarebné, chipsové aj metalické. 200+ realizácií, obhliadka a cenová ponuka zdarma.`;
 
   return {
     title,

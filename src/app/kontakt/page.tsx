@@ -8,7 +8,7 @@ import { BreadcrumbsJsonLd } from "@/components/seo/BreadcrumbsJsonLd";
 import { SITE } from "@/lib/site";
 
 export const metadata: Metadata = {
-  title: "Kontakt",
+  title: "Kontakt — epoxidové podlahy po celom Slovensku",
   description: `Kontaktujte EPOXIDOVO — zavolaj, napíš email alebo otvor chat. Telefón ${SITE.contact.phone}, email ${SITE.contact.email}.`,
   alternates: { canonical: "/kontakt" },
 };

@@ -6,7 +6,7 @@ import { SITE } from "@/lib/site";
 
 export const metadata: Metadata = {
   title: "Zásady cookies",
-  description: `Aké cookies používa ${SITE.domain} a ako ich môžeš spravovať.`,
+  description: `Aké cookies používa ${SITE.domain}, na čo slúžia jednotlivé kategórie (nevyhnutné, analytické, marketingové) a ako svoj súhlas kedykoľvek zmeníš alebo odvoláš.`,
   alternates: { canonical: "/cookies" },
 };
 

@@ -4,6 +4,7 @@ import { CATEGORIES } from "@/content/categories";
 import { CITIES } from "@/content/cities";
 import { CERT_LIST } from "@/content/certifications";
 import { MATERIALY } from "@/lib/materialy";
+import { OBSAH_KATEGORIE, SKUPINY } from "@/lib/obsah-kategorie";
 
 export default function sitemap(): MetadataRoute.Sitemap {
   const now = new Date();
@@ -65,6 +66,18 @@ export default function sitemap(): MetadataRoute.Sitemap {
     priority: 0.8,
   }));
 
+  // Statické kategórie e-shopu — /eshop/kategoria/[slug]
+  const katSlugy = [
+    ...SKUPINY.map((s) => s.id),
+    ...OBSAH_KATEGORIE.map((k) => k.id).filter((id) => id !== "ostatne" && !SKUPINY.some((s) => s.id === id)),
+  ];
+  const kategoriePages: MetadataRoute.Sitemap = katSlugy.map((slug) => ({
+    url: `${SITE.url}/eshop/kategoria/${slug}`,
+    lastModified: now,
+    changeFrequency: "weekly" as const,
+    priority: 0.7,
+  }));
+
   // Local SEO city landing pages
   const cityPages: MetadataRoute.Sitemap = CITIES.map((c) => ({
     url: `${SITE.url}/epoxidove-podlahy/${c.slug}`,
@@ -89,5 +102,5 @@ export default function sitemap(): MetadataRoute.Sitemap {
     priority: 0.6,
   }));
 
-  return [...staticPages, ...coursePages, ...servicePages, ...cityPages, ...certPages, ...productPages];
+  return [...staticPages, ...kategoriePages, ...coursePages, ...servicePages, ...cityPages, ...certPages, ...productPages];
 }

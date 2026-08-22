@@ -14,6 +14,37 @@ export interface ServiceDetail {
 }
 
 export const SERVICE_DETAILS: Record<string, ServiceDetail> = {
+  // Priemyselné — kategória existuje v CATEGORIES a linkuje sa z /sluzby aj
+  // zo sitemapy, ale detail tu chýbal → /sluzby/priemyselne vracalo 404.
+  priemyselne: {
+    slug: "priemyselne",
+    intro:
+      "Podlaha, ktorá znesie vysokozdvižný vozík, chémiu aj trojzmennú prevádzku.",
+    longDescription: [
+      "Priemyselná liata podlaha nerieši dizajn, ale prevádzku: koľko ton po nej denne prejde, čo na ňu vytečie a ako rýchlo sa dá po údržbe vrátiť do výroby. Podľa toho volíme systém — epoxidový, polyuretánový alebo ich kombináciu s kremičitým vsypom.",
+      "Skladbu navrhujeme až po diagnostike podkladu: meriame vlhkosť, pevnosť v odtrhu a stav dilatácií. Do prevádzky potom vieme doplniť antistatiku (ESD), protišmyk v triedach R9–R13, HACCP-kompatibilný povrch pre potravinárstvo alebo ATEX riešenie do výbušného prostredia — vrátane líniového značenia a soklov.",
+    ],
+    features: [
+      "Epoxid, polyuretán alebo hybridný systém",
+      "Hrúbka 2–6 mm podľa zaťaženia",
+      "ESD, HACCP, ATEX a protišmyk R9–R13 na požiadanie",
+      "Líniové značenie a vyspádované sokle",
+      "Etapová realizácia počas chodu prevádzky",
+    ],
+    bestFor: [
+      "Výrobné a montážne haly",
+      "Sklady a logistické centrá",
+      "Parkovacie domy a rampy",
+      "Potravinárske a farmaceutické prevádzky",
+    ],
+    priceRange: "cena na dopyt — podľa systému a zaťaženia",
+    technicalSpecs: [
+      { label: "Hrúbka", value: "2–6 mm" },
+      { label: "Pochôdznosť", value: "24 h" },
+      { label: "Plne zaťažiteľné", value: "7 dní" },
+      { label: "Životnosť", value: "15–25 rokov podľa prevádzky" },
+    ],
+  },
   jednofarebne: {
     slug: "jednofarebne",
     intro:

@@ -14,7 +14,7 @@ const POLOZKY: {
 }[] = [
   {
     label: "Epoxidové a polyuretánové živice 🧪",
-    href: "/eshop?skupina=hlavne#katalog",
+    href: "/eshop/kategoria/hlavne",
     deti: [
       { label: "Penetrácie", href: "/eshop?skupina=penetracie#katalog" },
       { label: "Hlavné vrstvy a nátery", href: "/eshop?skupina=hlavne#katalog" },
@@ -24,11 +24,11 @@ const POLOZKY: {
   },
   {
     label: "Kamenný koberec 🪨",
-    href: "/eshop?skupina=kamenny-koberec#katalog",
+    href: "/eshop/kategoria/kamenny-koberec",
   },
   {
     label: "Príprava podkladu 🏗️",
-    href: "/eshop?skupina=priprava#katalog",
+    href: "/eshop/kategoria/priprava",
     deti: [
       { label: "Nivelácie", href: "/eshop?kat=nivelacie#katalog" },
       { label: "Potery a opravy betónu", href: "/eshop?kat=potery#katalog" },
@@ -38,7 +38,7 @@ const POLOZKY: {
   },
   {
     label: "Náradie 🛠️",
-    href: "/eshop?skupina=naradie#katalog",
+    href: "/eshop/kategoria/naradie",
     deti: [
       { label: "Valce, stierky a pomôcky", href: "/eshop?kat=naradie#katalog" },
       { label: "Brúsky", href: "/eshop?kat=brusky#katalog" },

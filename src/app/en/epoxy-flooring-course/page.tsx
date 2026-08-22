@@ -33,9 +33,9 @@ import {
 const PATH = "/en/epoxy-flooring-course";
 
 export const metadata: Metadata = {
-  title: "Epoxy Flooring Course — 2-Day Hands-On Training | EPOXIDOVO Academy",
+  title: { absolute: "Epoxy Flooring Course in Europe — 2-Day Training" },
   description:
-    "Learn to install poured epoxy resin floors in 2 days near Ružomberok, Slovakia. Max. 6 people, 12 m² you pour yourself, material and tools included, certificate and 30 days of support. From €690.",
+    "Hands-on epoxy resin flooring training in Slovakia. 2 days, max. 6 people, 12 m² you pour yourself, material and tools included. From €690.",
   keywords: [
     "epoxy flooring course",
     "epoxy floor training",

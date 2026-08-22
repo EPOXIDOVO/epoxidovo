@@ -6,7 +6,7 @@ import { Toaster } from "@/components/ui/Toast";
 import { KonfiguratorClient } from "./KonfiguratorClient";
 
 export const metadata: Metadata = {
-  title: "Zisti, aký materiál potrebuješ — skladba, spotreba a cena",
+  title: "Návrh podlahy — skladba, spotreba a cena",
   description:
     "Odpovedz na pár otázok a dostaneš presnú skladbu vrstiev, spotrebu materiálu aj cenu. Epoxidové a polyuretánové podlahy, steny aj schody — interiér aj exteriér.",
   alternates: { canonical: "/navrhni-podlahu" },

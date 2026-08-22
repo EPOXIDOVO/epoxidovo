@@ -309,6 +309,82 @@ export default async function ProduktPage({ params }: PageProps) {
 
               <KombinujSystem m={m} />
 
+              {/* Technické parametre — zostavené z polí importu (spotreba,
+                  časy, podklad). Jediný súvislý text na stránke pre Google;
+                  nič sa tu nevymýšľa, čo v dátach nie je, sa nezobrazí. */}
+              {(m.spotreba_kg_m2 != null ||
+                m.spracovatelnost_min != null ||
+                m.dalsia_vrstva_od_h != null ||
+                m.pochodzne_h != null ||
+                m.plne_vytvrdnute_dni != null ||
+                m.vyzaduje_podklad_mpa != null ||
+                (m.typy_podlah?.length ?? 0) > 0) && (
+                <section className="mt-8 rounded-2xl border border-zinc-200 bg-white p-5">
+                  <h2 className="text-lg font-extrabold text-zinc-900">Technické parametre</h2>
+                  <dl className="mt-3 grid grid-cols-1 sm:grid-cols-2 gap-x-6 gap-y-2 text-sm">
+                    {m.spotreba_kg_m2 != null && (
+                      <div className="flex justify-between gap-4 border-b border-zinc-100 py-1.5">
+                        <dt className="text-zinc-500">Spotreba</dt>
+                        <dd className="font-semibold text-zinc-900 text-right">
+                          ~{String(m.spotreba_kg_m2).replace(".", ",")} kg/m²
+                          {m.spotreba_poznamka ? ` (${m.spotreba_poznamka})` : ""}
+                        </dd>
+                      </div>
+                    )}
+                    {m.pokryje_m2_z_balenia != null && (
+                      <div className="flex justify-between gap-4 border-b border-zinc-100 py-1.5">
+                        <dt className="text-zinc-500">Výdatnosť balenia</dt>
+                        <dd className="font-semibold text-zinc-900 text-right">
+                          {String(m.pokryje_m2_z_balenia).replace(".", ",")} m²
+                        </dd>
+                      </div>
+                    )}
+                    {m.spracovatelnost_min != null && (
+                      <div className="flex justify-between gap-4 border-b border-zinc-100 py-1.5">
+                        <dt className="text-zinc-500">Spracovateľnosť</dt>
+                        <dd className="font-semibold text-zinc-900 text-right">{m.spracovatelnost_min} min</dd>
+                      </div>
+                    )}
+                    {(m.dalsia_vrstva_od_h != null || m.dalsia_vrstva_do_h != null) && (
+                      <div className="flex justify-between gap-4 border-b border-zinc-100 py-1.5">
+                        <dt className="text-zinc-500">Ďalšia vrstva</dt>
+                        <dd className="font-semibold text-zinc-900 text-right">
+                          {m.dalsia_vrstva_od_h != null && m.dalsia_vrstva_do_h != null
+                            ? `po ${m.dalsia_vrstva_od_h}–${m.dalsia_vrstva_do_h} h`
+                            : m.dalsia_vrstva_od_h != null
+                              ? `po ${m.dalsia_vrstva_od_h} h`
+                              : `do ${m.dalsia_vrstva_do_h} h`}
+                        </dd>
+                      </div>
+                    )}
+                    {m.pochodzne_h != null && (
+                      <div className="flex justify-between gap-4 border-b border-zinc-100 py-1.5">
+                        <dt className="text-zinc-500">Pochôdzne</dt>
+                        <dd className="font-semibold text-zinc-900 text-right">po {m.pochodzne_h} h</dd>
+                      </div>
+                    )}
+                    {m.plne_vytvrdnute_dni != null && (
+                      <div className="flex justify-between gap-4 border-b border-zinc-100 py-1.5">
+                        <dt className="text-zinc-500">Plné vytvrdnutie</dt>
+                        <dd className="font-semibold text-zinc-900 text-right">{m.plne_vytvrdnute_dni} dní</dd>
+                      </div>
+                    )}
+                    {m.vyzaduje_podklad_mpa != null && (
+                      <div className="flex justify-between gap-4 border-b border-zinc-100 py-1.5">
+                        <dt className="text-zinc-500">Pevnosť podkladu</dt>
+                        <dd className="font-semibold text-zinc-900 text-right">min. {m.vyzaduje_podklad_mpa} MPa</dd>
+                      </div>
+                    )}
+                    {(m.typy_podlah?.length ?? 0) > 0 && (
+                      <div className="flex justify-between gap-4 border-b border-zinc-100 py-1.5 sm:col-span-2">
+                        <dt className="text-zinc-500">Vhodné pre</dt>
+                        <dd className="font-semibold text-zinc-900 text-right">{m.typy_podlah!.join(", ")}</dd>
+                      </div>
+                    )}
+                  </dl>
+                </section>
+              )}
+
               {/* Postup aplikácie — obsah doplní user zo svojho generátora
                   (NajCRM podklady); zatiaľ len viditeľný vypnutý button */}
               <section className="mt-8 rounded-2xl border border-zinc-200 bg-zinc-50 p-5">

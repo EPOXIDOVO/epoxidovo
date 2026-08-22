@@ -30,7 +30,7 @@ import {
 } from "@/content/kurz";
 
 export const metadata: Metadata = {
-  title: "Kurz epoxidových podláh — 2-dňové školenie | EPOXIDOVO Akadémia",
+  title: "Kurz epoxidových podláh — 2-dňové školenie",
   description:
     "Praktický kurz liatych epoxidových podláh v Ružomberku. 2 dni, max. 6 ľudí, vlastná plocha 12 m², materiál a náradie v cene, certifikát a 30 dní podpory. Od 690 €.",
   keywords: [

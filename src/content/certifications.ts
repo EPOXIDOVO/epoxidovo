@@ -56,9 +56,9 @@ export const CERTIFICATIONS: Record<CertSlug, CertificationContent> = {
     shortName: "ESD",
     emoji: "⚡",
     h1: "ESD antistatické epoxidové podlahy",
-    metaTitle: "ESD antistatické epoxidové podlahy — ochrana elektroniky | EPOXIDOVO",
+    metaTitle: "ESD antistatické epoxidové podlahy | EPOXIDOVO",
     metaDescription:
-      "ESD podlahy zvádzajú statickú elektrinu — nevyhnutné v elektronike, serverovniach, laboratóriách. Certifikované podľa DIN EN 61340. Cena od 85 €/m². Realizácia po celom Slovensku.",
+      "ESD podlahy zvádzajú statickú elektrinu — pre elektroniku, serverovne a laboratóriá. Podľa DIN EN 61340, od 85 €/m², realizácia po celom Slovensku.",
     heroTagline:
       "Nulové riziko iskry, ochrana citlivej elektroniky, súlad s DIN EN 61340.",
     accent: "#3DB6E8",
@@ -203,7 +203,7 @@ export const CERTIFICATIONS: Record<CertSlug, CertificationContent> = {
     shortName: "HACCP",
     emoji: "🥗",
     h1: "HACCP epoxidové podlahy pre potravinárstvo",
-    metaTitle: "HACCP epoxidové podlahy — potravinárstvo, kuchyne, cukrárne | EPOXIDOVO",
+    metaTitle: "HACCP podlahy do potravinárstva | EPOXIDOVO",
     metaDescription:
       "HACCP-vhodné bezšpárové podlahy s antibakteriálnou úpravou. Súlad s Nariadením EÚ 852/2004. Pre kuchyne, cukrárne, mliekarne, mäsokombináty. Cena od 75 €/m².",
     heroTagline:
@@ -350,7 +350,7 @@ export const CERTIFICATIONS: Record<CertSlug, CertificationContent> = {
     shortName: "ATEX",
     emoji: "🔥",
     h1: "ATEX podlahy pre výbušné prostredia",
-    metaTitle: "ATEX podlahy pre výbušné prostredia — sklady chémie, mlyny | EPOXIDOVO",
+    metaTitle: "ATEX podlahy do výbušných prostredí | EPOXIDOVO",
     metaDescription:
       "ATEX certifikované vodivé podlahy pre zóny 20/21/22 a 0/1/2. Súlad so smernicou 2014/34/EU. Sklady rozpúšťadiel, mlyny, chemické prevádzky. Cena od 95 €/m².",
     heroTagline:

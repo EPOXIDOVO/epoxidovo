@@ -31,8 +31,18 @@ export async function generateMetadata({
     description: detail.intro,
     alternates: { canonical: `/sluzby/${slug}` },
     openGraph: {
+      type: "website",
+      url: `${SITE.url}/sluzby/${slug}`,
       title: `${cat.name} epoxidové podlahy — EPOXIDOVO`,
       description: detail.intro,
+      images: [
+        {
+          url: "/og-home.jpg?v=3",
+          width: 1200,
+          height: 630,
+          alt: `${cat.name} epoxidové podlahy — EPOXIDOVO`,
+        },
+      ],
     },
   };
 }

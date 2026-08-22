@@ -28,13 +28,24 @@ export async function generateMetadata({
   const data = CERTIFICATIONS[cert as CertSlug];
   if (!data) return {};
   return {
-    title: data.metaTitle,
+    // metaTitle už brand obsahuje — absolute vypne „%s | EPOXIDOVO" template,
+    // inak sa v <title> objaví dvakrát a Google ho odseká.
+    title: { absolute: data.metaTitle },
     description: data.metaDescription,
     alternates: { canonical: `/podlahy/${cert}` },
     openGraph: {
       title: data.metaTitle,
       description: data.metaDescription,
       type: "article",
+      url: `${SITE.url}/podlahy/${cert}`,
+      images: [
+        {
+          url: "/og-home.jpg?v=3",
+          width: 1200,
+          height: 630,
+          alt: data.metaTitle,
+        },
+      ],
     },
   };
 }

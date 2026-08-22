@@ -13,9 +13,9 @@ import { REVIEWS } from "@/content/reviews";
 import { RecenzieRotator } from "./RecenzieRotator";
 
 export const metadata: Metadata = {
-  title: "E-shop — epoxidové materiály Sika, TopStone, Arturo a UZIN",
+  title: "E-shop — epoxidové materiály Sika a TopStone",
   description:
-    "Profesionálne epoxidové materiály, ktoré používame na vlastných realizáciách — penetrácie, hlavné vrstvy, vrchné laky, nivelačné hmoty, pigmenty, chipsy a kremičité piesky. Sika, TopStone, Arturo a UZIN, konečné ceny.",
+    "Profesionálne epoxidové materiály z našich realizácií — penetrácie, hlavné vrstvy, laky, nivelačky, pigmenty, chipsy a piesky. Sika, TopStone, Arturo, UZIN.",
   alternates: { canonical: "/eshop" },
 };
 
