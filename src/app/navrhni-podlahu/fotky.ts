@@ -60,7 +60,7 @@ export const FOTO_VZHLAD: Record<string, Nahlad> = {
  */
 export const GALERIA_VZHLAD: Record<string, (string | null)[]> = {
   // rovnaké varianty ako v sekcii „Čo všetko vieme vyčarovať" na webe
-  jednofarebna: ["/images/realizacie/r-28.jpg", "/images/realizacie/r-19.jpg"],
+  jednofarebna: ["/images/realizacie/r-37.webp", "/images/realizacie/r-10.jpg"],
   chipsy: ["/images/realizacie/r-47.jpg", "/images/realizacie/r-49.jpg"],
   metalik: [
     "/images/eshop/topstone-metallic/azuro.jpg",

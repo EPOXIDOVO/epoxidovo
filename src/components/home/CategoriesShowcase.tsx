@@ -23,9 +23,10 @@ import { CATEGORIES } from "@/content/categories";
 // typu podlahy. Vlastné realizácie + oficiálne TopStone vzory (metalické).
 const VARIANT_PHOTOS: Record<string, { src: string; alt: string }[]> = {
   jednofarebne: [
-    { src: "/images/realizacie/r-28.jpg", alt: "Jednofarebná podlaha — antracitová" },
-    { src: "/images/realizacie/r-19.jpg", alt: "Jednofarebná podlaha — svetlá modro-sivá" },
-    { src: "/images/realizacie/r-17.jpg", alt: "Jednofarebná podlaha — svetlosivá" },
+    // bývanie, nie priemysel — pod kartou „Jednofarebné" majú byť interiéry
+    { src: "/images/realizacie/r-37.webp", alt: "Jednofarebná podlaha — biela obývačka s krbom" },
+    { src: "/images/realizacie/r-10.jpg", alt: "Jednofarebná podlaha — lesklá kuchyňa" },
+    { src: "/images/realizacie/r-13.jpg", alt: "Jednofarebná podlaha — svetlá kúpeľňa" },
   ],
   chipsove: [
     { src: "/images/realizacie/r-47.jpg", alt: "Chipsová podlaha — krémová" },
