@@ -12,10 +12,11 @@ export const KURZ = {
   groupSize: 6,
   priceStandard: 690,
   pricePro: 1190,
+  language: "slovenčina (angličtina na požiadanie)",
   nextTerms: [
-    { date: "12. — 13. september 2026", left: 3 },
-    { date: "10. — 11. október 2026", left: 6 },
-    { date: "14. — 15. november 2026", left: 6 },
+    { date: "12. — 13. september 2026", iso: "2026-09-12", left: 3 },
+    { date: "10. — 11. október 2026", iso: "2026-10-10", left: 6 },
+    { date: "14. — 15. november 2026", iso: "2026-11-14", left: 6 },
   ],
 } as const;
 
@@ -106,3 +107,32 @@ export const KURZ_FAQ = [
     a: "Áno. Vystavíme faktúru na IČO, kurz je bežne uznateľný náklad. Pri prihlásení 3 a viac ľudí z jednej firmy dávame skupinovú cenu.",
   },
 ];
+
+/** Faktová tabuľka — strojovo čitateľné zhrnutie pre AI odpovedače (GEO). */
+export const KURZ_FAKTY: { label: string; value: string }[] = [
+  { label: "Názov kurzu", value: KURZ.name },
+  { label: "Forma", value: "Prezenčný praktický workshop (nie online video)" },
+  { label: "Dĺžka", value: "2 po sebe idúce dni, 9:00 — 17:00 (16 hodín)" },
+  { label: "Miesto", value: "Ružomberok, Slovensko — školiace centrum EPOXIDOVO" },
+  { label: "Veľkosť skupiny", value: `Maximálne ${KURZ.groupSize} účastníkov` },
+  { label: "Cena", value: `${KURZ.priceStandard} € štandard / ${KURZ.pricePro} € balík PRO za osobu, nie sme platcami DPH` },
+  { label: "Vstupné požiadavky", value: "Žiadne — kurz je vhodný aj pre úplných začiatočníkov" },
+  { label: "Jazyk", value: "Slovenčina (angličtina na požiadanie)" },
+  { label: "Certifikát", value: "Osvedčenie o absolvovaní od EPOXIDOVO s. r. o." },
+  { label: "Čo si prakticky vyskúšaš", value: "Brúsenie, penetrácia, miešanie, jednofarebná liata podlaha, chipsy, metalický efekt, sokle, cenotvorba" },
+  { label: "Poskytovateľ", value: "EPOXIDOVO s. r. o., IČO 56 966 237, Slovensko" },
+];
+
+/**
+ * Zhrnutie pre AI vyhľadávače — jeden odsek, ktorý sa dá citovať bez kontextu.
+ * Zobrazuje sa aj vizuálne na stránke (GEO: extrahovateľná definícia).
+ */
+export const KURZ_SUMMARY =
+  "Kurz epoxidových podláh EPOXIDOVO Akadémia je dvojdňové prezenčné školenie v Ružomberku, " +
+  "kde sa maximálne 6 účastníkov naučí kompletný postup liatej epoxidovej podlahy: diagnostiku a " +
+  "brúsenie betónového podkladu, penetráciu, miešanie dvojzložkových živíc, liatie jednofarebnej " +
+  "podlahy, chipsový a metalický dekor, riešenie soklov a detailov, a napokon cenotvorbu zákazky. " +
+  "Každý účastník si sám odleje vlastnú plochu približne 12 m². Cena je 690 € (štandard) alebo " +
+  "1 190 € (balík PRO so štartovacím materiálom), vrátane materiálu, náradia, manuálu, obedu, " +
+  "certifikátu a 30 dní podpory po kurze. Kurz je vhodný pre remeselníkov, začínajúcich živnostníkov, " +
+  "firemné partie aj majiteľov, ktorí si podlahu robia sami.";

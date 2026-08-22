@@ -13,35 +13,6 @@ import { obsahKategoria } from "@/lib/obsah-kategorie";
 import { ARTURO_FARBY, ARTURO_TYPY } from "@/content/arturo-farby";
 import { ArturoGrid } from "./ArturoGrid";
 
-export const metadata: Metadata = {
-  title: "Vzorkovník farieb — RAL Classic",
-  description:
-    "Kompletný RAL Classic vzorkovník. Vyber si farbu svojej epoxidovej podlahy z 50+ overených RAL odtieňov.",
-  alternates: { canonical: "/vzorkovnik" },
-};
-
-// Zoradenie podľa RAL_GROUPS poradia, ale renderované v jednom plynulom gride
-// (ako reálny papierový vzorkovník — všetko vidno na jednej obrazovke).
-const ORDERED_COLORS = RAL_GROUPS.flatMap((g) =>
-  RAL_CLASSIC_FULL.filter((c) => c.skupina === g.key),
-);
-
-/** Reálne vzorky metalických efektov TopStone. */
-const METALICKE = [
-  { id: "sequoia", label: "Sequoia" },
-  { id: "charcoal", label: "Charcoal" },
-  { id: "azuro", label: "Azuro" },
-  { id: "copper", label: "Copper" },
-  { id: "pearl", label: "Pearl" },
-  { id: "slate", label: "Slate" },
-  { id: "gold", label: "Gold" },
-  { id: "midnight-blue", label: "Midnight Blue" },
-  { id: "moose-green", label: "Moose Green" },
-  { id: "wine-red", label: "Wine Red" },
-  { id: "white", label: "White" },
-  { id: "gun-metal", label: "Gun Metal" },
-];
-
 /**
  * Vzorkovník pre konkrétny typ podlahy — z konfigurátora sem chodí
  * `?typ=`. Jednofarebné a priemyselné majú RAL, metalické a mramorové
@@ -87,6 +58,46 @@ const TYPY: Record<
     zdroj: "priprava",
   },
 };
+
+export async function generateMetadata({
+  searchParams,
+}: {
+  searchParams: Promise<{ typ?: string }>;
+}): Promise<Metadata> {
+  const { typ } = await searchParams;
+  const v = typ ? TYPY[typ] : null;
+  return {
+    title: v ? v.nadpis : "Vzorkovník farieb — RAL, TopStone metalik, Arturo",
+    description: v
+      ? v.popis
+      : "Vzorkovník epoxidových podláh: 213 odtieňov RAL Classic, metalické efekty TopStone a 68 odtieňov Arturo. Vyber si farbu, my dopočítame materiál.",
+    // každý typ je vlastná stránka, nech sa neberú ako duplikát
+    alternates: { canonical: typ && TYPY[typ] ? `/vzorkovnik?typ=${typ}` : "/vzorkovnik" },
+  };
+}
+
+// Zoradenie podľa RAL_GROUPS poradia, ale renderované v jednom plynulom gride
+// (ako reálny papierový vzorkovník — všetko vidno na jednej obrazovke).
+const ORDERED_COLORS = RAL_GROUPS.flatMap((g) =>
+  RAL_CLASSIC_FULL.filter((c) => c.skupina === g.key),
+);
+
+/** Reálne vzorky metalických efektov TopStone. */
+const METALICKE = [
+  { id: "sequoia", label: "Sequoia" },
+  { id: "charcoal", label: "Charcoal" },
+  { id: "azuro", label: "Azuro" },
+  { id: "copper", label: "Copper" },
+  { id: "pearl", label: "Pearl" },
+  { id: "slate", label: "Slate" },
+  { id: "gold", label: "Gold" },
+  { id: "midnight-blue", label: "Midnight Blue" },
+  { id: "moose-green", label: "Moose Green" },
+  { id: "wine-red", label: "Wine Red" },
+  { id: "white", label: "White" },
+  { id: "gun-metal", label: "Gun Metal" },
+];
+
 
 export default async function VzorkovnikPage({
   searchParams,

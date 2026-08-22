@@ -2,14 +2,13 @@
 
 import * as React from "react";
 import { Plus } from "lucide-react";
-import { KURZ_FAQ } from "@/content/kurz";
 
-export function KurzFaq() {
+export function KurzFaq({ items }: { items: readonly { q: string; a: string }[] }) {
   const [open, setOpen] = React.useState<number | null>(0);
 
   return (
     <div className="divide-y divide-[var(--color-border)] border-y border-[var(--color-border)]">
-      {KURZ_FAQ.map((item, i) => {
+      {items.map((item, i) => {
         const isOpen = open === i;
         return (
           <div key={item.q}>

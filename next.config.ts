@@ -13,6 +13,18 @@ const nextConfig: NextConfig = {
   eslint: {
     ignoreDuringBuilds: true,
   },
+  async redirects() {
+    return [
+      // Staré mestské URL (epoxidove-podlahy-bratislava) — priečinok s [mesto]
+      // uprostred názvu Next nebral ako dynamickú trasu a vracal 404.
+      // Google ich má v indexe, preto trvalé 301 na nový tvar.
+      {
+        source: "/epoxidove-podlahy-:mesto",
+        destination: "/epoxidove-podlahy/:mesto",
+        permanent: true,
+      },
+    ];
+  },
   // TS errors ENABLED v build pipeline — kód je čistý.
   // cron-worker má vlastný tsconfig a je excluded v hlavnom tsconfig.json.
   // Striktný typecheck zachytí type bugs PRED deployom.

@@ -47,7 +47,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
     .filter(Boolean)
     .join(" ");
   return {
-    title: `${m.nazov} — ${m.cena_eur_s_dph.toFixed(2)} €`,
+    title: `${m.nazov} — ${m.cena_eur_s_dph.toFixed(2).replace(".", ",")} € | ${m.vyrobca}`,
     description: desc,
     alternates: { canonical: `/eshop/${m.sku}` },
   };
@@ -122,21 +122,41 @@ export default async function ProduktPage({ params }: PageProps) {
     techRows.push({ label: "Pevnosť podkladu min.", value: `${m.vyzaduje_podklad_mpa} MPa` });
 
   // Product JSON-LD — cena je konečná (neplatiteľ DPH)
+  // Bez image + description Google produktový snippet (cena v SERP) neukáže.
+  const fotoAbs = m.foto ?? m.foto_sud ?? null;
+  const popisSchema = [
+    `${m.nazov} — ${m.kategoria.toLowerCase()}, ${m.vyrobca}.`,
+    m.balenie ? `Balenie ${m.balenie}.` : null,
+    m.spotreba_kg_m2 != null ? `Spotreba cca ${String(m.spotreba_kg_m2).replace(".", ",")} kg/m².` : null,
+    m.pokryje_m2_z_balenia != null ? `Vystačí na ${String(m.pokryje_m2_z_balenia).replace(".", ",")} m².` : null,
+    "Konečná cena, nie sme platiteľmi DPH.",
+  ].filter(Boolean).join(" ");
+  const priceValidUntil = new Date(Date.now() + 1000 * 60 * 60 * 24 * 90).toISOString().slice(0, 10);
   const productSchema = {
     "@context": "https://schema.org",
     "@type": "Product",
     "@id": `${SITE.url}/eshop/${m.sku}/#product`,
     name: m.nazov,
     sku: m.sku,
+    mpn: m.sku,
+    description: popisSchema,
+    ...(fotoAbs ? { image: [`${SITE.url}${fotoAbs}`] } : {}),
     brand: { "@type": "Brand", name: m.vyrobca },
     category: m.kategoria,
     url: `${SITE.url}/eshop/${m.sku}`,
     offers: {
       "@type": "Offer",
+      url: `${SITE.url}/eshop/${m.sku}`,
       priceCurrency: "EUR",
       price: m.cena_eur_s_dph,
+      priceValidUntil,
       availability: "https://schema.org/InStock",
+      itemCondition: "https://schema.org/NewCondition",
       seller: { "@type": "Organization", name: SITE.legalName, url: SITE.url },
+      shippingDetails: {
+        "@type": "OfferShippingDetails",
+        shippingDestination: { "@type": "DefinedRegion", addressCountry: "SK" },
+      },
     },
   };
 

@@ -3,6 +3,7 @@ import Link from "next/link";
 import Image from "next/image";
 import { Phone, Mail } from "lucide-react";
 import { Container } from "@/components/ui/Container";
+import { CITIES } from "@/content/cities";
 import { SITE, getAddressLine } from "@/lib/site";
 
 /**
@@ -102,6 +103,27 @@ export function Footer() {
           </div>
         </div>
       </Container>
+
+      {/* Lokality — interné prelinkovanie mestských stránok. Bez odkazov ich
+          Google našiel len cez sitemap a nemali žiadnu váhu. */}
+      <div className="border-t border-white/10">
+        <Container size="xl" className="py-4">
+          <nav aria-label="Epoxidové podlahy podľa mesta" className="text-xs md:text-sm text-white/70">
+            <span className="font-bold text-white/90 mr-2">Epoxidové podlahy:</span>
+            {CITIES.map((c, i) => (
+              <span key={c.slug}>
+                <Link
+                  href={`/epoxidove-podlahy/${c.slug}`}
+                  className="hover:text-white transition-colors"
+                >
+                  {c.name}
+                </Link>
+                {i < CITIES.length - 1 && <span className="mx-1.5 text-white/30">·</span>}
+              </span>
+            ))}
+          </nav>
+        </Container>
+      </div>
 
       {/* Spodný blok — navigácia + copyright + IČO/DIČ */}
       <div className="border-t border-white/10">

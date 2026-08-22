@@ -50,16 +50,15 @@ export async function generateMetadata({ params }: RouteContext): Promise<Metada
       `garážové podlahy ${city.name}`,
       `priemyselné podlahy ${city.name}`,
     ],
-    alternates: { canonical: `/epoxidove-podlahy-${city.slug}` },
+    alternates: { canonical: `/epoxidove-podlahy/${city.slug}` },
     openGraph: {
       type: "website",
       locale: "sk_SK",
-      url: `${SITE.url}/epoxidove-podlahy-${city.slug}`,
+      url: `${SITE.url}/epoxidove-podlahy/${city.slug}`,
       siteName: "EPOXIDOVO",
       title,
       description,
-      // OG image sa generuje dynamicky cez opengraph-image.tsx v tomto routte
-      // (s názvom mesta) — Next.js to auto-detekuje, nemusíme tu špecifikovať.
+      images: [{ url: "/og-home.jpg?v=3", width: 1200, height: 630, alt: title }],
     },
   };
 }
@@ -73,10 +72,10 @@ export default async function CityPage({ params }: RouteContext) {
   const localBusinessSchema = {
     "@context": "https://schema.org",
     "@type": "LocalBusiness",
-    "@id": `${SITE.url}/epoxidove-podlahy-${city.slug}/#business`,
+    "@id": `${SITE.url}/epoxidove-podlahy/${city.slug}/#business`,
     name: `${SITE.legalName} — Epoxidové podlahy ${city.inCity}`,
     description: `Realizácie epoxidových a polyuretánových podláh ${city.inCity} a okolí.`,
-    url: `${SITE.url}/epoxidove-podlahy-${city.slug}`,
+    url: `${SITE.url}/epoxidove-podlahy/${city.slug}`,
     telephone: SITE.contact.phone,
     email: SITE.contact.email,
     address: {
@@ -110,7 +109,7 @@ export default async function CityPage({ params }: RouteContext) {
           { name: "Domov", path: "/" },
           {
             name: `Epoxidové podlahy ${city.name}`,
-            path: `/epoxidove-podlahy-${city.slug}`,
+            path: `/epoxidove-podlahy/${city.slug}`,
           },
         ]}
       />

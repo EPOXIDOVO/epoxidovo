@@ -1,6 +1,6 @@
 /**
  * Mestá pre lokálne SEO landing pages.
- * Každé mesto má vlastnú URL /epoxidove-podlahy-{slug}.
+ * Každé mesto má vlastnú URL /epoxidove-podlahy/{slug}.
  */
 
 export interface City {

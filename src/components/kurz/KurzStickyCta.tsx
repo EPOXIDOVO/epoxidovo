@@ -1,10 +1,17 @@
 "use client";
 
 import * as React from "react";
-import { KURZ } from "@/content/kurz";
 
 /** Mobilná sticky lišta — objaví sa po odscrollovaní hero. */
-export function KurzStickyCta() {
+export function KurzStickyCta({
+  meta,
+  price,
+  cta,
+}: {
+  meta: string;
+  price: string;
+  cta: string;
+}) {
   const [show, setShow] = React.useState(false);
 
   React.useEffect(() => {
@@ -23,15 +30,15 @@ export function KurzStickyCta() {
       <div className="flex items-center gap-3 px-4 pr-[5.5rem] py-3 bg-white/95 backdrop-blur border-t border-[var(--color-border)] pb-[calc(0.75rem+env(safe-area-inset-bottom))]">
         <div className="min-w-0">
           <p className="text-[0.7rem] uppercase tracking-[0.15em] text-[var(--color-fg-subtle)]">
-            2 dni · Ružomberok
+            {meta}
           </p>
-          <p className="text-sm font-bold truncate">od {KURZ.priceStandard} €</p>
+          <p className="text-sm font-bold truncate">{price}</p>
         </div>
         <a
           href="#prihlaska"
           className="ml-auto shrink-0 inline-flex items-center justify-center h-11 px-5 rounded-xl bg-[var(--color-copper)] text-white text-sm font-semibold whitespace-nowrap transition-colors hover:bg-[var(--color-copper-light)]"
         >
-          Rezervovať miesto
+          {cta}
         </a>
       </div>
     </div>

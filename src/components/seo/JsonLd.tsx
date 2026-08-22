@@ -64,11 +64,15 @@ export function JsonLd() {
     priceRange: "€€",
     aggregateRating: {
       "@type": "AggregateRating",
-      ratingValue: "5.0",
-      reviewCount: "28",
+      // rovnaké čísla ako na webe (4,87 z 1 638) — rozdiel medzi schémou
+      // a stránkou Google trestá ako zavádzajúce štruktúrované dáta
+      ratingValue: "4.87",
+      reviewCount: "1638",
       bestRating: "5",
       worstRating: "1",
     },
+    knowsLanguage: ["sk", "cs", "en"],
+    subOrganization: { "@id": `${SITE.url}/#academy` },
     sameAs: [
       SITE.social.facebook,
       SITE.social.instagram,
@@ -174,8 +178,121 @@ export function JsonLd() {
     ],
   };
 
+  // Organization — knowledge panel; prepojené s LocalBusiness cez @id
+  const organization = {
+    "@context": "https://schema.org",
+    "@type": "Organization",
+    "@id": `${SITE.url}/#organization`,
+    name: SITE.name,
+    legalName: SITE.legalName,
+    url: SITE.url,
+    logo: { "@type": "ImageObject", url: `${SITE.url}/images/site/logo.png` },
+    email: SITE.contact.email,
+    telephone: SITE.contact.phone,
+    address: {
+      "@type": "PostalAddress",
+      streetAddress: SITE.address.street,
+      addressLocality: SITE.address.city,
+      postalCode: SITE.address.postalCode,
+      addressCountry: SITE.address.countryCode,
+    },
+    contactPoint: [
+      {
+        "@type": "ContactPoint",
+        telephone: SITE.contact.phone,
+        email: SITE.contact.email,
+        contactType: "sales",
+        areaServed: "SK",
+        availableLanguage: ["sk"],
+      },
+    ],
+    knowsLanguage: ["sk", "cs", "en"],
+    subOrganization: { "@id": `${SITE.url}/#academy` },
+    sameAs: [SITE.social.facebook, SITE.social.instagram, SITE.social.tiktok, SITE.social.youtube].filter(Boolean),
+  };
+
+  // WebSite + SearchAction — Google vie vykresliť vyhľadávacie pole v SERP-e
+  const website = {
+    "@context": "https://schema.org",
+    "@type": "WebSite",
+    "@id": `${SITE.url}/#website`,
+    url: SITE.url,
+    name: SITE.name,
+    publisher: { "@id": `${SITE.url}/#organization` },
+    inLanguage: "sk-SK",
+    potentialAction: {
+      "@type": "SearchAction",
+      target: { "@type": "EntryPoint", urlTemplate: `${SITE.url}/eshop?q={search_term_string}#katalog` },
+      "query-input": "required name=search_term_string",
+    },
+  };
+
+  // WebSite node — kotva pre isPartOf na podstránkach + Sitelinks searchbox.
+  // /eshop?q=<dopyt> reálne funguje (EshopClient číta ?q), takže SearchAction
+  // nie je fikcia.
+  const website = {
+    "@context": "https://schema.org",
+    "@type": "WebSite",
+    "@id": `${SITE.url}/#website`,
+    url: SITE.url,
+    name: SITE.name,
+    alternateName: SITE.legalName,
+    description: SITE.description,
+    inLanguage: ["sk-SK", "en"],
+    publisher: { "@id": `${SITE.url}/#business` },
+    potentialAction: {
+      "@type": "SearchAction",
+      target: {
+        "@type": "EntryPoint",
+        urlTemplate: `${SITE.url}/eshop?q={search_term_string}`,
+      },
+      "query-input": "required name=search_term_string",
+    },
+  };
+
+  // Vzdelávacia vetva firmy — kurz ako samostatná entita napojená na business.
+  const academy = {
+    "@context": "https://schema.org",
+    "@type": "EducationalOrganization",
+    "@id": `${SITE.url}/#academy`,
+    name: "EPOXIDOVO Akadémia",
+    url: `${SITE.url}/kurz`,
+    description:
+      "Dvojdňové praktické kurzy liatych epoxidových podláh v Ružomberku — max. 6 účastníkov v skupine.",
+    parentOrganization: { "@id": `${SITE.url}/#business` },
+    address: {
+      "@type": "PostalAddress",
+      streetAddress: SITE.address.street,
+      addressLocality: SITE.address.city,
+      postalCode: SITE.address.postalCode,
+      addressCountry: SITE.address.countryCode,
+    },
+    telephone: SITE.contact.phone,
+    email: SITE.contact.email,
+    hasCourse: [
+      { "@type": "Course", "@id": `${SITE.url}/kurz#course` },
+      { "@type": "Course", "@id": `${SITE.url}/en/epoxy-flooring-course#course` },
+    ],
+  };
+
   return (
     <>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: safeJsonLd(website) }}
+      />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: safeJsonLd(academy) }}
+      />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: safeJsonLd(organization) }}
+      />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: safeJsonLd(website) }}
+      />
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: safeJsonLd(localBusiness) }}

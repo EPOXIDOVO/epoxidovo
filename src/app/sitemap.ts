@@ -14,7 +14,6 @@ export default function sitemap(): MetadataRoute.Sitemap {
     { url: `${SITE.url}/realizacie`, lastModified: now, changeFrequency: "weekly", priority: 0.9 },
     { url: `${SITE.url}/kontakt`, lastModified: now, changeFrequency: "yearly", priority: 0.8 },
     { url: `${SITE.url}/cenova-ponuka`, lastModified: now, changeFrequency: "monthly", priority: 0.95 },
-    { url: `${SITE.url}/o-nas`, lastModified: now, changeFrequency: "yearly", priority: 0.6 },
     { url: `${SITE.url}/ochrana-sukromia`, lastModified: now, changeFrequency: "yearly", priority: 0.3 },
     { url: `${SITE.url}/cookies`, lastModified: now, changeFrequency: "yearly", priority: 0.3 },
     { url: `${SITE.url}/obchodne-podmienky`, lastModified: now, changeFrequency: "yearly", priority: 0.3 },
@@ -23,8 +22,40 @@ export default function sitemap(): MetadataRoute.Sitemap {
     { url: `${SITE.url}/eshop`, lastModified: now, changeFrequency: "monthly", priority: 0.5 },
     { url: `${SITE.url}/eshop/znacky`, lastModified: now, changeFrequency: "monthly", priority: 0.4 },
     { url: `${SITE.url}/kalkulacka`, lastModified: now, changeFrequency: "monthly", priority: 0.8 },
+    { url: `${SITE.url}/vzorkovnik`, lastModified: now, changeFrequency: "monthly", priority: 0.7 },
+    { url: `${SITE.url}/ai-vizualizer`, lastModified: now, changeFrequency: "monthly", priority: 0.7 },
     { url: `${SITE.url}/navrhni-podlahu`, lastModified: now, changeFrequency: "monthly", priority: 0.8 },
     { url: `${SITE.url}/kupit-material/b2b`, lastModified: now, changeFrequency: "yearly", priority: 0.4 },
+  ];
+
+  // Kurz — SK + EN pár s hreflang alternates (Google párovanie jazykových verzií)
+  const coursePages: MetadataRoute.Sitemap = [
+    {
+      url: `${SITE.url}/kurz`,
+      lastModified: now,
+      changeFrequency: "weekly" as const,
+      priority: 0.9,
+      alternates: {
+        languages: {
+          sk: `${SITE.url}/kurz`,
+          en: `${SITE.url}/en/epoxy-flooring-course`,
+          "x-default": `${SITE.url}/kurz`,
+        },
+      },
+    },
+    {
+      url: `${SITE.url}/en/epoxy-flooring-course`,
+      lastModified: now,
+      changeFrequency: "weekly" as const,
+      priority: 0.8,
+      alternates: {
+        languages: {
+          sk: `${SITE.url}/kurz`,
+          en: `${SITE.url}/en/epoxy-flooring-course`,
+          "x-default": `${SITE.url}/kurz`,
+        },
+      },
+    },
   ];
 
   const servicePages: MetadataRoute.Sitemap = CATEGORIES.map((cat) => ({
@@ -36,7 +67,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
 
   // Local SEO city landing pages
   const cityPages: MetadataRoute.Sitemap = CITIES.map((c) => ({
-    url: `${SITE.url}/epoxidove-podlahy-${c.slug}`,
+    url: `${SITE.url}/epoxidove-podlahy/${c.slug}`,
     lastModified: now,
     changeFrequency: "monthly" as const,
     priority: 0.85,
@@ -58,5 +89,5 @@ export default function sitemap(): MetadataRoute.Sitemap {
     priority: 0.6,
   }));
 
-  return [...staticPages, ...servicePages, ...cityPages, ...certPages, ...productPages];
+  return [...staticPages, ...coursePages, ...servicePages, ...cityPages, ...certPages, ...productPages];
 }
