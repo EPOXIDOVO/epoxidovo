@@ -116,7 +116,7 @@ const SHOWCASE_CATS: ShowcaseCat[] = [
     name: "Betón look",
     priceFrom: 0,
     priceLabel: "Cena na dopyt",
-    image: "/images/vzorkovnik/arturo/concrete-look-fresh-power.webp",
+    image: "/images/vzorkovnik/arturo/concrete-look-downtown-mix.webp",
     href: "/vzorkovnik?typ=arturo",
     pripravujeme: true,
   },
@@ -138,7 +138,7 @@ function CategoriesShowcaseInner() {
         id="kategorie"
         className="relative bg-[var(--color-copper)] text-white overflow-hidden"
       >
-        <Container size="xl" className="pt-12 md:pt-28 lg:pt-32 pb-10 md:pb-14">
+        <Container size="xl" className="pt-10 md:pt-14 pb-10 md:pb-14">
           {/* Header sekcie */}
           <div className="max-w-3xl mx-auto text-center">
             <span className="inline-flex items-center gap-2 px-4 py-2 rounded-full border border-white/20 bg-white/10 backdrop-blur-sm text-[0.7rem] md:text-xs font-extrabold uppercase tracking-[0.18em] text-white">
