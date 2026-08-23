@@ -163,29 +163,6 @@ export default function RealizaciePage() {
       <Section tone="default" size="md" className="!bg-transparent !text-white max-md:!py-4">
         <Container size="xl">
           <div className="relative">
-            {/* Desktop bublina — absolute na pravej strane (preč od chips),
-                tail diagonálne smerom vľavo-dole na chip area.
-                Mobil bez bubliny — filtre sa vysvetlia sami. */}
-            <div className="hidden md:block absolute top-0 right-[22%] lg:right-[26%] w-[240px] lg:w-[260px] z-20">
-              <div className="relative bg-white text-[var(--color-fg)] rounded-2xl px-5 py-3.5 shadow-[0_12px_30px_rgba(0,0,0,0.22)] ring-1 ring-black/5">
-                <p className="text-sm leading-snug font-medium">
-                  Filtruj podľa{" "}
-                  <span className="text-[#3db6e8] font-semibold">typu priestoru</span>{" "}
-                  alebo{" "}
-                  <span className="text-[#3db6e8] font-semibold">vzoru podlahy</span>
-                  . Klikni na fotku pre detail.
-                </p>
-                {/* Tail — z bottom-left, krátky diagonál smerom dole-vľavo */}
-                <svg
-                  className="absolute -bottom-3 left-6 w-7 h-4 drop-shadow-[0_4px_4px_rgba(0,0,0,0.1)]"
-                  viewBox="0 0 28 16"
-                  aria-hidden
-                >
-                  <polygon points="0,0 28,0 0,16" fill="white" />
-                </svg>
-              </div>
-            </div>
-
             <Suspense
               fallback={
                 <div className="py-20 text-center text-white/70 text-sm">

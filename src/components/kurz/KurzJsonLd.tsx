@@ -88,7 +88,9 @@ export function KurzJsonLd(input: CourseSchemaInput) {
       startDate: t.iso,
       endDate: endOf(t.iso),
       maximumAttendeeCapacity: input.groupSize,
-      inLanguage: lang,
+      // Kurz sa VYUČUJE po anglicky (lektor rozumie aj slovensky) — nezávisí
+      // od jazyka stránky; inLanguage na Course/WebPage ostáva jazykom obsahu.
+      inLanguage: "en",
       location: {
         "@type": "Place",
         name: input.place,

@@ -155,7 +155,7 @@ export function NahladPodlahyProvider({ children }: { children: React.ReactNode 
                     className="inline-flex items-center justify-center gap-2 px-5 py-3.5 rounded-full bg-gradient-to-r from-[#3db6e8] to-[#a855f7] text-white font-bold text-sm md:text-base shadow-[0_6px_20px_rgba(168,85,247,0.35)] hover:-translate-y-0.5 transition-all whitespace-nowrap"
                   >
                     <Sparkles className="w-4 h-4" aria-hidden />
-                    Pozrieť v mojom priestore
+                    AI Vizualizátor
                   </Link>
                 ) : (
                   <span className="inline-flex items-center justify-center gap-2 px-5 py-3.5 rounded-full border-2 border-dashed border-zinc-300 text-zinc-400 font-bold text-sm whitespace-nowrap cursor-default">

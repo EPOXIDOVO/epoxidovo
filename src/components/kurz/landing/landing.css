@@ -440,7 +440,7 @@
   text-align: center;
   margin: 0;
 }
-.kl-about h2 span { display: block; max-width: 18em; margin: 0 auto; }
+.kl-about h2 span { display: block; max-width: 13.5em; margin: 0 auto; }
 .kl-about p {
   position: absolute;
   z-index: 5;
@@ -451,9 +451,9 @@
 }
 .kl-about p.t1 { top: calc(40% + 12rem); left: 0; max-width: 14em; }
 .kl-about p.t2 { top: calc(40% - 16rem); left: 0; max-width: 18.5em; }
-.kl-about p.t3 { top: calc(30% + 121px + 3.75rem); left: 0; width: 100%; text-align: center; }
+.kl-about p.t3 { top: calc(30% + 224px + 2.5rem); left: 0; width: 100%; text-align: center; }
 .kl-about p.t4 { top: calc(40% + 12rem); right: 0; max-width: 14.5em; }
-.kl-about p.t5 { top: 8rem; right: 6rem; max-width: 14em; }
+.kl-about p.t5 { top: 8rem; right: 16.5rem; max-width: 14em; }
 .kl-about__img {
   position: absolute;
   border-radius: 20px;
@@ -917,3 +917,57 @@
   .kl-hello h1 > span { transform: scale(0.65); opacity: 1; animation: none; }
   .kl-about h2, .kl-about p { opacity: 1 !important; }
 }
+
+/* ---------- Kalkulačka zárobku + grafy ---------- */
+.kl-zisk__grid { display: grid; grid-template-columns: 5fr 7fr; gap: 2rem; margin-top: 2.5rem; }
+@media (max-width: 991.98px) { .kl-zisk__grid { grid-template-columns: 1fr; } }
+.kl-zisk__calc, .kl-zisk__chart, .kl-zisk__table { padding: 2.5rem; }
+@media (max-width: 767.98px) { .kl-zisk__calc, .kl-zisk__chart, .kl-zisk__table { padding: 1.5rem; } }
+.kl-zisk__table { margin-top: 2rem; }
+.kl-zisk__slider-label { display: flex; justify-content: space-between; align-items: baseline; color: #fff; font-size: 1rem; margin-bottom: 1rem; }
+.kl-zisk__slider-label strong { font-family: var(--kl-font-display); font-size: 2rem; font-weight: 600; }
+.kl-range { width: 100%; appearance: none; height: 4px; border-radius: 4px; background: linear-gradient(90deg, var(--kl-accent) 0%, var(--kl-accent) var(--p, 10%), rgba(255,255,255,0.12) var(--p, 10%)); outline: none; margin: 0.5rem 0 1.25rem; cursor: pointer; }
+.kl-range::-webkit-slider-thumb { appearance: none; width: 28px; height: 28px; border-radius: 50%; background: #fff; border: 6px solid var(--kl-accent); cursor: pointer; transition: transform 150ms ease; }
+.kl-range::-webkit-slider-thumb:hover { transform: scale(1.1); }
+.kl-range::-moz-range-thumb { width: 28px; height: 28px; border-radius: 50%; background: #fff; border: 6px solid var(--kl-accent); cursor: pointer; }
+.kl-range::-moz-range-track { height: 4px; border-radius: 4px; background: rgba(255,255,255,0.12); }
+.kl-zisk__quick { display: flex; flex-wrap: wrap; gap: 0.5rem; margin-bottom: 2rem; }
+.kl-chip { color: #fff; font: inherit; font-size: 0.875rem; background: rgba(255,255,255,0.08); border: 1px solid transparent; border-radius: 50px; padding: 0.4rem 0.9rem; cursor: pointer; white-space: nowrap; transition: background 250ms ease, border-color 250ms ease, color 250ms ease; }
+.kl-chip:hover { background: rgba(var(--kl-accent-rgb), 0.18); border-color: rgba(var(--kl-accent-rgb), 0.5); }
+.kl-chip.is-active { background: var(--kl-accent); border-color: var(--kl-accent); }
+.kl-zisk__rows { margin: 0; }
+.kl-zisk__row { display: flex; align-items: flex-end; justify-content: space-between; gap: 1rem; padding: 1rem 0; border-top: 1px solid var(--kl-border); }
+.kl-zisk__row dt { font-size: 1rem; color: #fff; }
+.kl-zisk__row dt small { display: block; font-size: 0.8125rem; color: var(--kl-text); margin-top: 0.15rem; }
+.kl-zisk__row dd { margin: 0; font-family: var(--kl-font-display); font-size: 1.5rem; color: #fff; white-space: nowrap; }
+.kl-zisk__row--total { border-top: 1px solid rgba(var(--kl-accent-rgb), 0.5); }
+.kl-zisk__row--total dd { font-size: 2.25rem; }
+.kl-zisk__note { font-size: 0.9375rem; margin: 1.25rem 0 0; }
+.kl-chart { width: 100%; height: auto; display: block; }
+.kl-chart__legend { display: flex; gap: 1.5rem; list-style: none; padding: 0; margin: 1rem 0 0; font-size: 0.875rem; }
+.kl-chart__legend li { display: inline-flex; align-items: center; gap: 0.5rem; }
+.kl-chart__legend i { display: inline-block; width: 14px; height: 14px; border-radius: 4px; }
+.kl-table { width: 100%; border-collapse: separate; border-spacing: 0; font-size: 0.9375rem; min-width: 560px; }
+.kl-table th, .kl-table td { text-align: left; padding: 0.85em 1em; border-bottom: 1px solid rgba(255,255,255,0.1); }
+.kl-table th { color: rgba(255,255,255,0.6); font-weight: 500; font-size: 0.8125rem; text-transform: uppercase; letter-spacing: 0.06em; }
+.kl-table td:last-child, .kl-table th:last-child { text-align: right; }
+.kl-table__sum td { color: #fff; font-weight: 600; border-bottom: 0; }
+.kl-table__sum--accent td { font-family: var(--kl-font-display); font-size: 1.125rem; }
+.kl-zisk__disclaimer { font-size: 0.8125rem; margin: 1.25rem 0 0; }
+
+/* ---------- Checkout doplnky vo formulári ---------- */
+.kl-pay { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-bottom: 2.25rem; }
+@media (max-width: 575.98px) { .kl-pay { grid-template-columns: 1fr; } }
+.kl-pay__opt { position: relative; display: flex; gap: 1rem; align-items: flex-start; padding: 1.25em; border: 1px solid var(--kl-border-strong); border-radius: 20px; cursor: pointer; transition: border-color 250ms ease, background 250ms ease; }
+.kl-pay__opt:hover { border-color: rgba(255,255,255,0.45); }
+.kl-pay__opt.is-active { border-color: var(--kl-accent); background: rgba(var(--kl-accent-rgb), 0.06); }
+.kl-pay__opt.is-disabled { opacity: 0.45; cursor: not-allowed; }
+.kl-pay__opt input { position: absolute; opacity: 0; width: 0; height: 0; }
+.kl-pay__opt strong { display: block; color: #fff; font-weight: 600; font-size: 1rem; }
+.kl-pay__opt span { display: block; font-size: 0.8125rem; line-height: 1.5; }
+.kl-pay__opt .kl-check__box { margin: 0.1rem 0 0; height: 1.5rem; width: 1.5rem; }
+.kl-pay__opt .kl-check__box::after { height: 0.4rem; width: 0.4rem; }
+.kl-pay__opt.is-active .kl-check__box::after { opacity: 1; }
+.kl-summary { display: flex; align-items: center; justify-content: space-between; gap: 1rem; padding: 1.25em 1.5em; border: 1px solid rgba(var(--kl-accent-rgb), 0.4); border-radius: 20px; margin-bottom: 2.25rem; background: rgba(var(--kl-accent-rgb), 0.05); }
+.kl-summary strong { color: #fff; font-family: var(--kl-font-display); font-size: 1.75rem; white-space: nowrap; }
+.kl-summary span { font-size: 0.9375rem; }

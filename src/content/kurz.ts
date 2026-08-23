@@ -12,7 +12,7 @@ export const KURZ = {
   groupSize: 6,
   priceStandard: 690,
   pricePro: 1190,
-  language: "slovenčina (angličtina na požiadanie)",
+  language: "angličtina (lektor rozumie aj po slovensky)",
   nextTerms: [
     { date: "12. — 13. september 2026", iso: "2026-09-12", left: 3 },
     { date: "10. — 11. október 2026", iso: "2026-10-10", left: 6 },
@@ -103,6 +103,10 @@ export const KURZ_FAQ = [
     a: "Na kurze dostaneš zoznam overených dodávateľov aj naše nákupné podmienky. Cez náš e-shop nakupuješ ako absolvent za partnerské ceny.",
   },
   {
+    q: "V akom jazyku kurz prebieha?",
+    a: "Kurz vedieme v angličtine — chodia k nám ľudia z celej Európy. Lektor rozumie aj po slovensky, takže otázku môžeš položiť v slovenčine a odpoveď dostaneš aj tak. Manuál dostaneš v angličtine aj slovenčine.",
+  },
+  {
     q: "Dá sa kurz zaplatiť na firmu / na faktúru?",
     a: "Áno. Vystavíme faktúru na IČO, kurz je bežne uznateľný náklad. Pri prihlásení 3 a viac ľudí z jednej firmy dávame skupinovú cenu.",
   },
@@ -117,7 +121,7 @@ export const KURZ_FAKTY: { label: string; value: string }[] = [
   { label: "Veľkosť skupiny", value: `Maximálne ${KURZ.groupSize} účastníkov` },
   { label: "Cena", value: `${KURZ.priceStandard} € štandard / ${KURZ.pricePro} € balík PRO za osobu, nie sme platcami DPH` },
   { label: "Vstupné požiadavky", value: "Žiadne — kurz je vhodný aj pre úplných začiatočníkov" },
-  { label: "Jazyk", value: "Slovenčina (angličtina na požiadanie)" },
+  { label: "Jazyk", value: "Angličtina — kurz vedieme po anglicky, lektor rozumie aj slovensky" },
   { label: "Certifikát", value: "Osvedčenie o absolvovaní od EPOXIDOVO s. r. o." },
   { label: "Čo si prakticky vyskúšaš", value: "Brúsenie, penetrácia, miešanie, jednofarebná liata podlaha, chipsy, metalický efekt, sokle, cenotvorba" },
   { label: "Poskytovateľ", value: "EPOXIDOVO s. r. o., IČO 56 966 237, Slovensko" },
@@ -132,7 +136,7 @@ export const KURZ_SUMMARY =
   "kde sa maximálne 6 účastníkov naučí kompletný postup liatej epoxidovej podlahy: diagnostiku a " +
   "brúsenie betónového podkladu, penetráciu, miešanie dvojzložkových živíc, liatie jednofarebnej " +
   "podlahy, chipsový a metalický dekor, riešenie soklov a detailov, a napokon cenotvorbu zákazky. " +
-  "Každý účastník si sám odleje vlastnú plochu približne 12 m². Cena je 690 € (štandard) alebo " +
+  "Kurz prebieha v angličtine. Každý účastník si sám odleje vlastnú plochu približne 12 m². Cena je 690 € (štandard) alebo " +
   "1 190 € (balík PRO so štartovacím materiálom), vrátane materiálu, náradia, manuálu, obedu, " +
   "certifikátu a 30 dní podpory po kurze. Kurz je vhodný pre remeselníkov, začínajúcich živnostníkov, " +
   "firemné partie aj majiteľov, ktorí si podlahu robia sami.";

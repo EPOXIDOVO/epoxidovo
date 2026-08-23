@@ -13,7 +13,7 @@ export const COURSE_EN = {
   groupSize: KURZ.groupSize,
   priceStandard: KURZ.priceStandard,
   pricePro: KURZ.pricePro,
-  language: "Slovak, with English-speaking instruction on request",
+  language: "English (the instructor also understands Slovak)",
   nextTerms: [
     { date: "12 — 13 September 2026", iso: "2026-09-12", left: 3 },
     { date: "10 — 11 October 2026", iso: "2026-10-10", left: 6 },
@@ -109,7 +109,7 @@ export const COURSE_EN_FAQ = [
   },
   {
     q: "Is the course taught in English?",
-    a: "The course runs in Slovak. English-speaking instruction is available on request for individual bookings and for company groups — tell us when you apply and we confirm it before you pay.",
+    a: "Yes. The course is taught in English — participants come from all over Europe. The instructor also understands Slovak, and the manual is provided in both English and Slovak.",
   },
   {
     q: "I am travelling from abroad — where do I stay?",
@@ -138,7 +138,7 @@ export const COURSE_EN_FACTS: { label: string; value: string }[] = [
  */
 export const COURSE_EN_SUMMARY =
   "The EPOXIDOVO Academy epoxy flooring course is a two-day, in-person training in Ružomberok, Slovakia, " +
-  "where a maximum of six participants learn the complete process of a poured epoxy resin floor: diagnosing " +
+  "taught in English, where a maximum of six participants learn the complete process of a poured epoxy resin floor: diagnosing " +
   "and grinding the concrete substrate, priming, mixing two-component resins, pouring a single-colour floor, " +
   "flake and metallic decorative finishes, coving and detail work, and finally how to price a job. Every " +
   "participant pours roughly 12 m² of real floor themselves. The price is €690 (standard) or €1,190 (pro " +

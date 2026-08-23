@@ -69,7 +69,7 @@ const CARD_IMAGES = [
   "/images/hero/hala.webp",
   "/images/hero/garaz.webp",
   "/images/realizacie/r-01.jpg",
-  "/images/process/step-01-konzultacia.webp",
+  "/images/realizacie/r-05.jpg",
 ];
 
 export const COPY: Record<Locale, LandingCopy> = {
@@ -139,6 +139,7 @@ export const COPY: Record<Locale, LandingCopy> = {
       { value: "6", label: "ľudí max. v jednej skupine" },
       { value: "2 dni", label: "od podkladu po cenovú ponuku" },
       { value: "30 dní", label: "podpory lektora po kurze" },
+      { value: "EN", label: "kurz v angličtine, lektor rozumie slovensky" },
       { value: `${KURZ.priceStandard} €`, label: "cena vrátane materiálu a náradia" },
     ],
     tools: {
@@ -248,6 +249,7 @@ export const COPY: Record<Locale, LandingCopy> = {
       { value: "6", label: "people max. per group" },
       { value: "2 days", label: "from substrate to final quote" },
       { value: "30 days", label: "of instructor support afterwards" },
+      { value: "EN", label: "taught in English — participants from all over Europe" },
       { value: `€${COURSE_EN.priceStandard}`, label: "all-in, material and tools included" },
     ],
     tools: {

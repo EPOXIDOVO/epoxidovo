@@ -17,7 +17,7 @@ export function SiteChrome({ children }: { children: React.ReactNode }) {
   // Landing kurzu (SK + EN) má vlastnú hlavičku, pätu aj tmavý dizajn
   // (1:1 podľa TicketWave) — globálne chrome by sa s ním bilo.
   const isKurzLanding =
-    pathname === "/kurz" || pathname.startsWith("/en/epoxy-flooring-course");
+    pathname.startsWith("/kurz") || pathname.startsWith("/en/epoxy-flooring-course");
   if (isKurzLanding) {
     return <main id="main">{children}</main>;
   }
