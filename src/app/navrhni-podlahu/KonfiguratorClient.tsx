@@ -133,9 +133,17 @@ export function KonfiguratorClient() {
     const co = q.get("co") as Co | null;
     const kde = q.get("kde") as Kde | null;
     const m2 = q.get("m2");
+    const vzhlad = q.get("vzhlad");
+    const farba = q.get("farba");
     if (co) init = { ...init, co };
     if (kde) init = { ...init, kde };
     if (m2 && Number(m2) > 0) init = { ...init, plochaM2: Number(m2) };
+    // príchod z náhľadu fotky: vzhľad (a farba) sú už vybraté → začni až
+    // otázkou interiér/exteriér, nech zákazník neklikne to isté dvakrát
+    if (vzhlad) {
+      init = { ...init, vzhlad, odtien: farba ?? init.odtien };
+      setKrokIndex(1);
+    }
     setVolba(init);
   }, []);
 
@@ -1076,6 +1084,162 @@ function OdfotPodklad({ volba }: { volba: Volba }) {
   );
 }
 
+/**
+ * „Mám záujem o telefonát" — zákazník už videl cenu. Ak ho neodradila,
+ * zaškrtne a nechá kontakt; lead s celou konfiguráciou padne obchodníkovi.
+ * Bez zaškrtnutia nič neodchádza — pozrieť si cenu je zadarmo a anonymné.
+ */
+function ZaujemOTelefonat({
+  volba,
+  system,
+  vysledok,
+}: {
+  volba: Volba;
+  system: System;
+  vysledok: ReturnType<typeof prepocitaj>;
+}) {
+  const [chce, setChce] = React.useState(false);
+  const [meno, setMeno] = React.useState("");
+  const [priezvisko, setPriezvisko] = React.useState("");
+  const [telefon, setTelefon] = React.useState("");
+  const [email, setEmail] = React.useState("");
+  const [suhlas, setSuhlas] = React.useState(false);
+  const [turnstileToken, setTurnstileToken] = React.useState<string | null>(null);
+  const [posiela, setPosiela] = React.useState(false);
+  const [hotovo, setHotovo] = React.useState(false);
+  const [chyba, setChyba] = React.useState<string | null>(null);
+
+  const mozePoslat =
+    meno.trim().length > 1 &&
+    priezvisko.trim().length > 1 &&
+    telefon.trim().length > 8 &&
+    email.includes("@") &&
+    suhlas &&
+    !!turnstileToken &&
+    !posiela;
+
+  const posli = async () => {
+    setPosiela(true);
+    setChyba(null);
+    const plocha = efektivnaPlocha(volba);
+    const skladba = vysledok.riadky
+      .filter((r) => !r.bezMaterialu)
+      .map((r) => `${r.poradie}. ${r.nazov}: ${r.produktNazov}${r.pocetBaleni ? ` × ${r.pocetBaleni} bal.` : ""}`)
+      .join(" | ");
+    try {
+      const r = await fetch("/api/lead", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          name: meno.trim(),
+          lastName: priezvisko.trim(),
+          email: email.trim(),
+          phone: telefon.trim(),
+          consent: true,
+          turnstileToken,
+          source: "konfigurator_cp",
+          spaceType: volba.priestor === "byt_dom" ? "dom" : volba.priestor === "garaz" ? "garaz" : volba.priestor === "priemysel" ? "hala-firma" : "ine",
+          service:
+            volba.vzhlad === "jednofarebna" || volba.vzhlad === "priemyselna"
+              ? "jednofarebne"
+              : volba.vzhlad === "chipsy"
+                ? "chipsove"
+                : volba.vzhlad === "marble"
+                  ? "mramorove"
+                  : volba.vzhlad === "metalik"
+                    ? "metalicke"
+                    : "neviem",
+          area: plocha ? Math.round(plocha) : undefined,
+          message: [
+            "AUTO CP Z KONFIGURÁTORA — zákazník videl cenu a chce telefonát.",
+            `Systém: ${system.nazov}`,
+            `Vzhľad: ${volba.vzhlad}${volba.odtien ? ` · odtieň ${volba.odtien}` : ""}${volba.povrch ? ` · lak ${volba.povrch}` : ""}`,
+            `Kde: ${volba.kde} · priestor: ${volba.priestor === "ine" ? volba.priestorPopis : volba.priestor}`,
+            `Podklad: ${volba.podklad} · stav: ${volba.stav}${volba.priznaky.length ? ` · ${volba.priznaky.join(", ")}` : ""}`,
+            `Plocha: ${plocha ?? "?"} m²`,
+            `Materiál z webu: ${fmtEur(vysledok.cenaSpolu)} € (konečná cena, nie sme platcami DPH)`,
+            `Skladba: ${skladba}`,
+          ].join(" \n"),
+        }),
+      });
+      if (!r.ok) throw new Error(String(r.status));
+      setHotovo(true);
+    } catch {
+      setChyba("Odoslanie zlyhalo. Skús znova alebo nám zavolaj.");
+    } finally {
+      setPosiela(false);
+    }
+  };
+
+  if (hotovo) {
+    return (
+      <div className="rounded-2xl border-2 border-emerald-300 bg-emerald-50 p-5">
+        <div className="flex items-center gap-2 font-extrabold text-emerald-900">
+          <Check className="w-5 h-5" aria-hidden />
+          Ozveme sa ti
+        </div>
+        <p className="mt-1.5 text-sm text-emerald-900/80">
+          Obchodník vidí presne to, čo si si vyklikal — zavolá s konkrétnou ponukou na realizáciu, nie naslepo.
+        </p>
+      </div>
+    );
+  }
+
+  return (
+    <div className={`rounded-2xl border-2 transition-colors ${chce ? "border-[#16a34a] bg-emerald-50/40" : "border-zinc-200 bg-white"}`}>
+      <label className="flex items-start gap-3 p-4 cursor-pointer">
+        <input
+          type="checkbox"
+          checked={chce}
+          onChange={(e) => setChce(e.target.checked)}
+          className="mt-0.5 w-5 h-5 accent-[#16a34a]"
+        />
+        <span>
+          <span className="block font-extrabold text-[#0e1a3b]">
+            Cena ma neodradila — mám záujem o telefonát s obchodníkom
+          </span>
+          <span className="block text-sm text-[#4a5478] mt-0.5">
+            Nechceš liať sám? Pripravíme ti cenovú ponuku na realizáciu na kľúč.
+          </span>
+        </span>
+      </label>
+
+      {chce && (
+        <div className="px-4 pb-4 space-y-3">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+            <input value={meno} onChange={(e) => setMeno(e.target.value)} placeholder="Meno" autoComplete="given-name"
+              className="px-4 py-3 rounded-xl border-2 border-zinc-200 bg-white text-[#0e1a3b] placeholder:text-zinc-400 focus:outline-none focus:border-[#16a34a] transition-colors" />
+            <input value={priezvisko} onChange={(e) => setPriezvisko(e.target.value)} placeholder="Priezvisko" autoComplete="family-name"
+              className="px-4 py-3 rounded-xl border-2 border-zinc-200 bg-white text-[#0e1a3b] placeholder:text-zinc-400 focus:outline-none focus:border-[#16a34a] transition-colors" />
+            <input value={telefon} onChange={(e) => setTelefon(e.target.value)} inputMode="tel" autoComplete="tel" placeholder="Telefón"
+              className="px-4 py-3 rounded-xl border-2 border-zinc-200 bg-white text-[#0e1a3b] placeholder:text-zinc-400 focus:outline-none focus:border-[#16a34a] transition-colors" />
+            <input value={email} onChange={(e) => setEmail(e.target.value)} inputMode="email" autoComplete="email" placeholder="E-mail"
+              className="px-4 py-3 rounded-xl border-2 border-zinc-200 bg-white text-[#0e1a3b] placeholder:text-zinc-400 focus:outline-none focus:border-[#16a34a] transition-colors" />
+          </div>
+          <label className="flex items-start gap-2.5 text-sm text-[#4a5478] cursor-pointer">
+            <input type="checkbox" checked={suhlas} onChange={(e) => setSuhlas(e.target.checked)} className="mt-0.5 w-4 h-4 accent-[#16a34a]" />
+            <span>
+              Súhlasím so spracovaním údajov podľa{" "}
+              <Link href="/ochrana-sukromia" className="font-bold text-[#12729f] hover:underline">ochrany súkromia</Link>.
+            </span>
+          </label>
+          <TurnstileWidget onVerify={setTurnstileToken} onExpire={() => setTurnstileToken(null)} />
+          {chyba && <p className="text-sm font-semibold text-red-600">{chyba}</p>}
+          <button
+            type="button"
+            onClick={posli}
+            disabled={!mozePoslat}
+            className="w-full inline-flex items-center justify-center gap-2 px-6 py-4 rounded-full bg-[#16a34a] text-white font-extrabold hover:bg-[#15803d] disabled:bg-[#dfe3ec] disabled:text-[#98a0b6] disabled:cursor-not-allowed transition-colors"
+          >
+            <Phone className="w-4 h-4 shrink-0" aria-hidden />
+            Zavolajte mi s ponukou
+          </button>
+        </div>
+      )}
+    </div>
+  );
+}
+
 /* ── Pomocné komponenty ─────────────────────────────────────────── */
 
 function Finis({ volba, uprav }: { volba: Volba; uprav: (p: Partial<Volba>) => void }) {
@@ -1485,13 +1649,7 @@ function Vysledok({
                 </>
               )}
             </button>
-            <Link
-              href={`/cenova-ponuka?zdroj=konfigurator&co=${volba.co}&m2=${efektivnaPlocha(volba) ?? ""}&vzhlad=${volba.vzhlad ?? ""}`}
-              className="w-full inline-flex items-center justify-center gap-2 px-6 py-4 rounded-full bg-[#16a34a] text-white font-bold hover:bg-[#15803d] transition-colors text-center"
-            >
-              <Phone className="w-4 h-4 shrink-0" aria-hidden />
-              Nechcem liať sám — chcem cenovú ponuku
-            </Link>
+            <ZaujemOTelefonat volba={volba} system={system} vysledok={vysledok} />
             <button
               type="button"
               onClick={() => window.print()}

@@ -29,6 +29,19 @@ function variantLabel(m: Material): string {
   return (m.balenie ?? m.sku) + (kat ? ` · kat. ${kat.toUpperCase()}` : "");
 }
 
+/**
+ * Vzhľad → ktoré produkty k nemu patria. `typy_podlah` v dátach je zatiaľ
+ * prázdne, tak rozhodujeme z názvu; keď sa pole naplní, nahradí to toto.
+ */
+const VZHLAD_TEST: Record<string, (m: Material) => boolean> = {
+  metalik: (m) => /metal|3000 fx|ep11/i.test(m.nazov),
+  marble: (m) => /marble|mramor|ep11|3310/i.test(m.nazov),
+  chipsy: (m) => /chips|flakes|vloc|264|perlet/i.test(normalize(m.nazov)),
+  jednofarebna: (m) => m.kategoria === "Hlavná vrstva" && !/metal|marble|mramor|chips/i.test(m.nazov),
+  priemyselna: (m) => m.kategoria === "Hlavná vrstva" && /264|2510|263|3000|1590|ep|pu23/i.test(m.nazov),
+  beton_look: (m) => /beton|concrete|mikrocement|arturo/i.test(normalize(m.nazov)) && m.kategoria === "Hlavná vrstva",
+};
+
 /** Čo produktu chýba na dorobenie (admin pohľad, ?admin=1). */
 function chybaZoznam(m: Material): string[] {
   const chyba: string[] = [];
@@ -54,6 +67,8 @@ export function EshopClient({ sidebarVyrobcov = false }: { sidebarVyrobcov?: boo
   const [variant, setVariant] = React.useState<Record<string, string>>({});
   const [admin, setAdmin] = React.useState(false);
   const [adminFilter, setAdminFilter] = React.useState<AdminFilter>(null);
+  /** Filter podľa vzhľadu podlahy (metalik/marble/chipsy/…) — z náhľadu fotky na webe. */
+  const [vzhlad, setVzhlad] = React.useState<string | null>(null);
 
   // Admin režim cez ?admin=1 (statický export — čítame location, nie useSearchParams)
   React.useEffect(() => {
@@ -66,12 +81,17 @@ export function EshopClient({ sidebarVyrobcov = false }: { sidebarVyrobcov?: boo
     if (hq) setQuery(hq);
     const vy = q.get("vyrobca");
     if (vy) setVyrobca(vy as Vyrobca);
+    const vz = q.get("vzhlad");
+    if (vz && VZHLAD_TEST[vz]) {
+      setVzhlad(vz);
+      setSkupina("hlavne");
+    }
     if (sk && SKUPINY.some((x) => x.id === sk)) setSkupina(sk);
     if (kt && OBSAH_KATEGORIE.some((x) => x.id === kt)) {
       setObsah(kt);
       if (!sk) setSkupina(skupinaPreObsah(kt));
     }
-    if (sk || kt || hq || q.get("vyrobca")) {
+    if (sk || kt || hq || q.get("vyrobca") || q.get("vzhlad")) {
       setTimeout(() => {
         document.getElementById("katalog")?.scrollIntoView({ behavior: "smooth", block: "start" });
       }, 150);
@@ -93,7 +113,7 @@ export function EshopClient({ sidebarVyrobcov = false }: { sidebarVyrobcov?: boo
 
   React.useEffect(() => {
     setLimit(KROK);
-  }, [query, skupina, obsah, vyrobca, adminFilter]);
+  }, [query, skupina, obsah, vyrobca, adminFilter, vzhlad]);
 
   const filtered = React.useMemo(() => {
     const q = normalize(query.trim());
@@ -102,6 +122,7 @@ export function EshopClient({ sidebarVyrobcov = false }: { sidebarVyrobcov?: boo
       const kat = obsahKategoria(m);
       if (obsah && kat !== obsah) return false;
       if (!obsah && skupina && skupinaPreObsah(kat) !== skupina) return false;
+      if (vzhlad && !VZHLAD_TEST[vzhlad](m)) return false;
       if (q) {
         const hay = normalize(`${m.nazov} ${m.sku}`);
         if (!hay.includes(q)) return false;
@@ -123,7 +144,7 @@ export function EshopClient({ sidebarVyrobcov = false }: { sidebarVyrobcov?: boo
       );
     }
     return base;
-  }, [obsah, skupina, vyrobca, query, admin, adminFilter, predajnost]);
+  }, [obsah, skupina, vyrobca, query, admin, adminFilter, predajnost, vzhlad]);
 
   /** Karty zlúčené podľa produktu — rôzne balenia sú varianty v dropdown-e. */
   const skupinyKariet = React.useMemo(() => {

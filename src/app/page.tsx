@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Hero } from "@/components/home/Hero";
 import { Stats } from "@/components/home/Stats";
 import { CategoriesShowcase } from "@/components/home/CategoriesShowcase";
+import { NahladPodlahyProvider } from "@/components/home/NahladPodlahy";
 import { HowItWorks } from "@/components/home/HowItWorks";
 import { Reviews } from "@/components/home/Reviews";
 
@@ -53,7 +54,9 @@ export default function HomePage() {
       <div className="-mt-20 md:-mt-24">
         <Hero />
       </div>
-      <CategoriesShowcase />
+      <NahladPodlahyProvider>
+        <CategoriesShowcase />
+      </NahladPodlahyProvider>
       <Stats />
       <HowItWorks />
       <Reviews />

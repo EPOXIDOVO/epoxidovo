@@ -14,7 +14,8 @@ const POLOZKY: {
 }[] = [
   {
     label: "Epoxidové a polyuretánové živice 🧪",
-    href: "/eshop/kategoria/hlavne",
+    // klik na hlavnú položku ukáže rovno metalické — to je vlajková loď
+    href: "/eshop?vzhlad=metalik#katalog",
     deti: [
       { label: "Penetrácie", href: "/eshop?skupina=penetracie#katalog" },
       { label: "Hlavné vrstvy a nátery", href: "/eshop?skupina=hlavne#katalog" },

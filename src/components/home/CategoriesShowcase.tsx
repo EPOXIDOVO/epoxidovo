@@ -5,6 +5,8 @@ import Image from "next/image";
 import Link from "next/link";
 import { Container } from "@/components/ui/Container";
 import { CATEGORIES } from "@/content/categories";
+import type { FotkaPodlahy } from "@/content/typ-podlahy";
+import { useNahladPodlahy } from "./NahladPodlahy";
 
 /**
  * Sekcia "Čo všetko vieme vyčarovať" — z briefu klienta:
@@ -21,27 +23,27 @@ import { CATEGORIES } from "@/content/categories";
 
 // Farebné varianty pod hlavnou kartou — 3 fotky iných farieb toho istého
 // typu podlahy. Vlastné realizácie + oficiálne TopStone vzory (metalické).
-const VARIANT_PHOTOS: Record<string, { src: string; alt: string }[]> = {
+const VARIANT_PHOTOS: Record<string, FotkaPodlahy[]> = {
   jednofarebne: [
     // bývanie, nie priemysel — pod kartou „Jednofarebné" majú byť interiéry
-    { src: "/images/realizacie/r-37.webp", alt: "Jednofarebná podlaha — biela obývačka s krbom" },
-    { src: "/images/realizacie/r-10.jpg", alt: "Jednofarebná podlaha — lesklá kuchyňa" },
-    { src: "/images/realizacie/r-13.jpg", alt: "Jednofarebná podlaha — svetlá kúpeľňa" },
+    { src: "/images/realizacie/r-37.webp", typ: "jednofarebna", alt: "Jednofarebná podlaha — biela obývačka s krbom", farba: "RAL 9010", farbaLabel: "Biela" },
+    { src: "/images/realizacie/r-10.jpg", typ: "jednofarebna", alt: "Jednofarebná podlaha — lesklá kuchyňa", farba: "RAL 9016", farbaLabel: "Dopravná biela" },
+    { src: "/images/realizacie/r-13.jpg", typ: "jednofarebna", alt: "Jednofarebná podlaha — svetlá kúpeľňa", farba: "RAL 7047", farbaLabel: "Svetlosivá" },
   ],
   chipsove: [
-    { src: "/images/realizacie/r-47.jpg", alt: "Chipsová podlaha — krémová" },
-    { src: "/images/realizacie/r-49.jpg", alt: "Chipsová podlaha — sivá" },
-    { src: "/images/realizacie/r-48.jpg", alt: "Chipsová podlaha — svetlosivá lesklá" },
+    { src: "/images/realizacie/r-47.jpg", typ: "chipsova", alt: "Chipsová podlaha — krémová", farbaLabel: "Krémová" },
+    { src: "/images/realizacie/r-49.jpg", typ: "chipsova", alt: "Chipsová podlaha — sivá", farbaLabel: "Sivá" },
+    { src: "/images/realizacie/r-48.jpg", typ: "chipsova", alt: "Chipsová podlaha — svetlosivá lesklá", farbaLabel: "Svetlosivá lesklá" },
   ],
   metalicke: [
-    { src: "/images/eshop/topstone-metallic/azuro.jpg", alt: "Metalická podlaha — Azuro modrá" },
-    { src: "/images/eshop/topstone-metallic/gold.jpg", alt: "Metalická podlaha — Gold zlatá" },
-    { src: "/images/eshop/topstone-metallic/moose-green.jpg", alt: "Metalická podlaha — Moose green zelená" },
+    { src: "/images/eshop/topstone-metallic/azuro.jpg", typ: "metalicka", alt: "Metalická podlaha — Azuro modrá", farba: "Azuro", farbaLabel: "Azuro modrá" },
+    { src: "/images/eshop/topstone-metallic/gold.jpg", typ: "metalicka", alt: "Metalická podlaha — Gold zlatá", farba: "Gold", farbaLabel: "Gold zlatá" },
+    { src: "/images/eshop/topstone-metallic/moose-green.jpg", typ: "metalicka", alt: "Metalická podlaha — Moose green zelená", farba: "Moose Green", farbaLabel: "Moose green zelená" },
   ],
   priemyselne: [
-    { src: "/images/realizacie/r-20.jpg", alt: "Priemyselná podlaha — modrá hala" },
-    { src: "/images/realizacie/r-22.jpg", alt: "Priemyselná podlaha — zelená hala" },
-    { src: "/images/realizacie/r-46.jpg", alt: "Priemyselná podlaha — béžová hala" },
+    { src: "/images/realizacie/r-20.jpg", typ: "priemyselna", alt: "Priemyselná podlaha — modrá hala", farba: "RAL 5012", farbaLabel: "Svetlomodrá" },
+    { src: "/images/realizacie/r-22.jpg", typ: "priemyselna", alt: "Priemyselná podlaha — zelená hala", farba: "RAL 6021", farbaLabel: "Bledozelená" },
+    { src: "/images/realizacie/r-46.jpg", typ: "priemyselna", alt: "Priemyselná podlaha — béžová hala", farba: "RAL 1001", farbaLabel: "Béžová" },
   ],
 };
 
@@ -69,6 +71,7 @@ function DiceIcon({ pips }: { pips: 1 | 2 | 3 | 4 | 5 }) {
 }
 
 export function CategoriesShowcase() {
+  const { otvor } = useNahladPodlahy();
   return (
     <>
       <section
@@ -152,11 +155,15 @@ export function CategoriesShowcase() {
                 </div>
               </Link>
 
-              {/* 3 farebné varianty toho istého typu podlahy */}
-              {(VARIANT_PHOTOS[cat.slug] ?? []).map((v) => (
-                <div
+              {/* 3 farebné varianty toho istého typu podlahy — klik otvorí
+                  náhľad s typom, farbou, vizualizáciou a cestou k CP */}
+              {(VARIANT_PHOTOS[cat.slug] ?? []).map((v, vi) => (
+                <button
                   key={v.src}
-                  className="relative aspect-[16/9] rounded-xl overflow-hidden"
+                  type="button"
+                  onClick={() => otvor(VARIANT_PHOTOS[cat.slug], vi, cat.priceFrom || null)}
+                  aria-label={`${v.alt} — otvoriť náhľad`}
+                  className="group/v relative aspect-[16/9] rounded-xl overflow-hidden focus:outline-none focus-visible:ring-2 focus-visible:ring-[#3db6e8]"
                 >
                   <Image
                     src={v.src}
@@ -164,9 +171,14 @@ export function CategoriesShowcase() {
                     fill
                     sizes="(max-width: 768px) 50vw, 25vw"
                     quality={75}
-                    className="object-cover"
+                    className="object-cover group-hover/v:scale-105 transition-transform duration-500"
                   />
-                </div>
+                  {(v.farbaLabel || v.farba) && (
+                    <span className="absolute bottom-1.5 left-1.5 px-2 py-0.5 rounded-md bg-white/90 text-[10px] md:text-[11px] font-bold text-[#1a1a1a] whitespace-nowrap">
+                      {v.farbaLabel ?? v.farba}
+                    </span>
+                  )}
+                </button>
               ))}
 
               {/* Vzorkovník farieb — RAL vzorkovník platí pre jednofarebné
