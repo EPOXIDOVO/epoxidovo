@@ -100,16 +100,16 @@ export function KurzZisk({ locale }: { locale: Locale }) {
               id="kl-m2"
               type="range"
               min={10}
-              max={200}
+              max={500}
               step={5}
               value={m2}
               onChange={(e) => setM2(Number(e.target.value))}
               className="kl-range"
-              style={{ ["--p" as string]: `${((m2 - 10) / 190) * 100}%` }}
+              style={{ ["--p" as string]: `${((m2 - 10) / 490) * 100}%` }}
               aria-valuetext={`${m2} m²`}
             />
             <div className="kl-zisk__quick" role="group" aria-label="m²">
-              {[20, 30, 50, 80, 120].map((v) => (
+              {[20, 30, 50, 100, 200, 500].map((v) => (
                 <button key={v} type="button" className={`kl-chip${m2 === v ? " is-active" : ""}`} onClick={() => setM2(v)}>
                   {v} m²
                 </button>
