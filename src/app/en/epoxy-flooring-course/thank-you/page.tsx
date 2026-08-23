@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Suspense } from "react";
 import { KurzThanks } from "@/components/kurz/landing/KurzThanks";
+import { KurzFonts } from "@/components/kurz/landing/KurzShell";
 
 export const metadata: Metadata = {
   title: { absolute: "Thank you — EPOXIDOVO Academy" },
@@ -9,8 +10,10 @@ export const metadata: Metadata = {
 
 export default function CourseThankYouPage() {
   return (
-    <Suspense fallback={null}>
-      <KurzThanks locale="en" />
-    </Suspense>
+    <KurzFonts>
+      <Suspense fallback={null}>
+        <KurzThanks locale="en" />
+      </Suspense>
+    </KurzFonts>
   );
 }

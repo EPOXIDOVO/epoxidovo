@@ -105,6 +105,7 @@ export function KurzZisk({ locale }: { locale: Locale }) {
               value={m2}
               onChange={(e) => setM2(Number(e.target.value))}
               className="kl-range"
+              style={{ ["--p" as string]: `${((m2 - 10) / 190) * 100}%` }}
               aria-valuetext={`${m2} m²`}
             />
             <div className="kl-zisk__quick" role="group" aria-label="m²">

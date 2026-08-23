@@ -13,7 +13,7 @@ export interface LandingCopy {
   path: string;
   otherPath: string;
   otherLabel: string;
-  nav: { home: string; about: string; program: string; price: string; faq: string; contact: string; cta: string };
+  nav: { home: string; about: string; program: string; calc: string; price: string; faq: string; contact: string; cta: string };
   hero: { h1: string; scroll: string };
   about: { h2: string; t1: string; t2: string; t3: string; t4: string; t5: string };
   events: {
@@ -41,6 +41,7 @@ export interface LandingCopy {
       text: string;
       items?: string[];
       button?: string;
+      variant?: "standard" | "pro" | "firma";
       muted?: boolean;
     }[];
   };
@@ -78,7 +79,7 @@ export const COPY: Record<Locale, LandingCopy> = {
     path: "/kurz",
     otherPath: "/en/epoxy-flooring-course",
     otherLabel: "EN",
-    nav: { home: "Úvod", about: "O kurze", program: "Program", price: "Cena", faq: "FAQ", contact: "Kontakt", cta: "Prihlásiť sa" },
+    nav: { home: "Úvod", about: "O kurze", program: "Program", calc: "Kalkulačka", price: "Cena", faq: "FAQ", contact: "Kontakt", cta: "Prihlásiť sa" },
     hero: { h1: "Nauč sa liať podlahy", scroll: "Scrolluj dole" },
     about: {
       h2: "Staň sa súčasťou najpraktickejšieho kurzu epoxidových podláh na Slovensku",
@@ -152,6 +153,7 @@ export const COPY: Record<Locale, LandingCopy> = {
           text: "Kompletné dvojdňové školenie s vlastnou plochou, manuálom, kalkulačkou spotreby a certifikátom. Nie sme platcami DPH — cena je konečná.",
           items: ["2 dni, 16 hodín praxe", "Vlastná plocha 12 m²", "Manuál + kalkulačka spotreby", "Certifikát a 30 dní podpory"],
           button: "Chcem Štandard",
+          variant: "standard",
         },
         {
           number: "02 · PRO",
@@ -160,12 +162,14 @@ export const COPY: Record<Locale, LandingCopy> = {
           text: "Všetko zo Štandardu a k tomu materiál na prvú zákazku (~20 m²), sada náradia, partnerské ceny v e-shope natrvalo a 3 mesiace konzultácií.",
           items: ["Všetko zo Štandardu", "Materiál na ~20 m²", "Sada náradia", "Partnerské ceny + 3 mesiace konzultácií"],
           button: "Chcem PRO",
+          variant: "pro",
         },
         {
           number: "03 · Firma",
           title: "Firemné školenie",
           text: "Tri a viac ľudí z jednej partie? Spravíme súkromný termín len pre vás — u nás alebo na vašej hale.",
           button: "Dohodnúť termín",
+          variant: "firma",
         },
         {
           number: "04 · Absolventi",
@@ -220,7 +224,7 @@ export const COPY: Record<Locale, LandingCopy> = {
     path: "/en/epoxy-flooring-course",
     otherPath: "/kurz",
     otherLabel: "SK",
-    nav: { home: "Home", about: "About", program: "Curriculum", price: "Pricing", faq: "FAQ", contact: "Contact", cta: "Apply now" },
+    nav: { home: "Home", about: "About", program: "Curriculum", calc: "Calculator", price: "Pricing", faq: "FAQ", contact: "Contact", cta: "Apply now" },
     hero: { h1: "Learn to pour floors", scroll: "Scroll down" },
     about: {
       h2: "Become part of the most hands-on epoxy flooring course in Central Europe",
@@ -255,9 +259,9 @@ export const COPY: Record<Locale, LandingCopy> = {
     tools: {
       h2: "Course packages",
       boxes: [
-        { number: "01 · Standard", title: "Standard course", price: { value: `€${COURSE_EN.priceStandard}`, suffix: "/ person" }, text: "The complete two-day training with your own area, manual, consumption calculator and certificate. We are not VAT registered — this is the final price.", items: ["2 days, 16 hours of practice", "Your own 12 m² area", "Manual + consumption calculator", "Certificate and 30 days of support"], button: "Choose Standard" },
-        { number: "02 · PRO", title: "PRO course + starter kit", price: { value: `€${COURSE_EN.pricePro}`, suffix: "/ person" }, text: "Everything in Standard plus material for your first job (~20 m²), a tool set, permanent partner pricing in our e-shop and 3 months of consulting.", items: ["Everything in Standard", "Material for ~20 m²", "Tool set", "Partner pricing + 3 months of consulting"], button: "Choose PRO" },
-        { number: "03 · Company", title: "Company training", text: "Three or more people from one crew? We run a private date just for you — at our centre or in your hall.", button: "Arrange a date" },
+        { number: "01 · Standard", title: "Standard course", price: { value: `€${COURSE_EN.priceStandard}`, suffix: "/ person" }, text: "The complete two-day training with your own area, manual, consumption calculator and certificate. We are not VAT registered — this is the final price.", items: ["2 days, 16 hours of practice", "Your own 12 m² area", "Manual + consumption calculator", "Certificate and 30 days of support"], button: "Choose Standard", variant: "standard" },
+        { number: "02 · PRO", title: "PRO course + starter kit", price: { value: `€${COURSE_EN.pricePro}`, suffix: "/ person" }, text: "Everything in Standard plus material for your first job (~20 m²), a tool set, permanent partner pricing in our e-shop and 3 months of consulting.", items: ["Everything in Standard", "Material for ~20 m²", "Tool set", "Partner pricing + 3 months of consulting"], button: "Choose PRO", variant: "pro" },
+        { number: "03 · Company", title: "Company training", text: "Three or more people from one crew? We run a private date just for you — at our centre or in your hall.", button: "Arrange a date", variant: "firma" },
         { number: "04 · Graduates", title: "Material after the course", text: "Graduates buy Sika and TopStone material in our e-shop at partner prices with access to technical support.", muted: true },
       ],
     },

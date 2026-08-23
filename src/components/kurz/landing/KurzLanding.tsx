@@ -9,6 +9,7 @@ import { SITE } from "@/lib/site";
 import { KURZ } from "@/content/kurz";
 import { COURSE_EN } from "@/content/kurz-en";
 import { COPY, type Locale } from "./copy";
+import { KurzZisk } from "./KurzZisk";
 import "./landing.css";
 
 /* ------------------------------------------------------------------ */
@@ -77,8 +78,9 @@ function Header({ locale, onMenu }: { locale: Locale; onMenu: (open: boolean) =>
             <li className="kl-nav__home"><a href="#hello" onClick={close}>{t.nav.home}</a></li>
             <li><a href="#about" onClick={close}>{t.nav.about}</a></li>
             <li><a href="#program" onClick={close}>{t.nav.program}</a></li>
-            <li><a href="#cena" onClick={close}>{t.nav.price}</a></li>
-            <li className="kl-nav__right"><a href="#faq" onClick={close}>{t.nav.faq}</a></li>
+            <li><a href="#kalkulacka" onClick={close}>{t.nav.calc}</a></li>
+            <li className="kl-nav__right"><a href="#cena" onClick={close}>{t.nav.price}</a></li>
+            <li><a href="#faq" onClick={close}>{t.nav.faq}</a></li>
             <li><a href="#kontakt" onClick={close}>{t.nav.contact}</a></li>
             <li className="kl-nav__cta"><a href="#prihlaska" onClick={close}>{t.nav.cta}</a></li>
             <li className="kl-nav__lang">
@@ -332,7 +334,7 @@ function Boxes({ locale }: { locale: Locale }) {
               )}
               {b.button && (
                 <div className="kl-box__footer">
-                  <a href="#prihlaska" className="kl-btn kl-btn--primary">{b.button}</a>
+                  <a href={`#prihlaska?balik=${b.variant ?? "standard"}`} className="kl-btn kl-btn--primary">{b.button}</a>
                 </div>
               )}
             </article>
@@ -392,28 +394,99 @@ function Faq({ locale }: { locale: Locale }) {
 interface FormState {
   name: string; lastName: string; phone: string; email: string;
   term: string; variant: string; experience: string; message: string; website: string;
+  company: string; ico: string;
 }
+
+const PAY_T = {
+  sk: {
+    payTitle: "Spôsob platby",
+    karta: "Platba kartou",
+    kartaSub: "Bezpečne cez Stripe. Miesto máš potvrdené okamžite.",
+    kartaOff: "Momentálne nedostupné — vyber prevod.",
+    prevod: "Bankový prevod",
+    prevodSub: "Faktúru a platobné údaje pošleme e-mailom do 24 h. Miesto držíme 5 pracovných dní.",
+    summary: "K úhrade",
+    summaryNote: "Nie sme platcami DPH — cena je konečná.",
+    firmaNote: "Firemné školenie: pošli dopyt, ozveme sa s termínom a cenou pre skupinu.",
+    company: "Firma (voliteľné)",
+    ico: "IČO (voliteľné)",
+    submitPay: "Zaplatiť kartou",
+    submitPrevod: "Objednať na faktúru",
+    submitFirma: "Poslať dopyt",
+    redirecting: "Presmerúvam na platbu…",
+  },
+  en: {
+    payTitle: "Payment method",
+    karta: "Card payment",
+    kartaSub: "Secure checkout via Stripe. Your seat is confirmed instantly.",
+    kartaOff: "Currently unavailable — choose bank transfer.",
+    prevod: "Bank transfer",
+    prevodSub: "Invoice and payment details by e-mail within 24 h. Seat held for 5 working days.",
+    summary: "To pay",
+    summaryNote: "We are not VAT registered — this is the final price.",
+    firmaNote: "Company training: send an inquiry, we come back with a date and a group price.",
+    company: "Company (optional)",
+    ico: "Company ID (optional)",
+    submitPay: "Pay by card",
+    submitPrevod: "Order on invoice",
+    submitFirma: "Send inquiry",
+    redirecting: "Redirecting to payment…",
+  },
+} as const;
 
 function ContactForm({ locale }: { locale: Locale }) {
   const t = COPY[locale].contact;
   const L = t.labels;
+  const P = PAY_T[locale];
   const terms = locale === "sk" ? KURZ.nextTerms : COURSE_EN.nextTerms;
   const [v, setV] = React.useState<FormState>({
     name: "", lastName: "", phone: "", email: "",
     term: terms[0].date, variant: "standard", experience: "zaciatocnik", message: "", website: "",
+    company: "", ico: "",
   });
+  const [payment, setPayment] = React.useState<"karta" | "prevod">("prevod");
+  const [cardAvailable, setCardAvailable] = React.useState<boolean | null>(null);
   const [consent, setConsent] = React.useState(false);
   const [invalid, setInvalid] = React.useState<string | null>(null);
   const [error, setError] = React.useState<string | null>(null);
   const [sending, setSending] = React.useState(false);
-  const [done, setDone] = React.useState(false);
+  const [redirecting, setRedirecting] = React.useState(false);
+  const [done, setDone] = React.useState<"inquiry" | null>(null);
   const [token, setToken] = React.useState<string | null>(null);
+
+  // Zisti, či je kartová brána živá (server rozhoduje, klient len zobrazuje).
+  React.useEffect(() => {
+    let alive = true;
+    fetch("/api/kurz/checkout")
+      .then((r) => r.json())
+      .then((j: { methods?: { id: string; available: boolean }[] }) => {
+        if (!alive) return;
+        const card = j.methods?.find((m) => m.id === "karta")?.available ?? false;
+        setCardAvailable(card);
+        if (card) setPayment("karta");
+      })
+      .catch(() => alive && setCardAvailable(false));
+    return () => { alive = false; };
+  }, []);
+
+  // predvyplnenie balíka z hash-u (#prihlaska?balik=pro) alebo z klikov na boxy
+  React.useEffect(() => {
+    const pick = () => {
+      const m = window.location.hash.match(/balik=(standard|pro|firma)/);
+      if (m) setV((p) => ({ ...p, variant: m[1] }));
+    };
+    pick();
+    window.addEventListener("hashchange", pick);
+    return () => window.removeEventListener("hashchange", pick);
+  }, []);
+
+  const isPurchase = v.variant !== "firma";
+  const amount = v.variant === "pro" ? KURZ.pricePro : v.variant === "standard" ? KURZ.priceStandard : 0;
 
   const set = (k: keyof FormState, val: string) => {
     setV((p) => ({ ...p, [k]: val }));
     if (error) { setError(null); setInvalid(null); }
   };
-
   const fail = (field: string, msg: string) => { setInvalid(field); setError(msg); };
 
   const submit = async (e: React.FormEvent) => {
@@ -428,40 +501,49 @@ function ContactForm({ locale }: { locale: Locale }) {
 
     setSending(true);
     setError(null);
-    const body = [
-      locale === "sk" ? "PRIHLÁŠKA NA KURZ" : "COURSE APPLICATION (EN page)",
-      `Termín: ${v.term}`,
-      `Balík: ${t.variants[v.variant]}`,
-      `Skúsenosti: ${t.experience[v.experience]}`,
-      v.message.trim() ? `\nPoznámka: ${v.message.trim()}` : null,
-    ].filter(Boolean).join("\n");
-
     try {
-      const res = await fetch("/api/lead", {
+      const res = await fetch("/api/kurz/checkout", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           name: v.name.trim(), lastName: v.lastName.trim(), email: v.email.trim(), phone: v.phone.trim(),
-          message: body, consent: true, source: locale === "sk" ? "kurz" : "kurz_en",
-          website: v.website, turnstileToken: token,
+          term: v.term, variant: v.variant, experience: t.experience[v.experience],
+          message: v.message.trim(), payment: isPurchase ? payment : "prevod", locale,
+          company: v.company.trim(), ico: v.ico.trim(),
+          consent: true, website: v.website, turnstileToken: token,
         }),
       });
-      if (!res.ok) { setError(t.errors.send); setSending(false); return; }
+      const j = (await res.json().catch(() => ({}))) as {
+        ok?: boolean; mode?: string; url?: string; redirect?: string; message?: string; error?: string;
+      };
+      if (!res.ok || !j.ok) {
+        if (j.error === "gateway_unavailable") { setCardAvailable(false); setPayment("prevod"); }
+        setError(j.message || t.errors.send);
+        setSending(false);
+        return;
+      }
+      trackEvent("kurz_prihlaska", { term: v.term, variant: v.variant, locale, payment: isPurchase ? payment : "inquiry" });
+      trackEvent("generate_lead", { source: locale === "sk" ? "kurz" : "kurz_en", value: amount, currency: "EUR" });
+      if (j.mode === "redirect" && j.url) {
+        setRedirecting(true);
+        trackEvent("begin_checkout", { value: amount, currency: "EUR", item_name: `kurz_${v.variant}` });
+        window.location.assign(j.url);
+        return;
+      }
+      if (j.mode === "prevod" && j.redirect) {
+        setRedirecting(true);
+        window.location.assign(j.redirect);
+        return;
+      }
       setSending(false);
-      setDone(true);
-      trackEvent("kurz_prihlaska", { term: v.term, variant: v.variant, locale });
-      trackEvent("generate_lead", {
-        source: locale === "sk" ? "kurz" : "kurz_en",
-        value: v.variant === "pro" ? KURZ.pricePro : KURZ.priceStandard,
-        currency: "EUR",
-      });
+      setDone("inquiry");
     } catch {
       setError(t.errors.send);
       setSending(false);
     }
   };
 
-  if (done) {
+  if (done === "inquiry") {
     return (
       <div className="kl-form__done">
         <h3><span className="kl-grad">{L.okTitle}</span></h3>
@@ -476,6 +558,10 @@ function ContactForm({ locale }: { locale: Locale }) {
       <input id={`kl-${key}`} type={type} autoComplete={auto} value={v[key]} onChange={(e) => set(key, e.target.value)} />
     </div>
   );
+
+  const submitLabel = sending
+    ? (redirecting ? P.redirecting : L.sending)
+    : !isPurchase ? P.submitFirma : payment === "karta" ? P.submitPay : P.submitPrevod;
 
   return (
     <form className="kl-form" onSubmit={submit} noValidate>
@@ -507,18 +593,52 @@ function ContactForm({ locale }: { locale: Locale }) {
           </select>
         </div>
       </div>
-      <div className="kl-field">
-        <label htmlFor="kl-exp">{L.experience}</label>
-        <select id="kl-exp" value={v.experience} onChange={(e) => set("experience", e.target.value)}>
-          {Object.entries(t.experience).map(([k, lab]) => <option key={k} value={k}>{lab}</option>)}
-        </select>
+      <div className="kl-form__row">
+        <div className="kl-field">
+          <label htmlFor="kl-exp">{L.experience}</label>
+          <select id="kl-exp" value={v.experience} onChange={(e) => set("experience", e.target.value)}>
+            {Object.entries(t.experience).map(([k, lab]) => <option key={k} value={k}>{lab}</option>)}
+          </select>
+        </div>
+        {field("company", P.company, "text", "organization")}
       </div>
       <div className="kl-field">
         <label htmlFor="kl-msg">{L.message}</label>
         <textarea id="kl-msg" value={v.message} onChange={(e) => set("message", e.target.value)} />
       </div>
 
-      <TurnstileWidget onVerify={setToken} onExpire={() => setToken(null)} />
+      {isPurchase ? (
+        <>
+          <p style={{ color: "#fff", fontSize: "1rem", margin: "0 0 0.75rem" }}>{P.payTitle}</p>
+          <div className="kl-pay" role="radiogroup" aria-label={P.payTitle}>
+            <label className={`kl-pay__opt${payment === "karta" ? " is-active" : ""}${cardAvailable === false ? " is-disabled" : ""}`}>
+              <input type="radio" name="kl-pay" value="karta" checked={payment === "karta"} disabled={cardAvailable === false}
+                onChange={() => cardAvailable !== false && setPayment("karta")} />
+              <span className="kl-check__box" aria-hidden />
+              <span>
+                <strong>{P.karta}</strong>
+                <span>{cardAvailable === false ? P.kartaOff : P.kartaSub}</span>
+              </span>
+            </label>
+            <label className={`kl-pay__opt${payment === "prevod" ? " is-active" : ""}`}>
+              <input type="radio" name="kl-pay" value="prevod" checked={payment === "prevod"} onChange={() => setPayment("prevod")} />
+              <span className="kl-check__box" aria-hidden />
+              <span>
+                <strong>{P.prevod}</strong>
+                <span>{P.prevodSub}</span>
+              </span>
+            </label>
+          </div>
+          <div className="kl-summary">
+            <span>{t.variants[v.variant]}<br /><small>{P.summaryNote}</small></span>
+            <strong>{P.summary}: {amount} €</strong>
+          </div>
+        </>
+      ) : (
+        <p className="kl-zisk__note" style={{ marginBottom: "2rem" }}>{P.firmaNote}</p>
+      )}
+
+      <TurnstileWidget theme="dark" onVerify={setToken} onExpire={() => setToken(null)} />
 
       <div className="kl-form__footer">
         <label className="kl-check">
@@ -526,11 +646,12 @@ function ContactForm({ locale }: { locale: Locale }) {
           <span className="kl-check__box" aria-hidden />
           <span>
             {L.consent}{" "}
-            <a href="/ochrana-sukromia" target="_blank" rel="noopener">{L.consentLink}</a>.
+            <a href="/ochrana-sukromia" target="_blank" rel="noopener">{L.consentLink}</a>
+            {isPurchase && (<> · <a href="/obchodne-podmienky" target="_blank" rel="noopener">{locale === "sk" ? "obchodné podmienky" : "terms"}</a></>)}.
           </span>
         </label>
         <button type="submit" className="kl-btn kl-btn--primary" disabled={sending}>
-          {sending ? L.sending : L.submit}
+          {submitLabel}
         </button>
       </div>
       {error && <p className="kl-form__msg err" role="alert">{error}</p>}
@@ -627,6 +748,7 @@ export function KurzLanding({ locale }: { locale: Locale }) {
         <Program locale={locale} />
         <Cta locale={locale} />
         <Highlights locale={locale} />
+        <KurzZisk locale={locale} />
         <Boxes locale={locale} />
         <Faq locale={locale} />
         <Contact locale={locale} />

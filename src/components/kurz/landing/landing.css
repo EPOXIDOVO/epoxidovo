@@ -169,7 +169,7 @@
 }
 .kl-nav__menu > li {
   display: inline-flex;
-  margin-right: 4rem;
+  margin-right: 3rem;
   opacity: 0;
   transform: translateY(-10px);
   animation: klNavIn 500ms ease forwards;
@@ -182,6 +182,7 @@
 .kl-nav__menu > li:nth-child(6) { animation-delay: 600ms; }
 .kl-nav__menu > li:nth-child(7) { animation-delay: 680ms; }
 .kl-nav__menu > li:nth-child(8) { animation-delay: 760ms; }
+.kl-nav__menu > li:nth-child(9) { animation-delay: 840ms; }
 .kl-nav__menu > li a {
   display: flex;
   align-items: center;
@@ -261,6 +262,7 @@
   .kl-nav__menu.is-active > li:nth-child(6) a { animation-delay: 800ms; }
   .kl-nav__menu.is-active > li:nth-child(7) a { animation-delay: 900ms; }
   .kl-nav__menu.is-active > li:nth-child(8) a { animation-delay: 1000ms; }
+  .kl-nav__menu.is-active > li:nth-child(9) a { animation-delay: 1100ms; }
   .kl-nav__menu > li.kl-nav__home a { background: none; padding: 1.5rem 0; }
   .kl-nav__menu > li.kl-nav__right { margin-left: 0; }
   .kl-nav__menu > li.kl-nav__cta { text-align: center; margin-top: 1rem; }
@@ -303,7 +305,7 @@
   .kl-nav__toggle.is-active span:first-child { transform: rotate(45deg); transform-origin: center; }
   .kl-nav__toggle.is-active span:last-child { margin-top: -8.5px; transform: rotate(-45deg); transform-origin: center; }
   .kl-nav__toggle.is-active::after { display: none; }
-  .kl.menu-is-active .kl-nav__brand { opacity: 0; }
+  .kl.menu-is-active .kl-nav__brand { opacity: 0; animation: none; pointer-events: none; }
 }
 
 /* ---------- Hello / Hero (scroll-pinned) ---------- */
@@ -971,3 +973,18 @@
 .kl-summary { display: flex; align-items: center; justify-content: space-between; gap: 1rem; padding: 1.25em 1.5em; border: 1px solid rgba(var(--kl-accent-rgb), 0.4); border-radius: 20px; margin-bottom: 2.25rem; background: rgba(var(--kl-accent-rgb), 0.05); }
 .kl-summary strong { color: #fff; font-family: var(--kl-font-display); font-size: 1.75rem; white-space: nowrap; }
 .kl-summary span { font-size: 0.9375rem; }
+
+/* opravy špecificity voči .kl-box pravidlám */
+.kl-box .kl-zisk__row dd span { font-size: inherit; }
+.kl-box .kl-chart__legend li { padding-left: 0; margin-bottom: 0; color: var(--kl-text); }
+.kl-box .kl-chart__legend li::before { display: none; }
+.kl-box .kl-zisk__slider-label span { font-size: 1rem; }
+.kl-box .kl-summary strong, .kl-box .kl-table__sum--accent span { font-size: inherit; }
+.kl-zisk__grid > * { min-width: 0; }
+.kl-zisk__calc, .kl-zisk__chart, .kl-zisk__table { max-width: 100%; overflow: hidden; }
+@media (max-width: 575.98px) {
+  .kl-zisk__row { flex-wrap: wrap; }
+  .kl-zisk__row dd { font-size: 1.35rem; }
+  .kl-zisk__row--total dd { font-size: 1.75rem; }
+  .kl-zisk__slider-label strong { font-size: 1.5rem; }
+}

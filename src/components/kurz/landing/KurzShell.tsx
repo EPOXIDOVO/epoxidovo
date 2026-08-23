@@ -1,3 +1,4 @@
+import type * as React from "react";
 import localFont from "next/font/local";
 import { Outfit } from "next/font/google";
 import { KurzLanding } from "./KurzLanding";
@@ -25,10 +26,15 @@ const outfit = Outfit({
   display: "swap",
 });
 
+/** Obal s fontovými CSS premennými — pre landing aj ďakovaciu stránku. */
+export function KurzFonts({ children }: { children: React.ReactNode }) {
+  return <div className={`${clash.variable} ${outfit.variable}`}>{children}</div>;
+}
+
 export function KurzShell({ locale }: { locale: Locale }) {
   return (
-    <div className={`${clash.variable} ${outfit.variable}`}>
+    <KurzFonts>
       <KurzLanding locale={locale} />
-    </div>
+    </KurzFonts>
   );
 }

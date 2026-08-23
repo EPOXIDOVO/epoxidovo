@@ -16,9 +16,11 @@ import { Turnstile, type TurnstileInstance } from "@marsidev/react-turnstile";
 interface Props {
   onVerify: (token: string) => void;
   onExpire?: () => void;
+  /** Farebná téma widgetu — default light (biele formuláre), dark pre tmavé landingy. */
+  theme?: "light" | "dark" | "auto";
 }
 
-export function TurnstileWidget({ onVerify, onExpire }: Props) {
+export function TurnstileWidget({ onVerify, onExpire, theme = "light" }: Props) {
   const ref = React.useRef<TurnstileInstance>(null);
   const siteKey = process.env.NEXT_PUBLIC_TURNSTILE_SITE_KEY;
 
@@ -43,7 +45,7 @@ export function TurnstileWidget({ onVerify, onExpire }: Props) {
       ref={ref}
       siteKey={siteKey}
       options={{
-        theme: "light",
+        theme,
         size: "flexible",
         language: "sk",
       }}
