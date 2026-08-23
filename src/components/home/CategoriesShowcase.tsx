@@ -173,7 +173,7 @@ function CategoriesShowcaseInner() {
                   type="button"
                   onClick={() => otvor(VARIANT_PHOTOS[cat.slug], vi, cat.priceFrom || null)}
                   aria-label={`${v.alt} — otvoriť náhľad`}
-                  className="group/v relative aspect-[16/9] rounded-xl overflow-hidden focus:outline-none focus-visible:ring-2 focus-visible:ring-[#3db6e8]"
+                  className="group/v relative aspect-[16/9] rounded-xl overflow-hidden transition-all duration-300 ease-out hover:scale-[1.06] hover:z-10 hover:shadow-[0_18px_40px_rgba(0,0,0,0.45)] hover:ring-[3px] hover:ring-white focus:outline-none focus-visible:ring-[3px] focus-visible:ring-white"
                 >
                   <Image
                     src={v.src}
@@ -181,13 +181,8 @@ function CategoriesShowcaseInner() {
                     fill
                     sizes="(max-width: 768px) 50vw, 25vw"
                     quality={75}
-                    className="object-cover group-hover/v:scale-105 transition-transform duration-500"
+                    className="object-cover group-hover/v:scale-110 transition-transform duration-500"
                   />
-                  {(v.farbaLabel || v.farba) && (
-                    <span className="absolute bottom-1.5 left-1.5 px-2 py-0.5 rounded-md bg-white/90 text-[10px] md:text-[11px] font-bold text-[#1a1a1a] whitespace-nowrap">
-                      {v.farbaLabel ?? v.farba}
-                    </span>
-                  )}
                 </button>
               ))}
 
