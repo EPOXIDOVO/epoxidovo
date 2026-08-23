@@ -26,6 +26,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
     { url: `${SITE.url}/vzorkovnik`, lastModified: now, changeFrequency: "monthly", priority: 0.7 },
     { url: `${SITE.url}/ai-vizualizer`, lastModified: now, changeFrequency: "monthly", priority: 0.7 },
     { url: `${SITE.url}/navrhni-podlahu`, lastModified: now, changeFrequency: "monthly", priority: 0.8 },
+    { url: `${SITE.url}/metalicka-podlaha`, lastModified: now, changeFrequency: "monthly", priority: 0.9 },
     { url: `${SITE.url}/kupit-material/b2b`, lastModified: now, changeFrequency: "yearly", priority: 0.4 },
   ];
 

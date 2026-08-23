@@ -14,6 +14,14 @@ export function SiteChrome({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();
   const isHome = pathname === "/";
 
+  // Landing kurzu (SK + EN) má vlastnú hlavičku, pätu aj tmavý dizajn
+  // (1:1 podľa TicketWave) — globálne chrome by sa s ním bilo.
+  const isKurzLanding =
+    pathname === "/kurz" || pathname.startsWith("/en/epoxy-flooring-course");
+  if (isKurzLanding) {
+    return <main id="main">{children}</main>;
+  }
+
   // Obchodná časť má vlastnú commerce hlavičku ako Epodex/GymBeam — logo +
   // search + košík, bez servisných CTA. Patrí sem aj konfigurátor a
   // vzorkovník, lebo z nich vedie cesta do košíka, nie do dopytu.
@@ -21,12 +29,15 @@ export function SiteChrome({ children }: { children: React.ReactNode }) {
     pathname.startsWith("/eshop") ||
     pathname.startsWith("/kupit-material") ||
     pathname.startsWith("/navrhni-podlahu") ||
-    pathname.startsWith("/vzorkovnik");
+    pathname.startsWith("/vzorkovnik") ||
+    pathname.startsWith("/metalicka-podlaha");
 
   // v konfigurátore a vzorkovníku je zákazník uprostred rozhodovania —
   // vyhľadávanie ho len odvádza inam
   const bezVyhladavania =
-    pathname.startsWith("/navrhni-podlahu") || pathname.startsWith("/vzorkovnik");
+    pathname.startsWith("/navrhni-podlahu") ||
+    pathname.startsWith("/vzorkovnik") ||
+    pathname.startsWith("/metalicka-podlaha");
 
   if (isShop) {
     return (

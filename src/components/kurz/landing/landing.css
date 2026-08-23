@@ -353,9 +353,15 @@
   font-size: 7.25rem;
   line-height: 1;
   text-align: center;
-  transform: translate3d(-50%, -50%, 0) scale(var(--kl-h1-scale, 0.4));
-  opacity: var(--kl-h1-opacity, 0);
-  will-change: transform, opacity;
+  transform: translate3d(-50%, -50%, 0) scale(var(--kl-h1-scroll, 1));
+  will-change: transform;
+}
+/* intro (ako TicketWave): z 0.4 na 0.65 + fade-in; scroll potom dorastie na 1 */
+.kl-hello h1 > span {
+  display: inline-block;
+  transform: scale(0.4);
+  opacity: 0;
+  animation: klH1Intro 1.4s cubic-bezier(0.22, 1, 0.36, 1) 350ms forwards;
 }
 @media (max-width: 991.98px) { .kl-hello h1 { font-size: 4.25rem; } }
 @media (max-width: 575.98px) { .kl-hello h1 { max-width: 6.4em; font-size: 3.75rem; top: 45%; } }
@@ -894,6 +900,7 @@
 
 /* ---------- Keyframes ---------- */
 @keyframes klFadeIn { from { opacity: 0; } to { opacity: 1; } }
+@keyframes klH1Intro { from { transform: scale(0.4); opacity: 0; } to { transform: scale(0.65); opacity: 1; } }
 @keyframes klNavIn { to { opacity: 1; transform: translateY(0); } }
 @keyframes klFadeInUp {
   0% { transform: translate3d(0, 2em, 0); opacity: 0; }
@@ -906,6 +913,7 @@
 
 @media (prefers-reduced-motion: reduce) {
   .kl *, .kl *::before, .kl *::after { animation-duration: 0.01ms !important; animation-iteration-count: 1 !important; transition-duration: 0.01ms !important; }
-  .kl-hello h1 { --kl-h1-scale: 1; --kl-h1-opacity: 1; }
+  .kl-hello h1 { --kl-h1-scroll: 1.538; }
+  .kl-hello h1 > span { transform: scale(0.65); opacity: 1; animation: none; }
   .kl-about h2, .kl-about p { opacity: 1 !important; }
 }
