@@ -72,6 +72,56 @@ function DiceIcon({ pips }: { pips: 1 | 2 | 3 | 4 | 5 }) {
 
 /** Obal s providerom — sekcia sa používa na viacerých stránkach, nech
  *  nemusí každá z nich vedieť o náhľade. */
+/**
+ * Stĺpce showcase — 4 živé kategórie z CATEGORIES + 2 pripravované
+ * (mramorové, betón look). Tie dve zámerne NIE sú v globálnych
+ * CATEGORIES, aby nevznikli prázdne /sluzby/… stránky a sitemap.
+ */
+type ShowcaseCat = {
+  slug: string;
+  name: string;
+  priceFrom: number;
+  priceLabel?: string;
+  /** Hlavná fotka; bez nej stĺpec ukazuje „Čoskoro". */
+  image?: string;
+  href?: string;
+  pripravujeme?: boolean;
+};
+
+const SHOWCASE_CATS: ShowcaseCat[] = [
+  ...CATEGORIES.map((c) => ({
+    slug: c.slug,
+    name: c.slug === "jednofarebne" ? "Hladké jednofarebné" : c.name,
+    priceFrom: c.priceFrom,
+    priceLabel: c.priceLabel,
+    image:
+      c.slug === "jednofarebne"
+        ? "/images/hero/byvanie-v2.webp"
+        : c.slug === "priemyselne"
+          ? "/images/hero/hala.jpg"
+          : `/images/categories/${c.slug}.jpg`,
+    href: c.slug === "priemyselne" ? "/realizacie?priestor=hala-firma" : `/realizacie?kategoria=${c.slug}`,
+  })),
+  {
+    slug: "mramorove",
+    name: "Mramorové",
+    priceFrom: 0,
+    priceLabel: "Cena na dopyt",
+    image: "/images/categories/mramorove.jpg",
+    href: "/realizacie?kategoria=mramorove",
+    pripravujeme: true,
+  },
+  {
+    slug: "beton-look",
+    name: "Betón look",
+    priceFrom: 0,
+    priceLabel: "Cena na dopyt",
+    image: "/images/vzorkovnik/arturo/concrete-look-fresh-power.webp",
+    href: "/vzorkovnik?typ=arturo",
+    pripravujeme: true,
+  },
+];
+
 export function CategoriesShowcase() {
   return (
     <NahladPodlahyProvider>
@@ -102,43 +152,31 @@ function CategoriesShowcaseInner() {
 
           {/* Karty s kategóriami — každý stĺpec: hlavná karta + 3 farebné
               varianty (zatiaľ dummy "Čoskoro") + vlastný vzorkovník link */}
-          <div className="mt-8 md:mt-16 grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-4 gap-2.5 md:gap-5">
-            {CATEGORIES.map((cat, idx) => (
+          <div className="mt-8 md:mt-16 grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-2.5 md:gap-4">
+            {SHOWCASE_CATS.map((cat, idx) => (
               <div
                 key={cat.slug}
                 className="flex flex-col gap-1.5 md:gap-2"
               >
               <Link
-                href={
-                  cat.slug === "priemyselne"
-                    ? "/realizacie?priestor=hala-firma"
-                    : `/realizacie?kategoria=${cat.slug}`
-                }
+                href={cat.href ?? "/realizacie"}
                 aria-label={`Pozrieť realizácie — ${cat.name}`}
                 className="group relative flex flex-col rounded-2xl overflow-hidden bg-[#5c2c18] text-left hover:shadow-[0_18px_40px_rgba(0,0,0,0.35)] hover:-translate-y-1 transition-all duration-500 focus:outline-none focus-visible:ring-2 focus-visible:ring-[#3db6e8]"
               >
                 {/* Horný blok — kocka + nadpis. Pevná výška. */}
-                <div className="px-3 pt-2.5 pb-2 md:p-7 md:pb-4 h-[96px] md:h-[180px] flex flex-col">
-                  <div className="w-6 h-6 md:w-10 md:h-10 mb-1 md:mb-5 rounded-md bg-white text-[#5c2c18] group-hover:text-[#3db6e8] flex items-center justify-center p-1 md:p-1.5 transition-colors duration-700 shrink-0">
-                    <DiceIcon pips={(idx + 1) as 1 | 2 | 3 | 4 | 5} />
+                <div className="px-3 pt-2.5 pb-2 md:p-5 md:pb-3 h-[96px] md:h-[150px] flex flex-col">
+                  <div className="w-6 h-6 md:w-8 md:h-8 mb-1 md:mb-3 rounded-md bg-white text-[#5c2c18] group-hover:text-[#3db6e8] flex items-center justify-center p-1 md:p-1.5 transition-colors duration-700 shrink-0">
+                    <DiceIcon pips={((idx % 5) + 1) as 1 | 2 | 3 | 4 | 5} />
                   </div>
-                  <h3 className="text-[17px] leading-[1.12] md:text-2xl lg:text-[28px] font-black text-white tracking-tight md:leading-[1.05]">
-                    {cat.name === "Jednofarebné"
-                      ? "Hladké jednofarebné"
-                      : cat.name}
+                  <h3 className="text-[17px] leading-[1.12] md:text-xl lg:text-[22px] font-black text-white tracking-tight md:leading-[1.05]">
+                    {cat.name}
                   </h3>
                 </div>
 
                 {/* Fotka */}
                 <div className="relative overflow-hidden aspect-[4/3]">
                   <Image
-                    src={
-                      cat.slug === "jednofarebne"
-                        ? "/images/hero/byvanie-v2.webp"
-                        : cat.slug === "priemyselne"
-                        ? "/images/hero/hala.jpg"
-                        : `/images/categories/${cat.slug}.jpg`
-                    }
+                    src={cat.image ?? "/images/categories/jednofarebne.jpg"}
                     alt={`${cat.name} epoxidová podlaha`}
                     fill
                     sizes="(max-width: 768px) 50vw, 25vw"
@@ -167,6 +205,16 @@ function CategoriesShowcaseInner() {
 
               {/* 3 farebné varianty toho istého typu podlahy — klik otvorí
                   náhľad s typom, farbou, vizualizáciou a cestou k CP */}
+              {cat.pripravujeme &&
+                [0, 1, 2].map((i) => (
+                  <div
+                    key={`coskoro-${i}`}
+                    aria-hidden
+                    className="relative aspect-[16/9] rounded-xl border-2 border-dashed border-white/25 bg-[#5c2c18]/60 flex items-center justify-center text-white/50 text-[11px] md:text-xs font-bold uppercase tracking-wide select-none"
+                  >
+                    Čoskoro
+                  </div>
+                ))}
               {(VARIANT_PHOTOS[cat.slug] ?? []).map((v, vi) => (
                 <button
                   key={v.src}
@@ -189,7 +237,14 @@ function CategoriesShowcaseInner() {
               {/* Vzorkovník farieb — RAL vzorkovník platí pre jednofarebné
                   a priemyselné. Ostatné kategórie (chips/metal) majú vlastné
                   farebné systémy — ich vzorkovník je zatiaľ čoskoro. */}
-              {cat.slug === "jednofarebne" || cat.slug === "priemyselne" ? (
+              {cat.pripravujeme ? (
+                <div
+                  aria-disabled
+                  className="inline-flex items-center justify-center px-3 py-2.5 md:py-3 rounded-full border-2 border-dashed border-white/25 bg-[#5c2c18]/70 text-white/50 font-bold text-[12px] md:text-sm whitespace-nowrap uppercase tracking-wide select-none cursor-default"
+                >
+                  Čoskoro
+                </div>
+              ) : cat.slug === "jednofarebne" || cat.slug === "priemyselne" ? (
                 <Link
                   href="/vzorkovnik"
                   aria-label={`Vzorkovník farieb — ${cat.name}`}
