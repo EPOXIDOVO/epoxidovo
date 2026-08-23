@@ -100,12 +100,12 @@ const EMPTY_BASE: Omit<State, "term"> = {
 const VARIANT_LABEL: Record<Locale, Record<string, string>> = {
   sk: {
     standard: `ŠTANDARD (${KURZ.priceStandard} €)`,
-    pro: `PRO + štartovací balík (${KURZ.pricePro} €)`,
+    pro: `PRO + mentoring (${KURZ.pricePro} €)`,
     firma: "Firemné školenie (3+ ľudí)",
   },
   en: {
     standard: `STANDARD (€${KURZ.priceStandard})`,
-    pro: `PRO + starter package (€${KURZ.pricePro})`,
+    pro: `PRO + mentoring (€${KURZ.pricePro})`,
     firma: "Company training (3+ people)",
   },
 };

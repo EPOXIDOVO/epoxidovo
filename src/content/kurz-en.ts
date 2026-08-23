@@ -141,6 +141,6 @@ export const COURSE_EN_SUMMARY =
   "taught in English, where a maximum of six participants learn the complete process of a poured epoxy resin floor: diagnosing " +
   "and grinding the concrete substrate, priming, mixing two-component resins, pouring a single-colour floor, " +
   "flake and metallic decorative finishes, coving and detail work, and finally how to price a job. Every " +
-  "participant pours roughly 12 m² of real floor themselves. The price is €690 (standard) or €1,190 (pro " +
-  "package including starter material), covering material, tools, a manual, lunch, a certificate and 30 days " +
-  "of post-course support. It suits tradespeople, new contractors, company crews and owners doing their own floor.";
+  "participant pours roughly 12 m² of real floor themselves. The price is €499 (standard) or €1,499 (PRO " +
+  "package with 3 months of personal mentoring and starter material), covering material, tools, a manual, lunch, a certificate and 30 days " +
+  "of post-course support; the PRO package adds 3 months of personal mentoring. It suits tradespeople, new contractors, company crews and owners doing their own floor.";

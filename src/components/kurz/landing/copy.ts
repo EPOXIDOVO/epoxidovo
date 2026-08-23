@@ -156,12 +156,12 @@ export const COPY: Record<Locale, LandingCopy> = {
           variant: "standard",
         },
         {
-          number: "02 · PRO",
-          title: "Kurz PRO + štartovací balík",
+          number: "02 · PRO + Mentoring",
+          title: "Kurz PRO + mentoring",
           price: { value: `${KURZ.pricePro} €`, suffix: "/ osoba" },
-          text: "Všetko zo Štandardu a k tomu materiál na prvú zákazku (~20 m²), sada náradia, partnerské ceny v e-shope natrvalo a 3 mesiace konzultácií.",
-          items: ["Všetko zo Štandardu", "Materiál na ~20 m²", "Sada náradia", "Partnerské ceny + 3 mesiace konzultácií"],
-          button: "Chcem PRO",
+          text: "Všetko zo Štandardu a k tomu 3 mesiace osobného mentoringu — lektor ti pomôže naceniť prvé zákazky, skontroluje postup na fotkách z realizácie a je na telefóne, keď niečo nejde. Plus materiál na prvú zákazku (~20 m²), sada náradia a partnerské ceny v e-shope natrvalo.",
+          items: ["Všetko zo Štandardu", "3 mesiace osobného mentoringu (telefón, fotky z realizácie, cenové ponuky)", "Materiál na ~20 m² + sada náradia", "Partnerské ceny v e-shope natrvalo"],
+          button: "Chcem PRO + mentoring",
           variant: "pro",
         },
         {
@@ -195,7 +195,7 @@ export const COPY: Record<Locale, LandingCopy> = {
       },
       variants: {
         standard: `Štandard (${KURZ.priceStandard} €)`,
-        pro: `PRO + štartovací balík (${KURZ.pricePro} €)`,
+        pro: `PRO + mentoring (${KURZ.pricePro} €)`,
         firma: "Firemné školenie (3+ ľudí)",
       },
       experience: {
@@ -260,7 +260,7 @@ export const COPY: Record<Locale, LandingCopy> = {
       h2: "Course packages",
       boxes: [
         { number: "01 · Standard", title: "Standard course", price: { value: `€${COURSE_EN.priceStandard}`, suffix: "/ person" }, text: "The complete two-day training with your own area, manual, consumption calculator and certificate. We are not VAT registered — this is the final price.", items: ["2 days, 16 hours of practice", "Your own 12 m² area", "Manual + consumption calculator", "Certificate and 30 days of support"], button: "Choose Standard", variant: "standard" },
-        { number: "02 · PRO", title: "PRO course + starter kit", price: { value: `€${COURSE_EN.pricePro}`, suffix: "/ person" }, text: "Everything in Standard plus material for your first job (~20 m²), a tool set, permanent partner pricing in our e-shop and 3 months of consulting.", items: ["Everything in Standard", "Material for ~20 m²", "Tool set", "Partner pricing + 3 months of consulting"], button: "Choose PRO", variant: "pro" },
+        { number: "02 · PRO + Mentoring", title: "PRO course + mentoring", price: { value: `€${COURSE_EN.pricePro}`, suffix: "/ person" }, text: "Everything in Standard plus 3 months of personal mentoring — the instructor helps you price your first jobs, reviews your work from site photos and is on the phone when something goes wrong. Plus material for your first job (~20 m²), a tool set and permanent partner pricing in our e-shop.", items: ["Everything in Standard", "3 months of personal mentoring (phone, site photos, quotes)", "Material for ~20 m² + tool set", "Partner pricing in our e-shop, permanently"], button: "Choose PRO + mentoring", variant: "pro" },
         { number: "03 · Company", title: "Company training", text: "Three or more people from one crew? We run a private date just for you — at our centre or in your hall.", button: "Arrange a date", variant: "firma" },
         { number: "04 · Graduates", title: "Material after the course", text: "Graduates buy Sika and TopStone material in our e-shop at partner prices with access to technical support.", muted: true },
       ],
@@ -281,7 +281,7 @@ export const COPY: Record<Locale, LandingCopy> = {
       },
       variants: {
         standard: `Standard (€${COURSE_EN.priceStandard})`,
-        pro: `PRO + starter kit (€${COURSE_EN.pricePro})`,
+        pro: `PRO + mentoring (€${COURSE_EN.pricePro})`,
         firma: "Company training (3+ people)",
       },
       experience: {

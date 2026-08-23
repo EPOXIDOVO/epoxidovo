@@ -15,7 +15,7 @@ const PATH = "/en/epoxy-flooring-course";
 export const metadata: Metadata = {
   title: { absolute: "Epoxy Flooring Course in Europe — 2-Day Training" },
   description:
-    "Hands-on epoxy resin flooring training in Slovakia. 2 days, max. 6 people, 12 m² you pour yourself, material and tools included. From €690.",
+    "Hands-on epoxy resin flooring training in Slovakia. 2 days, max. 6 people, 12 m² you pour yourself, material and tools included. From €499.",
   keywords: [
     "epoxy flooring course",
     "epoxy floor training",
@@ -42,7 +42,7 @@ export const metadata: Metadata = {
     alternateLocale: ["sk_SK"],
     title: "Epoxy Flooring Course — learn to pour a floor in 2 days",
     description:
-      "Hands-on epoxy resin flooring training in Slovakia. Max. 6 people per group, 80 % of the time with tools in hand, 12 m² you pour yourself. From €690.",
+      "Hands-on epoxy resin flooring training in Slovakia. Max. 6 people per group, 80 % of the time with tools in hand, 12 m² you pour yourself. From €499.",
     url: PATH,
     images: [
       {
@@ -56,7 +56,7 @@ export const metadata: Metadata = {
   twitter: {
     card: "summary_large_image",
     title: "Epoxy Flooring Course — EPOXIDOVO Academy",
-    description: "2 days of practice, max. 6 people, 12 m² you pour yourself. From €690.",
+    description: "2 days of practice, max. 6 people, 12 m² you pour yourself. From €499.",
     images: ["/og-home.jpg?v=3"],
   },
 };

@@ -10,8 +10,8 @@ export const KURZ = {
   place: "Ružomberok (školiace centrum EPOXIDOVO)",
   duration: "2 dni · 9:00 — 17:00",
   groupSize: 6,
-  priceStandard: 690,
-  pricePro: 1190,
+  priceStandard: 499,
+  pricePro: 1499,
   language: "angličtina (lektor rozumie aj po slovensky)",
   nextTerms: [
     { date: "12. — 13. september 2026", iso: "2026-09-12", left: 3 },
@@ -136,7 +136,7 @@ export const KURZ_SUMMARY =
   "kde sa maximálne 6 účastníkov naučí kompletný postup liatej epoxidovej podlahy: diagnostiku a " +
   "brúsenie betónového podkladu, penetráciu, miešanie dvojzložkových živíc, liatie jednofarebnej " +
   "podlahy, chipsový a metalický dekor, riešenie soklov a detailov, a napokon cenotvorbu zákazky. " +
-  "Kurz prebieha v angličtine. Každý účastník si sám odleje vlastnú plochu približne 12 m². Cena je 690 € (štandard) alebo " +
-  "1 190 € (balík PRO so štartovacím materiálom), vrátane materiálu, náradia, manuálu, obedu, " +
-  "certifikátu a 30 dní podpory po kurze. Kurz je vhodný pre remeselníkov, začínajúcich živnostníkov, " +
+  "Kurz prebieha v angličtine. Každý účastník si sám odleje vlastnú plochu približne 12 m². Cena je 499 € (štandard) alebo " +
+  "1 499 € (balík PRO s mentoringom a štartovacím materiálom), vrátane materiálu, náradia, manuálu, obedu, " +
+  "certifikátu a 30 dní podpory po kurze; balík PRO pridáva 3 mesiace osobného mentoringu. Kurz je vhodný pre remeselníkov, začínajúcich živnostníkov, " +
   "firemné partie aj majiteľov, ktorí si podlahu robia sami.";

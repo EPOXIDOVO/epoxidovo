@@ -13,7 +13,7 @@ import {
 export const metadata: Metadata = {
   title: "Kurz epoxidových podláh — 2-dňové školenie",
   description:
-    "Praktický kurz liatych epoxidových podláh v Ružomberku. 2 dni, max. 6 ľudí, vlastná plocha 12 m², materiál a náradie v cene, certifikát a 30 dní podpory. Od 690 €.",
+    "Praktický kurz liatych epoxidových podláh v Ružomberku. 2 dni, max. 6 ľudí, vlastná plocha 12 m², materiál a náradie v cene, certifikát a 30 dní podpory. Od 499 €.",
   keywords: [
     "kurz epoxidových podláh",
     "školenie epoxidové podlahy",
@@ -39,14 +39,14 @@ export const metadata: Metadata = {
     locale: "sk_SK",
     title: "Kurz epoxidových podláh — nauč sa liať za 2 dni",
     description:
-      "Max. 6 ľudí v skupine, 80 % času s náradím v ruke, vlastná plocha 12 m². Materiál, náradie, manuál aj certifikát v cene. Od 690 €.",
+      "Max. 6 ľudí v skupine, 80 % času s náradím v ruke, vlastná plocha 12 m². Materiál, náradie, manuál aj certifikát v cene. Od 499 €.",
     url: "/kurz",
     images: [{ url: "/og-home.jpg?v=3", width: 1200, height: 630, alt: "Kurz epoxidových podláh EPOXIDOVO Akadémia" }],
   },
   twitter: {
     card: "summary_large_image",
     title: "Kurz epoxidových podláh — EPOXIDOVO Akadémia",
-    description: "2 dni praxe, max. 6 ľudí, vlastná plocha 12 m². Od 690 €.",
+    description: "2 dni praxe, max. 6 ľudí, vlastná plocha 12 m². Od 499 €.",
     images: ["/og-home.jpg?v=3"],
   },
 };

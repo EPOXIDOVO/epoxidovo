@@ -67,7 +67,7 @@ const PRICE: Record<"standard" | "pro", number> = {
 };
 const LABEL: Record<"standard" | "pro" | "firma", string> = {
   standard: "Kurz epoxidových podláh — Štandard",
-  pro: "Kurz epoxidových podláh — PRO + štartovací balík",
+  pro: "Kurz epoxidových podláh — PRO + mentoring",
   firma: "Firemné školenie (dopyt)",
 };
 
