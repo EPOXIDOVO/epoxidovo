@@ -6,7 +6,7 @@ import Link from "next/link";
 import { Container } from "@/components/ui/Container";
 import { CATEGORIES } from "@/content/categories";
 import type { FotkaPodlahy } from "@/content/typ-podlahy";
-import { useNahladPodlahy } from "./NahladPodlahy";
+import { NahladPodlahyProvider, useNahladPodlahy } from "./NahladPodlahy";
 
 /**
  * Sekcia "Čo všetko vieme vyčarovať" — z briefu klienta:
@@ -70,7 +70,17 @@ function DiceIcon({ pips }: { pips: 1 | 2 | 3 | 4 | 5 }) {
   );
 }
 
+/** Obal s providerom — sekcia sa používa na viacerých stránkach, nech
+ *  nemusí každá z nich vedieť o náhľade. */
 export function CategoriesShowcase() {
+  return (
+    <NahladPodlahyProvider>
+      <CategoriesShowcaseInner />
+    </NahladPodlahyProvider>
+  );
+}
+
+function CategoriesShowcaseInner() {
   const { otvor } = useNahladPodlahy();
   return (
     <>
