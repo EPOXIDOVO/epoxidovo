@@ -70,14 +70,14 @@ function Krokovnik({ krok }: { krok: Krok }) {
                   ? "bg-[#1B2430] text-white"
                   : hotovo
                     ? "bg-[#e6f4fb] text-[#15749e]"
-                    : "bg-white/70 text-[#1B2430]/45",
+                    : "bg-white text-[#1B2430]/45 ring-1 ring-[#1B2430]/8",
               ].join(" ")}
             >
               {hotovo ? <Check className="w-3 h-3" aria-hidden /> : <span>{c}</span>}
               <span className="hidden sm:inline">{n}</span>
             </span>
             {i < nazvy.length - 1 && (
-              <span aria-hidden className="w-3 md:w-5 h-px bg-white/40" />
+              <span aria-hidden className="w-3 md:w-5 h-px bg-[#1B2430]/15" />
             )}
           </li>
         );
@@ -213,7 +213,7 @@ export function KonfiguratorCP() {
                     void dalej(2);
                   }}
                   className={[
-                    "group text-left rounded-2xl overflow-hidden ring-1 transition-all",
+                    "group flex h-full flex-col text-left rounded-2xl overflow-hidden ring-1 transition-all",
                     "hover:-translate-y-0.5 hover:shadow-[0_10px_28px_rgba(27,36,48,0.16)]",
                     typ?.slug === t.slug
                       ? "ring-[3px] ring-[#2EA3DC]"
@@ -229,11 +229,11 @@ export function KonfiguratorCP() {
                       className="object-cover transition-transform duration-500 group-hover:scale-[1.04]"
                     />
                   </span>
-                  <span className="block p-3">
+                  <span className="flex flex-1 flex-col p-3">
                     <span className="block font-extrabold text-[#1B2430] leading-tight">
                       {t.name}
                     </span>
-                    <span className="mt-1 block text-sm font-bold text-[#15749e]">
+                    <span className="mt-auto pt-1 block text-sm font-bold text-[#15749e]">
                       {t.priceFrom > 0 ? (
                         <>
                           od {t.priceFrom} € <span className="text-[#1B2430]/50 font-semibold">/m²</span>
