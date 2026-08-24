@@ -79,7 +79,7 @@ export default function CenovaPonukaPage() {
               </h1>
             </div>
             <p className="mt-2 md:mt-4 text-xs md:text-base text-white/90 max-w-2xl mx-auto leading-snug md:leading-relaxed font-medium">
-              Vyklikaj si podlahu a cenu uvidíš hneď. Ponuku ti pošleme
+              Vyklikaj si podlahu a plochu — cenovú ponuku ti pošleme
               na e-mail do pár minút.
             </p>
             <nav
