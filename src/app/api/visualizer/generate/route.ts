@@ -261,7 +261,13 @@ export async function POST(req: NextRequest) {
   // Posielame max 2 referencie (cost trade-off, viac = drahšie tokeny).
   let referenceImages: ReferenceImage[] = [];
   if (isValidTextureSlug(body.texture)) {
-    const refPaths = getReferenceImagePaths(body.texture as TextureSlug).slice(0, 2);
+    // Per-color referenčná vzorka (TopStone efekt) má prednosť — AI potom
+    // kopíruje presne ten efekt, ktorý si zákazník klikol na webe.
+    const colorRef = getColorPreset(body.texture, body.colorSlug ?? "")?.color.refImage;
+    const refPaths = [
+      ...(colorRef ? [colorRef] : []),
+      ...getReferenceImagePaths(body.texture as TextureSlug),
+    ].slice(0, 2);
     if (refPaths.length > 0) {
       // SSRF guard: NEDÔVERUJEME Host headeru — attacker by mohol nastaviť
       // Host: evil.com a presmerovať fetch ref-image na svoj server.

@@ -77,6 +77,28 @@ export function AiVisualizer() {
 
   const fileInputRef = React.useRef<HTMLInputElement | null>(null);
 
+  /** Prefill z URL — náhľad fotky na webe posiela ?texture= a ?farba= (slug
+   *  alebo label efektu). Zákazník potom len odfotí priestor a generuje. */
+  const [prefillFarba, setPrefillFarba] = React.useState(false);
+  React.useEffect(() => {
+    const q = new URLSearchParams(window.location.search);
+    const t = q.get("texture");
+    if (!t || !(t in TEXTURES)) return;
+    setTexture(t as TextureSlug);
+    const f = (q.get("color") ?? q.get("farba") ?? "").toLowerCase();
+    if (f) {
+      const hit = COLORS[t as TextureSlug].find(
+        (c) => c.slug === f || c.slug === f.replace(/\s+/g, "-") || c.commercialName.toLowerCase() === f,
+      );
+      if (hit) {
+        preskocReset.current = true;
+        setColorSlug(hit.slug);
+        setFinish("leskla");
+        setPrefillFarba(true);
+      }
+    }
+  }, []);
+
   // ───────────────────────────────────────────────────────────────────────
   // File upload handlers
   // ───────────────────────────────────────────────────────────────────────
@@ -101,7 +123,8 @@ export function AiVisualizer() {
       setMimeType(file.type === "image/jpg" ? "image/jpeg" : file.type);
       setPreviewUrl(dataUrl);
       trackEvent("visualizer_upload", { size: file.size, type: file.type });
-      setStep("pick-texture");
+      // prefill z webu: textúra aj farba sú už vybraté — rovno na potvrdenie
+      setStep(prefillFarba ? "pick-color" : "pick-texture");
       scrollToTop();
     };
     reader.onerror = () => setError("Nepodarilo sa načítať fotku. Skús inú.");
@@ -267,7 +290,15 @@ export function AiVisualizer() {
   // Pri zmene textúry zresetujeme farbu na null — user musí vedome kliknúť
   // farbu (žiadny default highlight v color pickeri). Lak zachováme — finish
   // je nezávislý od textúry/farby (preference užívateľa naprieč variantmi).
+  const preskocReset = React.useRef(false);
   React.useEffect(() => {
+    // prefill z URL nastavil textúru aj farbu naraz — ten reset preskoč.
+    // Efekt beží aj pri mounte (texture ešte null) — flag míňame až pri
+    // reálnej zmene textúry, inak ho mount zožerie priskoro.
+    if (preskocReset.current) {
+      if (texture !== null) preskocReset.current = false;
+      return;
+    }
     setColorSlug(null);
   }, [texture]);
 
@@ -740,6 +771,25 @@ function PickColorStep({
           - hladka/chips → single color
           Renderujem inline aby zostal jeden komponent (a finish/turnstile/
           generate ostali spoločné nižšie). */}
+
+      {texture === "metalicka" && colorSlug && COLORS.metalicka.some((c) => c.slug === colorSlug) && (
+        /* Predvolený TopStone efekt z náhľadu fotky na webe — netreba nič
+           vyberať, rovno generovať. Mixér nižšie ho prepíše, ak chce inú. */
+        <div className="mb-4 flex items-center gap-3 rounded-2xl border-2 border-[#2EA3DC] bg-[#eaf6fc] p-3">
+          <img
+            src={COLORS.metalicka.find((c) => c.slug === colorSlug)?.refImage ?? ""}
+            alt=""
+            className="w-14 h-14 rounded-xl object-cover shrink-0"
+          />
+          <div className="min-w-0 flex-1">
+            <div className="text-[10px] font-extrabold uppercase tracking-wider text-[#1B2430]/55">Predvolený efekt z webu</div>
+            <div className="font-extrabold text-[#1B2430]">
+              {COLORS.metalicka.find((c) => c.slug === colorSlug)?.commercialName}
+            </div>
+            <div className="text-xs text-[#1B2430]/60">Môžeš rovno generovať — alebo si nižšie namiešaj vlastnú zmes.</div>
+          </div>
+        </div>
+      )}
 
       {texture === "mramor" ? (
         <MramorPicker colorSlug={colorSlug} onColor={onColor} />

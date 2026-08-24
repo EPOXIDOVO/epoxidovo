@@ -57,6 +57,8 @@ export interface ColorPreset {
   /** TOP 4 najčastejšie volené farby per textúra — zobrazené v pickeri default,
    * zvyšok skrytý za "Ďalšie farby" tlačidlom (lepší UX, menej overwhelm). */
   featured?: boolean;
+  /** Fotka reálnej vzorky — posiela sa AI ako referencia, aby efekt sedel 1:1. */
+  refImage?: string;
 }
 
 // ════════════════════════════════════════════════════════════════════════
@@ -295,6 +297,152 @@ export const COLORS: Record<TextureSlug, ColorPreset[]> = {
       hex: "#5c1f2e",
       promptColor:
         "burgundy wine metallic with copper swirls, exact base hex #5C1F2E, rich and warm",
+    },
+
+    // TopStone reálne efekty — prichádzajú predvolené z náhľadov fotiek na webe.
+    {
+      slug: "azuro",
+      commercialName: "Azuro",
+      hex: "#1493c2",
+      promptColor:
+        "TopStone Azuro — vivid azure blue metallic epoxy with turquoise and white pearlescent swirls, exact base hex #1493C2, replicate the swirl pattern and colour of the reference sample photo exactly",
+      refImage: "/images/eshop/topstone-metallic/azuro.jpg",
+    },
+    {
+      slug: "gold",
+      commercialName: "Gold",
+      hex: "#c46004",
+      promptColor:
+        "TopStone Gold — rich golden amber metallic epoxy with bronze swirls, exact base hex #C46004, replicate the swirl pattern and colour of the reference sample photo exactly",
+      refImage: "/images/eshop/topstone-metallic/gold.jpg",
+    },
+    {
+      slug: "copper",
+      commercialName: "Copper",
+      hex: "#d3851f",
+      promptColor:
+        "TopStone Copper — bright copper orange metallic epoxy with molten swirls, exact base hex #D3851F, replicate the swirl pattern and colour of the reference sample photo exactly",
+      refImage: "/images/eshop/topstone-metallic/copper.jpg",
+    },
+    {
+      slug: "charcoal",
+      commercialName: "Charcoal",
+      hex: "#3c3d43",
+      promptColor:
+        "TopStone Charcoal — dark charcoal grey metallic epoxy with silver veining, exact base hex #3C3D43, replicate the swirl pattern and colour of the reference sample photo exactly",
+      refImage: "/images/eshop/topstone-metallic/charcoal.jpg",
+    },
+    {
+      slug: "pearl",
+      commercialName: "Pearl",
+      hex: "#e1b087",
+      promptColor:
+        "TopStone Pearl — warm pearl beige metallic epoxy with champagne shimmer, exact base hex #E1B087, replicate the swirl pattern and colour of the reference sample photo exactly",
+      refImage: "/images/eshop/topstone-metallic/pearl.jpg",
+    },
+    {
+      slug: "slate",
+      commercialName: "Slate",
+      hex: "#6b616c",
+      promptColor:
+        "TopStone Slate — muted slate grey-violet metallic epoxy with soft swirls, exact base hex #6B616C, replicate the swirl pattern and colour of the reference sample photo exactly",
+      refImage: "/images/eshop/topstone-metallic/slate.jpg",
+    },
+    {
+      slug: "midnight-blue",
+      commercialName: "Midnight Blue",
+      hex: "#0d3680",
+      promptColor:
+        "TopStone Midnight Blue — deep midnight blue metallic epoxy with royal blue waves, exact base hex #0D3680, replicate the swirl pattern and colour of the reference sample photo exactly",
+      refImage: "/images/eshop/topstone-metallic/midnight-blue.jpg",
+    },
+    {
+      slug: "moose-green",
+      commercialName: "Moose Green",
+      hex: "#337e5a",
+      promptColor:
+        "TopStone Moose Green — forest green metallic epoxy with emerald swirls, exact base hex #337E5A, replicate the swirl pattern and colour of the reference sample photo exactly",
+      refImage: "/images/eshop/topstone-metallic/moose-green.jpg",
+    },
+    {
+      slug: "wine-red",
+      commercialName: "Wine Red",
+      hex: "#b13f07",
+      promptColor:
+        "TopStone Wine Red — deep wine red metallic epoxy with copper undertones, exact base hex #B13F07, replicate the swirl pattern and colour of the reference sample photo exactly",
+      refImage: "/images/eshop/topstone-metallic/wine-red.jpg",
+    },
+    {
+      slug: "white",
+      commercialName: "White",
+      hex: "#dad7d3",
+      promptColor:
+        "TopStone White — bright white pearl metallic epoxy with subtle silver shimmer, exact base hex #DAD7D3, replicate the swirl pattern and colour of the reference sample photo exactly",
+      refImage: "/images/eshop/topstone-metallic/white.jpg",
+    },
+    {
+      slug: "gun-metal",
+      commercialName: "Gun Metal",
+      hex: "#4b4c4f",
+      promptColor:
+        "TopStone Gun Metal — gun metal grey metallic epoxy with steel reflections, exact base hex #4B4C4F, replicate the swirl pattern and colour of the reference sample photo exactly",
+      refImage: "/images/eshop/topstone-metallic/gun-metal.jpg",
+    },
+    {
+      slug: "sequoia",
+      commercialName: "Sequoia",
+      hex: "#c37548",
+      promptColor:
+        "TopStone Sequoia — warm sequoia terracotta metallic epoxy with amber swirls, exact base hex #C37548, replicate the swirl pattern and colour of the reference sample photo exactly",
+      refImage: "/images/eshop/topstone-metallic/sequoia.jpg",
+    },
+    {
+      slug: "brass",
+      commercialName: "Brass",
+      hex: "#ea9731",
+      promptColor:
+        "TopStone Brass — bright brass yellow-gold metallic epoxy, exact base hex #EA9731, replicate the swirl pattern and colour of the reference sample photo exactly",
+      refImage: "/images/eshop/topstone-metallic/brass.jpg",
+    },
+    {
+      slug: "bronze",
+      commercialName: "Bronze",
+      hex: "#3f2b14",
+      promptColor:
+        "TopStone Bronze — dark bronze brown metallic epoxy with golden veins, exact base hex #3F2B14, replicate the swirl pattern and colour of the reference sample photo exactly",
+      refImage: "/images/eshop/topstone-metallic/bronze.jpg",
+    },
+    {
+      slug: "burnt-orange",
+      commercialName: "Burnt Orange",
+      hex: "#a77142",
+      promptColor:
+        "TopStone Burnt Orange — burnt orange metallic epoxy with rust swirls, exact base hex #A77142, replicate the swirl pattern and colour of the reference sample photo exactly",
+      refImage: "/images/eshop/topstone-metallic/burnt-orange.jpg",
+    },
+    {
+      slug: "champagne-ts",
+      commercialName: "Champagne TS",
+      hex: "#685a63",
+      promptColor:
+        "TopStone Champagne TS — dusky champagne mauve metallic epoxy with pearl shimmer, exact base hex #685A63, replicate the swirl pattern and colour of the reference sample photo exactly",
+      refImage: "/images/eshop/topstone-metallic/champagne.jpg",
+    },
+    {
+      slug: "dark-brown",
+      commercialName: "Dark Brown",
+      hex: "#b4866e",
+      promptColor:
+        "TopStone Dark Brown — chocolate brown metallic epoxy with caramel swirls, exact base hex #B4866E, replicate the swirl pattern and colour of the reference sample photo exactly",
+      refImage: "/images/eshop/topstone-metallic/dark-brown.jpg",
+    },
+    {
+      slug: "royal-blue",
+      commercialName: "Royal Blue",
+      hex: "#28446c",
+      promptColor:
+        "TopStone Royal Blue — royal navy blue metallic epoxy with silver swirls, exact base hex #28446C, replicate the swirl pattern and colour of the reference sample photo exactly",
+      refImage: "/images/eshop/topstone-metallic/royal-blue.jpg",
     },
   ],
   chips: [
