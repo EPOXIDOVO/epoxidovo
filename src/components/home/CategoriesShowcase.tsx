@@ -89,7 +89,7 @@ type ShowcaseCat = {
 };
 
 const SHOWCASE_CATS: ShowcaseCat[] = [
-  ...CATEGORIES.map((c) => ({
+  ...CATEGORIES.filter((c) => c.slug !== "priemyselne").map((c) => ({
     slug: c.slug,
     name: c.slug === "jednofarebne" ? "Hladké jednofarebné" : c.name,
     priceFrom: c.priceFrom,
@@ -105,8 +105,7 @@ const SHOWCASE_CATS: ShowcaseCat[] = [
   {
     slug: "mramorove",
     name: "Mramorové",
-    priceFrom: 0,
-    priceLabel: "Cena na dopyt",
+    priceFrom: 149,
     image: "/images/categories/mramorove.jpg",
     href: "/realizacie?kategoria=mramorove",
     pripravujeme: true,
@@ -114,12 +113,20 @@ const SHOWCASE_CATS: ShowcaseCat[] = [
   {
     slug: "beton-look",
     name: "Betón look",
-    priceFrom: 0,
-    priceLabel: "Cena na dopyt",
+    priceFrom: 79,
     image: "/images/vzorkovnik/arturo/concrete-look-downtown-mix.webp",
     href: "/vzorkovnik?typ=arturo",
     pripravujeme: true,
   },
+  // priemyselné na konci — B2C zákazník ich hľadá najmenej
+  ...CATEGORIES.filter((c) => c.slug === "priemyselne").map((c) => ({
+    slug: c.slug,
+    name: c.name,
+    priceFrom: c.priceFrom,
+    priceLabel: c.priceLabel,
+    image: "/images/hero/hala.jpg",
+    href: "/realizacie?priestor=hala-firma",
+  })),
 ];
 
 export function CategoriesShowcase() {
