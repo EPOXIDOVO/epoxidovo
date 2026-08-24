@@ -388,6 +388,7 @@ export function AiVisualizer() {
           textureLabel={TEXTURES[texture].label}
           colorName={
             COLORS[texture].find((c) => c.slug === colorSlug)?.commercialName ??
+            getRalColors(texture).find((c) => c.slug === colorSlug)?.commercialName ??
             colorSlug
           }
           finishLabel={FINISHES[finish].label}
