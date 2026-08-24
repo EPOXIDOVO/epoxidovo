@@ -165,18 +165,26 @@ export function NahladPodlahyProvider({ children }: { children: React.ReactNode 
                 )}
                 <Link
                   href={`/navrhni-podlahu?vzhlad=${vzhlad}${farbaParam}&cp=1`}
-                  className="inline-flex items-center justify-center gap-2 px-5 py-3.5 rounded-full bg-[#ea580c] text-white font-bold text-sm md:text-base shadow-[0_6px_20px_rgba(234,88,12,0.35)] hover:bg-[#c2410c] hover:-translate-y-0.5 transition-all whitespace-nowrap"
+                  className="inline-flex items-center justify-center gap-2 px-6 py-3.5 rounded-full bg-[#ea580c] text-white font-bold text-sm md:text-[15px] shadow-[0_6px_20px_rgba(234,88,12,0.35)] hover:bg-[#c2410c] hover:-translate-y-0.5 transition-all whitespace-nowrap"
                 >
-                  <FileText className="w-4 h-4" aria-hidden />
-                  Chcem cenovú ponuku
+                  <FileText className="w-4 h-4 shrink-0" aria-hidden />
+                  Cenová ponuka na realizáciu
                 </Link>
-                <Link
-                  href={`/eshop?vzhlad=${vzhlad}#katalog`}
-                  className="inline-flex items-center justify-center gap-2 px-5 py-3.5 rounded-full bg-[#0e1a3b] text-white font-bold text-sm md:text-base hover:bg-[#1a2b57] hover:-translate-y-0.5 transition-all whitespace-nowrap"
+                <span
+                  aria-disabled
+                  className="relative inline-flex flex-col items-center justify-center gap-0.5 px-5 py-2.5 rounded-full border-2 border-dashed border-zinc-300 text-zinc-400 font-bold text-sm md:text-base whitespace-nowrap select-none cursor-default"
                 >
-                  <ShoppingCart className="w-4 h-4" aria-hidden />
-                  Kúpiť materiál
-                </Link>
+                  <span className="inline-flex items-center gap-2">
+                    <ShoppingCart className="w-4 h-4" aria-hidden />
+                    Kúpiť materiál
+                  </span>
+                  <span className="text-[10px] font-semibold text-zinc-400 normal-case whitespace-normal text-center leading-tight">
+                    chcem si ju urobiť sám
+                  </span>
+                  <span className="absolute -top-2 -right-1 px-2 py-0.5 rounded-full bg-[#ea580c] text-white text-[9px] font-bold uppercase">
+                    čoskoro
+                  </span>
+                </span>
               </div>
               <p className="mt-3 text-xs text-[#1B2430]/55 text-center">
                 Cenu uvidíš hneď — kontakt vyplníš, len ak budeš chcieť, aby sme sa ozvali.
