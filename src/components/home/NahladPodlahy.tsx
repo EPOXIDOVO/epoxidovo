@@ -63,6 +63,9 @@ export function NahladPodlahyProvider({ children }: { children: React.ReactNode 
   const textura = f ? TYP_NA_TEXTURU[f.typ] : null;
   const vzhlad = f ? TYP_NA_VZHLAD[f.typ] : null;
   const farbaParam = f?.farba ? `&farba=${encodeURIComponent(f.farba)}` : "";
+  // Fotku posielame ďalej, nech ju vizualizátor ukáže na uvítacej obrazovke —
+  // zákazník musí vidieť, cez ktorú podlahu prišiel.
+  const fotoParam = f?.src ? `&foto=${encodeURIComponent(f.src)}` : "";
 
   return (
     <NahladCtx.Provider value={{ otvor }}>
@@ -151,7 +154,7 @@ export function NahladPodlahyProvider({ children }: { children: React.ReactNode 
               <div className="mt-5 grid grid-cols-1 sm:grid-cols-3 gap-3">
                 {textura ? (
                   <Link
-                    href={`/ai-vizualizer?texture=${textura}${farbaParam}`}
+                    href={`/ai-vizualizer?texture=${textura}${farbaParam}${fotoParam}`}
                     className="inline-flex items-center justify-center gap-2 px-5 py-3.5 rounded-full bg-gradient-to-r from-[#3db6e8] to-[#a855f7] text-white font-bold text-sm md:text-base shadow-[0_6px_20px_rgba(168,85,247,0.35)] hover:-translate-y-0.5 transition-all whitespace-nowrap"
                   >
                     <Sparkles className="w-4 h-4" aria-hidden />

@@ -80,6 +80,8 @@ export function AiVisualizer() {
   /** Prefill z URL — náhľad fotky na webe posiela ?texture= a ?farba= (slug
    *  alebo label efektu). Zákazník potom len odfotí priestor a generuje. */
   const [prefillFarba, setPrefillFarba] = React.useState(false);
+  /** Fotka podlahy, cez ktorú zákazník prišiel z webu (?foto=). */
+  const [prefillFoto, setPrefillFoto] = React.useState<string | null>(null);
   const prefillTextura = React.useRef(false);
   React.useEffect(() => {
     const q = new URLSearchParams(window.location.search);
@@ -87,6 +89,11 @@ export function AiVisualizer() {
     if (!t || !(t in TEXTURES)) return;
     prefillTextura.current = true;
     setTexture(t as TextureSlug);
+    // Fotka z náhľadu — prijmeme LEN vlastnú cestu, nie ľubovoľné URL.
+    const foto = q.get("foto") ?? "";
+    if (/^\/images\/[\w./-]+$/.test(foto) && !foto.includes("..")) {
+      setPrefillFoto(foto);
+    }
     const f = (q.get("color") ?? q.get("farba") ?? "").toLowerCase();
     if (f) {
       // hľadaj v presetoch textúry aj v RAL palete (hladká/chipsy) — fotky
@@ -207,6 +214,7 @@ export function AiVisualizer() {
   const tryAgain = () => {
     prefillTextura.current = false;
     setPrefillFarba(false);
+    setPrefillFoto(null);
     setResultBase64(null);
     // Reset voľby aby picker zobrazil čistý stav (žiadny default highlight) —
     // user prichádza zo "result" a chce skúsiť úplne inú kombináciu.
@@ -221,6 +229,7 @@ export function AiVisualizer() {
   const startOver = () => {
     prefillTextura.current = false;
     setPrefillFarba(false);
+    setPrefillFoto(null);
     setImageBase64(null);
     setPreviewUrl(null);
     setResultBase64(null);
@@ -320,7 +329,7 @@ export function AiVisualizer() {
   return (
     <div className="max-w-screen-2xl mx-auto px-4 py-3 md:py-4 md:h-full md:flex md:flex-col">
       <Breadcrumb />
-      <Header step={step} />
+      <Header step={step} predvolene={step === "upload" && texture !== null} />
 
       {/* STEP: UPLOAD — mobile: vertical stack (upload + mini demo) | desktop: side-by-side.
           Pomer 1fr:1fr na lg+ aby demo fotky podláh (vpravo) mali toľko priestoru
@@ -332,6 +341,22 @@ export function AiVisualizer() {
             onFile={handleFile}
             onClick={() => fileInputRef.current?.click()}
             error={error}
+            predvolba={
+              texture
+                ? {
+                    texturaLabel: TEXTURES[texture].label,
+                    farbaLabel:
+                      [...COLORS[texture], ...getRalColors(texture)].find(
+                        (c) => c.slug === colorSlug,
+                      )?.commercialName ?? null,
+                    obrazok:
+                      prefillFoto ??
+                      COLORS[texture].find((c) => c.slug === colorSlug)?.refImage ??
+                      TEXTURES[texture].previewImage ??
+                      null,
+                  }
+                : null
+            }
           />
           <DemoExample />
         </div>
@@ -449,7 +474,7 @@ function Breadcrumb() {
   );
 }
 
-function Header({ step }: { step: Step }) {
+function Header({ step, predvolene }: { step: Step; predvolene?: boolean }) {
   const stepNum =
     step === "upload"
       ? 1
@@ -466,6 +491,14 @@ function Header({ step }: { step: Step }) {
   const subtitleNode = isResult ? (
     <>
       Pre istotu si pozri aj <strong>ukážky realizácií</strong>.
+    </>
+  ) : predvolene ? (
+    // Typ aj farbu si zákazník vybral už na webe — nepýtaj ho o to znova.
+    <>
+      Nahraj fotku svojho priestoru.
+      <br className="hidden md:inline" />
+      <span className="md:hidden"> </span>
+      AI ti za pár sekúnd ukáže, ako v ňom bude vyzerať.
     </>
   ) : (
     <>
@@ -522,14 +555,51 @@ function UploadStep({
   onFile,
   onClick,
   error,
+  predvolba,
 }: {
   onFile: (f: File) => void;
   onClick: () => void;
   error?: string | null;
+  /** Podlaha, cez ktorú zákazník prišiel z webu — user 2026-08-24: „ked to
+   *  kliknes nevies ze mas zvolenu tuto farbu a pyta ta to nahrat fotku". */
+  predvolba?: {
+    texturaLabel: string;
+    farbaLabel: string | null;
+    obrazok: string | null;
+  } | null;
 }) {
   const [dragging, setDragging] = React.useState(false);
   return (
-    <>
+    // JEDNA bunka gridu — fragment tu rozhodil layout (pás skončil vo vlastnom
+    // stĺpci vedľa dropzony namiesto nad ňou).
+    <div className="flex flex-col min-h-0 flex-1 md:h-full">
+      {/* Zákazník prišiel z náhľadu konkrétnej podlahy — ukáž mu HNEĎ, že ju
+          má vybratú, inak ho holá výzva „nahraj fotku" mätie. */}
+      {predvolba && (
+        <div className="mb-3 flex items-center gap-3 rounded-2xl border-2 border-[#2EA3DC] bg-[#eaf6fc] p-2.5 md:p-3">
+          {predvolba.obrazok && (
+            /* eslint-disable-next-line @next/next/no-img-element */
+            <img
+              src={predvolba.obrazok}
+              alt=""
+              className="w-14 h-14 md:w-16 md:h-16 rounded-xl object-cover shrink-0 ring-1 ring-[#1B2430]/10"
+            />
+          )}
+          <div className="min-w-0 flex-1">
+            <div className="text-[10px] font-extrabold uppercase tracking-wider text-[#1B2430]/55">
+              Tvoj výber
+            </div>
+            <div className="font-extrabold text-[#1B2430] leading-tight truncate">
+              {predvolba.texturaLabel}
+              {predvolba.farbaLabel ? ` · ${predvolba.farbaLabel}` : ""}
+            </div>
+            <div className="text-xs text-[#1B2430]/65">
+              Odfoť svoj priestor a uvidíš v ňom presne túto podlahu.
+            </div>
+          </div>
+        </div>
+      )}
+
       {/* Error banner ak validácia predošlej fotky zlyhala (nie je podlaha) */}
       {error && (
         <div className="mb-5 rounded-2xl bg-amber-50 border border-amber-200 p-4 md:p-5 flex items-start gap-3">
@@ -565,8 +635,19 @@ function UploadStep({
         <Upload className="w-8 h-8 md:w-6 md:h-6 lg:w-7 lg:h-7" aria-hidden />
       </div>
       <h2 className="text-lg md:text-base lg:text-lg font-extrabold tracking-tight text-[#1B2430]">
-        <span className="md:hidden">Klikni a nahraj fotku</span>
-        <span className="hidden md:inline">Klikni alebo presuň fotku miestnosti</span>
+        {predvolba ? (
+          <>
+            <span className="md:hidden">Odfoť priestor</span>
+            <span className="hidden md:inline">
+              Nahraj fotku priestoru, kam ju chceš
+            </span>
+          </>
+        ) : (
+          <>
+            <span className="md:hidden">Klikni a nahraj fotku</span>
+            <span className="hidden md:inline">Klikni alebo presuň fotku miestnosti</span>
+          </>
+        )}
       </h2>
       <p className="mt-1.5 md:mt-1 text-xs md:text-[11px] lg:text-xs font-bold text-[#1B2430]/65">
         JPG, PNG alebo WebP · max 5 MB
@@ -585,7 +666,7 @@ function UploadStep({
         </ul>
       </div>
     </div>
-    </>
+    </div>
   );
 }
 
