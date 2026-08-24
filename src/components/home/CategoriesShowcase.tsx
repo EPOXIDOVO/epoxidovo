@@ -4,8 +4,7 @@ import * as React from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { Container } from "@/components/ui/Container";
-import { CATEGORIES } from "@/content/categories";
-import type { FotkaPodlahy } from "@/content/typ-podlahy";
+import { TYPY_PODLAH, type TypPodlahyKarta } from "@/content/typy-podlah";
 import { NahladPodlahyProvider, useNahladPodlahy } from "./NahladPodlahy";
 
 /**
@@ -23,29 +22,6 @@ import { NahladPodlahyProvider, useNahladPodlahy } from "./NahladPodlahy";
 
 // Farebné varianty pod hlavnou kartou — 3 fotky iných farieb toho istého
 // typu podlahy. Vlastné realizácie + oficiálne TopStone vzory (metalické).
-const VARIANT_PHOTOS: Record<string, FotkaPodlahy[]> = {
-  jednofarebne: [
-    // bývanie, nie priemysel — pod kartou „Jednofarebné" majú byť interiéry
-    { src: "/images/realizacie/r-37.webp", typ: "jednofarebna", alt: "Jednofarebná podlaha — biela obývačka s krbom", farba: "RAL 9010", farbaLabel: "Biela" },
-    { src: "/images/realizacie/r-10.jpg", typ: "jednofarebna", alt: "Jednofarebná podlaha — lesklá kuchyňa", farba: "RAL 9016", farbaLabel: "Dopravná biela" },
-    { src: "/images/realizacie/r-13.jpg", typ: "jednofarebna", alt: "Jednofarebná podlaha — svetlá kúpeľňa", farba: "RAL 7047", farbaLabel: "Svetlosivá" },
-  ],
-  chipsove: [
-    { src: "/images/realizacie/r-47.jpg", typ: "chipsova", alt: "Chipsová podlaha — biela s čiernymi chipsami, chodba skladu", farba: "Snow pearl", farbaLabel: "Biela s čiernymi chipsami" },
-    { src: "/images/realizacie/r-49.jpg", typ: "chipsova", alt: "Chipsová podlaha — sivá s čierno-bielymi chipsami", farba: "Granit klasik", farbaLabel: "Sivá s čierno-bielymi chipsami" },
-    { src: "/images/realizacie/r-48.jpg", typ: "chipsova", alt: "Chipsová podlaha — svetlá lesklá s čierno-bielymi chipsami", farba: "Snow pearl", farbaLabel: "Svetlá lesklá s chipsami" },
-  ],
-  metalicke: [
-    { src: "/images/eshop/topstone-metallic/azuro.jpg", typ: "metalicka", alt: "Metalická podlaha — Azuro modrá", farba: "Azuro", farbaLabel: "Azuro modrá" },
-    { src: "/images/eshop/topstone-metallic/gold.jpg", typ: "metalicka", alt: "Metalická podlaha — Gold zlatá", farba: "Gold", farbaLabel: "Gold zlatá" },
-    { src: "/images/eshop/topstone-metallic/moose-green.jpg", typ: "metalicka", alt: "Metalická podlaha — Moose green zelená", farba: "Moose Green", farbaLabel: "Moose green zelená" },
-  ],
-  priemyselne: [
-    { src: "/images/realizacie/r-20.jpg", typ: "priemyselna", alt: "Priemyselná podlaha — modrá hala", farba: "RAL 5012", farbaLabel: "Svetlomodrá" },
-    { src: "/images/realizacie/r-22.jpg", typ: "priemyselna", alt: "Priemyselná podlaha — zelená hala", farba: "RAL 6021", farbaLabel: "Bledozelená" },
-    { src: "/images/realizacie/r-46.jpg", typ: "priemyselna", alt: "Priemyselná podlaha — béžová hala", farba: "RAL 1001", farbaLabel: "Béžová" },
-  ],
-};
 
 // Kocka so 1-5 bodkami — biely zaoblený štvorček s tmavými bodkami
 function DiceIcon({ pips }: { pips: 1 | 2 | 3 | 4 | 5 }) {
@@ -77,57 +53,7 @@ function DiceIcon({ pips }: { pips: 1 | 2 | 3 | 4 | 5 }) {
  * (mramorové, betón look). Tie dve zámerne NIE sú v globálnych
  * CATEGORIES, aby nevznikli prázdne /sluzby/… stránky a sitemap.
  */
-type ShowcaseCat = {
-  slug: string;
-  name: string;
-  priceFrom: number;
-  priceLabel?: string;
-  /** Hlavná fotka; bez nej stĺpec ukazuje „Čoskoro". */
-  image?: string;
-  href?: string;
-  pripravujeme?: boolean;
-};
 
-const SHOWCASE_CATS: ShowcaseCat[] = [
-  ...CATEGORIES.filter((c) => c.slug !== "priemyselne").map((c) => ({
-    slug: c.slug,
-    name: c.slug === "jednofarebne" ? "Hladké jednofarebné" : c.name,
-    priceFrom: c.priceFrom,
-    priceLabel: c.priceLabel,
-    image:
-      c.slug === "jednofarebne"
-        ? "/images/hero/byvanie-v2.webp"
-        : c.slug === "priemyselne"
-          ? "/images/hero/hala.jpg"
-          : `/images/categories/${c.slug}.jpg`,
-    href: c.slug === "priemyselne" ? "/realizacie?priestor=hala-firma" : `/realizacie?kategoria=${c.slug}`,
-  })),
-  {
-    slug: "mramorove",
-    name: "Mramorové",
-    priceFrom: 149,
-    image: "/images/categories/mramorove.jpg",
-    href: "/realizacie?kategoria=mramorove",
-    pripravujeme: true,
-  },
-  {
-    slug: "beton-look",
-    name: "Betón look",
-    priceFrom: 79,
-    image: "/images/vzorkovnik/arturo/concrete-look-downtown-mix.webp",
-    href: "/vzorkovnik?typ=arturo",
-    pripravujeme: true,
-  },
-  // priemyselné na konci — B2C zákazník ich hľadá najmenej
-  ...CATEGORIES.filter((c) => c.slug === "priemyselne").map((c) => ({
-    slug: c.slug,
-    name: c.name,
-    priceFrom: c.priceFrom,
-    priceLabel: c.priceLabel,
-    image: "/images/hero/hala.jpg",
-    href: "/realizacie?priestor=hala-firma",
-  })),
-];
 
 export function CategoriesShowcase() {
   return (
@@ -160,7 +86,7 @@ function CategoriesShowcaseInner() {
           {/* Karty s kategóriami — každý stĺpec: hlavná karta + 3 farebné
               varianty (zatiaľ dummy "Čoskoro") + vlastný vzorkovník link */}
           <div className="mt-8 md:mt-16 grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-2.5 md:gap-4">
-            {SHOWCASE_CATS.map((cat, idx) => (
+            {TYPY_PODLAH.map((cat, idx) => (
               <div
                 key={cat.slug}
                 className="flex flex-col gap-1.5 md:gap-2"
@@ -222,11 +148,11 @@ function CategoriesShowcaseInner() {
                     Čoskoro
                   </div>
                 ))}
-              {(VARIANT_PHOTOS[cat.slug] ?? []).map((v, vi) => (
+              {(cat.variants ?? []).map((v, vi) => (
                 <button
                   key={v.src}
                   type="button"
-                  onClick={() => otvor(VARIANT_PHOTOS[cat.slug], vi, cat.priceFrom || null)}
+                  onClick={() => otvor(cat.variants, vi, cat.priceFrom || null)}
                   aria-label={`${v.alt} — otvoriť náhľad`}
                   className="group/v relative aspect-[16/9] rounded-xl overflow-hidden transition-all duration-300 ease-out hover:scale-[1.06] hover:z-10 hover:shadow-[0_18px_40px_rgba(0,0,0,0.45)] hover:ring-[3px] hover:ring-white focus:outline-none focus-visible:ring-[3px] focus-visible:ring-white"
                 >

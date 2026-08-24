@@ -3,7 +3,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { Container } from "@/components/ui/Container";
 import { Section } from "@/components/ui/Section";
-import { CenovaPonukaForm } from "@/components/cenova-ponuka/CenovaPonukaForm";
+import { KonfiguratorCP } from "@/components/cenova-ponuka/KonfiguratorCP";
 import { BreadcrumbsJsonLd } from "@/components/seo/BreadcrumbsJsonLd";
 import { SITE } from "@/lib/site";
 
@@ -79,8 +79,8 @@ export default function CenovaPonukaPage() {
               </h1>
             </div>
             <p className="mt-2 md:mt-4 text-xs md:text-base text-white/90 max-w-2xl mx-auto leading-snug md:leading-relaxed font-medium">
-              Vyplň formulár a do <strong>24 hodín</strong> ti pošleme cenovú
-              kalkuláciu na mieru.
+              Vyklikaj si podlahu a cenu uvidíš hneď. Ponuku ti pošleme
+              na e-mail do pár minút.
             </p>
             <nav
               aria-label="Breadcrumb"
@@ -119,7 +119,7 @@ export default function CenovaPonukaPage() {
         className="bg-[var(--color-copper)] !text-white flex-1 min-h-0 overflow-y-auto !py-3 md:!py-4"
       >
         <Container size="xl" className="py-0">
-          <CenovaPonukaForm />
+          <KonfiguratorCP />
         </Container>
       </Section>
     </div>
