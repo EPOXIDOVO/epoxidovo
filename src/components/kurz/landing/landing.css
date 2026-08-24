@@ -105,6 +105,14 @@
   color: var(--kl-ink);
   box-shadow: 0 1px 0 var(--kl-border);
 }
+/* Otvorené mobilné menu: backdrop-filter by z headera spravil containing
+   block pre fixed panel a orezal ho na výšku headera. */
+.kl-header.menu-open {
+  -webkit-backdrop-filter: none;
+  backdrop-filter: none;
+  background: var(--kl-bg);
+  color: var(--kl-ink);
+}
 .kl-nav { display: flex; align-items: center; gap: 2rem; width: 100%; }
 .kl-nav__brand { display: inline-flex; align-items: center; }
 .kl-nav__brand img { width: 3rem; height: auto; }
@@ -193,8 +201,9 @@
   position: absolute;
   inset: 0;
   background:
-    linear-gradient(200deg, rgba(10, 16, 34, 0.15) 30%, rgba(10, 16, 34, 0.62) 78%),
-    linear-gradient(0deg, rgba(10, 16, 34, 0.78) 0%, rgba(10, 16, 34, 0) 42%);
+    linear-gradient(200deg, rgba(10, 16, 34, 0.2) 30%, rgba(10, 16, 34, 0.62) 78%),
+    linear-gradient(0deg, rgba(10, 16, 34, 0.78) 0%, rgba(10, 16, 34, 0) 42%),
+    linear-gradient(180deg, rgba(10, 16, 34, 0.45) 0%, rgba(10, 16, 34, 0) 22%);
 }
 .kl-hero__inner {
   position: relative;
@@ -238,9 +247,9 @@
 }
 .kl-hero__actions { display: flex; flex-wrap: wrap; gap: 0.9rem; margin-top: 2.1rem; }
 .kl-hero__facts {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 0.5rem 2.2rem;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(10.5rem, max-content));
+  gap: 0.7rem 2.2rem;
   margin-top: 2.6rem;
   padding-top: 1.4rem;
   border-top: 1px solid rgba(255, 255, 255, 0.28);

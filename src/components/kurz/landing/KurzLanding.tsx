@@ -5,6 +5,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { trackEvent } from "@/components/analytics/Analytics";
 import { TurnstileWidget } from "@/components/turnstile/TurnstileWidget";
+import { Reveal } from "@/components/ui/Reveal";
 import { SITE } from "@/lib/site";
 import { KURZ } from "@/content/kurz";
 import { COURSE_EN } from "@/content/kurz-en";
@@ -13,35 +14,132 @@ import { KurzZisk } from "./KurzZisk";
 import "./landing.css";
 
 /* ------------------------------------------------------------------ */
-/*  Pomocné hooky                                                      */
+/*  Texty nových sekcií (SK/EN)                                        */
 /* ------------------------------------------------------------------ */
 
-/** Pridá `kl-reveal` keď sekcia vojde do viewportu (overlay sweep + fade-in). */
-function useReveal<T extends HTMLElement>(threshold = 0.25) {
-  const ref = React.useRef<T>(null);
-  React.useEffect(() => {
-    const el = ref.current;
-    if (!el) return;
-    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
-      el.classList.add("kl-reveal");
-      return;
-    }
-    const io = new IntersectionObserver(
-      (entries) => {
-        entries.forEach((e) => {
-          if (e.isIntersecting) {
-            el.classList.add("kl-reveal");
-            io.disconnect();
-          }
-        });
-      },
-      { threshold },
-    );
-    io.observe(el);
-    return () => io.disconnect();
-  }, [threshold]);
-  return ref;
-}
+const V2 = {
+  sk: {
+    badge: "Najbližší termín",
+    seatsLeft: (n: number) => `posledné ${n} miesta`,
+    h1a: "Remeslo, ktoré sa nedá",
+    h1em: " stiahnuť z YouTubu.",
+    lead: "Dvojdňový kurz liatych epoxidových podláh v Ružomberku. Šesť ľudí, reálny betón, vlastných 12 m². Odchádzaš s postupom, certifikátom a číslami na prvú cenovú ponuku.",
+    ctaMain: "Rezervovať miesto",
+    ctaProgram: "Pozrieť program",
+    facts: [
+      ["2 dni", "16 hodín praxe"],
+      ["6 ľudí", "maximum v skupine"],
+      ["12 m²", "vlastná plocha"],
+      ["EN", "kurz v angličtine"],
+    ],
+    claimH2a: "Za dva dni prejdeš cestu, ktorá nám trvala ",
+    claimH2em: "dvesto podláh.",
+    claimBody: "Lejeme podlahy po celom Slovensku a presne vieme, kde začiatočníci zabíjajú svoju prvú zákazku: v podklade, v miešaní a v cene. Kurz je postavený na týchto troch veciach, nie na prezentácii.",
+    claimPoints: [
+      "Každý krok si spravíš vlastnými rukami, od brúsenia po finálny lak",
+      "Materiál, náradie aj ochranné pomôcky sú v cene, prídeš v montérkach",
+      "Manuál so spotrebami a vzorová cenová ponuka pre tvojich zákazníkov",
+      "30 dní po kurze píšeš priamo lektorovi",
+    ],
+    claimCaption: "Metalická podlaha, práca absolventa",
+    daysH2: "Program: dva dni, dve témy",
+    daysIntro: "Prvý deň rozhoduje o tom, či podlaha vydrží. Druhý o tom, ako vyzerá a koľko si za ňu vypýtaš.",
+    day1Label: "Deň 1 · 9:00 až 17:00",
+    day2Label: "Deň 2 · 9:00 až 17:00",
+    day1Title: "Podklad a materiály",
+    day2Title: "Liatie, dekor a cenotvorba",
+    dayMeta1: "Obed, káva a všetok materiál v cene.",
+    dayMeta2: "Na konci dňa certifikát a manuál so spotrebami.",
+    stripH2: "Podlahy z našej dielne",
+    stripCaptions: ["Metalická garáž", "Obývačka, jednofarebná liata", "Priemyselná hala", "Chipsová prevádzka", "Metalický efekt zblízka", "Kancelárie"],
+    pricingH2: "Cena a balíky",
+    pricingIntro: "Nie sme platcami DPH, ceny sú konečné. Platí sa až po telefonickom potvrdení miesta.",
+    stdTitle: "Štandard",
+    stdDesc: "Kompletný dvojdňový kurz so všetkým materiálom a náradím.",
+    stdItems: ["16 hodín praxe na reálnom betóne", "Vlastná plocha 12 m²", "Manuál a kalkulačka spotreby", "Certifikát o absolvovaní", "30 dní podpory po kurze"],
+    stdCta: "Rezervovať Štandard",
+    proTag: "Najčastejšia voľba",
+    proTitle: "PRO s mentoringom",
+    proDesc: "Kurz a k tomu tri mesiace vedenia pri prvých zákazkách.",
+    proItems: ["Všetko zo Štandardu", "3 mesiace osobného mentoringu: telefón, fotky z realizácie, cenové ponuky", "Materiál na prvú zákazku, približne 20 m²", "Sada náradia: stierka, ježko, valec, miešadlo", "Partnerské ceny v e-shope natrvalo"],
+    proCta: "Rezervovať PRO",
+    perPerson: "na osobu",
+    firmaNote: "Traja a viac z jednej firmy? Spravíme súkromný termín u nás alebo vo vašej hale.",
+    firmaLink: "Napíš nám cez prihlášku",
+    termsH2: "Termíny",
+    termsPlace: "Školiace centrum EPOXIDOVO, Ružomberok",
+    seatsLow: (n: number) => `Posledné ${n} miesta`,
+    seatsOk: (n: number) => `Voľných ${n} miest`,
+    termCta: "Rezervovať",
+    faqH2: "Časté otázky",
+    formTitle: "Prihláška a platba",
+  },
+  en: {
+    badge: "Next date",
+    seatsLeft: (n: number) => `${n} seats left`,
+    h1a: "A trade you cannot",
+    h1em: " download from YouTube.",
+    lead: "A two day poured epoxy flooring course in Ružomberok, Slovakia. Six people, real concrete, your own 12 m². You leave with a repeatable process, a certificate and the numbers for your first quote.",
+    ctaMain: "Reserve a seat",
+    ctaProgram: "See the curriculum",
+    facts: [
+      ["2 days", "16 hours of practice"],
+      ["6 people", "maximum per group"],
+      ["12 m²", "your own floor"],
+      ["EN", "taught in English"],
+    ],
+    claimH2a: "In two days you cover what took us ",
+    claimH2em: "two hundred floors.",
+    claimBody: "We install floors across Slovakia and we know exactly where beginners lose their first job: the substrate, the mixing and the price. The course is built on those three things, not on slides.",
+    claimPoints: [
+      "You do every step with your own hands, from grinding to the final coat",
+      "Material, tools and protective gear are included, just bring work clothes",
+      "A manual with consumption rates and a sample quote for your clients",
+      "For 30 days after the course you write directly to the instructor",
+    ],
+    claimCaption: "Metallic floor, graduate work",
+    daysH2: "Curriculum: two days, two themes",
+    daysIntro: "Day one decides whether the floor lasts. Day two decides how it looks and what you charge for it.",
+    day1Label: "Day 1 · 9:00 to 17:00",
+    day2Label: "Day 2 · 9:00 to 17:00",
+    day1Title: "Substrate and materials",
+    day2Title: "Pouring, decoration and pricing",
+    dayMeta1: "Lunch, coffee and all material included.",
+    dayMeta2: "Certificate and consumption manual at the end of the day.",
+    stripH2: "Floors from our workshop",
+    stripCaptions: ["Metallic garage", "Living room, single colour", "Industrial hall", "Flake commercial floor", "Metallic effect up close", "Offices"],
+    pricingH2: "Price and packages",
+    pricingIntro: "We are not VAT registered, prices are final. You pay only after we confirm your seat by phone.",
+    stdTitle: "Standard",
+    stdDesc: "The complete two day course with all material and tools.",
+    stdItems: ["16 hours of practice on real concrete", "Your own 12 m² area", "Manual and consumption calculator", "Certificate of completion", "30 days of support after the course"],
+    stdCta: "Reserve Standard",
+    proTag: "Most popular",
+    proTitle: "PRO with mentoring",
+    proDesc: "The course plus three months of guidance on your first jobs.",
+    proItems: ["Everything in Standard", "3 months of personal mentoring: phone, site photos, quotes", "Material for your first job, roughly 20 m²", "Tool set: squeegee, spiked roller, roller, mixer", "Partner prices in our e-shop, permanently"],
+    proCta: "Reserve PRO",
+    perPerson: "per person",
+    firmaNote: "Three or more from one company? We run a private date at our centre or in your hall.",
+    firmaLink: "Tell us in the application",
+    termsH2: "Dates",
+    termsPlace: "EPOXIDOVO training centre, Ružomberok, Slovakia",
+    seatsLow: (n: number) => `Last ${n} seats`,
+    seatsOk: (n: number) => `${n} seats free`,
+    termCta: "Reserve",
+    faqH2: "Frequently asked",
+    formTitle: "Application and payment",
+  },
+} as const;
+
+const STRIP_IMAGES = [
+  "/images/hero/garaz.webp",
+  "/images/realizacie/r-05.jpg",
+  "/images/hero/hala.webp",
+  "/images/realizacie/r-07.jpg",
+  "/images/realizacie/r-12.jpg",
+  "/images/realizacie/r-03.jpg",
+];
 
 /* ------------------------------------------------------------------ */
 /*  Header                                                             */
@@ -53,7 +151,7 @@ function Header({ locale, onMenu }: { locale: Locale; onMenu: (open: boolean) =>
   const [open, setOpen] = React.useState(false);
 
   React.useEffect(() => {
-    const onScroll = () => setFixed(window.scrollY > 80);
+    const onScroll = () => setFixed(window.scrollY > 40);
     onScroll();
     window.addEventListener("scroll", onScroll, { passive: true });
     return () => window.removeEventListener("scroll", onScroll);
@@ -71,17 +169,19 @@ function Header({ locale, onMenu }: { locale: Locale; onMenu: (open: boolean) =>
   };
 
   return (
-    <header className={`kl-header${fixed ? " is-fixed" : ""}`}>
+    <header className={`kl-header${fixed || open ? " is-fixed" : ""}${open ? " menu-open" : ""}`}>
       <div className="kl-container">
         <nav className="kl-nav" aria-label="Kurz">
+          <Link href="/" className="kl-nav__brand" aria-label="EPOXIDOVO">
+            <Image src="/images/site/logo_v2.png" alt="EPOXIDOVO" width={48} height={46} priority />
+          </Link>
           <ul className={`kl-nav__menu${open ? " is-active" : ""}`}>
-            <li className="kl-nav__home"><a href="#hello" onClick={close}>{t.nav.home}</a></li>
-            <li><a href="#about" onClick={close}>{t.nav.about}</a></li>
+            <li><a href="#o-kurze" onClick={close}>{t.nav.about}</a></li>
             <li><a href="#program" onClick={close}>{t.nav.program}</a></li>
             <li><a href="#kalkulacka" onClick={close}>{t.nav.calc}</a></li>
-            <li className="kl-nav__right"><a href="#cena" onClick={close}>{t.nav.price}</a></li>
+            <li><a href="#cena" onClick={close}>{t.nav.price}</a></li>
+            <li><a href="#terminy" onClick={close}>{t.nav.faq === "FAQ" ? (locale === "sk" ? "Termíny" : "Dates") : "Termíny"}</a></li>
             <li><a href="#faq" onClick={close}>{t.nav.faq}</a></li>
-            <li><a href="#kontakt" onClick={close}>{t.nav.contact}</a></li>
             <li className="kl-nav__cta"><a href="#prihlaska" onClick={close}>{t.nav.cta}</a></li>
             <li className="kl-nav__lang">
               <Link href={t.otherPath} hrefLang={locale === "sk" ? "en" : "sk"} onClick={close}>
@@ -89,9 +189,6 @@ function Header({ locale, onMenu }: { locale: Locale; onMenu: (open: boolean) =>
               </Link>
             </li>
           </ul>
-          <Link href="/" className="kl-nav__brand" aria-label="EPOXIDOVO">
-            <Image src="/images/site/logo_v2.png" alt="EPOXIDOVO" width={69} height={66} priority />
-          </Link>
           <button
             type="button"
             className={`kl-nav__toggle${open ? " is-active" : ""}`}
@@ -109,97 +206,44 @@ function Header({ locale, onMenu }: { locale: Locale; onMenu: (open: boolean) =>
 }
 
 /* ------------------------------------------------------------------ */
-/*  Hero — scroll-pinned, h1 rastie so scrollom (TicketWave)           */
+/*  Hero                                                               */
 /* ------------------------------------------------------------------ */
 
-function Hello({ locale }: { locale: Locale }) {
-  const t = COPY[locale];
-  const wrap = React.useRef<HTMLElement>(null);
-  const h1 = React.useRef<HTMLHeadingElement>(null);
-
-  React.useEffect(() => {
-    const el = wrap.current;
-    const h = h1.current;
-    if (!el || !h) return;
-    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
-    // Intro (0.4 → 0.65 + fade) rieši CSS keyframe na vnútornom spane.
-    // Scroll dorastie h1 z 0.65 na 1.0 → násobok 1 → 1.538 na h1.
-    let raf = 0;
-    const apply = () => {
-      raf = 0;
-      const rect = el.getBoundingClientRect();
-      const total = el.offsetHeight - window.innerHeight;
-      const progress = Math.min(1, Math.max(0, -rect.top / Math.max(1, total)));
-      const p = Math.min(1, progress / 0.5);
-      const eased = 1 - Math.pow(1 - p, 3);
-      h.style.setProperty("--kl-h1-scroll", String(1 + 0.538 * eased));
-    };
-    const onScroll = () => {
-      if (!raf) raf = requestAnimationFrame(apply);
-    };
-    apply();
-    window.addEventListener("scroll", onScroll, { passive: true });
-    window.addEventListener("resize", onScroll);
-    return () => {
-      window.removeEventListener("scroll", onScroll);
-      window.removeEventListener("resize", onScroll);
-      if (raf) cancelAnimationFrame(raf);
-    };
-  }, []);
-
+function Hero({ locale }: { locale: Locale }) {
+  const t = V2[locale];
+  const terms = locale === "sk" ? KURZ.nextTerms : COURSE_EN.nextTerms;
+  const next = terms[0];
   return (
-    <section id="hello" className="kl-hello" ref={wrap}>
-      <div className="kl-hello__sticky">
-        <div className="kl-hello__video">
-          <video autoPlay muted loop playsInline poster="/images/process/step-03-liatie.webp" preload="metadata">
-            <source src="/video/eshop-hero-a.mp4" type="video/mp4" />
-          </video>
-        </div>
-        <h1 ref={h1}>
-          <span className="kl-grad">{t.hero.h1}</span>
-        </h1>
-        <a href="#about" className="kl-hello__scroll">
-          {t.hero.scroll}
-          <span aria-hidden />
-        </a>
+    <section className="kl-hero" id="hello">
+      <div className="kl-hero__media" aria-hidden>
+        <Image
+          src="/images/hero/garaz.webp"
+          alt=""
+          fill
+          priority
+          sizes="100vw"
+        />
       </div>
-    </section>
-  );
-}
-
-/* ------------------------------------------------------------------ */
-/*  About — floating paragraphs around a gradient heading              */
-/* ------------------------------------------------------------------ */
-
-function About({ locale }: { locale: Locale }) {
-  const t = COPY[locale].about;
-  const ref = useReveal<HTMLElement>(0.2);
-  return (
-    <section id="about" className="kl-section kl-about" ref={ref}>
-      <div className="kl-section__overlay" aria-hidden />
-      <div className="kl-container kl-container--large">
-        <div className="kl-about__stage">
-          <div className="kl-about__bg" aria-hidden>
-            <Image src="/images/kurz/wave-wide.svg" alt="" width={1512} height={669} />
+      <div className="kl-hero__inner">
+        <div className="kl-container">
+          <p className="kl-hero__badge">
+            <i aria-hidden />
+            {t.badge}: {next.date} · {t.seatsLeft(next.left)}
+          </p>
+          <h1>
+            {t.h1a}
+            <em>{t.h1em}</em>
+          </h1>
+          <p className="kl-hero__lead">{t.lead}</p>
+          <div className="kl-hero__actions">
+            <a href="#prihlaska" className="kl-btn kl-btn--primary">{t.ctaMain}</a>
+            <a href="#program" className="kl-btn kl-btn--ghost">{t.ctaProgram}</a>
           </div>
-          <div className="kl-about__layer">
-            <h2>
-              <span className="kl-grad">{t.h2}</span>
-            </h2>
-            <p className="t3">{t.t3}</p>
-            <p className="t2">{t.t2}</p>
-            <p className="t5">{t.t5}</p>
-            <p className="t1">{t.t1}</p>
-            <p className="t4">{t.t4}</p>
-            <div className="kl-about__img i1">
-              <Image src="/images/realizacie/r-07.jpg" alt="" width={512} height={512} />
-              <span className="kl-img-overlay" aria-hidden />
-            </div>
-            <div className="kl-about__img i2">
-              <Image src="/images/process/step-02-priprava.webp" alt="" width={472} height={320} />
-              <span className="kl-img-overlay" aria-hidden />
-            </div>
-          </div>
+          <dl className="kl-hero__facts">
+            {t.facts.map(([v, l]) => (
+              <div key={l}><strong>{v}</strong>{l}</div>
+            ))}
+          </dl>
         </div>
       </div>
     </section>
@@ -207,99 +251,78 @@ function About({ locale }: { locale: Locale }) {
 }
 
 /* ------------------------------------------------------------------ */
-/*  Events → Program — flip cards                                      */
+/*  Prísľub                                                            */
 /* ------------------------------------------------------------------ */
 
-function Program({ locale }: { locale: Locale }) {
-  const t = COPY[locale].events;
-  const [flipped, setFlipped] = React.useState<number | null>(null);
+function Claim({ locale }: { locale: Locale }) {
+  const t = V2[locale];
   return (
-    <section id="program" className="kl-section kl-events">
-      <div className="kl-container kl-events__intro">
-        <h2>{t.h2}</h2>
-        <p>{t.p}</p>
+    <section id="o-kurze" className="kl-section kl-claim">
+      <div className="kl-container kl-claim__grid">
+        <Reveal>
+          <h2>
+            {t.claimH2a}
+            <em>{t.claimH2em}</em>
+          </h2>
+          <p className="kl-claim__body">{t.claimBody}</p>
+          <ul className="kl-claim__points">
+            {t.claimPoints.map((p) => (
+              <li key={p}>
+                <svg viewBox="0 0 24 24" fill="none" aria-hidden>
+                  <path d="M5 12.5 10 17.5 19 7" stroke="currentColor" strokeWidth="2.4" strokeLinecap="round" strokeLinejoin="round" />
+                </svg>
+                {p}
+              </li>
+            ))}
+          </ul>
+        </Reveal>
+        <Reveal delay={120}>
+          <figure className="kl-claim__media">
+            <Image src="/images/realizacie/r-07.jpg" alt={t.claimCaption} width={880} height={1100} sizes="(max-width: 900px) 100vw, 40vw" />
+            <figcaption>{t.claimCaption}</figcaption>
+          </figure>
+        </Reveal>
       </div>
-      <div className="kl-container kl-container--large">
-        <div className="kl-cards">
-          {t.cards.map((c, i) => (
-            <article
-              key={c.title}
-              className={`kl-card${flipped === i ? " is-flipped" : ""}`}
-              onClick={() => setFlipped(flipped === i ? null : i)}
-            >
-              <div className="kl-card__inner">
-                <div className="kl-card__front">
-                  <div className="kl-card__front__header">
-                    <Image src={c.image} alt="" fill sizes="(max-width: 1200px) 80vw, 25vw" />
-                    <span className="kl-card__tag">{c.tag}</span>
-                  </div>
-                  <div className="kl-card__front__body">
-                    <h3>{c.title}</h3>
-                    <button type="button" className="kl-card__more">
-                      {t.more}
-                      <svg viewBox="0 0 24 24" fill="none" aria-hidden>
-                        <circle cx="12" cy="12" r="11" stroke="currentColor" strokeOpacity=".4" />
-                        <path d="M9 12h6m0 0-2.5-2.5M15 12l-2.5 2.5" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
-                      </svg>
-                    </button>
-                  </div>
-                </div>
-                <div className="kl-card__back">
-                  <p className="kl-card__back__name">{c.backName}</p>
-                  <h4>{c.backLabel}</h4>
-                  <p>{c.backValue}</p>
-                  <ul>
-                    {c.items.map((it) => (
-                      <li key={it}>{it}</li>
-                    ))}
-                  </ul>
-                </div>
+    </section>
+  );
+}
+
+/* ------------------------------------------------------------------ */
+/*  Program                                                            */
+/* ------------------------------------------------------------------ */
+
+function Days({ locale }: { locale: Locale }) {
+  const t = V2[locale];
+  const copyT = COPY[locale];
+  const day1 = [...copyT.events.cards[0].items, ...copyT.events.cards[1].items];
+  const day2 = [...copyT.events.cards[2].items, ...copyT.events.cards[3].items];
+  const days = [
+    { label: t.day1Label, title: t.day1Title, items: day1, img: "/images/hero/hala.webp", meta: t.dayMeta1 },
+    { label: t.day2Label, title: t.day2Title, items: day2, img: "/images/process/step-03-liatie.webp", meta: t.dayMeta2 },
+  ];
+  return (
+    <section id="program" className="kl-section kl-days">
+      <div className="kl-container">
+        <div className="kl-section__head">
+          <h2>{t.daysH2}</h2>
+          <p>{t.daysIntro}</p>
+        </div>
+        {days.map((d, i) => (
+          <Reveal key={d.title} delay={i * 80}>
+            <article className="kl-day">
+              <div className="kl-day__media">
+                <Image src={d.img} alt="" fill sizes="(max-width: 900px) 100vw, 40vw" />
+              </div>
+              <div className="kl-day__body">
+                <span className="kl-day__label">{d.label}</span>
+                <h3>{d.title}</h3>
+                <ul>
+                  {d.items.map((it) => <li key={it}>{it}</li>)}
+                </ul>
+                <p className="kl-day__meta">{d.meta}</p>
               </div>
             </article>
-          ))}
-        </div>
-      </div>
-    </section>
-  );
-}
-
-/* ------------------------------------------------------------------ */
-/*  CTA band                                                           */
-/* ------------------------------------------------------------------ */
-
-function Cta({ locale }: { locale: Locale }) {
-  const t = COPY[locale].cta;
-  return (
-    <section className="kl-section kl-cta">
-      <div className="kl-container">
-        <a href="#prihlaska" className="kl-cta__content">
-          <h2>{t.h2}</h2>
-          <span className="kl-cta__circle" aria-hidden>
-            <svg viewBox="0 0 40 40" fill="none">
-              <path d="M8 20h24m0 0-9-9m9 9-9 9" stroke="#fff" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
-            </svg>
-          </span>
-        </a>
-      </div>
-    </section>
-  );
-}
-
-/* ------------------------------------------------------------------ */
-/*  Highlights marquee                                                 */
-/* ------------------------------------------------------------------ */
-
-function Highlights({ locale }: { locale: Locale }) {
-  const items = COPY[locale].highlights;
-  const doubled = [...items, ...items];
-  return (
-    <section className="kl-section kl-highlights" aria-label="Čísla">
-      <div className="kl-marquee">
-        {doubled.map((h, i) => (
-          <div className="kl-marquee__item" key={`${h.value}-${i}`} aria-hidden={i >= items.length}>
-            <h3><span className="kl-grad">{h.value}</span></h3>
-            <p>{h.label}</p>
-          </div>
+          </Reveal>
         ))}
       </div>
     </section>
@@ -307,39 +330,110 @@ function Highlights({ locale }: { locale: Locale }) {
 }
 
 /* ------------------------------------------------------------------ */
-/*  Tools → Balíky                                                     */
+/*  Fotopás                                                            */
 /* ------------------------------------------------------------------ */
 
-function Boxes({ locale }: { locale: Locale }) {
-  const t = COPY[locale].tools;
+function Strip({ locale }: { locale: Locale }) {
+  const t = V2[locale];
   return (
-    <section id="cena" className="kl-section kl-tools">
+    <section className="kl-strip" aria-label={t.stripH2}>
       <div className="kl-container">
-        <h2>{t.h2}</h2>
-        <div className="kl-boxes">
-          {t.boxes.map((b) => (
-            <article key={b.title} className={`kl-box${b.muted ? " kl-box--muted" : ""}`}>
-              <span className="kl-box__number kl-grad">{b.number}</span>
-              {b.price && (
-                <p className="kl-box__price">
-                  <strong>{b.price.value}</strong> {b.price.suffix}
-                </p>
-              )}
-              <h3>{b.title}</h3>
-              <p>{b.text}</p>
-              {b.items && (
-                <ul>
-                  {b.items.map((it) => <li key={it}>{it}</li>)}
-                </ul>
-              )}
-              {b.button && (
-                <div className="kl-box__footer">
-                  <a href={`#prihlaska?balik=${b.variant ?? "standard"}`} className="kl-btn kl-btn--primary">{b.button}</a>
-                </div>
-              )}
-            </article>
-          ))}
+        <h2 style={{ fontSize: "clamp(1.6rem, 1.1rem + 2vw, 2.4rem)", marginBottom: "1.6rem" }}>{t.stripH2}</h2>
+      </div>
+      <div className="kl-strip__row">
+        {STRIP_IMAGES.map((src, i) => (
+          <figure key={src}>
+            <Image src={src} alt={t.stripCaptions[i]} width={640} height={800} sizes="(max-width: 768px) 70vw, 24rem" />
+            <figcaption>{t.stripCaptions[i]}</figcaption>
+          </figure>
+        ))}
+      </div>
+    </section>
+  );
+}
+
+/* ------------------------------------------------------------------ */
+/*  Ceny                                                               */
+/* ------------------------------------------------------------------ */
+
+function Pricing({ locale }: { locale: Locale }) {
+  const t = V2[locale];
+  const std = locale === "sk" ? KURZ.priceStandard : COURSE_EN.priceStandard;
+  const pro = locale === "sk" ? KURZ.pricePro : COURSE_EN.pricePro;
+  const eur = (n: number) => (locale === "sk" ? `${n} €` : `€${n}`);
+  const check = (
+    <svg viewBox="0 0 24 24" fill="none" aria-hidden>
+      <path d="M5 12.5 10 17.5 19 7" stroke="currentColor" strokeWidth="2.4" strokeLinecap="round" strokeLinejoin="round" />
+    </svg>
+  );
+  return (
+    <section id="cena" className="kl-section kl-pricing">
+      <div className="kl-container">
+        <div className="kl-section__head">
+          <h2>{t.pricingH2}</h2>
+          <p>{t.pricingIntro}</p>
         </div>
+        <div className="kl-pricing__grid">
+          <Reveal>
+            <article className="kl-price">
+              <h3>{t.stdTitle}</h3>
+              <p className="kl-price__amount">{eur(std)}<small>{t.perPerson}</small></p>
+              <p className="kl-price__desc">{t.stdDesc}</p>
+              <ul>
+                {t.stdItems.map((it) => <li key={it}>{check}{it}</li>)}
+              </ul>
+              <a href="#prihlaska?balik=standard" className="kl-btn kl-btn--line">{t.stdCta}</a>
+            </article>
+          </Reveal>
+          <Reveal delay={100}>
+            <article className="kl-price kl-price--featured">
+              <span className="kl-price__tag">{t.proTag}</span>
+              <h3>{t.proTitle}</h3>
+              <p className="kl-price__amount">{eur(pro)}<small>{t.perPerson}</small></p>
+              <p className="kl-price__desc">{t.proDesc}</p>
+              <ul>
+                {t.proItems.map((it) => <li key={it}>{check}{it}</li>)}
+              </ul>
+              <a href="#prihlaska?balik=pro" className="kl-btn kl-btn--primary">{t.proCta}</a>
+            </article>
+          </Reveal>
+        </div>
+        <p className="kl-pricing__note">
+          {t.firmaNote} <a href="#prihlaska?balik=firma">{t.firmaLink}</a>
+        </p>
+      </div>
+    </section>
+  );
+}
+
+/* ------------------------------------------------------------------ */
+/*  Termíny                                                            */
+/* ------------------------------------------------------------------ */
+
+function Terms({ locale }: { locale: Locale }) {
+  const t = V2[locale];
+  const terms = locale === "sk" ? KURZ.nextTerms : COURSE_EN.nextTerms;
+  return (
+    <section id="terminy" className="kl-section kl-terms">
+      <div className="kl-container">
+        <div className="kl-section__head">
+          <h2>{t.termsH2}</h2>
+          <p>{t.termsPlace} · 9:00 až 17:00</p>
+        </div>
+        <ul className="kl-terms__list">
+          {terms.map((term) => (
+            <li key={term.date} className="kl-terms__row">
+              <span className="kl-terms__date">
+                {term.date}
+                <small>{t.termsPlace}</small>
+              </span>
+              <span className={`kl-terms__seats ${term.left <= 3 ? "is-low" : "is-ok"}`}>
+                {term.left <= 3 ? t.seatsLow(term.left) : t.seatsOk(term.left)}
+              </span>
+              <a href="#prihlaska" className="kl-btn kl-btn--ink">{t.termCta}</a>
+            </li>
+          ))}
+        </ul>
       </div>
     </section>
   );
@@ -351,44 +445,37 @@ function Boxes({ locale }: { locale: Locale }) {
 
 function Faq({ locale }: { locale: Locale }) {
   const t = COPY[locale].faq;
+  const v2 = V2[locale];
   const [open, setOpen] = React.useState<number | null>(0);
   return (
-    <section id="faq" className="kl-section kl-faq">
-      <div className="kl-container">
-        <h2>{t.h2}</h2>
-        <div className="kl-accordions">
-          {t.items.map((f, i) => {
-            const active = open === i;
-            return (
-              <div key={f.q} className={`kl-acc${active ? " is-active" : ""}`}>
-                <button
-                  type="button"
-                  className="kl-acc__header"
-                  aria-expanded={active}
-                  onClick={() => setOpen(active ? null : i)}
-                >
-                  <h3>{f.q}</h3>
-                  <span className="kl-acc__plus" aria-hidden>
-                    <svg viewBox="0 0 24 24" fill="none" width="24" height="24">
-                      <path d="M4 12h16" stroke="#fff" strokeWidth="2" strokeLinecap="round" />
-                      <path className="v" d="M12 4v16" stroke="#fff" strokeWidth="2" strokeLinecap="round" />
-                    </svg>
-                  </span>
-                </button>
-                <div className="kl-acc__body">
-                  <div><p>{f.a}</p></div>
-                </div>
-              </div>
-            );
-          })}
+    <section id="faq" className="kl-section">
+      <div className="kl-container" style={{ maxWidth: "52rem" }}>
+        <div className="kl-section__head">
+          <h2>{v2.faqH2}</h2>
         </div>
+        {t.items.map((f, i) => {
+          const active = open === i;
+          return (
+            <div key={f.q} className={`kl-acc${active ? " is-active" : ""}`}>
+              <button type="button" className="kl-acc__header" aria-expanded={active} onClick={() => setOpen(active ? null : i)}>
+                <h3>{f.q}</h3>
+                <svg className="kl-acc__plus" viewBox="0 0 24 24" fill="none" aria-hidden>
+                  <path d="M12 5v14M5 12h14" stroke="currentColor" strokeWidth="2" strokeLinecap="round" />
+                </svg>
+              </button>
+              <div className="kl-acc__body">
+                <div><p>{f.a}</p></div>
+              </div>
+            </div>
+          );
+        })}
       </div>
     </section>
   );
 }
 
 /* ------------------------------------------------------------------ */
-/*  Contact + form                                                     */
+/*  Checkout formulár (logika nezmenená)                               */
 /* ------------------------------------------------------------------ */
 
 interface FormState {
@@ -609,12 +696,12 @@ function ContactForm({ locale }: { locale: Locale }) {
 
       {isPurchase ? (
         <>
-          <p style={{ color: "#fff", fontSize: "1rem", margin: "0 0 0.75rem" }}>{P.payTitle}</p>
+          <p style={{ color: "var(--kl-ink)", fontWeight: 600, fontSize: "0.95rem", margin: "0 0 0.6rem" }}>{P.payTitle}</p>
           <div className="kl-pay" role="radiogroup" aria-label={P.payTitle}>
             <label className={`kl-pay__opt${payment === "karta" ? " is-active" : ""}${cardAvailable === false ? " is-disabled" : ""}`}>
               <input type="radio" name="kl-pay" value="karta" checked={payment === "karta"} disabled={cardAvailable === false}
                 onChange={() => cardAvailable !== false && setPayment("karta")} />
-              <span className="kl-check__box" aria-hidden />
+              <span className="kl-pay__radio" aria-hidden />
               <span>
                 <strong>{P.karta}</strong>
                 <span>{cardAvailable === false ? P.kartaOff : P.kartaSub}</span>
@@ -622,7 +709,7 @@ function ContactForm({ locale }: { locale: Locale }) {
             </label>
             <label className={`kl-pay__opt${payment === "prevod" ? " is-active" : ""}`}>
               <input type="radio" name="kl-pay" value="prevod" checked={payment === "prevod"} onChange={() => setPayment("prevod")} />
-              <span className="kl-check__box" aria-hidden />
+              <span className="kl-pay__radio" aria-hidden />
               <span>
                 <strong>{P.prevod}</strong>
                 <span>{P.prevodSub}</span>
@@ -635,10 +722,10 @@ function ContactForm({ locale }: { locale: Locale }) {
           </div>
         </>
       ) : (
-        <p className="kl-zisk__note" style={{ marginBottom: "2rem" }}>{P.firmaNote}</p>
+        <p style={{ fontSize: "0.95rem", color: "var(--kl-subtle)", margin: "0 0 1.4rem" }}>{P.firmaNote}</p>
       )}
 
-      <TurnstileWidget theme="dark" onVerify={setToken} onExpire={() => setToken(null)} />
+      <TurnstileWidget onVerify={setToken} onExpire={() => setToken(null)} />
 
       <div className="kl-form__footer">
         <label className="kl-check">
@@ -661,65 +748,57 @@ function ContactForm({ locale }: { locale: Locale }) {
 
 function Contact({ locale }: { locale: Locale }) {
   const t = COPY[locale].contact;
+  const v2 = V2[locale];
   return (
-    <section id="kontakt" className="kl-section kl-contact">
-      <div className="kl-container">
-        <div className="kl-contact__grid">
-          <div className="kl-contact__info">
-            <h2>{t.h2}</h2>
-            <p>{t.p}</p>
-            <ul className="kl-contact__list">
-              <li>
-                <svg viewBox="0 0 24 24" fill="none" aria-hidden><path d="M5 4h4l2 5-2.5 1.5a11 11 0 0 0 5 5L15 13l5 2v4a2 2 0 0 1-2 2A16 16 0 0 1 3 6a2 2 0 0 1 2-2Z" stroke="currentColor" strokeWidth="1.6" strokeLinejoin="round"/></svg>
-                <a href={`tel:${SITE.contact.phoneRaw}`}>{SITE.contact.phone}</a>
-              </li>
-              <li>
-                <svg viewBox="0 0 24 24" fill="none" aria-hidden><rect x="3" y="5" width="18" height="14" rx="2" stroke="currentColor" strokeWidth="1.6"/><path d="m3 7 9 6 9-6" stroke="currentColor" strokeWidth="1.6"/></svg>
-                <a href={`mailto:${SITE.contact.email}`}>{SITE.contact.email}</a>
-              </li>
-              <li>
-                <svg viewBox="0 0 24 24" fill="none" aria-hidden><path d="M12 21s7-5.5 7-11a7 7 0 1 0-14 0c0 5.5 7 11 7 11Z" stroke="currentColor" strokeWidth="1.6"/><circle cx="12" cy="10" r="2.5" stroke="currentColor" strokeWidth="1.6"/></svg>
-                <span style={{ color: "#fff" }}>{SITE.address.street}, {SITE.address.postalCode} {SITE.address.city}</span>
-              </li>
-            </ul>
-            <h3>{t.socials}</h3>
-            <ul className="kl-contact__socials">
-              <li><a href={SITE.social.facebook} target="_blank" rel="noopener" aria-label="Facebook"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M13.5 22v-8h2.7l.4-3.2h-3.1V8.8c0-.9.3-1.6 1.6-1.6h1.7V4.3c-.3 0-1.3-.1-2.5-.1-2.5 0-4.1 1.5-4.1 4.2v2.4H7.5V14h2.7v8h3.3Z"/></svg></a></li>
-              <li><a href={SITE.social.instagram} target="_blank" rel="noopener" aria-label="Instagram"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="1" fill="currentColor" stroke="none"/></svg></a></li>
-              <li><a href={SITE.social.tiktok} target="_blank" rel="noopener" aria-label="TikTok"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M14 3h3a5 5 0 0 0 4 4v3a8 8 0 0 1-4-1.3V15a6 6 0 1 1-6-6v3a3 3 0 1 0 3 3V3Z"/></svg></a></li>
-            </ul>
-          </div>
-          <div className="kl-contact__form" id="prihlaska">
-            <h3>{t.formTitle}</h3>
-            <p style={{ fontSize: "1rem", marginBottom: "1.5rem" }}>{t.formSub}</p>
-            <ContactForm locale={locale} />
-          </div>
+    <section id="kontakt" className="kl-section kl-contact" style={{ background: "var(--kl-surface)" }}>
+      <div className="kl-container kl-contact__grid">
+        <div className="kl-contact__info">
+          <h2>{t.h2}</h2>
+          <p>{t.p}</p>
+          <ul className="kl-contact__list">
+            <li>
+              <svg viewBox="0 0 24 24" fill="none" aria-hidden><path d="M5 4h4l2 5-2.5 1.5a11 11 0 0 0 5 5L15 13l5 2v4a2 2 0 0 1-2 2A16 16 0 0 1 3 6a2 2 0 0 1 2-2Z" stroke="currentColor" strokeWidth="1.7" strokeLinejoin="round"/></svg>
+              <a href={`tel:${SITE.contact.phoneRaw}`}>{SITE.contact.phone}</a>
+            </li>
+            <li>
+              <svg viewBox="0 0 24 24" fill="none" aria-hidden><rect x="3" y="5" width="18" height="14" rx="2" stroke="currentColor" strokeWidth="1.7"/><path d="m3 7 9 6 9-6" stroke="currentColor" strokeWidth="1.7"/></svg>
+              <a href={`mailto:${SITE.contact.email}`}>{SITE.contact.email}</a>
+            </li>
+            <li>
+              <svg viewBox="0 0 24 24" fill="none" aria-hidden><path d="M12 21s7-5.5 7-11a7 7 0 1 0-14 0c0 5.5 7 11 7 11Z" stroke="currentColor" strokeWidth="1.7"/><circle cx="12" cy="10" r="2.5" stroke="currentColor" strokeWidth="1.7"/></svg>
+              <span>{SITE.address.street}, {SITE.address.postalCode} {SITE.address.city}</span>
+            </li>
+          </ul>
+          <ul className="kl-contact__socials">
+            <li><a href={SITE.social.facebook} target="_blank" rel="noopener" aria-label="Facebook"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M13.5 22v-8h2.7l.4-3.2h-3.1V8.8c0-.9.3-1.6 1.6-1.6h1.7V4.3c-.3 0-1.3-.1-2.5-.1-2.5 0-4.1 1.5-4.1 4.2v2.4H7.5V14h2.7v8h3.3Z"/></svg></a></li>
+            <li><a href={SITE.social.instagram} target="_blank" rel="noopener" aria-label="Instagram"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="1" fill="currentColor" stroke="none"/></svg></a></li>
+            <li><a href={SITE.social.tiktok} target="_blank" rel="noopener" aria-label="TikTok"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M14 3h3a5 5 0 0 0 4 4v3a8 8 0 0 1-4-1.3V15a6 6 0 1 1-6-6v3a3 3 0 1 0 3 3V3Z"/></svg></a></li>
+          </ul>
+        </div>
+        <div className="kl-contact__form" id="prihlaska">
+          <h3>{v2.formTitle}</h3>
+          <p>{t.formSub}</p>
+          <ContactForm locale={locale} />
         </div>
       </div>
     </section>
   );
 }
 
-/* ------------------------------------------------------------------ */
-/*  Footer                                                             */
-/* ------------------------------------------------------------------ */
-
 function Footer({ locale }: { locale: Locale }) {
   const t = COPY[locale].footer;
   return (
     <footer className="kl-footer">
-      <div className="kl-container">
-        <div className="kl-footer__row">
-          <div className="kl-footer__copy">
-            <Image src="/images/site/logo_v2.png" alt="EPOXIDOVO" width={64} height={61} />
-            <p>{t.copy}</p>
-          </div>
-          <ul className="kl-footer__links">
-            {t.links.map((l) => (
-              <li key={l.href}><Link href={l.href}>{l.label}</Link></li>
-            ))}
-          </ul>
+      <div className="kl-container kl-footer__row">
+        <div className="kl-footer__copy">
+          <Image src="/images/site/logo_v2.png" alt="EPOXIDOVO" width={42} height={40} />
+          <p>{t.copy}</p>
         </div>
+        <ul className="kl-footer__links">
+          {t.links.map((l) => (
+            <li key={l.href}><Link href={l.href}>{l.label}</Link></li>
+          ))}
+        </ul>
       </div>
     </footer>
   );
@@ -740,16 +819,16 @@ export function KurzLanding({ locale }: { locale: Locale }) {
   }, [menu, t.htmlLang]);
 
   return (
-    <div className={`kl${menu ? " menu-is-active" : ""}`} lang={t.htmlLang}>
+    <div className="kl" lang={t.htmlLang}>
       <Header locale={locale} onMenu={setMenu} />
       <main>
-        <Hello locale={locale} />
-        <About locale={locale} />
-        <Program locale={locale} />
-        <Cta locale={locale} />
-        <Highlights locale={locale} />
+        <Hero locale={locale} />
+        <Claim locale={locale} />
+        <Days locale={locale} />
+        <Strip locale={locale} />
         <KurzZisk locale={locale} />
-        <Boxes locale={locale} />
+        <Pricing locale={locale} />
+        <Terms locale={locale} />
         <Faq locale={locale} />
         <Contact locale={locale} />
       </main>

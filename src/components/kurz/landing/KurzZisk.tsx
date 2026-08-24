@@ -85,9 +85,10 @@ export function KurzZisk({ locale }: { locale: Locale }) {
   return (
     <section id="kalkulacka" className="kl-section kl-zisk">
       <div className="kl-container">
-        <p className="kl-box__number kl-grad" style={{ marginBottom: "1rem" }}>{t.label}</p>
-        <h2>{t.h2}</h2>
-        <p style={{ maxWidth: "44em" }}>{t.intro}</p>
+        <div className="kl-section__head">
+          <h2>{t.h2}</h2>
+          <p>{t.intro}</p>
+        </div>
 
         <div className="kl-zisk__grid">
           {/* --- kalkulačka --- */}
@@ -127,7 +128,7 @@ export function KurzZisk({ locale }: { locale: Locale }) {
               </div>
               <div className="kl-zisk__row kl-zisk__row--total">
                 <dt>{t.marza}<small>{t.marzaSub}</small></dt>
-                <dd><span className="kl-grad">{fmt(r.hrubaMarzaEur, locale)} €</span></dd>
+                <dd>{fmt(r.hrubaMarzaEur, locale)} €</dd>
               </div>
             </dl>
             <p className="kl-zisk__note">{t.navrat(r.navratnostM2)} {t.dni(r.dniRealizacie)}</p>
@@ -151,7 +152,7 @@ export function KurzZisk({ locale }: { locale: Locale }) {
                   <g key={s.pocet}>
                     <rect x={x0 - barW * 1.5 - 3} y={y(s.predaj)} width={barW} height={y(0) - y(s.predaj)} rx="4" fill="rgba(255,255,255,0.18)" />
                     <rect x={x0 - barW / 2} y={y(s.material)} width={barW} height={y(0) - y(s.material)} rx="4" fill="rgba(255,255,255,0.38)" />
-                    <rect x={x0 + barW / 2 + 3} y={y(s.marza)} width={barW} height={y(0) - y(s.marza)} rx="4" fill="var(--kl-accent)" />
+                    <rect x={x0 + barW / 2 + 3} y={y(s.marza)} width={barW} height={y(0) - y(s.marza)} rx="4" fill="oklch(0.72 0.14 55)" />
                     <text x={x0 + barW / 2 + 3 + barW / 2} y={y(s.marza) - 6} fill="#fff" fontSize="11" textAnchor="middle" fontWeight="600">
                       {fmt(s.marza, locale)}
                     </text>
@@ -168,7 +169,7 @@ export function KurzZisk({ locale }: { locale: Locale }) {
             <ul className="kl-chart__legend">
               <li><i style={{ background: "rgba(255,255,255,0.18)" }} />{t.chartLegendPredaj}</li>
               <li><i style={{ background: "rgba(255,255,255,0.38)" }} />{t.chartLegendMaterial}</li>
-              <li><i style={{ background: "var(--kl-accent)" }} />{t.chartLegendZisk}</li>
+              <li><i style={{ background: "oklch(0.72 0.14 55)" }} />{t.chartLegendZisk}</li>
             </ul>
           </div>
         </div>
@@ -176,7 +177,7 @@ export function KurzZisk({ locale }: { locale: Locale }) {
         {/* --- rozpis 1 m² --- */}
         <div className="kl-box kl-zisk__table">
           <h3 style={{ fontSize: "1.25rem", marginBottom: "1rem" }}>{t.breakdown}</h3>
-          <div style={{ overflowX: "auto" }}>
+          <div className="kl-table-scroll">
             <table className="kl-table">
               <thead>
                 <tr>{t.breakdownCols.map((c) => <th key={c}>{c}</th>)}</tr>
@@ -197,7 +198,7 @@ export function KurzZisk({ locale }: { locale: Locale }) {
                 </tr>
                 <tr className="kl-table__sum kl-table__sum--accent">
                   <td colSpan={4}>{t.breakdownMarza}</td>
-                  <td style={{ whiteSpace: "nowrap" }}><span className="kl-grad">{(PREDAJ_EUR_M2 - m2mat.spolu).toFixed(2)} €</span></td>
+                  <td style={{ whiteSpace: "nowrap" }}>{(PREDAJ_EUR_M2 - m2mat.spolu).toFixed(2)} €</td>
                 </tr>
               </tbody>
             </table>
