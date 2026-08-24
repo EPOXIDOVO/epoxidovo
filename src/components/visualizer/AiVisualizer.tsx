@@ -80,14 +80,19 @@ export function AiVisualizer() {
   /** Prefill z URL — náhľad fotky na webe posiela ?texture= a ?farba= (slug
    *  alebo label efektu). Zákazník potom len odfotí priestor a generuje. */
   const [prefillFarba, setPrefillFarba] = React.useState(false);
+  const prefillTextura = React.useRef(false);
   React.useEffect(() => {
     const q = new URLSearchParams(window.location.search);
     const t = q.get("texture");
     if (!t || !(t in TEXTURES)) return;
+    prefillTextura.current = true;
     setTexture(t as TextureSlug);
     const f = (q.get("color") ?? q.get("farba") ?? "").toLowerCase();
     if (f) {
-      const hit = COLORS[t as TextureSlug].find(
+      // hľadaj v presetoch textúry aj v RAL palete (hladká/chipsy) — fotky
+      // jednofarebných a priemyselných podláh nesú RAL kód, nie názov efektu
+      const kandidati = [...COLORS[t as TextureSlug], ...getRalColors(t as TextureSlug)];
+      const hit = kandidati.find(
         (c) => c.slug === f || c.slug === f.replace(/\s+/g, "-") || c.commercialName.toLowerCase() === f,
       );
       if (hit) {
@@ -123,8 +128,9 @@ export function AiVisualizer() {
       setMimeType(file.type === "image/jpg" ? "image/jpeg" : file.type);
       setPreviewUrl(dataUrl);
       trackEvent("visualizer_upload", { size: file.size, type: file.type });
-      // prefill z webu: textúra aj farba sú už vybraté — rovno na potvrdenie
-      setStep(prefillFarba ? "pick-color" : "pick-texture");
+      // prefill z webu: typ podlahy poznáme z URL, tak preskoč jeho výber
+      // (farba môže, ale nemusí byť — chipsové fotky ju nenesú)
+      setStep(prefillTextura.current ? "pick-color" : "pick-texture");
       scrollToTop();
     };
     reader.onerror = () => setError("Nepodarilo sa načítať fotku. Skús inú.");
@@ -199,6 +205,8 @@ export function AiVisualizer() {
   // ───────────────────────────────────────────────────────────────────────
 
   const tryAgain = () => {
+    prefillTextura.current = false;
+    setPrefillFarba(false);
     setResultBase64(null);
     // Reset voľby aby picker zobrazil čistý stav (žiadny default highlight) —
     // user prichádza zo "result" a chce skúsiť úplne inú kombináciu.
@@ -211,6 +219,8 @@ export function AiVisualizer() {
   };
 
   const startOver = () => {
+    prefillTextura.current = false;
+    setPrefillFarba(false);
     setImageBase64(null);
     setPreviewUrl(null);
     setResultBase64(null);
@@ -354,6 +364,7 @@ export function AiVisualizer() {
           turnstileToken={turnstileToken}
           onTurnstile={setTurnstileToken}
           onGenerate={generate}
+          prefilled={prefillFarba}
           onBack={() => {
             setStep("pick-texture");
             scrollToTop();
@@ -699,6 +710,7 @@ function PickColorStep({
   onTurnstile,
   onGenerate,
   onBack,
+  prefilled,
 }: {
   previewUrl: string;
   texture: TextureSlug;
@@ -710,6 +722,7 @@ function PickColorStep({
   onTurnstile: (t: string | null) => void;
   onGenerate: () => void;
   onBack: () => void;
+  prefilled: boolean;
 }) {
   const colors = COLORS[texture];
   const textureDef = TEXTURES[texture];
@@ -772,21 +785,32 @@ function PickColorStep({
           Renderujem inline aby zostal jeden komponent (a finish/turnstile/
           generate ostali spoločné nižšie). */}
 
-      {texture === "metalicka" && colorSlug && COLORS.metalicka.some((c) => c.slug === colorSlug) && (
-        /* Predvolený TopStone efekt z náhľadu fotky na webe — netreba nič
-           vyberať, rovno generovať. Mixér nižšie ho prepíše, ak chce inú. */
+      {prefilled && activeColor && (
+        /* Odtieň predvolený z náhľadu fotky na webe — netreba nič vyberať,
+           rovno generovať. Výber nižšie ho prepíše, ak chce zákazník iný. */
         <div className="mb-4 flex items-center gap-3 rounded-2xl border-2 border-[#2EA3DC] bg-[#eaf6fc] p-3">
-          <img
-            src={COLORS.metalicka.find((c) => c.slug === colorSlug)?.refImage ?? ""}
-            alt=""
-            className="w-14 h-14 rounded-xl object-cover shrink-0"
-          />
+          {activeColor.refImage ? (
+            /* eslint-disable-next-line @next/next/no-img-element */
+            <img
+              src={activeColor.refImage}
+              alt=""
+              className="w-14 h-14 rounded-xl object-cover shrink-0"
+            />
+          ) : (
+            <span
+              className="w-14 h-14 rounded-xl shrink-0 ring-1 ring-[#1B2430]/15"
+              style={{ background: activeColor.hex }}
+              aria-hidden
+            />
+          )}
           <div className="min-w-0 flex-1">
-            <div className="text-[10px] font-extrabold uppercase tracking-wider text-[#1B2430]/55">Predvolený efekt z webu</div>
-            <div className="font-extrabold text-[#1B2430]">
-              {COLORS.metalicka.find((c) => c.slug === colorSlug)?.commercialName}
+            <div className="text-[10px] font-extrabold uppercase tracking-wider text-[#1B2430]/55">
+              Predvolený odtieň z webu
             </div>
-            <div className="text-xs text-[#1B2430]/60">Môžeš rovno generovať — alebo si nižšie namiešaj vlastnú zmes.</div>
+            <div className="font-extrabold text-[#1B2430]">{activeColor.commercialName}</div>
+            <div className="text-xs text-[#1B2430]/60">
+              Môžeš rovno generovať — alebo si nižšie vyber iný.
+            </div>
           </div>
         </div>
       )}

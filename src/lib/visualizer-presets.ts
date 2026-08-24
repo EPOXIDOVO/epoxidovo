@@ -600,6 +600,7 @@ const RAL_CLASSIC: RalColor[] = [
   { ral: "RAL 7030", name: "Kamennosivá", hex: "#8B8C7A" },
   { ral: "RAL 7016", name: "Antracitsivá", hex: "#293133" },
   { ral: "RAL 7021", name: "Čiernosivá", hex: "#23282B" },
+  { ral: "RAL 7047", name: "Telesivá 4", hex: "#C8C8C7" },
   // Beiges / Browns
   { ral: "RAL 1001", name: "Béžová", hex: "#D0B084" },
   { ral: "RAL 8003", name: "Hlinková hnedá", hex: "#7B5141" },
@@ -607,9 +608,11 @@ const RAL_CLASSIC: RalColor[] = [
   // Blues
   { ral: "RAL 5010", name: "Encyánovo modrá", hex: "#0E294B" },
   { ral: "RAL 5015", name: "Nebesky modrá", hex: "#2271B3" },
+  { ral: "RAL 5012", name: "Svetlomodrá", hex: "#0089B6" },
   // Greens
   { ral: "RAL 6018", name: "Žltozelená", hex: "#57A639" },
   { ral: "RAL 6029", name: "Mätovo zelená", hex: "#20603D" },
+  { ral: "RAL 6021", name: "Bledozelená", hex: "#89AC76" },
   // Reds
   { ral: "RAL 3000", name: "Ohňová červená", hex: "#AF2B1E" },
   { ral: "RAL 3009", name: "Oxidovo červená", hex: "#6D3F36" },
