@@ -11,11 +11,11 @@ import {
 } from "@/content/kurz";
 
 export const metadata: Metadata = {
-  title: "Kurz epoxidových podláh — 2-dňové školenie",
+  title: "Online kurz epoxidových podláh",
   description:
-    "Praktický kurz liatych epoxidových podláh v Ružomberku. 2 dni, max. 6 ľudí, vlastná plocha 12 m², materiál a náradie v cene, certifikát a 30 dní podpory. Od 499 €.",
+    "Online kurz liatych epoxidových podláh: 8+ hodín videa zo skutočných zákaziek, manuál so spotrebami, kalkulačka, certifikát a prístup navždy. Od 499 €.",
   keywords: [
-    "kurz epoxidových podláh",
+    "online kurz epoxidových podláh",
     "školenie epoxidové podlahy",
     "kurz liatych podláh",
     "ako robiť epoxidovú podlahu",
@@ -23,7 +23,7 @@ export const metadata: Metadata = {
     "rekvalifikačný kurz podlahár",
     "kurz metalickej podlahy",
     "kurz chipsových podláh",
-    "epoxid kurz Ružomberok",
+    "video kurz liate podlahy",
     "naučiť sa liať epoxidovú podlahu",
   ],
   alternates: {
@@ -37,16 +37,16 @@ export const metadata: Metadata = {
   openGraph: {
     type: "article",
     locale: "sk_SK",
-    title: "Kurz epoxidových podláh — nauč sa liať za 2 dni",
+    title: "Online kurz epoxidových podláh",
     description:
-      "Max. 6 ľudí v skupine, 80 % času s náradím v ruke, vlastná plocha 12 m². Materiál, náradie, manuál aj certifikát v cene. Od 499 €.",
+      "8+ hodín videa zo skutočných zákaziek, manuál, kalkulačka spotreby a certifikát. Prístup okamžite a navždy. Od 499 €.",
     url: "/kurz",
     images: [{ url: "/og-home.jpg?v=3", width: 1200, height: 630, alt: "Kurz epoxidových podláh EPOXIDOVO Akadémia" }],
   },
   twitter: {
     card: "summary_large_image",
     title: "Kurz epoxidových podláh — EPOXIDOVO Akadémia",
-    description: "2 dni praxe, max. 6 ľudí, vlastná plocha 12 m². Od 499 €.",
+    description: "8+ hodín videa, prístup navždy, certifikát. Od 499 €.",
     images: ["/og-home.jpg?v=3"],
   },
 };
@@ -64,7 +64,7 @@ export default function KurzPage() {
         locale="sk"
         path="/kurz"
         name={KURZ.name}
-        description="Dvojdňový praktický kurz liatych epoxidových podláh — príprava podkladu, jednofarebná liata podlaha, chipsy, metalický efekt, detaily a cenotvorba."
+        description="Online video kurz liatych epoxidových podláh: príprava podkladu, jednofarebná liata podlaha, chipsy, metalický efekt, detaily a cenotvorba."
         summary={KURZ_SUMMARY}
         place={KURZ.place}
         duration={KURZ.duration}

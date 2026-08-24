@@ -8,10 +8,10 @@ import "./landing.css";
 
 const T = {
   sk: {
-    paid: "Platba prebehla — miesto je tvoje",
+    paid: "Platba prebehla, kurz je tvoj",
     prevod: "Objednávka prijatá",
-    paidText: "Na e-mail ti príde potvrdenie a do 24 hodín sa ozveme s pokynmi na cestu, zoznamom vecí a faktúrou.",
-    prevodText: "Platobné údaje ti pošleme e-mailom do 24 hodín spolu s faktúrou. Miesto držíme 5 pracovných dní od vystavenia faktúry.",
+    paidText: "Na e-mail ti do pár minút príde faktúra a prístup do členskej sekcie. Ak nič nevidíš, skontroluj spam alebo zavolaj.",
+    prevodText: "Platobné údaje a faktúru ti pošleme e-mailom do 24 hodín. Prístup do kurzu ti aktivujeme hneď po pripísaní platby.",
     order: "Číslo objednávky",
     amount: "Suma",
     back: "Späť na stránku kurzu",
@@ -19,10 +19,10 @@ const T = {
     q: "Niečo nesedí? Zavolaj",
   },
   en: {
-    paid: "Payment received — the seat is yours",
+    paid: "Payment received, the course is yours",
     prevod: "Order received",
-    paidText: "A confirmation is on its way to your e-mail. Within 24 hours we send travel details, a packing list and the invoice.",
-    prevodText: "We send the payment details and invoice by e-mail within 24 hours. Your seat is held for 5 working days from the invoice date.",
+    paidText: "The invoice and access to the member area arrive in your inbox within minutes. Check spam or call us if nothing shows up.",
+    prevodText: "We send the payment details and invoice by e-mail within 24 hours. Course access is activated as soon as the payment arrives.",
     order: "Order number",
     amount: "Amount",
     back: "Back to the course page",

@@ -13,9 +13,9 @@ import {
 const PATH = "/en/epoxy-flooring-course";
 
 export const metadata: Metadata = {
-  title: { absolute: "Epoxy Flooring Course in Europe — 2-Day Training" },
+  title: { absolute: "Online Epoxy Flooring Course" },
   description:
-    "Hands-on epoxy resin flooring training in Slovakia. 2 days, max. 6 people, 12 m² you pour yourself, material and tools included. From €499.",
+    "Online epoxy resin flooring course: 8+ hours of video filmed on real client jobs, manual with consumption rates, calculator, certificate and lifetime access. From €499.",
   keywords: [
     "epoxy flooring course",
     "epoxy floor training",
@@ -40,7 +40,7 @@ export const metadata: Metadata = {
     type: "article",
     locale: "en_GB",
     alternateLocale: ["sk_SK"],
-    title: "Epoxy Flooring Course — learn to pour a floor in 2 days",
+    title: "Online Epoxy Flooring Course",
     description:
       "Hands-on epoxy resin flooring training in Slovakia. Max. 6 people per group, 80 % of the time with tools in hand, 12 m² you pour yourself. From €499.",
     url: PATH,
@@ -74,7 +74,7 @@ export default function EpoxyFlooringCoursePage() {
         locale="en"
         path={PATH}
         name={COURSE_EN.name}
-        description="A two-day hands-on epoxy flooring course — substrate preparation, single-colour poured floor, flakes, metallic effect, detailing and job pricing."
+        description="An online epoxy flooring video course: substrate preparation, single-colour poured floor, flakes, metallic effect, detailing and job pricing."
         summary={COURSE_EN_SUMMARY}
         place={COURSE_EN.place}
         duration={COURSE_EN.duration}

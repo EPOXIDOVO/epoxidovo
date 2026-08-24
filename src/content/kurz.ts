@@ -4,27 +4,26 @@
  */
 
 export const KURZ = {
-  name: "EPOXIDOVO Akadémia — 2-dňový kurz liatych podláh",
-  shortName: "Kurz epoxidových podláh",
-  claim: "Za dva dni sa naučíš liať podlahu, ktorú si zákazník odfotí.",
-  place: "Ružomberok (školiace centrum EPOXIDOVO)",
-  duration: "2 dni · 9:00 — 17:00",
-  groupSize: 6,
+  name: "EPOXIDOVO Akadémia — online kurz liatych podláh",
+  shortName: "Online kurz epoxidových podláh",
+  claim: "Nauč sa liať podlahy z videí, ktoré nakrúcame na reálnych zákazkách.",
+  place: "online (prístup okamžite po zaplatení, navždy)",
+  duration: "8+ hodín videa · 40+ lekcií · vlastné tempo",
+  groupSize: 0,
   priceStandard: 499,
   pricePro: 1499,
-  language: "angličtina (lektor rozumie aj po slovensky)",
-  nextTerms: [
-    { date: "12. — 13. september 2026", iso: "2026-09-12", left: 3 },
-    { date: "10. — 11. október 2026", iso: "2026-10-10", left: 6 },
-    { date: "14. — 15. november 2026", iso: "2026-11-14", left: 6 },
-  ],
+  language: "angličtina (podklady aj v slovenčine)",
+  hoursVideo: 8,
+  lessons: 40,
+  // ponechané pre spätnosť typov; online kurz termíny nemá
+  nextTerms: [] as { date: string; iso: string; left: number }[],
 } as const;
 
 export const KURZ_STATS = [
-  { value: "2 dni", label: "od teórie po hotovú plochu" },
-  { value: "6 ľudí", label: "max. v skupine — na každého sa dostane" },
-  { value: "80 %", label: "času s valcom a stierkou v ruke" },
-  { value: "12 m²", label: "reálnej plochy, ktorú si odleješ sám" },
+  { value: "8+ h", label: "videa z reálnych zákaziek" },
+  { value: "40+", label: "lekcií od podkladu po fakturáciu" },
+  { value: "24/7", label: "prístup navždy, vlastné tempo" },
+  { value: "EN", label: "v angličtine, podklady aj po slovensky" },
 ];
 
 export const KURZ_FOR = [
@@ -48,21 +47,21 @@ export const KURZ_FOR = [
 
 export const KURZ_PROGRAM = [
   {
-    day: "Deň 1",
-    subtitle: "Podklad rozhoduje o všetkom",
+    day: "Modul 1",
+    subtitle: "Podklad a materiály",
     items: [
       "Materiály bez marketingu — epoxid, PU, polyaspartik: čo kedy použiť a prečo",
       "Diagnostika podkladu: vlhkosť, pevnosť v odtrhu, dilatácie, staré nátery",
-      "Brúsenie a frézovanie naživo — diamanty, zrnitosti, odsávanie",
+      "Brúsenie a frézovanie na kamere zblízka: diamanty, zrnitosti, odsávanie",
       "Penetrácia, vysprávky, kotviace zárezy, riešenie prasklín",
       "Miešanie A + B: pomery, teplota, potlife a čo sa stane keď to podceníš",
     ],
   },
   {
-    day: "Deň 2",
-    subtitle: "Liatie, dekor, finiš",
+    day: "Modul 2",
+    subtitle: "Liatie, dekor a cenotvorba",
     items: [
-      "Jednofarebná liata podlaha od kraja po kraj — ty, valec, ježko",
+      "Jednofarebná liata podlaha od kraja po kraj, celý postup v reálnom čase",
       "Chipsy: sypanie, prebrúsenie, transparentný uzáver",
       "Metalický efekt — pigmenty, fén, tvorba kresby (a kedy prestať)",
       "Sokle, prechody, odtoky a detaily, na ktorých padne 90 % amatérov",
@@ -72,58 +71,57 @@ export const KURZ_PROGRAM = [
 ];
 
 export const KURZ_INCLUDED = [
-  "Všetok materiál a spotrebák na dva dni tréningu",
-  "Zapožičanie profi náradia — brúska, miešadlo, ježko, stierka",
-  "Pracovný manuál (PDF + tlačený) s postupmi a spotrebami",
+  "40+ video lekcií nakrútených na reálnych zákazkách",
+  "Prístup navždy vrátane všetkých budúcich aktualizácií",
+  "Pracovný manuál (PDF) s postupmi a spotrebami",
   "Kalkulačka spotreby a vzorová cenová ponuka pre tvojich zákazníkov",
-  "Certifikát o absolvovaní EPOXIDOVO Akadémie",
-  "Obed a káva oba dni",
-  "30 dní podpory po kurze — píšeš priamo lektorovi",
+  "Certifikát o absolvovaní EPOXIDOVO Akadémie po záverečnom teste",
+  "Zoznam overených dodávateľov materiálu a náradia",
+  "Otázky k lekciám priamo pod videom, odpovedá lektor",
 ];
 
 export const KURZ_FAQ = [
   {
+    q: "Ako kurz prebieha?",
+    a: "Po zaplatení ti príde e-mail s prístupom do členskej sekcie. Pozeráš video lekcie vlastným tempom, kedykoľvek a na čomkoľvek. Prístup nemá časové obmedzenie a dostávaš aj všetky budúce aktualizácie.",
+  },
+  {
     q: "Potrebujem nejakú skúsenosť?",
-    a: "Nie. Kurz začína od podkladu a materiálov. Väčšina účastníkov drží stierku prvýkrát práve u nás. Ak už epoxid robíš, povedz nám to vopred — druhý deň ti pritvrdíme.",
+    a: "Nie. Kurz začína od podkladu a materiálov a každý krok je nakrútený zblízka na reálnej zákazke. Ak už epoxid robíš, preskočíš na moduly o dekore a cenotvorbe.",
   },
   {
-    q: "Budem naozaj liať, alebo sa len pozerám?",
-    a: "Lejeme. Každý účastník má vlastnú plochu cca 12 m², ktorú si celú spraví sám od brúsenia po finiš. Skupina je max. 6 ľudí presne preto.",
-  },
-  {
-    q: "Čo si mám priniesť?",
-    a: "Pracovné oblečenie a obuv, ktorú nie je škoda. Náradie, materiál aj ochranné pomôcky dostaneš na mieste.",
+    q: "V akom jazyku sú lekcie?",
+    a: "Videá sú v angličtine, pracovný manuál, kalkulačka a cenová ponuka sú v angličtine aj slovenčine. Otázky pod lekciami môžeš písať po slovensky, odpovedáme v tvojom jazyku.",
   },
   {
     q: "Viem po kurze rovno robiť zákazky?",
-    a: "Vieš robiť garáže, dielne a menšie interiéry. Na veľké haly a priemysel odporúčame ísť najprv ako druhý človek na pár realizácií — a to ti vieme pomôcť dohodnúť.",
+    a: "Kurz ťa prevedie celým postupom vrátane cenotvorby, takže garáže, dielne a menšie interiéry zvládneš. V balíku PRO ti pri prvých realizáciách pomáha lektor cez mentoring.",
   },
   {
-    q: "Kde materiál nakúpim?",
-    a: "Na kurze dostaneš zoznam overených dodávateľov aj naše nákupné podmienky. Cez náš e-shop nakupuješ ako absolvent za partnerské ceny.",
+    q: "Kde nakúpim materiál?",
+    a: "V kurze je zoznam overených dodávateľov a presné spotreby. Absolventi nakupujú materiál TopStone a Sika v našom e-shope za partnerské ceny.",
   },
   {
-    q: "V akom jazyku kurz prebieha?",
-    a: "Kurz vedieme v angličtine — chodia k nám ľudia z celej Európy. Lektor rozumie aj po slovensky, takže otázku môžeš položiť v slovenčine a odpoveď dostaneš aj tak. Manuál dostaneš v angličtine aj slovenčine.",
+    q: "Dá sa kurz kúpiť na firmu / na faktúru?",
+    a: "Áno. Pri objednávke vyplníš IČO a vystavíme faktúru, kurz je bežne uznateľný náklad. Nie sme platcami DPH, cena je konečná.",
   },
   {
-    q: "Dá sa kurz zaplatiť na firmu / na faktúru?",
-    a: "Áno. Vystavíme faktúru na IČO, kurz je bežne uznateľný náklad. Pri prihlásení 3 a viac ľudí z jednej firmy dávame skupinovú cenu.",
+    q: "Čo ak mi kurz nesadne?",
+    a: "Do 14 dní od nákupu môžeš bez udania dôvodu odstúpiť a vrátime ti celú sumu. Stačí napísať na obchod@epoxidovo.sk.",
   },
 ];
 
 /** Faktová tabuľka — strojovo čitateľné zhrnutie pre AI odpovedače (GEO). */
 export const KURZ_FAKTY: { label: string; value: string }[] = [
   { label: "Názov kurzu", value: KURZ.name },
-  { label: "Forma", value: "Prezenčný praktický workshop (nie online video)" },
-  { label: "Dĺžka", value: "2 po sebe idúce dni, 9:00 — 17:00 (16 hodín)" },
-  { label: "Miesto", value: "Ružomberok, Slovensko — školiace centrum EPOXIDOVO" },
-  { label: "Veľkosť skupiny", value: `Maximálne ${KURZ.groupSize} účastníkov` },
-  { label: "Cena", value: `${KURZ.priceStandard} € štandard / ${KURZ.pricePro} € balík PRO za osobu, nie sme platcami DPH` },
-  { label: "Vstupné požiadavky", value: "Žiadne — kurz je vhodný aj pre úplných začiatočníkov" },
-  { label: "Jazyk", value: "Angličtina — kurz vedieme po anglicky, lektor rozumie aj slovensky" },
-  { label: "Certifikát", value: "Osvedčenie o absolvovaní od EPOXIDOVO s. r. o." },
-  { label: "Čo si prakticky vyskúšaš", value: "Brúsenie, penetrácia, miešanie, jednofarebná liata podlaha, chipsy, metalický efekt, sokle, cenotvorba" },
+  { label: "Forma", value: "Online video kurz, vlastné tempo, prístup navždy" },
+  { label: "Rozsah", value: "8+ hodín videa, 40+ lekcií v 2 moduloch" },
+  { label: "Cena", value: `${KURZ.priceStandard} € štandard / ${KURZ.pricePro} € balík PRO s mentoringom, nie sme platcami DPH` },
+  { label: "Vstupné požiadavky", value: "Žiadne, kurz je vhodný aj pre úplných začiatočníkov" },
+  { label: "Jazyk", value: "Angličtina, podklady aj v slovenčine" },
+  { label: "Certifikát", value: "Osvedčenie o absolvovaní od EPOXIDOVO s. r. o. po záverečnom teste" },
+  { label: "Čo sa naučíš", value: "Diagnostika a brúsenie podkladu, penetrácia, miešanie, jednofarebná liata podlaha, chipsy, metalický efekt, sokle, cenotvorba" },
+  { label: "Garancia", value: "14 dní na vrátenie peňazí bez udania dôvodu" },
   { label: "Poskytovateľ", value: "EPOXIDOVO s. r. o., IČO 56 966 237, Slovensko" },
 ];
 
@@ -132,11 +130,10 @@ export const KURZ_FAKTY: { label: string; value: string }[] = [
  * Zobrazuje sa aj vizuálne na stránke (GEO: extrahovateľná definícia).
  */
 export const KURZ_SUMMARY =
-  "Kurz epoxidových podláh EPOXIDOVO Akadémia je dvojdňové prezenčné školenie v Ružomberku, " +
-  "kde sa maximálne 6 účastníkov naučí kompletný postup liatej epoxidovej podlahy: diagnostiku a " +
-  "brúsenie betónového podkladu, penetráciu, miešanie dvojzložkových živíc, liatie jednofarebnej " +
-  "podlahy, chipsový a metalický dekor, riešenie soklov a detailov, a napokon cenotvorbu zákazky. " +
-  "Kurz prebieha v angličtine. Každý účastník si sám odleje vlastnú plochu približne 12 m². Cena je 499 € (štandard) alebo " +
-  "1 499 € (balík PRO s mentoringom a štartovacím materiálom), vrátane materiálu, náradia, manuálu, obedu, " +
-  "certifikátu a 30 dní podpory po kurze; balík PRO pridáva 3 mesiace osobného mentoringu. Kurz je vhodný pre remeselníkov, začínajúcich živnostníkov, " +
-  "firemné partie aj majiteľov, ktorí si podlahu robia sami.";
+  "Online kurz epoxidových podláh EPOXIDOVO Akadémia obsahuje vyše 8 hodín videa a 40 lekcií " +
+  "nakrútených na reálnych zákazkách: diagnostiku a brúsenie betónového podkladu, penetráciu, " +
+  "miešanie dvojzložkových živíc, liatie jednofarebnej podlahy, chipsový a metalický dekor, sokle " +
+  "a detaily, a cenotvorbu zákazky. Lekcie sú v angličtine, podklady aj v slovenčine. Prístup je " +
+  "okamžitý po zaplatení a bez časového obmedzenia. Cena je 499 € (štandard) alebo 1 499 € (balík " +
+  "PRO s 3 mesiacmi osobného mentoringu). Súčasťou je manuál so spotrebami, kalkulačka, vzorová " +
+  "cenová ponuka a certifikát. Na kurz sa vzťahuje 14-dňová garancia vrátenia peňazí.";

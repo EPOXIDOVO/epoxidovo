@@ -182,9 +182,9 @@ export const COPY: Record<Locale, LandingCopy> = {
     faq: { h2: "FAQ", items: KURZ_FAQ.map((f) => ({ q: f.q, a: f.a })) },
     contact: {
       h2: "Kontakt",
-      p: "Sme EPOXIDOVO s. r. o. — realizujeme liate podlahy po celom Slovensku a v Ružomberku školíme nových podlahárov. Ak máš otázku, napíš nám cez formulár — na všetky dopyty odpovedáme do 24 hodín.",
+      p: "Sme EPOXIDOVO s. r. o., lejeme podlahy po celom Slovensku a naše postupy učíme v online kurze. Ak máš otázku, napíš alebo zavolaj, odpovedáme do 24 hodín.",
       formTitle: "Prihláška na kurz",
-      formSub: "Nezáväzne. Zavoláme ti, potvrdíme voľné miesto a až potom sa platí.",
+      formSub: "Vyber balík a spôsob platby. Prístup dostaneš e-mailom hneď po zaplatení.",
       socials: "Sleduj nás",
       labels: {
         name: "Meno *", lastName: "Priezvisko *", phone: "Telefón *", email: "E-mail *",
@@ -196,7 +196,7 @@ export const COPY: Record<Locale, LandingCopy> = {
       variants: {
         standard: `Štandard (${KURZ.priceStandard} €)`,
         pro: `PRO + mentoring (${KURZ.pricePro} €)`,
-        firma: "Firemné školenie (3+ ľudí)",
+        firma: "Firemný prístup pre tím (3+ ľudí)",
       },
       experience: {
         zaciatocnik: "Začiatočník — epoxid som ešte nerobil",
@@ -268,9 +268,9 @@ export const COPY: Record<Locale, LandingCopy> = {
     faq: { h2: "FAQ", items: COURSE_EN_FAQ.map((f) => ({ q: f.q, a: f.a })) },
     contact: {
       h2: "Contact",
-      p: "We are EPOXIDOVO s. r. o. — we install poured floors across Slovakia and train new installers in Ružomberok. If you have a question, use the form — we answer every inquiry within 24 hours.",
+      p: "We are EPOXIDOVO s. r. o., we install poured floors across Slovakia and teach our process in an online course. If you have a question, write or call, we answer within 24 hours.",
       formTitle: "Course application",
-      formSub: "No commitment. We call you, confirm a free seat, and only then you pay.",
+      formSub: "Pick a package and payment method. Access arrives by e-mail right after payment.",
       socials: "Follow us",
       labels: {
         name: "First name *", lastName: "Last name *", phone: "Phone *", email: "E-mail *",
@@ -282,7 +282,7 @@ export const COPY: Record<Locale, LandingCopy> = {
       variants: {
         standard: `Standard (€${COURSE_EN.priceStandard})`,
         pro: `PRO + mentoring (€${COURSE_EN.pricePro})`,
-        firma: "Company training (3+ people)",
+        firma: "Company team access (3+ people)",
       },
       experience: {
         zaciatocnik: "Beginner — never worked with epoxy",

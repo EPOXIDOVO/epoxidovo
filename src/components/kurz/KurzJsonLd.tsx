@@ -32,14 +32,8 @@ export interface CourseSchemaInput {
 export function KurzJsonLd(input: CourseSchemaInput) {
   const url = `${SITE.url}${input.path}`;
   const lang = input.locale === "sk" ? "sk-SK" : "en";
-  // Kurz je 2-dňový → koniec = začiatok + 1 deň.
-  const endOf = (iso: string) => {
-    const d = new Date(`${iso}T00:00:00Z`);
-    d.setUTCDate(d.getUTCDate() + 1);
-    return d.toISOString().slice(0, 10);
-  };
-  // Ceny držíme platné do konca roka posledného vypísaného termínu.
-  const priceValidUntil = `${input.terms[input.terms.length - 1].iso.slice(0, 4)}-12-31`;
+  // Ceny držíme platné do konca aktuálneho roka; online kurz nemá termíny.
+  const priceValidUntil = "2026-12-31";
 
   const course = {
     "@context": "https://schema.org",
@@ -78,45 +72,27 @@ export function KurzJsonLd(input: CourseSchemaInput) {
       priceValidUntil,
       availability: "https://schema.org/InStock",
       url,
-      validFrom: input.terms[0].iso,
     },
-    hasCourseInstance: input.terms.map((t) => ({
-      "@type": "CourseInstance",
-      name: `${input.name} — ${t.date}`,
-      courseMode: "onsite",
-      courseWorkload: "PT16H",
-      startDate: t.iso,
-      endDate: endOf(t.iso),
-      maximumAttendeeCapacity: input.groupSize,
-      // Kurz sa VYUČUJE po anglicky (lektor rozumie aj slovensky) — nezávisí
-      // od jazyka stránky; inLanguage na Course/WebPage ostáva jazykom obsahu.
-      inLanguage: "en",
-      location: {
-        "@type": "Place",
-        name: input.place,
-        address: {
-          "@type": "PostalAddress",
-          streetAddress: SITE.address.street,
-          addressLocality: SITE.address.city,
-          postalCode: SITE.address.postalCode,
-          addressCountry: SITE.address.countryCode,
+    hasCourseInstance: [
+      {
+        "@type": "CourseInstance",
+        name: input.name,
+        courseMode: "online",
+        courseWorkload: "PT8H",
+        inLanguage: "en",
+        location: {
+          "@type": "VirtualLocation",
+          url,
         },
-        geo: { "@type": "GeoCoordinates", latitude: 49.0775, longitude: 19.3066 },
+        offers: {
+          "@type": "Offer",
+          price: input.priceStandard,
+          priceCurrency: "EUR",
+          availability: "https://schema.org/InStock",
+          url,
+        },
       },
-      instructor: {
-        "@type": "Person",
-        name: "EPOXIDOVO",
-        worksFor: { "@id": `${SITE.url}/#business` },
-      },
-      offers: {
-        "@type": "Offer",
-        price: input.priceStandard,
-        priceCurrency: "EUR",
-        availability:
-          t.left > 0 ? "https://schema.org/InStock" : "https://schema.org/SoldOut",
-        url,
-      },
-    })),
+    ],
     syllabusSections: input.syllabus.map((day, i) => ({
       "@type": "Syllabus",
       position: i + 1,

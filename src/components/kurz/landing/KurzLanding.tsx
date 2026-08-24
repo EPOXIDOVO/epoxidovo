@@ -19,116 +19,104 @@ import "./landing.css";
 
 const V2 = {
   sk: {
-    badge: "Najbližší termín",
-    seatsLeft: (n: number) => `posledné ${n} miesta`,
-    h1a: "Remeslo, ktoré sa nedá",
-    h1em: " stiahnuť z YouTubu.",
-    lead: "Dvojdňový kurz liatych epoxidových podláh v Ružomberku. Šesť ľudí, reálny betón, vlastných 12 m². Odchádzaš s postupom, certifikátom a číslami na prvú cenovú ponuku.",
-    ctaMain: "Rezervovať miesto",
-    ctaProgram: "Pozrieť program",
+    badge: "Online kurz · prístup okamžite po zaplatení",
+    h1a: "Nauč sa liať podlahy.",
+    h1em: " Odkiaľkoľvek.",
+    lead: "Online kurz liatych epoxidových podláh: 8+ hodín videa nakrútených na reálnych zákazkách, od diagnostiky betónu po cenovú ponuku. Pozeráš vlastným tempom, prístup ti ostáva navždy.",
+    ctaMain: "Kúpiť kurz",
+    ctaProgram: "Pozrieť obsah",
     facts: [
-      ["2 dni", "16 hodín praxe"],
-      ["6 ľudí", "maximum v skupine"],
-      ["12 m²", "vlastná plocha"],
-      ["EN", "kurz v angličtine"],
+      ["8+ h", "videa z reálnych zákaziek"],
+      ["40+", "lekcií v 2 moduloch"],
+      ["24/7", "prístup navždy"],
+      ["14 dní", "garancia vrátenia peňazí"],
     ],
-    claimH2a: "Za dva dni prejdeš cestu, ktorá nám trvala ",
-    claimH2em: "dvesto podláh.",
-    claimBody: "Lejeme podlahy po celom Slovensku a presne vieme, kde začiatočníci zabíjajú svoju prvú zákazku: v podklade, v miešaní a v cene. Kurz je postavený na týchto troch veciach, nie na prezentácii.",
+    claimH2a: "Kurz nakrútený na zákazkách, ktoré nám ",
+    claimH2em: "zákazníci zaplatili.",
+    claimBody: "Lejeme podlahy po celom Slovensku a presne vieme, kde začiatočníci zabíjajú svoju prvú zákazku: v podklade, v miešaní a v cene. Kurz stojí na týchto troch veciach, každý záber je z reálnej realizácie, nie zo štúdia.",
     claimPoints: [
-      "Každý krok si spravíš vlastnými rukami, od brúsenia po finálny lak",
-      "Materiál, náradie aj ochranné pomôcky sú v cene, prídeš v montérkach",
+      "Každý krok vidíš zblízka a v reálnom čase, od brúsenia po finálny lak",
       "Manuál so spotrebami a vzorová cenová ponuka pre tvojich zákazníkov",
-      "30 dní po kurze píšeš priamo lektorovi",
+      "Otázky píšeš priamo pod lekciu, odpovedá lektor",
+      "Certifikát po záverečnom teste a partnerské ceny materiálu v našom e-shope",
     ],
     claimCaption: "Metalická podlaha, práca absolventa",
-    daysH2: "Program: dva dni, dve témy",
-    daysIntro: "Prvý deň rozhoduje o tom, či podlaha vydrží. Druhý o tom, ako vyzerá a koľko si za ňu vypýtaš.",
-    day1Label: "Deň 1 · 9:00 až 17:00",
-    day2Label: "Deň 2 · 9:00 až 17:00",
+    daysH2: "Obsah kurzu: dva moduly",
+    daysIntro: "Prvý modul rozhoduje o tom, či podlaha vydrží. Druhý o tom, ako vyzerá a koľko si za ňu vypýtaš.",
+    day1Label: "Modul 1 · 20+ lekcií",
+    day2Label: "Modul 2 · 20+ lekcií",
     day1Title: "Podklad a materiály",
     day2Title: "Liatie, dekor a cenotvorba",
-    dayMeta1: "Obed, káva a všetok materiál v cene.",
-    dayMeta2: "Na konci dňa certifikát a manuál so spotrebami.",
+    dayMeta1: "Každá lekcia má pod videom priestor na otázky.",
+    dayMeta2: "Na konci záverečný test a certifikát.",
     stripH2: "Podlahy z našej dielne",
     stripCaptions: ["Metalická garáž", "Obývačka, jednofarebná liata", "Priemyselná hala", "Chipsová prevádzka", "Metalický efekt zblízka", "Kancelárie"],
     pricingH2: "Cena a balíky",
-    pricingIntro: "Nie sme platcami DPH, ceny sú konečné. Platí sa až po telefonickom potvrdení miesta.",
+    pricingIntro: "Nie sme platcami DPH, ceny sú konečné. Kúpiš raz, prístup máš navždy.",
     stdTitle: "Štandard",
-    stdDesc: "Kompletný dvojdňový kurz so všetkým materiálom a náradím.",
-    stdItems: ["16 hodín praxe na reálnom betóne", "Vlastná plocha 12 m²", "Manuál a kalkulačka spotreby", "Certifikát o absolvovaní", "30 dní podpory po kurze"],
-    stdCta: "Rezervovať Štandard",
+    stdDesc: "Kompletný online kurz s prístupom navždy.",
+    stdItems: ["8+ hodín videa, 40+ lekcií", "Manuál a kalkulačka spotreby (SK + EN)", "Vzorová cenová ponuka", "Certifikát po záverečnom teste", "Otázky pod lekciami, odpovedá lektor"],
+    stdCta: "Kúpiť Štandard",
     proTag: "Najčastejšia voľba",
     proTitle: "PRO s mentoringom",
     proDesc: "Kurz a k tomu tri mesiace vedenia pri prvých zákazkách.",
-    proItems: ["Všetko zo Štandardu", "3 mesiace osobného mentoringu: telefón, fotky z realizácie, cenové ponuky", "Materiál na prvú zákazku, približne 20 m²", "Sada náradia: stierka, ježko, valec, miešadlo", "Partnerské ceny v e-shope natrvalo"],
-    proCta: "Rezervovať PRO",
+    proItems: ["Všetko zo Štandardu", "3 mesiace osobného mentoringu: telefón, fotky z realizácie, cenové ponuky", "Kontrola tvojej prvej realizácie krok po kroku", "Partnerské ceny materiálu v e-shope natrvalo"],
+    proCta: "Kúpiť PRO",
     perPerson: "na osobu",
-    firmaNote: "Traja a viac z jednej firmy? Spravíme súkromný termín u nás alebo vo vašej hale.",
-    firmaLink: "Napíš nám cez prihlášku",
-    termsH2: "Termíny",
-    termsPlace: "Školiace centrum EPOXIDOVO, Ružomberok",
-    seatsLow: (n: number) => `Posledné ${n} miesta`,
-    seatsOk: (n: number) => `Voľných ${n} miest`,
-    termCta: "Rezervovať",
+    firmaNote: "Chceš prístup pre celú partiu? Pri troch a viac ľuďoch z jednej firmy dáme skupinovú cenu.",
+    firmaLink: "Napíš nám cez objednávku",
     faqH2: "Časté otázky",
-    formTitle: "Prihláška a platba",
+    formTitle: "Objednávka a platba",
   },
   en: {
-    badge: "Next date",
-    seatsLeft: (n: number) => `${n} seats left`,
-    h1a: "A trade you cannot",
-    h1em: " download from YouTube.",
-    lead: "A two day poured epoxy flooring course in Ružomberok, Slovakia. Six people, real concrete, your own 12 m². You leave with a repeatable process, a certificate and the numbers for your first quote.",
-    ctaMain: "Reserve a seat",
+    badge: "Online course · instant access after payment",
+    h1a: "Learn to pour floors.",
+    h1em: " From anywhere.",
+    lead: "An online poured epoxy flooring course: 8+ hours of video filmed on real client jobs, from concrete diagnostics to the final quote. Watch at your own pace, access never expires.",
+    ctaMain: "Buy the course",
     ctaProgram: "See the curriculum",
     facts: [
-      ["2 days", "16 hours of practice"],
-      ["6 people", "maximum per group"],
-      ["12 m²", "your own floor"],
-      ["EN", "taught in English"],
+      ["8+ h", "of video from real jobs"],
+      ["40+", "lessons in 2 modules"],
+      ["24/7", "lifetime access"],
+      ["14 days", "money-back guarantee"],
     ],
-    claimH2a: "In two days you cover what took us ",
-    claimH2em: "two hundred floors.",
-    claimBody: "We install floors across Slovakia and we know exactly where beginners lose their first job: the substrate, the mixing and the price. The course is built on those three things, not on slides.",
+    claimH2a: "A course filmed on jobs our ",
+    claimH2em: "clients paid for.",
+    claimBody: "We install floors across Slovakia and we know exactly where beginners lose their first job: the substrate, the mixing and the price. The course is built on those three things, and every shot comes from a real installation, not a studio.",
     claimPoints: [
-      "You do every step with your own hands, from grinding to the final coat",
-      "Material, tools and protective gear are included, just bring work clothes",
+      "You see every step up close and in real time, from grinding to the final coat",
       "A manual with consumption rates and a sample quote for your clients",
-      "For 30 days after the course you write directly to the instructor",
+      "Ask questions under each lesson, the instructor answers",
+      "Certificate after the final test and partner material prices in our e-shop",
     ],
     claimCaption: "Metallic floor, graduate work",
-    daysH2: "Curriculum: two days, two themes",
-    daysIntro: "Day one decides whether the floor lasts. Day two decides how it looks and what you charge for it.",
-    day1Label: "Day 1 · 9:00 to 17:00",
-    day2Label: "Day 2 · 9:00 to 17:00",
+    daysH2: "Curriculum: two modules",
+    daysIntro: "Module one decides whether the floor lasts. Module two decides how it looks and what you charge for it.",
+    day1Label: "Module 1 · 20+ lessons",
+    day2Label: "Module 2 · 20+ lessons",
     day1Title: "Substrate and materials",
     day2Title: "Pouring, decoration and pricing",
-    dayMeta1: "Lunch, coffee and all material included.",
-    dayMeta2: "Certificate and consumption manual at the end of the day.",
+    dayMeta1: "Every lesson has a question thread under the video.",
+    dayMeta2: "Final test and certificate at the end.",
     stripH2: "Floors from our workshop",
     stripCaptions: ["Metallic garage", "Living room, single colour", "Industrial hall", "Flake commercial floor", "Metallic effect up close", "Offices"],
     pricingH2: "Price and packages",
-    pricingIntro: "We are not VAT registered, prices are final. You pay only after we confirm your seat by phone.",
+    pricingIntro: "We are not VAT registered, prices are final. Buy once, keep access forever.",
     stdTitle: "Standard",
-    stdDesc: "The complete two day course with all material and tools.",
-    stdItems: ["16 hours of practice on real concrete", "Your own 12 m² area", "Manual and consumption calculator", "Certificate of completion", "30 days of support after the course"],
-    stdCta: "Reserve Standard",
+    stdDesc: "The complete online course with lifetime access.",
+    stdItems: ["8+ hours of video, 40+ lessons", "Manual and consumption calculator (EN + SK)", "Sample quote for your clients", "Certificate after the final test", "Questions under each lesson, answered by the instructor"],
+    stdCta: "Buy Standard",
     proTag: "Most popular",
     proTitle: "PRO with mentoring",
     proDesc: "The course plus three months of guidance on your first jobs.",
-    proItems: ["Everything in Standard", "3 months of personal mentoring: phone, site photos, quotes", "Material for your first job, roughly 20 m²", "Tool set: squeegee, spiked roller, roller, mixer", "Partner prices in our e-shop, permanently"],
-    proCta: "Reserve PRO",
+    proItems: ["Everything in Standard", "3 months of personal mentoring: phone, site photos, quotes", "Step-by-step review of your first installation", "Partner material prices in our e-shop, permanently"],
+    proCta: "Buy PRO",
     perPerson: "per person",
-    firmaNote: "Three or more from one company? We run a private date at our centre or in your hall.",
-    firmaLink: "Tell us in the application",
-    termsH2: "Dates",
-    termsPlace: "EPOXIDOVO training centre, Ružomberok, Slovakia",
-    seatsLow: (n: number) => `Last ${n} seats`,
-    seatsOk: (n: number) => `${n} seats free`,
-    termCta: "Reserve",
+    firmaNote: "Access for the whole crew? Three or more people from one company get a group price.",
+    firmaLink: "Tell us in the order form",
     faqH2: "Frequently asked",
-    formTitle: "Application and payment",
+    formTitle: "Order and payment",
   },
 } as const;
 
@@ -180,7 +168,6 @@ function Header({ locale, onMenu }: { locale: Locale; onMenu: (open: boolean) =>
             <li><a href="#program" onClick={close}>{t.nav.program}</a></li>
             <li><a href="#kalkulacka" onClick={close}>{t.nav.calc}</a></li>
             <li><a href="#cena" onClick={close}>{t.nav.price}</a></li>
-            <li><a href="#terminy" onClick={close}>{t.nav.faq === "FAQ" ? (locale === "sk" ? "Termíny" : "Dates") : "Termíny"}</a></li>
             <li><a href="#faq" onClick={close}>{t.nav.faq}</a></li>
             <li className="kl-nav__cta"><a href="#prihlaska" onClick={close}>{t.nav.cta}</a></li>
             <li className="kl-nav__lang">
@@ -211,8 +198,6 @@ function Header({ locale, onMenu }: { locale: Locale; onMenu: (open: boolean) =>
 
 function Hero({ locale }: { locale: Locale }) {
   const t = V2[locale];
-  const terms = locale === "sk" ? KURZ.nextTerms : COURSE_EN.nextTerms;
-  const next = terms[0];
   return (
     <section className="kl-hero" id="hello">
       <div className="kl-hero__media" aria-hidden>
@@ -228,7 +213,7 @@ function Hero({ locale }: { locale: Locale }) {
         <div className="kl-container">
           <p className="kl-hero__badge">
             <i aria-hidden />
-            {t.badge}: {next.date} · {t.seatsLeft(next.left)}
+            {t.badge}
           </p>
           <h1>
             {t.h1a}
@@ -407,39 +392,6 @@ function Pricing({ locale }: { locale: Locale }) {
 }
 
 /* ------------------------------------------------------------------ */
-/*  Termíny                                                            */
-/* ------------------------------------------------------------------ */
-
-function Terms({ locale }: { locale: Locale }) {
-  const t = V2[locale];
-  const terms = locale === "sk" ? KURZ.nextTerms : COURSE_EN.nextTerms;
-  return (
-    <section id="terminy" className="kl-section kl-terms">
-      <div className="kl-container">
-        <div className="kl-section__head">
-          <h2>{t.termsH2}</h2>
-          <p>{t.termsPlace} · 9:00 až 17:00</p>
-        </div>
-        <ul className="kl-terms__list">
-          {terms.map((term) => (
-            <li key={term.date} className="kl-terms__row">
-              <span className="kl-terms__date">
-                {term.date}
-                <small>{t.termsPlace}</small>
-              </span>
-              <span className={`kl-terms__seats ${term.left <= 3 ? "is-low" : "is-ok"}`}>
-                {term.left <= 3 ? t.seatsLow(term.left) : t.seatsOk(term.left)}
-              </span>
-              <a href="#prihlaska" className="kl-btn kl-btn--ink">{t.termCta}</a>
-            </li>
-          ))}
-        </ul>
-      </div>
-    </section>
-  );
-}
-
-/* ------------------------------------------------------------------ */
 /*  FAQ                                                                */
 /* ------------------------------------------------------------------ */
 
@@ -480,7 +432,7 @@ function Faq({ locale }: { locale: Locale }) {
 
 interface FormState {
   name: string; lastName: string; phone: string; email: string;
-  term: string; variant: string; experience: string; message: string; website: string;
+  variant: string; experience: string; message: string; website: string;
   company: string; ico: string;
 }
 
@@ -488,13 +440,13 @@ const PAY_T = {
   sk: {
     payTitle: "Spôsob platby",
     karta: "Platba kartou",
-    kartaSub: "Bezpečne cez Stripe. Miesto máš potvrdené okamžite.",
+    kartaSub: "Bezpečne cez Stripe. Prístup do kurzu okamžite.",
     kartaOff: "Momentálne nedostupné — vyber prevod.",
     prevod: "Bankový prevod",
-    prevodSub: "Faktúru a platobné údaje pošleme e-mailom do 24 h. Miesto držíme 5 pracovných dní.",
+    prevodSub: "Faktúru a platobné údaje pošleme e-mailom do 24 h. Prístup po pripísaní platby.",
     summary: "K úhrade",
     summaryNote: "Nie sme platcami DPH — cena je konečná.",
-    firmaNote: "Firemné školenie: pošli dopyt, ozveme sa s termínom a cenou pre skupinu.",
+    firmaNote: "Firemný prístup: pošli dopyt, ozveme sa s cenou pre tím.",
     company: "Firma (voliteľné)",
     ico: "IČO (voliteľné)",
     submitPay: "Zaplatiť kartou",
@@ -505,13 +457,13 @@ const PAY_T = {
   en: {
     payTitle: "Payment method",
     karta: "Card payment",
-    kartaSub: "Secure checkout via Stripe. Your seat is confirmed instantly.",
+    kartaSub: "Secure checkout via Stripe. Instant course access.",
     kartaOff: "Currently unavailable — choose bank transfer.",
     prevod: "Bank transfer",
-    prevodSub: "Invoice and payment details by e-mail within 24 h. Seat held for 5 working days.",
+    prevodSub: "Invoice and payment details by e-mail within 24 h. Access once the payment arrives.",
     summary: "To pay",
     summaryNote: "We are not VAT registered — this is the final price.",
-    firmaNote: "Company training: send an inquiry, we come back with a date and a group price.",
+    firmaNote: "Company access: send an inquiry, we come back with a team price.",
     company: "Company (optional)",
     ico: "Company ID (optional)",
     submitPay: "Pay by card",
@@ -525,10 +477,9 @@ function ContactForm({ locale }: { locale: Locale }) {
   const t = COPY[locale].contact;
   const L = t.labels;
   const P = PAY_T[locale];
-  const terms = locale === "sk" ? KURZ.nextTerms : COURSE_EN.nextTerms;
   const [v, setV] = React.useState<FormState>({
     name: "", lastName: "", phone: "", email: "",
-    term: terms[0].date, variant: "standard", experience: "zaciatocnik", message: "", website: "",
+    variant: "standard", experience: "zaciatocnik", message: "", website: "",
     company: "", ico: "",
   });
   const [payment, setPayment] = React.useState<"karta" | "prevod">("prevod");
@@ -594,7 +545,7 @@ function ContactForm({ locale }: { locale: Locale }) {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           name: v.name.trim(), lastName: v.lastName.trim(), email: v.email.trim(), phone: v.phone.trim(),
-          term: v.term, variant: v.variant, experience: t.experience[v.experience],
+          term: "Online kurz", variant: v.variant, experience: t.experience[v.experience],
           message: v.message.trim(), payment: isPurchase ? payment : "prevod", locale,
           company: v.company.trim(), ico: v.ico.trim(),
           consent: true, website: v.website, turnstileToken: token,
@@ -609,7 +560,7 @@ function ContactForm({ locale }: { locale: Locale }) {
         setSending(false);
         return;
       }
-      trackEvent("kurz_prihlaska", { term: v.term, variant: v.variant, locale, payment: isPurchase ? payment : "inquiry" });
+      trackEvent("kurz_prihlaska", { variant: v.variant, locale, payment: isPurchase ? payment : "inquiry" });
       trackEvent("generate_lead", { source: locale === "sk" ? "kurz" : "kurz_en", value: amount, currency: "EUR" });
       if (j.mode === "redirect" && j.url) {
         setRedirecting(true);
@@ -665,29 +616,21 @@ function ContactForm({ locale }: { locale: Locale }) {
       </div>
       <div className="kl-form__row">
         <div className="kl-field">
-          <label htmlFor="kl-term">{L.term}</label>
-          <select id="kl-term" value={v.term} onChange={(e) => set("term", e.target.value)}>
-            {terms.map((tm) => (
-              <option key={tm.date} value={tm.date}>{tm.date} — {L.seatsLeft} {tm.left}</option>
-            ))}
-            <option value={L.termOther}>{L.termOther}</option>
-          </select>
-        </div>
-        <div className="kl-field">
           <label htmlFor="kl-variant">{L.variant}</label>
           <select id="kl-variant" value={v.variant} onChange={(e) => set("variant", e.target.value)}>
             {Object.entries(t.variants).map(([k, lab]) => <option key={k} value={k}>{lab}</option>)}
           </select>
         </div>
-      </div>
-      <div className="kl-form__row">
         <div className="kl-field">
           <label htmlFor="kl-exp">{L.experience}</label>
           <select id="kl-exp" value={v.experience} onChange={(e) => set("experience", e.target.value)}>
             {Object.entries(t.experience).map(([k, lab]) => <option key={k} value={k}>{lab}</option>)}
           </select>
         </div>
+      </div>
+      <div className="kl-form__row">
         {field("company", P.company, "text", "organization")}
+        {field("ico", P.ico, "text")}
       </div>
       <div className="kl-field">
         <label htmlFor="kl-msg">{L.message}</label>
@@ -828,7 +771,6 @@ export function KurzLanding({ locale }: { locale: Locale }) {
         <Strip locale={locale} />
         <KurzZisk locale={locale} />
         <Pricing locale={locale} />
-        <Terms locale={locale} />
         <Faq locale={locale} />
         <Contact locale={locale} />
       </main>

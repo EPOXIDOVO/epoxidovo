@@ -48,7 +48,7 @@ const Body = z.object({
   lastName: z.string().min(2).max(80),
   email: z.string().email().max(200),
   phone: z.string().min(9).max(30).regex(/^[+\d\s\-/()]+$/),
-  term: z.string().min(3).max(80),
+  term: z.string().max(80).optional().default("Online kurz"),
   variant: z.enum(["standard", "pro", "firma"]),
   experience: z.string().max(40).optional(),
   message: z.string().max(2000).optional().or(z.literal("")),
@@ -66,9 +66,9 @@ const PRICE: Record<"standard" | "pro", number> = {
   pro: KURZ.pricePro,
 };
 const LABEL: Record<"standard" | "pro" | "firma", string> = {
-  standard: "Kurz epoxidových podláh — Štandard",
-  pro: "Kurz epoxidových podláh — PRO + mentoring",
-  firma: "Firemné školenie (dopyt)",
+  standard: "Online kurz epoxidových podláh — Štandard",
+  pro: "Online kurz epoxidových podláh — PRO + mentoring",
+  firma: "Firemný prístup pre tím (dopyt)",
 };
 
 function orderNumber(): string {
@@ -152,7 +152,7 @@ export async function POST(req: NextRequest) {
     const lines = [
       isPurchase ? `OBJEDNÁVKA KURZU ${order}` : "DOPYT — FIREMNÉ ŠKOLENIE",
       `Balík: ${LABEL[d.variant]}${isPurchase ? ` — ${amount} €` : ""}`,
-      `Termín: ${d.term}`,
+      `Forma: online kurz (prístup po zaplatení)`,
       d.experience ? `Skúsenosti: ${d.experience}` : null,
       isPurchase ? `Platba: ${payment === "karta" ? "kartou (Stripe)" : "bankový prevod — poslať platobné údaje"}` : null,
       d.company ? `Firma: ${d.company}${d.ico ? ` (IČO ${d.ico})` : ""}` : null,
@@ -236,7 +236,7 @@ export async function POST(req: NextRequest) {
         orderId: order!,
         amountEur: amount,
         customerEmail: email,
-        description: `${LABEL[d.variant]} · ${d.term}`,
+        description: LABEL[d.variant],
         successUrl: `${origin}${thanksPath}?o=${order}&p=karta&s={CHECKOUT_SESSION_ID}`,
         cancelUrl: `${origin}${d.locale === "sk" ? "/kurz" : "/en/epoxy-flooring-course"}#prihlaska`,
       });
