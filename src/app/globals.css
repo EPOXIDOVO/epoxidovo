@@ -625,3 +625,20 @@ select,
   from { opacity: 0; transform: translateY(4px); }
   to { opacity: 1; transform: translateY(0); }
 }
+
+/* ─────────────────────────────────────────────────────────────────────────
+   Šípky number inputov PREČ — v Safari aj Chrome sa prekrývali s príponami
+   („m²", „€/m²") v absolútne pozicovaných poliach. User to reklamoval
+   2026-08-14 aj 2026-08-25, tak nech to je vyriešené raz a globálne.
+   Krok hodnoty šípkami aj tak nikde nepotrebujeme.
+   ───────────────────────────────────────────────────────────────────────── */
+input[type="number"]::-webkit-outer-spin-button,
+input[type="number"]::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  appearance: none;
+  margin: 0;
+}
+input[type="number"] {
+  -moz-appearance: textfield;
+  appearance: textfield;
+}

@@ -86,6 +86,13 @@ function Krokovnik({ krok }: { krok: Krok }) {
   );
 }
 
+/** Pustí do poľa len číslice a jednu desatinnú čiarku. */
+function lenCislo(v: string): string {
+  const znaky = v.replace(/[^\d.,]/g, "").replace(/\./g, ",");
+  const [prva, ...zvysok] = znaky.split(",");
+  return zvysok.length > 0 ? `${prva},${zvysok.join("")}` : prva;
+}
+
 function euro(n: number) {
   return new Intl.NumberFormat("sk-SK", {
     style: "currency",
@@ -280,12 +287,15 @@ export function KonfiguratorCP() {
                 Alebo zadaj presne
               </span>
               <span className="mt-1 relative block">
+                {/* type="text" zámerne — number input pridáva šípky, ktoré sa
+                    prekrývali s príponou „m²". Do poľa sa aj tak nedostane nič
+                    iné ako číslice a jedna desatinná čiarka. */}
                 <input
-                  type="number"
+                  type="text"
                   inputMode="decimal"
-                  min={1}
+                  autoComplete="off"
                   value={m2}
-                  onChange={(e) => setM2(e.target.value)}
+                  onChange={(e) => setM2(lenCislo(e.target.value))}
                   placeholder="napr. 45"
                   className="w-full rounded-2xl border-2 border-[#1B2430]/12 bg-white px-4 py-3 pr-14 text-base font-bold text-[#1B2430] outline-none transition-colors focus:border-[#2EA3DC]"
                 />
