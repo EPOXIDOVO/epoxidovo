@@ -137,6 +137,54 @@ function Krokovnik({ kroky, krok }: { kroky: Krok[]; krok: Krok }) {
   );
 }
 
+/**
+ * Rez podlahou — betón zdola, na ňom vrstva epoxidu v hrúbke, ktorú si
+ * zákazník vyberá. User 2026-08-25: „musi to byt graficky spracovane nejako
+ * ze nater je takyto 1mm vrstva je takato 2mm takato".
+ *
+ * Výšky sú vizuálne, nie v mierke — reálny náter (~0,3 mm) by pri 2 mm
+ * vrstve bol jeden pixel a nebolo by ho vidieť.
+ */
+function RezVrstvy({ hrubka }: { hrubka: string | null }) {
+  // Betón má pevnú výšku a spoločnú základňu — mení sa LEN modrá vrstva,
+  // inak sa tri obrázky nedajú medzi sebou porovnať.
+  const vrstva = hrubka === "nater" ? 4 : hrubka === "1mm" ? 10 : 17;
+  const W = 64;
+  const H = 52;
+  const BETON = 22;
+  const betonY = H - 2 - BETON;
+  const vrstvaY = betonY - vrstva;
+
+  return (
+    <svg width={W} height={H} viewBox={`0 0 ${W} ${H}`} aria-hidden className="shrink-0">
+      {/* betónový podklad */}
+      <rect x="2" y={betonY} width={W - 4} height={BETON} rx="2" fill="#cfd3d8" />
+      <g fill="#aeb4bc">
+        <circle cx="12" cy={betonY + 7} r="1.7" />
+        <circle cx="26" cy={betonY + 14} r="1.3" />
+        <circle cx="39" cy={betonY + 6} r="1.5" />
+        <circle cx="52" cy={betonY + 15} r="1.2" />
+        <circle cx="20" cy={betonY + 18} r="1.2" />
+        <circle cx="46" cy={betonY + 10} r="1.4" />
+      </g>
+      {/* vrstva epoxidu */}
+      <rect x="2" y={vrstvaY} width={W - 4} height={vrstva} rx="1.5" fill="#2EA3DC" />
+      {/* lesk na povrchu */}
+      <rect x="5" y={vrstvaY + 1} width={W - 16} height="1.4" rx="0.7" fill="#fff" opacity="0.6" />
+      {/* kóta hrúbky vpravo */}
+      <line
+        x1={W - 0.75}
+        y1={vrstvaY}
+        x2={W - 0.75}
+        y2={betonY}
+        stroke="#1B2430"
+        strokeOpacity="0.45"
+        strokeWidth="1.5"
+      />
+    </svg>
+  );
+}
+
 /** Pustí do poľa len číslice a jednu desatinnú čiarku. */
 function lenCislo(v: string): string {
   const znaky = v.replace(/[^\d.,]/g, "").replace(/\./g, ",");
@@ -208,7 +256,7 @@ export function KonfiguratorCP() {
   const kroky = React.useMemo<Krok[]>(
     () =>
       maPrevedenie
-        ? ["typ", "prevedenie", "plocha", "priestor", "kontakt", "hotovo"]
+        ? ["typ", "plocha", "priestor", "prevedenie", "kontakt", "hotovo"]
         : ["typ", "plocha", "priestor", "kontakt", "hotovo"],
     [maPrevedenie],
   );
@@ -326,10 +374,7 @@ export function KonfiguratorCP() {
                     const prvy = dostupne[0] ?? null;
                     setSystem(prvy);
                     setHrubka(prvy?.hrubky[0]?.hrubka ?? null);
-                    const jeVyber =
-                      dostupne.length > 1 ||
-                      (dostupne.length === 1 && dostupne[0].vyber_hrubky);
-                    void chod(jeVyber ? "prevedenie" : "plocha");
+                    void chod("plocha");
                   }}
                   className={[
                     "group flex h-full flex-col text-left rounded-2xl overflow-hidden ring-1 transition-all",
@@ -435,20 +480,23 @@ export function KonfiguratorCP() {
                         type="button"
                         onClick={() => setHrubka(h.hrubka)}
                         className={[
-                          "rounded-2xl border-2 p-3 text-left transition-colors",
+                          "flex items-center gap-3 rounded-2xl border-2 p-3 text-left transition-colors",
                           zvolena
                             ? "border-[#2EA3DC] bg-[#eaf6fc]"
                             : "border-[#1B2430]/12 hover:border-[#2EA3DC] hover:bg-[#f7fcff]",
                         ].join(" ")}
                       >
-                        <span className="flex items-baseline justify-between gap-2">
-                          <span className="font-extrabold text-[#1B2430]">{h.label}</span>
-                          <span className="text-sm font-bold text-[#15749e] whitespace-nowrap">
-                            {h.price_per_m2} €/m²
+                        <RezVrstvy hrubka={h.hrubka} />
+                        <span className="min-w-0 flex-1">
+                          <span className="flex items-baseline justify-between gap-2">
+                            <span className="font-extrabold text-[#1B2430]">{h.label}</span>
+                            <span className="text-sm font-bold text-[#15749e] whitespace-nowrap">
+                              {h.price_per_m2} €/m²
+                            </span>
                           </span>
-                        </span>
-                        <span className="mt-1 block text-xs text-[#1B2430]/65 leading-snug">
-                          {HRUBKA_POPIS[h.hrubka ?? ""] ?? ""}
+                          <span className="mt-1 block text-xs text-[#1B2430]/65 leading-snug">
+                            {HRUBKA_POPIS[h.hrubka ?? ""] ?? ""}
+                          </span>
                         </span>
                       </button>
                     );
