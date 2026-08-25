@@ -37,15 +37,7 @@ const PRIESTORY = [
 
 const TERMINY = ["Čo najskôr", "Do 3 mesiacov", "Do pol roka", "Zatiaľ zisťujem"];
 
-const STAV_PODKLADU = [
-  "Nový betón",
-  "Starý betón",
-  "Dlažba",
-  "Poter / nivelačka",
-  "Neviem posúdiť",
-];
-
-const PLOCHY_RYCHLO = [20, 40, 60, 100, 150];
+const PODKLAD = ["Betón", "Poter", "Dlaždice", "Neviem"];
 
 const DOVODY_NECHCE = [
   "Zatiaľ len zisťujem cenu",
@@ -265,26 +257,9 @@ export function KonfiguratorCP() {
             <p className="mt-1 text-sm text-[#1B2430]/60">
               Stačí odhad — pri obhliadke to premeriame presne.
             </p>
-            <div className="mt-4 flex flex-wrap gap-2">
-              {PLOCHY_RYCHLO.map((p) => (
-                <button
-                  key={p}
-                  type="button"
-                  onClick={() => setM2(String(p))}
-                  className={[
-                    "rounded-full px-4 py-2 text-sm font-bold transition-colors",
-                    m2 === String(p)
-                      ? "bg-[#1B2430] text-white"
-                      : "bg-[#f1f3f5] text-[#1B2430] hover:bg-[#e6f4fb] hover:text-[#15749e]",
-                  ].join(" ")}
-                >
-                  {p} m²
-                </button>
-              ))}
-            </div>
             <label className="mt-4 block">
               <span className="text-xs font-extrabold uppercase tracking-wider text-[#1B2430]/55">
-                Alebo zadaj presne
+                Plocha podlahy
               </span>
               <span className="mt-1 relative block">
                 {/* type="text" zámerne — number input pridáva šípky, ktoré sa
@@ -321,19 +296,9 @@ export function KonfiguratorCP() {
             <p className="mt-1 text-sm text-[#1B2430]/60">
               Podľa mesta dorátame dopravu, podľa podkladu prípravu.
             </p>
-            <label className="mt-4 block">
-              <span className="text-xs font-extrabold uppercase tracking-wider text-[#1B2430]/55">
-                Mesto alebo obec
-              </span>
-              <input
-                value={lokalita}
-                onChange={(e) => setLokalita(e.target.value)}
-                placeholder="napr. Žilina"
-                className="mt-1 w-full rounded-2xl border-2 border-[#1B2430]/12 bg-white px-4 py-3 text-base font-semibold text-[#1B2430] outline-none transition-colors focus:border-[#2EA3DC]"
-              />
-            </label>
+            <MestoPole hodnota={lokalita} zmen={setLokalita} />
             <Vyber label="Priestor" moznosti={PRIESTORY} hodnota={priestor} zmen={setPriestor} />
-            <Vyber label="Stav podkladu" moznosti={STAV_PODKLADU} hodnota={stavPodkladu} zmen={setStavPodkladu} />
+            <Vyber label="Podklad" moznosti={PODKLAD} hodnota={stavPodkladu} zmen={setStavPodkladu} />
             <Vyber label="Kedy to riešiš" moznosti={TERMINY} hodnota={termin} zmen={setTermin} />
             <Navigacia spat={() => dalej(2)} dalej={() => dalej(4)} dalejOk />
           </>
@@ -602,4 +567,127 @@ function Pole({
       />
     </label>
   );
+}
+
+
+/**
+ * Pole mesta s napovedaním — user 2026-08-25: „ma to byt prediktivne a ma
+ * sa to doplnat samo ked napisem Zi tak mi ma samo pitchnut zilinu".
+ *
+ * Zoznam obcí je ten istý, z akého NajCRM ráta dopravu (sk-places), takže
+ * čo pole ponúkne, to vie CRM aj naceniť. Načítava sa až pri prvom písmene,
+ * nech 64 kB nesedí v bundli pre každého, kto sem príde.
+ */
+function MestoPole({
+  hodnota,
+  zmen,
+}: {
+  hodnota: string;
+  zmen: (v: string) => void;
+}) {
+  const [obce, setObce] = React.useState<string[] | null>(null);
+  const [otvorene, setOtvorene] = React.useState(false);
+  const [aktivny, setAktivny] = React.useState(0);
+  const obal = React.useRef<HTMLDivElement | null>(null);
+
+  const nacitaj = React.useCallback(async () => {
+    if (obce) return;
+    const m = await import("@/content/sk-obce.json");
+    setObce((m.default ?? m) as unknown as string[]);
+  }, [obce]);
+
+  // klik mimo zatvorí ponuku
+  React.useEffect(() => {
+    if (!otvorene) return;
+    const mimo = (e: MouseEvent) => {
+      if (obal.current && !obal.current.contains(e.target as Node)) setOtvorene(false);
+    };
+    document.addEventListener("mousedown", mimo);
+    return () => document.removeEventListener("mousedown", mimo);
+  }, [otvorene]);
+
+  const navrhy = React.useMemo(() => {
+    const q = bezDiakritiky(hodnota);
+    if (!obce || q.length < 2) return [];
+    const zaciatok: string[] = [];
+    const vnutri: string[] = [];
+    for (const o of obce) {
+      const n = bezDiakritiky(o);
+      if (n.startsWith(q)) zaciatok.push(o);
+      else if (n.includes(q)) vnutri.push(o);
+      if (zaciatok.length >= 8) break;
+    }
+    return [...zaciatok, ...vnutri].slice(0, 8);
+  }, [obce, hodnota]);
+
+  const vyber = (o: string) => {
+    zmen(o);
+    setOtvorene(false);
+  };
+
+  return (
+    <div className="mt-4 relative" ref={obal}>
+      <span className="text-xs font-extrabold uppercase tracking-wider text-[#1B2430]/55">
+        Mesto alebo obec
+      </span>
+      <input
+        value={hodnota}
+        autoComplete="off"
+        onFocus={() => void nacitaj()}
+        onChange={(e) => {
+          void nacitaj();
+          zmen(e.target.value);
+          setAktivny(0);
+          setOtvorene(true);
+        }}
+        onKeyDown={(e) => {
+          if (!otvorene || navrhy.length === 0) return;
+          if (e.key === "ArrowDown") {
+            e.preventDefault();
+            setAktivny((i) => (i + 1) % navrhy.length);
+          } else if (e.key === "ArrowUp") {
+            e.preventDefault();
+            setAktivny((i) => (i - 1 + navrhy.length) % navrhy.length);
+          } else if (e.key === "Enter") {
+            e.preventDefault();
+            vyber(navrhy[aktivny]);
+          } else if (e.key === "Escape") {
+            setOtvorene(false);
+          }
+        }}
+        placeholder="napr. Žilina"
+        className="mt-1 w-full rounded-2xl border-2 border-[#1B2430]/12 bg-white px-4 py-3 text-base font-semibold text-[#1B2430] outline-none transition-colors focus:border-[#2EA3DC]"
+      />
+      {otvorene && navrhy.length > 0 && (
+        <ul className="absolute left-0 right-0 top-full z-30 mt-1 overflow-hidden rounded-2xl bg-white shadow-[0_16px_40px_rgba(27,36,48,0.18)] ring-1 ring-[#1B2430]/10">
+          {navrhy.map((o, i) => (
+            <li key={o}>
+              <button
+                type="button"
+                onMouseEnter={() => setAktivny(i)}
+                onClick={() => vyber(o)}
+                className={[
+                  "block w-full px-4 py-2.5 text-left text-sm font-bold transition-colors",
+                  i === aktivny
+                    ? "bg-[#e6f4fb] text-[#15749e]"
+                    : "text-[#1B2430] hover:bg-[#f1f3f5]",
+                ].join(" ")}
+              >
+                {o}
+              </button>
+            </li>
+          ))}
+        </ul>
+      )}
+    </div>
+  );
+}
+
+/** Porovnávame bez diakritiky — „Zi" musí nájsť „Žilinu". */
+function bezDiakritiky(s: string): string {
+  return s
+    .toLowerCase()
+    .normalize("NFD")
+    .replace(/[\u0300-\u036f]/g, "")
+    .trim();
 }
