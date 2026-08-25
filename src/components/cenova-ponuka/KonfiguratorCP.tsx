@@ -471,11 +471,21 @@ export function KonfiguratorCP() {
               </div>
             )}
 
-            {system?.vyber_hrubky && (
+            {system && system.hrubky.length > 0 && (
               <div className="mt-4">
                 <span className="text-xs font-extrabold uppercase tracking-wider text-[#1B2430]/55">
                   Hrúbka vrstvy
                 </span>
+                {/* Keď je hrúbka daná (polyuretán = vždy 2 mm), aj tak ju
+                    ukážeme aj s rezom — user 2026-08-25: „daj noramlne ze
+                    ukazuje vrstvu a nech tam je napisane ze PU sa da iba 2mm". */}
+                {!system.vyber_hrubky && (
+                  <p className="mt-1 text-sm text-[#1B2430]/65">
+                    {system.binder === "polyuretan"
+                      ? "Polyuretán sa lieva len v 2 mm — tenšia vrstva pri ňom neexistuje."
+                      : "Pri tomto systéme je hrúbka daná."}
+                  </p>
+                )}
                 <div className="mt-1.5 grid gap-2">
                   {system.hrubky.map((h) => {
                     const zvolena = hrubka === h.hrubka;
@@ -484,11 +494,13 @@ export function KonfiguratorCP() {
                         key={h.hrubka ?? "jedna"}
                         type="button"
                         onClick={() => setHrubka(h.hrubka)}
+                        disabled={!system.vyber_hrubky}
                         className={[
                           "flex items-center gap-3 rounded-2xl border-2 p-3 text-left transition-colors",
                           zvolena
                             ? "border-[#2EA3DC] bg-[#eaf6fc]"
                             : "border-[#1B2430]/12 hover:border-[#2EA3DC] hover:bg-[#f7fcff]",
+                          system.vyber_hrubky ? "" : "cursor-default",
                         ].join(" ")}
                       >
                         <RezVrstvy hrubka={h.hrubka} />
