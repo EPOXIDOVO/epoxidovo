@@ -5,7 +5,7 @@ import { SITE } from "@/lib/site";
 
 export const metadata: Metadata = {
   title: "Nezáväzná cenová ponuka",
-  description: `Vyklikaj si typ podlahy a plochu — cenovú ponuku ti pošleme na e-mail. Bezplatne a nezáväzne. ${SITE.contact.phone}.`,
+  description: `Vyklikaj si typ podlahy, prevedenie a plochu — orientačnú cenu uvidíš hneď a ponuku ti pošleme na e-mail. Bezplatne a nezáväzne. ${SITE.contact.phone}.`,
   alternates: { canonical: "/cenova-ponuka" },
 };
 
