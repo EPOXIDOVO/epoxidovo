@@ -621,8 +621,8 @@ export function KonfiguratorCP() {
               </div>
               {cena?.ok && (
                 <p className="mt-3 text-xs text-[#1B2430]/60">
-                  Orientačná cena vrátane materiálu aj práce. Kompletnú
-                  ponuku v PDF ti pošleme na e-mail, presnú potvrdíme po obhliadke.
+                  Presná cena sa môže mierne líšiť v závislosti od reálneho
+                  stavu podkladu, ktorý sa potvrdí na obhliadke.
                 </p>
               )}
             </div>
@@ -630,21 +630,21 @@ export function KonfiguratorCP() {
             {/* Otázka HNEĎ pod cenou — user 2026-08-24: „musi sa tato tam
                 opytat pod cenou ci mas zaujem o nezavazny telefonat
                 s obchodnim zastupcom". */}
-            <div className="mt-4 rounded-2xl border-2 border-[#1B2430]/12 p-4">
+            <div className="mt-4 rounded-2xl border-2 border-[#1B2430]/12 p-5 text-center">
               <p className="font-extrabold text-[#1B2430]">
                 Máš záujem o nezáväzný telefonát s obchodným zástupcom?
               </p>
               <p className="mt-0.5 text-sm text-[#1B2430]/60">
                 Prejde s tebou podklad, termín aj možnosti. Nič tým nepodpisuješ.
               </p>
-              <div className="mt-3 flex flex-wrap gap-2">
+              <div className="mt-3.5 flex flex-wrap justify-center gap-2">
                 <button
                   type="button"
                   onClick={() => setChceKontakt(true)}
                   className={[
-                    "inline-flex items-center gap-1.5 rounded-full px-4 py-2.5 text-sm font-bold transition-colors",
+                    "inline-flex items-center gap-1.5 rounded-full px-5 py-2.5 text-sm font-bold transition-colors",
                     chceKontakt
-                      ? "bg-[#1B2430] text-white"
+                      ? "bg-[#2EA3DC] text-white shadow-[0_4px_14px_rgba(46,163,220,0.35)]"
                       : "bg-[#f1f3f5] text-[#1B2430] hover:bg-[#e6f4fb] hover:text-[#15749e]",
                   ].join(" ")}
                 >
@@ -655,9 +655,9 @@ export function KonfiguratorCP() {
                   type="button"
                   onClick={() => setChceKontakt(false)}
                   className={[
-                    "rounded-full px-4 py-2.5 text-sm font-bold transition-colors",
+                    "rounded-full px-5 py-2.5 text-sm font-bold transition-colors",
                     !chceKontakt
-                      ? "bg-[#1B2430] text-white"
+                      ? "bg-[#2EA3DC] text-white shadow-[0_4px_14px_rgba(46,163,220,0.35)]"
                       : "bg-[#f1f3f5] text-[#1B2430] hover:bg-[#e6f4fb] hover:text-[#15749e]",
                   ].join(" ")}
                 >
@@ -665,12 +665,14 @@ export function KonfiguratorCP() {
                 </button>
               </div>
               {!chceKontakt && (
-                <Vyber
-                  label="Prečo zatiaľ nie (nepovinné)"
-                  moznosti={DOVODY_NECHCE}
-                  hodnota={dovodNechce}
-                  zmen={setDovodNechce}
-                />
+                <div className="[&_div]:justify-center">
+                  <Vyber
+                    label="Prečo zatiaľ nie (nepovinné)"
+                    moznosti={DOVODY_NECHCE}
+                    hodnota={dovodNechce}
+                    zmen={setDovodNechce}
+                  />
+                </div>
               )}
             </div>
 
