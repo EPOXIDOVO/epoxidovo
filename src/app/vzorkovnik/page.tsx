@@ -67,7 +67,8 @@ const TYPY: Record<
     zdroj: "arturo",
   },
   "kamenny-koberec": {
-    // vlastnú fotku kamenného koberca zatiaľ nemáme
+    // reálna vzorka TopStone z katalógu e-shopu (Korfu 4–8 mm)
+    foto: "/images/eshop/products/TS-KORFU-4-8-K06.jpg",
     nadpis: "Vzorkovník — kamenný koberec",
     popis: "Mramorové a kremičité kamienky spájané živicou. Vzorkovník kameňov ti pošleme poštou.",
     zdroj: "priprava",
