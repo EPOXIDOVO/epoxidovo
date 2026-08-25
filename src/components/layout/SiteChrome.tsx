@@ -22,6 +22,12 @@ export function SiteChrome({ children }: { children: React.ReactNode }) {
     return <main id="main">{children}</main>;
   }
 
+  // /ponuka je landing pre platenú FB/IG reklamu — vlastná minimálna hlavička
+  // aj pätička, žiadna navigácia preč zo stránky. Jediná cesta je formulár.
+  if (pathname.startsWith("/ponuka")) {
+    return <main id="main">{children}</main>;
+  }
+
   // Obchodná časť má vlastnú commerce hlavičku ako Epodex/GymBeam — logo +
   // search + košík, bez servisných CTA. Patrí sem aj konfigurátor a
   // vzorkovník, lebo z nich vedie cesta do košíka, nie do dopytu.

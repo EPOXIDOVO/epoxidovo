@@ -56,6 +56,17 @@ function DiceIcon({ pips }: { pips: 1 | 2 | 3 | 4 | 5 }) {
 
 
 /**
+ * Kam vedie tlačidlo „Vzorkovník farieb". Metalické majú od 2026-08-25
+ * kompletnú kolekciu TopStone EP11 (18 odtieňov), tak už tam nie je
+ * „Čoskoro". Kategórie, ktoré tu nie sú, ho stále nemajú.
+ */
+const VZORKOVNIK_TYP: Record<string, string> = {
+  jednofarebne: "/vzorkovnik?typ=jednofarebne",
+  priemyselne: "/vzorkovnik?typ=priemyselne",
+  metalicke: "/vzorkovnik?typ=metalicke",
+};
+
+/**
  * `cenyOd` prichádza zo servera z NajCRM (@/lib/cennik-od) — tá istá matica,
  * z akej ráta konfigurátor. Keď ho stránka nepošle alebo CRM neodpovie,
  * padáme na statické `priceFrom`, nech dlaždica nikdy neostane bez ceny.
@@ -184,9 +195,9 @@ function CategoriesShowcaseInner({ cenyOd }: { cenyOd?: Record<string, number> }
                 >
                   Čoskoro
                 </div>
-              ) : cat.slug === "jednofarebne" || cat.slug === "priemyselne" ? (
+              ) : VZORKOVNIK_TYP[cat.slug] ? (
                 <Link
-                  href="/vzorkovnik"
+                  href={VZORKOVNIK_TYP[cat.slug]}
                   aria-label={`Vzorkovník farieb — ${cat.name}`}
                   className="inline-flex items-center justify-center px-3 py-2.5 md:py-3 rounded-full bg-[#3db6e8] text-white font-semibold text-[12px] md:text-sm whitespace-nowrap hover:bg-[#1a8cc4] shadow-[0_6px_20px_rgba(61,182,232,0.35)] hover:-translate-y-0.5 transition-all duration-300"
                 >

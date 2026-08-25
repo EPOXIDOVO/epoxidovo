@@ -1,3 +1,5 @@
+import { TOPSTONE_METALIK } from "@/content/topstone-metalik";
+
 /**
  * Fotky pre náhľadový panel konfigurátora.
  *
@@ -72,20 +74,7 @@ export const GALERIA_VZHLAD: Record<string, (string | null)[]> = {
 };
 
 /** Metalické a marble efekty — reálne vzorky TopStone. */
-export const EFEKTY: { id: string; label: string; src: string }[] = [
-  { id: "sequoia", label: "Sequoia", src: "/images/eshop/topstone-metallic/sequoia.jpg" },
-  { id: "charcoal", label: "Charcoal", src: "/images/eshop/topstone-metallic/charcoal.jpg" },
-  { id: "azuro", label: "Azuro", src: "/images/eshop/topstone-metallic/azuro.jpg" },
-  { id: "copper", label: "Copper", src: "/images/eshop/topstone-metallic/copper.jpg" },
-  { id: "pearl", label: "Pearl", src: "/images/eshop/topstone-metallic/pearl.jpg" },
-  { id: "slate", label: "Slate", src: "/images/eshop/topstone-metallic/slate.jpg" },
-  { id: "gold", label: "Gold", src: "/images/eshop/topstone-metallic/gold.jpg" },
-  { id: "midnight-blue", label: "Midnight Blue", src: "/images/eshop/topstone-metallic/midnight-blue.jpg" },
-  { id: "moose-green", label: "Moose Green", src: "/images/eshop/topstone-metallic/moose-green.jpg" },
-  { id: "wine-red", label: "Wine Red", src: "/images/eshop/topstone-metallic/wine-red.jpg" },
-  { id: "white", label: "White", src: "/images/eshop/topstone-metallic/white.jpg" },
-  { id: "gun-metal", label: "Gun Metal", src: "/images/eshop/topstone-metallic/gun-metal.jpg" },
-];
+export const EFEKTY = TOPSTONE_METALIK;
 
 /** Základná trieda RAL — bežná cena a skladom. Ostatné = pastelová trieda. */
 export const RAL_ZAKLADNE = ["RAL 7032", "RAL 7035"];

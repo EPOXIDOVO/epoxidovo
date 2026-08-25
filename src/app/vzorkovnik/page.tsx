@@ -8,6 +8,7 @@ import Image from "next/image";
 import { Container } from "@/components/ui/Container";
 import { BreadcrumbsJsonLd } from "@/components/seo/BreadcrumbsJsonLd";
 import { RAL_CLASSIC_FULL, RAL_GROUPS } from "@/content/ral-classic";
+import { TOPSTONE_METALIK } from "@/content/topstone-metalik";
 import { MATERIALY } from "@/lib/materialy";
 import { obsahKategoria } from "@/lib/obsah-kategorie";
 import { ARTURO_FARBY, ARTURO_TYPY } from "@/content/arturo-farby";
@@ -82,21 +83,8 @@ const ORDERED_COLORS = RAL_GROUPS.flatMap((g) =>
   RAL_CLASSIC_FULL.filter((c) => c.skupina === g.key),
 );
 
-/** Reálne vzorky metalických efektov TopStone. */
-const METALICKE = [
-  { id: "sequoia", label: "Sequoia" },
-  { id: "charcoal", label: "Charcoal" },
-  { id: "azuro", label: "Azuro" },
-  { id: "copper", label: "Copper" },
-  { id: "pearl", label: "Pearl" },
-  { id: "slate", label: "Slate" },
-  { id: "gold", label: "Gold" },
-  { id: "midnight-blue", label: "Midnight Blue" },
-  { id: "moose-green", label: "Moose Green" },
-  { id: "wine-red", label: "Wine Red" },
-  { id: "white", label: "White" },
-  { id: "gun-metal", label: "Gun Metal" },
-];
+/** Reálne vzorky metalických efektov TopStone — zdroj: @/content/topstone-metalik. */
+const METALICKE = TOPSTONE_METALIK;
 
 
 export default async function VzorkovnikPage({
