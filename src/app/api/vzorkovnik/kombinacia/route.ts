@@ -124,8 +124,10 @@ export async function POST(request: NextRequest) {
   const vysledok = await generateFloorEdit(prvy.base64, prvy.mimeType, prompt, zvysok);
 
   if (!vysledok.ok) {
+    const dovod = vysledok.reason ?? "generovanie_zlyhalo";
+    console.error("[kombinacia] generovanie zlyhalo:", dovod);
     return NextResponse.json(
-      { ok: false, error: vysledok.reason ?? "generovanie_zlyhalo" },
+      { ok: false, error: dovod, message: hlaskaPreDovod(dovod) },
       { status: 502 },
     );
   }
@@ -147,6 +149,29 @@ export async function POST(request: NextRequest) {
     mimeType: vysledok.mimeType ?? "image/png",
     nazov: mena.join(" + "),
   });
+}
+
+/**
+ * Zrozumiteľné hlásenie namiesto „skús to znovu" pri veciach, kde opakovanie
+ * nepomôže. Bez toho sa nedá odlíšiť chýbajúci kľúč od výpadku Gemini.
+ */
+function hlaskaPreDovod(dovod: string): string {
+  if (dovod === "api_key_missing") {
+    return "AI generovanie nie je v tomto prostredí nastavené (chýba GEMINI_API_KEY). Na epoxidovo.sk funguje.";
+  }
+  if (dovod === "no_image_in_response") {
+    return "AI tentoraz nevrátila obrázok. Skús inú kombináciu.";
+  }
+  if (dovod.startsWith("blocked_")) {
+    return "AI odmietla túto kombináciu vygenerovať. Skús inú.";
+  }
+  if (dovod.startsWith("api_error_")) {
+    return `Služba generovania hlási chybu (${dovod.replace("api_error_", "")}). Skús o chvíľu.`;
+  }
+  if (dovod === "network_error") {
+    return "Nepodarilo sa spojiť so službou generovania. Skús o chvíľu.";
+  }
+  return "Nepodarilo sa namiešať vzorku. Skús to znovu.";
 }
 
 function arrayBufferToBase64(buf: ArrayBuffer): string {

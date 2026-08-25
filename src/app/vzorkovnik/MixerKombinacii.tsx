@@ -41,7 +41,9 @@ export function MixerKombinacii() {
       });
       const d = await r.json();
       if (!d.ok) {
-        setChyba(d.message ?? "Nepodarilo sa namiešať vzorku. Skús to znovu.");
+        // Ukáž konkrétny dôvod — „skús znovu" pri chýbajúcom kľúči
+        // alebo vyčerpanom limite je len mätúce.
+        setChyba(d.message ?? `Nepodarilo sa namiešať vzorku (${d.error ?? "neznáma chyba"}).`);
         return;
       }
       setVysledok({ src: `data:${d.mimeType};base64,${d.imageBase64}`, nazov: d.nazov });
