@@ -115,8 +115,9 @@ export async function POST(request: NextRequest) {
     `Create a photorealistic top-down close-up of a poured metallic epoxy floor that blends these TopStone EP11 pigments together: ${mena.join(", ")}.`,
     "Use the attached sample photos as the exact colour reference — the hues, sheen and pigment behaviour must match them, do not invent new colours.",
     "Blend them the way a real poured floor looks: metallic pigment drifts into cells and lacing, soft feathered edges where the colours meet, subtle depth and translucency, no hard lines and no repeating pattern.",
-    "High-gloss clear topcoat with soft diffuse studio reflections, seamless surface, no objects, no furniture, no text, no watermark, no seams, fills the entire frame.",
-    "Square framing, evenly lit, sharp focus, looks like a real photograph of a finished floor sample.",
+    "High-gloss clear topcoat with soft diffuse studio reflections, seamless surface, no objects, no furniture, no text, no watermark.",
+    "CRITICAL: the poured surface must completely fill the frame and bleed off all four edges. Do not reproduce the white background, board edge, table, wall or any margin visible in the reference photos — crop into the material only.",
+    "Square framing, evenly lit, sharp focus, looks like a real photograph of a finished floor.",
   ].join(" ");
 
   const [prvy, ...zvysok] = nacitane;
