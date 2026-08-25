@@ -9,6 +9,7 @@ import { Container } from "@/components/ui/Container";
 import { BreadcrumbsJsonLd } from "@/components/seo/BreadcrumbsJsonLd";
 import { RAL_CLASSIC_FULL, RAL_GROUPS } from "@/content/ral-classic";
 import { TOPSTONE_METALIK } from "@/content/topstone-metalik";
+import { MixerKombinacii } from "./MixerKombinacii";
 import { MATERIALY } from "@/lib/materialy";
 import { obsahKategoria } from "@/lib/obsah-kategorie";
 import { ARTURO_FARBY, ARTURO_TYPY } from "@/content/arturo-farby";
@@ -159,7 +160,9 @@ export default async function VzorkovnikPage({
               <p className="text-xs md:text-sm font-bold text-[#1B2430]/60">{pocet}</p>
             )}
           </div>
-          {v && <p className="mt-2 text-sm md:text-base text-[#1B2430]/70 max-w-2xl">{v.popis}</p>}
+          {/* Podnadpis zámerne preč (user 2026-08-25) — typ je vidieť
+              z nadpisu aj z dlaždíc s fotkami. `popis` ostáva, ide do
+              meta description pre vyhľadávače. */}
         </header>
 
         {/* Prepínač typov — dlaždice s náhľadovou fotkou, nie holý text
@@ -226,6 +229,10 @@ export default async function VzorkovnikPage({
             ))}
           </div>
         )}
+
+        {/* Miešačka len pri metalických — pri ostatných typoch nemáme
+            referenčné vzorky pigmentov. */}
+        {typ === "metalicke" && <MixerKombinacii />}
 
         {zdroj === "efekty" && (
           <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-3 md:gap-4">
