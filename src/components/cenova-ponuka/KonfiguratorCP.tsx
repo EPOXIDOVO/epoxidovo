@@ -74,9 +74,9 @@ const SYSTEMY_PRE_TYP: Record<string, string[]> = {
 /** Čo znamená pojivo — aby si zákazník vedel vybrať, nielen kliknúť. */
 const BINDER_POPIS: Record<string, string> = {
   epoxid:
-    "Tvrdší povrch a nižšia cena. Do interiéru bez priameho slnka — na svetle môže časom zožltnúť.",
+    "Tvrdší povrch a nižšia cena. Nie je UV stabilný ako polyuretán, tak sa hodí do interiéru bez priameho slnka.",
   polyuretan:
-    "Pružnejší a odolný voči UV. Znesie slnko aj teplotné zmeny, hodí sa aj tam, kde podklad pracuje.",
+    "Pružnejší, a preto príjemnejší naboso — hodí sa do obytných priestorov. Odolný voči UV, znesie slnko aj teplotné zmeny.",
 };
 
 /** Čo znamená hrúbka vrstvy. */
@@ -570,8 +570,18 @@ export function KonfiguratorCP() {
 
             <div className="mt-3 rounded-2xl border-2 border-[#2EA3DC] bg-[#eaf6fc] p-4">
               <div className="flex items-start gap-3">
+                {/* Hotová podlaha, nie titulná fotka kategórie — user
+                    2026-08-25: „tu musi byt pov podlahy produktu hotoveho …
+                    povedzme bude to 2. fotka v kategorii co vieme vycarovat".
+                    Titulná je prvá, takže berieme tú hneď za ňou. */}
                 <span className="relative w-16 h-16 shrink-0 rounded-xl overflow-hidden bg-white/60">
-                  <Image src={typ.image} alt="" fill sizes="64px" className="object-cover" />
+                  <Image
+                    src={typ.variants[0]?.src ?? typ.image}
+                    alt=""
+                    fill
+                    sizes="64px"
+                    className="object-cover"
+                  />
                 </span>
                 <div className="min-w-0 flex-1">
                   <div className="font-extrabold text-[#1B2430]">
