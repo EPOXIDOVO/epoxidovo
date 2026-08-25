@@ -262,6 +262,26 @@ const EMPTY: FormValues = {
 
 const KROKOV = 3;
 
+/**
+ * UTM parametre z URL (?utm_source=…). Čítame ich až pri odoslaní priamo
+ * z window.location — bez useSearchParams (Suspense) a bez useEffect.
+ * Ak v URL nič nie je, default je Facebook, lebo táto stránka existuje
+ * výlučne ako cieľ FB/IG reklamy.
+ */
+function citajUtm() {
+  let p: URLSearchParams | null = null;
+  try {
+    p = new URLSearchParams(window.location.search);
+  } catch {
+    p = null;
+  }
+  return {
+    source: p?.get("utm_source") || "facebook",
+    medium: p?.get("utm_medium") || "paid_social",
+    campaign: p?.get("utm_campaign") || "Facebook reklama (/ponuka)",
+  };
+}
+
 function LeadForm() {
   const [step, setStep] = React.useState(0);
   const [v, setV] = React.useState<FormValues>(EMPTY);
@@ -269,22 +289,6 @@ function LeadForm() {
   const [sending, setSending] = React.useState(false);
   const [success, setSuccess] = React.useState(false);
   const [token, setToken] = React.useState<string | null>(null);
-  const [utm, setUtm] = React.useState<{ source?: string; medium?: string; campaign?: string }>({});
-
-  // UTM z URL (?utm_source=…) — čítame z window, aby sme nepotrebovali
-  // Suspense boundary okolo useSearchParams.
-  React.useEffect(() => {
-    try {
-      const p = new URLSearchParams(window.location.search);
-      setUtm({
-        source: p.get("utm_source") ?? undefined,
-        medium: p.get("utm_medium") ?? undefined,
-        campaign: p.get("utm_campaign") ?? undefined,
-      });
-    } catch {
-      /* ignore */
-    }
-  }, []);
 
   const set = <K extends keyof FormValues>(k: K, val: FormValues[K]) => {
     setV((p) => ({ ...p, [k]: val }));
@@ -333,6 +337,7 @@ function LeadForm() {
     setSending(true);
     setErr(null);
 
+    const utm = citajUtm();
     const spaceLabel = PRIESTORY.find((p) => p.value === v.spaceType)?.label ?? "";
     const sluzbaLabel = SLUZBY.find((s) => s.value === v.service)?.label ?? "";
     const sprava = [
@@ -362,9 +367,9 @@ function LeadForm() {
           message: sprava,
           consent: true,
           source: "fb_landing",
-          utmSource: utm.source || "facebook",
-          utmMedium: utm.medium || "paid_social",
-          utmCampaign: utm.campaign || "Facebook reklama (/ponuka)",
+          utmSource: utm.source,
+          utmMedium: utm.medium,
+          utmCampaign: utm.campaign,
           website: v.website,
           turnstileToken: token,
         }),
@@ -761,7 +766,7 @@ function Recenzie() {
                 ))}
               </div>
               <blockquote className="mt-3 text-sm leading-relaxed text-white/85">
-                „{r.text}"
+                &bdquo;{r.text}&ldquo;
               </blockquote>
               <figcaption className="mt-4 text-xs font-bold text-white/60">
                 {r.name}

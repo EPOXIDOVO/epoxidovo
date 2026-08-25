@@ -21,39 +21,52 @@ import { ArturoGrid } from "./ArturoGrid";
  */
 const TYPY: Record<
   string,
-  { nadpis: string; popis: string; zdroj: "ral" | "efekty" | "chipsy" | "arturo" | "priprava" }
+  {
+    nadpis: string;
+    popis: string;
+    zdroj: "ral" | "efekty" | "chipsy" | "arturo" | "priprava";
+    /** Náhľad do prepínača. Bez fotky sa vykreslí neutrálna dlaždica. */
+    foto?: string;
+  }
 > = {
   jednofarebne: {
+    foto: "/images/categories/jednofarebne.jpg",
     nadpis: "Vzorkovník — jednofarebné podlahy",
     popis: "RAL Classic. Odtieň si vyberáš z tej istej palety, akú miešame do živice.",
     zdroj: "ral",
   },
   priemyselne: {
+    foto: "/images/hero/hala.jpg",
     nadpis: "Vzorkovník — priemyselné podlahy",
     popis: "RAL Classic. Do hál a dielní sa najčastejšie lejú sivé a modré odtiene.",
     zdroj: "ral",
   },
   metalicke: {
+    foto: "/images/categories/metalicke.jpg",
     nadpis: "Vzorkovník — metalické efekty",
     popis: "Reálne vzorky TopStone. Každá liata plocha vyzerá trochu inak — to je podstata efektu.",
     zdroj: "efekty",
   },
   mramorove: {
+    foto: "/images/categories/mramorove.jpg",
     nadpis: "Vzorkovník — mramorové efekty",
     popis: "Rovnaké pigmenty ako pri metalike, len iná technika ťahania. Vzory sú orientačné.",
     zdroj: "efekty",
   },
   chipsove: {
+    foto: "/images/categories/chipsove.jpg",
     nadpis: "Vzorkovník — chipsové podlahy",
     popis: "Dekoračné vločky, ktoré sa sypú do čerstvej vrstvy. Kombinujú sa so základnou farbou z RAL.",
     zdroj: "chipsy",
   },
   arturo: {
+    foto: "/images/vzorkovnik/arturo/concrete-look-downtown-mix.webp",
     nadpis: "Vzorkovník — Arturo",
     popis: "Kompletná farebná škála Arturo — 68 odtieňov v radoch Unicolor, Concrete look, Mistral, Microcement a Concreta.",
     zdroj: "arturo",
   },
   "kamenny-koberec": {
+    // vlastnú fotku kamenného koberca zatiaľ nemáme
     nadpis: "Vzorkovník — kamenný koberec",
     popis: "Mramorové a kremičité kamienky spájané živicou. Vzorkovník kameňov ti pošleme poštou.",
     zdroj: "priprava",
@@ -149,22 +162,52 @@ export default async function VzorkovnikPage({
           {v && <p className="mt-2 text-sm md:text-base text-[#1B2430]/70 max-w-2xl">{v.popis}</p>}
         </header>
 
-        {/* prepínač typov — nech sa dá preskákať medzi vzorkovníkmi */}
-        <div className="mb-6 flex flex-wrap gap-2">
-          {Object.entries(TYPY).map(([slug, t]) => (
-            <Link
-              key={slug}
-              href={`/vzorkovnik?typ=${slug}`}
-              className={`px-3.5 py-1.5 rounded-full text-sm font-bold whitespace-nowrap transition-colors ${
-                typ === slug
-                  ? "bg-[#3db6e8] text-[#0e1a3b]"
-                  : "bg-zinc-100 text-[#1B2430]/70 hover:bg-zinc-200"
-              }`}
-            >
-              {t.nadpis.replace("Vzorkovník — ", "")}
-            </Link>
-          ))}
-        </div>
+        {/* Prepínač typov — dlaždice s náhľadovou fotkou, nie holý text
+            (user 2026-08-25: „nech vidis tie typy podlah ako fotku
+            nahladovu nie ze napis"). */}
+        <nav aria-label="Typy vzorkovníkov" className="mb-6">
+          <ul className="grid grid-cols-3 sm:grid-cols-4 lg:grid-cols-7 gap-2 md:gap-3">
+            {Object.entries(TYPY).map(([slug, t]) => {
+              const aktivny = typ === slug;
+              return (
+                <li key={slug}>
+                  <Link
+                    href={`/vzorkovnik?typ=${slug}`}
+                    aria-current={aktivny ? "page" : undefined}
+                    className={`group block overflow-hidden rounded-xl ring-2 transition-all ${
+                      aktivny
+                        ? "ring-[#3db6e8] shadow-[0_8px_22px_rgba(61,182,232,0.28)]"
+                        : "ring-transparent hover:ring-[#3db6e8]/60 hover:-translate-y-0.5"
+                    }`}
+                  >
+                    <span className="relative block aspect-[4/3] bg-zinc-100">
+                      {t.foto ? (
+                        <Image
+                          src={t.foto}
+                          alt=""
+                          fill
+                          sizes="(max-width: 640px) 33vw, 160px"
+                          className="object-cover transition-transform duration-500 group-hover:scale-105"
+                        />
+                      ) : (
+                        <span className="absolute inset-0 flex items-center justify-center text-[10px] font-bold uppercase tracking-wide text-zinc-400">
+                          Foto čoskoro
+                        </span>
+                      )}
+                    </span>
+                    <span
+                      className={`block px-2 py-1.5 text-center text-[11px] md:text-xs font-bold leading-tight ${
+                        aktivny ? "bg-[#3db6e8] text-[#0e1a3b]" : "bg-zinc-100 text-[#1B2430]/75"
+                      }`}
+                    >
+                      {t.nadpis.replace("Vzorkovník — ", "")}
+                    </span>
+                  </Link>
+                </li>
+              );
+            })}
+          </ul>
+        </nav>
 
         {zdroj === "ral" && (
           <div className="grid grid-cols-4 sm:grid-cols-6 md:grid-cols-8 lg:grid-cols-10 xl:grid-cols-12 gap-2 md:gap-2.5">
