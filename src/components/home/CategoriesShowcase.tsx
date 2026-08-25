@@ -55,15 +55,20 @@ function DiceIcon({ pips }: { pips: 1 | 2 | 3 | 4 | 5 }) {
  */
 
 
-export function CategoriesShowcase() {
+/**
+ * `cenyOd` prichádza zo servera z NajCRM (@/lib/cennik-od) — tá istá matica,
+ * z akej ráta konfigurátor. Keď ho stránka nepošle alebo CRM neodpovie,
+ * padáme na statické `priceFrom`, nech dlaždica nikdy neostane bez ceny.
+ */
+export function CategoriesShowcase({ cenyOd }: { cenyOd?: Record<string, number> }) {
   return (
     <NahladPodlahyProvider>
-      <CategoriesShowcaseInner />
+      <CategoriesShowcaseInner cenyOd={cenyOd} />
     </NahladPodlahyProvider>
   );
 }
 
-function CategoriesShowcaseInner() {
+function CategoriesShowcaseInner({ cenyOd }: { cenyOd?: Record<string, number> }) {
   const { otvor } = useNahladPodlahy();
   return (
     <>
@@ -127,7 +132,7 @@ function CategoriesShowcaseInner() {
                       <>
                         <span className="text-[9px] md:text-[11px] font-normal lowercase text-[#888]">od</span>
                         <span className="text-[13px] md:text-[18px] font-bold text-[#1a1a1a] leading-none">
-                          {cat.priceFrom} €
+                          {cenyOd?.[cat.slug] ?? cat.priceFrom} €
                         </span>
                         <span className="text-[10px] md:text-[12px] font-medium text-[#555]">/m²</span>
                       </>
@@ -152,7 +157,9 @@ function CategoriesShowcaseInner() {
                 <button
                   key={v.src}
                   type="button"
-                  onClick={() => otvor(cat.variants, vi, cat.priceFrom || null)}
+                  onClick={() =>
+                    otvor(cat.variants, vi, cenyOd?.[cat.slug] ?? cat.priceFrom ?? null)
+                  }
                   aria-label={`${v.alt} — otvoriť náhľad`}
                   className="group/v relative aspect-[16/9] rounded-xl overflow-hidden transition-all duration-300 ease-out hover:scale-[1.06] hover:z-10 hover:shadow-[0_18px_40px_rgba(0,0,0,0.45)] hover:ring-[3px] hover:ring-white focus:outline-none focus-visible:ring-[3px] focus-visible:ring-white"
                 >

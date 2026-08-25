@@ -5,6 +5,7 @@ import Image from "next/image";
 import { Container } from "@/components/ui/Container";
 import { Section } from "@/components/ui/Section";
 import { CategoriesShowcase } from "@/components/home/CategoriesShowcase";
+import { cenyOdZCrm } from "@/lib/cennik-od";
 import { Reviews } from "@/components/home/Reviews";
 import { HowItWorks } from "@/components/home/HowItWorks";
 import { Stats } from "@/components/home/Stats";
@@ -66,6 +67,7 @@ export async function generateMetadata({ params }: RouteContext): Promise<Metada
 }
 
 export default async function CityPage({ params }: RouteContext) {
+  const cenyOd = await cenyOdZCrm();
   const { mesto } = await params;
   const city = findCity(mesto);
   if (!city) notFound();
@@ -259,7 +261,7 @@ export default async function CityPage({ params }: RouteContext) {
 
       {/* Reuse hlavných sekcií homepage (rovnaký dizajn aj komponenty) */}
       <Stats />
-      <CategoriesShowcase />
+      <CategoriesShowcase cenyOd={cenyOd} />
       <HowItWorks />
       <Reviews />
 

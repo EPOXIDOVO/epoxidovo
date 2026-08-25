@@ -25,6 +25,12 @@ export type TypPodlahyKarta = {
   priceLabel?: string;
   /** Úvodná (titulná) fotka — rovnaká na karte, v náhľade aj v konfigurátore. */
   image: string;
+  /**
+   * Náhľad do cenovej karty. Keď sa nevyplní, berie sa `image`, teda tá istá
+   * fotka ako na dlaždici typu — poradie fotiek v galérii sa naň nesmie
+   * prejaviť (user 2026-08-25).
+   */
+  thumb?: string;
   href?: string;
   /** Fotky iných farieb toho istého typu — otvárajú náhľad. */
   variants: FotkaPodlahy[];
@@ -124,6 +130,9 @@ export const TYPY_PODLAH: TypPodlahyKarta[] = [
     ],
   },
 ];
+
+/** Fotka do cenovej karty — vždy tá hlavná, nie prvá z galérie. */
+export const nahladTypu = (t: TypPodlahyKarta) => t.thumb ?? t.image;
 
 export const getTypPodlahy = (slug: string) =>
   TYPY_PODLAH.find((t) => t.slug === slug) ?? null;

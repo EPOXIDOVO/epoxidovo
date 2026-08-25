@@ -4,7 +4,7 @@ import * as React from "react";
 import Image from "next/image";
 import { ArrowLeft, Check, Loader2, Phone, Sparkles } from "lucide-react";
 import { TurnstileWidget } from "@/components/turnstile/TurnstileWidget";
-import { TYPY_PODLAH, type TypPodlahyKarta } from "@/content/typy-podlah";
+import { TYPY_PODLAH, nahladTypu, type TypPodlahyKarta } from "@/content/typy-podlah";
 
 /**
  * Konfigurátor cenovej ponuky — user 2026-08-24: „chcem urobit automaticke
@@ -59,12 +59,23 @@ const TERMINY = ["Čo najskôr", "Do 3 mesiacov", "Do pol roka", "Zatiaľ zisťu
 
 const PODKLAD = ["Betón", "Poter", "Dlaždice", "Neviem"];
 
-/** Čo znamená pojivo — aby si zákazník vedel vybrať, nielen kliknúť. */
+/** Čo predvolíme, kým si zákazník nevyberie sám. */
+const PREDVOLENA_HRUBKA = "1mm";
+
+/**
+ * Čo znamená pojivo. Obe možnosti hovoria o tých istých troch veciach
+ * v rovnakom poradí — odolnosť, slnko, kam sa hodí — nech sa dajú porovnať.
+ */
 const BINDER_POPIS: Record<string, string> = {
   epoxid:
-    "Tvrdší povrch a nižšia cena. Nie je UV stabilný ako polyuretán, tak sa hodí do interiéru bez priameho slnka.",
+    "Tvrdší a odolnejší proti oderu. Na priamom slnku časom zožltne. Hodí sa do garáže, dielne či pivnice.",
   polyuretan:
-    "Pružnejší, a preto príjemnejší naboso — hodí sa do obytných priestorov. Odolný voči UV, znesie slnko aj teplotné zmeny.",
+    "Pružnejší a príjemnejší naboso. Slnko aj teplotné zmeny mu neprekážajú. Hodí sa do obytných priestorov.",
+};
+
+/** Popiska hrúbky — CRM posiela „Náter", zákazníkovi to spresníme. */
+const HRUBKA_NAZOV: Record<string, string> = {
+  nater: "Náter (~0,3 mm)",
 };
 
 /** Čo znamená hrúbka vrstvy. */
@@ -180,6 +191,16 @@ function lenCislo(v: string): string {
   return zvysok.length > 0 ? `${prva},${zvysok.join("")}` : prva;
 }
 
+/** Predvolená hrúbka — 1 mm, keď ju systém vie; inak jediná, čo má. */
+function predvolenaHrubka(sys: CennikSystem | null): string | null {
+  if (!sys) return null;
+  return (
+    sys.hrubky.find((h) => h.hrubka === PREDVOLENA_HRUBKA)?.hrubka ??
+    sys.hrubky[0]?.hrubka ??
+    null
+  );
+}
+
 /** Systémy z CRM, ktoré sa dajú pri danom type vybrať. */
 function prevedeniaPreTyp(
   t: TypPodlahyKarta | null,
@@ -207,6 +228,8 @@ export function KonfiguratorCP() {
   const [krok, setKrok] = React.useState<Krok>("typ");
   const [cennik, setCennik] = React.useState<CennikSystem[] | null>(null);
   const [defaultSystem, setDefaultSystem] = React.useState<Record<string, string>>({});
+  /** Minimálna cena zákazky z /admin/systems. 0 = neuplatňuje sa. */
+  const [minOrder, setMinOrder] = React.useState(0);
   const [system, setSystem] = React.useState<CennikSystem | null>(null);
   const [hrubka, setHrubka] = React.useState<string | null>(null);
   const [typ, setTyp] = React.useState<TypPodlahyKarta | null>(null);
@@ -237,6 +260,7 @@ export function KonfiguratorCP() {
         if (zrusene || !d?.ok || !Array.isArray(d.systemy)) return;
         setCennik(d.systemy);
         setDefaultSystem(d.default_system ?? {});
+        setMinOrder(Number(d.min_order_eur ?? 0) || 0);
       })
       .catch(() => {
         /* bez cenníka ide dopyt ďalej, cenu pripraví obchodník */
@@ -267,6 +291,12 @@ export function KonfiguratorCP() {
         : ["typ", "plocha", "priestor", "kontakt", "hotovo"],
     [maPrevedenie],
   );
+
+  /** Cena €/m² pre práve zvolený systém a hrúbku — zdroj je cenník z CRM. */
+  const cenaZaM2 =
+    system?.hrubky.find((h) => h.hrubka === hrubka)?.price_per_m2 ??
+    system?.hrubky[0]?.price_per_m2 ??
+    null;
 
   const plocha = Number(m2.replace(",", "."));
   const plochaOk = isFinite(plocha) && plocha > 0;
@@ -378,7 +408,7 @@ export function KonfiguratorCP() {
                     const dostupne = prevedeniaPreTyp(t, cennik, defaultSystem);
                     const prvy = dostupne[0] ?? null;
                     setSystem(prvy);
-                    setHrubka(prvy?.hrubky[0]?.hrubka ?? null);
+                    setHrubka(predvolenaHrubka(prvy));
                     void chod("plocha");
                   }}
                   className={[
@@ -444,7 +474,7 @@ export function KonfiguratorCP() {
                         type="button"
                         onClick={() => {
                           setSystem(sys);
-                          setHrubka(sys.hrubky[0]?.hrubka ?? null);
+                          setHrubka(predvolenaHrubka(sys));
                         }}
                         className={[
                           "rounded-2xl border-2 p-3 text-left transition-colors",
@@ -506,7 +536,14 @@ export function KonfiguratorCP() {
                         <RezVrstvy hrubka={h.hrubka} />
                         <span className="min-w-0 flex-1">
                           <span className="flex items-baseline justify-between gap-2">
-                            <span className="font-extrabold text-[#1B2430]">{h.label}</span>
+                            <span className="font-extrabold text-[#1B2430]">
+                              {HRUBKA_NAZOV[h.hrubka ?? ""] ?? h.label}
+                              {h.hrubka === PREDVOLENA_HRUBKA && system.vyber_hrubky && (
+                                <span className="ml-2 align-middle rounded-full bg-[#e6f4fb] px-2 py-0.5 text-[10px] font-extrabold uppercase tracking-wide text-[#15749e] whitespace-nowrap">
+                                  Odporúčame
+                                </span>
+                              )}
+                            </span>
                             <span className="text-sm font-bold text-[#15749e] whitespace-nowrap">
                               {h.price_per_m2} €/m²
                             </span>
@@ -519,6 +556,21 @@ export function KonfiguratorCP() {
                     );
                   })}
                 </div>
+              </div>
+            )}
+
+            {cenaZaM2 != null && plochaOk && (
+              <div className="mt-4 rounded-2xl bg-[#f4f7fa] p-3.5">
+                <div className="text-center font-extrabold text-[#1B2430] tabular-nums">
+                  {cenaZaM2} €/m² × {plocha} m² ={" "}
+                  <span className="text-[#15749e]">{euro(cenaZaM2 * plocha)}</span>
+                </div>
+                <p className="mt-1.5 text-center text-xs text-[#1B2430]/65 leading-snug">
+                  V cene je brúsenie podkladu, penetrácia aj vyspravenie drobných
+                  prasklín. Doprava sa doráta v ďalšom kroku.
+                  {minOrder > 0 &&
+                    ` Pri ploche pod 30 m² platí minimálna cena zákazky ${euro(minOrder)}.`}
+                </p>
               </div>
             )}
 
@@ -593,13 +645,11 @@ export function KonfiguratorCP() {
 
             <div className="mt-3 rounded-2xl border-2 border-[#2EA3DC] bg-[#eaf6fc] p-4">
               <div className="flex items-start gap-3">
-                {/* Hotová podlaha, nie titulná fotka kategórie — user
-                    2026-08-25: „tu musi byt pov podlahy produktu hotoveho …
-                    povedzme bude to 2. fotka v kategorii co vieme vycarovat".
-                    Titulná je prvá, takže berieme tú hneď za ňou. */}
+                {/* Hlavná fotka typu, nie prvá z galérie — poradie fotiek
+                    v galérii sa na náhľad v cene nesmie prejaviť. */}
                 <span className="relative w-16 h-16 shrink-0 rounded-xl overflow-hidden bg-white/60">
                   <Image
-                    src={typ.variants[0]?.src ?? typ.image}
+                    src={nahladTypu(typ)}
                     alt=""
                     fill
                     sizes="64px"

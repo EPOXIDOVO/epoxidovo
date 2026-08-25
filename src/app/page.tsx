@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Hero } from "@/components/home/Hero";
 import { Stats } from "@/components/home/Stats";
 import { CategoriesShowcase } from "@/components/home/CategoriesShowcase";
+import { cenyOdZCrm } from "@/lib/cennik-od";
 import { HowItWorks } from "@/components/home/HowItWorks";
 import { Reviews } from "@/components/home/Reviews";
 
@@ -47,13 +48,15 @@ export const metadata: Metadata = {
   },
 };
 
-export default function HomePage() {
+export default async function HomePage() {
+  // „od" ceny z tej istej matice ako konfigurátor — nech sa nerozídu
+  const cenyOd = await cenyOdZCrm();
   return (
     <>
       <div className="-mt-20 md:-mt-24">
         <Hero />
       </div>
-      <CategoriesShowcase />
+      <CategoriesShowcase cenyOd={cenyOd} />
       <Stats />
       <HowItWorks />
       <Reviews />
