@@ -18,7 +18,7 @@ import { getClientIp, rateLimit } from "@/lib/rate-limit";
 const CRM_URL = process.env.NAJCRM_BASE_URL ?? "https://app.najcrm.sk";
 
 export async function POST(request: NextRequest) {
-  const secret = process.env.EPX_PUSH_SECRET;
+  const secret = process.env.EPX_PUSH_SECRET ?? process.env.BDSMANAGER_WEBHOOK_SECRET;
   if (!secret) {
     // Bez kľúča cenu nezískame — a NEVYMÝŠĽAME ju. Konfigurátor v takom
     // prípade ukáže „cenu pripravíme individuálne" a dopyt aj tak odošle.

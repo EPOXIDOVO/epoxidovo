@@ -19,10 +19,30 @@ import { TYPY_PODLAH, type TypPodlahyKarta } from "@/content/typy-podlah";
  * ktoré používa ten istý vzorec ako automatická CP posielaná do mailu.
  */
 
-type Krok = 1 | 2 | 3 | 4 | 5;
+type Krok = "typ" | "prevedenie" | "plocha" | "priestor" | "kontakt" | "hotovo";
+
+/** Systém = konkrétne zloženie podlahy z NajCRM (kód + ceny za hrúbky). */
+type CennikSystem = {
+  code: string;
+  label: string;
+  binder: string | null;
+  floor_type: string | null;
+  vyber_hrubky: boolean;
+  hrubky: { hrubka: string | null; label: string | null; price_per_m2: number }[];
+};
 
 type Cena =
-  | { ok: true; total: number; zaklad: number; zlava: number; zlava_pct: number; doprava: number; price_per_m2: number; system_label: string }
+  | {
+      ok: true;
+      total: number;
+      zaklad: number;
+      zlava: number;
+      zlava_pct: number;
+      doprava: number;
+      price_per_m2: number;
+      system_label: string;
+      hrubka_label?: string;
+    }
   | { ok: false; dovod: string }
   | null;
 
@@ -39,20 +59,59 @@ const TERMINY = ["Čo najskôr", "Do 3 mesiacov", "Do pol roka", "Zatiaľ zisťu
 
 const PODKLAD = ["Betón", "Poter", "Dlaždice", "Neviem"];
 
+/**
+ * Ktoré systémy z NajCRM ponúkame na webe pri ktorom type podlahy.
+ * User 2026-08-25: „pri jednofarebnych pridaj moznost epoxid a polyuretan
+ * a nacen 3000 a 264". CENY sa sem nepíšu — ťahajú sa z CRM.
+ */
+const SYSTEMY_PRE_TYP: Record<string, string[]> = {
+  jednofarebne: ["264", "3000"],
+  chipsove: ["264-chip"],
+  metalicke: ["topstopne"],
+  mramorove: ["topstopne-m"],
+};
+
+/** Čo znamená pojivo — aby si zákazník vedel vybrať, nielen kliknúť. */
+const BINDER_POPIS: Record<string, string> = {
+  epoxid:
+    "Tvrdší povrch a nižšia cena. Do interiéru bez priameho slnka — na svetle môže časom zožltnúť.",
+  polyuretan:
+    "Pružnejší a odolný voči UV. Znesie slnko aj teplotné zmeny, hodí sa aj tam, kde podklad pracuje.",
+};
+
+/** Čo znamená hrúbka vrstvy. */
+const HRUBKA_POPIS: Record<string, string> = {
+  nater:
+    "Tenký náter valcom. Najlacnejšia ochrana betónu, nerovnosti nevyrovná. Do garáže, pivnice či technickej miestnosti.",
+  "1mm":
+    "Liata stierka. Prekryje drobné nerovnosti a dá súvislý hladký povrch. Najčastejšia voľba do domu aj garáže.",
+  "2mm":
+    "Najhrubšia vrstva a najvyššia odolnosť proti záťaži aj oderu. Do dielní, prevádzok a priemyslu.",
+};
+
 const DOVODY_NECHCE = [
   "Zatiaľ len zisťujem cenu",
   "Cena je pre mňa privysoká",
   "Riešim to až neskôr",
 ];
 
-function Krokovnik({ krok }: { krok: Krok }) {
-  const nazvy = ["Typ podlahy", "Plocha", "Priestor", "Kontakt", "Hotovo"];
+const KROK_NAZOV: Record<Krok, string> = {
+  typ: "Typ podlahy",
+  prevedenie: "Prevedenie",
+  plocha: "Plocha",
+  priestor: "Priestor",
+  kontakt: "Kontakt",
+  hotovo: "Hotovo",
+};
+
+function Krokovnik({ kroky, krok }: { kroky: Krok[]; krok: Krok }) {
+  const teraz_i = kroky.indexOf(krok);
   return (
     <ol className="flex items-center gap-1.5 md:gap-2.5 mb-5" aria-label="Postup">
-      {nazvy.map((n, i) => {
-        const c = (i + 1) as Krok;
-        const hotovo = c < krok;
-        const teraz = c === krok;
+      {kroky.map((k, i) => {
+        const n = KROK_NAZOV[k];
+        const hotovo = i < teraz_i;
+        const teraz = i === teraz_i;
         return (
           <li key={n} className="flex items-center gap-1.5 md:gap-2.5">
             <span
@@ -65,10 +124,10 @@ function Krokovnik({ krok }: { krok: Krok }) {
                     : "bg-white text-[#1B2430]/45 ring-1 ring-[#1B2430]/8",
               ].join(" ")}
             >
-              {hotovo ? <Check className="w-3 h-3" aria-hidden /> : <span>{c}</span>}
+              {hotovo ? <Check className="w-3 h-3" aria-hidden /> : <span>{i + 1}</span>}
               <span className="hidden sm:inline">{n}</span>
             </span>
-            {i < nazvy.length - 1 && (
+            {i < kroky.length - 1 && (
               <span aria-hidden className="w-3 md:w-5 h-px bg-[#1B2430]/15" />
             )}
           </li>
@@ -94,7 +153,10 @@ function euro(n: number) {
 }
 
 export function KonfiguratorCP() {
-  const [krok, setKrok] = React.useState<Krok>(1);
+  const [krok, setKrok] = React.useState<Krok>("typ");
+  const [cennik, setCennik] = React.useState<CennikSystem[] | null>(null);
+  const [system, setSystem] = React.useState<CennikSystem | null>(null);
+  const [hrubka, setHrubka] = React.useState<string | null>(null);
   const [typ, setTyp] = React.useState<TypPodlahyKarta | null>(null);
   const [m2, setM2] = React.useState<string>("");
   const [priestor, setPriestor] = React.useState("");
@@ -113,6 +175,43 @@ export function KonfiguratorCP() {
   // Verejný formulár — bez anti-bot vrstvy by sa dal spamovať do CRM aj mailu.
   const [turnstileToken, setTurnstileToken] = React.useState<string | null>(null);
   const [chyba, setChyba] = React.useState<string | null>(null);
+
+  // Prevedenia a ceny ťaháme z NajCRM — na webe nesmie sedieť ani jedna cena.
+  React.useEffect(() => {
+    let zrusene = false;
+    fetch("/api/cenova-ponuka/cennik")
+      .then((r) => r.json())
+      .then((d) => {
+        if (!zrusene && d?.ok && Array.isArray(d.systemy)) setCennik(d.systemy);
+      })
+      .catch(() => {
+        /* bez cenníka ide dopyt ďalej, cenu pripraví obchodník */
+      });
+    return () => {
+      zrusene = true;
+    };
+  }, []);
+
+  /** Prevedenia pre zvolený typ — kurátorsky vybrané kódy, ceny z CRM. */
+  const prevedenia = React.useMemo(() => {
+    if (!typ?.crmFloorType || !cennik) return [];
+    const kody = SYSTEMY_PRE_TYP[typ.slug] ?? [];
+    return kody
+      .map((k) => cennik.find((s) => s.code === k))
+      .filter((s): s is CennikSystem => Boolean(s));
+  }, [typ, cennik]);
+
+  /** Krok „Prevedenie" má zmysel len keď je z čoho vyberať. */
+  const maPrevedenie =
+    prevedenia.length > 1 || (prevedenia.length === 1 && prevedenia[0].vyber_hrubky);
+
+  const kroky = React.useMemo<Krok[]>(
+    () =>
+      maPrevedenie
+        ? ["typ", "prevedenie", "plocha", "priestor", "kontakt", "hotovo"]
+        : ["typ", "plocha", "priestor", "kontakt", "hotovo"],
+    [maPrevedenie],
+  );
 
   const plocha = Number(m2.replace(",", "."));
   const plochaOk = isFinite(plocha) && plocha > 0;
@@ -135,6 +234,8 @@ export function KonfiguratorCP() {
           floor_type: typ.crmFloorType,
           m2: plocha,
           lokalita: lokalita || undefined,
+          system_code: system?.code,
+          hrubka,
         }),
       });
       setCena(await r.json());
@@ -143,12 +244,18 @@ export function KonfiguratorCP() {
     } finally {
       setCenaBezi(false);
     }
-  }, [typ, plocha, plochaOk, lokalita]);
+  }, [typ, plocha, plochaOk, lokalita, system, hrubka]);
 
-  const dalej = async (n: Krok) => {
+  const chod = async (n: Krok) => {
     setKrok(n);
     hore();
-    if (n >= 4) await nacitajCenu();
+    if (n === "kontakt") await nacitajCenu();
+  };
+
+  const posun = (o: 1 | -1) => {
+    const i = kroky.indexOf(krok);
+    const d = kroky[i + o];
+    if (d) void chod(d);
   };
 
   const odosli = async () => {
@@ -171,6 +278,8 @@ export function KonfiguratorCP() {
           stav_podkladu: stavPodkladu,
           chce_kontakt: chceKontakt,
           dovod_nechce: chceKontakt ? "" : dovodNechce,
+          system_code: system?.code,
+          hrubka,
           turnstileToken,
         }),
       });
@@ -179,7 +288,7 @@ export function KonfiguratorCP() {
         setChyba("Odoslanie zlyhalo. Skús to prosím znovu alebo nám zavolaj.");
         return;
       }
-      setKrok(5);
+      setKrok("hotovo");
       hore();
     } catch {
       setChyba("Nepodarilo sa spojiť so serverom. Skús to prosím znovu.");
@@ -190,11 +299,11 @@ export function KonfiguratorCP() {
 
   return (
     <div ref={vrch} className="w-full">
-      <Krokovnik krok={krok} />
+      <Krokovnik kroky={kroky} krok={krok} />
 
       <div className="rounded-3xl bg-white p-4 md:p-6 shadow-[0_10px_40px_rgba(27,36,48,0.10)]">
         {/* ── KROK 1 — typ podlahy ─────────────────────────────────────── */}
-        {krok === 1 && (
+        {krok === "typ" && (
           <>
             <h2 className="text-lg md:text-xl font-extrabold text-[#1B2430]">
               Akú podlahu chceš?
@@ -209,7 +318,18 @@ export function KonfiguratorCP() {
                   type="button"
                   onClick={() => {
                     setTyp(t);
-                    void dalej(2);
+                    // Prevedenia počítame rovno z `t` — `typ` v state sa
+                    // aktualizuje až po tomto renderi.
+                    const dostupne = (SYSTEMY_PRE_TYP[t.slug] ?? [])
+                      .map((k) => cennik?.find((x) => x.code === k))
+                      .filter((x): x is CennikSystem => Boolean(x));
+                    const prvy = dostupne[0] ?? null;
+                    setSystem(prvy);
+                    setHrubka(prvy?.hrubky[0]?.hrubka ?? null);
+                    const jeVyber =
+                      dostupne.length > 1 ||
+                      (dostupne.length === 1 && dostupne[0].vyber_hrubky);
+                    void chod(jeVyber ? "prevedenie" : "plocha");
                   }}
                   className={[
                     "group flex h-full flex-col text-left rounded-2xl overflow-hidden ring-1 transition-all",
@@ -248,8 +368,101 @@ export function KonfiguratorCP() {
           </>
         )}
 
+        {/* ── KROK: PREVEDENIE — materiál a hrúbka vrstvy ──────────────── */}
+        {krok === "prevedenie" && typ && (
+          <>
+            <h2 className="text-lg md:text-xl font-extrabold text-[#1B2430]">
+              Aké prevedenie?
+            </h2>
+            <p className="mt-1 text-sm text-[#1B2430]/60">
+              Líšia sa cenou aj odolnosťou. Keď si nie si istý, nechaj
+              predvolené — obchodník to s tebou prejde.
+            </p>
+
+            {prevedenia.length > 1 && (
+              <div className="mt-4">
+                <span className="text-xs font-extrabold uppercase tracking-wider text-[#1B2430]/55">
+                  Materiál
+                </span>
+                <div className="mt-1.5 grid gap-2 sm:grid-cols-2">
+                  {prevedenia.map((sys) => {
+                    const zvoleny = system?.code === sys.code;
+                    const odCeny = Math.min(...sys.hrubky.map((h) => h.price_per_m2));
+                    return (
+                      <button
+                        key={sys.code}
+                        type="button"
+                        onClick={() => {
+                          setSystem(sys);
+                          setHrubka(sys.hrubky[0]?.hrubka ?? null);
+                        }}
+                        className={[
+                          "rounded-2xl border-2 p-3 text-left transition-colors",
+                          zvoleny
+                            ? "border-[#2EA3DC] bg-[#eaf6fc]"
+                            : "border-[#1B2430]/12 hover:border-[#2EA3DC] hover:bg-[#f7fcff]",
+                        ].join(" ")}
+                      >
+                        <span className="flex items-baseline justify-between gap-2">
+                          <span className="font-extrabold text-[#1B2430]">
+                            {sys.binder === "polyuretan" ? "Polyuretán" : "Epoxid"}
+                          </span>
+                          <span className="text-sm font-bold text-[#15749e] whitespace-nowrap">
+                            od {odCeny} €/m²
+                          </span>
+                        </span>
+                        <span className="mt-1 block text-xs text-[#1B2430]/65 leading-snug">
+                          {BINDER_POPIS[sys.binder ?? ""] ?? sys.label}
+                        </span>
+                      </button>
+                    );
+                  })}
+                </div>
+              </div>
+            )}
+
+            {system?.vyber_hrubky && (
+              <div className="mt-4">
+                <span className="text-xs font-extrabold uppercase tracking-wider text-[#1B2430]/55">
+                  Hrúbka vrstvy
+                </span>
+                <div className="mt-1.5 grid gap-2">
+                  {system.hrubky.map((h) => {
+                    const zvolena = hrubka === h.hrubka;
+                    return (
+                      <button
+                        key={h.hrubka ?? "jedna"}
+                        type="button"
+                        onClick={() => setHrubka(h.hrubka)}
+                        className={[
+                          "rounded-2xl border-2 p-3 text-left transition-colors",
+                          zvolena
+                            ? "border-[#2EA3DC] bg-[#eaf6fc]"
+                            : "border-[#1B2430]/12 hover:border-[#2EA3DC] hover:bg-[#f7fcff]",
+                        ].join(" ")}
+                      >
+                        <span className="flex items-baseline justify-between gap-2">
+                          <span className="font-extrabold text-[#1B2430]">{h.label}</span>
+                          <span className="text-sm font-bold text-[#15749e] whitespace-nowrap">
+                            {h.price_per_m2} €/m²
+                          </span>
+                        </span>
+                        <span className="mt-1 block text-xs text-[#1B2430]/65 leading-snug">
+                          {HRUBKA_POPIS[h.hrubka ?? ""] ?? ""}
+                        </span>
+                      </button>
+                    );
+                  })}
+                </div>
+              </div>
+            )}
+
+            <Navigacia spat={() => posun(-1)} dalej={() => posun(1)} dalejOk={Boolean(system)} />
+          </>
+        )}
+
         {/* ── KROK 2 — plocha ──────────────────────────────────────────── */}
-        {krok === 2 && typ && (
+        {krok === "plocha" && typ && (
           <>
             <h2 className="text-lg md:text-xl font-extrabold text-[#1B2430]">
               Koľko m² potrebuješ?
@@ -279,16 +492,12 @@ export function KonfiguratorCP() {
                 </span>
               </span>
             </label>
-            <Navigacia
-              spat={() => dalej(1)}
-              dalej={() => dalej(3)}
-              dalejOk={plochaOk}
-            />
+            <Navigacia spat={() => posun(-1)} dalej={() => posun(1)} dalejOk={plochaOk} />
           </>
         )}
 
         {/* ── KROK 3 — priestor a lokalita ─────────────────────────────── */}
-        {krok === 3 && (
+        {krok === "priestor" && (
           <>
             <h2 className="text-lg md:text-xl font-extrabold text-[#1B2430]">
               Kde to bude?
@@ -300,12 +509,12 @@ export function KonfiguratorCP() {
             <Vyber label="Priestor" moznosti={PRIESTORY} hodnota={priestor} zmen={setPriestor} />
             <Vyber label="Podklad" moznosti={PODKLAD} hodnota={stavPodkladu} zmen={setStavPodkladu} />
             <Vyber label="Kedy to riešiš" moznosti={TERMINY} hodnota={termin} zmen={setTermin} />
-            <Navigacia spat={() => dalej(2)} dalej={() => dalej(4)} dalejOk />
+            <Navigacia spat={() => posun(-1)} dalej={() => posun(1)} dalejOk />
           </>
         )}
 
         {/* ── KROK 4 — cena + kontakt ──────────────────────────────────── */}
-        {krok === 4 && typ && (
+        {krok === "kontakt" && typ && (
           <>
             <h2 className="text-lg md:text-xl font-extrabold text-[#1B2430]">
               Tvoja orientačná cena
@@ -335,7 +544,9 @@ export function KonfiguratorCP() {
                         {euro(cena.total)}
                       </div>
                       <div className="text-xs text-[#1B2430]/60">
-                        {cena.system_label} · {cena.price_per_m2} €/m²
+                        {cena.system_label}
+                        {cena.hrubka_label ? ` · ${cena.hrubka_label}` : ""} ·{" "}
+                        {cena.price_per_m2} €/m²
                         {cena.zlava > 0 && ` · zľava ${cena.zlava_pct} % (−${euro(cena.zlava)})`}
                         {cena.doprava > 0 && ` · doprava ${euro(cena.doprava)}`}
                       </div>
@@ -427,7 +638,7 @@ export function KonfiguratorCP() {
             <div className="mt-4 flex items-center justify-between gap-3">
               <button
                 type="button"
-                onClick={() => dalej(3)}
+                onClick={() => posun(-1)}
                 className="inline-flex items-center gap-1.5 rounded-full px-4 py-2.5 text-sm font-bold text-[#1B2430]/70 transition-colors hover:bg-[#f1f3f5] hover:text-[#1B2430]"
               >
                 <ArrowLeft className="w-4 h-4" aria-hidden />
@@ -451,7 +662,7 @@ export function KonfiguratorCP() {
         )}
 
         {/* ── KROK 5 — hotovo ──────────────────────────────────────────── */}
-        {krok === 5 && (
+        {krok === "hotovo" && (
           <div className="py-6 text-center">
             <span className="inline-flex w-14 h-14 items-center justify-center rounded-full bg-[#e6f7ee]">
               <Check className="w-7 h-7 text-[#1a7f4b]" aria-hidden />

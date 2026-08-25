@@ -89,7 +89,7 @@ export async function POST(request: NextRequest) {
     return NextResponse.json({ ok: false, error: "overenie_zlyhalo" }, { status: 403 });
   }
 
-  const secret = process.env.EPX_PUSH_SECRET;
+  const secret = process.env.EPX_PUSH_SECRET ?? process.env.BDSMANAGER_WEBHOOK_SECRET;
   if (!secret) return zalozneOdoslanie(request, body);
 
   try {
@@ -106,6 +106,8 @@ export async function POST(request: NextRequest) {
         lokalita: String(body.lokalita ?? "").trim() || undefined,
         termin: String(body.termin ?? "").trim() || undefined,
         stav_podkladu: String(body.stav_podkladu ?? "").trim() || undefined,
+        system_code: String(body.system_code ?? "").trim() || undefined,
+        hrubka: String(body.hrubka ?? "").trim() || undefined,
         chce_kontakt: body.chce_kontakt !== false,
         dovod_nechce: String(body.dovod_nechce ?? "").trim() || undefined,
       }),
