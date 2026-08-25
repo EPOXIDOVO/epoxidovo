@@ -59,18 +59,6 @@ const TERMINY = ["Čo najskôr", "Do 3 mesiacov", "Do pol roka", "Zatiaľ zisťu
 
 const PODKLAD = ["Betón", "Poter", "Dlaždice", "Neviem"];
 
-/**
- * Ktoré systémy z NajCRM ponúkame na webe pri ktorom type podlahy.
- * User 2026-08-25: „pri jednofarebnych pridaj moznost epoxid a polyuretan
- * a nacen 3000 a 264". CENY sa sem nepíšu — ťahajú sa z CRM.
- */
-const SYSTEMY_PRE_TYP: Record<string, string[]> = {
-  jednofarebne: ["264", "3000"],
-  chipsove: ["264-chip"],
-  metalicke: ["topstopne"],
-  mramorove: ["topstopne-m"],
-};
-
 /** Čo znamená pojivo — aby si zákazník vedel vybrať, nielen kliknúť. */
 const BINDER_POPIS: Record<string, string> = {
   epoxid:
@@ -192,6 +180,21 @@ function lenCislo(v: string): string {
   return zvysok.length > 0 ? `${prva},${zvysok.join("")}` : prva;
 }
 
+/** Systémy z CRM, ktoré sa dajú pri danom type vybrať. */
+function prevedeniaPreTyp(
+  t: TypPodlahyKarta | null,
+  cennik: CennikSystem[] | null,
+  defaultSystem: Record<string, string>,
+): CennikSystem[] {
+  if (!t?.crmFloorType || !cennik) return [];
+  const kody = t.crmSystemy?.length
+    ? t.crmSystemy
+    : [defaultSystem[t.crmFloorType]].filter(Boolean);
+  return kody
+    .map((k) => cennik.find((s) => s.code === k))
+    .filter((s): s is CennikSystem => Boolean(s));
+}
+
 function euro(n: number) {
   return new Intl.NumberFormat("sk-SK", {
     style: "currency",
@@ -203,6 +206,7 @@ function euro(n: number) {
 export function KonfiguratorCP() {
   const [krok, setKrok] = React.useState<Krok>("typ");
   const [cennik, setCennik] = React.useState<CennikSystem[] | null>(null);
+  const [defaultSystem, setDefaultSystem] = React.useState<Record<string, string>>({});
   const [system, setSystem] = React.useState<CennikSystem | null>(null);
   const [hrubka, setHrubka] = React.useState<string | null>(null);
   const [typ, setTyp] = React.useState<TypPodlahyKarta | null>(null);
@@ -230,7 +234,9 @@ export function KonfiguratorCP() {
     fetch("/api/cenova-ponuka/cennik")
       .then((r) => r.json())
       .then((d) => {
-        if (!zrusene && d?.ok && Array.isArray(d.systemy)) setCennik(d.systemy);
+        if (zrusene || !d?.ok || !Array.isArray(d.systemy)) return;
+        setCennik(d.systemy);
+        setDefaultSystem(d.default_system ?? {});
       })
       .catch(() => {
         /* bez cenníka ide dopyt ďalej, cenu pripraví obchodník */
@@ -240,14 +246,15 @@ export function KonfiguratorCP() {
     };
   }, []);
 
-  /** Prevedenia pre zvolený typ — kurátorsky vybrané kódy, ceny z CRM. */
-  const prevedenia = React.useMemo(() => {
-    if (!typ?.crmFloorType || !cennik) return [];
-    const kody = SYSTEMY_PRE_TYP[typ.slug] ?? [];
-    return kody
-      .map((k) => cennik.find((s) => s.code === k))
-      .filter((s): s is CennikSystem => Boolean(s));
-  }, [typ, cennik]);
+  /**
+   * Prevedenia pre zvolený typ. Keď typ nemá vymenované `crmSystemy`,
+   * vezmeme default systém z /admin/systems — vďaka tomu stačí pridať nový
+   * typ podlahy do @/content/typy-podlah a v ponuke funguje sám.
+   */
+  const prevedenia = React.useMemo(
+    () => prevedeniaPreTyp(typ, cennik, defaultSystem),
+    [typ, cennik, defaultSystem],
+  );
 
   /** Krok „Prevedenie" má zmysel len keď je z čoho vyberať. */
   const maPrevedenie =
@@ -368,9 +375,7 @@ export function KonfiguratorCP() {
                     setTyp(t);
                     // Prevedenia počítame rovno z `t` — `typ` v state sa
                     // aktualizuje až po tomto renderi.
-                    const dostupne = (SYSTEMY_PRE_TYP[t.slug] ?? [])
-                      .map((k) => cennik?.find((x) => x.code === k))
-                      .filter((x): x is CennikSystem => Boolean(x));
+                    const dostupne = prevedeniaPreTyp(t, cennik, defaultSystem);
                     const prvy = dostupne[0] ?? null;
                     setSystem(prvy);
                     setHrubka(prvy?.hrubky[0]?.hrubka ?? null);
@@ -532,6 +537,12 @@ export function KonfiguratorCP() {
                   autoComplete="off"
                   value={m2}
                   onChange={(e) => setM2(lenCislo(e.target.value))}
+                  onKeyDown={(e) => {
+                    if (e.key === "Enter" && plochaOk) {
+                      e.preventDefault();
+                      posun(1);
+                    }
+                  }}
                   placeholder="napr. 45"
                   className="w-full rounded-2xl border-2 border-[#1B2430]/12 bg-white px-4 py-3 pr-14 text-base font-bold text-[#1B2430] outline-none transition-colors focus:border-[#2EA3DC]"
                 />
@@ -553,7 +564,7 @@ export function KonfiguratorCP() {
             <p className="mt-1 text-sm text-[#1B2430]/60">
               Podľa mesta dorátame dopravu, podľa podkladu prípravu.
             </p>
-            <MestoPole hodnota={lokalita} zmen={setLokalita} />
+            <MestoPole hodnota={lokalita} zmen={setLokalita} onEnter={() => posun(1)} />
             <Vyber label="Priestor" moznosti={PRIESTORY} hodnota={priestor} zmen={setPriestor} />
             <Vyber label="Podklad" moznosti={PODKLAD} hodnota={stavPodkladu} zmen={setStavPodkladu} />
             <Vyber label="Kedy to riešiš" moznosti={TERMINY} hodnota={termin} zmen={setTermin} />
@@ -613,8 +624,8 @@ export function KonfiguratorCP() {
 
                   {!cenaBezi && !cena?.ok && (
                     <div className="mt-1 text-sm text-[#1B2430]/70">
-                      Túto podlahu ceníme individuálne — presnú ponuku ti pripraví
-                      náš obchodník a pošleme ju na e-mail.
+                      Cena je na dopyt — dohodneme ju telefonicky po preštudovaní
+                      podkladov ku zákazke.
                     </div>
                   )}
                 </div>
@@ -677,10 +688,10 @@ export function KonfiguratorCP() {
             </div>
 
             <div className="mt-4 grid gap-3 sm:grid-cols-2">
-              <Pole label="Meno a priezvisko" hodnota={meno} zmen={setMeno} placeholder="Ján Novák" />
-              <Pole label="E-mail" hodnota={email} zmen={setEmail} placeholder="jan@email.sk" typ="email" />
+              <Pole label="Meno a priezvisko" hodnota={meno} zmen={setMeno} placeholder="Ján Novák" onEnter={odosli} />
+              <Pole label="E-mail" hodnota={email} zmen={setEmail} placeholder="jan@email.sk" typ="email" onEnter={odosli} />
             </div>
-            <Pole label="Telefón (nepovinné)" hodnota={telefon} zmen={setTelefon} placeholder="0900 000 000" typ="tel" />
+            <Pole label="Telefón (nepovinné)" hodnota={telefon} zmen={setTelefon} placeholder="0900 000 000" typ="tel" onEnter={odosli} />
 
             {chyba && (
               <p className="mt-3 rounded-xl bg-[#fdecec] px-3 py-2 text-sm font-semibold text-[#a4262c]">
@@ -817,12 +828,14 @@ function Pole({
   zmen,
   placeholder,
   typ = "text",
+  onEnter,
 }: {
   label: string;
   hodnota: string;
   zmen: (v: string) => void;
   placeholder?: string;
   typ?: string;
+  onEnter?: () => void;
 }) {
   return (
     <label className="mt-3 block">
@@ -833,6 +846,12 @@ function Pole({
         type={typ}
         value={hodnota}
         onChange={(e) => zmen(e.target.value)}
+        onKeyDown={(e) => {
+          if (e.key === "Enter" && onEnter) {
+            e.preventDefault();
+            onEnter();
+          }
+        }}
         placeholder={placeholder}
         className="mt-1 w-full rounded-2xl border-2 border-[#1B2430]/12 bg-white px-4 py-3 text-base font-semibold text-[#1B2430] outline-none transition-colors focus:border-[#2EA3DC]"
       />
@@ -852,9 +871,12 @@ function Pole({
 function MestoPole({
   hodnota,
   zmen,
+  onEnter,
 }: {
   hodnota: string;
   zmen: (v: string) => void;
+  /** Enter mimo otvorenej ponuky potvrdí krok. */
+  onEnter?: () => void;
 }) {
   const [obce, setObce] = React.useState<string[] | null>(null);
   const [otvorene, setOtvorene] = React.useState(false);
@@ -912,7 +934,13 @@ function MestoPole({
           setOtvorene(true);
         }}
         onKeyDown={(e) => {
-          if (!otvorene || navrhy.length === 0) return;
+          if (!otvorene || navrhy.length === 0) {
+            if (e.key === "Enter") {
+              e.preventDefault();
+              onEnter?.();
+            }
+            return;
+          }
           if (e.key === "ArrowDown") {
             e.preventDefault();
             setAktivny((i) => (i + 1) % navrhy.length);
@@ -921,7 +949,14 @@ function MestoPole({
             setAktivny((i) => (i - 1 + navrhy.length) % navrhy.length);
           } else if (e.key === "Enter") {
             e.preventDefault();
-            vyber(navrhy[aktivny]);
+            // Keď už je v poli presne to mesto, netreba ho „vyberať" znova —
+            // Enter rovno potvrdí krok, nech to nechce dva stlačenia.
+            if (bezDiakritiky(navrhy[aktivny]) === bezDiakritiky(hodnota)) {
+              setOtvorene(false);
+              onEnter?.();
+            } else {
+              vyber(navrhy[aktivny]);
+            }
           } else if (e.key === "Escape") {
             setOtvorene(false);
           }
@@ -931,11 +966,14 @@ function MestoPole({
       />
       {otvorene && navrhy.length > 0 && (
         <ul className="absolute left-0 right-0 top-full z-30 mt-1 overflow-hidden rounded-2xl bg-white shadow-[0_16px_40px_rgba(27,36,48,0.18)] ring-1 ring-[#1B2430]/10">
+          {/* mousemove, nie mouseenter — ponuka sa otvorí pod kurzorom a
+              mouseenter by hneď prepísal to, čo má človek vybrané klávesnicou,
+              aj keď myšou vôbec nepohol */}
           {navrhy.map((o, i) => (
             <li key={o}>
               <button
                 type="button"
-                onMouseEnter={() => setAktivny(i)}
+                onMouseMove={() => setAktivny(i)}
                 onClick={() => vyber(o)}
                 className={[
                   "block w-full px-4 py-2.5 text-left text-sm font-bold transition-colors",

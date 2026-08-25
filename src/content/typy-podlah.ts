@@ -32,6 +32,13 @@ export type TypPodlahyKarta = {
   pripravujeme?: boolean;
   /** Kľúč typu v generátore CP (NajCRM). null = bez automatickej ceny. */
   crmFloorType: CrmFloorType | null;
+  /**
+   * Kódy systémov z NajCRM, ktoré pri tomto type ponúkame na výber
+   * (napr. epoxid vs polyuretán). Keď to nevyplníš, konfigurátor si vezme
+   * default systém pre daný typ z /admin/systems — takže nový typ podlahy
+   * stačí pridať sem a funguje aj v cenovej ponuke.
+   */
+  crmSystemy?: string[];
 };
 
 const kat = (slug: string) => CATEGORIES.find((c) => c.slug === slug);
@@ -44,6 +51,8 @@ export const TYPY_PODLAH: TypPodlahyKarta[] = [
     image: "/images/hero/byvanie-v2.webp",
     href: "/realizacie?kategoria=jednofarebne",
     crmFloorType: "jednofarebna",
+    // user 2026-08-25: pri jednofarebných na výber epoxid aj polyuretán
+    crmSystemy: ["264", "3000"],
     variants: [
       // bývanie, nie priemysel — pod kartou „Jednofarebné" majú byť interiéry
       { src: "/images/realizacie/r-37.webp", typ: "jednofarebna", alt: "Jednofarebná podlaha — biela obývačka s krbom", farba: "RAL 9010", farbaLabel: "Biela" },
