@@ -7,6 +7,37 @@ import { TurnstileWidget } from "@/components/turnstile/TurnstileWidget";
 import { TOPSTONE_METALIK } from "@/content/topstone-metalik";
 
 /**
+ * Model občas prekreslí okraj podkladu z referenčnej fotky (biely pruh po
+ * kraji). Prompt to zmierňuje, ale nezaručí, tak výsledok orežeme —
+ * pár percent po obvode je pri liatej ploche bez informácie.
+ */
+async function orezOkraje(dataUrl: string, orezPct = 0.07): Promise<string> {
+  try {
+    // pozor: `Image` je tu next/image, tak si obrázok vyrobíme cez DOM
+    const img = await new Promise<HTMLImageElement>((res, rej) => {
+      const i = document.createElement("img");
+      i.onload = () => res(i);
+      i.onerror = rej;
+      i.src = dataUrl;
+    });
+    const dx = Math.round(img.naturalWidth * orezPct);
+    const dy = Math.round(img.naturalHeight * orezPct);
+    const w = img.naturalWidth - dx * 2;
+    const h = img.naturalHeight - dy * 2;
+    if (w <= 0 || h <= 0) return dataUrl;
+    const c = document.createElement("canvas");
+    c.width = w;
+    c.height = h;
+    const ctx = c.getContext("2d");
+    if (!ctx) return dataUrl;
+    ctx.drawImage(img, dx, dy, w, h, 0, 0, w, h);
+    return c.toDataURL("image/png");
+  } catch {
+    return dataUrl;
+  }
+}
+
+/**
  * Miešačka metalických efektov — user 2026-08-25: „urob tu taky nejaky tool
  * ze si pridas dve alebo tri vzorkovniky a vyjde ti nova proste kombinacia
  * tychto charcoal a azuro".
@@ -46,7 +77,8 @@ export function MixerKombinacii() {
         setChyba(d.message ?? `Nepodarilo sa namiešať vzorku (${d.error ?? "neznáma chyba"}).`);
         return;
       }
-      setVysledok({ src: `data:${d.mimeType};base64,${d.imageBase64}`, nazov: d.nazov });
+      const surova = `data:${d.mimeType};base64,${d.imageBase64}`;
+      setVysledok({ src: await orezOkraje(surova), nazov: d.nazov });
     } catch {
       setChyba("Nepodarilo sa spojiť so serverom.");
     } finally {
