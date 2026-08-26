@@ -151,7 +151,8 @@ export function NahladPodlahyProvider({ children }: { children: React.ReactNode 
                 )}
               </div>
 
-              <div className="mt-5 grid grid-cols-1 sm:grid-cols-3 gap-3">
+              <div className="mt-5 grid grid-cols-1 sm:grid-cols-3 gap-3 items-start">
+                <div className="flex flex-col items-center gap-1.5">
                 {textura ? (
                   <Link
                     href={`/ai-vizualizer?texture=${textura}${farbaParam}${fotoParam}`}
@@ -166,6 +167,14 @@ export function NahladPodlahyProvider({ children }: { children: React.ReactNode 
                     Vizualizácia čoskoro
                   </span>
                 )}
+                {textura && (
+                  <p className="text-xs font-bold text-[#1B2430] text-center leading-snug">
+                    Pozri si, ako táto podlaha bude vyzerať v tvojom priestore.
+                  </p>
+                )}
+                </div>
+
+                <div className="flex flex-col items-center gap-1.5">
                 <Link
                   href={`/navrhni-podlahu?vzhlad=${vzhlad}${farbaParam}&cp=1`}
                   className="inline-flex items-center justify-center gap-2 px-6 py-3.5 rounded-full bg-[#ea580c] text-white font-bold text-sm md:text-[15px] shadow-[0_6px_20px_rgba(234,88,12,0.35)] hover:bg-[#c2410c] hover:-translate-y-0.5 transition-all whitespace-nowrap"
@@ -173,6 +182,12 @@ export function NahladPodlahyProvider({ children }: { children: React.ReactNode 
                   <FileText className="w-4 h-4 shrink-0" aria-hidden />
                   Cenová ponuka na realizáciu
                 </Link>
+                <p className="text-xs font-bold text-[#1B2430] text-center leading-snug">
+                  Cenu uvidíš hneď — kontakt vyplníš, len ak budeš chcieť, aby sme
+                  sa ozvali.
+                </p>
+                </div>
+
                 <span
                   aria-disabled
                   className="relative inline-flex flex-col items-center justify-center gap-0.5 px-5 py-2.5 rounded-full border-2 border-dashed border-zinc-300 text-zinc-400 font-bold text-sm md:text-base whitespace-nowrap select-none cursor-default"
@@ -189,9 +204,6 @@ export function NahladPodlahyProvider({ children }: { children: React.ReactNode 
                   </span>
                 </span>
               </div>
-              <p className="mt-3 text-xs text-[#1B2430]/55 text-center">
-                Cenu uvidíš hneď — kontakt vyplníš, len ak budeš chcieť, aby sme sa ozvali.
-              </p>
             </div>
           </div>
         </div>

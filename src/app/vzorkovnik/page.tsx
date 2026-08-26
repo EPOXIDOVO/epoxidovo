@@ -9,6 +9,7 @@ import { Container } from "@/components/ui/Container";
 import { BreadcrumbsJsonLd } from "@/components/seo/BreadcrumbsJsonLd";
 import { RAL_CLASSIC_FULL, RAL_GROUPS } from "@/content/ral-classic";
 import { TOPSTONE_METALIK } from "@/content/topstone-metalik";
+import { TYPY_PODLAH } from "@/content/typy-podlah";
 import { MixerKombinacii } from "./MixerKombinacii";
 import { MATERIALY } from "@/lib/materialy";
 import { obsahKategoria } from "@/lib/obsah-kategorie";
@@ -74,6 +75,31 @@ const TYPY: Record<
     zdroj: "priprava",
   },
 };
+
+/**
+ * Dlaždice zoraďujeme presne ako sekcia „Čo všetko vieme vyčarovať"
+ * (user 2026-08-25). Poradie sa berie z @/content/typy-podlah, takže keď
+ * tam pribudne alebo sa presunie typ, vzorkovník ide automaticky s ním.
+ *
+ * Betón look v showcase odkazuje na vzorkovník Arturo — preto ten preklad.
+ * Typy, ktoré v showcase nie sú (kamenný koberec), idú na koniec.
+ */
+const SHOWCASE_NA_VZORKOVNIK: Record<string, string> = {
+  jednofarebne: "jednofarebne",
+  chipsove: "chipsove",
+  metalicke: "metalicke",
+  mramorove: "mramorove",
+  "beton-look": "arturo",
+  priemyselne: "priemyselne",
+};
+
+function zoradeneTypy(): [string, (typeof TYPY)[string]][] {
+  const podlaShowcase = TYPY_PODLAH.map((t) => SHOWCASE_NA_VZORKOVNIK[t.slug]).filter(
+    (k): k is string => Boolean(k) && Boolean(TYPY[k]),
+  );
+  const zvysok = Object.keys(TYPY).filter((k) => !podlaShowcase.includes(k));
+  return [...podlaShowcase, ...zvysok].map((k) => [k, TYPY[k]]);
+}
 
 export async function generateMetadata({
   searchParams,
@@ -171,7 +197,7 @@ export default async function VzorkovnikPage({
             nahladovu nie ze napis"). */}
         <nav aria-label="Typy vzorkovníkov" className="mb-6">
           <ul className="grid grid-cols-3 sm:grid-cols-4 lg:grid-cols-7 gap-2 md:gap-3">
-            {Object.entries(TYPY).map(([slug, t]) => {
+            {zoradeneTypy().map(([slug, t]) => {
               const aktivny = typ === slug;
               return (
                 <li key={slug}>
