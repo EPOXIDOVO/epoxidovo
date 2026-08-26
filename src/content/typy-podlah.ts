@@ -121,7 +121,7 @@ export const TYPY_PODLAH: TypPodlahyKarta[] = [
   },
   {
     slug: "beton-look",
-    name: "Betón look",
+    name: "Concrete Look",
     // user 2026-08-25
     priceFrom: 99,
     image: "/images/vzorkovnik/arturo/concrete-look-downtown-mix.webp",
@@ -131,9 +131,9 @@ export const TYPY_PODLAH: TypPodlahyKarta[] = [
     variants: [
       // najvýraznejšie z radu — fresh-power a spol. sú prebielené a na
       // hnedom pozadí showcase ich nevidno
-      { src: "/images/vzorkovnik/arturo/concrete-look-worn-stuff.webp", typ: "beton-look", alt: "Betón look — Worn Stuff", farba: "Worn Stuff", farbaLabel: "Worn Stuff" },
-      { src: "/images/vzorkovnik/arturo/concrete-look-nordic-night.webp", typ: "beton-look", alt: "Betón look — Nordic Night", farba: "Nordic Night", farbaLabel: "Nordic Night" },
-      { src: "/images/vzorkovnik/arturo/concrete-look-dark-move.webp", typ: "beton-look", alt: "Betón look — Dark Move", farba: "Dark Move", farbaLabel: "Dark Move" },
+      { src: "/images/vzorkovnik/arturo/concrete-look-worn-stuff.webp", typ: "beton-look", alt: "Concrete Look — Worn Stuff", farba: "Worn Stuff", farbaLabel: "Worn Stuff" },
+      { src: "/images/vzorkovnik/arturo/concrete-look-nordic-night.webp", typ: "beton-look", alt: "Concrete Look — Nordic Night", farba: "Nordic Night", farbaLabel: "Nordic Night" },
+      { src: "/images/vzorkovnik/arturo/concrete-look-dark-move.webp", typ: "beton-look", alt: "Concrete Look — Dark Move", farba: "Dark Move", farbaLabel: "Dark Move" },
     ],
   },
   {

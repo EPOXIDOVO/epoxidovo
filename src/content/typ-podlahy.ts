@@ -22,7 +22,7 @@ export const TYP_PODLAHY_LABEL: Record<TypPodlahy, string> = {
   jednofarebna: "Jednofarebná",
   chipsova: "Chipsová",
   priemyselna: "Priemyselná",
-  "beton-look": "Betón look",
+  "beton-look": "Concrete Look",
   mramorova: "Mramorová",
   mistral: "Mistral",
 };

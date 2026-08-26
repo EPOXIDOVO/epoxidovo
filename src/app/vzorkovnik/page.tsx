@@ -68,7 +68,7 @@ const TYPY: Record<
   },
   "beton-look": {
     foto: "/images/vzorkovnik/arturo/concrete-look-downtown-mix.webp",
-    nadpis: "Vzorkovník — betón look",
+    nadpis: "Vzorkovník — Concrete Look",
     popis: "Odtiene Arturo v radoch Concrete look a Concreta. Vzhľad pohľadového betónu, ale hladký a bezškárový.",
     zdroj: "arturo",
   },
@@ -325,7 +325,7 @@ export default async function VzorkovnikPage({
         {zdroj === "priprava" && (
           <div className="rounded-2xl border border-zinc-200 bg-[#f7f6f3] p-6 md:p-8 text-center">
             <p className="text-[#1B2430]/80 max-w-xl mx-auto">
-              Vzorkovník betón look ešte fotíme. Zavolaj nám alebo napíš a pošleme ti
+              Vzorkovník Concrete Look ešte fotíme. Zavolaj nám alebo napíš a pošleme ti
               reálne vzorky, aby si videl štruktúru naživo.
             </p>
             <Link

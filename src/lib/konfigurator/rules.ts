@@ -114,7 +114,7 @@ export function dostupnePodklady(co: Co | null) {
 export const VZHLADY_PODLAHA = [
   { id: "metalik", label: "Metalické" },
   { id: "marble", label: "Mramorové" },
-  { id: "beton_look", label: "Betón Look" },
+  { id: "beton_look", label: "Concrete Look" },
   { id: "jednofarebna", label: "Jednofarebné" },
   { id: "chipsy", label: "Chipsové" },
   { id: "priemyselna", label: "Priemyselné" },
@@ -175,7 +175,7 @@ export function dostupnostVzhladov(volba: Volba): {
     }
     // 3b — dekoratívny betón look je interiérový, vonku nevydrží mráz
     if (vz.id === "beton_look" && volba.kde === "exterier") {
-      return { ...vz, dostupny: false, dovod: "Betón look je do interiéru — vonku ho mráz a vlhkosť rozrušia." };
+      return { ...vz, dostupny: false, dovod: "Concrete Look je do interiéru — vonku ho mráz a vlhkosť rozrušia." };
     }
     // 15 — na sadrokartóne len náter, žiadne liate systémy
     // (mikrocement sme z ponuky vyradili — user 2026-08-25)
