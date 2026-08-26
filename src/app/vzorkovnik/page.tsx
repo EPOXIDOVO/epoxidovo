@@ -11,6 +11,7 @@ import { RAL_CLASSIC_FULL, RAL_GROUPS } from "@/content/ral-classic";
 import { TOPSTONE_METALIK } from "@/content/topstone-metalik";
 import { TYPY_PODLAH } from "@/content/typy-podlah";
 import { EfektyGrid } from "./EfektyGrid";
+import { KombinacieSekcia } from "./KombinacieSekcia";
 import { cenyOdZCrm } from "@/lib/cennik-od";
 import { MATERIALY } from "@/lib/materialy";
 import { obsahKategoria } from "@/lib/obsah-kategorie";
@@ -260,6 +261,9 @@ export default async function VzorkovnikPage({
             ))}
           </div>
         )}
+
+        {/* prvá sekcia pri metalických — ukážky kombinácií */}
+        {typ === "metalicke" && <KombinacieSekcia />}
 
         {zdroj === "efekty" && <EfektyGrid cenaOd={cenaOdMetalik} />}
 

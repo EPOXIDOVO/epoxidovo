@@ -35,3 +35,31 @@ export const TOPSTONE_METALIK: MetalikEfekt[] = [
   efekt("dark-brown", "Dark Brown"),
   efekt("royal-blue", "Royal Blue"),
 ];
+
+/**
+ * Ukážkové kombinácie odtieňov — do jednej podlahy sa dajú zliať dva alebo
+ * tri pigmenty. Fotky reálnych realizácií dodá klient; kým nie sú, dlaždica
+ * ukáže „Čoskoro" a vypíše, z čoho sa kombinácia skladá.
+ *
+ * Keď fotka pribudne, stačí doplniť `foto` — nič iné sa nemení.
+ */
+export type Kombinacia = {
+  id: string;
+  /** id odtieňov z TOPSTONE_METALIK, v poradí ako sa lejú */
+  zlozky: string[];
+  foto?: string;
+};
+
+export const KOMBINACIE: Kombinacia[] = [
+  { id: "charcoal-azuro", zlozky: ["charcoal", "azuro"] },
+  { id: "copper-sequoia-white", zlozky: ["copper", "sequoia", "white"] },
+  // tretiu vybral Claude, kým klient nepovie inak — zlato proti antracitu
+  { id: "gold-charcoal", zlozky: ["gold", "charcoal"] },
+];
+
+/** Názov kombinácie do UI, napr. „Charcoal + Azuro". */
+export function nazovKombinacie(k: Kombinacia): string {
+  return k.zlozky
+    .map((id) => TOPSTONE_METALIK.find((e) => e.id === id)?.label ?? id)
+    .join(" + ");
+}
