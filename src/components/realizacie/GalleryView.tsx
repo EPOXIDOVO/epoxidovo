@@ -4,10 +4,11 @@ import * as React from "react";
 import Image from "next/image";
 import { useSearchParams, useRouter } from "next/navigation";
 import { motion } from "framer-motion";
-import { X, ChevronLeft, ChevronRight } from "lucide-react";
 import { cn } from "@/lib/utils";
 import type { Category, SpaceType } from "@/content/categories";
 import { REALIZACIE } from "@/content/realizacie";
+import { NahladPodlahyProvider, useNahladPodlahy } from "@/components/home/NahladPodlahy";
+import type { FotkaPodlahy } from "@/content/typ-podlahy";
 
 interface GalleryViewProps {
   categories: Category[];
@@ -18,30 +19,39 @@ interface GalleryViewProps {
  * Klient-side galéria s filtrovaním cez URL params.
  * URL: /realizacie?kategoria=jednofarebne&priestor=dom
  */
-export function GalleryView({ categories, spaceTypes }: GalleryViewProps) {
+export function GalleryView(props: GalleryViewProps) {
+  return (
+    <NahladPodlahyProvider>
+      <GalleryViewInner {...props} />
+    </NahladPodlahyProvider>
+  );
+}
+
+function GalleryViewInner({ categories, spaceTypes }: GalleryViewProps) {
   const router = useRouter();
   const params = useSearchParams();
   const activeCategory = params.get("kategoria") || "all";
   const activeSpace = params.get("priestor") || "all";
-  const [lightboxIdx, setLightboxIdx] = React.useState<number | null>(null);
+  const { otvor } = useNahladPodlahy();
 
-  // Pinch-zoom + pan state pre lightbox.
-  // Globálny gesturestart blocker v layout.tsx + viewport userScalable: false
-  // bránia natívnemu pinchu → implementujeme vlastný cez touchevents.
-  const [zoom, setZoom] = React.useState({ scale: 1, x: 0, y: 0 });
-  const gestureRef = React.useRef<{
-    initialDist: number;
-    initialScale: number;
-    panOffsetX: number;
-    panOffsetY: number;
-  } | null>(null);
-  const lastTapRef = React.useRef(0);
+  /**
+   * Galéria otvára TEN ISTÝ náhľad ako fotky na homepage — user 2026-08-25:
+   * „chcem aby sa vsetky tie fotky zobrazovali rovnako … s tymi popismi
+   * a kupit material". Predtým tu bol holý lightbox bez popisu aj bez
+   * cesty ďalej (vizualizér, cenová ponuka).
+   */
+  const otvorNahlad = (i: number) => {
+    const fotky: FotkaPodlahy[] = filtered.map((r) => ({
+      src: r.src,
+      typ: r.typ,
+      alt: r.alt,
+      farba: r.farba,
+      farbaLabel: r.farba,
+    }));
+    otvor(fotky, i, null);
+  };
 
-  // Reset zoom pri zmene fotky alebo zatvorení lightboxu
-  React.useEffect(() => {
-    setZoom({ scale: 1, x: 0, y: 0 });
-    gestureRef.current = null;
-  }, [lightboxIdx]);
+
 
   const setFilter = (key: "kategoria" | "priestor", value: string) => {
     const next = new URLSearchParams(params.toString());
@@ -65,17 +75,6 @@ export function GalleryView({ categories, spaceTypes }: GalleryViewProps) {
     [activeCategory, activeSpace],
   );
 
-  // Keyboard navigation v lightboxe
-  React.useEffect(() => {
-    if (lightboxIdx === null) return;
-    const onKey = (e: KeyboardEvent) => {
-      if (e.key === "Escape") setLightboxIdx(null);
-      if (e.key === "ArrowLeft") setLightboxIdx((i) => (i === null ? null : (i - 1 + filtered.length) % filtered.length));
-      if (e.key === "ArrowRight") setLightboxIdx((i) => (i === null ? null : (i + 1) % filtered.length));
-    };
-    window.addEventListener("keydown", onKey);
-    return () => window.removeEventListener("keydown", onKey);
-  }, [lightboxIdx, filtered.length]);
 
   return (
     <div>
@@ -131,7 +130,7 @@ export function GalleryView({ categories, spaceTypes }: GalleryViewProps) {
             <motion.button
               key={photo.id}
               type="button"
-              onClick={() => setLightboxIdx(i)}
+              onClick={() => otvorNahlad(i)}
               initial={{ opacity: 0, y: 12 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.5, delay: (i % 12) * 0.04 }}
@@ -162,166 +161,6 @@ export function GalleryView({ categories, spaceTypes }: GalleryViewProps) {
         </div>
       )}
 
-      {/* Lightbox */}
-      {lightboxIdx !== null && filtered[lightboxIdx] && (
-        <div
-          role="dialog"
-          aria-modal="true"
-          className="fixed inset-0 z-[100] bg-black/95 flex items-center justify-center p-4"
-          onClick={() => setLightboxIdx(null)}
-          onTouchStart={(e) => {
-            // @ts-expect-error mutable
-            e.currentTarget._touchX = e.touches[0].clientX;
-          }}
-          onTouchEnd={(e) => {
-            // @ts-expect-error mutable
-            const startX = e.currentTarget._touchX as number | undefined;
-            if (typeof startX !== "number") return;
-            const endX = e.changedTouches[0].clientX;
-            const dx = endX - startX;
-            if (Math.abs(dx) < 50) return; // ignore taps
-            e.stopPropagation();
-            if (dx > 0) {
-              setLightboxIdx((lightboxIdx - 1 + filtered.length) % filtered.length);
-            } else {
-              setLightboxIdx((lightboxIdx + 1) % filtered.length);
-            }
-          }}
-        >
-          <button
-            type="button"
-            aria-label="Zavrieť"
-            onClick={() => setLightboxIdx(null)}
-            className="absolute top-6 right-6 inline-flex items-center justify-center w-14 h-14 rounded-full bg-white/15 hover:bg-white/25 active:bg-white/30 text-white transition-colors z-10"
-            style={{ touchAction: "manipulation" }}
-          >
-            <X className="w-6 h-6" aria-hidden />
-          </button>
-          <button
-            type="button"
-            aria-label="Predchádzajúca"
-            onClick={(e) => { e.stopPropagation(); setLightboxIdx((lightboxIdx - 1 + filtered.length) % filtered.length); }}
-            className="absolute left-3 md:left-8 top-1/2 -translate-y-1/2 inline-flex items-center justify-center w-14 h-14 md:w-12 md:h-12 rounded-full bg-white/15 hover:bg-white/25 active:bg-white/30 text-white transition-colors z-10"
-            style={{ touchAction: "manipulation" }}
-          >
-            <ChevronLeft className="w-7 h-7 md:w-6 md:h-6" aria-hidden />
-          </button>
-          <button
-            type="button"
-            aria-label="Ďalšia"
-            onClick={(e) => { e.stopPropagation(); setLightboxIdx((lightboxIdx + 1) % filtered.length); }}
-            className="absolute right-3 md:right-8 top-1/2 -translate-y-1/2 inline-flex items-center justify-center w-14 h-14 md:w-12 md:h-12 rounded-full bg-white/15 hover:bg-white/25 active:bg-white/30 text-white transition-colors z-10"
-            style={{ touchAction: "manipulation" }}
-          >
-            <ChevronRight className="w-7 h-7 md:w-6 md:h-6" aria-hidden />
-          </button>
-          {/* Image wrapper s pinch-zoom + pan + double-tap.
-              touchAction: none aby sme zachytili všetky touch eventy.
-              Image samotný má natural object-contain → každá fotka rovnaký
-              dostupný priestor (max 90vh × 95vw), nie aspect-locked container. */}
-          <div
-            className="relative flex items-center justify-center w-full h-full max-w-[95vw] max-h-[90vh] overflow-hidden"
-            style={{ touchAction: "none" }}
-            onClick={(e) => e.stopPropagation()}
-            onTouchStart={(e) => {
-              if (e.touches.length === 2) {
-                // Pinch start — stop propagation aby parent neradil swipe
-                e.stopPropagation();
-                const t1 = e.touches[0], t2 = e.touches[1];
-                const dist = Math.hypot(t2.clientX - t1.clientX, t2.clientY - t1.clientY);
-                gestureRef.current = {
-                  initialDist: dist,
-                  initialScale: zoom.scale,
-                  panOffsetX: zoom.x,
-                  panOffsetY: zoom.y,
-                };
-              } else if (e.touches.length === 1) {
-                // Double-tap detection (≤300ms between taps)
-                const now = Date.now();
-                if (now - lastTapRef.current < 300) {
-                  e.stopPropagation();
-                  setZoom((z) =>
-                    z.scale === 1 ? { scale: 2.5, x: 0, y: 0 } : { scale: 1, x: 0, y: 0 },
-                  );
-                  lastTapRef.current = 0;
-                  return;
-                }
-                lastTapRef.current = now;
-                if (zoom.scale > 1) {
-                  // Pan start — len keď je zoomnuté
-                  e.stopPropagation();
-                  gestureRef.current = {
-                    initialDist: 0,
-                    initialScale: zoom.scale,
-                    panOffsetX: zoom.x - e.touches[0].clientX,
-                    panOffsetY: zoom.y - e.touches[0].clientY,
-                  };
-                }
-                // ELSE: scale === 1, single finger — nechaj parent handler
-                // spracovať potenciálny swipe pre navigáciu medzi fotkami.
-              }
-            }}
-            onTouchMove={(e) => {
-              const ref = gestureRef.current;
-              if (!ref) return;
-              e.stopPropagation();
-              if (e.touches.length === 2 && ref.initialDist > 0) {
-                // Pinch in progress
-                e.preventDefault();
-                const t1 = e.touches[0], t2 = e.touches[1];
-                const dist = Math.hypot(t2.clientX - t1.clientX, t2.clientY - t1.clientY);
-                const newScale = Math.max(1, Math.min(4, ref.initialScale * (dist / ref.initialDist)));
-                setZoom((z) => ({ ...z, scale: newScale }));
-              } else if (e.touches.length === 1 && ref.initialDist === 0) {
-                // Pan in progress
-                e.preventDefault();
-                setZoom((z) => ({
-                  ...z,
-                  x: e.touches[0].clientX + ref.panOffsetX,
-                  y: e.touches[0].clientY + ref.panOffsetY,
-                }));
-              }
-            }}
-            onTouchEnd={(e) => {
-              gestureRef.current = null;
-              // Ak skončil zoom < 1.1, snap back na 1 (cleanup tiny zoom)
-              if (zoom.scale < 1.1 && zoom.scale > 1) {
-                setZoom({ scale: 1, x: 0, y: 0 });
-              }
-              // Ak používateľ swajpne (1 prst) keď nie je zoomnuté, prejde do navigation
-              // (parent handler na lightbox div) — tu nestoppropagate ak scale === 1
-              if (zoom.scale === 1 && e.touches.length === 0) {
-                // Nezastavíme propagáciu — parent swipe handler funguje
-              }
-            }}
-            onDoubleClick={(e) => {
-              // Desktop double-click = same as double-tap (toggle zoom)
-              e.stopPropagation();
-              setZoom((z) =>
-                z.scale === 1 ? { scale: 2.5, x: 0, y: 0 } : { scale: 1, x: 0, y: 0 },
-              );
-            }}
-          >
-            {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img
-              src={filtered[lightboxIdx].src}
-              alt={filtered[lightboxIdx].alt}
-              className="max-w-full max-h-[90vh] object-contain select-none pointer-events-none"
-              draggable={false}
-              style={{
-                transform: `translate(${zoom.x}px, ${zoom.y}px) scale(${zoom.scale})`,
-                transformOrigin: "center center",
-                transition: gestureRef.current ? "none" : "transform 0.2s ease-out",
-                willChange: "transform",
-              }}
-            />
-          </div>
-          {/* Pager + swipe hint */}
-          <div className="absolute bottom-6 left-1/2 -translate-x-1/2 text-white/80 text-xs font-medium z-10 pointer-events-none">
-            {lightboxIdx + 1} / {filtered.length} <span className="md:hidden ml-2 opacity-60">← swipe →</span>
-          </div>
-        </div>
-      )}
     </div>
   );
 }

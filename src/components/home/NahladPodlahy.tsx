@@ -86,7 +86,7 @@ export function NahladPodlahyProvider({ children }: { children: React.ReactNode 
               type="button"
               onClick={zavri}
               aria-label="Zavrieť náhľad"
-              className="absolute top-3 right-3 z-10 w-10 h-10 inline-flex items-center justify-center rounded-full bg-white/90 text-[#1B2430] shadow hover:bg-white transition-colors"
+              className="absolute top-3 right-3 z-10 w-10 h-10 inline-flex items-center justify-center rounded-full bg-white/90 text-[#1B2430] shadow transition-colors hover:bg-[#3db6e8] hover:text-white"
             >
               <X className="w-5 h-5" aria-hidden />
             </button>
