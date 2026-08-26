@@ -105,9 +105,8 @@ export const TYPY_PODLAH: TypPodlahyKarta[] = [
   {
     slug: "mistral",
     name: "Mistral",
-    // cenu pre Mistral v CRM nemáme a vymýšľať ju nebudem
-    priceFrom: 0,
-    priceLabel: "Cena na dopyt",
+    // cenu zadal user 2026-08-25 (v CRM systém pre Mistral nie je)
+    priceFrom: 104,
     image: "/images/vzorkovnik/arturo/mistral-mixed-clay.webp",
     href: "/vzorkovnik?typ=mistral",
     crmFloorType: null,
@@ -122,7 +121,8 @@ export const TYPY_PODLAH: TypPodlahyKarta[] = [
   {
     slug: "beton-look",
     name: "Betón look",
-    priceFrom: 79,
+    // user 2026-08-25
+    priceFrom: 99,
     image: "/images/vzorkovnik/arturo/concrete-look-downtown-mix.webp",
     href: "/vzorkovnik?typ=beton-look",
     // generátor CP v NajCRM betón look nepozná → dopyt ide obchodníkovi
@@ -145,10 +145,12 @@ export const TYPY_PODLAH: TypPodlahyKarta[] = [
     href: "/realizacie?priestor=hala-firma",
     // priemyselné sa cenia individuálne podľa prevádzky, nie paušálom
     crmFloorType: null,
+    // Priemyselné podlahy majú značenia, žľaby a viac odtieňov naraz —
+    // jeden RAL sa im priradiť nedá (user 2026-08-25).
     variants: [
-      { src: "/images/realizacie/r-20.jpg", typ: "priemyselna", alt: "Priemyselná podlaha — modrá hala", farba: "RAL 5012", farbaLabel: "Svetlomodrá" },
-      { src: "/images/realizacie/r-22.jpg", typ: "priemyselna", alt: "Priemyselná podlaha — zelená hala", farba: "RAL 6021", farbaLabel: "Bledozelená" },
-      { src: "/images/realizacie/r-46.jpg", typ: "priemyselna", alt: "Priemyselná podlaha — béžová hala", farba: "RAL 1001", farbaLabel: "Béžová" },
+      { src: "/images/realizacie/r-20.jpg", typ: "priemyselna", alt: "Priemyselná podlaha — modrá hala" },
+      { src: "/images/realizacie/r-22.jpg", typ: "priemyselna", alt: "Priemyselná podlaha — zelená hala" },
+      { src: "/images/realizacie/r-46.jpg", typ: "priemyselna", alt: "Priemyselná podlaha — oranžová chodba s odvodňovacím žľabom" },
     ],
   },
 ];

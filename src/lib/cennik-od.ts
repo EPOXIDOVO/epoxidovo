@@ -14,8 +14,11 @@ import { TYPY_PODLAH, type TypPodlahyKarta } from "@/content/typy-podlah";
 type CennikSystem = {
   code: string;
   floor_type: string | null;
-  hrubky: { price_per_m2: number }[];
+  hrubky: { hrubka: string | null; price_per_m2: number }[];
 };
+
+/** Hrúbka, ktorou sa inzeruje „od" cena — rovnaká ako predvolená v konfigurátore. */
+const HRUBKA_PRE_OD = "1mm";
 
 const CRM_URL = process.env.NAJCRM_BASE_URL ?? "https://app.najcrm.sk";
 
@@ -59,10 +62,15 @@ function najnizsiaCena(
   const kody = t.crmSystemy?.length
     ? t.crmSystemy
     : [defaultSystem[t.crmFloorType]].filter(Boolean);
+  // Inzerujeme cenu 1 mm vrstvy; náter je lacnejší tier a ako „od" cena
+  // v galérii pôsobil podstrelene (user 2026-08-25).
   const ceny = kody
     .map((k) => systemy.find((s) => s.code === k))
     .filter((s): s is CennikSystem => Boolean(s))
-    .flatMap((s) => s.hrubky.map((h) => h.price_per_m2))
-    .filter((n) => typeof n === "number" && n > 0);
+    .map((s) => {
+      const zHrubky = s.hrubky.find((h) => h.hrubka === HRUBKA_PRE_OD)?.price_per_m2;
+      return zHrubky ?? s.hrubky[0]?.price_per_m2;
+    })
+    .filter((n): n is number => typeof n === "number" && n > 0);
   return ceny.length ? Math.min(...ceny) : null;
 }
