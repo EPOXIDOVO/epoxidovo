@@ -224,7 +224,7 @@ function euro(n: number) {
   }).format(n);
 }
 
-export function KonfiguratorCP() {
+export function KonfiguratorCP({ cenyOd }: { cenyOd?: Record<string, number> }) {
   const [krok, setKrok] = React.useState<Krok>("typ");
   const [cennik, setCennik] = React.useState<CennikSystem[] | null>(null);
   const [defaultSystem, setDefaultSystem] = React.useState<Record<string, string>>({});
@@ -435,7 +435,8 @@ export function KonfiguratorCP() {
                     <span className="mt-auto pt-1 block text-sm font-bold text-[#15749e]">
                       {t.priceFrom > 0 ? (
                         <>
-                          od {t.priceFrom} € <span className="text-[#1B2430]/50 font-semibold">/m²</span>
+                          od {cenyOd?.[t.slug] ?? t.priceFrom} €{" "}
+                          <span className="text-[#1B2430]/50 font-semibold">/m²</span>
                         </>
                       ) : (
                         (t.priceLabel ?? "Cena na dopyt")
