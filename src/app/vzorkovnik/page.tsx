@@ -15,7 +15,7 @@ import { KombinacieSekcia } from "./KombinacieSekcia";
 import { cenyOdZCrm } from "@/lib/cennik-od";
 import { MATERIALY } from "@/lib/materialy";
 import { obsahKategoria } from "@/lib/obsah-kategorie";
-import { ARTURO_FARBY, ARTURO_TYPY } from "@/content/arturo-farby";
+import { ARTURO_TYPY, arturoPreTyp } from "@/content/arturo-farby";
 import { ArturoGrid } from "./ArturoGrid";
 
 /**
@@ -36,7 +36,7 @@ const TYPY: Record<
   jednofarebne: {
     foto: "/images/categories/jednofarebne.jpg",
     nadpis: "Vzorkovník — jednofarebné podlahy",
-    popis: "RAL Classic. Odtieň si vyberáš z tej istej palety, akú miešame do živice.",
+    popis: "RAL Classic aj odtiene Arturo Unicolor. Vyberáš z tej istej palety, akú miešame do živice.",
     zdroj: "ral",
   },
   priemyselne: {
@@ -63,10 +63,16 @@ const TYPY: Record<
     popis: "Dekoračné vločky, ktoré sa sypú do čerstvej vrstvy. Kombinujú sa so základnou farbou z RAL.",
     zdroj: "chipsy",
   },
-  arturo: {
+  "beton-look": {
     foto: "/images/vzorkovnik/arturo/concrete-look-downtown-mix.webp",
-    nadpis: "Vzorkovník — Arturo",
-    popis: "Kompletná farebná škála Arturo — 68 odtieňov v radoch Unicolor, Concrete look, Mistral, Microcement a Concreta.",
+    nadpis: "Vzorkovník — betón look",
+    popis: "Odtiene Arturo v radoch Concrete look a Concreta. Vzhľad pohľadového betónu, ale hladký a bezškárový.",
+    zdroj: "arturo",
+  },
+  mistral: {
+    foto: "/images/vzorkovnik/arturo/mistral-calm-breeze.webp",
+    nadpis: "Vzorkovník — Mistral",
+    popis: "Rad Mistral od Arturo. Mäkký oblačný ťah s jemnými prechodmi — nie sivý betón, ale pokojná plocha do interiéru.",
     zdroj: "arturo",
   },
   "kamenny-koberec": {
@@ -79,25 +85,14 @@ const TYPY: Record<
 };
 
 /**
- * Dlaždice zoraďujeme presne ako sekcia „Čo všetko vieme vyčarovať"
- * (user 2026-08-25). Poradie sa berie z @/content/typy-podlah, takže keď
- * tam pribudne alebo sa presunie typ, vzorkovník ide automaticky s ním.
- *
- * Betón look v showcase odkazuje na vzorkovník Arturo — preto ten preklad.
- * Typy, ktoré v showcase nie sú (kamenný koberec), idú na koniec.
+ * Dlaždice zoraďujeme presne ako sekcia „Čo všetko vieme vyčarovať".
+ * Slugy typov sedia 1:1 s @/content/typy-podlah, takže keď tam typ pribudne
+ * alebo sa presunie, vzorkovník ide automaticky s ním. Typy, ktoré
+ * v showcase nie sú (kamenný koberec), idú na koniec.
  */
-const SHOWCASE_NA_VZORKOVNIK: Record<string, string> = {
-  jednofarebne: "jednofarebne",
-  chipsove: "chipsove",
-  metalicke: "metalicke",
-  mramorove: "mramorove",
-  "beton-look": "arturo",
-  priemyselne: "priemyselne",
-};
-
 function zoradeneTypy(): [string, (typeof TYPY)[string]][] {
-  const podlaShowcase = TYPY_PODLAH.map((t) => SHOWCASE_NA_VZORKOVNIK[t.slug]).filter(
-    (k): k is string => Boolean(k) && Boolean(TYPY[k]),
+  const podlaShowcase = TYPY_PODLAH.map((t) => t.slug).filter(
+    (k): k is string => Boolean(TYPY[k]),
   );
   const zvysok = Object.keys(TYPY).filter((k) => !podlaShowcase.includes(k));
   return [...podlaShowcase, ...zvysok].map((k) => [k, TYPY[k]]);
@@ -142,11 +137,13 @@ export default async function VzorkovnikPage({
 
   const chipsy = MATERIALY.filter((m) => obsahKategoria(m) === "chipsy");
 
-  const arturoFarby = ARTURO_FARBY;
+  const arturoFarby = typ ? arturoPreTyp(typ) : [];
 
   const pocet =
     zdroj === "ral"
-      ? `${ORDERED_COLORS.length} RAL Classic odtieňov`
+      ? typ === "jednofarebne"
+        ? `${ORDERED_COLORS.length} RAL + ${arturoPreTyp("jednofarebne").length} Arturo`
+        : `${ORDERED_COLORS.length} RAL Classic odtieňov`
       : zdroj === "efekty"
         ? `${METALICKE.length} efektov`
         : zdroj === "chipsy"
@@ -266,6 +263,21 @@ export default async function VzorkovnikPage({
         {typ === "metalicke" && <KombinacieSekcia />}
 
         {zdroj === "efekty" && <EfektyGrid cenaOd={cenaOdMetalik} />}
+
+        {/* Arturo Unicolor patrí k jednofarebným — je to iná paleta toho
+            istého typu podlahy, nie samostatný druh. */}
+        {typ === "jednofarebne" && arturoFarby.length > 0 && (
+          <section className="mt-8">
+            <h2 className="text-lg md:text-xl font-extrabold text-[#1B2430]">
+              Arturo Unicolor
+            </h2>
+            <p className="mt-1 mb-4 text-sm text-[#1B2430]/65 max-w-2xl">
+              Hotové odtiene od Arturo — namiešané výrobcom, takže farba sedí
+              presne. Alternatíva k miešaniu podľa RAL.
+            </p>
+            <ArturoGrid typy={ARTURO_TYPY} farby={arturoFarby} />
+          </section>
+        )}
 
         {zdroj === "chipsy" && (
           <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-3 md:gap-4">

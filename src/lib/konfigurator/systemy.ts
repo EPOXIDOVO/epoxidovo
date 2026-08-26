@@ -240,36 +240,6 @@ export const SYSTEMY: System[] = [
 
   /* ── STENY (spotreby TODO — doplní Tristan) ──────────────────────── */
   {
-    id: "stena-mikrocement",
-    nazov: "Mikrocement — bezškárová stena",
-    trieda: "premium",
-    vlastnosti: [
-      "Bezškárový betónový vzhľad, hrúbka len 2–3 mm",
-      "Vhodný aj do kúpeľne a sprchy",
-      "Aplikovateľný na dlažbu aj sadrokartón",
-    ],
-    podmienky: {
-      co: ["stena"],
-      kde: ["interier"],
-      priestor: ["kupelna", "obyvacka", "kuchyna", "prevadzka"],
-      podklad: ["beton", "cem_poter", "dlazba", "sadrokarton", "stary_nater", "neviem"],
-      vzhlad: ["mikrocement"],
-    },
-    vrstvy: [
-      // TODO: doplniť reálne SKU a spotreby mikrocementu (Tristan)
-      v(1, "Penetrácia", { sku: "498434", nazov: "Penetrácia pod mikrocement", spotreba: null, balenie: 10 }),
-      v(2, "Mikrocement — jadro", { sku: "TODO-MIKROCEMENT-A", nazov: "Mikrocement (základná vrstva)", spotreba: null, balenie: 20 }, {
-        poznamka: "TODO: SKU a spotreba — doplní Tristan",
-      }),
-      v(3, "Mikrocement — finiš", { sku: "TODO-MIKROCEMENT-B", nazov: "Mikrocement (finálna vrstva)", spotreba: null, balenie: 20 }, {
-        poznamka: "TODO: SKU a spotreba — doplní Tristan",
-      }),
-      v(4, "Ochranný lak", { sku: "TODO-MIKROCEMENT-LAK", nazov: "Lak na mikrocement", spotreba: null, balenie: 5 }, {
-        poznamka: "TODO: SKU a spotreba — doplní Tristan",
-      }),
-    ],
-  },
-  {
     id: "stena-nater",
     nazov: "Standard — umývateľný stenový náter",
     trieda: "standard",

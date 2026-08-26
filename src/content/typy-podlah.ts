@@ -103,11 +103,25 @@ export const TYPY_PODLAH: TypPodlahyKarta[] = [
     variants: [],
   },
   {
+    slug: "mistral",
+    name: "Mistral",
+    // cenu pre Mistral v CRM nemáme a vymýšľať ju nebudem
+    priceFrom: 0,
+    priceLabel: "Cena na dopyt",
+    image: "/images/vzorkovnik/arturo/mistral-calm-breeze.webp",
+    href: "/vzorkovnik?typ=mistral",
+    // Arturo Mistral — mäkký oblačný ťah. Vlastné realizačné fotky
+    // zatiaľ nemáme, tak sú varianty prázdne.
+    crmFloorType: null,
+    pripravujeme: true,
+    variants: [],
+  },
+  {
     slug: "beton-look",
     name: "Betón look",
     priceFrom: 79,
     image: "/images/vzorkovnik/arturo/concrete-look-downtown-mix.webp",
-    href: "/vzorkovnik?typ=arturo",
+    href: "/vzorkovnik?typ=beton-look",
     // generátor CP v NajCRM betón look nepozná → dopyt ide obchodníkovi
     crmFloorType: null,
     pripravujeme: true,

@@ -1,24 +1,38 @@
 /**
- * Vzorkovník Arturo — stiahnuté z arturocollection.com/colour-chart.
- * 68 odtieňov v piatich radoch. Na webe zatiaľ zobrazujeme všetky;
- * keď sa vyberie užší výber, stačí tu nechať len tie a zvyšok zmazať.
+ * Odtiene Arturo — stiahnuté z arturocollection.com/colour-chart.
+ *
+ * Arturo je výrobca, nie druh podlahy, takže vo vzorkovníku nemá vlastnú
+ * záložku. Jednotlivé rady patria pod naše typy podláh — mapa nižšie
+ * (ARTURO_RAD_NA_TYP) hovorí, ktorý kam.
  */
 
 export type ArturoFarba = {
-  typ: "Unicolor" | "Concrete look" | "Mistral" | "Microcement" | "Concreta";
+  /** Mikrocement sme z ponuky vyradili (user 2026-08-25: „nerobíme a robiť
+   *  nebudeme"), preto tu nie je. */
+  typ: "Unicolor" | "Concrete look" | "Mistral" | "Concreta";
   nazov: string;
   /** Kód z Arturo katalógu (data-sku na ich webe), ak ho uvádzajú. */
   sku: string | null;
   obrazok: string;
 };
 
-export const ARTURO_TYPY = [
-  "Unicolor",
-  "Concrete look",
-  "Mistral",
-  "Microcement",
-  "Concreta",
-] as const;
+export const ARTURO_TYPY = ["Unicolor", "Concrete look", "Mistral", "Concreta"] as const;
+
+/**
+ * Arturo je VÝROBCA, nie typ podlahy — jeho rady patria pod naše typy,
+ * nie vedľa nich (user 2026-08-25). Táto mapa hovorí, kam ktorý rad ide.
+ */
+export const ARTURO_RAD_NA_TYP: Record<string, "jednofarebne" | "beton-look" | "mistral"> = {
+  Unicolor: "jednofarebne",
+  "Concrete look": "beton-look",
+  Concreta: "beton-look",
+  Mistral: "mistral",
+};
+
+/** Odtiene Arturo pre daný typ podlahy. */
+export function arturoPreTyp(typ: string): ArturoFarba[] {
+  return ARTURO_FARBY.filter((f) => ARTURO_RAD_NA_TYP[f.typ] === typ);
+}
 
 export const ARTURO_FARBY: ArturoFarba[] = [
   { typ: "Unicolor", nazov: "Basic White", sku: "BSCC1", obrazok: "/images/vzorkovnik/arturo/unicolor-basic-white.webp" },
@@ -73,14 +87,6 @@ export const ARTURO_FARBY: ArturoFarba[] = [
   { typ: "Mistral", nazov: "Harsh Gravel", sku: "MHG1", obrazok: "/images/vzorkovnik/arturo/mistral-harsh-gravel.webp" },
   { typ: "Mistral", nazov: "Ice Cave", sku: "MIC1", obrazok: "/images/vzorkovnik/arturo/mistral-ice-cave.webp" },
   { typ: "Mistral", nazov: "Mixed Clay", sku: "MMC1", obrazok: "/images/vzorkovnik/arturo/mistral-mixed-clay.webp" },
-  { typ: "Microcement", nazov: "Ash", sku: "AM1", obrazok: "/images/vzorkovnik/arturo/microcement-ash.webp" },
-  { typ: "Microcement", nazov: "Bark", sku: "BM1", obrazok: "/images/vzorkovnik/arturo/microcement-bark.webp" },
-  { typ: "Microcement", nazov: "Beach", sku: "BEM1", obrazok: "/images/vzorkovnik/arturo/microcement-beach.webp" },
-  { typ: "Microcement", nazov: "Beton", sku: "BETM1", obrazok: "/images/vzorkovnik/arturo/microcement-beton.webp" },
-  { typ: "Microcement", nazov: "Ice", sku: "IM1", obrazok: "/images/vzorkovnik/arturo/microcement-ice.webp" },
-  { typ: "Microcement", nazov: "Lake", sku: "LM1", obrazok: "/images/vzorkovnik/arturo/microcement-lake.webp" },
-  { typ: "Microcement", nazov: "Tuscan", sku: "TM1", obrazok: "/images/vzorkovnik/arturo/microcement-tuscan.webp" },
-  { typ: "Microcement", nazov: "Vulcan", sku: "VM1", obrazok: "/images/vzorkovnik/arturo/microcement-vulcan.webp" },
   { typ: "Concreta", nazov: "Dove", sku: "CD1", obrazok: "/images/vzorkovnik/arturo/concreta-dove.webp" },
   { typ: "Concreta", nazov: "Fossil", sku: "CF1", obrazok: "/images/vzorkovnik/arturo/concreta-fossil.webp" },
   { typ: "Concreta", nazov: "Pebble", sku: "CP1", obrazok: "/images/vzorkovnik/arturo/concreta-pebble.webp" },

@@ -46,7 +46,6 @@ const POLOZKY: {
       { label: "Vlhkomery", href: "/eshop?kat=vlhkomery#katalog" },
     ],
   },
-  { label: "Mikrocement 🧊", coskoro: true },
   { label: "Nátery na betón 🎨", coskoro: true },
   { label: "Dekoratívne steny 🖌️", coskoro: true },
 ];

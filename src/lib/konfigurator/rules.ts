@@ -122,7 +122,6 @@ export const VZHLADY_PODLAHA = [
 ];
 
 export const VZHLADY_STENA = [
-  { id: "mikrocement", label: "Mikrocement" },
   { id: "epoxidovy_nater", label: "Epoxidový náter (jednofarebný)" },
   { id: "dekor", label: "Dekoratívny efekt" },
 ];
@@ -178,16 +177,10 @@ export function dostupnostVzhladov(volba: Volba): {
     if (vz.id === "beton_look" && volba.kde === "exterier") {
       return { ...vz, dostupny: false, dovod: "Betón look je do interiéru — vonku ho mráz a vlhkosť rozrušia." };
     }
-    // 9 — mikrocement na podlahu v exteriéri nie
-    if (vz.id === "mikrocement" && volba.kde === "exterier") {
-      return { ...vz, dostupny: false, dovod: "V exteriéri mikrocement neponúkame — nezvláda mráz a stálu vlhkosť." };
-    }
-    // 15 — na sadrokartóne len mikrocement alebo náter, žiadne liate systémy
-    if (
-      volba.podklad === "sadrokarton" &&
-      !["mikrocement", "epoxidovy_nater"].includes(vz.id)
-    ) {
-      return { ...vz, dostupny: false, dovod: "Na sadrokartóne len mikrocement alebo náter — liata vrstva je preň príliš ťažká." };
+    // 15 — na sadrokartóne len náter, žiadne liate systémy
+    // (mikrocement sme z ponuky vyradili — user 2026-08-25)
+    if (volba.podklad === "sadrokarton" && vz.id !== "epoxidovy_nater") {
+      return { ...vz, dostupny: false, dovod: "Na sadrokartóne len náter — liata vrstva je preň príliš ťažká." };
     }
     return { ...vz, dostupny: true };
   });
@@ -202,7 +195,7 @@ export function dostupnostKde(volba: Volba): {
   dostupny: boolean;
   dovod?: string;
 }[] {
-  const lenInterier = ["metalik", "marble", "beton_look", "mikrocement"];
+  const lenInterier = ["metalik", "marble", "beton_look"];
   return (["interier", "exterier"] as Kde[]).map((id) => {
     if (id === "exterier" && volba.vzhlad && lenInterier.includes(volba.vzhlad)) {
       return {

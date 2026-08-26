@@ -51,7 +51,6 @@ export const FOTO_VZHLAD: Record<string, Nahlad> = {
   priemyselna: F("/images/hero/hala.jpg", "Priemyselné"),
   beton_look: F("/images/vzorkovnik/arturo/concrete-look-downtown-mix.webp", "Betón Look — Downtown Mix"),
   kamenny_koberec: CHYBA("Kamenný koberec", "Fotka kamenného koberca"),
-  mikrocement: CHYBA("Mikrocement", "Fotka mikrocementovej steny"),
   epoxidovy_nater: CHYBA("Epoxidový náter na stenu", "Fotka natretej steny v prevádzke"),
   dekor: CHYBA("Dekoratívny efekt", "Fotka dekoratívnej stierky na stene"),
 };

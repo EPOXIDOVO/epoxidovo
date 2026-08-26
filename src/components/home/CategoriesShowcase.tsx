@@ -91,6 +91,8 @@ const VZORKOVNIK_TYP: Record<string, string> = {
   jednofarebne: "/vzorkovnik?typ=jednofarebne",
   priemyselne: "/vzorkovnik?typ=priemyselne",
   metalicke: "/vzorkovnik?typ=metalicke",
+  "beton-look": "/vzorkovnik?typ=beton-look",
+  mistral: "/vzorkovnik?typ=mistral",
 };
 
 /**

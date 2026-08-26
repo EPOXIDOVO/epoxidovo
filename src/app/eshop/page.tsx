@@ -70,7 +70,6 @@ const DLAZDICE: Record<
     href: "/eshop?skupina=naradie#katalog",
     linky: [{ text: "Valce, stierky a pomôcky", href: "/eshop?skupina=naradie#katalog" }],
   },
-  mikrocement: { label: "MIKROCEMENT", img: "/images/hero/byvanie-v2.webp", coskoro: true },
   farby: { label: "FARBY A DEKORATÍVNE STENY", img: "/images/realizacie/r-17.jpg", coskoro: true },
 };
 
