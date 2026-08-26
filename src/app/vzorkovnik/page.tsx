@@ -70,7 +70,7 @@ const TYPY: Record<
     zdroj: "arturo",
   },
   mistral: {
-    foto: "/images/vzorkovnik/arturo/mistral-calm-breeze.webp",
+    foto: "/images/vzorkovnik/arturo/mistral-gentle-shade.webp",
     nadpis: "Vzorkovník — Mistral",
     popis: "Rad Mistral od Arturo. Mäkký oblačný ťah s jemnými prechodmi — nie sivý betón, ale pokojná plocha do interiéru.",
     zdroj: "arturo",
@@ -198,7 +198,9 @@ export default async function VzorkovnikPage({
             (user 2026-08-25: „nech vidis tie typy podlah ako fotku
             nahladovu nie ze napis"). */}
         <nav aria-label="Typy vzorkovníkov" className="mb-6">
-          <ul className="grid grid-cols-3 sm:grid-cols-4 lg:grid-cols-7 gap-2 md:gap-3">
+          {/* 4 v riadku namiesto 7 — pri jemných vzorkách (Mistral, betón
+              look) sa na malej dlaždici nedá rozoznať nič (user 2026-08-25). */}
+          <ul className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-3 md:gap-4">
             {zoradeneTypy().map(([slug, t]) => {
               const aktivny = typ === slug;
               return (
@@ -218,7 +220,7 @@ export default async function VzorkovnikPage({
                           src={t.foto}
                           alt=""
                           fill
-                          sizes="(max-width: 640px) 33vw, 160px"
+                          sizes="(max-width: 640px) 50vw, 320px"
                           className="object-cover transition-transform duration-500 group-hover:scale-105"
                         />
                       ) : (
@@ -228,7 +230,7 @@ export default async function VzorkovnikPage({
                       )}
                     </span>
                     <span
-                      className={`block px-2 py-1.5 text-center text-[11px] md:text-xs font-bold leading-tight ${
+                      className={`block px-2 py-2 text-center text-xs md:text-sm font-bold leading-tight ${
                         aktivny ? "bg-[#3db6e8] text-[#0e1a3b]" : "bg-zinc-100 text-[#1B2430]/75"
                       }`}
                     >

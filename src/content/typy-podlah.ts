@@ -108,7 +108,7 @@ export const TYPY_PODLAH: TypPodlahyKarta[] = [
     // cenu pre Mistral v CRM nemáme a vymýšľať ju nebudem
     priceFrom: 0,
     priceLabel: "Cena na dopyt",
-    image: "/images/vzorkovnik/arturo/mistral-calm-breeze.webp",
+    image: "/images/vzorkovnik/arturo/mistral-gentle-shade.webp",
     href: "/vzorkovnik?typ=mistral",
     // Arturo Mistral — mäkký oblačný ťah. Vlastné realizačné fotky
     // zatiaľ nemáme, tak sú varianty prázdne.
