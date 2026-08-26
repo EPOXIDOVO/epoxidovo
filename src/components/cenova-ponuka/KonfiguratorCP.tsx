@@ -42,6 +42,7 @@ type Cena =
       price_per_m2: number;
       system_label: string;
       hrubka_label?: string;
+      min_order_applied?: boolean;
     }
   | { ok: false; dovod: string }
   | null;
@@ -59,6 +60,13 @@ const TERMINY = ["Čo najskôr", "Do 3 mesiacov", "Do pol roka", "Zatiaľ zisťu
 
 const PODKLAD = ["Betón", "Poter", "Dlaždice", "Neviem"];
 
+/**
+ * Minimálna zákazka — user 2026-08-26: „minimalna objednavka je 20m2 alebo
+ * 1000 eur v hodnote ak to je pod 1000 tak sa to zaokruhluje na 1000".
+ * Sumu ráta CRM (generator.min_order_eur), tu len upozorňujeme dopredu.
+ */
+const MIN_M2 = 20;
+
 /** Čo predvolíme, kým si zákazník nevyberie sám. */
 const PREDVOLENA_HRUBKA = "1mm";
 
@@ -75,7 +83,31 @@ const BINDER_POPIS: Record<string, string> = {
 
 /** Popiska hrúbky — CRM posiela „Náter", zákazníkovi to spresníme. */
 const HRUBKA_NAZOV: Record<string, string> = {
-  nater: "Náter (~0,3 mm)",
+  nater: "Náter (0,3 mm)",
+};
+
+/** Skloňovaný názov do prepínača „Viac o …". */
+const HRUBKA_O: Record<string, string> = {
+  nater: "nátere",
+  "1mm": "1 mm vrstve",
+  "2mm": "2 mm vrstve",
+};
+
+/** Čo ktorá hrúbka zakryje — najčastejšia otázka pri obhliadke. */
+const HRUBKA_ZAKRYJE: Record<string, string> = {
+  nater: "Nerovnosti podkladu zostanú viditeľné",
+  "1mm": "Zakryje nerovnosti do ~1 mm",
+  "2mm": "Zakryje nerovnosti do ~2 mm",
+};
+
+/** Dlhší popis pod „Viac o …" — v riadku by zaberal priveľa miesta. */
+const HRUBKA_DETAIL: Record<string, string> = {
+  nater:
+    "Valcovaný náter zapečatí betón proti prachu a olejom, ale kopíruje podklad — praskliny aj nerovnosti ostanú vidieť. Najlacnejšie riešenie do garáže, pivnice či technickej miestnosti.",
+  "1mm":
+    "Liata stierka, ktorá sa sama rozleje do roviny a prekryje drobné nerovnosti. Súvislý hladký povrch bez škár, ktorý sa ľahko umýva — najčastejšia voľba do domu aj garáže.",
+  "2mm":
+    "Najhrubšia liata vrstva. Znesie ťažkú premávku, paletové vozíky aj bodové zaťaženie a prekryje aj väčšie nerovnosti. Do dielní, prevádzok a priemyslu.",
 };
 
 /** Čo znamená hrúbka vrstvy. */
@@ -104,35 +136,31 @@ const KROK_NAZOV: Record<Krok, string> = {
 };
 
 function Krokovnik({ kroky, krok }: { kroky: Krok[]; krok: Krok }) {
-  const teraz_i = kroky.indexOf(krok);
+  const teraz = kroky.indexOf(krok) + 1;
+  const spolu = kroky.length;
+  const podiel = Math.round((teraz / spolu) * 100);
   return (
-    <ol className="flex items-center gap-1.5 md:gap-2.5 mb-5" aria-label="Postup">
-      {kroky.map((k, i) => {
-        const n = KROK_NAZOV[k];
-        const hotovo = i < teraz_i;
-        const teraz = i === teraz_i;
-        return (
-          <li key={n} className="flex items-center gap-1.5 md:gap-2.5">
-            <span
-              className={[
-                "flex items-center gap-1.5 rounded-full px-2.5 py-1 text-[11px] md:text-xs font-bold whitespace-nowrap transition-colors",
-                teraz
-                  ? "bg-[#1B2430] text-white"
-                  : hotovo
-                    ? "bg-[#e6f4fb] text-[#15749e]"
-                    : "bg-white text-[#1B2430]/45 ring-1 ring-[#1B2430]/8",
-              ].join(" ")}
-            >
-              {hotovo ? <Check className="w-3 h-3" aria-hidden /> : <span>{i + 1}</span>}
-              <span className="hidden sm:inline">{n}</span>
-            </span>
-            {i < kroky.length - 1 && (
-              <span aria-hidden className="w-3 md:w-5 h-px bg-[#1B2430]/15" />
-            )}
-          </li>
-        );
-      })}
-    </ol>
+    <div className="mb-5">
+      <div className="flex items-baseline justify-between gap-3">
+        <span className="text-xs font-extrabold uppercase tracking-wider text-[#1B2430]/55">
+          Krok {teraz} zo {spolu}
+        </span>
+        <span className="text-sm font-bold text-[#1B2430]">{KROK_NAZOV[krok]}</span>
+      </div>
+      <div
+        className="mt-2 h-1 w-full overflow-hidden rounded-full bg-[#1B2430]/10"
+        role="progressbar"
+        aria-valuenow={teraz}
+        aria-valuemin={1}
+        aria-valuemax={spolu}
+        aria-label={`Krok ${teraz} zo ${spolu}: ${KROK_NAZOV[krok]}`}
+      >
+        <span
+          className="block h-full rounded-full bg-[#2563EB] transition-all duration-500"
+          style={{ width: `${podiel}%` }}
+        />
+      </div>
+    </div>
   );
 }
 
@@ -233,6 +261,10 @@ export function KonfiguratorCP({ cenyOd }: { cenyOd?: Record<string, number> }) 
   const [system, setSystem] = React.useState<CennikSystem | null>(null);
   const [hrubka, setHrubka] = React.useState<string | null>(null);
   const [typ, setTyp] = React.useState<TypPodlahyKarta | null>(null);
+  /** Ktorý riadok hrúbky má rozbalený dlhší popis. */
+  const [detail, setDetail] = React.useState<string | null>(null);
+  /** Posledná epoxidová hrúbka — po prepnutí z PU späť ju obnovíme. */
+  const poslednaHrubka = React.useRef<string | null>(null);
   const [m2, setM2] = React.useState<string>("");
   const [priestor, setPriestor] = React.useState("");
   const [lokalita, setLokalita] = React.useState("");
@@ -280,9 +312,14 @@ export function KonfiguratorCP({ cenyOd }: { cenyOd?: Record<string, number> }) 
     [typ, cennik, defaultSystem],
   );
 
-  /** Krok „Prevedenie" má zmysel len keď je z čoho vyberať. */
+  /**
+   * Krok „Prevedenie" má zmysel len keď je z čoho vyberať. Kým typ nie je
+   * zvolený, rátame s ním — inak by počítadlo skočilo z „zo 5" na „zo 6".
+   */
   const maPrevedenie =
-    prevedenia.length > 1 || (prevedenia.length === 1 && prevedenia[0].vyber_hrubky);
+    typ == null ||
+    prevedenia.length > 1 ||
+    (prevedenia.length === 1 && prevedenia[0].vyber_hrubky);
 
   const kroky = React.useMemo<Krok[]>(
     () =>
@@ -297,6 +334,26 @@ export function KonfiguratorCP({ cenyOd }: { cenyOd?: Record<string, number> }) 
     system?.hrubky.find((h) => h.hrubka === hrubka)?.price_per_m2 ??
     system?.hrubky[0]?.price_per_m2 ??
     null;
+
+  /** Základ pre rozdielové ceny — najlacnejšia hrúbka zvoleného systému. */
+  const najlacnejsia = system?.hrubky.length
+    ? Math.min(...system.hrubky.map((h) => h.price_per_m2))
+    : 0;
+
+  /** Prepnutie materiálu: PU vie len 2 mm, pri návrate obnovíme epoxid. */
+  const zvolMaterial = (sys: CennikSystem) => {
+    if (system?.code === sys.code) return;
+    if (system?.vyber_hrubky && hrubka) poslednaHrubka.current = hrubka;
+    const obnovena =
+      sys.vyber_hrubky &&
+      poslednaHrubka.current &&
+      sys.hrubky.some((h) => h.hrubka === poslednaHrubka.current)
+        ? poslednaHrubka.current
+        : predvolenaHrubka(sys);
+    setSystem(sys);
+    setHrubka(obnovena);
+    setDetail(null);
+  };
 
   const plocha = Number(m2.replace(",", "."));
   const plochaOk = isFinite(plocha) && plocha > 0;
@@ -450,22 +507,28 @@ export function KonfiguratorCP({ cenyOd }: { cenyOd?: Record<string, number> }) 
         )}
 
         {/* ── KROK: PREVEDENIE — materiál a hrúbka vrstvy ──────────────── */}
+        {/* ── KROK: PREVEDENIE — materiál a hrúbka vrstvy ──────────────── */}
         {krok === "prevedenie" && typ && (
           <>
             <h2 className="text-lg md:text-xl font-extrabold text-[#1B2430]">
               Aké prevedenie?
             </h2>
             <p className="mt-1 text-sm text-[#1B2430]/60">
-              Líšia sa cenou aj odolnosťou. Keď si nie si istý, nechaj
-              predvolené — obchodník to s tebou prejde.
+              Ak si nie si istý, nechaj predvolené — obchodník to s tebou ešte
+              prejde.
             </p>
 
+            {/* MATERIÁL — segmentovaný prepínač, nie dve veľké karty */}
             {prevedenia.length > 1 && (
-              <div className="mt-4">
+              <div className="mt-5">
                 <span className="text-xs font-extrabold uppercase tracking-wider text-[#1B2430]/55">
                   Materiál
                 </span>
-                <div className="mt-1.5 grid gap-2 sm:grid-cols-2">
+                <div
+                  role="radiogroup"
+                  aria-label="Materiál"
+                  className="mt-1.5 inline-flex w-full rounded-full bg-[#EEF2F7] p-1"
+                >
                   {prevedenia.map((sys) => {
                     const zvoleny = system?.code === sys.code;
                     const odCeny = Math.min(...sys.hrubky.map((h) => h.price_per_m2));
@@ -473,109 +536,169 @@ export function KonfiguratorCP({ cenyOd }: { cenyOd?: Record<string, number> }) 
                       <button
                         key={sys.code}
                         type="button"
-                        onClick={() => {
-                          setSystem(sys);
-                          setHrubka(predvolenaHrubka(sys));
-                        }}
+                        role="radio"
+                        aria-checked={zvoleny}
+                        onClick={() => zvolMaterial(sys)}
                         className={[
-                          "rounded-2xl border-2 p-3 text-left transition-colors",
+                          "flex-1 rounded-full px-3 py-2 text-center transition-colors",
                           zvoleny
-                            ? "border-[#2EA3DC] bg-[#eaf6fc]"
-                            : "border-[#1B2430]/12 hover:border-[#2EA3DC] hover:bg-[#f7fcff]",
+                            ? "bg-white text-[#1B2430] shadow-[0_2px_8px_rgba(27,36,48,0.12)] ring-1 ring-[#2563EB]"
+                            : "text-[#1B2430]/60 hover:text-[#1B2430]",
                         ].join(" ")}
                       >
-                        <span className="flex items-baseline justify-between gap-2">
-                          <span className="font-extrabold text-[#1B2430]">
-                            {sys.binder === "polyuretan" ? "Polyuretán" : "Epoxid"}
-                          </span>
-                          <span className="text-sm font-bold text-[#15749e] whitespace-nowrap">
-                            od {odCeny} €/m²
-                          </span>
+                        <span className="block text-sm font-extrabold whitespace-nowrap">
+                          {sys.binder === "polyuretan" ? "Polyuretán" : "Epoxid"}
                         </span>
-                        <span className="mt-1 block text-xs text-[#1B2430]/65 leading-snug">
-                          {BINDER_POPIS[sys.binder ?? ""] ?? sys.label}
+                        <span className="block text-[11px] font-semibold text-[#1B2430]/55 whitespace-nowrap">
+                          od {odCeny} €/m²
                         </span>
                       </button>
                     );
                   })}
                 </div>
-              </div>
-            )}
-
-            {system && system.hrubky.length > 0 && (
-              <div className="mt-4">
-                <span className="text-xs font-extrabold uppercase tracking-wider text-[#1B2430]/55">
-                  Hrúbka vrstvy
-                </span>
-                {/* Keď je hrúbka daná (polyuretán = vždy 2 mm), aj tak ju
-                    ukážeme aj s rezom — user 2026-08-25: „daj noramlne ze
-                    ukazuje vrstvu a nech tam je napisane ze PU sa da iba 2mm". */}
-                {!system.vyber_hrubky && (
-                  <p className="mt-1 text-sm text-[#1B2430]/65">
-                    {system.binder === "polyuretan"
-                      ? "Polyuretán sa lieva len v 2 mm — tenšia vrstva pri ňom neexistuje."
-                      : "Pri tomto systéme je hrúbka daná."}
-                  </p>
-                )}
-                <div className="mt-1.5 grid gap-2">
-                  {system.hrubky.map((h) => {
-                    const zvolena = hrubka === h.hrubka;
-                    return (
-                      <button
-                        key={h.hrubka ?? "jedna"}
-                        type="button"
-                        onClick={() => setHrubka(h.hrubka)}
-                        disabled={!system.vyber_hrubky}
-                        className={[
-                          "flex items-center gap-3 rounded-2xl border-2 p-3 text-left transition-colors",
-                          zvolena
-                            ? "border-[#2EA3DC] bg-[#eaf6fc]"
-                            : "border-[#1B2430]/12 hover:border-[#2EA3DC] hover:bg-[#f7fcff]",
-                          system.vyber_hrubky ? "" : "cursor-default",
-                        ].join(" ")}
-                      >
-                        <RezVrstvy hrubka={h.hrubka} />
-                        <span className="min-w-0 flex-1">
-                          <span className="flex items-baseline justify-between gap-2">
-                            <span className="font-extrabold text-[#1B2430]">
-                              {HRUBKA_NAZOV[h.hrubka ?? ""] ?? h.label}
-                              {h.hrubka === PREDVOLENA_HRUBKA && system.vyber_hrubky && (
-                                <span className="ml-2 align-middle rounded-full bg-[#e6f4fb] px-2 py-0.5 text-[10px] font-extrabold uppercase tracking-wide text-[#15749e] whitespace-nowrap">
-                                  Odporúčame
-                                </span>
-                              )}
-                            </span>
-                            <span className="text-sm font-bold text-[#15749e] whitespace-nowrap">
-                              {h.price_per_m2} €/m²
-                            </span>
-                          </span>
-                          <span className="mt-1 block text-xs text-[#1B2430]/65 leading-snug">
-                            {HRUBKA_POPIS[h.hrubka ?? ""] ?? ""}
-                          </span>
-                        </span>
-                      </button>
-                    );
-                  })}
-                </div>
-              </div>
-            )}
-
-            {cenaZaM2 != null && plochaOk && (
-              <div className="mt-4 rounded-2xl bg-[#f4f7fa] p-3.5">
-                <div className="text-center font-extrabold text-[#1B2430] tabular-nums">
-                  {cenaZaM2} €/m² × {plocha} m² ={" "}
-                  <span className="text-[#15749e]">{euro(cenaZaM2 * plocha)}</span>
-                </div>
-                <p className="mt-1.5 text-center text-xs text-[#1B2430]/65 leading-snug">
-                  V cene je brúsenie podkladu, penetrácia aj vyspravenie drobných
-                  prasklín. Doprava sa doráta v ďalšom kroku.
-                  {minOrder > 0 &&
-                    ` Pri ploche pod 30 m² platí minimálna cena zákazky ${euro(minOrder)}.`}
+                <p className="mt-2 text-sm text-[#1B2430]/65 leading-snug">
+                  {BINDER_POPIS[system?.binder ?? ""] ?? ""}
                 </p>
               </div>
             )}
 
-            <Navigacia spat={() => posun(-1)} dalej={() => posun(1)} dalejOk={Boolean(system)} />
+            {/* HRÚBKA VRSTVY */}
+            {system && system.hrubky.length > 0 && (
+              <div className="mt-5">
+                <span className="text-xs font-extrabold uppercase tracking-wider text-[#1B2430]/55">
+                  Hrúbka vrstvy
+                </span>
+
+                <div
+                  role="radiogroup"
+                  aria-label="Hrúbka vrstvy"
+                  className="mt-1.5 flex flex-col gap-2"
+                >
+                  {system.hrubky.map((h) => {
+                    const zvolena = hrubka === h.hrubka;
+                    const zamknute = !system.vyber_hrubky;
+                    const rozdiel = h.price_per_m2 - najlacnejsia;
+                    const otvoreny = detail === h.hrubka;
+                    return (
+                      <div
+                        key={h.hrubka ?? "jedna"}
+                        role="radio"
+                        aria-checked={zvolena}
+                        tabIndex={zamknute ? -1 : 0}
+                        onClick={() => !zamknute && setHrubka(h.hrubka)}
+                        onKeyDown={(e) => {
+                          if (zamknute) return;
+                          if (e.key === "Enter" || e.key === " ") {
+                            e.preventDefault();
+                            setHrubka(h.hrubka);
+                          }
+                        }}
+                        className={[
+                          "flex items-start gap-3 rounded-2xl border-2 p-3 transition-colors",
+                          zvolena
+                            ? "border-[#2563EB] bg-[#EFF4FF]"
+                            : "border-[#1B2430]/12",
+                          zamknute
+                            ? "cursor-default"
+                            : "cursor-pointer hover:border-[#2563EB]/60",
+                        ].join(" ")}
+                      >
+                        <RezVrstvy hrubka={h.hrubka} />
+
+                        <div className="min-w-0 flex-1">
+                          <div className="font-extrabold text-[#1B2430]">
+                            {HRUBKA_NAZOV[h.hrubka ?? ""] ?? h.label}
+                          </div>
+                          <div className="mt-0.5 text-xs text-[#1B2430]/65 leading-snug">
+                            {HRUBKA_POPIS[h.hrubka ?? ""] ?? ""}
+                          </div>
+                          <div className="mt-1 text-xs font-semibold text-[#1B2430]/50">
+                            {HRUBKA_ZAKRYJE[h.hrubka ?? ""] ?? ""}
+                          </div>
+
+                          {HRUBKA_DETAIL[h.hrubka ?? ""] && (
+                            <>
+                              <button
+                                type="button"
+                                onClick={(e) => {
+                                  // klik na „Viac o…" nesmie prepnúť výber hrúbky
+                                  e.stopPropagation();
+                                  setDetail(otvoreny ? null : h.hrubka);
+                                }}
+                                className="mt-1.5 text-xs font-bold text-[#2563EB] underline-offset-2 hover:underline"
+                              >
+                                {otvoreny
+                                  ? "Skryť"
+                                  : `Viac o ${HRUBKA_O[h.hrubka ?? ""] ?? "vrstve"}`}
+                              </button>
+                              {otvoreny && (
+                                <p className="mt-1.5 text-xs text-[#1B2430]/70 leading-snug">
+                                  {HRUBKA_DETAIL[h.hrubka ?? ""]}
+                                </p>
+                              )}
+                            </>
+                          )}
+                        </div>
+
+                        <div className="flex shrink-0 flex-col items-end gap-1.5">
+                          {system.vyber_hrubky && (
+                            <span className="text-xs font-bold text-[#1B2430]/70 whitespace-nowrap">
+                              {rozdiel > 0 ? `+${rozdiel} €/m²` : "v základe"}
+                            </span>
+                          )}
+                          {!zamknute && (
+                            <span
+                              aria-hidden
+                              className={[
+                                "inline-flex h-5 w-5 items-center justify-center rounded-full border-2 transition-colors",
+                                zvolena
+                                  ? "border-[#2563EB] bg-[#2563EB] text-white"
+                                  : "border-[#1B2430]/25 text-transparent",
+                              ].join(" ")}
+                            >
+                              <Check className="h-3 w-3" />
+                            </span>
+                          )}
+                        </div>
+                      </div>
+                    );
+                  })}
+                </div>
+
+                {!system.vyber_hrubky && system.binder === "polyuretan" && (
+                  <p className="mt-2.5 rounded-2xl bg-[#EEF2F7] p-3 text-xs text-[#1B2430]/70 leading-snug">
+                    Polyuretán aplikujeme len ako 2 mm liatu vrstvu — v tenšom
+                    prevedení nedrží pružnosť ani UV stabilitu, kvôli ktorým sa
+                    oplatí.
+                  </p>
+                )}
+              </div>
+            )}
+
+            {/* spodná lišta — bez cien, tie prídu až v rekapitulácii */}
+            <div className="sticky bottom-0 -mx-4 mt-5 flex flex-col gap-2.5 border-t border-[#1B2430]/10 bg-white/95 px-4 py-3 backdrop-blur md:-mx-6 md:flex-row md:items-center md:justify-between md:px-6">
+              <p className="text-xs text-[#1B2430]/60 leading-snug">
+                Celkovú cenu ti ukážeme na konci — aj s dopravou a doplnkami.
+              </p>
+              <div className="flex items-center justify-between gap-3 md:justify-end">
+                <button
+                  type="button"
+                  onClick={() => posun(-1)}
+                  className="inline-flex items-center gap-1.5 rounded-full px-4 py-2.5 text-sm font-bold text-[#1B2430]/70 transition-colors hover:bg-[#f1f3f5] hover:text-[#1B2430]"
+                >
+                  <ArrowLeft className="h-4 w-4" aria-hidden />
+                  Späť
+                </button>
+                <button
+                  type="button"
+                  onClick={() => posun(1)}
+                  disabled={!system}
+                  className="flex-1 rounded-full bg-[#1B2430] px-6 py-3 font-extrabold text-white transition-all hover:-translate-y-0.5 disabled:opacity-40 disabled:hover:translate-y-0 md:flex-none whitespace-nowrap"
+                >
+                  Pokračovať
+                </button>
+              </div>
+            </div>
           </>
         )}
 
@@ -616,6 +739,12 @@ export function KonfiguratorCP({ cenyOd }: { cenyOd?: Record<string, number> }) 
                 </span>
               </span>
             </label>
+            {plochaOk && plocha < MIN_M2 && (
+              <p className="mt-2 rounded-2xl bg-[#EEF2F7] p-3 text-xs text-[#1B2430]/70 leading-snug">
+                Minimálna zákazka je {MIN_M2} m² alebo 1 000 €. Pri menšej ploche
+                počítame minimum — cenu ti aj tak ukážeme v ďalšom kroku.
+              </p>
+            )}
             <Navigacia spat={() => posun(-1)} dalej={() => posun(1)} dalejOk={plochaOk} />
           </>
         )}
@@ -693,6 +822,12 @@ export function KonfiguratorCP({ cenyOd }: { cenyOd?: Record<string, number> }) 
                   )}
                 </div>
               </div>
+              {cena?.ok && cena.min_order_applied && (
+                <p className="mt-3 text-xs font-semibold text-[#1B2430]/75">
+                  Uplatnili sme minimálnu zákazku {euro(minOrder || 1000)} — pri
+                  menších plochách sa presun techniky a materiálu neoplatí.
+                </p>
+              )}
               {cena?.ok && (
                 <p className="mt-3 text-xs text-[#1B2430]/60">
                   Presná cena sa môže mierne líšiť v závislosti od reálneho
