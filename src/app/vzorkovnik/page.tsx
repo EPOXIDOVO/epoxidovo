@@ -73,7 +73,7 @@ const TYPY: Record<
     zdroj: "arturo",
   },
   mistral: {
-    foto: "/images/vzorkovnik/arturo/mistral-mixed-clay.webp",
+    foto: "/images/vzorkovnik/arturo/mistral-endless-beach.webp",
     nadpis: "Vzorkovník — Mistral",
     popis: "Rad Mistral od Arturo. Mäkký oblačný ťah s jemnými prechodmi — nie sivý betón, ale pokojná plocha do interiéru.",
     zdroj: "arturo",

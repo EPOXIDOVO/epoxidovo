@@ -107,13 +107,14 @@ export const TYPY_PODLAH: TypPodlahyKarta[] = [
     name: "Mistral",
     // cenu zadal user 2026-08-25 (v CRM systém pre Mistral nie je)
     priceFrom: 104,
-    image: "/images/vzorkovnik/arturo/mistral-mixed-clay.webp",
+    image: "/images/vzorkovnik/arturo/mistral-endless-beach.webp",
     href: "/vzorkovnik?typ=mistral",
     crmFloorType: null,
     // vzorky výrobcu — vlastné realizačné fotky zatiaľ nemáme
     variants: [
-      // vybrané podľa nameraného kontrastu — ploché vzorky sa na dlaždici stratia
-      { src: "/images/vzorkovnik/arturo/mistral-harsh-gravel.webp", typ: "mistral", alt: "Mistral — Harsh Gravel", farba: "Harsh Gravel", farbaLabel: "Harsh Gravel" },
+      // Vybrané podľa nameranej kresby na plných 900px vzorkách — ploché
+      // odtiene sa na dlaždici stratia (user 2026-08-25).
+      { src: "/images/vzorkovnik/arturo/mistral-mixed-clay.webp", typ: "mistral", alt: "Mistral — Mixed Clay", farba: "Mixed Clay", farbaLabel: "Mixed Clay" },
       { src: "/images/vzorkovnik/arturo/mistral-frozen-cosmos.webp", typ: "mistral", alt: "Mistral — Frozen Cosmos", farba: "Frozen Cosmos", farbaLabel: "Frozen Cosmos" },
       { src: "/images/vzorkovnik/arturo/mistral-ice-cave.webp", typ: "mistral", alt: "Mistral — Ice Cave", farba: "Ice Cave", farbaLabel: "Ice Cave" },
     ],
@@ -131,7 +132,7 @@ export const TYPY_PODLAH: TypPodlahyKarta[] = [
       // najvýraznejšie z radu — fresh-power a spol. sú prebielené a na
       // hnedom pozadí showcase ich nevidno
       { src: "/images/vzorkovnik/arturo/concrete-look-worn-stuff.webp", typ: "beton-look", alt: "Betón look — Worn Stuff", farba: "Worn Stuff", farbaLabel: "Worn Stuff" },
-      { src: "/images/vzorkovnik/arturo/concrete-look-velvet-blossom.webp", typ: "beton-look", alt: "Betón look — Velvet Blossom", farba: "Velvet Blossom", farbaLabel: "Velvet Blossom" },
+      { src: "/images/vzorkovnik/arturo/concrete-look-nordic-night.webp", typ: "beton-look", alt: "Betón look — Nordic Night", farba: "Nordic Night", farbaLabel: "Nordic Night" },
       { src: "/images/vzorkovnik/arturo/concrete-look-dark-move.webp", typ: "beton-look", alt: "Betón look — Dark Move", farba: "Dark Move", farbaLabel: "Dark Move" },
     ],
   },
