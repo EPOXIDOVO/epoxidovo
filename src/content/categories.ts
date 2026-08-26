@@ -96,7 +96,7 @@ export const CATEGORIES: Category[] = [
     image: "/images/realizacie/r-22.jpg",
     driveCategory: "priemyselne",
     priceFrom: 0,
-    priceLabel: "Cena na dopyt",
+    priceLabel: "Na dopyt",
   },
 ];
 

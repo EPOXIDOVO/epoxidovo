@@ -165,9 +165,13 @@ function CategoriesShowcaseInner({ cenyOd }: { cenyOd?: Record<string, number> }
                   />
 
                   {/* Cena od — biely glassmorphism chip vpravo dole */}
-                  <span className="absolute bottom-2 right-2 md:bottom-3 md:right-3 inline-flex items-baseline gap-1 px-[8px] py-[4px] md:px-[14px] md:py-[8px] rounded-lg bg-white/95 backdrop-blur-md border border-white shadow-[0_4px_12px_rgba(0,0,0,0.15)] group-hover:-translate-y-0.5 group-hover:shadow-[0_8px_22px_rgba(0,0,0,0.22)] transition-all duration-300">
+                  {/* whitespace-nowrap: „Cena na dopyt" sa lámala na dva riadky
+                      a chip bol vyšší než ostatné (user 2026-08-25) */}
+                  <span className="absolute bottom-2 right-2 md:bottom-3 md:right-3 inline-flex items-baseline gap-1 whitespace-nowrap px-[8px] py-[4px] md:px-[14px] md:py-[8px] rounded-lg bg-white/95 backdrop-blur-md border border-white shadow-[0_4px_12px_rgba(0,0,0,0.15)] group-hover:-translate-y-0.5 group-hover:shadow-[0_8px_22px_rgba(0,0,0,0.22)] transition-all duration-300">
                     {cat.priceLabel ? (
-                      <span className="text-[13px] md:text-[18px] font-bold text-[#1a1a1a] leading-none">
+                      // leading dorovnáva výšku na cenový chip, ktorý má navyše
+                      // malé „od" a tým vyšší riadok
+                      <span className="text-[13px] md:text-[18px] font-bold text-[#1a1a1a] leading-[16px] md:leading-[21px]">
                         {cat.priceLabel}
                       </span>
                     ) : (

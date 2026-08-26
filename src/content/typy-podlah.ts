@@ -144,7 +144,7 @@ export const TYPY_PODLAH: TypPodlahyKarta[] = [
     slug: "priemyselne",
     name: kat("priemyselne")?.name ?? "Priemyselné",
     priceFrom: kat("priemyselne")?.priceFrom ?? 0,
-    priceLabel: kat("priemyselne")?.priceLabel ?? "Cena na dopyt",
+    priceLabel: kat("priemyselne")?.priceLabel ?? "Na dopyt",
     image: "/images/hero/hala.jpg",
     href: "/realizacie?priestor=hala-firma",
     // priemyselné sa cenia individuálne podľa prevádzky, nie paušálom
