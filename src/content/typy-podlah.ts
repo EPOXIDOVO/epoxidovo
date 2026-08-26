@@ -99,8 +99,11 @@ export const TYPY_PODLAH: TypPodlahyKarta[] = [
     image: "/images/categories/mramorove.jpg",
     href: "/realizacie?kategoria=mramorove",
     crmFloorType: "mramorova",
-    pripravujeme: true,
-    variants: [],
+    variants: [
+      { src: "/images/realizacie/r-11.jpg", typ: "mramorova", alt: "Mramorová podlaha — biela so sivým žilkovaním" },
+      { src: "/images/realizacie/r-38.avif", typ: "mramorova", alt: "Mramorová podlaha — lesklá biela s tmavými žilkami" },
+      { src: "/images/realizacie/r-12.jpg", typ: "mramorova", alt: "Mramorová podlaha — krémová s hnedými žilkami" },
+    ],
   },
   {
     slug: "mistral",
@@ -114,9 +117,9 @@ export const TYPY_PODLAH: TypPodlahyKarta[] = [
     variants: [
       // Vybrané podľa nameranej kresby na plných 900px vzorkách — ploché
       // odtiene sa na dlaždici stratia (user 2026-08-25).
-      { src: "/images/vzorkovnik/arturo/mistral-cosmic-fusion.webp", typ: "mistral", alt: "Mistral — Cosmic Fusion", farba: "Cosmic Fusion", farbaLabel: "Cosmic Fusion" },
       { src: "/images/vzorkovnik/arturo/mistral-mixed-clay.webp", typ: "mistral", alt: "Mistral — Mixed Clay", farba: "Mixed Clay", farbaLabel: "Mixed Clay" },
-      { src: "/images/vzorkovnik/arturo/mistral-frozen-cosmos.webp", typ: "mistral", alt: "Mistral — Frozen Cosmos", farba: "Frozen Cosmos", farbaLabel: "Frozen Cosmos" },
+      { src: "/images/vzorkovnik/arturo/mistral-basic-wash.webp", typ: "mistral", alt: "Mistral — Basic Wash", farba: "Basic Wash", farbaLabel: "Basic Wash" },
+      { src: "/images/vzorkovnik/arturo/mistral-calm-breeze.webp", typ: "mistral", alt: "Mistral — Calm Breeze", farba: "Calm Breeze", farbaLabel: "Calm Breeze" },
     ],
   },
   {

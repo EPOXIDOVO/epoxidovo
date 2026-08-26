@@ -130,7 +130,9 @@ function CategoriesShowcaseInner({ cenyOd }: { cenyOd?: Record<string, number> }
 
           {/* Karty s kategóriami — každý stĺpec: hlavná karta + 3 farebné
               varianty (zatiaľ dummy "Čoskoro") + vlastný vzorkovník link */}
-          <div className="mt-8 md:mt-16 grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-2.5 md:gap-4">
+          {/* 7 stĺpcov — všetky typy v jednom riadku, priemyselné na konci
+              (user 2026-08-25). */}
+          <div className="mt-8 md:mt-16 grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-7 gap-2.5 md:gap-3">
             {TYPY_PODLAH.map((cat, idx) => (
               <div
                 key={cat.slug}
