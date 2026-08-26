@@ -110,11 +110,14 @@ export const TYPY_PODLAH: TypPodlahyKarta[] = [
     priceLabel: "Cena na dopyt",
     image: "/images/vzorkovnik/arturo/mistral-gentle-shade.webp",
     href: "/vzorkovnik?typ=mistral",
-    // Arturo Mistral — mäkký oblačný ťah. Vlastné realizačné fotky
-    // zatiaľ nemáme, tak sú varianty prázdne.
     crmFloorType: null,
-    pripravujeme: true,
-    variants: [],
+    // vzorky výrobcu — vlastné realizačné fotky zatiaľ nemáme
+    variants: [
+      // vybrané podľa nameraného kontrastu — ploché vzorky sa na dlaždici stratia
+      { src: "/images/vzorkovnik/arturo/mistral-mixed-clay.webp", typ: "mistral", alt: "Mistral — Mixed Clay", farba: "Mixed Clay", farbaLabel: "Mixed Clay" },
+      { src: "/images/vzorkovnik/arturo/mistral-basic-wash.webp", typ: "mistral", alt: "Mistral — Basic Wash", farba: "Basic Wash", farbaLabel: "Basic Wash" },
+      { src: "/images/vzorkovnik/arturo/mistral-ice-cave.webp", typ: "mistral", alt: "Mistral — Ice Cave", farba: "Ice Cave", farbaLabel: "Ice Cave" },
+    ],
   },
   {
     slug: "beton-look",
@@ -124,8 +127,13 @@ export const TYPY_PODLAH: TypPodlahyKarta[] = [
     href: "/vzorkovnik?typ=beton-look",
     // generátor CP v NajCRM betón look nepozná → dopyt ide obchodníkovi
     crmFloorType: null,
-    pripravujeme: true,
-    variants: [],
+    variants: [
+      // najvýraznejšie z radu — fresh-power a spol. sú prebielené a na
+      // hnedom pozadí showcase ich nevidno
+      { src: "/images/vzorkovnik/arturo/concrete-look-worn-stuff.webp", typ: "beton-look", alt: "Betón look — Worn Stuff", farba: "Worn Stuff", farbaLabel: "Worn Stuff" },
+      { src: "/images/vzorkovnik/arturo/concrete-look-velvet-blossom.webp", typ: "beton-look", alt: "Betón look — Velvet Blossom", farba: "Velvet Blossom", farbaLabel: "Velvet Blossom" },
+      { src: "/images/vzorkovnik/arturo/concrete-look-dark-move.webp", typ: "beton-look", alt: "Betón look — Dark Move", farba: "Dark Move", farbaLabel: "Dark Move" },
+    ],
   },
   {
     // priemyselné na konci — B2C zákazník ich hľadá najmenej

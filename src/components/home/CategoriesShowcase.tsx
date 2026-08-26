@@ -231,7 +231,7 @@ function CategoriesShowcaseInner({ cenyOd }: { cenyOd?: Record<string, number> }
                   aria-label={`Vzorkovník farieb — ${cat.name}`}
                   className="inline-flex items-center justify-center px-3 py-2.5 md:py-3 rounded-full bg-[#3db6e8] text-white font-semibold text-[12px] md:text-sm whitespace-nowrap hover:bg-[#1a8cc4] shadow-[0_6px_20px_rgba(61,182,232,0.35)] hover:-translate-y-0.5 transition-all duration-300"
                 >
-                  Vzorkovník farieb
+                  {cat.slug === "priemyselne" ? "Špeciálne systémy" : "Vzorkovník farieb"}
                 </Link>
               ) : (
                 <div

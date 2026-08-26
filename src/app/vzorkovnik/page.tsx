@@ -13,6 +13,7 @@ import { TYPY_PODLAH } from "@/content/typy-podlah";
 import { EfektyGrid } from "./EfektyGrid";
 import { KombinacieSekcia } from "./KombinacieSekcia";
 import { ChipsyKombinacie } from "./ChipsyKombinacie";
+import { SpecialneSystemy } from "./SpecialneSystemy";
 import { cenyOdZCrm } from "@/lib/cennik-od";
 import { MATERIALY } from "@/lib/materialy";
 import { obsahKategoria } from "@/lib/obsah-kategorie";
@@ -21,15 +22,16 @@ import { ArturoGrid } from "./ArturoGrid";
 
 /**
  * Vzorkovník pre konkrétny typ podlahy — z konfigurátora sem chodí
- * `?typ=`. Jednofarebné a priemyselné majú RAL, metalické a mramorové
- * efektové vzorky, chipsové reálne posypy z katalógu.
+ * `?typ=`. Jednofarebné majú RAL aj Arturo Unicolor, metalické a mramorové
+ * efektové vzorky, chipsové reálne posypy z katalógu a priemyselné namiesto
+ * farieb špeciálne systémy (ESD, HACCP, ATEX, protišmyk).
  */
 const TYPY: Record<
   string,
   {
     nadpis: string;
     popis: string;
-    zdroj: "ral" | "efekty" | "chipsy" | "arturo" | "priprava";
+    zdroj: "ral" | "efekty" | "chipsy" | "arturo" | "priprava" | "specialne";
     /** Náhľad do prepínača. Bez fotky sa vykreslí neutrálna dlaždica. */
     foto?: string;
   }
@@ -42,9 +44,9 @@ const TYPY: Record<
   },
   priemyselne: {
     foto: "/images/hero/hala.jpg",
-    nadpis: "Vzorkovník — priemyselné podlahy",
-    popis: "RAL Classic. Do hál a dielní sa najčastejšie lejú sivé a modré odtiene.",
-    zdroj: "ral",
+    nadpis: "Priemyselné podlahy — špeciálne systémy",
+    popis: "ESD, HACCP, ATEX a protišmyk. V priemysle rozhoduje vlastnosť podlahy, nie odtieň — farbu doladíme podľa RAL až nakoniec.",
+    zdroj: "specialne",
   },
   metalicke: {
     foto: "/images/categories/metalicke.jpg",
@@ -287,6 +289,8 @@ export default async function VzorkovnikPage({
         )}
 
         {typ === "chipsove" && <ChipsyKombinacie />}
+
+        {zdroj === "specialne" && <SpecialneSystemy />}
 
         {zdroj === "chipsy" && (
           <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-3 md:gap-4">
