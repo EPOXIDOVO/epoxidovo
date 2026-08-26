@@ -108,14 +108,14 @@ export const TYPY_PODLAH: TypPodlahyKarta[] = [
     // cenu pre Mistral v CRM nemáme a vymýšľať ju nebudem
     priceFrom: 0,
     priceLabel: "Cena na dopyt",
-    image: "/images/vzorkovnik/arturo/mistral-gentle-shade.webp",
+    image: "/images/vzorkovnik/arturo/mistral-mixed-clay.webp",
     href: "/vzorkovnik?typ=mistral",
     crmFloorType: null,
     // vzorky výrobcu — vlastné realizačné fotky zatiaľ nemáme
     variants: [
       // vybrané podľa nameraného kontrastu — ploché vzorky sa na dlaždici stratia
-      { src: "/images/vzorkovnik/arturo/mistral-mixed-clay.webp", typ: "mistral", alt: "Mistral — Mixed Clay", farba: "Mixed Clay", farbaLabel: "Mixed Clay" },
-      { src: "/images/vzorkovnik/arturo/mistral-basic-wash.webp", typ: "mistral", alt: "Mistral — Basic Wash", farba: "Basic Wash", farbaLabel: "Basic Wash" },
+      { src: "/images/vzorkovnik/arturo/mistral-harsh-gravel.webp", typ: "mistral", alt: "Mistral — Harsh Gravel", farba: "Harsh Gravel", farbaLabel: "Harsh Gravel" },
+      { src: "/images/vzorkovnik/arturo/mistral-frozen-cosmos.webp", typ: "mistral", alt: "Mistral — Frozen Cosmos", farba: "Frozen Cosmos", farbaLabel: "Frozen Cosmos" },
       { src: "/images/vzorkovnik/arturo/mistral-ice-cave.webp", typ: "mistral", alt: "Mistral — Ice Cave", farba: "Ice Cave", farbaLabel: "Ice Cave" },
     ],
   },
