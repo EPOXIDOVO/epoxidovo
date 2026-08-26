@@ -12,6 +12,7 @@ import { TOPSTONE_METALIK } from "@/content/topstone-metalik";
 import { TYPY_PODLAH } from "@/content/typy-podlah";
 import { EfektyGrid } from "./EfektyGrid";
 import { KombinacieSekcia } from "./KombinacieSekcia";
+import { ChipsyKombinacie } from "./ChipsyKombinacie";
 import { cenyOdZCrm } from "@/lib/cennik-od";
 import { MATERIALY } from "@/lib/materialy";
 import { obsahKategoria } from "@/lib/obsah-kategorie";
@@ -207,6 +208,9 @@ export default async function VzorkovnikPage({
                 <li key={slug}>
                   <Link
                     href={`/vzorkovnik?typ=${slug}`}
+                    // bez scroll={false} by prepnutie typu vyhodilo človeka
+                    // späť na začiatok stránky — chce ostať tam, kde bol
+                    scroll={false}
                     aria-current={aktivny ? "page" : undefined}
                     className={`group block overflow-hidden rounded-xl ring-2 transition-all ${
                       aktivny
@@ -280,6 +284,8 @@ export default async function VzorkovnikPage({
             <ArturoGrid typy={ARTURO_TYPY} farby={arturoFarby} />
           </section>
         )}
+
+        {typ === "chipsove" && <ChipsyKombinacie />}
 
         {zdroj === "chipsy" && (
           <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-3 md:gap-4">
