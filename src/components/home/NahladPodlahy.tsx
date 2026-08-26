@@ -151,52 +151,55 @@ export function NahladPodlahyProvider({ children }: { children: React.ReactNode 
                 )}
               </div>
 
-              <div className="mt-5 grid grid-cols-1 sm:grid-cols-3 gap-3 items-start">
-                <div className="flex flex-col items-center gap-1.5">
+              {/* Popisky sú VNÚTRI tlačidiel — samostatné vety pod nimi
+                  rozhadzovali šírky a prostredné tlačidlo pretekalo do
+                  susedného (user 2026-08-25). whitespace-nowrap preč, text
+                  sa smie zalomiť. */}
+              <div className="mt-5 grid grid-cols-1 sm:grid-cols-3 gap-3 items-stretch">
                 {textura ? (
                   <Link
                     href={`/ai-vizualizer?texture=${textura}${farbaParam}${fotoParam}`}
-                    className="inline-flex items-center justify-center gap-2 px-5 py-3.5 rounded-full bg-gradient-to-r from-[#3db6e8] to-[#a855f7] text-white font-bold text-sm md:text-base shadow-[0_6px_20px_rgba(168,85,247,0.35)] hover:-translate-y-0.5 transition-all whitespace-nowrap"
+                    className="flex flex-col items-center justify-center gap-0.5 px-4 py-3 rounded-2xl bg-gradient-to-r from-[#3db6e8] to-[#a855f7] text-white shadow-[0_6px_20px_rgba(168,85,247,0.35)] hover:-translate-y-0.5 transition-all text-center"
                   >
-                    <Sparkles className="w-4 h-4" aria-hidden />
-                    AI Vizualizátor
+                    <span className="inline-flex items-center gap-2 font-bold text-sm md:text-[15px]">
+                      <Sparkles className="w-4 h-4 shrink-0" aria-hidden />
+                      AI Vizualizátor
+                    </span>
+                    <span className="text-[11px] font-semibold leading-tight text-white/85">
+                      pozri si ju v tvojom priestore
+                    </span>
                   </Link>
                 ) : (
-                  <span className="inline-flex items-center justify-center gap-2 px-5 py-3.5 rounded-full border-2 border-dashed border-zinc-300 text-zinc-400 font-bold text-sm whitespace-nowrap cursor-default">
-                    <Sparkles className="w-4 h-4" aria-hidden />
-                    Vizualizácia čoskoro
+                  <span className="flex flex-col items-center justify-center gap-0.5 px-4 py-3 rounded-2xl border-2 border-dashed border-zinc-300 text-zinc-400 text-center select-none cursor-default">
+                    <span className="inline-flex items-center gap-2 font-bold text-sm md:text-[15px]">
+                      <Sparkles className="w-4 h-4 shrink-0" aria-hidden />
+                      Vizualizácia čoskoro
+                    </span>
                   </span>
                 )}
-                {textura && (
-                  <p className="text-xs font-bold text-[#1B2430] text-center leading-snug">
-                    Pozri si, ako táto podlaha bude vyzerať v tvojom priestore.
-                  </p>
-                )}
-                </div>
 
-                <div className="flex flex-col items-center gap-1.5">
                 <Link
                   href={`/navrhni-podlahu?vzhlad=${vzhlad}${farbaParam}&cp=1`}
-                  className="inline-flex items-center justify-center gap-2 px-6 py-3.5 rounded-full bg-[#ea580c] text-white font-bold text-sm md:text-[15px] shadow-[0_6px_20px_rgba(234,88,12,0.35)] hover:bg-[#c2410c] hover:-translate-y-0.5 transition-all whitespace-nowrap"
+                  className="flex flex-col items-center justify-center gap-0.5 px-4 py-3 rounded-2xl bg-[#ea580c] text-white shadow-[0_6px_20px_rgba(234,88,12,0.35)] hover:bg-[#c2410c] hover:-translate-y-0.5 transition-all text-center"
                 >
-                  <FileText className="w-4 h-4 shrink-0" aria-hidden />
-                  Cenová ponuka na realizáciu
+                  <span className="inline-flex items-center gap-2 font-bold text-sm md:text-[15px]">
+                    <FileText className="w-4 h-4 shrink-0" aria-hidden />
+                    Cenová ponuka
+                  </span>
+                  <span className="text-[11px] font-semibold leading-tight text-white/85">
+                    cenu uvidíš hneď
+                  </span>
                 </Link>
-                <p className="text-xs font-bold text-[#1B2430] text-center leading-snug">
-                  Cenu uvidíš hneď — kontakt vyplníš, len ak budeš chcieť, aby sme
-                  sa ozvali.
-                </p>
-                </div>
 
                 <span
                   aria-disabled
-                  className="relative inline-flex flex-col items-center justify-center gap-0.5 px-5 py-2.5 rounded-full border-2 border-dashed border-zinc-300 text-zinc-400 font-bold text-sm md:text-base whitespace-nowrap select-none cursor-default"
+                  className="relative flex flex-col items-center justify-center gap-0.5 px-4 py-3 rounded-2xl border-2 border-dashed border-zinc-300 text-zinc-400 text-center select-none cursor-default"
                 >
-                  <span className="inline-flex items-center gap-2">
-                    <ShoppingCart className="w-4 h-4" aria-hidden />
+                  <span className="inline-flex items-center gap-2 font-bold text-sm md:text-[15px]">
+                    <ShoppingCart className="w-4 h-4 shrink-0" aria-hidden />
                     Kúpiť materiál
                   </span>
-                  <span className="text-[10px] font-semibold text-zinc-400 normal-case whitespace-normal text-center leading-tight">
+                  <span className="text-[11px] font-semibold leading-tight">
                     chcem si ju urobiť sám
                   </span>
                   <span className="absolute -top-2 -right-1 px-2 py-0.5 rounded-full bg-[#ea580c] text-white text-[9px] font-bold uppercase">

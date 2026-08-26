@@ -5,6 +5,8 @@ import Image from "next/image";
 import Link from "next/link";
 import { Container } from "@/components/ui/Container";
 import { TYPY_PODLAH, type TypPodlahyKarta } from "@/content/typy-podlah";
+import { TOPSTONE_METALIK } from "@/content/topstone-metalik";
+import type { FotkaPodlahy } from "@/content/typ-podlahy";
 import { NahladPodlahyProvider, useNahladPodlahy } from "./NahladPodlahy";
 
 /**
@@ -60,6 +62,31 @@ function DiceIcon({ pips }: { pips: 1 | 2 | 3 | 4 | 5 }) {
  * kompletnú kolekciu TopStone EP11 (18 odtieňov), tak už tam nie je
  * „Čoskoro". Kategórie, ktoré tu nie sú, ho stále nemajú.
  */
+/**
+ * Čím listujú šípky v náhľade. Pri metalických nechceme zavrieť človeka
+ * do troch fotiek z dlaždice — user 2026-08-25: „nech ma to nelimituje iba
+ * na tie 3 fotky … nech mi to proste zacne scrollovat … celom vzorkovniku
+ * a scrollujes az dole uplne na poslednu". Vrátime celú kolekciu a index
+ * fotky, na ktorú sa kliklo, aby šípky pokračovali od nej až na koniec.
+ */
+function zoznamPreNahlad(
+  cat: TypPodlahyKarta,
+  index: number,
+): { fotky: FotkaPodlahy[]; index: number } {
+  if (cat.slug !== "metalicke") return { fotky: cat.variants, index };
+
+  const cela: FotkaPodlahy[] = TOPSTONE_METALIK.map((e) => ({
+    src: e.src,
+    typ: "metalicka" as const,
+    alt: `Metalická podlaha — ${e.label}`,
+    farba: e.label,
+    farbaLabel: e.label,
+  }));
+  const kliknuta = cat.variants[index]?.src;
+  const i = cela.findIndex((f) => f.src === kliknuta);
+  return { fotky: cela, index: i >= 0 ? i : 0 };
+}
+
 const VZORKOVNIK_TYP: Record<string, string> = {
   jednofarebne: "/vzorkovnik?typ=jednofarebne",
   priemyselne: "/vzorkovnik?typ=priemyselne",
@@ -168,9 +195,10 @@ function CategoriesShowcaseInner({ cenyOd }: { cenyOd?: Record<string, number> }
                 <button
                   key={v.src}
                   type="button"
-                  onClick={() =>
-                    otvor(cat.variants, vi, cenyOd?.[cat.slug] ?? cat.priceFrom ?? null)
-                  }
+                  onClick={() => {
+                    const z = zoznamPreNahlad(cat, vi);
+                    otvor(z.fotky, z.index, cenyOd?.[cat.slug] ?? cat.priceFrom ?? null);
+                  }}
                   aria-label={`${v.alt} — otvoriť náhľad`}
                   className="group/v relative aspect-[16/9] rounded-xl overflow-hidden transition-all duration-300 ease-out hover:scale-[1.06] hover:z-10 hover:shadow-[0_18px_40px_rgba(0,0,0,0.45)] hover:ring-[3px] hover:ring-white focus:outline-none focus-visible:ring-[3px] focus-visible:ring-white"
                 >
