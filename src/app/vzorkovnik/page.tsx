@@ -10,7 +10,6 @@ import { BreadcrumbsJsonLd } from "@/components/seo/BreadcrumbsJsonLd";
 import { RAL_CLASSIC_FULL, RAL_GROUPS } from "@/content/ral-classic";
 import { TOPSTONE_METALIK } from "@/content/topstone-metalik";
 import { TYPY_PODLAH } from "@/content/typy-podlah";
-import { MixerKombinacii } from "./MixerKombinacii";
 import { EfektyGrid } from "./EfektyGrid";
 import { cenyOdZCrm } from "@/lib/cennik-od";
 import { MATERIALY } from "@/lib/materialy";
@@ -261,10 +260,6 @@ export default async function VzorkovnikPage({
             ))}
           </div>
         )}
-
-        {/* Miešačka len pri metalických — pri ostatných typoch nemáme
-            referenčné vzorky pigmentov. */}
-        {typ === "metalicke" && <MixerKombinacii />}
 
         {zdroj === "efekty" && <EfektyGrid cenaOd={cenaOdMetalik} />}
 
