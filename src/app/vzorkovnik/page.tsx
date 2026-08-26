@@ -155,6 +155,7 @@ export default async function VzorkovnikPage({
 
   const cenyOd = await cenyOdZCrm();
   const cenaOdMetalik = cenyOd["metalicke"] ?? null;
+  const cenaOdTypu = typ ? (cenyOd[typ] ?? null) : null;
 
   return (
     <div className="bg-white">
@@ -281,7 +282,7 @@ export default async function VzorkovnikPage({
               Hotové odtiene od Arturo — namiešané výrobcom, takže farba sedí
               presne. Alternatíva k miešaniu podľa RAL.
             </p>
-            <ArturoGrid typy={ARTURO_TYPY} farby={arturoFarby} />
+            <ArturoGrid typy={ARTURO_TYPY} farby={arturoFarby} cenaOd={cenaOdTypu} />
           </section>
         )}
 
@@ -315,7 +316,7 @@ export default async function VzorkovnikPage({
           </div>
         )}
 
-        {zdroj === "arturo" && <ArturoGrid typy={ARTURO_TYPY} farby={arturoFarby} />}
+        {zdroj === "arturo" && <ArturoGrid typy={ARTURO_TYPY} farby={arturoFarby} cenaOd={cenaOdTypu} />}
 
         {zdroj === "priprava" && (
           <div className="rounded-2xl border border-zinc-200 bg-[#f7f6f3] p-6 md:p-8 text-center">

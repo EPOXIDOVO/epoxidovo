@@ -13,6 +13,7 @@ import {
   PIESOK_SKUS,
   PU_2MM_SKUS,
   referencnaFotka,
+  texturaProVizualizer,
 } from "@/lib/materialy";
 import { ProductVisual } from "@/components/eshop/ProductVisual";
 import {
@@ -202,7 +203,7 @@ export default async function ProduktPage({ params }: PageProps) {
               </div>
 
               {refFoto && m.kategoria === "Hlavná vrstva" ? (
-                <RalNahlad fotoSrc={refFoto.src} fotoLabel={refFoto.label} />
+                <RalNahlad fotoSrc={refFoto.src} fotoLabel={refFoto.label} textura={texturaProVizualizer(m)} />
               ) : refFoto ? (
                 <figure className="relative aspect-[16/9] rounded-3xl overflow-hidden">
                   <Image

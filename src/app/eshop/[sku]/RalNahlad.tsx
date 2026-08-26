@@ -2,7 +2,7 @@
 
 import * as React from "react";
 import Image from "next/image";
-import { Palette } from "lucide-react";
+import { Palette, Sparkles } from "lucide-react";
 import Link from "next/link";
 import { RAL_CLASSIC_FULL as RAL_CLASSIC, type RalSwatch } from "@/content/ral-classic";
 
@@ -27,9 +27,12 @@ const SKUPINY_LABELS: Record<string, string> = {
 export function RalNahlad({
   fotoSrc,
   fotoLabel,
+  textura,
 }: {
   fotoSrc: string;
   fotoLabel: string;
+  /** Typ podlahy pre AI vizualizér; null = produkt sa vizualizovať nedá. */
+  textura?: "metalicka" | "chips" | "hladka" | null;
 }) {
   const [ral, setRal] = React.useState<RalSwatch | null>(null);
 
@@ -104,6 +107,23 @@ export function RalNahlad({
           </Link>
           . Materiál miešame na objednávku v ľubovoľnom RAL odtieni.
         </p>
+
+        {/* Rovnaká cesta ako z náhľadu fotky na homepage — odtieň, ktorý si
+            tu vybral, ide rovno do vizualizéra (user 2026-08-25). */}
+        {textura && (
+          <Link
+            href={`/ai-vizualizer?texture=${textura}${ral ? `&farba=${encodeURIComponent(ral.kod)}` : ""}&foto=${encodeURIComponent(fotoSrc)}`}
+            className="mt-1 flex w-full flex-col items-center justify-center gap-0.5 rounded-2xl bg-gradient-to-r from-[#3db6e8] to-[#a855f7] px-4 py-3 text-center text-white shadow-[0_6px_20px_rgba(168,85,247,0.35)] transition-all hover:-translate-y-0.5"
+          >
+            <span className="inline-flex items-center gap-2 text-sm font-bold md:text-[15px]">
+              <Sparkles className="h-4 w-4 shrink-0" aria-hidden />
+              AI Vizualizátor
+            </span>
+            <span className="text-[11px] font-semibold leading-tight text-white/85">
+              pozri si {ral ? `${ral.kod} ` : ""}v tvojom priestore
+            </span>
+          </Link>
+        )}
       </div>
     </figure>
   );

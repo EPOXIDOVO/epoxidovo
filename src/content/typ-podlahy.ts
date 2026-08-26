@@ -12,6 +12,7 @@ export const TYPY_PODLAHY = [
   "priemyselna",
   "beton-look",
   "mramorova",
+  "mistral",
 ] as const;
 
 export type TypPodlahy = (typeof TYPY_PODLAHY)[number];
@@ -23,6 +24,7 @@ export const TYP_PODLAHY_LABEL: Record<TypPodlahy, string> = {
   priemyselna: "Priemyselná",
   "beton-look": "Betón look",
   mramorova: "Mramorová",
+  mistral: "Mistral",
 };
 
 /** Mapovanie na vzhľad v konfigurátore (src/lib/konfigurator/rules.ts). */
@@ -33,6 +35,8 @@ export const TYP_NA_VZHLAD: Record<TypPodlahy, string> = {
   priemyselna: "priemyselna",
   "beton-look": "beton_look",
   mramorova: "marble",
+  // konfigurátor Mistral zatiaľ nepozná — berieme ho ako betón look
+  mistral: "beton_look",
 };
 
 /** Starý slug kategórie na webe (/sluzby/…, categories.ts) → typ. */
@@ -41,6 +45,7 @@ export const SLUG_NA_TYP: Record<string, TypPodlahy> = {
   chipsove: "chipsova",
   metalicke: "metalicka",
   mramorove: "mramorova",
+  mistral: "mistral",
   priemyselne: "priemyselna",
   "beton-look": "beton-look",
 };

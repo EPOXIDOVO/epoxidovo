@@ -152,6 +152,19 @@ export function referencnaFotka(m: Material): {
   return { src: "/images/hero/byvanie-v2.webp", label: "Jednofarebná podlaha — naša realizácia" };
 }
 
+/**
+ * Textúra pre AI vizualizér podľa produktu — rovnaká heuristika ako
+ * referencnaFotka. Vďaka nej vie e-shop poslať človeka do vizualizéra
+ * s predvyplneným typom podlahy (user 2026-08-25).
+ */
+export function texturaProVizualizer(m: Material): "metalicka" | "chips" | "hladka" | null {
+  if (m.kategoria !== "Hlavná vrstva") return null;
+  const n = m.nazov.toLowerCase();
+  if (/metalick|metallic|ep11|ep22/.test(n)) return "metalicka";
+  if (/chips|vločk|flake/.test(n)) return "chips";
+  return "hladka";
+}
+
 /** Koľko celých balení treba na danú plochu. Materiál sa predáva len
  *  v celých baleniach — zaokrúhľujeme NAHOR. */
 export function baleniaNaPlochu(m: Material, plochaM2: number): number | null {
