@@ -63,6 +63,30 @@ export const CATEGORIES: Category[] = [
     priceFrom: 129,
   },
   {
+    // Zatiaľ bez realizačných fotiek — klient ich dodá (user 2026-08-25).
+    slug: "mistral",
+    name: "Mistral",
+    shortName: "Mistral",
+    tagline: "Mäkký oblačný ťah",
+    description:
+      "Rad Mistral od Arturo — jemné prechody a pokojná plocha bez ostrých hraníc. Do obytných priestorov, showroomov a ordinácií.",
+    image: "/images/vzorkovnik/arturo/mistral-endless-beach.webp",
+    driveCategory: "mistral",
+    priceFrom: 104,
+  },
+  {
+    // Zatiaľ bez realizačných fotiek — klient ich dodá (user 2026-08-25).
+    slug: "beton-look",
+    name: "Concrete Look",
+    shortName: "Concrete Look",
+    tagline: "Pohľadový betón bez škár",
+    description:
+      "Rady Concrete look a Concreta od Arturo — vzhľad pohľadového betónu, ale hladký, bezškárový a ľahko udržiavateľný.",
+    image: "/images/vzorkovnik/arturo/concrete-look-downtown-mix.webp",
+    driveCategory: "beton-look",
+    priceFrom: 99,
+  },
+  {
     slug: "priemyselne",
     name: "Priemyselné",
     shortName: "Priemyselné",

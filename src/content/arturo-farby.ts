@@ -80,6 +80,7 @@ export const ARTURO_FARBY: ArturoFarba[] = [
   { typ: "Concrete look", nazov: "Worn Stuff", sku: "WSCC1", obrazok: "/images/vzorkovnik/arturo/concrete-look-worn-stuff.webp" },
   { typ: "Mistral", nazov: "Basic Wash", sku: "MBW1", obrazok: "/images/vzorkovnik/arturo/mistral-basic-wash.webp" },
   { typ: "Mistral", nazov: "Calm Breeze", sku: "MCB1", obrazok: "/images/vzorkovnik/arturo/mistral-calm-breeze.webp" },
+  { typ: "Mistral", nazov: "Cosmic Fusion", sku: null, obrazok: "/images/vzorkovnik/arturo/mistral-cosmic-fusion.webp" },
   { typ: "Mistral", nazov: "Endless Beach", sku: null, obrazok: "/images/vzorkovnik/arturo/mistral-endless-beach.webp" },
   { typ: "Mistral", nazov: "Foggy Sky", sku: "MFS1", obrazok: "/images/vzorkovnik/arturo/mistral-foggy-sky.webp" },
   { typ: "Mistral", nazov: "Frozen Cosmos", sku: "MFC1", obrazok: "/images/vzorkovnik/arturo/mistral-frozen-cosmos.webp" },

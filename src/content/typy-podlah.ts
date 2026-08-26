@@ -108,15 +108,15 @@ export const TYPY_PODLAH: TypPodlahyKarta[] = [
     // cenu zadal user 2026-08-25 (v CRM systém pre Mistral nie je)
     priceFrom: 104,
     image: "/images/vzorkovnik/arturo/mistral-endless-beach.webp",
-    href: "/vzorkovnik?typ=mistral",
+    href: "/realizacie?kategoria=mistral",
     crmFloorType: null,
     // vzorky výrobcu — vlastné realizačné fotky zatiaľ nemáme
     variants: [
       // Vybrané podľa nameranej kresby na plných 900px vzorkách — ploché
       // odtiene sa na dlaždici stratia (user 2026-08-25).
+      { src: "/images/vzorkovnik/arturo/mistral-cosmic-fusion.webp", typ: "mistral", alt: "Mistral — Cosmic Fusion", farba: "Cosmic Fusion", farbaLabel: "Cosmic Fusion" },
       { src: "/images/vzorkovnik/arturo/mistral-mixed-clay.webp", typ: "mistral", alt: "Mistral — Mixed Clay", farba: "Mixed Clay", farbaLabel: "Mixed Clay" },
       { src: "/images/vzorkovnik/arturo/mistral-frozen-cosmos.webp", typ: "mistral", alt: "Mistral — Frozen Cosmos", farba: "Frozen Cosmos", farbaLabel: "Frozen Cosmos" },
-      { src: "/images/vzorkovnik/arturo/mistral-ice-cave.webp", typ: "mistral", alt: "Mistral — Ice Cave", farba: "Ice Cave", farbaLabel: "Ice Cave" },
     ],
   },
   {
@@ -125,7 +125,7 @@ export const TYPY_PODLAH: TypPodlahyKarta[] = [
     // user 2026-08-25
     priceFrom: 99,
     image: "/images/vzorkovnik/arturo/concrete-look-downtown-mix.webp",
-    href: "/vzorkovnik?typ=beton-look",
+    href: "/realizacie?kategoria=beton-look",
     // generátor CP v NajCRM betón look nepozná → dopyt ide obchodníkovi
     crmFloorType: null,
     variants: [

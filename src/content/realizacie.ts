@@ -9,7 +9,14 @@ export interface Realizacia {
   id: number;
   src: string;
   /** Slug pre filtre v galérii (historický). */
-  category: "jednofarebne" | "chipsove" | "mramorove" | "metalicke" | "priemyselne" | "beton-look";
+  category:
+    | "jednofarebne"
+    | "chipsove"
+    | "mramorove"
+    | "metalicke"
+    | "priemyselne"
+    | "beton-look"
+    | "mistral";
   /** Povinný tag typu podlahy — z neho ide vizualizácia aj CP. */
   typ: TypPodlahy;
   space: "dom" | "garaz" | "hala-firma";

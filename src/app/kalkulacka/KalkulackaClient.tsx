@@ -311,7 +311,9 @@ export function KalkulackaClient() {
                   )}
                   <div className="px-3 pt-2.5 pb-2 md:p-6 md:pb-3 h-[84px] md:h-[150px] flex flex-col">
                     <div className="w-6 h-6 md:w-9 md:h-9 mb-1 md:mb-4 rounded-md bg-white text-[#5c2c18] group-hover:text-[#3db6e8] flex items-center justify-center p-1 md:p-1.5 transition-colors duration-500 shrink-0">
-                      <DiceIcon pips={(idx + 1) as 1 | 2 | 3 | 4 | 5} />
+                      {/* modulo ako v CategoriesShowcase — kocka má len 5 stien, pri
+                          šiestej kategórii by inak spadol prerender */}
+                      <DiceIcon pips={((idx % 5) + 1) as 1 | 2 | 3 | 4 | 5} />
                     </div>
                     <h3 className="text-[15px] leading-[1.12] md:text-xl lg:text-2xl font-black text-white tracking-tight md:leading-[1.05]">
                       {cat.name === "Jednofarebné" ? "Hladké jednofarebné" : cat.name}
