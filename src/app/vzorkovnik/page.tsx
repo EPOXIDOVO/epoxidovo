@@ -11,6 +11,8 @@ import { RAL_CLASSIC_FULL, RAL_GROUPS } from "@/content/ral-classic";
 import { TOPSTONE_METALIK } from "@/content/topstone-metalik";
 import { TYPY_PODLAH } from "@/content/typy-podlah";
 import { MixerKombinacii } from "./MixerKombinacii";
+import { EfektyGrid } from "./EfektyGrid";
+import { cenyOdZCrm } from "@/lib/cennik-od";
 import { MATERIALY } from "@/lib/materialy";
 import { obsahKategoria } from "@/lib/obsah-kategorie";
 import { ARTURO_FARBY, ARTURO_TYPY } from "@/content/arturo-farby";
@@ -153,6 +155,9 @@ export default async function VzorkovnikPage({
             ? `${arturoFarby.length} odtieňov`
             : "";
 
+  const cenyOd = await cenyOdZCrm();
+  const cenaOdMetalik = cenyOd["metalicke"] ?? null;
+
   return (
     <div className="bg-white">
       <BreadcrumbsJsonLd
@@ -261,25 +266,7 @@ export default async function VzorkovnikPage({
             referenčné vzorky pigmentov. */}
         {typ === "metalicke" && <MixerKombinacii />}
 
-        {zdroj === "efekty" && (
-          <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-3 md:gap-4">
-            {METALICKE.map((e) => (
-              <div key={e.id} className="group">
-                <div className="relative aspect-[4/3] rounded-xl overflow-hidden ring-1 ring-[#1B2430]/10 group-hover:ring-[#3db6e8] transition-all">
-                  <Image
-                    src={`/images/eshop/topstone-metallic/${e.id}.jpg`}
-                    alt={`Metalický efekt ${e.label}`}
-                    fill
-                    sizes="(max-width: 768px) 50vw, 25vw"
-                    quality={85}
-                    className="object-cover group-hover:scale-105 transition-transform duration-500"
-                  />
-                </div>
-                <div className="mt-1.5 text-sm font-bold text-[#1B2430]">{e.label}</div>
-              </div>
-            ))}
-          </div>
-        )}
+        {zdroj === "efekty" && <EfektyGrid cenaOd={cenaOdMetalik} />}
 
         {zdroj === "chipsy" && (
           <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-3 md:gap-4">
