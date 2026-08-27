@@ -107,7 +107,7 @@ export function NahladPodlahyProvider({ children }: { children: React.ReactNode 
                     type="button"
                     onClick={() => posun(-1)}
                     aria-label="Predchádzajúca fotka"
-                    className="absolute left-3 top-1/2 -translate-y-1/2 w-10 h-10 inline-flex items-center justify-center rounded-full bg-white/90 text-[#1B2430] shadow hover:bg-white transition-colors"
+                    className="absolute left-3 top-1/2 -translate-y-1/2 w-10 h-10 inline-flex items-center justify-center rounded-full bg-white/90 text-[#1B2430] shadow hover:bg-white transition-colors hover:text-white relative isolate overflow-hidden before:absolute before:inset-0 before:-z-10 before:rounded-full before:bg-[#3db6e8] before:origin-center before:scale-0 before:transition-transform before:duration-[450ms] before:ease-[cubic-bezier(0.16,1,0.3,1)] hover:before:scale-100"
                   >
                     <ChevronLeft className="w-5 h-5" aria-hidden />
                   </button>
@@ -115,7 +115,7 @@ export function NahladPodlahyProvider({ children }: { children: React.ReactNode 
                     type="button"
                     onClick={() => posun(1)}
                     aria-label="Ďalšia fotka"
-                    className="absolute right-3 top-1/2 -translate-y-1/2 w-10 h-10 inline-flex items-center justify-center rounded-full bg-white/90 text-[#1B2430] shadow hover:bg-white transition-colors"
+                    className="absolute right-3 top-1/2 -translate-y-1/2 w-10 h-10 inline-flex items-center justify-center rounded-full bg-white/90 text-[#1B2430] shadow hover:bg-white transition-colors hover:text-white relative isolate overflow-hidden before:absolute before:inset-0 before:-z-10 before:rounded-full before:bg-[#3db6e8] before:origin-center before:scale-0 before:transition-transform before:duration-[450ms] before:ease-[cubic-bezier(0.16,1,0.3,1)] hover:before:scale-100"
                   >
                     <ChevronRight className="w-5 h-5" aria-hidden />
                   </button>
