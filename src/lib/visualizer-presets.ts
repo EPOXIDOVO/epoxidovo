@@ -14,7 +14,13 @@ import type React from "react";
  *    perspective, and all objects on the floor."
  */
 
-export type TextureSlug = "hladka" | "metalicka" | "chips" | "mramor";
+export type TextureSlug =
+  | "hladka"
+  | "metalicka"
+  | "chips"
+  | "mramor"
+  | "mistral"
+  | "beton";
 
 /** Povrchový lak — len finálny topcoat, nezávislý od textúry/farby. */
 export type Finish = "matna" | "leskla";
@@ -161,6 +167,32 @@ export const TEXTURES: Record<TextureSlug, TextureDef> = {
       filter: "blur(0.3px)",
     },
     previewImage: "/images/categories/metalicke.jpg",
+    previewObjectPosition: "center center",
+  },
+  mistral: {
+    slug: "mistral",
+    label: "Mistral",
+    description: "Jemný melírovaný dekoratívny povrch",
+    promptBase:
+      "decorative troweled Mistral-style seamless floor with soft cloud-like washed tonal movement, gentle organic mottling and subtle lighter and darker veiling, fine sandy micro-texture, matte to soft-satin finish, no decorative chips and no marble veins, professional photorealistic interior photography",
+    swatchCss: {
+      background:
+        "linear-gradient(120deg, #cdc7ba 0%, #b6b1a6 35%, #d8d2c4 60%, #b9b4ab 100%)",
+    },
+    previewImage: "/images/vzorkovnik/arturo/mistral-calm-breeze.webp",
+    previewObjectPosition: "center center",
+  },
+  beton: {
+    slug: "beton",
+    label: "Concrete Look",
+    description: "Betónový / mikrocementový vzhľad",
+    promptBase:
+      "seamless microcement concrete-look floor with smooth hand-troweled matte surface, subtle cloudy tonal variation and fine trowel marks, natural raw concrete aesthetic, soft mineral mottling, no glossy reflections and no decorative chips, professional photorealistic interior photography",
+    swatchCss: {
+      background:
+        "linear-gradient(120deg, #c2beb6 0%, #a9a6a1 40%, #cfccc7 65%, #b0aca7 100%)",
+    },
+    previewImage: "/images/vzorkovnik/arturo/concrete-look-native-shadow.webp",
     previewObjectPosition: "center center",
   },
 };
@@ -571,6 +603,266 @@ export const COLORS: Record<TextureSlug, ColorPreset[]> = {
         "Rosa Portugal pink marble pattern with darker rose veining, exact base hex #D4A896, soft romantic tones",
     },
   ],
+  mistral: [
+    {
+      slug: "basic-wash",
+      commercialName: "Basic Wash",
+      hex: "#b5b2a5",
+      promptColor:
+        "Basic Wash washed decorative shade, base tone approximately hex #B5B2A5, soft mid cloudy mottled movement, match the color and pattern of the reference sample exactly",
+      featured: true,
+      refImage: "/images/vzorkovnik/arturo/mistral-basic-wash.webp",
+    },
+    {
+      slug: "calm-breeze",
+      commercialName: "Calm Breeze",
+      hex: "#dcd3c3",
+      promptColor:
+        "Calm Breeze washed decorative shade, base tone approximately hex #DCD3C3, light airy cloudy mottled movement, match the color and pattern of the reference sample exactly",
+      featured: true,
+      refImage: "/images/vzorkovnik/arturo/mistral-calm-breeze.webp",
+    },
+    {
+      slug: "cosmic-fusion",
+      commercialName: "Cosmic Fusion",
+      hex: "#c5b8a1",
+      promptColor:
+        "Cosmic Fusion washed decorative shade, base tone approximately hex #C5B8A1, soft mid cloudy mottled movement, match the color and pattern of the reference sample exactly",
+      refImage: "/images/vzorkovnik/arturo/mistral-cosmic-fusion.webp",
+    },
+    {
+      slug: "endless-beach",
+      commercialName: "Endless Beach",
+      hex: "#d8d2bf",
+      promptColor:
+        "Endless Beach washed decorative shade, base tone approximately hex #D8D2BF, light airy cloudy mottled movement, match the color and pattern of the reference sample exactly",
+      refImage: "/images/vzorkovnik/arturo/mistral-endless-beach.webp",
+    },
+    {
+      slug: "foggy-sky",
+      commercialName: "Foggy Sky",
+      hex: "#c4bfb6",
+      promptColor:
+        "Foggy Sky washed decorative shade, base tone approximately hex #C4BFB6, light airy cloudy mottled movement, match the color and pattern of the reference sample exactly",
+      refImage: "/images/vzorkovnik/arturo/mistral-foggy-sky.webp",
+    },
+    {
+      slug: "frozen-cosmos",
+      commercialName: "Frozen Cosmos",
+      hex: "#c1c4c8",
+      promptColor:
+        "Frozen Cosmos washed decorative shade, base tone approximately hex #C1C4C8, light airy cloudy mottled movement, match the color and pattern of the reference sample exactly",
+      refImage: "/images/vzorkovnik/arturo/mistral-frozen-cosmos.webp",
+    },
+    {
+      slug: "gentle-shade",
+      commercialName: "Gentle Shade",
+      hex: "#bfbdb4",
+      promptColor:
+        "Gentle Shade washed decorative shade, base tone approximately hex #BFBDB4, soft mid cloudy mottled movement, match the color and pattern of the reference sample exactly",
+      refImage: "/images/vzorkovnik/arturo/mistral-gentle-shade.webp",
+    },
+    {
+      slug: "harsh-gravel",
+      commercialName: "Harsh Gravel",
+      hex: "#bab6b2",
+      promptColor:
+        "Harsh Gravel washed decorative shade, base tone approximately hex #BAB6B2, soft mid cloudy mottled movement, match the color and pattern of the reference sample exactly",
+      refImage: "/images/vzorkovnik/arturo/mistral-harsh-gravel.webp",
+    },
+    {
+      slug: "ice-cave",
+      commercialName: "Ice Cave",
+      hex: "#9fb1b2",
+      promptColor:
+        "Ice Cave washed decorative shade, base tone approximately hex #9FB1B2, soft mid cloudy mottled movement, match the color and pattern of the reference sample exactly",
+      featured: true,
+      refImage: "/images/vzorkovnik/arturo/mistral-ice-cave.webp",
+    },
+    {
+      slug: "mixed-clay",
+      commercialName: "Mixed Clay",
+      hex: "#b6b1b3",
+      promptColor:
+        "Mixed Clay washed decorative shade, base tone approximately hex #B6B1B3, soft mid cloudy mottled movement, match the color and pattern of the reference sample exactly",
+      featured: true,
+      refImage: "/images/vzorkovnik/arturo/mistral-mixed-clay.webp",
+    },
+  ],
+  beton: [
+    {
+      slug: "basic-wash",
+      commercialName: "Basic Wash",
+      hex: "#b5b2a5",
+      promptColor:
+        "Basic Wash concrete-look microcement shade, base tone approximately hex #B5B2A5, soft mid cloudy mottled movement, match the color and pattern of the reference sample exactly",
+      featured: true,
+      refImage: "/images/vzorkovnik/arturo/concrete-look-basic-wash.webp",
+    },
+    {
+      slug: "cosmic-fusion",
+      commercialName: "Cosmic Fusion",
+      hex: "#cbbda6",
+      promptColor:
+        "Cosmic Fusion concrete-look microcement shade, base tone approximately hex #CBBDA6, light airy cloudy mottled movement, match the color and pattern of the reference sample exactly",
+      refImage: "/images/vzorkovnik/arturo/concrete-look-cosmic-fusion.webp",
+    },
+    {
+      slug: "dark-move",
+      commercialName: "Dark Move",
+      hex: "#46535d",
+      promptColor:
+        "Dark Move concrete-look microcement shade, base tone approximately hex #46535D, deep cloudy mottled movement, match the color and pattern of the reference sample exactly",
+      refImage: "/images/vzorkovnik/arturo/concrete-look-dark-move.webp",
+    },
+    {
+      slug: "downtown-mix",
+      commercialName: "Downtown Mix",
+      hex: "#4c4a4b",
+      promptColor:
+        "Downtown Mix concrete-look microcement shade, base tone approximately hex #4C4A4B, deep cloudy mottled movement, match the color and pattern of the reference sample exactly",
+      refImage: "/images/vzorkovnik/arturo/concrete-look-downtown-mix.webp",
+    },
+    {
+      slug: "foggy-sky",
+      commercialName: "Foggy Sky",
+      hex: "#c4beb6",
+      promptColor:
+        "Foggy Sky concrete-look microcement shade, base tone approximately hex #C4BEB6, light airy cloudy mottled movement, match the color and pattern of the reference sample exactly",
+      refImage: "/images/vzorkovnik/arturo/concrete-look-foggy-sky.webp",
+    },
+    {
+      slug: "fresh-power",
+      commercialName: "Fresh Power",
+      hex: "#e9e7dc",
+      promptColor:
+        "Fresh Power concrete-look microcement shade, base tone approximately hex #E9E7DC, light airy cloudy mottled movement, match the color and pattern of the reference sample exactly",
+      featured: true,
+      refImage: "/images/vzorkovnik/arturo/concrete-look-fresh-power.webp",
+    },
+    {
+      slug: "frozen-cosmos",
+      commercialName: "Frozen Cosmos",
+      hex: "#c3c5c9",
+      promptColor:
+        "Frozen Cosmos concrete-look microcement shade, base tone approximately hex #C3C5C9, light airy cloudy mottled movement, match the color and pattern of the reference sample exactly",
+      refImage: "/images/vzorkovnik/arturo/concrete-look-frozen-cosmos.webp",
+    },
+    {
+      slug: "harsh-gravel",
+      commercialName: "Harsh Gravel",
+      hex: "#c2bcb8",
+      promptColor:
+        "Harsh Gravel concrete-look microcement shade, base tone approximately hex #C2BCB8, soft mid cloudy mottled movement, match the color and pattern of the reference sample exactly",
+      refImage: "/images/vzorkovnik/arturo/concrete-look-harsh-gravel.webp",
+    },
+    {
+      slug: "ice-cave",
+      commercialName: "Ice Cave",
+      hex: "#9fb1b1",
+      promptColor:
+        "Ice Cave concrete-look microcement shade, base tone approximately hex #9FB1B1, soft mid cloudy mottled movement, match the color and pattern of the reference sample exactly",
+      refImage: "/images/vzorkovnik/arturo/concrete-look-ice-cave.webp",
+    },
+    {
+      slug: "looming-dust",
+      commercialName: "Looming Dust",
+      hex: "#d5d1d4",
+      promptColor:
+        "Looming Dust concrete-look microcement shade, base tone approximately hex #D5D1D4, light airy cloudy mottled movement, match the color and pattern of the reference sample exactly",
+      refImage: "/images/vzorkovnik/arturo/concrete-look-looming-dust.webp",
+    },
+    {
+      slug: "mixed-clay",
+      commercialName: "Mixed Clay",
+      hex: "#b5b0b2",
+      promptColor:
+        "Mixed Clay concrete-look microcement shade, base tone approximately hex #B5B0B2, soft mid cloudy mottled movement, match the color and pattern of the reference sample exactly",
+      refImage: "/images/vzorkovnik/arturo/concrete-look-mixed-clay.webp",
+    },
+    {
+      slug: "morning-flow",
+      commercialName: "Morning Flow",
+      hex: "#e9e6dc",
+      promptColor:
+        "Morning Flow concrete-look microcement shade, base tone approximately hex #E9E6DC, light airy cloudy mottled movement, match the color and pattern of the reference sample exactly",
+      refImage: "/images/vzorkovnik/arturo/concrete-look-morning-flow.webp",
+    },
+    {
+      slug: "native-shadow",
+      commercialName: "Native Shadow",
+      hex: "#9e9a95",
+      promptColor:
+        "Native Shadow concrete-look microcement shade, base tone approximately hex #9E9A95, soft mid cloudy mottled movement, match the color and pattern of the reference sample exactly",
+      featured: true,
+      refImage: "/images/vzorkovnik/arturo/concrete-look-native-shadow.webp",
+    },
+    {
+      slug: "nordic-night",
+      commercialName: "Nordic Night",
+      hex: "#2b4d60",
+      promptColor:
+        "Nordic Night concrete-look microcement shade, base tone approximately hex #2B4D60, deep cloudy mottled movement, match the color and pattern of the reference sample exactly",
+      featured: true,
+      refImage: "/images/vzorkovnik/arturo/concrete-look-nordic-night.webp",
+    },
+    {
+      slug: "outback-dream",
+      commercialName: "Outback Dream",
+      hex: "#817060",
+      promptColor:
+        "Outback Dream concrete-look microcement shade, base tone approximately hex #817060, deep cloudy mottled movement, match the color and pattern of the reference sample exactly",
+      refImage: "/images/vzorkovnik/arturo/concrete-look-outback-dream.webp",
+    },
+    {
+      slug: "raw-basalt",
+      commercialName: "Raw Basalt",
+      hex: "#686e71",
+      promptColor:
+        "Raw Basalt concrete-look microcement shade, base tone approximately hex #686E71, deep cloudy mottled movement, match the color and pattern of the reference sample exactly",
+      refImage: "/images/vzorkovnik/arturo/concrete-look-raw-basalt.webp",
+    },
+    {
+      slug: "rough-lead",
+      commercialName: "Rough Lead",
+      hex: "#7e7d7c",
+      promptColor:
+        "Rough Lead concrete-look microcement shade, base tone approximately hex #7E7D7C, soft mid cloudy mottled movement, match the color and pattern of the reference sample exactly",
+      refImage: "/images/vzorkovnik/arturo/concrete-look-rough-lead.webp",
+    },
+    {
+      slug: "soft-stone",
+      commercialName: "Soft Stone",
+      hex: "#b7b5b5",
+      promptColor:
+        "Soft Stone concrete-look microcement shade, base tone approximately hex #B7B5B5, soft mid cloudy mottled movement, match the color and pattern of the reference sample exactly",
+      refImage: "/images/vzorkovnik/arturo/concrete-look-soft-stone.webp",
+    },
+    {
+      slug: "velvet-blossom",
+      commercialName: "Velvet Blossom",
+      hex: "#775559",
+      promptColor:
+        "Velvet Blossom concrete-look microcement shade, base tone approximately hex #775559, deep cloudy mottled movement, match the color and pattern of the reference sample exactly",
+      refImage: "/images/vzorkovnik/arturo/concrete-look-velvet-blossom.webp",
+    },
+    {
+      slug: "volcano-flame",
+      commercialName: "Volcano Flame",
+      hex: "#97605b",
+      promptColor:
+        "Volcano Flame concrete-look microcement shade, base tone approximately hex #97605B, deep cloudy mottled movement, match the color and pattern of the reference sample exactly",
+      refImage: "/images/vzorkovnik/arturo/concrete-look-volcano-flame.webp",
+    },
+    {
+      slug: "worn-stuff",
+      commercialName: "Worn Stuff",
+      hex: "#677488",
+      promptColor:
+        "Worn Stuff concrete-look microcement shade, base tone approximately hex #677488, deep cloudy mottled movement, match the color and pattern of the reference sample exactly",
+      refImage: "/images/vzorkovnik/arturo/concrete-look-worn-stuff.webp",
+    },
+  ],
 };
 
 // ════════════════════════════════════════════════════════════════════════
@@ -827,6 +1119,16 @@ const REFERENCE_IMAGES: Record<TextureSlug, string[]> = {
     "/images/visualizer-refs/metalic5.jpg",
     "/images/visualizer-refs/metalic7.jpg",
   ],
+  mistral: [
+    "/images/vzorkovnik/arturo/mistral-basic-wash.webp",
+    "/images/vzorkovnik/arturo/mistral-calm-breeze.webp",
+    "/images/vzorkovnik/arturo/mistral-mixed-clay.webp",
+  ],
+  beton: [
+    "/images/vzorkovnik/arturo/concrete-look-native-shadow.webp",
+    "/images/vzorkovnik/arturo/concrete-look-fresh-power.webp",
+    "/images/vzorkovnik/arturo/concrete-look-basic-wash.webp",
+  ],
 };
 
 /**
@@ -838,7 +1140,14 @@ export function getReferenceImagePaths(texture: TextureSlug): string[] {
 }
 
 export function isValidTextureSlug(s: string): s is TextureSlug {
-  return s === "hladka" || s === "metalicka" || s === "chips" || s === "mramor";
+  return (
+    s === "hladka" ||
+    s === "metalicka" ||
+    s === "chips" ||
+    s === "mramor" ||
+    s === "mistral" ||
+    s === "beton"
+  );
 }
 
 /**

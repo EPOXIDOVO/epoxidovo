@@ -30,7 +30,8 @@ const TYP_NA_TEXTURU: Record<string, string | null> = {
   mramorova: "mramor",
   metalicka: "metalicka",
   priemyselna: "hladka",
-  "beton-look": null,
+  mistral: "mistral",
+  "beton-look": "beton",
 };
 
 export function NahladPodlahyProvider({ children }: { children: React.ReactNode }) {
