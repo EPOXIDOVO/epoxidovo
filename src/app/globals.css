@@ -431,11 +431,15 @@ select,
   will-change: transform;
 }
 .cursor-dot {
-  width: 6px; height: 6px;
-  margin: -3px 0 0 -3px;
+  width: 7px; height: 7px;
+  margin: -3.5px 0 0 -3.5px;
   border-radius: 50%;
-  background: var(--color-brand);
-  z-index: 92;
+  /* biela s obrysom — presný bod kliknutia je vidieť na SVETLOM aj TMAVOM
+     aj na modrom (zahoverovanom) tlačidle. Predtým bola modrá a na modrom
+     tlačidle splynula (user 2026-08-27). */
+  background: #fff;
+  box-shadow: 0 0 0 1.5px var(--color-brand), 0 1px 3px rgba(0,0,0,0.4);
+  z-index: 203; /* NAD prstencom (201) — presný bod musí byť vždy navrchu */
   /* skrytý, kým myš prvý raz nepohne — inak visí bodka v ľavom hornom rohu */
   opacity: 0;
   transition: opacity 0.2s ease;
@@ -452,8 +456,8 @@ select,
   z-index: 201;
 }
 .cursor-ring.is-hover {
-  width: 56px; height: 56px;
-  margin: -28px 0 0 -28px;
+  width: 40px; height: 40px;
+  margin: -20px 0 0 -20px;
   border-color: #f97316;
 }
 .cursor-ring.is-down { opacity: 0.5; }
