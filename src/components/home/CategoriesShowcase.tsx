@@ -119,12 +119,12 @@ function CategoriesShowcaseInner({ cenyOd }: { cenyOd?: Record<string, number> }
         <Container size="xl" className="pt-10 md:pt-14 pb-10 md:pb-14">
           {/* Header sekcie */}
           <div className="max-w-3xl mx-auto text-center">
-            <span className="inline-flex items-center gap-2 px-4 py-2 rounded-full border border-white/20 bg-white/10 backdrop-blur-sm text-[0.7rem] md:text-xs font-extrabold uppercase tracking-[0.18em] text-white">
-              <span className="inline-block w-1.5 h-1.5 rounded-full bg-white" aria-hidden />
+            {/* Pilulka JE nadpis sekcie — veľký titulok „Čo všetko vieme
+                vyčarovať" dal user 2026-08-26 preč, stačí mu portfólio.
+                Zostáva h2, aby sekcia nebola bez nadpisu. */}
+            <h2 className="inline-flex items-center gap-2.5 px-5 py-2.5 rounded-full border border-white/20 bg-white/10 backdrop-blur-sm text-base md:text-lg leading-6 md:leading-7 font-extrabold uppercase tracking-[0.18em] text-white">
+              <span className="inline-block w-2 h-2 rounded-full bg-white" aria-hidden />
               NAŠE PORTFÓLIO
-            </span>
-            <h2 className="mt-5 text-3xl sm:text-4xl md:text-4xl lg:text-5xl font-extrabold tracking-tight leading-[1.1] text-[#3db6e8]">
-              Čo všetko vieme vyčarovať
             </h2>
           </div>
 
@@ -132,7 +132,10 @@ function CategoriesShowcaseInner({ cenyOd }: { cenyOd?: Record<string, number> }
               varianty (zatiaľ dummy "Čoskoro") + vlastný vzorkovník link */}
           {/* 7 stĺpcov — všetky typy v jednom riadku, priemyselné na konci
               (user 2026-08-25). */}
-          <div className="mt-8 md:mt-16 grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-7 gap-2.5 md:gap-3">
+          {/* mt zámerne menšie ako pôvodné mt-8/md:mt-16 — pilulka vyššie
+              narástla o ~10,6 px, toto to presne
+              vracia, aby sa karty nikam neposunuli (user 2026-08-26). */}
+          <div className="mt-[23px] md:mt-[53px] grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-7 gap-2.5 md:gap-3">
             {TYPY_PODLAH.map((cat, idx) => (
               <div
                 key={cat.slug}

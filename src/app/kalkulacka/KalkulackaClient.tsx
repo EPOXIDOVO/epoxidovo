@@ -281,12 +281,14 @@ export function KalkulackaClient() {
         </Container>
       </section>
 
-      {/* ═══ KATEGÓRIE — štýl "Čo všetko vieme vyčarovať" ═══ */}
+      {/* ═══ KATEGÓRIE — štýl sekcie portfólia z homepage ═══ */}
       <section className="bg-[var(--color-copper)] text-white">
         <Container size="xl" className="pt-10 md:pt-16 pb-10 md:pb-14">
           <div className="max-w-3xl mx-auto text-center">
+            {/* „Čo všetko vieme vyčarovať" dal majiteľ preč (2026-08-27) —
+                rovnako ako predtým na homepage; stačí mu portfólio. */}
             <h2 className="text-2xl sm:text-3xl md:text-4xl font-extrabold tracking-tight text-[#3db6e8]">
-              Čo všetko vieme vyčarovať
+              Naše portfólio
             </h2>
             <p className="mt-2 text-white/85 text-sm md:text-base">
               Klikni na typ podlahy, ktorý ťa zaujíma — formulár sa predvyplní.

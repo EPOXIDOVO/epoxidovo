@@ -469,7 +469,7 @@ export function KonfiguratorCP({ cenyOd }: { cenyOd?: Record<string, number> }) 
                     void chod("plocha");
                   }}
                   className={[
-                    "group flex h-full flex-col text-left rounded-2xl overflow-hidden ring-1 transition-all",
+                    "group flex h-full flex-col text-left rounded-2xl overflow-hidden ring-1 transition-all select-none",
                     "hover:-translate-y-0.5 hover:shadow-[0_10px_28px_rgba(27,36,48,0.16)]",
                     typ?.slug === t.slug
                       ? "ring-[3px] ring-[#2EA3DC]"
@@ -482,7 +482,8 @@ export function KonfiguratorCP({ cenyOd }: { cenyOd?: Record<string, number> }) 
                       alt={t.name}
                       fill
                       sizes="(max-width: 1024px) 45vw, 260px"
-                      className="object-cover transition-transform duration-500 group-hover:scale-[1.04]"
+                      draggable={false}
+                      className="object-cover transition-transform duration-500 group-hover:scale-[1.04] [-webkit-user-drag:none]"
                     />
                   </span>
                   <span className="flex flex-1 flex-col p-3">
@@ -783,7 +784,8 @@ export function KonfiguratorCP({ cenyOd }: { cenyOd?: Record<string, number> }) 
                     alt=""
                     fill
                     sizes="64px"
-                    className="object-cover"
+                    draggable={false}
+                    className="object-cover [-webkit-user-drag:none]"
                   />
                 </span>
                 <div className="min-w-0 flex-1">

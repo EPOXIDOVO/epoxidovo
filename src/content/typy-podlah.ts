@@ -51,35 +51,6 @@ const kat = (slug: string) => CATEGORIES.find((c) => c.slug === slug);
 
 export const TYPY_PODLAH: TypPodlahyKarta[] = [
   {
-    slug: "jednofarebne",
-    name: "Hladké jednofarebné",
-    priceFrom: kat("jednofarebne")?.priceFrom ?? 59,
-    image: "/images/hero/byvanie-v2.webp",
-    href: "/realizacie?kategoria=jednofarebne",
-    crmFloorType: "jednofarebna",
-    // user 2026-08-25: pri jednofarebných na výber epoxid aj polyuretán
-    crmSystemy: ["264", "3000"],
-    variants: [
-      // bývanie, nie priemysel — pod kartou „Jednofarebné" majú byť interiéry
-      { src: "/images/realizacie/r-37.webp", typ: "jednofarebna", alt: "Jednofarebná podlaha — biela obývačka s krbom", farba: "RAL 9010", farbaLabel: "Biela" },
-      { src: "/images/realizacie/r-10.jpg", typ: "jednofarebna", alt: "Jednofarebná podlaha — lesklá kuchyňa", farba: "RAL 9016", farbaLabel: "Dopravná biela" },
-      { src: "/images/realizacie/r-13.jpg", typ: "jednofarebna", alt: "Jednofarebná podlaha — svetlá kúpeľňa", farba: "RAL 7047", farbaLabel: "Svetlosivá" },
-    ],
-  },
-  {
-    slug: "chipsove",
-    name: kat("chipsove")?.name ?? "Chipsové",
-    priceFrom: kat("chipsove")?.priceFrom ?? 49,
-    image: "/images/categories/chipsove.jpg",
-    href: "/realizacie?kategoria=chipsove",
-    crmFloorType: "chipsova",
-    variants: [
-      { src: "/images/realizacie/r-47.jpg", typ: "chipsova", alt: "Chipsová podlaha — biela s čiernymi chipsami, chodba skladu", farba: "Snow pearl", farbaLabel: "Biela s čiernymi chipsami" },
-      { src: "/images/realizacie/r-49.jpg", typ: "chipsova", alt: "Chipsová podlaha — sivá s čierno-bielymi chipsami", farba: "Granit klasik", farbaLabel: "Sivá s čierno-bielymi chipsami" },
-      { src: "/images/realizacie/r-48.jpg", typ: "chipsova", alt: "Chipsová podlaha — svetlá lesklá s čierno-bielymi chipsami", farba: "Snow pearl", farbaLabel: "Svetlá lesklá s chipsami" },
-    ],
-  },
-  {
     slug: "metalicke",
     name: kat("metalicke")?.name ?? "Metalické",
     priceFrom: kat("metalicke")?.priceFrom ?? 129,
@@ -103,6 +74,22 @@ export const TYPY_PODLAH: TypPodlahyKarta[] = [
       { src: "/images/realizacie/r-11.jpg", typ: "mramorova", alt: "Mramorová podlaha — biela so sivým žilkovaním" },
       { src: "/images/realizacie/r-38.avif", typ: "mramorova", alt: "Mramorová podlaha — lesklá biela s tmavými žilkami" },
       { src: "/images/realizacie/r-12.jpg", typ: "mramorova", alt: "Mramorová podlaha — krémová s hnedými žilkami" },
+    ],
+  },
+  {
+    slug: "jednofarebne",
+    name: "Hladké jednofarebné",
+    priceFrom: kat("jednofarebne")?.priceFrom ?? 59,
+    image: "/images/hero/byvanie-v2.webp",
+    href: "/realizacie?kategoria=jednofarebne",
+    crmFloorType: "jednofarebna",
+    // user 2026-08-25: pri jednofarebných na výber epoxid aj polyuretán
+    crmSystemy: ["264", "3000"],
+    variants: [
+      // bývanie, nie priemysel — pod kartou „Jednofarebné" majú byť interiéry
+      { src: "/images/realizacie/r-37.webp", typ: "jednofarebna", alt: "Jednofarebná podlaha — biela obývačka s krbom", farba: "RAL 9010", farbaLabel: "Biela" },
+      { src: "/images/realizacie/r-10.jpg", typ: "jednofarebna", alt: "Jednofarebná podlaha — lesklá kuchyňa", farba: "RAL 9016", farbaLabel: "Dopravná biela" },
+      { src: "/images/realizacie/r-13.jpg", typ: "jednofarebna", alt: "Jednofarebná podlaha — svetlá kúpeľňa", farba: "RAL 7047", farbaLabel: "Svetlosivá" },
     ],
   },
   {
@@ -137,6 +124,19 @@ export const TYPY_PODLAH: TypPodlahyKarta[] = [
       { src: "/images/vzorkovnik/arturo/concrete-look-worn-stuff.webp", typ: "beton-look", alt: "Concrete Look — Worn Stuff", farba: "Worn Stuff", farbaLabel: "Worn Stuff" },
       { src: "/images/vzorkovnik/arturo/concrete-look-nordic-night.webp", typ: "beton-look", alt: "Concrete Look — Nordic Night", farba: "Nordic Night", farbaLabel: "Nordic Night" },
       { src: "/images/vzorkovnik/arturo/concrete-look-dark-move.webp", typ: "beton-look", alt: "Concrete Look — Dark Move", farba: "Dark Move", farbaLabel: "Dark Move" },
+    ],
+  },
+  {
+    slug: "chipsove",
+    name: kat("chipsove")?.name ?? "Chipsové",
+    priceFrom: kat("chipsove")?.priceFrom ?? 49,
+    image: "/images/categories/chipsove.jpg",
+    href: "/realizacie?kategoria=chipsove",
+    crmFloorType: "chipsova",
+    variants: [
+      { src: "/images/realizacie/r-47.jpg", typ: "chipsova", alt: "Chipsová podlaha — biela s čiernymi chipsami, chodba skladu", farba: "Snow pearl", farbaLabel: "Biela s čiernymi chipsami" },
+      { src: "/images/realizacie/r-49.jpg", typ: "chipsova", alt: "Chipsová podlaha — sivá s čierno-bielymi chipsami", farba: "Granit klasik", farbaLabel: "Sivá s čierno-bielymi chipsami" },
+      { src: "/images/realizacie/r-48.jpg", typ: "chipsova", alt: "Chipsová podlaha — svetlá lesklá s čierno-bielymi chipsami", farba: "Snow pearl", farbaLabel: "Svetlá lesklá s chipsami" },
     ],
   },
   {

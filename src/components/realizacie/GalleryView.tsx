@@ -191,11 +191,21 @@ function FilterRow({ label, active, options, onChange }: FilterRowProps) {
             style={{ touchAction: "manipulation" }}
             className={cn(
               "whitespace-nowrap min-h-[52px] md:min-h-[44px] px-1.5 md:px-5 py-3.5 md:py-2.5 rounded-full text-[11px] md:text-base transition-all duration-300 select-none cursor-pointer",
+              // Hover „od stredu ku krajom" (user 2026-08-27): pod textom leží
+              // modrá pilulka `::before`, ktorá sa z scale-0 v strede rozvinie
+              // na celé tlačidlo. `isolate` + `before:-z-10` ju kreslí NAD
+              // vlastným pozadím tlačidla, ale POD textom — netreba obaľovať
+              // deti. `overflow-hidden` drží prechod v rounded-full tvare.
+              "relative isolate overflow-hidden",
+              "before:absolute before:inset-0 before:-z-10 before:rounded-full before:bg-[#3db6e8]",
+              "before:origin-center before:scale-0 before:transition-transform before:duration-[450ms] before:ease-[cubic-bezier(0.16,1,0.3,1)]",
               active === opt.value
                 // ACTIVE pill: bright "logo blue" #3db6e8 + white bold text
                 // na obidvoch (mobile + desktop) — user explicit request.
-                ? "bg-[#3db6e8] text-white font-extrabold shadow-[0_6px_18px_rgba(61,182,232,0.35)]"
-                : "bg-white text-[var(--color-fg)] font-semibold hover:bg-white/90 active:bg-white/80",
+                // Aktívna je modrá natvrdo, hover efekt netreba → before skrytý.
+                ? "bg-[#3db6e8] text-white font-extrabold shadow-[0_6px_18px_rgba(61,182,232,0.35)] before:hidden"
+                // INACTIVE: biela; hover rozvinie modrú od stredu a text zbelie.
+                : "bg-white text-[var(--color-fg)] font-semibold hover:text-white hover:before:scale-100 active:bg-white/80",
             )}
             aria-pressed={active === opt.value}
           >
