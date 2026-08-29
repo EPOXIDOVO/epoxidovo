@@ -2,7 +2,7 @@
 
 import * as React from "react";
 import Link from "next/link";
-import { Menu, X, Images, Phone, Home, Sparkles, ShoppingBag } from "lucide-react";
+import { Menu, X, Images, Phone, Home, Sparkles, ShoppingBag, GraduationCap } from "lucide-react";
 import { Container } from "@/components/ui/Container";
 import { SamplePicker } from "@/components/home/SamplePicker";
 import { cn } from "@/lib/utils";
@@ -210,6 +210,17 @@ export function Header({ transparentOnTop = false }: HeaderProps) {
             >
               <ShoppingBag className="w-4 h-4" aria-hidden />
               Kúpiť materiál
+              <span className="absolute -top-2 right-4 px-2 py-0.5 rounded-full bg-[#f97316] text-white text-[10px] font-bold uppercase tracking-wide whitespace-nowrap shadow-[0_2px_8px_rgba(249,115,22,0.5)]">
+                Čoskoro
+              </span>
+            </div>
+            {/* Kurzy — čoskoro, NEklikateľné */}
+            <div
+              aria-disabled
+              className="relative inline-flex items-center justify-center gap-2 px-6 py-4 rounded-full border-2 border-zinc-200 text-zinc-400 font-semibold select-none cursor-default"
+            >
+              <GraduationCap className="w-4 h-4" aria-hidden />
+              Kurzy
               <span className="absolute -top-2 right-4 px-2 py-0.5 rounded-full bg-[#f97316] text-white text-[10px] font-bold uppercase tracking-wide whitespace-nowrap shadow-[0_2px_8px_rgba(249,115,22,0.5)]">
                 Čoskoro
               </span>

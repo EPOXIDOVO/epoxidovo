@@ -18,6 +18,7 @@ import { SITE, getAddressLine } from "@/lib/site";
 const FOOTER_NAV = [
   { href: "/", label: "Úvod" },
   { href: "/sluzby", label: "Služby" },
+  { href: "/kurz", label: "Kurzy", soon: true },
   { href: "/kontakt", label: "Kontakty" },
   { href: "/ochrana-sukromia", label: "Zásady ochrany osobných údajov" },
   { href: "/obchodne-podmienky", label: "Obchodné podmienky" },
@@ -133,15 +134,27 @@ export function Footer() {
               aria-label="Footer navigácia"
               className="flex flex-wrap items-center justify-center gap-x-6 gap-y-2 text-xs md:text-sm text-white/80"
             >
-              {FOOTER_NAV.map((l) => (
-                <Link
-                  key={l.href}
-                  href={l.href}
-                  className="hover:text-white transition-colors"
-                >
-                  {l.label}
-                </Link>
-              ))}
+              {FOOTER_NAV.map((l) =>
+                "soon" in l && l.soon ? (
+                  <span
+                    key={l.href}
+                    className="inline-flex items-center gap-1.5 text-white/50 select-none cursor-default"
+                  >
+                    {l.label}
+                    <span className="px-1.5 py-0.5 rounded-full bg-[#f97316]/90 text-white text-[9px] font-bold uppercase tracking-wide">
+                      Čoskoro
+                    </span>
+                  </span>
+                ) : (
+                  <Link
+                    key={l.href}
+                    href={l.href}
+                    className="hover:text-white transition-colors"
+                  >
+                    {l.label}
+                  </Link>
+                ),
+              )}
             </nav>
 
             <p className="text-xs text-white/70 text-center md:text-right leading-relaxed">
