@@ -17,6 +17,12 @@ const MARQUEE_PHOTOS = [
   "/images/realizacie/r-32.jpg",
   "/images/realizacie/r-37.webp",
   "/images/realizacie/r-40.jpg",
+  "/images/realizacie/r-11.jpg",
+  "/images/realizacie/r-14.jpg",
+  "/images/realizacie/r-24.jpg",
+  "/images/realizacie/r-01.jpg",
+  "/images/realizacie/r-30.jpg",
+  "/images/realizacie/r-08.jpg",
 ];
 
 export const metadata: Metadata = {
