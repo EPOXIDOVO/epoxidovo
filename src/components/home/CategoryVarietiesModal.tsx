@@ -176,7 +176,7 @@ export function CategoryVarietiesModal({
                 type="button"
                 onClick={prev}
                 aria-label="Predchádzajúci"
-                className="absolute left-3 md:left-5 top-1/2 -translate-y-1/2 inline-flex items-center justify-center w-11 h-11 md:w-12 md:h-12 rounded-full bg-white/15 hover:bg-white/25 text-white backdrop-blur-md transition-colors isolate overflow-hidden before:absolute before:inset-0 before:-z-10 before:rounded-full before:bg-[#3db6e8] before:origin-center before:scale-0 before:transition-transform before:duration-[450ms] before:ease-[cubic-bezier(0.16,1,0.3,1)] hover:before:scale-100"
+                className="absolute left-3 md:left-5 top-[calc(50%-22px)] md:top-[calc(50%-24px)] inline-flex items-center justify-center w-11 h-11 md:w-12 md:h-12 rounded-full bg-white/15 hover:bg-white/25 text-white backdrop-blur-md transition-colors isolate overflow-hidden before:absolute before:inset-0 before:-z-10 before:rounded-full before:bg-[#3db6e8] before:origin-center before:scale-0 before:transition-transform before:duration-[450ms] before:ease-[cubic-bezier(0.16,1,0.3,1)] hover:before:scale-100"
               >
                 <ChevronLeft className="w-5 h-5" aria-hidden />
               </button>
@@ -184,7 +184,7 @@ export function CategoryVarietiesModal({
                 type="button"
                 onClick={next}
                 aria-label="Nasledujúci"
-                className="absolute right-3 md:right-5 top-1/2 -translate-y-1/2 inline-flex items-center justify-center w-11 h-11 md:w-12 md:h-12 rounded-full bg-white/15 hover:bg-white/25 text-white backdrop-blur-md transition-colors isolate overflow-hidden before:absolute before:inset-0 before:-z-10 before:rounded-full before:bg-[#3db6e8] before:origin-center before:scale-0 before:transition-transform before:duration-[450ms] before:ease-[cubic-bezier(0.16,1,0.3,1)] hover:before:scale-100"
+                className="absolute right-3 md:right-5 top-[calc(50%-22px)] md:top-[calc(50%-24px)] inline-flex items-center justify-center w-11 h-11 md:w-12 md:h-12 rounded-full bg-white/15 hover:bg-white/25 text-white backdrop-blur-md transition-colors isolate overflow-hidden before:absolute before:inset-0 before:-z-10 before:rounded-full before:bg-[#3db6e8] before:origin-center before:scale-0 before:transition-transform before:duration-[450ms] before:ease-[cubic-bezier(0.16,1,0.3,1)] hover:before:scale-100"
               >
                 <ChevronRight className="w-5 h-5" aria-hidden />
               </button>
