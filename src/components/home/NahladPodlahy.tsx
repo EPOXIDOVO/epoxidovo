@@ -36,13 +36,20 @@ const TYP_NA_TEXTURU: Record<string, string | null> = {
 
 export function NahladPodlahyProvider({ children }: { children: React.ReactNode }) {
   const [stav, setStav] = React.useState<{ fotky: FotkaPodlahy[]; i: number; cenaOd: number | null } | null>(null);
+  // Načítanie fotky — kým sa nová nenačíta, drží sa „blank" placeholder
+  // (iPhone-like), aby sa nikdy neukázala stará fotka s novým popisom
+  // (user 2026-08-27).
+  const [loaded, setLoaded] = React.useState(false);
 
   const otvor = React.useCallback((fotky: FotkaPodlahy[], index: number, cenaOd?: number | null) => {
+    setLoaded(false);
     setStav({ fotky, i: index, cenaOd: cenaOd ?? null });
   }, []);
   const zavri = () => setStav(null);
-  const posun = (o: number) =>
+  const posun = (o: number) => {
+    setLoaded(false);
     setStav((s) => (s ? { ...s, i: (s.i + o + s.fotky.length) % s.fotky.length } : s));
+  };
 
   React.useEffect(() => {
     if (!stav) return;
@@ -94,14 +101,26 @@ export function NahladPodlahyProvider({ children }: { children: React.ReactNode 
 
             <div className="relative aspect-[4/3] md:aspect-[16/10] w-full bg-zinc-100">
               <Image
+                key={f.src}
                 src={f.src}
                 alt={f.alt}
                 fill
                 sizes="(max-width: 768px) 100vw, 768px"
                 quality={92}
-                className="object-cover"
+                onLoad={() => setLoaded(true)}
+                className={[
+                  "object-cover transition-opacity duration-300 ease-out",
+                  loaded ? "opacity-100" : "opacity-0",
+                ].join(" ")}
                 priority
               />
+              {/* „Blank pole" kým sa nová fotka nenačíta (iPhone efekt). */}
+              {!loaded && (
+                <div
+                  className="absolute inset-0 bg-zinc-100 animate-pulse"
+                  aria-hidden
+                />
+              )}
               {stav!.fotky.length > 1 && (
                 <>
                   <button
