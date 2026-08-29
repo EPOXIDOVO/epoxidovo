@@ -107,10 +107,10 @@ export default function RealizaciePage() {
               "radial-gradient(60% 60% at 50% 0%, rgba(61,182,232,0.18), transparent 75%)",
           }}
         />
-        <Container size="xl" className="pt-[80px] md:pt-[140px] pb-4 md:pb-14 relative z-10">
+        <Container size="xl" className="pt-[64px] md:pt-[96px] pb-2 md:pb-5 relative z-10">
           <div className="text-center text-white">
-            <div className="inline-block px-5 md:px-14 py-3 md:py-7 rounded-2xl md:rounded-3xl bg-white/[0.06] backdrop-blur-md border border-white/15 shadow-[0_20px_60px_rgba(0,0,0,0.35)]">
-              <h1 className="text-2xl sm:text-3xl md:text-5xl lg:text-6xl font-extrabold tracking-tight leading-tight md:whitespace-nowrap">
+            <div className="inline-block px-4 md:px-10 py-2 md:py-4 rounded-2xl md:rounded-3xl bg-white/[0.06] backdrop-blur-md border border-white/15 shadow-[0_20px_60px_rgba(0,0,0,0.35)]">
+              <h1 className="text-xl sm:text-2xl md:text-4xl lg:text-5xl font-extrabold tracking-tight leading-tight md:whitespace-nowrap">
                 Realizujeme{" "}
                 <span className="text-[#3db6e8]">po celom </span>
                 <span
