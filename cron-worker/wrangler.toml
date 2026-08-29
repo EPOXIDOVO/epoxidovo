@@ -6,9 +6,14 @@ compatibility_flags = ["nodejs_compat"]
 # Cron triggers: každý deň o 8:00 UTC = 10:00 SK leto / 9:00 SK zima
 # (https://crontab.guru/#0_8_*_*_*)
 [triggers]
-crons = ["0 8 * * *"]
+# "0 8 * * *"   → denný lead follow-up
+# "*/5 * * * *" → automatická CP splatná (~5 min po dopyte z webu)
+crons = ["0 8 * * *", "*/5 * * * *"]
 
 # Env premenné — non-secret. CRON_SECRET sa setuje cez:
 #   wrangler secret put CRON_SECRET --name epoxidovo-cron
 [vars]
 CRON_TARGET_URL = "https://epoxidovo.sk/api/cron/lead-followup"
+AUTOCP_TARGET_URL = "https://app.najcrm.sk/api/cron/auto-cp"
+# AUTOCP_SECRET (= CRM CRON_SECRET) sa nastaví cez:
+#   wrangler secret put AUTOCP_SECRET --name epoxidovo-cron

@@ -10,16 +10,27 @@
 
 export interface Env {
   CRON_SECRET: string;
-  CRON_TARGET_URL: string; // napr. "https://epoxidovo.sk/api/cron/lead-followup"
+  CRON_TARGET_URL: string; // denný follow-up: "https://epoxidovo.sk/api/cron/lead-followup"
+  // Automatická CP (user 2026-08-27) — každých 5 min, aby CP odišla aj v noci
+  // a cez víkend (dovtedy bežala len keď mal niekto CRM otvorený).
+  AUTOCP_TARGET_URL?: string; // "https://app.najcrm.sk/api/cron/auto-cp"
+  AUTOCP_SECRET?: string;     // = CRM CRON_SECRET (X-Cron-Secret header)
 }
 
 export default {
   async scheduled(
-    _event: ScheduledEvent,
+    event: ScheduledEvent,
     env: Env,
     ctx: ExecutionContext,
   ): Promise<void> {
-    ctx.waitUntil(runFollowup(env));
+    // Dva rozvrhy v jednom workeri — rozlíšime podľa cron patternu:
+    //   "0 8 * * *"   → denný lead follow-up (Pages)
+    //   "*/5 * * * *" → automatická CP splatná (~5 min po dopyte, CRM)
+    if (event.cron === "*/5 * * * *") {
+      ctx.waitUntil(runAutoCp(env));
+    } else {
+      ctx.waitUntil(runFollowup(env));
+    }
   },
 
   // Manuálny trigger — VYŽADUJE Bearer auth (rovnaký secret ako cron).
@@ -51,6 +62,28 @@ function constantTimeEqual(a: string, b: string): boolean {
     diff |= aBytes[i] ^ bBytes[i];
   }
   return diff === 0;
+}
+
+async function runAutoCp(env: Env): Promise<{ ok: boolean; status?: number; body?: unknown; error?: string }> {
+  const target = env.AUTOCP_TARGET_URL;
+  const secret = env.AUTOCP_SECRET;
+  if (!target || !secret) {
+    // Nie je nakonfigurované → ticho preskoč (nezhadzuj follow-up worker).
+    return { ok: false, error: "autocp_not_configured" };
+  }
+  try {
+    const res = await fetch(target, {
+      method: "POST",
+      headers: { "X-Cron-Secret": secret, "Content-Type": "application/json" },
+    });
+    const body = await res.json().catch(() => ({}));
+    console.log(`[cron-worker] auto-cp target=${target} status=${res.status}`, body);
+    return { ok: res.ok, status: res.status, body };
+  } catch (e) {
+    const msg = e instanceof Error ? e.message : "unknown";
+    console.error("[cron-worker] auto-cp fetch failed:", msg);
+    return { ok: false, error: msg };
+  }
 }
 
 async function runFollowup(env: Env): Promise<{ ok: boolean; status?: number; body?: unknown; error?: string }> {
