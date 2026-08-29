@@ -157,10 +157,14 @@ export function referencnaFotka(m: Material): {
  * referencnaFotka. Vďaka nej vie e-shop poslať človeka do vizualizéra
  * s predvyplneným typom podlahy (user 2026-08-25).
  */
-export function texturaProVizualizer(m: Material): "metalicka" | "chips" | "hladka" | null {
+export function texturaProVizualizer(
+  m: Material,
+): "metalicka" | "chips" | "hladka" | "mramor" | "beton" | null {
   if (m.kategoria !== "Hlavná vrstva") return null;
   const n = m.nazov.toLowerCase();
-  if (/metalick|metallic|ep11|ep22/.test(n)) return "metalicka";
+  if (/metalick|metallic|ep11|ep22|3000 ?fx/.test(n)) return "metalicka";
+  if (/mramor|marble|3310/.test(n)) return "mramor";
+  if (/beton|concrete|mikrocement|mistral/.test(n)) return "beton";
   if (/chips|vločk|flake/.test(n)) return "chips";
   return "hladka";
 }

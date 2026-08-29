@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import Image from "next/image";
 import Link from "next/link";
-import { ArrowRight, FileText, Mail, Phone, Lock, Truck, RotateCcw, ShieldCheck } from "lucide-react";
+import { ArrowRight, FileText, Mail, Phone, Lock, Truck, RotateCcw, ShieldCheck, Sparkles } from "lucide-react";
 import { Container } from "@/components/ui/Container";
 import { BreadcrumbsJsonLd } from "@/components/seo/BreadcrumbsJsonLd";
 import { SITE } from "@/lib/site";
@@ -300,6 +300,26 @@ export default async function ProduktPage({ params }: PageProps) {
                   Objednať emailom
                 </a>
               </div>
+
+              {/* AI Vizualizácia — na každom hlavnom nátere, prednastavená na
+                  túto textúru (user 2026-08-27). Odfotíš priestor a uvidíš,
+                  ako bude vyzerať presne tento materiál. */}
+              {texturaProVizualizer(m) && (
+                <Link
+                  href={`/ai-vizualizer?texture=${texturaProVizualizer(m)}${refFoto ? `&foto=${encodeURIComponent(refFoto.src)}` : ""}`}
+                  className="mt-4 flex w-full items-center justify-center gap-2.5 rounded-2xl bg-gradient-to-r from-[#3db6e8] to-[#a855f7] px-5 py-4 text-white shadow-[0_8px_24px_rgba(168,85,247,0.4)] transition-all hover:-translate-y-0.5 hover:shadow-[0_12px_32px_rgba(168,85,247,0.55)]"
+                >
+                  <Sparkles className="w-5 h-5 shrink-0" aria-hidden />
+                  <span className="text-center leading-tight">
+                    <span className="block font-extrabold text-[15px] md:text-base">
+                      Pozri si {m.nazov} u seba doma
+                    </span>
+                    <span className="block text-[12px] font-semibold text-white/85">
+                      Odfoť priestor — AI ti hneď ukáže, ako to bude vyzerať. Zadarmo.
+                    </span>
+                  </span>
+                </Link>
+              )}
 
               {/* Trust prúžok (user 2026-08-27) */}
               <div className="mt-4 flex flex-wrap items-center gap-x-4 gap-y-1.5 text-xs text-zinc-600">

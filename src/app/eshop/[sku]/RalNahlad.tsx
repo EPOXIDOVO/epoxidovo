@@ -32,7 +32,7 @@ export function RalNahlad({
   fotoSrc: string;
   fotoLabel: string;
   /** Typ podlahy pre AI vizualizér; null = produkt sa vizualizovať nedá. */
-  textura?: "metalicka" | "chips" | "hladka" | null;
+  textura?: "metalicka" | "chips" | "hladka" | "mramor" | "beton" | null;
 }) {
   const [ral, setRal] = React.useState<RalSwatch | null>(null);
 
