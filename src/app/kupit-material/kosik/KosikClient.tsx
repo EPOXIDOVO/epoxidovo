@@ -47,6 +47,30 @@ export function KosikClient({ paymentMethods }: { paymentMethods: PaymentMethod[
   const [state, setState] = React.useState<"idle" | "sending" | "err">("idle");
   const [errMsg, setErrMsg] = React.useState<string | null>(null);
   const [done, setDone] = React.useState<string | null>(null);
+  const [paid, setPaid] = React.useState(false);
+  const [platbaZrusena, setPlatbaZrusena] = React.useState(false);
+
+  // Návrat zo Stripe Checkout (user 2026-08-27) — success/cancel URL nesie
+  // ?stav=zaplatene|zrusene&objednavka=. Predtým sa to nespracovalo a
+  // zákazník sa po platbe kartou vrátil na plný košík bez potvrdenia.
+  React.useEffect(() => {
+    const q = new URLSearchParams(window.location.search);
+    const stav = q.get("stav");
+    const obj = q.get("objednavka");
+    if (stav === "zaplatene") {
+      if (obj) setDone(obj);
+      setPaid(true);
+      clear();
+    } else if (stav === "zrusene") {
+      setPlatbaZrusena(true);
+    }
+    if (stav) {
+      // vyčisti query, nech refresh nezopakuje potvrdenie
+      window.history.replaceState(null, "", window.location.pathname);
+    }
+    // mount-only
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   const weightKg = calcWeightKg(
     lines.map((l) => ({
@@ -142,11 +166,12 @@ export function KosikClient({ paymentMethods }: { paymentMethods: PaymentMethod[
           <Check className="w-9 h-9" aria-hidden />
         </div>
         <h2 className="text-2xl md:text-3xl font-extrabold text-zinc-900">
-          Objednávka {done} prijatá
+          Objednávka {done} {paid ? "zaplatená" : "prijatá"}
         </h2>
         <p className="mt-3 text-zinc-600">
-          Potvrdenie s celým rozpisom letí na e-mail. Ozveme sa s termínom
-          expedície{shippingId === "kurier" ? " a cenou dopravy" : ""}.
+          {paid ? "Platba kartou prebehla úspešne. " : ""}Potvrdenie s celým
+          rozpisom letí na e-mail. Ozveme sa s termínom expedície
+          {shippingId === "kurier" ? " a cenou dopravy" : ""}.
         </p>
         <p className="mt-4 text-sm text-zinc-500 bg-blue-50 rounded-xl p-3">
           <strong>Nejde to podľa predstáv? Zavolajte nám, dokončíme to za vás.</strong>
@@ -185,6 +210,12 @@ export function KosikClient({ paymentMethods }: { paymentMethods: PaymentMethod[
 
   return (
     <div className="grid grid-cols-1 lg:grid-cols-[1fr_380px] gap-6 items-start">
+      {platbaZrusena && (
+        <div className="lg:col-span-2 rounded-2xl border-2 border-amber-300 bg-amber-50 px-4 py-3 text-sm text-amber-900">
+          <strong>Platba bola zrušená.</strong> Košík sme ti nechali — môžeš to
+          skúsiť znova, alebo zvoľ bankový prevod či dobierku.
+        </div>
+      )}
       {/* položky */}
       <div className="rounded-3xl bg-white p-5 md:p-6 shadow-[0_18px_50px_rgba(0,0,0,0.08)]">
         <h2 className="text-xl font-extrabold text-zinc-900 mb-4">Košík ({count})</h2>

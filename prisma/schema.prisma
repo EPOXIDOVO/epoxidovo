@@ -213,6 +213,8 @@ model EshopOrder {
   paymentId    String
   hasOnRequest Boolean          @default(false)
   note         String?
+  /// Zaplatené kartou cez Stripe — nastaví webhook (user 2026-08-27). null = nezaplatené / prevod / dobierka.
+  paidAt       DateTime?
   items        EshopOrderItem[]
 }
 

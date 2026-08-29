@@ -106,6 +106,14 @@ export const metadata: Metadata = {
   alternates: {
     canonical: "/",
   },
+  // Klasické geo meta tagy (user 2026-08-27) — dopĺňajú LocalBusiness JSON-LD.
+  // Ružomberok, Žilinský kraj (SK-ZI), GPS zhodné s hlavnou #business entitou.
+  other: {
+    "geo.region": "SK-ZI",
+    "geo.placename": "Ružomberok",
+    "geo.position": "49.0775;19.3066",
+    ICBM: "49.0775, 19.3066",
+  },
 };
 
 export default function RootLayout({

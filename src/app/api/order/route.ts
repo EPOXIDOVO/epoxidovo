@@ -208,7 +208,7 @@ export async function POST(req: NextRequest) {
     const total =
       Math.round((subtotal + (shipping.priceEur ?? 0)) * 100) / 100;
 
-    await sendOrderEmails({
+    const emailResult = await sendOrderEmails({
       orderId,
       name,
       email,
@@ -226,6 +226,7 @@ export async function POST(req: NextRequest) {
 
     // Štatistiky (/admin/ceny) — best-effort zápis; e-mail je primárny kanál,
     // výpadok DB nesmie objednávku zhodiť.
+    let dbOk = false;
     try {
       const { prisma } = await import("@/lib/prisma");
       await prisma.eshopOrder.create({
@@ -249,8 +250,23 @@ export async function POST(req: NextRequest) {
           },
         },
       });
+      dbOk = true;
     } catch (dbErr) {
       console.error("[order] zápis do DB zlyhal (objednávka odišla mailom):", dbErr);
+    }
+
+    // Fail-safe (user 2026-08-27): ak zlyhal e-mail AJ DB, objednávka nie je
+    // nikde zaznamenaná — NEHLÁSIME úspech (a nepustíme ju na platbu kartou).
+    if (!emailResult.sent && !dbOk) {
+      console.error("[order] KRITICKÉ: objednávka", orderId, "sa nezaznamenala (e-mail aj DB zlyhali)");
+      return NextResponse.json(
+        {
+          ok: false,
+          error:
+            "Objednávku sa nepodarilo spracovať. Skúste to prosím znova, alebo nám zavolajte a dokončíme to za vás.",
+        },
+        { status: 500 },
+      );
     }
 
     // Stripe redirect pri platbe kartou

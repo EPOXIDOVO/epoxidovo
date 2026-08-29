@@ -71,10 +71,21 @@ export async function generateMetadata({
   const produkty = MATERIALY.filter((m) => k.test(m.sku) && m.cena_eur_s_dph > 0);
   const vyrobcovia = [...new Set(produkty.map((m) => m.vyrobca))].join(", ");
   const odCeny = produkty.length ? Math.min(...produkty.map((m) => m.cena_eur_s_dph)) : null;
+  const titul = `${k.label} — ${produkty.length} produktov${odCeny != null ? ` od ${odCeny.toFixed(2).replace(".", ",")} €` : ""}`;
+  const popis = `${k.label} na epoxidové a polyuretánové podlahy: ${vyrobcovia}. ${k.popis.slice(0, 110)}`;
+  // Fallback OG obrázok — prvý produkt s fotkou, inak brandový og-home.
+  const ogFoto = produkty.find((m) => m.foto)?.foto ?? "/og-home.jpg";
   return {
-    title: `${k.label} — ${produkty.length} produktov${odCeny != null ? ` od ${odCeny.toFixed(2).replace(".", ",")} €` : ""}`,
-    description: `${k.label} na epoxidové a polyuretánové podlahy: ${vyrobcovia}. ${k.popis.slice(0, 110)}`,
+    title: titul,
+    description: popis,
     alternates: { canonical: `/eshop/kategoria/${slug}` },
+    openGraph: {
+      type: "website",
+      url: `/eshop/kategoria/${slug}`,
+      title: titul,
+      description: popis,
+      images: [{ url: ogFoto, width: 1200, height: 630, alt: k.label }],
+    },
   };
 }
 

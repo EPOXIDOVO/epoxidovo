@@ -47,10 +47,19 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   ]
     .filter(Boolean)
     .join(" ");
+  const ogFoto = m.foto ?? m.foto_sud ?? "/og-home.jpg";
+  const titul = `${m.nazov} — ${m.cena_eur_s_dph.toFixed(2).replace(".", ",")} € | ${m.vyrobca}`;
   return {
-    title: `${m.nazov} — ${m.cena_eur_s_dph.toFixed(2).replace(".", ",")} € | ${m.vyrobca}`,
+    title: titul,
     description: desc,
     alternates: { canonical: `/eshop/${m.sku}` },
+    openGraph: {
+      type: "website",
+      url: `/eshop/${m.sku}`,
+      title: titul,
+      description: desc,
+      images: [{ url: ogFoto, width: 1200, height: 630, alt: m.nazov }],
+    },
   };
 }
 
@@ -124,7 +133,9 @@ export default async function ProduktPage({ params }: PageProps) {
 
   // Product JSON-LD — cena je konečná (neplatiteľ DPH)
   // Bez image + description Google produktový snippet (cena v SERP) neukáže.
-  const fotoAbs = m.foto ?? m.foto_sud ?? null;
+  // Fallback na brandový obrázok — bez image Google neukáže cenový snippet
+  // (user 2026-08-27: SEO na VŠETKY produkty).
+  const fotoAbs = m.foto ?? m.foto_sud ?? "/og-home.jpg";
   const popisSchema = [
     `${m.nazov} — ${m.kategoria.toLowerCase()}, ${m.vyrobca}.`,
     m.balenie ? `Balenie ${m.balenie}.` : null,
@@ -141,7 +152,7 @@ export default async function ProduktPage({ params }: PageProps) {
     sku: m.sku,
     mpn: m.sku,
     description: popisSchema,
-    ...(fotoAbs ? { image: [`${SITE.url}${fotoAbs}`] } : {}),
+    image: [`${SITE.url}${fotoAbs}`],
     brand: { "@type": "Brand", name: m.vyrobca },
     category: m.kategoria,
     url: `${SITE.url}/eshop/${m.sku}`,

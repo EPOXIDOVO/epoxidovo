@@ -76,13 +76,28 @@ export async function POST(req: NextRequest) {
     };
     if (event.type === "checkout.session.completed") {
       const obj = event.data?.object;
+      const orderId = obj?.client_reference_id;
       console.log(
         "[stripe] payment completed — order:",
-        obj?.client_reference_id,
+        orderId,
         "amount:",
         obj?.amount_total != null ? obj.amount_total / 100 : "?",
         "EUR",
       );
+      // Označ objednávku ako zaplatenú (user 2026-08-27) — admin vidí stav
+      // platby. Best-effort: výpadok DB nesmie webhook zhodiť (Stripe by
+      // inak retry-oval donekonečna).
+      if (orderId) {
+        try {
+          const { prisma } = await import("@/lib/prisma");
+          await prisma.eshopOrder.update({
+            where: { id: orderId },
+            data: { paidAt: new Date() },
+          });
+        } catch (e) {
+          console.error("[stripe] paidAt update zlyhal pre", orderId, e);
+        }
+      }
     }
   } catch {
     /* neznámy payload — potvrdíme prijatie, Stripe nemá retry-ovať */

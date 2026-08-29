@@ -30,6 +30,18 @@ export function generateStaticParams() {
   return CITIES.map((c) => ({ mesto: c.slug }));
 }
 
+// ISO 3166-2 kódy krajov pre geo.region meta tag.
+const KRAJ_ISO: Record<string, string> = {
+  "Bratislavský kraj": "SK-BL",
+  "Trnavský kraj": "SK-TA",
+  "Trenčiansky kraj": "SK-TC",
+  "Nitriansky kraj": "SK-NI",
+  "Žilinský kraj": "SK-ZI",
+  "Banskobystrický kraj": "SK-BC",
+  "Prešovský kraj": "SK-PV",
+  "Košický kraj": "SK-KI",
+};
+
 export async function generateMetadata({ params }: RouteContext): Promise<Metadata> {
   const { mesto } = await params;
   const city = findCity(mesto);
@@ -62,6 +74,11 @@ export async function generateMetadata({ params }: RouteContext): Promise<Metada
       title,
       description,
       images: [{ url: "/og-home.jpg?v=3", width: 1200, height: 630, alt: title }],
+    },
+    // Geo meta cieliace na mesto/kraj (user 2026-08-27).
+    other: {
+      "geo.placename": city.name,
+      "geo.region": KRAJ_ISO[city.region] ?? "SK",
     },
   };
 }
@@ -98,6 +115,14 @@ export default async function CityPage({ params }: RouteContext) {
       },
     },
     priceRange: "€€",
+    // Napojenie na hlavnú (fyzickú) prevádzku — user 2026-08-27, aby to
+    // neboli osirotené duplicitné LocalBusiness entity.
+    parentOrganization: {
+      "@type": "Organization",
+      "@id": `${SITE.url}/#business`,
+      name: SITE.legalName,
+      url: SITE.url,
+    },
   };
 
   return (
