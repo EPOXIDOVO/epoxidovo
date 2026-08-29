@@ -43,12 +43,13 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
     `${m.nazov} — ${m.kategoria.toLowerCase()}, ${m.vyrobca}.`,
     m.balenie ? `Balenie ${m.balenie}.` : null,
     m.pokryje_m2_z_balenia != null ? `Vystačí na ${String(m.pokryje_m2_z_balenia).replace(".", ",")} m².` : null,
-    `Konečná cena ${m.cena_eur_s_dph.toFixed(2)} €.`,
+    m.cena_eur_s_dph > 0 ? `Konečná cena ${m.cena_eur_s_dph.toFixed(2)} €.` : "Cena na dopyt — pripravíme individuálnu ponuku.",
   ]
     .filter(Boolean)
     .join(" ");
   const ogFoto = m.foto ?? m.foto_sud ?? "/og-home.jpg";
-  const titul = `${m.nazov} — ${m.cena_eur_s_dph.toFixed(2).replace(".", ",")} € | ${m.vyrobca}`;
+  const cenaText = m.cena_eur_s_dph > 0 ? `${m.cena_eur_s_dph.toFixed(2).replace(".", ",")} €` : "cena na dopyt";
+  const titul = `${m.nazov} — ${cenaText} | ${m.vyrobca}`;
   return {
     title: titul,
     description: desc,
@@ -156,20 +157,25 @@ export default async function ProduktPage({ params }: PageProps) {
     brand: { "@type": "Brand", name: m.vyrobca },
     category: m.kategoria,
     url: `${SITE.url}/eshop/${m.sku}`,
-    offers: {
-      "@type": "Offer",
-      url: `${SITE.url}/eshop/${m.sku}`,
-      priceCurrency: "EUR",
-      price: m.cena_eur_s_dph,
-      priceValidUntil,
-      availability: "https://schema.org/InStock",
-      itemCondition: "https://schema.org/NewCondition",
-      seller: { "@type": "Organization", name: SITE.legalName, url: SITE.url },
-      shippingDetails: {
-        "@type": "OfferShippingDetails",
-        shippingDestination: { "@type": "DefinedRegion", addressCountry: "SK" },
-      },
-    },
+    // Na dopyt (cena 0) = bez offers, aby v SERP nesvietilo fiktívne 0 €.
+    ...(m.cena_eur_s_dph > 0
+      ? {
+          offers: {
+            "@type": "Offer",
+            url: `${SITE.url}/eshop/${m.sku}`,
+            priceCurrency: "EUR",
+            price: m.cena_eur_s_dph,
+            priceValidUntil,
+            availability: "https://schema.org/InStock",
+            itemCondition: "https://schema.org/NewCondition",
+            seller: { "@type": "Organization", name: SITE.legalName, url: SITE.url },
+            shippingDetails: {
+              "@type": "OfferShippingDetails",
+              shippingDestination: { "@type": "DefinedRegion", addressCountry: "SK" },
+            },
+          },
+        }
+      : {}),
   };
 
   const mailSubject = encodeURIComponent(`Objednávka: ${m.nazov} (${m.sku})`);
@@ -253,7 +259,7 @@ export default async function ProduktPage({ params }: PageProps) {
                     Konečná cena
                   </div>
                   <div className="mt-0.5 text-3xl md:text-4xl font-extrabold">
-                    {fmt(m.cena_eur_s_dph)} €
+                    {m.cena_eur_s_dph > 0 ? `${fmt(m.cena_eur_s_dph)} €` : "Cena na dopyt"}
                   </div>
                 </div>
                 {m.pokryje_m2_z_balenia != null && (
@@ -297,7 +303,7 @@ export default async function ProduktPage({ params }: PageProps) {
 
               {/* Kalkulačka — hlavné vrstvy majú výber hrúbky (náter/1mm/2mm),
                   penetrácie a ostatné jednoduchý prepočet balení */}
-              {m.kategoria === "Hlavná vrstva" && m.balenie_kg != null ? (
+              {m.cena_eur_s_dph > 0 && m.kategoria === "Hlavná vrstva" && m.balenie_kg != null ? (
                 <div className="mt-6">
                   <HrubkaKalkulacka
                     balenieKg={m.balenie_kg}
@@ -306,7 +312,7 @@ export default async function ProduktPage({ params }: PageProps) {
                     cenaJeFinalna={!!m.cena_pevna}
                   />
                 </div>
-              ) : m.spotreba_kg_m2 != null && m.balenie_kg != null ? (
+              ) : m.cena_eur_s_dph > 0 && m.spotreba_kg_m2 != null && m.balenie_kg != null ? (
                 <div className="mt-6">
                   <BaleniaKalkulacka
                     spotrebaKgM2={m.spotreba_kg_m2}
@@ -317,7 +323,9 @@ export default async function ProduktPage({ params }: PageProps) {
                 </div>
               ) : null}
 
-              <PorovnanieCien sku={m.sku} nasaCena={m.cena_eur_s_dph} />
+              {m.cena_eur_s_dph > 0 && (
+                <PorovnanieCien sku={m.sku} nasaCena={m.cena_eur_s_dph} />
+              )}
 
               <KombinujSystem m={m} />
 
