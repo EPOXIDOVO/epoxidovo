@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import Image from "next/image";
 import Link from "next/link";
-import { ArrowRight, FileText, Mail, Phone } from "lucide-react";
+import { ArrowRight, FileText, Mail, Phone, Lock, Truck, RotateCcw, ShieldCheck } from "lucide-react";
 import { Container } from "@/components/ui/Container";
 import { BreadcrumbsJsonLd } from "@/components/seo/BreadcrumbsJsonLd";
 import { SITE } from "@/lib/site";
@@ -299,6 +299,22 @@ export default async function ProduktPage({ params }: PageProps) {
                   <Mail className="w-4 h-4" aria-hidden />
                   Objednať emailom
                 </a>
+              </div>
+
+              {/* Trust prúžok (user 2026-08-27) */}
+              <div className="mt-4 flex flex-wrap items-center gap-x-4 gap-y-1.5 text-xs text-zinc-600">
+                <span className="inline-flex items-center gap-1.5">
+                  <Lock className="w-3.5 h-3.5 text-emerald-600" aria-hidden /> Bezpečná platba
+                </span>
+                <span className="inline-flex items-center gap-1.5">
+                  <Truck className="w-3.5 h-3.5 text-[#3db6e8]" aria-hidden /> Doprava zdarma nad 100 €
+                </span>
+                <span className="inline-flex items-center gap-1.5">
+                  <RotateCcw className="w-3.5 h-3.5 text-[#ea580c]" aria-hidden /> 14 dní na vrátenie
+                </span>
+                <span className="inline-flex items-center gap-1.5">
+                  <ShieldCheck className="w-3.5 h-3.5 text-emerald-600" aria-hidden /> Overený predajca
+                </span>
               </div>
 
               {/* Kalkulačka — hlavné vrstvy majú výber hrúbky (náter/1mm/2mm),

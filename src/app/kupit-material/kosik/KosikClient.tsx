@@ -2,7 +2,7 @@
 
 import * as React from "react";
 import Link from "next/link";
-import { Minus, Plus, Trash2, ShoppingCart, Check, Phone, FileText } from "lucide-react";
+import { Minus, Plus, Trash2, ShoppingCart, Check, Phone, FileText, ShieldCheck, Truck, RotateCcw, Lock } from "lucide-react";
 import { useCart } from "@/lib/cart";
 import { calcWeightKg } from "@/lib/calculator";
 import { getShippingOptions, FREE_SHIPPING_MIN_EUR, type PaymentMethod } from "@/lib/payments";
@@ -417,6 +417,26 @@ export function KosikClient({ paymentMethods }: { paymentMethods: PaymentMethod[
           </a>{" "}
           — dokončíme to za vás.
         </p>
+
+        {/* Trust prvky — znižujú opustenie objednávky (user 2026-08-27). */}
+        <div className="mt-4 grid grid-cols-2 gap-2.5 text-xs">
+          <div className="flex items-center gap-2 rounded-xl bg-zinc-50 border border-zinc-100 px-3 py-2.5">
+            <Lock className="w-4 h-4 shrink-0 text-emerald-600" aria-hidden />
+            <span className="text-zinc-700 leading-tight font-semibold">Bezpečná platba<br /><span className="font-normal text-zinc-500">šifrované, cez Stripe</span></span>
+          </div>
+          <div className="flex items-center gap-2 rounded-xl bg-zinc-50 border border-zinc-100 px-3 py-2.5">
+            <Truck className="w-4 h-4 shrink-0 text-[#3db6e8]" aria-hidden />
+            <span className="text-zinc-700 leading-tight font-semibold">Doprava zdarma<br /><span className="font-normal text-zinc-500">nad {FREE_SHIPPING_MIN_EUR} € (do 30 kg)</span></span>
+          </div>
+          <div className="flex items-center gap-2 rounded-xl bg-zinc-50 border border-zinc-100 px-3 py-2.5">
+            <RotateCcw className="w-4 h-4 shrink-0 text-[#ea580c]" aria-hidden />
+            <span className="text-zinc-700 leading-tight font-semibold">14 dní na vrátenie<br /><span className="font-normal text-zinc-500">bez udania dôvodu</span></span>
+          </div>
+          <div className="flex items-center gap-2 rounded-xl bg-zinc-50 border border-zinc-100 px-3 py-2.5">
+            <ShieldCheck className="w-4 h-4 shrink-0 text-emerald-600" aria-hidden />
+            <span className="text-zinc-700 leading-tight font-semibold">Overený predajca<br /><span className="font-normal text-zinc-500">IČO {SITE.business.ico}</span></span>
+          </div>
+        </div>
       </div>
     </div>
   );
