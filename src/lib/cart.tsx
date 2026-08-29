@@ -118,6 +118,8 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
     if (!hydrated.current) return;
     try {
       window.localStorage.setItem(STORAGE_KEY, JSON.stringify(state.items));
+      // Okamžitý signál pre EshopHeader (badge count) — bez 1,5 s lagu.
+      window.dispatchEvent(new Event("epx-cart-changed"));
     } catch {
       /* quota / private mode */
     }

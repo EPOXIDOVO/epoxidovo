@@ -234,9 +234,10 @@ export async function POST(req: NextRequest) {
       const origin = req.headers.get("origin") ?? base;
       const session = await createStripeCheckoutSession({
         orderId: order!,
-        amountEur: amount,
+        lineItems: [
+          { name: LABEL[d.variant], unitAmountCents: Math.round(amount * 100), qty: 1 },
+        ],
         customerEmail: email,
-        description: LABEL[d.variant],
         successUrl: `${origin}${thanksPath}?o=${order}&p=karta&s={CHECKOUT_SESSION_ID}`,
         cancelUrl: `${origin}${d.locale === "sk" ? "/kurz" : "/en/epoxy-flooring-course"}#prihlaska`,
       });

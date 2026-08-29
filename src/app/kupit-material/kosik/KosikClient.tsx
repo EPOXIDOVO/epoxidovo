@@ -5,7 +5,7 @@ import Link from "next/link";
 import { Minus, Plus, Trash2, ShoppingCart, Check, Phone, FileText } from "lucide-react";
 import { useCart } from "@/lib/cart";
 import { calcWeightKg } from "@/lib/calculator";
-import { getShippingOptions, type PaymentMethod } from "@/lib/payments";
+import { getShippingOptions, FREE_SHIPPING_MIN_EUR, type PaymentMethod } from "@/lib/payments";
 import { TurnstileWidget } from "@/components/turnstile/TurnstileWidget";
 import { trackEvent } from "@/components/analytics/Analytics";
 import { SITE } from "@/lib/site";
@@ -319,6 +319,25 @@ export function KosikClient({ paymentMethods }: { paymentMethods: PaymentMethod[
         <textarea placeholder="Poznámka k objednávke" value={note} onChange={(e) => setNote(e.target.value)} rows={2} className={`${inputCls} mt-3 resize-none`} aria-label="Poznámka" />
 
         <div className="mt-4 rounded-xl bg-[#0e1a3b] text-white p-4">
+          {!hasOnRequest && subtotal < FREE_SHIPPING_MIN_EUR && (
+            <div className="mb-3 pb-3 border-b border-white/15">
+              <p className="text-xs text-white/85">
+                Do <strong className="text-[#3db6e8]">dopravy zdarma</strong> ti chýba{" "}
+                <strong>{fmt(FREE_SHIPPING_MIN_EUR - subtotal)}</strong>
+              </p>
+              <div className="mt-1.5 h-1.5 rounded-full bg-white/15 overflow-hidden">
+                <div
+                  className="h-full rounded-full bg-gradient-to-r from-[#3db6e8] to-[#7c5ee8] transition-all"
+                  style={{ width: `${Math.min(100, (subtotal / FREE_SHIPPING_MIN_EUR) * 100)}%` }}
+                />
+              </div>
+            </div>
+          )}
+          {!hasOnRequest && subtotal >= FREE_SHIPPING_MIN_EUR && (
+            <p className="mb-3 pb-3 border-b border-white/15 text-xs text-emerald-300 font-semibold">
+              ✓ Máš nárok na dopravu zdarma (do 30 kg)
+            </p>
+          )}
           <div className="flex items-baseline justify-between text-sm text-white/80">
             <span>Medzisúčet</span>
             <span className="tnum">{fmt(subtotal)}</span>

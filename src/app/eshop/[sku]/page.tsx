@@ -405,26 +405,29 @@ export default async function ProduktPage({ params }: PageProps) {
                 </section>
               )}
 
-              {/* Postup aplikácie — obsah doplní user zo svojho generátora
-                  (NajCRM podklady); zatiaľ len viditeľný vypnutý button */}
-              <section className="mt-8 rounded-2xl border border-zinc-200 bg-zinc-50 p-5">
-                <h2 className="text-lg font-extrabold text-zinc-900">
-                  📋 Postup aplikácie
-                </h2>
-                <p className="mt-1 text-sm text-zinc-500 max-w-xl">
-                  Krok za krokom, ako {m.nazov} správne namiešať a aplikovať —
-                  z našej realizačnej praxe. Pripravujeme.
-                </p>
-                <button
-                  type="button"
-                  disabled
-                  aria-disabled="true"
-                  title="Pripravujeme"
-                  className="mt-3 inline-flex items-center gap-2 px-6 py-3 rounded-full border-2 border-zinc-200 font-bold text-zinc-400 cursor-not-allowed whitespace-nowrap"
-                >
-                  Zobraziť postup aplikácie (čoskoro)
-                </button>
-              </section>
+              {/* Postup aplikácie — napojené na oficiálny technický list výrobcu
+                  (obsahuje pomery miešania, spotrebu a postup). User 2026-08-27:
+                  namiesto vypnutého placeholdera funkčný odkaz na TL. */}
+              {m.technicky_list && (
+                <section className="mt-8 rounded-2xl border border-zinc-200 bg-zinc-50 p-5">
+                  <h2 className="text-lg font-extrabold text-zinc-900">
+                    📋 Postup aplikácie a technický list
+                  </h2>
+                  <p className="mt-1 text-sm text-zinc-500 max-w-xl">
+                    Presné pomery miešania, spotrebu, časy a krok-za-krokom postup
+                    pre {m.nazov} nájdeš v oficiálnom technickom liste výrobcu.
+                  </p>
+                  <a
+                    href={m.technicky_list}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="mt-3 inline-flex items-center gap-2 px-6 py-3 rounded-full bg-zinc-900 text-white font-bold hover:bg-zinc-700 transition-colors whitespace-nowrap"
+                  >
+                    <FileText className="w-4 h-4" aria-hidden />
+                    Otvoriť technický list (PDF)
+                  </a>
+                </section>
+              )}
 
               {/* Technické údaje — len vyplnené riadky */}
               {techRows.length > 0 && (

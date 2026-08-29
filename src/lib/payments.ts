@@ -55,11 +55,16 @@ export function getPaymentMethods(): PaymentMethod[] {
   return methods;
 }
 
+export interface StripeLineItem {
+  name: string;
+  unitAmountCents: number;
+  qty: number;
+}
 export interface StripeSessionInput {
   orderId: string;
-  amountEur: number;
+  lineItems: StripeLineItem[];
+  shippingCents?: number;
   customerEmail: string;
-  description: string;
   successUrl: string;
   cancelUrl: string;
 }
@@ -76,17 +81,25 @@ export async function createStripeCheckoutSession(
 
   const body = new URLSearchParams({
     mode: "payment",
-    "line_items[0][price_data][currency]": "eur",
-    "line_items[0][price_data][product_data][name]": input.description,
-    "line_items[0][price_data][unit_amount]": String(
-      Math.round(input.amountEur * 100),
-    ),
-    "line_items[0][quantity]": "1",
     customer_email: input.customerEmail,
     client_reference_id: input.orderId,
     success_url: input.successUrl,
     cancel_url: input.cancelUrl,
   });
+  // Itemizovaný checkout — každý produkt zvlášť + doprava (user 2026-08-27).
+  input.lineItems.forEach((li, i) => {
+    body.set(`line_items[${i}][price_data][currency]`, "eur");
+    body.set(`line_items[${i}][price_data][product_data][name]`, li.name.slice(0, 250));
+    body.set(`line_items[${i}][price_data][unit_amount]`, String(Math.round(li.unitAmountCents)));
+    body.set(`line_items[${i}][quantity]`, String(li.qty));
+  });
+  if (input.shippingCents && input.shippingCents > 0) {
+    const i = input.lineItems.length;
+    body.set(`line_items[${i}][price_data][currency]`, "eur");
+    body.set(`line_items[${i}][price_data][product_data][name]`, "Doprava kuriérom");
+    body.set(`line_items[${i}][price_data][unit_amount]`, String(Math.round(input.shippingCents)));
+    body.set(`line_items[${i}][quantity]`, "1");
+  }
 
   const res = await fetch("https://api.stripe.com/v1/checkout/sessions", {
     method: "POST",

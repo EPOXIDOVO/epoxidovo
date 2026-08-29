@@ -274,9 +274,13 @@ export async function POST(req: NextRequest) {
     if (payment.id === "karta") {
       const session = await createStripeCheckoutSession({
         orderId,
-        amountEur: total,
+        lineItems: lines.map((l) => ({
+          name: l.product.name,
+          unitAmountCents: Math.round((l.product.priceRetail ?? 0) * 100),
+          qty: l.qty,
+        })),
+        shippingCents: shipping.priceEur ? Math.round(shipping.priceEur * 100) : 0,
         customerEmail: email,
-        description: `Objednávka ${orderId} — materiály EPOXIDOVO (${lines.length} položiek)`,
         successUrl: `${SITE.url}/kupit-material/kosik?stav=zaplatene&objednavka=${orderId}`,
         cancelUrl: `${SITE.url}/kupit-material/kosik?stav=zrusene&objednavka=${orderId}`,
       });

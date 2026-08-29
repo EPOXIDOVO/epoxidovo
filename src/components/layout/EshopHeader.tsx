@@ -41,10 +41,13 @@ export function EshopHeader({ bezVyhladavania = false }: { bezVyhladavania?: boo
     const obnov = () => setPocet(precitajPocet());
     obnov();
     window.addEventListener("storage", obnov);
-    // vlastný event z cart.tsx nemáme — polling raz za 1,5 s je dosť
-    const t = window.setInterval(obnov, 1500);
+    // Okamžitý update z cart.tsx (rovnaká karta) — badge sa zmení hneď.
+    window.addEventListener("epx-cart-changed", obnov);
+    // Poll len ako fallback (iná karta bez storage eventu, edge prípady).
+    const t = window.setInterval(obnov, 3000);
     return () => {
       window.removeEventListener("storage", obnov);
+      window.removeEventListener("epx-cart-changed", obnov);
       window.clearInterval(t);
     };
   }, []);
