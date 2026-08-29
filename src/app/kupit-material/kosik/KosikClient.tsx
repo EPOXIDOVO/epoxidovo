@@ -5,7 +5,7 @@ import Link from "next/link";
 import { Minus, Plus, Trash2, ShoppingCart, Check, Phone, FileText } from "lucide-react";
 import { useCart } from "@/lib/cart";
 import { calcWeightKg } from "@/lib/calculator";
-import type { PaymentMethod } from "@/lib/payments";
+import { getShippingOptions, type PaymentMethod } from "@/lib/payments";
 import { TurnstileWidget } from "@/components/turnstile/TurnstileWidget";
 import { trackEvent } from "@/components/analytics/Analytics";
 import { SITE } from "@/lib/site";
@@ -78,26 +78,16 @@ export function KosikClient({ paymentMethods }: { paymentMethods: PaymentMethod[
       qty: l.qty,
     })),
   );
-  const containsHazardous = lines.some((l) => l.product.hazardous);
-
-  // doprava — rovnaká logika ako server (informatívne)
-  const shippingOptions: ShippingOptionDto[] = [
-    {
-      id: "pickup",
-      label: "Osobný odber — Komjatná",
-      description: "Školská 480, 034 96 Komjatná. Pripravíme do 24 h, zavoláme.",
-      priceEur: 0,
-    },
-    {
-      id: "kurier",
-      label: "Kuriér",
-      description: containsHazardous
-        ? `Zásielka obsahuje chemické produkty (ADR) — cenu dopravy potvrdíme e-mailom. Hmotnosť ${weightKg} kg.`
-        : `Hmotnosť ${weightKg} kg. Cenu dopravy potvrdíme e-mailom.`,
-      priceEur: null,
-    },
-  ];
+  // Doprava — JEDEN zdroj so serverom (payments.ts), ceny sedia s /api/order.
+  const shippingOptions: ShippingOptionDto[] = getShippingOptions(weightKg, subtotal);
   const shipping = shippingOptions.find((s) => s.id === shippingId)!;
+  const selectedPayment = paymentMethods.find((m) => m.id === paymentId);
+  const surcharge = selectedPayment?.surchargeEur ?? 0;
+  // Reálny súčet vieme ukázať len keď nič nie je „na dopyt".
+  const totalKnown = !hasOnRequest && shipping.priceEur != null;
+  const displayTotal = totalKnown
+    ? Math.round((subtotal + (shipping.priceEur ?? 0) + surcharge) * 100) / 100
+    : null;
 
   const kartaDisabled = hasOnRequest || (shippingId === "kurier" && shipping.priceEur == null);
 
@@ -329,17 +319,36 @@ export function KosikClient({ paymentMethods }: { paymentMethods: PaymentMethod[
         <textarea placeholder="Poznámka k objednávke" value={note} onChange={(e) => setNote(e.target.value)} rows={2} className={`${inputCls} mt-3 resize-none`} aria-label="Poznámka" />
 
         <div className="mt-4 rounded-xl bg-[#0e1a3b] text-white p-4">
-          <div className="flex items-baseline justify-between">
-            <span className="font-bold text-sm">{hasOnRequest ? "Medzisúčet" : "Spolu"}</span>
-            <span className="tnum text-2xl font-extrabold">{fmt(subtotal)}</span>
+          <div className="flex items-baseline justify-between text-sm text-white/80">
+            <span>Medzisúčet</span>
+            <span className="tnum">{fmt(subtotal)}</span>
+          </div>
+          <div className="mt-1 flex items-baseline justify-between text-sm text-white/80">
+            <span>Doprava</span>
+            <span className="tnum">
+              {shipping.priceEur == null
+                ? "potvrdíme e-mailom"
+                : shipping.priceEur === 0
+                  ? "Zadarmo"
+                  : fmt(shipping.priceEur)}
+            </span>
+          </div>
+          {surcharge > 0 && (
+            <div className="mt-1 flex items-baseline justify-between text-sm text-white/80">
+              <span>{selectedPayment?.label ?? "Príplatok"}</span>
+              <span className="tnum">+ {fmt(surcharge)}</span>
+            </div>
+          )}
+          <div className="mt-2 pt-2 border-t border-white/15 flex items-baseline justify-between">
+            <span className="font-bold text-sm">{totalKnown ? "Spolu" : "Medzisúčet"}</span>
+            <span className="tnum text-2xl font-extrabold">
+              {fmt(displayTotal ?? subtotal)}
+            </span>
           </div>
           {hasOnRequest && (
             <p className="mt-1 text-xs text-amber-300">
               + položky „na dopyt" — finálnu sumu potvrdíme e-mailom.
             </p>
-          )}
-          {shipping.priceEur == null && shippingId === "kurier" && (
-            <p className="mt-1 text-xs text-white/60">+ doprava (potvrdíme e-mailom)</p>
           )}
           <p className="mt-1.5 text-[11px] text-white/50">
             Dodávateľ nie je platiteľom DPH. Ceny sú konečné.

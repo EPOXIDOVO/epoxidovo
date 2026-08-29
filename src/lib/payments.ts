@@ -33,7 +33,7 @@ const DOBIERKA: PaymentMethod = {
   id: "dobierka",
   label: "Dobierka",
   description: "Zaplatíte kuriérovi pri prevzatí.",
-  surchargeEur: null, // príplatok doplníme keď bude potvrdený cenník dopravcu
+  surchargeEur: 1.0, // dobierka +1 € (ako konkurencia montana.sk, user 2026-08-27)
 };
 
 const KARTA: PaymentMethod = {
@@ -114,28 +114,50 @@ export interface ShippingOption {
 }
 
 /**
- * Doprava podľa hmotnosti a hazardous obsahu.
+ * Doprava podľa hmotnosti — sadzby prevzaté z konkurencie montana.sk
+ * (predáva tie isté Sika materiály; tekuté materiály = farby/penetrácie/epoxidy
+ * posiela kuriérom SDS podľa hmotnosti). User 2026-08-27: „cenu dopravy daj
+ * ako má konkurencia".
  *
- * POZOR: sadzby kuriéra pre ťažké/ADR zásielky zatiaľ NEMÁME potvrdené —
- * nevymýšľame ich. Kuriér sa preto zobrazuje s „cenu potvrdíme e-mailom".
- * Osobný odber je vždy zadarmo. Keď user dodá cenník dopravcu, doplní sa
- * do SHIPPING_RATES a checkout začne počítať automaticky.
+ * Doprava ZADARMO nad 100 € (do 30 kg). Nad 53 kg → paleta, cenu potvrdíme
+ * e-mailom. Osobný odber je vždy zadarmo.
  */
-export const SHIPPING_RATES: { maxKg: number; priceEur: number; hazardous: boolean }[] =
-  [
-    // doplniť po potvrdení cenníka dopravcu, napr.:
-    // { maxKg: 30, priceEur: 9.9, hazardous: false },
-  ];
+export const FREE_SHIPPING_MIN_EUR = 100;
+const FREE_SHIPPING_MAX_KG = 30;
+
+export const SHIPPING_RATES: { maxKg: number; priceEur: number }[] = [
+  { maxKg: 3.99, priceEur: 4.0 },
+  { maxKg: 9.99, priceEur: 4.82 },
+  { maxKg: 14.99, priceEur: 5.43 },
+  { maxKg: 19.99, priceEur: 6.05 },
+  { maxKg: 29.99, priceEur: 7.07 },
+  { maxKg: 39.99, priceEur: 8.71 },
+  { maxKg: 49.99, priceEur: 11.17 },
+  { maxKg: 52.99, priceEur: 18.45 },
+];
 
 export const PICKUP_ADDRESS = "Školská 480, 034 96 Komjatná";
 
 export function getShippingOptions(
   weightKg: number,
-  containsHazardous: boolean,
+  subtotalEur: number,
 ): ShippingOption[] {
-  const rate = SHIPPING_RATES.find(
-    (r) => weightKg <= r.maxKg && r.hazardous === containsHazardous,
-  );
+  const hm = Math.round(weightKg * 10) / 10;
+  let kurierPrice: number | null;
+  let kurierDesc: string;
+  if (subtotalEur >= FREE_SHIPPING_MIN_EUR && weightKg <= FREE_SHIPPING_MAX_KG) {
+    kurierPrice = 0;
+    kurierDesc = `Doprava ZADARMO — objednávka nad ${FREE_SHIPPING_MIN_EUR} € (do ${FREE_SHIPPING_MAX_KG} kg). Hmotnosť ${hm} kg.`;
+  } else {
+    const rate = SHIPPING_RATES.find((r) => weightKg <= r.maxKg);
+    if (rate) {
+      kurierPrice = rate.priceEur;
+      kurierDesc = `Kuriér DPD / GLS / SDS. Hmotnosť ${hm} kg. Doručenie do 2–4 dní.`;
+    } else {
+      kurierPrice = null; // paleta / nadrozmer
+      kurierDesc = `Ťažká zásielka (${hm} kg) — preprava na palete, presnú cenu potvrdíme e-mailom.`;
+    }
+  }
   return [
     {
       id: "pickup",
@@ -146,10 +168,8 @@ export function getShippingOptions(
     {
       id: "kurier",
       label: "Kuriér",
-      description: containsHazardous
-        ? `Zásielka obsahuje chemické produkty (ADR) — cenu dopravy potvrdíme e-mailom. Hmotnosť ${weightKg} kg.`
-        : `Hmotnosť ${weightKg} kg. ${rate ? "" : "Cenu dopravy potvrdíme e-mailom."}`,
-      priceEur: rate?.priceEur ?? null,
+      description: kurierDesc,
+      priceEur: kurierPrice,
     },
   ];
 }

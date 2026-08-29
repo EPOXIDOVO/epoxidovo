@@ -179,8 +179,7 @@ export async function POST(req: NextRequest) {
         qty: l.qty,
       })),
     );
-    const containsHazardous = lines.some((l) => l.product.hazardous);
-    const shipping = getShippingOptions(weightKg, containsHazardous).find(
+    const shipping = getShippingOptions(weightKg, subtotal).find(
       (s) => s.id === shippingId,
     )!;
 
@@ -206,7 +205,9 @@ export async function POST(req: NextRequest) {
 
     const orderId = `EPX-${Date.now().toString(36).toUpperCase()}`;
     const total =
-      Math.round((subtotal + (shipping.priceEur ?? 0)) * 100) / 100;
+      Math.round(
+        (subtotal + (shipping.priceEur ?? 0) + (payment.surchargeEur ?? 0)) * 100,
+      ) / 100;
 
     const emailResult = await sendOrderEmails({
       orderId,
