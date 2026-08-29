@@ -33,6 +33,15 @@ function variantLabel(m: Material): string {
  * Vzhľad → ktoré produkty k nemu patria. `typy_podlah` v dátach je zatiaľ
  * prázdne, tak rozhodujeme z názvu; keď sa pole naplní, nahradí to toto.
  */
+// Manuálne bestsellery — kým e-shop nemá reálne predaje, radíme podľa toho,
+// čo sa reálne najviac predáva. User 2026-08-27: Sika 151, 150 Plus, 264 sú
+// istá TOP trojka. Prvé v zozname = prvé v katalógu.
+const MANUALNE_BESTSELLERY: string[] = [
+  "SIKAFLOOR-151",       // Sikafloor-151 Primer
+  "SF-150-PLUS",         // Sikafloor-150 Plus
+  "SIKAFLOOR-264-30",    // Sikafloor-264 (2K epoxid)
+];
+
 const VZHLAD_TEST: Record<string, (m: Material) => boolean> = {
   metalik: (m) => /metal|3000 fx|ep11/i.test(m.nazov),
   marble: (m) => /marble|mramor|ep11|3310/i.test(m.nazov),
@@ -136,14 +145,16 @@ export function EshopClient({ sidebarVyrobcov = false }: { sidebarVyrobcov?: boo
     if (admin && adminFilter) {
       return [...base].sort((a, b) => chybaZoznam(b).length - chybaZoznam(a).length);
     }
-    if (predajnost.size > 0) {
-      // stabilný sort — nepredávané ostávajú v pôvodnom poradí za bestsellermi
-      return [...base].sort(
-        (a, b) =>
-          (predajnost.get(a.sku) ?? Infinity) - (predajnost.get(b.sku) ?? Infinity),
-      );
-    }
-    return base;
+    // Poradie: manuálne bestsellery (Sika 151/150/264 dopredu) → reálne predaje
+    // z /api/eshop/poradie → zvyšok v pôvodnom poradí (stabilný sort).
+    const rank = (sku: string): number => {
+      const mi = MANUALNE_BESTSELLERY.indexOf(sku);
+      if (mi !== -1) return mi;
+      const pi = predajnost.get(sku);
+      if (pi != null) return MANUALNE_BESTSELLERY.length + pi;
+      return Infinity;
+    };
+    return [...base].sort((a, b) => rank(a.sku) - rank(b.sku));
   }, [obsah, skupina, vyrobca, query, admin, adminFilter, predajnost, vzhlad]);
 
   /** Karty zlúčené podľa produktu — rôzne balenia sú varianty v dropdown-e. */
