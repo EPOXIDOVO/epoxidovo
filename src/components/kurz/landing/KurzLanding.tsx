@@ -11,8 +11,8 @@ import { SITE } from "@/lib/site";
 import { KURZ } from "@/content/kurz";
 import { COURSE_EN } from "@/content/kurz-en";
 import { COPY, type Locale } from "./copy";
-import { KurzZisk, useAnimatedNumber } from "./KurzZisk";
-import { spocitajZisk, TYPY, type TypSlug } from "@/lib/kurz-zisk";
+import { useAnimatedNumber } from "./KurzZisk";
+import { spocitajZisk, TYPY, BEZNA_MARZA, ABSOLVENT_MARZA, type TypSlug } from "@/lib/kurz-zisk";
 import "./landing.css";
 
 /* ------------------------------------------------------------------ */
@@ -40,6 +40,7 @@ const V2 = {
     lead: "Toto nie je len kurz — je to celý funkčný biznis model v kocke. Roky skúseností z reálnych zákaziek, softvér, vďaka ktorému firma beží aj bez teba, a reálne čísla, ktoré inde neuvidíš. Naučíš sa remeslo — a biznis, ktorý ho predáva.",
     ctaMain: "Chcem prístup",
     ctaProgram: "Koľko môžem zarobiť? ↓",
+    ctaFirma: "Naša realizačná firma ↗",
     navCta: "Chcem prístup",
     facts: [
       ["8+ h", "videa z reálnych zákaziek"],
@@ -79,7 +80,8 @@ const V2 = {
     },
     absolventi: {
       eyebrow: "Absolventi",
-      h2: "Ich prvá podlaha. A prvá faktúra.",
+      h2: "Prvá podlaha našich klientov. A ich prvá faktúra.",
+      fotoTodo: "foto doplníme",
       prva: "Prvá zákazka:",
       countLine: (n: number) => `Už ${n} absolventov lialo svoju prvú podlahu.`,
       // TODO: nahradiť reálnymi referenciami (fotky /images/absolvent-1.jpg až -3.jpg)
@@ -107,11 +109,13 @@ const V2 = {
       rowSell: "Vyfakturuješ zákazníkovi",
       rowMat: "Materiál (veľkoobchod)",
       rowKeep: "Zarobíš",
+      zaBalenia: "za celé balenia",
+      balenia: (n: number) => `${n} ${n === 1 ? "balenie" : n < 5 ? "balenia" : "balení"}`,
+      vyhoda: (bezna: string, moja: string) => `Materiál máš za ${moja} €/m² namiesto ${bezna} €/m² v e-shope.`,
       note: (m2: number) => `Kurz Štandard (${KURZ.priceStandard} €) sa ti vráti po ~${m2} m².`,
       ctxLabel: "Typické plochy",
       ctxGaraz: "Priemerná garáž",
       ctxDom: "Rodinný dom",
-      more: "Celá kalkulačka s detailmi ↓",
     },
     claimH2a: "Kurz nakrútený na zákazkách, ktoré nám ",
     claimH2em: "zákazníci zaplatili.",
@@ -203,6 +207,7 @@ const V2 = {
     lead: "This isn't just a course — it's a complete, working business model. Years of experience from real jobs, software that keeps the company running without you, and real numbers you won't see anywhere else. You learn the craft — and the business that sells it.",
     ctaMain: "Get access",
     ctaProgram: "How much can I earn? ↓",
+    ctaFirma: "Our installation company ↗",
     navCta: "Get access",
     facts: [
       ["8+ h", "of video from real jobs"],
@@ -242,7 +247,8 @@ const V2 = {
     },
     absolventi: {
       eyebrow: "Graduates",
-      h2: "Their first floor. And first invoice.",
+      h2: "Our clients' first floor. And their first invoice.",
+      fotoTodo: "photo coming",
       prva: "First job:",
       countLine: (n: number) => `${n} graduates have already poured their first floor.`,
       // TODO: replace with real references (photos /images/absolvent-1.jpg to -3.jpg)
@@ -270,11 +276,13 @@ const V2 = {
       rowSell: "You invoice the client",
       rowMat: "Material (wholesale)",
       rowKeep: "You earn",
+      zaBalenia: "for whole packages",
+      balenia: (n: number) => `${n} package${n === 1 ? "" : "s"}`,
+      vyhoda: (bezna: string, moja: string) => `You get material at €${moja}/m² instead of €${bezna}/m² in the e-shop.`,
       note: (m2: number) => `The Standard course (€${KURZ.priceStandard}) pays back after ~${m2} m².`,
       ctxLabel: "Typical areas",
       ctxGaraz: "Average garage",
       ctxDom: "Family house",
-      more: "Full calculator with details ↓",
     },
     claimH2a: "A course filmed on jobs our ",
     claimH2em: "clients paid for.",
@@ -479,8 +487,13 @@ function HeroKalkulacka({ locale }: { locale: Locale }) {
   const aMat = useAnimatedNumber(r?.materialEur ?? 0);
   const aKeep = useAnimatedNumber(r?.hrubaMarzaEur ?? 0);
   if (!r) return null;
+  const usporaPct = Math.round((1 - (1 - BEZNA_MARZA) / (1 - ABSOLVENT_MARZA)) * 100);
+  const fmt2 = (n: number) =>
+    new Intl.NumberFormat(locale === "sk" ? "sk-SK" : "en-GB", { minimumFractionDigits: 2, maximumFractionDigits: 2 }).format(n);
   return (
-    <aside className="kl-hcalc" aria-label={t.tag}>
+    /* id="kalkulacka": jediná kalkulačka na stránke — kotvy z menu aj CTA
+       vedú sem (veľká sekcia zrušená, majiteľ 2026-08-30). */
+    <aside id="kalkulacka" className="kl-hcalc" aria-label={t.tag}>
       <div className="kl-hcalc__tag">
         <span>{t.tag}</span>
         <span className="kl-hcalc__live"><i aria-hidden />{t.live}</span>
@@ -516,10 +529,20 @@ function HeroKalkulacka({ locale }: { locale: Locale }) {
         aria-valuetext={`${m2} m²`}
       />
       <dl className="kl-hcalc__rows">
-        <div><dt>{t.rowSell}</dt><dd>{fmt(aSell)} €</dd></div>
-        <div><dt>{t.rowMat}</dt><dd>−{fmt(aMat)} €</dd></div>
+        <div>
+          <dt>{t.rowSell}<small>{r.predajM2} € × {r.plochaM2} m² + {fmt(r.priplatokEur)} € {t.zaBalenia}</small></dt>
+          <dd>{fmt(aSell)} €</dd>
+        </div>
+        <div>
+          <dt>{t.rowMat}<small>{t.balenia(r.baleniaSpolu)}</small></dt>
+          <dd>−{fmt(aMat)} €</dd>
+        </div>
         <div className="is-total"><dt>{t.rowKeep}</dt><dd>{fmt(aKeep)} €</dd></div>
       </dl>
+      {/* Veľkoobchodná výhoda — stiahnutá zo zrušenej veľkej sekcie. */}
+      <p className="kl-hcalc__vyhoda">
+        <b>−{usporaPct} %</b> {t.vyhoda(fmt2(r.beznaMaterialM2), fmt2(r.materialM2))}
+      </p>
       {/* Klik na návratnosť vedie rovno na ponuku kurzov (majiteľ). */}
       <a href="#cena" className="kl-hcalc__note">{t.note(r.navratnostM2)}</a>
       {/* Typické plochy — klik rovno nastaví slider (garáž 50, dom 120). */}
@@ -533,7 +556,6 @@ function HeroKalkulacka({ locale }: { locale: Locale }) {
           {t.ctxDom} <b>~120 m²</b>
         </button>
       </div>
-      <a href="#kalkulacka" className="kl-hcalc__more">{t.more}</a>
     </aside>
   );
 }
@@ -568,6 +590,7 @@ function Hero({ locale }: { locale: Locale }) {
             <div className="kl-hero__actions">
               <a href="#prihlaska" className="kl-btn kl-btn--primary">{t.ctaMain}</a>
               <a href="#kalkulacka" className="kl-btn kl-btn--ghost">{t.ctaProgram}</a>
+              <Link href="/" className="kl-btn kl-btn--ghost">{t.ctaFirma}</Link>
             </div>
             {/* Trust ticker — fakty bežia sprava doľava (majiteľ 2026-08-30);
                 dve kópie sady + posun o −50 % = plynulá slučka. */}
@@ -670,7 +693,11 @@ function Absolventi({ locale }: { locale: Locale }) {
         <div className="kl-abs__grid">
           {t.data.map((a, i) => (
             <Reveal as="article" className="kl-abs-card" key={a.meno} delay={i * 80}>
-              <Image src={a.img} alt={a.meno} width={640} height={480} sizes="(max-width: 700px) 100vw, 24rem" />
+              {/* Dummy placeholder — NIE reálna fotka (majiteľ: doplniť neskôr). */}
+              <div className="kl-abs-card__ph" aria-hidden>
+                <span>?</span>
+                <small>{t.fotoTodo}</small>
+              </div>
               <div className="kl-abs-card__body">
                 <p className="kl-abs-card__meno">{a.meno}</p>
                 <p className="kl-abs-card__citat">„{a.citat}&ldquo;</p>
@@ -1366,7 +1393,6 @@ export function KurzLanding({ locale }: { locale: Locale }) {
             absolventi → spolupráca → CENA → úprimný filter → dôkaz → obsah. */}
         <Hero locale={locale} />
         <Vrstvy locale={locale} />
-        <KurzZisk locale={locale} />
         <Absolventi locale={locale} />
         <Spolupraca locale={locale} />
         <Pricing locale={locale} />

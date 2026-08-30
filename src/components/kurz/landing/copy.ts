@@ -79,7 +79,7 @@ export const COPY: Record<Locale, LandingCopy> = {
     path: "/kurz",
     otherPath: "/en/epoxy-flooring-course",
     otherLabel: "EN",
-    nav: { home: "Úvod", about: "O kurze", program: "Program", calc: "Kalkulačka", price: "Cena", faq: "FAQ", contact: "Kontakt", cta: "Prihlásiť sa" },
+    nav: { home: "Úvod", about: "O kurze", program: "Program", calc: "Kalkulačka", price: "Cena", faq: "Časté otázky", contact: "Kontakt", cta: "Prihlásiť sa" },
     hero: { h1: "Nauč sa liať podlahy", scroll: "Scrolluj dole" },
     about: {
       h2: "Staň sa súčasťou najpraktickejšieho kurzu epoxidových podláh na Slovensku",

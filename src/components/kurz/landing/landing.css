@@ -138,12 +138,21 @@
   color: #fff;
   transition: background 300ms var(--kl-ease), box-shadow 300ms var(--kl-ease);
 }
+/* Po scrolle biely header s tmavým textom — rovnaká funkcia ako hlavný web. */
 .kl-header.is-fixed {
-  background: rgba(13, 18, 24, 0.85);
+  background: rgba(255, 255, 255, 0.92);
   -webkit-backdrop-filter: blur(14px);
   backdrop-filter: blur(14px);
-  box-shadow: 0 1px 0 var(--kl-border);
+  box-shadow: 0 1px 0 rgba(10, 15, 30, 0.12);
 }
+.kl-header.is-fixed .kl-brand-mark { color: #0a0f1e; text-shadow: 0 1px 2px rgba(0, 0, 0, 0.12); }
+.kl-header.is-fixed .kl-nav__menu a { color: #24303c; }
+.kl-header.is-fixed .kl-nav__menu a:hover { color: var(--kl-accent-deep); }
+.kl-header.is-fixed .kl-nav__phone a { border-color: rgba(10, 15, 30, 0.25); color: #0a0f1e; background: rgba(10, 15, 30, 0.04); }
+.kl-header.is-fixed .kl-nav__login a { border-color: rgba(10, 15, 30, 0.22); color: rgba(10, 15, 30, 0.65); }
+.kl-header.is-fixed .kl-nav__login a:hover { color: #0a0f1e; border-color: var(--kl-accent); }
+.kl-header.is-fixed .kl-nav__lang a { border-color: rgba(10, 15, 30, 0.22); color: #24303c; }
+.kl-header.is-fixed .kl-nav__toggle { color: #0a0f1e; }
 /* Otvorené mobilné menu: backdrop-filter by z headera spravil containing
    block pre fixed panel a orezal ho na výšku headera. */
 .kl-header.menu-open {
@@ -151,6 +160,9 @@
   backdrop-filter: none;
   background: var(--kl-bg);
 }
+/* Otvorené menu je tmavé — vráť svetlé texty aj keď je zároveň is-fixed. */
+.kl-header.menu-open .kl-brand-mark { color: #fff; }
+.kl-header.menu-open .kl-nav__toggle { color: #fff; }
 .kl-nav { display: flex; align-items: center; gap: 2rem; width: 100%; }
 .kl-nav__brand { display: inline-flex; align-items: center; }
 /* Textové logo — 1:1 s hlavným webom (text-4xl/5xl extrabold, guľatá
@@ -467,6 +479,7 @@
   font-size: 0.88rem;
 }
 .kl-hcalc__rows dt { color: var(--kl-subtle); }
+.kl-hcalc__rows dt small { display: block; font-size: 0.68rem; font-weight: 500; color: var(--kl-faint); margin-top: 0.1rem; }
 .kl-hcalc__rows dd { margin: 0; font-family: var(--kl-font-mono); font-weight: 700; color: var(--kl-ink); font-variant-numeric: tabular-nums; white-space: nowrap; }
 .kl-hcalc__rows .is-total { border-top: 1px solid var(--kl-profit); }
 .kl-hcalc__rows .is-total dd { color: var(--kl-profit); font-size: 1.5rem; }
@@ -487,8 +500,9 @@
   transition: background 200ms var(--kl-ease), transform 200ms var(--kl-ease);
 }
 .kl-hcalc__note:hover { background: rgba(85, 196, 143, 0.24); transform: translateY(-1px); }
-.kl-hcalc__more { display: inline-block; margin-top: 0.7rem; font-size: 0.85rem; font-weight: 700; color: var(--kl-accent-hi); }
-.kl-hcalc__more:hover { text-decoration: underline; }
+/* veľkoobchodná výhoda — stiahnutá zo zrušenej veľkej kalkulačky */
+.kl-hcalc__vyhoda { margin-top: 0.6rem; font-size: 0.78rem; color: var(--kl-subtle); }
+.kl-hcalc__vyhoda b { font-family: var(--kl-font-mono); font-weight: 700; color: var(--kl-profit); margin-right: 0.25rem; }
 /* typické plochy — klikacie pilulky s ikonami (garáž / dom), jeden riadok */
 .kl-hcalc__ctx { display: flex; flex-wrap: nowrap; gap: 0.5rem; margin-top: 0.7rem; }
 @media (max-width: 380px) { .kl-hcalc__ctx { flex-wrap: wrap; } }
@@ -684,6 +698,19 @@
 }
 .kl-abs-card:hover { border-color: var(--kl-accent); transform: translateY(-3px); }
 .kl-abs-card img { width: 100%; aspect-ratio: 4 / 3; object-fit: cover; }
+/* dummy placeholder namiesto reálnej fotky (doplní sa neskôr) */
+.kl-abs-card__ph {
+  aspect-ratio: 4 / 3;
+  display: grid;
+  place-items: center;
+  align-content: center;
+  gap: 0.3rem;
+  background: var(--kl-field-bg);
+  border-bottom: 1px solid var(--kl-border);
+  color: var(--kl-faint);
+}
+.kl-abs-card__ph span { font-family: var(--kl-font-mono); font-size: 3rem; font-weight: 700; line-height: 1; }
+.kl-abs-card__ph small { font-size: 0.78rem; }
 .kl-abs-card__body { padding: 1.15rem 1.3rem 1.3rem; }
 .kl-abs-card__meno { font-weight: 700; color: var(--kl-ink); }
 .kl-abs-card__citat { font-size: 0.93rem; color: var(--kl-text); margin-top: 0.4rem; }
