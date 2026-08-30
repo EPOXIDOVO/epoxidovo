@@ -444,6 +444,10 @@
 
 /* interaktívna mini-kalkulačka v hero */
 .kl-hcalc {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  gap: 0.35rem;
   background: linear-gradient(160deg, var(--kl-panel), var(--kl-surface));
   border: 1px solid var(--kl-border-strong);
   border-radius: var(--kl-radius);
@@ -483,8 +487,8 @@
   text-align: left;
   font: inherit;
   font-size: 0.84rem;
-  font-weight: 600;
-  color: var(--kl-text);
+  font-weight: 700;
+  color: #eef2f6;
   background: var(--kl-field-bg);
   border: 1px solid var(--kl-border-strong);
   border-radius: 10px;
@@ -498,7 +502,7 @@
 .kl-hcalc__typ.is-active .kl-hcalc__typ-txt i { color: #123c2a; }
 .kl-hcalc__typ:hover { border-color: var(--kl-accent); color: var(--kl-ink); }
 .kl-hcalc__typ.is-active { background: var(--kl-accent); border-color: var(--kl-accent); color: #160d06; font-weight: 700; }
-.kl-hcalc__slider { display: flex; justify-content: space-between; align-items: baseline; font-size: 0.85rem; font-weight: 600; color: var(--kl-subtle); }
+.kl-hcalc__slider { display: flex; justify-content: space-between; align-items: baseline; font-size: 0.9rem; font-weight: 700; color: #e7ecf1; }
 .kl-hcalc__slider strong { font-family: var(--kl-font-mono); font-size: 1.25rem; color: var(--kl-ink); font-variant-numeric: tabular-nums; }
 .kl-hcalc .kl-range { margin-bottom: 0.7rem; }
 .kl-hcalc__rows { margin: 0; }
@@ -511,11 +515,12 @@
   border-top: 1px dashed var(--kl-border-strong);
   font-size: 0.88rem;
 }
-.kl-hcalc__rows dt { color: var(--kl-subtle); }
-.kl-hcalc__rows dt small { display: block; font-size: 0.68rem; font-weight: 500; color: var(--kl-faint); margin-top: 0.1rem; }
+.kl-hcalc__rows dt { color: #e7ecf1; font-weight: 700; }
+.kl-hcalc__rows dt small { display: block; font-size: 0.7rem; font-weight: 600; color: var(--kl-subtle); margin-top: 0.1rem; }
 .kl-hcalc__rows dd { margin: 0; font-family: var(--kl-font-mono); font-weight: 700; color: var(--kl-ink); font-variant-numeric: tabular-nums; white-space: nowrap; }
 .kl-hcalc__rows .is-total { border-top: 1px solid var(--kl-profit); }
-.kl-hcalc__rows .is-total dd { color: var(--kl-profit); font-size: 1.5rem; }
+.kl-hcalc__rows .is-total dt { font-size: 1.25rem; font-weight: 700; color: #fff; }
+.kl-hcalc__rows .is-total dd { color: var(--kl-profit); font-size: 2rem; }
 /* Návratnosť kurzu — hlavný predajný argument, svieti (majiteľ: „toto
    zvýrazniť veľmi"). */
 .kl-hcalc__note {
@@ -536,7 +541,7 @@
 }
 .kl-hcalc__note:hover { background: rgba(85, 196, 143, 0.24); transform: translateY(-1px); }
 /* veľkoobchodná výhoda — stiahnutá zo zrušenej veľkej kalkulačky */
-.kl-hcalc__vyhoda { margin-top: 0.6rem; font-size: 0.74rem; color: var(--kl-subtle); white-space: nowrap; }
+.kl-hcalc__vyhoda { margin-top: 0.6rem; font-size: 0.74rem; font-weight: 600; color: #ccd4dc; white-space: nowrap; }
 .kl-hcalc__vyhoda b { font-family: var(--kl-font-mono); font-weight: 700; color: var(--kl-profit); margin-right: 0.25rem; }
 /* typické plochy — klikacie pilulky s ikonami (garáž / dom), jeden riadok */
 .kl-hcalc__ctx { display: flex; flex-wrap: nowrap; gap: 0.5rem; margin-top: 0.7rem; }
@@ -551,8 +556,8 @@
   gap: 0.4rem;
   font: inherit;
   font-size: 0.76rem;
-  font-weight: 600;
-  color: var(--kl-subtle);
+  font-weight: 700;
+  color: #e7ecf1;
   background: var(--kl-field-bg);
   border: 1px solid var(--kl-border-strong);
   border-radius: 999px;

@@ -557,7 +557,7 @@ function Hero({ locale }: { locale: Locale }) {
     <section className="kl-hero" id="hello">
       <div className="kl-hero__media" aria-hidden>
         <Image
-          src="/images/hero/garaz.webp"
+          src="/images/eshop/topstone-metallic/midnight-blue.jpg"
           alt=""
           fill
           priority
