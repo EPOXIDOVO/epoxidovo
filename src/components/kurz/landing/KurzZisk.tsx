@@ -93,8 +93,9 @@ const nfmt = (locale: Locale, min = 0, max = 0) =>
 const fmt = (n: number, locale: Locale) => nfmt(locale).format(n);
 const fmt2 = (n: number, locale: Locale) => nfmt(locale, 2, 2).format(n);
 
-/** Plynulé narátavanie čísla (easeOutCubic). Na SSR aj prvom paint = cieľ. */
-function useAnimatedNumber(target: number, duration = 500): number {
+/** Plynulé narátavanie čísla (easeOutCubic). Na SSR aj prvom paint = cieľ.
+ *  Exportované — používa ho aj mini-kalkulačka v hero (KurzLanding). */
+export function useAnimatedNumber(target: number, duration = 500): number {
   const [val, setVal] = React.useState(target);
   const prev = React.useRef(target);
   React.useEffect(() => {

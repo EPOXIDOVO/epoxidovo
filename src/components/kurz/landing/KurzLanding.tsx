@@ -10,8 +10,8 @@ import { SITE } from "@/lib/site";
 import { KURZ } from "@/content/kurz";
 import { COURSE_EN } from "@/content/kurz-en";
 import { COPY, type Locale } from "./copy";
-import { KurzZisk } from "./KurzZisk";
-import { spocitajZisk, TYPY } from "@/lib/kurz-zisk";
+import { KurzZisk, useAnimatedNumber } from "./KurzZisk";
+import { spocitajZisk, TYPY, type TypSlug } from "@/lib/kurz-zisk";
 import "./landing.css";
 
 /* ------------------------------------------------------------------ */
@@ -23,7 +23,7 @@ const V2 = {
     badge: "Online kurz · prístup okamžite po zaplatení",
     heroKicker: "Get Instant Access to 20 Years of Installer Secrets.",
     h1a: "Nauč sa liať podlahy.",
-    h1em: " A postav na tom firmu.",
+    h1em: "A postav na tom firmu.",
     lead: "Toto nie je len kurz. Otvoríme ti celú našu firmu — videá z reálnych zákaziek, CRM na dopyty, aplikáciu na ľudí, reálne čísla a mzdy. Naučíš sa remeslo aj biznis, ktorý ho predáva.",
     ctaMain: "Chcem prístup",
     ctaProgram: "Koľko zarobím? ↓",
@@ -33,15 +33,16 @@ const V2 = {
       ["24/7", "prístup navždy"],
       ["14 dní", "garancia vrátenia peňazí"],
     ],
-    ledger: {
-      tagL: "Výkaz · metalická podlaha",
-      tagR: "30 m² garáž",
-      bigSuffix: "€ zisk",
-      sub: "hrubý zisk z jednej bežnej zákazky",
-      rowSell: "Faktúra zákazníkovi",
+    hcalc: {
+      tag: "Kalkulačka zárobku",
+      live: "naživo",
+      typAria: "Typ podlahy",
+      plocha: "Plocha zákazky",
+      rowSell: "Vyfakturuješ zákazníkovi",
       rowMat: "Materiál (veľkoobchod)",
-      rowM2: "Ostane ti na m²",
-      rowPayback: "Kurz sa ti vráti po",
+      rowKeep: "Ostane ti",
+      note: (m2: number) => `Kurz Štandard (${KURZ.priceStandard} €) sa ti vráti po ~${m2} m².`,
+      more: "Celá kalkulačka s detailmi ↓",
     },
     claimH2a: "Kurz nakrútený na zákazkách, ktoré nám ",
     claimH2em: "zákazníci zaplatili.",
@@ -110,7 +111,7 @@ const V2 = {
     badge: "Online course · instant access after payment",
     heroKicker: "Get Instant Access to 20 Years of Installer Secrets.",
     h1a: "Learn to pour floors.",
-    h1em: " And build a business on it.",
+    h1em: "And build a business on it.",
     lead: "This is not just a course. We open up our whole company — video from real jobs, a CRM for leads, an app for your crew, real numbers and wages. You learn the craft and the business that sells it.",
     ctaMain: "Get access",
     ctaProgram: "How much will I earn? ↓",
@@ -120,15 +121,16 @@ const V2 = {
       ["24/7", "lifetime access"],
       ["14 days", "money-back guarantee"],
     ],
-    ledger: {
-      tagL: "Ledger · metallic floor",
-      tagR: "30 m² garage",
-      bigSuffix: "€ profit",
-      sub: "gross profit from one typical job",
-      rowSell: "Client invoice",
+    hcalc: {
+      tag: "Earnings calculator",
+      live: "live",
+      typAria: "Floor type",
+      plocha: "Job area",
+      rowSell: "You invoice the client",
       rowMat: "Material (wholesale)",
-      rowM2: "You keep per m²",
-      rowPayback: "Course pays back after",
+      rowKeep: "You keep",
+      note: (m2: number) => `The Standard course (€${KURZ.priceStandard}) pays back after ~${m2} m².`,
+      more: "Full calculator with details ↓",
     },
     claimH2a: "A course filmed on jobs our ",
     claimH2em: "clients paid for.",
@@ -271,16 +273,71 @@ function Header({ locale, onMenu }: { locale: Locale; onMenu: (open: boolean) =>
 /*  Hero                                                               */
 /* ------------------------------------------------------------------ */
 
-function Hero({ locale }: { locale: Locale }) {
-  const t = V2[locale];
+/**
+ * Interaktívna mini-kalkulačka priamo v hero (majiteľ 2026-08-30: „normálne
+ * live si to vieš tam skúsiť naklikať, to predá ľudí"). Rovnaká cenotvorba
+ * ako veľká kalkulačka — nič natvrdo. Kompakt: typy + slider + tri riadky.
+ */
+function HeroKalkulacka({ locale }: { locale: Locale }) {
+  const t = V2[locale].hcalc;
   const fmt = (n: number) =>
     new Intl.NumberFormat(locale === "sk" ? "sk-SK" : "en-GB", { maximumFractionDigits: 0 }).format(n);
-  const fmt2 = (n: number) =>
-    new Intl.NumberFormat(locale === "sk" ? "sk-SK" : "en-GB", { minimumFractionDigits: 2, maximumFractionDigits: 2 }).format(n);
-  // Výkaz počíta z tej istej cenotvorby ako kalkulačka — keď sa zmenia ceny,
-  // zmení sa aj hero. Nič natvrdo.
-  const metalicka = TYPY.find((x) => x.slug === "metalicke");
-  const r = metalicka ? spocitajZisk(30, metalicka) : null;
+  const [slug, setSlug] = React.useState<TypSlug>("metalicke");
+  const [m2, setM2] = React.useState(30);
+  const typ = React.useMemo(() => TYPY.find((x) => x.slug === slug) ?? TYPY[0], [slug]);
+  const r = React.useMemo(() => spocitajZisk(m2, typ), [m2, typ]);
+  const aSell = useAnimatedNumber(r?.predajEur ?? 0);
+  const aMat = useAnimatedNumber(r?.materialEur ?? 0);
+  const aKeep = useAnimatedNumber(r?.hrubaMarzaEur ?? 0);
+  if (!r) return null;
+  return (
+    <aside className="kl-hcalc" aria-label={t.tag}>
+      <div className="kl-hcalc__tag">
+        <span>{t.tag}</span>
+        <span className="kl-hcalc__live"><i aria-hidden />{t.live}</span>
+      </div>
+      <div className="kl-hcalc__types" role="group" aria-label={t.typAria}>
+        {TYPY.filter((x) => x.nakupMaterialEurM2 != null).map((x) => (
+          <button
+            key={x.slug}
+            type="button"
+            className={`kl-hcalc__typ${x.slug === slug ? " is-active" : ""}`}
+            onClick={() => setSlug(x.slug)}
+            aria-pressed={x.slug === slug}
+          >
+            {x.label}
+          </button>
+        ))}
+      </div>
+      <label className="kl-hcalc__slider" htmlFor="kl-hero-m2">
+        <span>{t.plocha}</span>
+        <strong>{m2} m²</strong>
+      </label>
+      <input
+        id="kl-hero-m2"
+        type="range"
+        min={10}
+        max={500}
+        step={5}
+        value={m2}
+        onChange={(e) => setM2(Number(e.target.value))}
+        className="kl-range"
+        style={{ ["--p" as string]: `${((m2 - 10) / 490) * 100}%` }}
+        aria-valuetext={`${m2} m²`}
+      />
+      <dl className="kl-hcalc__rows">
+        <div><dt>{t.rowSell}</dt><dd>{fmt(aSell)} €</dd></div>
+        <div><dt>{t.rowMat}</dt><dd>−{fmt(aMat)} €</dd></div>
+        <div className="is-total"><dt>{t.rowKeep}</dt><dd>{fmt(aKeep)} €</dd></div>
+      </dl>
+      <p className="kl-hcalc__note">{t.note(r.navratnostM2)}</p>
+      <a href="#kalkulacka" className="kl-hcalc__more">{t.more}</a>
+    </aside>
+  );
+}
+
+function Hero({ locale }: { locale: Locale }) {
+  const t = V2[locale];
   return (
     <section className="kl-hero" id="hello">
       <div className="kl-hero__media" aria-hidden>
@@ -300,8 +357,10 @@ function Hero({ locale }: { locale: Locale }) {
               {t.badge}
             </p>
             <p className="kl-hero__kicker">{t.heroKicker}</p>
+            {/* Dva riadky: veta + medená veta (majiteľ 2026-08-30). */}
             <h1>
               {t.h1a}
+              <br />
               <em>{t.h1em}</em>
             </h1>
             <p className="kl-hero__lead">{t.lead}</p>
@@ -315,19 +374,7 @@ function Hero({ locale }: { locale: Locale }) {
               ))}
             </dl>
           </div>
-          {r && (
-            <aside className="kl-ledger" aria-label={t.ledger.sub}>
-              <div className="kl-ledger__tag"><span>{t.ledger.tagL}</span><span>{t.ledger.tagR}</span></div>
-              <div className="kl-ledger__big">+{fmt(r.hrubaMarzaEur)} <small>{t.ledger.bigSuffix}</small></div>
-              <p className="kl-ledger__sub">{t.ledger.sub}</p>
-              <dl>
-                <div><dt>{t.ledger.rowSell}</dt><dd>{fmt(r.predajEur)} €</dd></div>
-                <div><dt>{t.ledger.rowMat}</dt><dd>−{fmt(r.materialEur)} €</dd></div>
-                <div><dt>{t.ledger.rowM2}</dt><dd className="is-profit">{fmt2(r.marzaM2)} €</dd></div>
-                <div><dt>{t.ledger.rowPayback}</dt><dd className="is-profit">~{r.navratnostM2} m²</dd></div>
-              </dl>
-            </aside>
-          )}
+          <HeroKalkulacka locale={locale} />
         </div>
       </div>
     </section>

@@ -279,10 +279,12 @@
   letter-spacing: 0.04em;
   color: var(--kl-accent-hi);
 }
+/* Dva riadky na desktope: veľkosť je zvolená tak, aby sa dlhšia veta
+   („Nauč sa liať podlahy.") zmestila do stĺpca na jeden riadok. */
 .kl-hero h1 {
   color: #fff;
-  font-size: clamp(2.5rem, 1.3rem + 4.8vw, 4.6rem);
-  max-width: 13em;
+  font-size: clamp(2.1rem, 1rem + 3vw, 3.4rem);
+  max-width: none;
 }
 .kl-hero h1 em { font-style: normal; color: var(--kl-accent-hi); }
 .kl-hero__lead {
@@ -307,21 +309,22 @@
 .kl-hero__inner .kl-hero__grid > * { animation: klRise 900ms var(--kl-ease) both; }
 .kl-hero__inner .kl-hero__grid > :nth-child(2) { animation-delay: 160ms; }
 
-/* výkaz — ledger karta v hero */
-.kl-ledger {
+/* interaktívna mini-kalkulačka v hero */
+.kl-hcalc {
   background: linear-gradient(160deg, var(--kl-panel), var(--kl-surface));
   border: 1px solid var(--kl-border-strong);
   border-radius: var(--kl-radius);
-  padding: clamp(1.4rem, 2.4vw, 1.9rem);
+  padding: clamp(1.3rem, 2.2vw, 1.7rem);
   box-shadow: var(--kl-shadow);
-  max-width: 26rem;
+  max-width: 27rem;
   justify-self: end;
   width: 100%;
 }
-@media (max-width: 991.98px) { .kl-ledger { justify-self: start; } }
-.kl-ledger__tag {
+@media (max-width: 991.98px) { .kl-hcalc { justify-self: start; } }
+.kl-hcalc__tag {
   display: flex;
   justify-content: space-between;
+  align-items: center;
   gap: 1rem;
   font-family: var(--kl-font-mono);
   font-size: 0.66rem;
@@ -329,30 +332,51 @@
   letter-spacing: 0.16em;
   text-transform: uppercase;
   color: var(--kl-faint);
-  margin-bottom: 1.1rem;
+  margin-bottom: 0.9rem;
 }
-.kl-ledger__big {
-  font-family: var(--kl-font-mono);
-  font-weight: 700;
-  font-size: clamp(2.4rem, 4vw, 3rem);
-  line-height: 1;
-  color: var(--kl-profit);
-  font-variant-numeric: tabular-nums;
+.kl-hcalc__live { display: inline-flex; align-items: center; gap: 0.4rem; color: var(--kl-profit); }
+.kl-hcalc__live i {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: var(--kl-profit);
+  box-shadow: 0 0 0 3px var(--kl-profit-soft);
 }
-.kl-ledger__big small { font-size: 0.4em; color: var(--kl-subtle); font-weight: 500; }
-.kl-ledger__sub { font-size: 0.86rem; color: var(--kl-subtle); margin-top: 0.5rem; }
-.kl-ledger dl { margin: 1.3rem 0 0; }
-.kl-ledger dl div {
+.kl-hcalc__types { display: grid; grid-template-columns: 1fr 1fr; gap: 0.45rem; margin-bottom: 1rem; }
+.kl-hcalc__typ {
+  font: inherit;
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--kl-text);
+  background: var(--kl-field-bg);
+  border: 1px solid var(--kl-border-strong);
+  border-radius: 10px;
+  padding: 0.5rem 0.6rem;
+  cursor: pointer;
+  transition: background 180ms var(--kl-ease), border-color 180ms var(--kl-ease), color 180ms var(--kl-ease);
+}
+.kl-hcalc__typ:hover { border-color: var(--kl-accent); }
+.kl-hcalc__typ.is-active { background: var(--kl-accent); border-color: var(--kl-accent); color: #160d06; font-weight: 700; }
+.kl-hcalc__slider { display: flex; justify-content: space-between; align-items: baseline; font-size: 0.85rem; font-weight: 600; color: var(--kl-subtle); }
+.kl-hcalc__slider strong { font-family: var(--kl-font-mono); font-size: 1.25rem; color: var(--kl-ink); font-variant-numeric: tabular-nums; }
+.kl-hcalc .kl-range { margin-bottom: 0.7rem; }
+.kl-hcalc__rows { margin: 0; }
+.kl-hcalc__rows div {
   display: flex;
   justify-content: space-between;
+  align-items: baseline;
   gap: 1rem;
-  padding: 0.65rem 0;
+  padding: 0.5rem 0;
   border-top: 1px dashed var(--kl-border-strong);
-  font-size: 0.9rem;
+  font-size: 0.88rem;
 }
-.kl-ledger dt { color: var(--kl-subtle); }
-.kl-ledger dd { margin: 0; font-family: var(--kl-font-mono); font-weight: 700; color: var(--kl-ink); font-variant-numeric: tabular-nums; white-space: nowrap; }
-.kl-ledger dd.is-profit { color: var(--kl-profit); }
+.kl-hcalc__rows dt { color: var(--kl-subtle); }
+.kl-hcalc__rows dd { margin: 0; font-family: var(--kl-font-mono); font-weight: 700; color: var(--kl-ink); font-variant-numeric: tabular-nums; white-space: nowrap; }
+.kl-hcalc__rows .is-total { border-top: 1px solid var(--kl-profit); }
+.kl-hcalc__rows .is-total dd { color: var(--kl-profit); font-size: 1.5rem; }
+.kl-hcalc__note { font-size: 0.78rem; color: var(--kl-faint); margin-top: 0.6rem; }
+.kl-hcalc__more { display: inline-block; margin-top: 0.7rem; font-size: 0.85rem; font-weight: 700; color: var(--kl-accent-hi); }
+.kl-hcalc__more:hover { text-decoration: underline; }
 
 /* ---------- Sekcie ---------- */
 .kl-section { padding-block: clamp(4rem, 9vw, 7.5rem); }
