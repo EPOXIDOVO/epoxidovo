@@ -3,7 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "dev": "node scripts/ceny-admin.mjs & next dev -p 3010",
+    "dev": "node scripts/ceny-admin.mjs & NEXT_DIST_DIR=.next-dev next dev -p 3010",
     "build": "prisma generate && next build",
     "postinstall": "prisma generate",
     "start": "next start",

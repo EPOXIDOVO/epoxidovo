@@ -38,19 +38,20 @@ export const CATEGORIES: Category[] = [
     driveCategory: "chipsova podlaha",
     priceFrom: 49,
   },
-  // Mramorové — 2026-08 DOČASNE vyradené z ponuky (user request).
-  // Entry nechávame zakomentovaný pre jednoduchý návrat:
-  // {
-  //   slug: "mramorove",
-  //   name: "Mramorové",
-  //   shortName: "Mramorové",
-  //   tagline: "Luxus, ktorý sa nikde nezopakuje",
-  //   description:
-  //     "Ručne tvorené žilkovanie pripomínajúce skutočný mramor — každá podlaha je originál. Vytvára pocit luxusného priestoru bez nákladov na pravý kameň.",
-  //   image: "/images/categories/mramorove.jpg",
-  //   driveCategory: "mramorove efekty",
-  //   priceFrom: 139,
-  // },
+  // Mramorové — 2026-08 dočasne vyradené, 2026-08-30 späť v ponuke
+  // (majiteľ: „mramorovú normálne máme"). Systém TopStone Mramor je živý
+  // aj v CRM za 139 €/m², odkazy naň sú v recenziách aj v kalkulačke kurzu.
+  {
+    slug: "mramorove",
+    name: "Mramorové",
+    shortName: "Mramorové",
+    tagline: "Luxus, ktorý sa nikde nezopakuje",
+    description:
+      "Ručne tvorené žilkovanie pripomínajúce skutočný mramor — každá podlaha je originál. Vytvára pocit luxusného priestoru bez nákladov na pravý kameň.",
+    image: "/images/categories/mramorove.jpg",
+    driveCategory: "mramorove efekty",
+    priceFrom: 139,
+  },
   {
     slug: "metalicke",
     name: "Metalické",

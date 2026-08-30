@@ -14,6 +14,20 @@ export const metadata: Metadata = {
   alternates: { canonical: "/sluzby" },
 };
 
+/** Číslovky slovom pre nadpis — do desiatich stačí. */
+const POCET_SLOVOM: Record<number, string> = {
+  1: "Jeden",
+  2: "Dva",
+  3: "Tri",
+  4: "Štyri",
+  5: "Päť",
+  6: "Šesť",
+  7: "Sedem",
+  8: "Osem",
+  9: "Deväť",
+  10: "Desať",
+};
+
 export default function SluzbyPage() {
   return (
     <>
@@ -29,8 +43,12 @@ export default function SluzbyPage() {
             <p className="text-xs font-semibold uppercase tracking-[0.2em] text-[var(--color-brand)]">
               Naše služby
             </p>
+            {/* Číslovka sa berie z CATEGORIES — nadpis tvrdil „Štyri typy",
+                kým ich na stránke bolo sedem (pribudli Mistral, Concrete Look
+                a vrátila sa mramorová). Takto sa to už nerozíde. */}
             <h1 className="mt-4 text-4xl md:text-5xl lg:text-6xl font-bold tracking-tight">
-              Štyri typy podláh.
+              {POCET_SLOVOM[CATEGORIES.length] ?? CATEGORIES.length}{" "}
+              {CATEGORIES.length >= 5 ? "typov" : "typy"} podláh.
               <br />
               <span className="text-[var(--color-fg-muted)] font-normal">
                 Nekonečné možnosti.
