@@ -86,6 +86,10 @@ export const KURZ_FAQ = [
     a: "Po zaplatení ti príde e-mail s prístupom do členskej sekcie. Pozeráš video lekcie vlastným tempom, kedykoľvek a na čomkoľvek — všetko je interaktívne a intuitívne. Počas celého procesu si v kontakte s naším realizačným technikom, ktorého sa môžeš pýtať, keď niečomu nerozumieš. Dozvieš sa všetko o tom, ako založiť, riadiť a škálovať úspešnú epoxidovú firmu. Prístup nemá časové obmedzenie a dostávaš aj všetky budúce aktualizácie.",
   },
   {
+    q: "Čo sa v kurze naučím?",
+    a: "Kurz má dva moduly po 20+ lekcií. Modul 1 — Podklad a materiály: aké materiály existujú a kedy ktorý použiť, ako spoznať, či je betón pripravený, príprava podkladu a brúsenie zblízka, penetrácia, vysprávky a opravy prasklín, miešanie dvoch zložiek bez chýb. Modul 2 — Liatie, dekor a biznis: liatie jednofarebnej podlahy krok za krokom, chipsy a metalický efekt, sokle, prechody a detaily, cenotvorba, škálovanie firmy a ako získať prvé zákazky vo svojom okolí.",
+  },
+  {
     q: "Potrebujem nejakú skúsenosť?",
     a: "Nie. Kurz začína od podkladu a materiálov a každý krok je nakrútený zblízka na reálnej zákazke. Ak už epoxid robíš, preskočíš na moduly o dekore a cenotvorbe.",
   },

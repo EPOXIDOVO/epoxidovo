@@ -61,6 +61,9 @@
   font-weight: 600;
   line-height: 1.06;
   letter-spacing: -0.015em;
+  /* Clash Display má úzku medzeru — „s mentoringom" vyzeralo zlepené.
+     Word-spacing vracia slovám čitateľný odstup. */
+  word-spacing: 0.22em;
   margin: 0;
   text-wrap: balance;
 }
@@ -339,8 +342,10 @@
   display: grid;
   grid-template-columns: minmax(0, 7fr) minmax(0, 5fr);
   gap: clamp(2.5rem, 5vw, 4.5rem);
-  align-items: center;
+  /* stretch + flex stĺpec: fajky-karty sa dorovnajú so spodkom kalkulačky */
+  align-items: stretch;
 }
+.kl-hero__grid > div:first-child { display: flex; flex-direction: column; }
 @media (max-width: 991.98px) { .kl-hero__grid { grid-template-columns: 1fr; } }
 .kl-hero__badge {
   display: inline-flex;
@@ -382,21 +387,21 @@
 .kl-hero__actions { display: flex; flex-wrap: wrap; gap: 0.6rem; margin-top: 2rem; }
 .kl-hero__actions .kl-btn { padding: 0.85rem 1.15rem; font-size: 0.9rem; }
 @media (min-width: 992px) { .kl-hero__actions { flex-wrap: nowrap; } }
-/* trust ticker — fakty bežia sprava doľava, na hover sa zastaví */
-.kl-hero__ticker {
-  margin-top: 2.2rem;
-  padding-top: 1.3rem;
-  border-top: 1px solid rgba(255, 255, 255, 0.2);
+/* trust ticker — plnoširoký pás medzi hero a Vrstvami, beží doľava */
+.kl-tickerband {
+  border-block: 1px solid var(--kl-border);
+  background: var(--kl-surface);
+  padding: 0.85rem 0;
   overflow: hidden;
-  -webkit-mask-image: linear-gradient(90deg, transparent, #000 7%, #000 93%, transparent);
-  mask-image: linear-gradient(90deg, transparent, #000 7%, #000 93%, transparent);
+  -webkit-mask-image: linear-gradient(90deg, transparent, #000 5%, #000 95%, transparent);
+  mask-image: linear-gradient(90deg, transparent, #000 5%, #000 95%, transparent);
 }
+.kl-tickerband:hover .kl-hero__ticker-track { animation-play-state: paused; }
 .kl-hero__ticker-track {
   display: flex;
   width: max-content;
   animation: klTicker 15s linear infinite;
 }
-.kl-hero__ticker:hover .kl-hero__ticker-track { animation-play-state: paused; }
 .kl-hero__tick {
   display: inline-flex;
   align-items: baseline;
@@ -411,12 +416,11 @@
    (majiteľ 2026-08-30: veľa viet, ale všetky ostávajú). */
 .kl-hero__proofs {
   list-style: none;
-  margin: 1.2rem 0 0;
-  padding: 0;
+  margin: auto 0 0;
+  padding-top: 1.6rem;
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: 0.55rem 0.7rem;
-  max-width: 44rem;
 }
 @media (max-width: 700px) { .kl-hero__proofs { grid-template-columns: 1fr; } }
 .kl-hero__proofs li {
@@ -1238,6 +1242,50 @@
 }
 .kl-contact__form > h3 { font-size: 1.6rem; }
 .kl-contact__form > p { margin: 0.5rem 0 1.6rem; font-size: 0.95rem; color: var(--kl-subtle); }
+
+/* 3-krokový sprievodca objednávkou */
+.kl-form__steps { display: flex; gap: 0.5rem; margin-bottom: 1.4rem; }
+.kl-fstep {
+  flex: 1;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  font: inherit;
+  font-size: 0.82rem;
+  font-weight: 600;
+  color: var(--kl-faint);
+  background: var(--kl-field-bg);
+  border: 1px solid var(--kl-border-strong);
+  border-radius: 10px;
+  padding: 0.55rem 0.5rem;
+  cursor: default;
+  transition: border-color 200ms var(--kl-ease), color 200ms var(--kl-ease);
+}
+.kl-fstep i {
+  display: inline-grid;
+  place-items: center;
+  width: 1.35rem;
+  height: 1.35rem;
+  border-radius: 50%;
+  font-style: normal;
+  font-family: var(--kl-font-mono);
+  font-size: 0.72rem;
+  font-weight: 700;
+  background: var(--kl-panel);
+  border: 1px solid var(--kl-border-strong);
+  color: var(--kl-subtle);
+  flex: none;
+}
+.kl-fstep.is-active { border-color: var(--kl-accent); color: var(--kl-ink); }
+.kl-fstep.is-active i { background: var(--kl-accent); border-color: var(--kl-accent); color: #160d06; }
+.kl-fstep.is-done { border-color: var(--kl-profit); color: var(--kl-text); cursor: pointer; }
+.kl-fstep.is-done i { background: var(--kl-profit-soft); border-color: var(--kl-profit); color: var(--kl-profit); }
+.kl-fstep.is-done:hover { color: var(--kl-ink); }
+.kl-form__step { animation: klRise 380ms var(--kl-ease) both; }
+.kl-form__nav { display: flex; justify-content: space-between; align-items: center; margin-top: 0.4rem; }
+.kl-form__back { background: none; border: 0; padding: 0.4rem 0; font: inherit; font-size: 0.88rem; font-weight: 600; color: var(--kl-subtle); cursor: pointer; }
+.kl-form__back:hover { color: var(--kl-ink); }
 
 .kl-form__row { display: grid; grid-template-columns: 1fr 1fr; gap: 0 1.25rem; }
 @media (max-width: 640px) { .kl-form__row { grid-template-columns: 1fr; } }

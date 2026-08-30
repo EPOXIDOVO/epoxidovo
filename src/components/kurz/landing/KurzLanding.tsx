@@ -417,7 +417,6 @@ function Header({ locale, onMenu }: { locale: Locale; onMenu: (open: boolean) =>
           </Link>
           <ul className={`kl-nav__menu${open ? " is-active" : ""}`}>
             <li><a href="#o-kurze" onClick={close}>{t.nav.about}</a></li>
-            <li><a href="#program" onClick={close}>{t.nav.program}</a></li>
             <li><a href="#kalkulacka" onClick={close}>{t.nav.calc}</a></li>
             <li><a href="#cena" onClick={close}>{t.nav.price}</a></li>
             <li><a href="#faq" onClick={close}>{t.nav.faq}</a></li>
@@ -540,7 +539,7 @@ function HeroKalkulacka({ locale }: { locale: Locale }) {
         <em>{t.uspora(fmt(r.usporaMaterialM2 * r.plochaM2), r.plochaM2)}</em>
       </p>
       {/* Klik na návratnosť vedie rovno na ponuku kurzov (majiteľ). */}
-      <a href="#cena" className="kl-hcalc__note">{t.note(r.navratnostM2)}</a>
+      <a href="#baliky" className="kl-hcalc__note">{t.note(r.navratnostM2)}</a>
       {/* Typické plochy — klik rovno nastaví slider (garáž 50, dom 120). */}
       <div className="kl-hcalc__ctx" role="group" aria-label={t.ctxLabel}>
         <button type="button" className={m2 === 50 ? "is-active" : ""} onClick={() => setM2(50)}>
@@ -587,17 +586,6 @@ function Hero({ locale }: { locale: Locale }) {
               <a href="#prihlaska" className="kl-btn kl-btn--primary">{t.ctaMain}</a>
               <a href="#kalkulacka" className="kl-btn kl-btn--ghost">{t.ctaProgram}</a>
               <Link href="/" className="kl-btn kl-btn--ghost">{t.ctaFirma}</Link>
-            </div>
-            {/* Trust ticker — fakty bežia sprava doľava (majiteľ 2026-08-30);
-                dve kópie sady + posun o −50 % = plynulá slučka. */}
-            <div className="kl-hero__ticker">
-              <div className="kl-hero__ticker-track">
-                {[...t.facts, ...t.facts].map(([v, l], i) => (
-                  <span className="kl-hero__tick" key={`${l}-${i}`} aria-hidden={i >= t.facts.length}>
-                    <strong>{v}</strong>{l}
-                  </span>
-                ))}
-              </div>
             </div>
             {/* Osobitné dôkazy so zelenou fajkou — nejdú v tickri (majiteľ). */}
             <ul className="kl-hero__proofs">
@@ -664,7 +652,7 @@ function Spolupraca({ locale }: { locale: Locale }) {
           </a>
         </Reveal>
         <div className="kl-partner__cta">
-          <a href="#cena" className="kl-btn kl-btn--line">{t.cta}</a>
+          <a href="#baliky" className="kl-btn kl-btn--line">{t.cta}</a>
         </div>
       </div>
     </section>
@@ -747,6 +735,25 @@ function Claim({ locale }: { locale: Locale }) {
 }
 
 /* ------------------------------------------------------------------ */
+/*  Bežiaci pás faktov — plnoširoký, medzi hero a Vrstvami             */
+/* ------------------------------------------------------------------ */
+
+function TickerBand({ locale }: { locale: Locale }) {
+  const t = V2[locale];
+  return (
+    <div className="kl-tickerband" aria-hidden>
+      <div className="kl-hero__ticker-track">
+        {[...t.facts, ...t.facts].map(([v, l], i) => (
+          <span className="kl-hero__tick" key={`${l}-${i}`}>
+            <strong>{v}</strong>{l}
+          </span>
+        ))}
+      </div>
+    </div>
+  );
+}
+
+/* ------------------------------------------------------------------ */
 /*  Vrstvy — biznis model podaný ako prierez podlahy                   */
 /* ------------------------------------------------------------------ */
 
@@ -813,53 +820,6 @@ function Vrstvy({ locale }: { locale: Locale }) {
             ))}
           </div>
         </div>
-      </div>
-    </section>
-  );
-}
-
-/* ------------------------------------------------------------------ */
-/*  Program                                                            */
-/* ------------------------------------------------------------------ */
-
-function Days({ locale }: { locale: Locale }) {
-  const t = V2[locale];
-  const days = [
-    // Modul 1 nemá fotku — abstraktný prierez vrstiev (majiteľ: fotka haly
-    // tam nesedela, chcel „niečo zaujímavé ako tie vrstvy").
-    { label: t.day1Label, title: t.day1Title, items: t.day1Items, img: null, meta: t.dayMeta1 },
-    { label: t.day2Label, title: t.day2Title, items: t.day2Items, img: "/images/process/step-03-liatie.webp", meta: t.dayMeta2 },
-  ];
-  return (
-    <section id="program" className="kl-section kl-days">
-      <div className="kl-container">
-        <div className="kl-section__head">
-          <h2>{t.daysH2}</h2>
-          <p>{t.daysIntro}</p>
-        </div>
-        {days.map((d, i) => (
-          /* Reveal renderuje article priamo — obalový div by zabil súrodenecké
-             selektory (.kl-day + .kl-day, :nth-of-type) v CSS. */
-          <Reveal as="article" className="kl-day" key={d.title} delay={i * 80}>
-            <div className="kl-day__media">
-              {d.img ? (
-                <Image src={d.img} alt="" fill sizes="(max-width: 900px) 100vw, 40vw" />
-              ) : (
-                <div className="kl-day__art" aria-hidden>
-                  <div className="kl-artstack"><i /><i /><i /><i /></div>
-                </div>
-              )}
-            </div>
-            <div className="kl-day__body">
-              <span className="kl-day__label">{d.label}</span>
-              <h3>{d.title}</h3>
-              <ul>
-                {d.items.map((it) => <li key={it}>{it}</li>)}
-              </ul>
-              <p className="kl-day__meta">{d.meta}</p>
-            </div>
-          </Reveal>
-        ))}
       </div>
     </section>
   );
@@ -951,7 +911,7 @@ function Pricing({ locale }: { locale: Locale }) {
           <h2>{t.pricingH2}</h2>
           <p>{t.pricingIntro}</p>
         </div>
-        <div className="kl-pricing__grid">
+        <div className="kl-pricing__grid" id="baliky">
           <Reveal>
             <article className="kl-price">
               <h3>{t.stdTitle}</h3>
@@ -1047,6 +1007,9 @@ const PAY_T = {
     submitPrevod: "Objednať na faktúru",
     submitFirma: "Poslať dopyt",
     redirecting: "Presmerúvam na platbu…",
+    steps: ["Kontakt", "Balík", "Platba"],
+    continueBtn: "Pokračovať →",
+    backBtn: "← Späť",
   },
   en: {
     payTitle: "Payment method",
@@ -1064,6 +1027,9 @@ const PAY_T = {
     submitPrevod: "Order on invoice",
     submitFirma: "Send inquiry",
     redirecting: "Redirecting to payment…",
+    steps: ["Contact", "Package", "Payment"],
+    continueBtn: "Continue →",
+    backBtn: "← Back",
   },
 } as const;
 
@@ -1120,6 +1086,20 @@ function ContactForm({ locale }: { locale: Locale }) {
     if (error) { setError(null); setInvalid(null); }
   };
   const fail = (field: string, msg: string) => { setInvalid(field); setError(msg); };
+
+  /*
+    Sprievodca v 3 krokoch (majiteľ 2026-08-30: „nech to nie je jeden veľký
+    dropdown, postupne sa rozbaľuje ako strany"). Logika odoslania nezmenená —
+    mení sa len to, ktoré polia sú práve viditeľné.
+  */
+  const [step, setStep] = React.useState(0);
+  const dalejZKontaktu = () => {
+    if (v.name.trim().length < 2) return fail("name", t.errors.name);
+    if (v.lastName.trim().length < 2) return fail("lastName", t.errors.last);
+    if (!/^[+\d\s\-/()]{9,30}$/.test(v.phone.trim())) return fail("phone", t.errors.phone);
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v.email.trim())) return fail("email", t.errors.email);
+    setError(null); setInvalid(null); setStep(1);
+  };
 
   const submit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -1200,84 +1180,129 @@ function ContactForm({ locale }: { locale: Locale }) {
       <div style={{ position: "absolute", left: "-9999px" }} aria-hidden>
         <label>Web<input type="text" tabIndex={-1} autoComplete="off" value={v.website} onChange={(e) => set("website", e.target.value)} /></label>
       </div>
-      <div className="kl-form__row">
-        {field("name", L.name, "text", "given-name")}
-        {field("lastName", L.lastName, "text", "family-name")}
-      </div>
-      <div className="kl-form__row">
-        {field("phone", L.phone, "tel", "tel")}
-        {field("email", L.email, "email", "email")}
-      </div>
-      <div className="kl-form__row">
-        <div className="kl-field">
-          <label htmlFor="kl-variant">{L.variant}</label>
-          <select id="kl-variant" value={v.variant} onChange={(e) => set("variant", e.target.value)}>
-            {Object.entries(t.variants).map(([k, lab]) => <option key={k} value={k}>{lab}</option>)}
-          </select>
-        </div>
-        <div className="kl-field">
-          <label htmlFor="kl-exp">{L.experience}</label>
-          <select id="kl-exp" value={v.experience} onChange={(e) => set("experience", e.target.value)}>
-            {Object.entries(t.experience).map(([k, lab]) => <option key={k} value={k}>{lab}</option>)}
-          </select>
-        </div>
-      </div>
-      <div className="kl-form__row">
-        {field("company", P.company, "text", "organization")}
-        {field("ico", P.ico, "text")}
-      </div>
-      <div className="kl-field">
-        <label htmlFor="kl-msg">{L.message}</label>
-        <textarea id="kl-msg" value={v.message} onChange={(e) => set("message", e.target.value)} />
+
+      {/* Ukazovateľ krokov — hotové kroky sú klikateľné späť. */}
+      <div className="kl-form__steps" role="tablist" aria-label={t.h2}>
+        {P.steps.map((s, i) => (
+          <button
+            key={s}
+            type="button"
+            role="tab"
+            aria-selected={step === i}
+            className={`kl-fstep${step === i ? " is-active" : ""}${i < step ? " is-done" : ""}`}
+            onClick={() => i < step && setStep(i)}
+            disabled={i > step}
+          >
+            <i>{i < step ? "✓" : i + 1}</i>
+            {s}
+          </button>
+        ))}
       </div>
 
-      {isPurchase ? (
-        <>
-          <p style={{ color: "var(--kl-ink)", fontWeight: 600, fontSize: "0.95rem", margin: "0 0 0.6rem" }}>{P.payTitle}</p>
-          <div className="kl-pay" role="radiogroup" aria-label={P.payTitle}>
-            <label className={`kl-pay__opt${payment === "karta" ? " is-active" : ""}${cardAvailable === false ? " is-disabled" : ""}`}>
-              <input type="radio" name="kl-pay" value="karta" checked={payment === "karta"} disabled={cardAvailable === false}
-                onChange={() => cardAvailable !== false && setPayment("karta")} />
-              <span className="kl-pay__radio" aria-hidden />
-              <span>
-                <strong>{P.karta}</strong>
-                <span>{cardAvailable === false ? P.kartaOff : P.kartaSub}</span>
-              </span>
-            </label>
-            <label className={`kl-pay__opt${payment === "prevod" ? " is-active" : ""}`}>
-              <input type="radio" name="kl-pay" value="prevod" checked={payment === "prevod"} onChange={() => setPayment("prevod")} />
-              <span className="kl-pay__radio" aria-hidden />
-              <span>
-                <strong>{P.prevod}</strong>
-                <span>{P.prevodSub}</span>
-              </span>
-            </label>
+      {step === 0 && (
+        <div className="kl-form__step" key="s0">
+          <div className="kl-form__row">
+            {field("name", L.name, "text", "given-name")}
+            {field("lastName", L.lastName, "text", "family-name")}
           </div>
-          <div className="kl-summary">
-            <span>{t.variants[v.variant]}<br /><small>{P.summaryNote}</small></span>
-            <strong>{P.summary}: {amount} €</strong>
+          <div className="kl-form__row">
+            {field("phone", L.phone, "tel", "tel")}
+            {field("email", L.email, "email", "email")}
           </div>
-        </>
-      ) : (
-        <p style={{ fontSize: "0.95rem", color: "var(--kl-subtle)", margin: "0 0 1.4rem" }}>{P.firmaNote}</p>
+          <div className="kl-form__nav">
+            <span />
+            <button type="button" className="kl-btn kl-btn--primary" onClick={dalejZKontaktu}>{P.continueBtn}</button>
+          </div>
+        </div>
       )}
 
-      <TurnstileWidget theme="dark" onVerify={setToken} onExpire={() => setToken(null)} />
+      {step === 1 && (
+        <div className="kl-form__step" key="s1">
+          <div className="kl-form__row">
+            <div className="kl-field">
+              <label htmlFor="kl-variant">{L.variant}</label>
+              <select id="kl-variant" value={v.variant} onChange={(e) => set("variant", e.target.value)}>
+                {Object.entries(t.variants).map(([k, lab]) => <option key={k} value={k}>{lab}</option>)}
+              </select>
+            </div>
+            <div className="kl-field">
+              <label htmlFor="kl-exp">{L.experience}</label>
+              <select id="kl-exp" value={v.experience} onChange={(e) => set("experience", e.target.value)}>
+                {Object.entries(t.experience).map(([k, lab]) => <option key={k} value={k}>{lab}</option>)}
+              </select>
+            </div>
+          </div>
+          <div className="kl-form__row">
+            {field("company", P.company, "text", "organization")}
+            {field("ico", P.ico, "text")}
+          </div>
+          <div className="kl-field">
+            <label htmlFor="kl-msg">{L.message}</label>
+            <textarea id="kl-msg" value={v.message} onChange={(e) => set("message", e.target.value)} />
+          </div>
+          <div className="kl-form__nav">
+            <button type="button" className="kl-form__back" onClick={() => setStep(0)}>{P.backBtn}</button>
+            <button type="button" className="kl-btn kl-btn--primary" onClick={() => setStep(2)}>{P.continueBtn}</button>
+          </div>
+        </div>
+      )}
 
-      <div className="kl-form__footer">
-        <label className="kl-check">
-          <input type="checkbox" checked={consent} onChange={(e) => { setConsent(e.target.checked); if (error) setError(null); }} />
-          <span className="kl-check__box" aria-hidden />
-          <span>
-            {L.consent}{" "}
-            <a href="/ochrana-sukromia" target="_blank" rel="noopener">{L.consentLink}</a>
-            {isPurchase && (<> · <a href="/obchodne-podmienky" target="_blank" rel="noopener">{locale === "sk" ? "obchodné podmienky" : "terms"}</a></>)}.
-          </span>
-        </label>
-        <button type="submit" className="kl-btn kl-btn--primary" disabled={sending}>
-          {submitLabel}
-        </button>
-      </div>
+      {step === 2 && (
+        <div className="kl-form__step" key="s2">
+          {isPurchase ? (
+            <>
+              <p style={{ color: "var(--kl-ink)", fontWeight: 600, fontSize: "0.95rem", margin: "0 0 0.6rem" }}>{P.payTitle}</p>
+              <div className="kl-pay" role="radiogroup" aria-label={P.payTitle}>
+                <label className={`kl-pay__opt${payment === "karta" ? " is-active" : ""}${cardAvailable === false ? " is-disabled" : ""}`}>
+                  <input type="radio" name="kl-pay" value="karta" checked={payment === "karta"} disabled={cardAvailable === false}
+                    onChange={() => cardAvailable !== false && setPayment("karta")} />
+                  <span className="kl-pay__radio" aria-hidden />
+                  <span>
+                    <strong>{P.karta}</strong>
+                    <span>{cardAvailable === false ? P.kartaOff : P.kartaSub}</span>
+                  </span>
+                </label>
+                <label className={`kl-pay__opt${payment === "prevod" ? " is-active" : ""}`}>
+                  <input type="radio" name="kl-pay" value="prevod" checked={payment === "prevod"} onChange={() => setPayment("prevod")} />
+                  <span className="kl-pay__radio" aria-hidden />
+                  <span>
+                    <strong>{P.prevod}</strong>
+                    <span>{P.prevodSub}</span>
+                  </span>
+                </label>
+              </div>
+              <div className="kl-summary">
+                <span>{t.variants[v.variant]}<br /><small>{P.summaryNote}</small></span>
+                <strong>{P.summary}: {amount} €</strong>
+              </div>
+            </>
+          ) : (
+            <p style={{ fontSize: "0.95rem", color: "var(--kl-subtle)", margin: "0 0 1.4rem" }}>{P.firmaNote}</p>
+          )}
+
+          <TurnstileWidget theme="dark" onVerify={setToken} onExpire={() => setToken(null)} />
+
+          <div className="kl-form__footer">
+            <label className="kl-check">
+              <input type="checkbox" checked={consent} onChange={(e) => { setConsent(e.target.checked); if (error) setError(null); }} />
+              <span className="kl-check__box" aria-hidden />
+              <span>
+                {L.consent}{" "}
+                <a href="/ochrana-sukromia" target="_blank" rel="noopener">{L.consentLink}</a>
+                {isPurchase && (<> · <a href="/obchodne-podmienky" target="_blank" rel="noopener">{locale === "sk" ? "obchodné podmienky" : "terms"}</a></>)}.
+              </span>
+            </label>
+            <button type="submit" className="kl-btn kl-btn--primary" disabled={sending}>
+              {submitLabel}
+            </button>
+          </div>
+          <div className="kl-form__nav">
+            <button type="button" className="kl-form__back" onClick={() => setStep(1)}>{P.backBtn}</button>
+            <span />
+          </div>
+        </div>
+      )}
+
       {error && <p className="kl-form__msg err" role="alert">{error}</p>}
     </form>
   );
@@ -1362,13 +1387,13 @@ export function KurzLanding({ locale }: { locale: Locale }) {
         {/* Poradie podľa briefu 2026-08-30: hero → vrstvy → kalkulačka →
             absolventi → spolupráca → CENA → úprimný filter → dôkaz → obsah. */}
         <Hero locale={locale} />
+        <TickerBand locale={locale} />
         <Vrstvy locale={locale} />
         <Spolupraca locale={locale} />
         {/* Prvé podlahy klientov rovno nad cenníkom — dôkaz pri rozhodovaní. */}
         <Absolventi locale={locale} />
         <Pricing locale={locale} />
         <Claim locale={locale} />
-        <Days locale={locale} />
         <Strip locale={locale} />
         <Faq locale={locale} />
         <Contact locale={locale} />

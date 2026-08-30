@@ -86,6 +86,10 @@ export const COURSE_EN_FAQ = [
     a: "After payment you receive an e-mail with access to the member area. You watch the video lessons at your own pace, anytime, on any device — everything is interactive and intuitive. Throughout the whole process you are in touch with our installation technician, who you can ask whenever something is unclear. You learn everything about founding, running and scaling a successful epoxy business. Access never expires and includes all future updates.",
   },
   {
+    q: "What will I learn in the course?",
+    a: "The course has two modules of 20+ lessons each. Module 1 — Substrate and materials: which materials exist and when to use each, how to tell the concrete is ready, substrate prep and grinding up close, priming, patching and crack repair, mixing two components without mistakes. Module 2 — Pouring, decoration and business: pouring a single-colour floor step by step, flakes and the metallic effect, skirtings, transitions and details, pricing, scaling the company and winning your first jobs in your area.",
+  },
+  {
     q: "Do I need any previous experience?",
     a: "No. The course starts from the substrate and the materials, and every step is filmed up close on a real job. If you already work with epoxy, skip ahead to the decoration and pricing modules.",
   },
