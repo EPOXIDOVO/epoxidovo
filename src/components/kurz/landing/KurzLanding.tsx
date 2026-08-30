@@ -53,15 +53,21 @@ const V2 = {
         text: "Liate podlahy sú jeden z najrýchlejšie rastúcich biznisov roka 2026 — a konkurencia na Slovensku je stále malá.",
       },
       {
-        text: "Nie sme len školitelia — sme realizačná firma EPOXIDOVO s.r.o., ktorá podlahy reálne leje.",
+        text: "Nie sme len školitelia — sme realizačná firma EPOXIDOVO s.r.o. a otvárame ti 20 rokov podlahárskych tajomstiev.",
         cta: "Pozri naše realizácie →",
         href: "/realizacie",
       },
       {
-        text: "Na zákazku budovaný softvér, ktorý našu firmu stál desiatky tisíc €, máš v cene.",
+        text: "Prevedieme ťa všetkým krok po kroku — a kedykoľvek sa opýtaš reálneho realizačného technika, ktorý u nás denne leje podlahy.",
       },
       {
-        text: "Získaš okamžitý prístup k 20 rokom podlahárskych tajomstiev.",
+        text: "Presne ti povieme, aké náradie a materiál kúpiť — a predáme ti ich ako pripravený štartovací balíček pre začiatočníkov.",
+      },
+      {
+        text: "Materiál nakupuješ za najlepšie veľkoobchodné ceny — vďaka veľkým odberom našej realizačnej firmy.",
+      },
+      {
+        text: "Na zákazku budovaný celofiremný softvér za desiatky tisíc € máš v cene.",
       },
     ] as { text: string; cta?: string; href?: string }[],
     partner: {
@@ -209,15 +215,21 @@ const V2 = {
         text: "Poured floors are one of the fastest-growing businesses of 2026 — and competition in Slovakia is still small.",
       },
       {
-        text: "We're not just instructors — EPOXIDOVO s.r.o. is a real installation company that actually pours floors.",
+        text: "We're not just instructors — EPOXIDOVO s.r.o. is a real installation company, opening up 20 years of installer secrets.",
         cta: "See our work →",
         href: "/realizacie",
       },
       {
-        text: "Custom-built software that cost our company tens of thousands € — included in the price.",
+        text: "We walk you through everything step by step — and you can always ask a real installation technician who pours floors for us daily.",
       },
       {
-        text: "Get instant access to 20 years of installer secrets.",
+        text: "We tell you exactly which tools and material to buy — and sell them as a ready starter kit for beginners.",
+      },
+      {
+        text: "You buy material at the best wholesale prices — thanks to our installation company's large volumes.",
+      },
+      {
+        text: "Custom company-wide software worth tens of thousands € — included in the price.",
       },
     ] as { text: string; cta?: string; href?: string }[],
     partner: {
