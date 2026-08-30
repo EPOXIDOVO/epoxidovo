@@ -22,8 +22,8 @@ const T = {
     od: "od",
     sliderLabel: "Plocha zákazky",
     predaj: "Vyfakturuješ zákazníkovi",
-    material: "Materiál — absolventská cena",
-    materialSub: "tvoja cena ako absolventa, nie plná e-shop cena",
+    material: "Materiál za veľkoobchodné ceny",
+    materialSub: "naša veľkoobchodná cena pre absolventov, nie e-shopová",
     marza: "Ostane ti",
     marzaSub: "hrubý zisk pred tvojou prácou a réžiou",
     perM2: "na m²",
@@ -34,9 +34,9 @@ const T = {
     chartLegendMaterial: "materiál",
     chartLegendZisk: "zisk",
     vyhodaTitle: "Materiál: tvoja výhoda ako absolventa",
-    vyhodaIntro: `Bežný zákazník kúpi ten istý materiál v e-shope drahšie. Ako absolvent ho máš za absolventskú cenu (naša marža len ${Math.round(ABSOLVENT_MARZA * 100)} %).`,
+    vyhodaIntro: `Bežný zákazník kúpi ten istý materiál v e-shope drahšie. Ako absolvent ho máš za naše veľkoobchodné ceny (naša marža len ${Math.round(ABSOLVENT_MARZA * 100)} %).`,
     vyhodaBezna: "Bežná cena v e-shope",
-    vyhodaAbsolvent: "Tvoja absolventská cena",
+    vyhodaAbsolvent: "Tvoja veľkoobchodná cena",
     vyhodaUspora: "Ušetríš na m²",
     vyhodaNote: (usporaJob: string, m2: number) =>
       `Na zákazke ${m2} m² ušetríš na materiáli ${usporaJob} € oproti bežnej cene.`,
@@ -57,8 +57,8 @@ const T = {
     od: "from",
     sliderLabel: "Job area",
     predaj: "You invoice the client",
-    material: "Material — graduate price",
-    materialSub: "your graduate price, not the full e-shop price",
+    material: "Material at wholesale prices",
+    materialSub: "our wholesale price for graduates, not the e-shop one",
     marza: "You keep",
     marzaSub: "gross profit before labour and overheads",
     perM2: "per m²",
@@ -69,9 +69,9 @@ const T = {
     chartLegendMaterial: "material",
     chartLegendZisk: "profit",
     vyhodaTitle: "Material: your graduate advantage",
-    vyhodaIntro: `A regular customer buys the same material in the e-shop for more. As a graduate you get the graduate price (our margin only ${Math.round(ABSOLVENT_MARZA * 100)} %).`,
+    vyhodaIntro: `A regular customer buys the same material in the e-shop for more. As a graduate you get our wholesale prices (our margin only ${Math.round(ABSOLVENT_MARZA * 100)} %).`,
     vyhodaBezna: "Regular e-shop price",
-    vyhodaAbsolvent: "Your graduate price",
+    vyhodaAbsolvent: "Your wholesale price",
     vyhodaUspora: "You save per m²",
     vyhodaNote: (usporaJob: string, m2: number) =>
       `On a ${m2} m² job you save €${usporaJob} on material vs the regular price.`,
@@ -153,16 +153,16 @@ export function KurzZisk({ locale }: { locale: Locale }) {
               id="kl-m2"
               type="range"
               min={10}
-              max={500}
-              step={5}
+              max={2000}
+              step={10}
               value={m2}
               onChange={(e) => setM2(Number(e.target.value))}
               className="kl-range"
-              style={{ ["--p" as string]: `${((m2 - 10) / 490) * 100}%` }}
+              style={{ ["--p" as string]: `${((m2 - 10) / 1990) * 100}%` }}
               aria-valuetext={`${m2} m²`}
             />
             <div className="kl-zisk__quick" role="group" aria-label="m²">
-              {[20, 30, 50, 100, 200, 500].map((v) => (
+              {[20, 30, 50, 100, 200, 500, 1000, 2000].map((v) => (
                 <button key={v} type="button" className={`kl-chip${m2 === v ? " is-active" : ""}`} onClick={() => setM2(v)}>
                   {v} m²
                 </button>
