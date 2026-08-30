@@ -20,6 +20,7 @@ import "./landing.css";
 const V2 = {
   sk: {
     badge: "Online kurz · prístup okamžite po zaplatení",
+    heroKicker: "Get Instant Access to 20 Years of Installer Secrets.",
     h1a: "Nauč sa liať podlahy.",
     h1em: " Odkiaľkoľvek.",
     lead: "Online kurz liatych epoxidových podláh: 8+ hodín videa nakrútených na reálnych zákazkách, od diagnostiky betónu po cenovú ponuku. Pozeráš vlastným tempom, prístup ti ostáva navždy.",
@@ -82,6 +83,7 @@ const V2 = {
   },
   en: {
     badge: "Online course · instant access after payment",
+    heroKicker: "Get Instant Access to 20 Years of Installer Secrets.",
     h1a: "Learn to pour floors.",
     h1em: " From anywhere.",
     lead: "An online poured epoxy flooring course: 8+ hours of video filmed on real client jobs, from concrete diagnostics to the final quote. Watch at your own pace, access never expires.",
@@ -239,6 +241,7 @@ function Hero({ locale }: { locale: Locale }) {
             <i aria-hidden />
             {t.badge}
           </p>
+          <p className="kl-hero__kicker">{t.heroKicker}</p>
           <h1>
             {t.h1a}
             <em>{t.h1em}</em>
