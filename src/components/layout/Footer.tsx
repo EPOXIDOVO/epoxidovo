@@ -20,7 +20,7 @@ const FOOTER_NAV = [
   { href: "/", label: "Úvod" },
   { href: "/sluzby", label: "Služby" },
   { href: "/kontakt", label: "Kontakty" },
-  { href: "/kurz", label: "Kurzy", soon: true },
+  { href: "/realizacie", label: "Ukážky realizácií" },
   { href: "/kupit-material", label: "Kúpiť materiál", soon: true },
 ];
 
