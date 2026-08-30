@@ -6,6 +6,7 @@ import {
   TYPY,
   absolventMaterialEurM2,
   beznaMaterialEurM2,
+  ABSOLVENT_MARZA,
   type TypSlug,
 } from "@/lib/kurz-zisk";
 
@@ -17,14 +18,14 @@ describe("kurz-zisk — celé sudy (kontrolné čísla z CRM 2026-08-30)", () =>
    * [slug, plocha, balení, nákup, absolventská, príplatok, tržba, zostane, zostane €/m²]
    */
   const TABULKA: [TypSlug, number, number, number, number, number, number, number, number][] = [
-    ["jednofarebne", 20, 3, 601.47, 733.5, 385.04, 1565.04, 831.54, 41.58],
-    ["jednofarebne", 30, 3, 601.47, 733.5, 210.8, 1980.8, 1247.3, 41.58],
-    ["jednofarebne", 50, 4, 811.8, 990.0, 118.84, 3068.84, 2078.84, 41.58],
-    ["chipsove", 30, 3, 625.77, 763.13, 210.8, 1680.8, 917.67, 30.59],
-    ["metalicke", 20, 6, 1570.71, 1915.5, 711.68, 3291.68, 1376.18, 68.81],
-    ["metalicke", 30, 7, 1847.46, 2253.0, 447.27, 4317.27, 2064.27, 68.81],
-    ["metalicke", 50, 10, 2677.71, 3265.5, 255.94, 6705.94, 3440.44, 68.81],
-    ["mramorove", 20, 6, 1570.71, 1915.5, 711.68, 3491.68, 1576.18, 78.81],
+    ["jednofarebne", 20, 3, 601.47, 925.34, 485.74, 1665.74, 740.4, 37.02],
+    ["jednofarebne", 30, 3, 601.47, 925.34, 265.94, 2035.94, 1110.6, 37.02],
+    ["jednofarebne", 50, 4, 811.8, 1248.92, 149.92, 3099.92, 1851.0, 37.02],
+    ["chipsove", 30, 3, 625.77, 962.72, 265.94, 1735.94, 773.22, 25.77],
+    ["metalicke", 20, 6, 1570.71, 2416.48, 897.82, 3477.82, 1061.34, 53.07],
+    ["metalicke", 30, 7, 1847.46, 2842.25, 564.25, 4434.25, 1592.0, 53.07],
+    ["metalicke", 50, 10, 2677.71, 4119.55, 322.88, 6772.88, 2653.33, 53.07],
+    ["mramorove", 20, 6, 1570.71, 2416.48, 897.82, 3677.82, 1261.34, 63.07],
   ];
 
   it.each(TABULKA)("%s %d m²: balení %d, nákup %s, absolventská %s, príplatok %s, tržba %s, zostane %s (%s €/m²)",
@@ -40,17 +41,16 @@ describe("kurz-zisk — celé sudy (kontrolné čísla z CRM 2026-08-30)", () =>
     });
 
   it("invariant: „zostane €/m²' je pri každej ploche rovnaké pre všetky typy", () => {
-    // Pozn.: zadanie uvádza Mistral 44,01 a Concrete 40,21, ale to je dvojité
-    // zaokrúhlenie (teoretická na centy → potom delenie). Pri zaokrúhlení až
-    // na konci (pravidlo zo zadania) vychádza 44,02 resp. 40,20.
+    // Hodnoty pri marži 35 % (majiteľ 2026-08-30). Pri zmene ABSOLVENT_MARZA
+    // sa prepočítajú — invariant nižšie ich kontroluje aj bez tabuľky.
     const ocakavane: Record<TypSlug, number> = {
-      jednofarebne: 41.58, chipsove: 30.59, metalicke: 68.81,
-      mramorove: 78.81, mistral: 44.02, "beton-look": 40.2,
+      jednofarebne: 37.02, chipsove: 25.77, metalicke: 53.07,
+      mramorove: 63.07, mistral: 28.33, "beton-look": 24.82,
     };
-    const ABS = 0.82;
+    const ABS = 1 - ABSOLVENT_MARZA;
     for (const t of TYPY) {
       expect(marzaEurM2(t), t.slug).toBeCloseTo(ocakavane[t.slug], 2);
-      // presný (nezaokrúhlený) invariant: zostane = (predaj − teor/0.82) × plocha
+      // presný (nezaokrúhlený) invariant: zostane = (predaj − teor/(1−marža)) × plocha
       const exactM2 = t.predajEurM2 - teoretickaEurM2(t) / ABS;
       for (const plocha of [20, 30, 50, 100, 200, 500, 1000, 2000]) {
         const r = spocitajZisk(plocha, t);
@@ -82,7 +82,9 @@ describe("kurz-zisk — celé sudy (kontrolné čísla z CRM 2026-08-30)", () =>
 
   it("absolventská cena je lacnejšia než bežná e-shop cena", () => {
     const nakup = 49.36;
-    expect(absolventMaterialEurM2(nakup)).toBeCloseTo(60.2, 1);
+    expect(absolventMaterialEurM2(nakup)).toBeCloseTo(75.94, 1);
     expect(beznaMaterialEurM2(nakup)).toBeCloseTo(89.75, 1);
+    // Výhoda absolventa musí ostať kladná, nech sa marža nastaví akokoľvek.
+    expect(absolventMaterialEurM2(nakup)).toBeLessThan(beznaMaterialEurM2(nakup));
   });
 });

@@ -19,8 +19,18 @@
  */
 import { KURZ } from "@/content/kurz";
 
-/** Naša marža na materiáli, ktorý absolvent kúpi u nás (strop majiteľa: 19 %). */
-export const ABSOLVENT_MARZA = 0.18;
+/**
+ * Naša marža na materiáli, ktorý absolvent kúpi u nás.
+ *
+ * Majiteľ 2026-08-30: „daj naše náklady na materiál, iba materiál, a pridaj
+ * tam 35 % maržu." Marža je podiel z PREDAJNEJ ceny, rovnako ako všade inde
+ * v CRM (predaj = náklad / (1 − marža)), teda náklad × 1,538 — nie náklad
+ * + 35 %. Náklad je čistý materiál v celých baleniach s DPH, bez práce.
+ *
+ * Dopad: kurzista zarobí menej (epoxidy −11 až −16 %, Arturo −36 až −38 %)
+ * a jeho výhoda oproti e-shopu klesla z −33 % na −15 %.
+ */
+export const ABSOLVENT_MARZA = 0.35;
 /** Bežná e-shop marža na čistom materiáli (bez realizácie) — na porovnanie. */
 export const BEZNA_MARZA = 0.45;
 
