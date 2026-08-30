@@ -405,9 +405,14 @@ function Header({ locale, onMenu }: { locale: Locale; onMenu: (open: boolean) =>
     <header className={`kl-header${fixed || open ? " is-fixed" : ""}${open ? " menu-open" : ""}`}>
       <div className="kl-container">
         <nav className="kl-nav" aria-label="Kurz">
-          {/* Rovnaké logo ako hlavný web (veľkosť, guľatá bodka, link domov) —
-              len vo farbách kurzu: zlatá + biela (majiteľ 2026-08-30). */}
-          <Link href="/" className="kl-nav__brand" aria-label="EPOXIDOVO — domov">
+          {/* Rovnaké logo ako hlavný web, farby kurzu. Vedie na VRCH KURZU,
+              nie na realizačný web (majiteľ 2026-08-30). */}
+          <Link
+            href={locale === "sk" ? "/kurz" : "/en/epoxy-flooring-course"}
+            className="kl-nav__brand"
+            aria-label="EPOXIDOVO Akadémia"
+            onClick={close}
+          >
             <span className="kl-brand-mark"><b>EPOXID</b>OVO<i aria-hidden />SK</span>
           </Link>
           <ul className={`kl-nav__menu${open ? " is-active" : ""}`}>
