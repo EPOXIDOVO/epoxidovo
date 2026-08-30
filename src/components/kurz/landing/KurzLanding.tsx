@@ -67,6 +67,18 @@ const V2 = {
     firmaLink: "Napíš nám cez objednávku",
     faqH2: "Časté otázky",
     formTitle: "Objednávka a platba",
+    bizBadge: "Nie je to len kurz",
+    bizH2a: "Toto nie je len kurz. Je to celý ",
+    bizH2em: "biznis model v kocke.",
+    bizBody: "Nedostaneš len videá o liatí. Otvorím ti celú firmu — systémy, na ktorých EPOXIDOVO reálne beží — a naučím ťa postaviť rovnakú epoxidovú firmu v tvojej lokalite.",
+    bizItems: [
+      ["Reálne dáta z našej firmy", "Žiadna teória — ukazujem ti čísla, ktoré nám naozaj bežia."],
+      ["Firemné systémy na spracovanie dopytov (CRM)", "Ako dopyt zachytiť, roztriediť a uzavrieť tak, aby ti ani jeden neprepadol."],
+      ["Aplikácia na sledovanie zamestnancov", "Prehľad, kto čo robí a v akom stave je každá zákazka."],
+      ["Koľko reálne platiť ľuďom", "Konkrétne mzdy a odmeny podľa toho, čo funguje — nie odhady."],
+      ["Ako škálovať biznis na milióny", "Cesta od prvej zákazky po firmu, ktorá rastie aj bez teba pri každom liatí."],
+      ["Ako vybudovať firmu v tvojej lokalite", "Krok za krokom postavíš epoxidovú firmu tam, kde bývaš."],
+    ] as [string, string][],
   },
   en: {
     badge: "Online course · instant access after payment",
@@ -117,6 +129,18 @@ const V2 = {
     firmaLink: "Tell us in the order form",
     faqH2: "Frequently asked",
     formTitle: "Order and payment",
+    bizBadge: "Not just a course",
+    bizH2a: "This isn't just a course. It's a whole ",
+    bizH2em: "business model in a nutshell.",
+    bizBody: "You don't just get how-to-pour videos. I open up the entire company — the systems EPOXIDOVO actually runs on — and teach you to build the same epoxy business in your area.",
+    bizItems: [
+      ["Real data from our company", "No theory — I show you the numbers we actually run on."],
+      ["Company systems for handling leads (CRM)", "How to capture, sort and close a lead so not one slips through."],
+      ["Employee tracking app", "See who does what and the status of every job."],
+      ["How much to really pay people", "Concrete wages and bonuses based on what works — not guesses."],
+      ["How to scale the business to millions", "From your first job to a company that grows without you on every pour."],
+      ["How to build a company in your area", "Step by step you build an epoxy business where you live."],
+    ] as [string, string][],
   },
 } as const;
 
@@ -267,6 +291,39 @@ function Claim({ locale }: { locale: Locale }) {
             <figcaption>{t.claimCaption}</figcaption>
           </figure>
         </Reveal>
+      </div>
+    </section>
+  );
+}
+
+/* ------------------------------------------------------------------ */
+/*  Biznis model                                                       */
+/* ------------------------------------------------------------------ */
+
+function BiznisModel({ locale }: { locale: Locale }) {
+  const t = V2[locale];
+  return (
+    <section id="biznis-model" className="kl-section kl-biz">
+      <div className="kl-container">
+        <div className="kl-biz__head">
+          <Reveal>
+            <span className="kl-biz__badge">{t.bizBadge}</span>
+            <h2>
+              {t.bizH2a}
+              <em>{t.bizH2em}</em>
+            </h2>
+            <p>{t.bizBody}</p>
+          </Reveal>
+        </div>
+        <div className="kl-biz__grid">
+          {t.bizItems.map(([title, desc], i) => (
+            <Reveal as="article" className="kl-biz-card" key={title} delay={i * 70}>
+              <span className="kl-biz-card__num">{String(i + 1).padStart(2, "0")}</span>
+              <h3>{title}</h3>
+              <p>{desc}</p>
+            </Reveal>
+          ))}
+        </div>
       </div>
     </section>
   );
@@ -767,6 +824,7 @@ export function KurzLanding({ locale }: { locale: Locale }) {
       <main>
         <Hero locale={locale} />
         <Claim locale={locale} />
+        <BiznisModel locale={locale} />
         <Days locale={locale} />
         <Strip locale={locale} />
         <KurzZisk locale={locale} />
