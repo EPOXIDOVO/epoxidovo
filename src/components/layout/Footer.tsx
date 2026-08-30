@@ -15,12 +15,16 @@ import { SITE, getAddressLine } from "@/lib/site";
  * - Sociálne siete: Instagram, TikTok, Facebook (z SITE.social)
  */
 
+/* Footer odkazy v stĺpcoch (majiteľ 2026-08-30: „do stĺpcov, vyzerá to lepšie") */
 const FOOTER_NAV = [
   { href: "/", label: "Úvod" },
   { href: "/sluzby", label: "Služby" },
+  { href: "/kontakt", label: "Kontakty" },
   { href: "/kurz", label: "Kurzy", soon: true },
   { href: "/kupit-material", label: "Kúpiť materiál", soon: true },
-  { href: "/kontakt", label: "Kontakty" },
+];
+
+const FOOTER_DOCS = [
   { href: "/ochrana-sukromia", label: "Zásady ochrany osobných údajov" },
   { href: "/obchodne-podmienky", label: "Obchodné podmienky" },
   { href: "/reklamacny-poriadok", label: "Reklamačný poriadok" },
@@ -127,44 +131,59 @@ export function Footer() {
         </Container>
       </div>
 
-      {/* Spodný blok — navigácia + copyright + IČO/DIČ */}
+      {/* Spodný blok — 3 stĺpce: Navigácia · Dokumenty · Firma */}
       <div className="border-t border-white/10">
-        <Container size="xl" className="py-4 md:py-5">
-          <div className="flex flex-col md:flex-row items-center justify-between gap-4">
-            <nav
-              aria-label="Footer navigácia"
-              className="flex flex-wrap items-center justify-center gap-x-6 gap-y-2 text-xs md:text-sm text-white/80"
-            >
-              {FOOTER_NAV.map((l) =>
-                "soon" in l && l.soon ? (
-                  <span
-                    key={l.href}
-                    className="inline-flex items-center gap-1.5 text-white/50 select-none cursor-default"
-                  >
-                    {l.label}
-                    <span className="px-1.5 py-0.5 rounded-full bg-[#f97316]/90 text-white text-[9px] font-bold uppercase tracking-wide">
-                      Čoskoro
-                    </span>
-                  </span>
-                ) : (
-                  <Link
-                    key={l.href}
-                    href={l.href}
-                    className="hover:text-white transition-colors"
-                  >
-                    {l.label}
-                  </Link>
-                ),
-              )}
+        <Container size="xl" className="py-8 md:py-10">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8 lg:gap-12">
+            <nav aria-label="Footer navigácia">
+              <h3 className="text-sm font-bold text-white mb-3">Navigácia</h3>
+              <ul className="space-y-2 text-sm text-white/75">
+                {FOOTER_NAV.map((l) => (
+                  <li key={l.href}>
+                    {"soon" in l && l.soon ? (
+                      <span className="inline-flex items-center gap-1.5 text-white/45 select-none cursor-default">
+                        {l.label}
+                        <span className="px-1.5 py-0.5 rounded-full bg-[#f97316]/90 text-white text-[9px] font-bold uppercase tracking-wide">
+                          Čoskoro
+                        </span>
+                      </span>
+                    ) : (
+                      <Link href={l.href} className="hover:text-white transition-colors">
+                        {l.label}
+                      </Link>
+                    )}
+                  </li>
+                ))}
+              </ul>
             </nav>
 
-            <p className="text-xs text-white/70 text-center md:text-right leading-relaxed">
-              © {year} {SITE.legalName}. Všetky práva vyhradené.
-              <br />
-              IČO: {SITE.business.ico} · DIČ: {SITE.business.dic} · {getAddressLine()}
-            </p>
-          </div>
+            <nav aria-label="Dokumenty">
+              <h3 className="text-sm font-bold text-white mb-3">Dokumenty</h3>
+              <ul className="space-y-2 text-sm text-white/75">
+                {FOOTER_DOCS.map((l) => (
+                  <li key={l.href}>
+                    <Link href={l.href} className="hover:text-white transition-colors">
+                      {l.label}
+                    </Link>
+                  </li>
+                ))}
+              </ul>
+            </nav>
 
+            <div className="sm:col-span-2 lg:col-span-1">
+              <h3 className="text-sm font-bold text-white mb-3">{SITE.legalName}</h3>
+              <p className="text-sm text-white/75 leading-relaxed">
+                IČO: {SITE.business.ico}
+                <br />
+                DIČ: {SITE.business.dic}
+                <br />
+                {getAddressLine()}
+              </p>
+              <p className="mt-3 text-xs text-white/55">
+                © {year} {SITE.legalName}. Všetky práva vyhradené.
+              </p>
+            </div>
+          </div>
         </Container>
       </div>
     </footer>
