@@ -220,7 +220,8 @@ export function KurzZisk({ locale }: { locale: Locale }) {
                 <dd>{fmt(aPredaj, locale)} €</dd>
               </div>
               <div className="kl-zisk__row">
-                <dt>{t.material}<small>{r.baleniaSpolu} {t.baleniaTvar(r.baleniaSpolu)} · {t.materialSub}</small></dt>
+                {/* Počet balení preč — majiteľ 2026-08-30: „3 balenia — daj prec". */}
+                <dt>{t.material}<small>{t.materialSub}</small></dt>
                 <dd>− {fmt(aMaterial, locale)} €</dd>
               </div>
               <div className="kl-zisk__row kl-zisk__row--total">
