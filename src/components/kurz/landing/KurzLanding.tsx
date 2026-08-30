@@ -33,12 +33,17 @@ const V2 = {
       ["40+", "lekcií v 2 moduloch"],
       ["24/7", "prístup navždy"],
       ["14 dní", "garancia vrátenia peňazí"],
-      ["Desiatky tisíc €", "stál na zákazku budovaný softvér našej firmy — máš ho v cene"],
     ],
-    proof: {
-      text: "Nie sme len školitelia — sme realizačná firma EPOXIDOVO s.r.o., ktorá podlahy reálne leje.",
-      cta: "Pozri naše realizácie →",
-    },
+    proofs: [
+      {
+        text: "Nie sme len školitelia — sme realizačná firma EPOXIDOVO s.r.o., ktorá podlahy reálne leje.",
+        cta: "Pozri naše realizácie →",
+        href: "/realizacie",
+      },
+      {
+        text: "Na zákazku budovaný softvér, ktorý našu firmu stál desiatky tisíc €, máš v cene.",
+      },
+    ] as { text: string; cta?: string; href?: string }[],
     partner: {
       eyebrow: "Spolupráca s našou firmou",
       h2a: "Netrúfaš si ešte na veľkú zákazku? ",
@@ -137,12 +142,17 @@ const V2 = {
       ["40+", "lessons in 2 modules"],
       ["24/7", "lifetime access"],
       ["14 days", "money-back guarantee"],
-      ["Tens of thousands €", "worth of custom-built company software — included"],
     ],
-    proof: {
-      text: "We're not just instructors — EPOXIDOVO s.r.o. is a real installation company that actually pours floors.",
-      cta: "See our work →",
-    },
+    proofs: [
+      {
+        text: "We're not just instructors — EPOXIDOVO s.r.o. is a real installation company that actually pours floors.",
+        cta: "See our work →",
+        href: "/realizacie",
+      },
+      {
+        text: "Custom-built software that cost our company tens of thousands € — included in the price.",
+      },
+    ] as { text: string; cta?: string; href?: string }[],
     partner: {
       eyebrow: "Partnership with our company",
       h2a: "Not ready for a big job yet? ",
@@ -363,7 +373,8 @@ function HeroKalkulacka({ locale }: { locale: Locale }) {
         <div><dt>{t.rowMat}</dt><dd>−{fmt(aMat)} €</dd></div>
         <div className="is-total"><dt>{t.rowKeep}</dt><dd>{fmt(aKeep)} €</dd></div>
       </dl>
-      <p className="kl-hcalc__note">{t.note(r.navratnostM2)}</p>
+      {/* Klik na návratnosť vedie rovno na ponuku kurzov (majiteľ). */}
+      <a href="#cena" className="kl-hcalc__note">{t.note(r.navratnostM2)}</a>
       <a href="#kalkulacka" className="kl-hcalc__more">{t.more}</a>
     </aside>
   );
@@ -412,10 +423,20 @@ function Hero({ locale }: { locale: Locale }) {
                 ))}
               </div>
             </div>
-            <p className="kl-hero__proof">
-              {t.proof.text}{" "}
-              <Link href="/realizacie">{t.proof.cta}</Link>
-            </p>
+            {/* Osobitné dôkazy so zelenou fajkou — nejdú v tickri (majiteľ). */}
+            <ul className="kl-hero__proofs">
+              {t.proofs.map((p) => (
+                <li key={p.text}>
+                  <svg viewBox="0 0 24 24" fill="none" aria-hidden>
+                    <path d="M5 12.5 10 17.5 19 7" stroke="currentColor" strokeWidth="2.4" strokeLinecap="round" strokeLinejoin="round" />
+                  </svg>
+                  <span>
+                    {p.text}
+                    {p.cta && p.href && (<> <Link href={p.href}>{p.cta}</Link></>)}
+                  </span>
+                </li>
+              ))}
+            </ul>
           </div>
           <HeroKalkulacka locale={locale} />
         </div>
