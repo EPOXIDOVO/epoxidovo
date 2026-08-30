@@ -39,14 +39,17 @@ const V2 = {
     h1em: "A postav na tom firmu.",
     lead: "Toto nie je len kurz — je to celý funkčný biznis model v kocke. Roky skúseností z reálnych zákaziek, softvér, vďaka ktorému firma beží aj bez teba, a reálne čísla, ktoré inde neuvidíš. Naučíš sa remeslo — a biznis, ktorý ho predáva.",
     ctaMain: "Chcem prístup",
-    ctaProgram: "Koľko môžem zarobiť? ↓",
+    ctaProgram: "Koľko môžem zarobiť? →",
     ctaFirma: "Naša realizačná firma ↗",
     navCta: "Chcem prístup",
     facts: [
-      ["8+ h", "videa z reálnych zákaziek"],
+      ["8+h", "videa z reálnych zákaziek"],
       ["40+", "lekcií v 2 moduloch"],
       ["24/7", "prístup navždy"],
-      ["14 dní", "garancia vrátenia peňazí"],
+      ["100 %", "online, vlastným tempom"],
+      ["SK+EN", "podklady v oboch jazykoch"],
+      ["1:1", "mentoring v balíku PRO"],
+      ["5", "miest v PRO tento rok"],
     ],
     proofs: [
       {
@@ -204,14 +207,17 @@ const V2 = {
     h1em: "And build a business on it.",
     lead: "This isn't just a course — it's a complete, working business model. Years of experience from real jobs, software that keeps the company running without you, and real numbers you won't see anywhere else. You learn the craft — and the business that sells it.",
     ctaMain: "Get access",
-    ctaProgram: "How much can I earn? ↓",
+    ctaProgram: "How much can I earn? →",
     ctaFirma: "Our installation company ↗",
     navCta: "Get access",
     facts: [
-      ["8+ h", "of video from real jobs"],
+      ["8+h", "of video from real jobs"],
       ["40+", "lessons in 2 modules"],
       ["24/7", "lifetime access"],
-      ["14 days", "money-back guarantee"],
+      ["100 %", "online, your own pace"],
+      ["SK+EN", "workbooks in both languages"],
+      ["1:1", "mentoring in the PRO package"],
+      ["5", "PRO spots this year"],
     ],
     proofs: [
       {
@@ -364,19 +370,6 @@ const V2 = {
     ] as { title: string; body: string; chips: { label: string; hot?: boolean }[] }[],
   },
 } as const;
-
-const STRIP_IMAGES = [
-  "/images/hero/garaz.webp",
-  "/images/realizacie/r-05.jpg",
-  "/images/hero/hala.webp",
-  "/images/realizacie/r-07.jpg",
-  "/images/realizacie/r-12.jpg",
-  "/images/realizacie/r-03.jpg",
-  // Mistral a Concrete Look zatiaľ nemáme odfotené z realizácie — oficiálne
-  // textúry z Arturo vzorkovníka (už ich používa aj /vzorkovnik).
-  "/images/vzorkovnik/arturo/mistral-calm-breeze.webp",
-  "/images/vzorkovnik/arturo/concrete-look-soft-stone.webp",
-];
 
 /* ------------------------------------------------------------------ */
 /*  Header                                                             */
@@ -574,10 +567,6 @@ function Hero({ locale }: { locale: Locale }) {
       <div className="kl-hero__inner">
         <div className="kl-container kl-hero__grid">
           <div>
-            <p className="kl-hero__badge">
-              <i aria-hidden />
-              {t.badge}
-            </p>
             {/* Dva riadky: veta + medená veta (majiteľ 2026-08-30). */}
             <h1>
               {t.h1a}
@@ -587,7 +576,7 @@ function Hero({ locale }: { locale: Locale }) {
             <p className="kl-hero__lead">{t.lead}</p>
             <div className="kl-hero__actions">
               <a href="#prihlaska" className="kl-btn kl-btn--primary">{t.ctaMain}</a>
-              <a href="#kalkulacka" className="kl-btn kl-btn--ghost">{t.ctaProgram}</a>
+              <Link href={locale === "sk" ? "/kurz/kalkulacka" : "/en/epoxy-flooring-course/calculator"} className="kl-btn kl-btn--ghost">{t.ctaProgram}</Link>
               <Link href="/" className="kl-btn kl-btn--ghost">{t.ctaFirma}</Link>
             </div>
             {/* Osobitné dôkazy so zelenou fajkou — nejdú v tickri (majiteľ). */}
