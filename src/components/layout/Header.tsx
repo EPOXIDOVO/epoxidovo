@@ -81,7 +81,7 @@ export function Header({ transparentOnTop = false }: HeaderProps) {
             </span>
           </Link>
 
-          {/* Desktop CTA — Kontakt (zelená pill) + Cenová ponuka + Kurzy + AI Vizualizácia */}
+          {/* Desktop CTA — Kontakt (zelená pill) + Cenová ponuka + Ukážky realizácií + AI Vizualizácia */}
           <div className="hidden md:flex items-center gap-3 lg:gap-4 ml-auto">
             <Link
               href="/kontakt"
@@ -93,10 +93,14 @@ export function Header({ transparentOnTop = false }: HeaderProps) {
             <Link href="/cenova-ponuka" className="btn btn-primary btn-md">
               Cenová ponuka
             </Link>
-            <Link href="/kurz" className="btn btn-md btn-outline">
-              <GraduationCap className="w-4 h-4" aria-hidden />
-              Kurzy
-            </Link>
+            <button
+              type="button"
+              onClick={() => setPickerOpen(true)}
+              className="btn btn-md btn-outline"
+            >
+              <Images className="w-4 h-4" aria-hidden />
+              Ukážky realizácií
+            </button>
             <Link
               href="/ai-vizualizer"
               className="inline-flex items-center gap-2 px-4 lg:px-5 py-2.5 rounded-full bg-gradient-to-r from-[#3db6e8] to-[#a855f7] text-white font-semibold text-sm lg:text-base shadow-[0_6px_20px_rgba(168,85,247,0.4)] hover:from-[#1a8cc4] hover:to-[#9333ea] hover:shadow-[0_8px_24px_rgba(168,85,247,0.55)] hover:-translate-y-0.5 transition-all duration-300"
@@ -148,14 +152,17 @@ export function Header({ transparentOnTop = false }: HeaderProps) {
               <Home className="w-4 h-4" aria-hidden />
               Domovská stránka
             </Link>
-            <Link
-              href="/kurz"
-              onClick={() => setOpen(false)}
+            <button
+              type="button"
+              onClick={() => {
+                setOpen(false);
+                setPickerOpen(true);
+              }}
               className="inline-flex items-center justify-center gap-2 px-6 py-4 rounded-full border-2 border-[#3db6e8] text-[#3db6e8] font-semibold hover:bg-[#3db6e8] hover:text-white transition-colors"
             >
-              <GraduationCap className="w-4 h-4" aria-hidden />
-              Kurzy
-            </Link>
+              <Images className="w-4 h-4" aria-hidden />
+              Ukážky realizácií
+            </button>
             <Link
               href="/cenova-ponuka"
               onClick={() => setOpen(false)}
