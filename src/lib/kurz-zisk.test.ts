@@ -31,8 +31,19 @@ describe("kurz-zisk — model zárobku z jednej zákazky", () => {
     expect(r.navratnostM2).toBeGreaterThan(0);
   });
 
-  it("typ bez doplneného nákupu (Mistral) vráti null", () => {
-    expect(spocitajZisk(30, mistral)).toBeNull();
+  it("Mistral (Arturo): predaj 104, zarobíš ~44 €/m² — dáta z CRM 2026-08-30", () => {
+    const r = spocitajZisk(30, mistral)!;
+    expect(r).not.toBeNull();
+    expect(r.predajM2).toBe(104);
+    expect(r.materialM2).toBeCloseTo(60.0, 1); // 49.20 / 0.82
+    expect(r.marzaM2).toBeCloseTo(44.0, 1);
+  });
+
+  it("Concrete Look (Arturo): predaj 99, zarobíš ~40,18 €/m²", () => {
+    const beton = TYPY.find((t) => t.slug === "beton-look")!;
+    const r = spocitajZisk(30, beton)!;
+    expect(r.materialM2).toBeCloseTo(58.82, 1); // 48.23 / 0.82
+    expect(r.marzaM2).toBeCloseTo(40.18, 1);
   });
 
   it("séria rastie monotónne", () => {

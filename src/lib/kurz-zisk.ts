@@ -12,8 +12,9 @@
  * Marže sú počítané ako podiel z predajnej ceny (nie prirážka na nákup) —
  * rovnako ako v CRM: predaj = nákup / (1 − marža).
  *
- * Mistral a Concrete Look zatiaľ nemajú doplnenú nákupnú cenu materiálu
- * (`nakupMaterialEurM2: null`) — v kalkulačke sa nedajú zvoliť a čakajú na dáta.
+ * Nákupné ceny doplnené z CRM cenotvorby 2026-08-30 (epoxidovo-typy-podlah.json):
+ * Mistral = Arturo Mistral (EP 6200 + Mistral + PU 7310), Concrete Look =
+ * Arturo Betón Look (EP 6200 + PU 2030 + PU 7310).
  */
 import { KURZ } from "@/content/kurz";
 
@@ -45,8 +46,8 @@ export const TYPY: TypPodlahy[] = [
   { slug: "mramorove", label: "Mramorová", predajEurM2: 139, nakupMaterialEurM2: 49.36 },
   { slug: "jednofarebne", label: "Jednofarebná", predajEurM2: 59, nakupMaterialEurM2: 14.29 },
   { slug: "chipsove", label: "Chipsová", predajEurM2: 49, nakupMaterialEurM2: 15.1 },
-  { slug: "mistral", label: "Mistral", predajEurM2: 104, nakupMaterialEurM2: null },
-  { slug: "beton-look", label: "Concrete Look", predajEurM2: 99, nakupMaterialEurM2: null },
+  { slug: "mistral", label: "Mistral", predajEurM2: 104, nakupMaterialEurM2: 49.2 },
+  { slug: "beton-look", label: "Concrete Look", predajEurM2: 99, nakupMaterialEurM2: 48.23 },
 ];
 
 const r2 = (n: number) => Math.round(n * 100) / 100;

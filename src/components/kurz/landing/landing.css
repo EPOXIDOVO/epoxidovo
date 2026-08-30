@@ -65,7 +65,11 @@
   text-wrap: balance;
 }
 .kl h2 { font-size: clamp(2rem, 1.2rem + 3.2vw, 3.2rem); }
-.kl p { margin: 0; max-width: 68ch; }
+/* Reset marginov cez :where() = nulová špecificita — inak by ".kl p"
+   (0-1-1) prebíjal margin-top tried ako .kl-zisk__note (0-1-0) a odstupy
+   by sa ticho zahadzovali (bug: chip nalepený na dlaždice). */
+.kl :where(p) { margin: 0; }
+.kl p { max-width: 68ch; }
 .kl a { color: inherit; text-decoration: none; transition: color 250ms var(--kl-ease); }
 .kl img { display: block; }
 
@@ -449,6 +453,12 @@
   overflow: hidden;
 }
 .kl-slab.is-on { transform: translateX(14px); box-shadow: 0 14px 40px rgba(0, 0, 0, 0.5); border-color: var(--kl-accent); }
+/* Kurzor na vrstve: vysunie sa a zažiari (majiteľ 2026-08-30). */
+.kl-slab:hover {
+  transform: translateX(20px) scale(1.03);
+  border-color: var(--kl-accent-hi);
+  box-shadow: 0 18px 48px rgba(0, 0, 0, 0.55), 0 0 26px rgba(232, 155, 99, 0.3);
+}
 .kl-slab--1 { background: radial-gradient(120px 40px at 20% 30%, rgba(255, 255, 255, 0.35), transparent 60%), linear-gradient(120deg, #3f6484, #20374e 55%, #4a2e1c); }
 .kl-slab--2 { background: conic-gradient(from 210deg at 60% 40%, #2a4763, #c97c45 22%, #20364c 45%, #b06a38 70%, #2a4763); }
 .kl-slab--3 { background: linear-gradient(100deg, #38434f, #242e39); }
