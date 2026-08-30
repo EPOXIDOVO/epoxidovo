@@ -4,13 +4,13 @@ import * as React from "react";
 import Image from "next/image";
 import Link from "next/link";
 import {
-  Images,
   Brush,
   Shield,
   ShieldCheck,
   ChevronLeft,
   ChevronRight,
   Sparkles,
+  GraduationCap,
   ShoppingBag,
 } from "lucide-react";
 import { Container } from "@/components/ui/Container";
@@ -311,14 +311,6 @@ export function Hero() {
               >
                 Cenová ponuka
               </Link>
-              <button
-                type="button"
-                onClick={() => setPickerOpen(true)}
-                className="btn btn-outline btn-lg !w-full max-md:!px-4 max-md:!py-2.5 max-md:!text-[13px]"
-              >
-                <Images className="w-3.5 h-3.5 md:w-4 md:h-4" aria-hidden />
-                Ukážky realizácií
-              </button>
               {/* Pure Tailwind (bez .btn class) aby gradient nemal CSS konflikty. */}
               <Link
                 href="/ai-vizualizer"
@@ -326,6 +318,14 @@ export function Hero() {
               >
                 <Sparkles className="w-3.5 h-3.5 md:w-4 md:h-4" aria-hidden />
                 AI Vizualizácia
+              </Link>
+              {/* Kurzy — živý link, vedľa Kúpiť materiál (majiteľ 2026-08-30) */}
+              <Link
+                href="/kurz"
+                className="btn btn-outline btn-lg !w-full max-md:!px-4 max-md:!py-2.5 max-md:!text-[13px]"
+              >
+                <GraduationCap className="w-3.5 h-3.5 md:w-4 md:h-4" aria-hidden />
+                Kurzy
               </Link>
               {/* Kúpiť materiál — čoskoro, NEklikateľné kým e-shop nespustíme */}
               <div
