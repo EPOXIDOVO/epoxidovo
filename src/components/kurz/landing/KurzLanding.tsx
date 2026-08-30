@@ -147,7 +147,9 @@ const V2 = {
     ],
     dayMeta1: "Každá lekcia má pod videom priestor na otázky.",
     dayMeta2: "Na konci záverečný test a certifikát.",
-    stripH2: "Naše realizácie",
+    stripH2: "Realizácie našich klientov",
+    stripTodo: "doplniť popis realizácie",
+    stripFoto: "foto doplníme",
     stripCaptions: ["Metalická garáž", "Obývačka, jednofarebná liata", "Priemyselná hala", "Chipsová prevádzka", "Metalický efekt zblízka", "Kancelárie", "Mistral — vzorkovník Arturo", "Concrete Look — vzorkovník Arturo"],
     stripPreviewText: "Presne toto sa na kurze naučíš liať — reálna práca našej realizačnej firmy.",
     stripPreviewCta: "Pozri všetky realizácie →",
@@ -310,7 +312,9 @@ const V2 = {
     ],
     dayMeta1: "Every lesson has a question thread under the video.",
     dayMeta2: "Final test and certificate at the end.",
-    stripH2: "Our installations",
+    stripH2: "Our clients’ installations",
+    stripTodo: "add installation description",
+    stripFoto: "photo coming",
     stripCaptions: ["Metallic garage", "Living room, single colour", "Industrial hall", "Flake commercial floor", "Metallic effect up close", "Offices", "Mistral — Arturo sample book", "Concrete Look — Arturo sample book"],
     stripPreviewText: "This is exactly what you learn to pour — real work by our installation company.",
     stripPreviewCta: "See all our work →",
@@ -829,55 +833,32 @@ function Vrstvy({ locale }: { locale: Locale }) {
 /*  Fotopás                                                            */
 /* ------------------------------------------------------------------ */
 
+/** Mená klientov pre recenzie realizácií — ženy max 10 % (majiteľ).
+ *  TODO: nahradiť reálnymi menami, fotkami a popismi realizácií. */
+const KLIENTI = ["Martin", "Pavol", "Peter", "Jozef", "Tomáš", "Marek", "Lukáš", "Milan", "Štefan", "Helena"];
+
 function Strip({ locale }: { locale: Locale }) {
   const t = V2[locale];
-  const [preview, setPreview] = React.useState<number | null>(null);
-  const items = STRIP_IMAGES.map((src, i) => ({ src, cap: t.stripCaptions[i] }));
-
-  // ESC zavrie preview
-  React.useEffect(() => {
-    if (preview == null) return;
-    const onKey = (e: KeyboardEvent) => { if (e.key === "Escape") setPreview(null); };
-    window.addEventListener("keydown", onKey);
-    return () => window.removeEventListener("keydown", onKey);
-  }, [preview]);
-
   return (
     <section className="kl-strip" aria-label={t.stripH2}>
       <div className="kl-container">
         <h2 style={{ fontSize: "clamp(1.6rem, 1.1rem + 2vw, 2.4rem)", marginBottom: "1.6rem" }}>{t.stripH2}</h2>
       </div>
-      {/* Marquee zľava doprava, na hover sa zastaví; klik otvorí preview. */}
+      {/* Marquee zľava doprava; karty sú zatiaľ placeholder — doplniť. */}
       <div className="kl-strip__marquee">
         <div className="kl-strip__track">
-          {[...items, ...items].map((it, i) => (
-            <button
-              type="button"
-              className="kl-strip__item"
-              key={`${it.src}-${i}`}
-              aria-hidden={i >= items.length}
-              tabIndex={i >= items.length ? -1 : 0}
-              onClick={() => setPreview(i % items.length)}
-            >
-              <Image src={it.src} alt={it.cap} width={640} height={800} sizes="24rem" />
-              <span>{it.cap}</span>
-            </button>
+          {[...KLIENTI, ...KLIENTI].map((meno, i) => (
+            <div className="kl-strip__item" key={`${meno}-${i}`} aria-hidden={i >= KLIENTI.length}>
+              <div className="kl-strip__ph">
+                <span>?</span>
+                <small>{t.stripFoto}</small>
+              </div>
+              <span>{meno}</span>
+              <em className="kl-strip__todo">{t.stripTodo}</em>
+            </div>
           ))}
         </div>
       </div>
-      {preview != null && (
-        <div className="kl-lightbox" role="dialog" aria-modal="true" aria-label={items[preview].cap} onClick={() => setPreview(null)}>
-          <figure onClick={(e) => e.stopPropagation()}>
-            <button type="button" className="kl-lightbox__close" aria-label={t.stripClose} onClick={() => setPreview(null)}>×</button>
-            <Image src={items[preview].src} alt={items[preview].cap} width={1280} height={1600} sizes="90vw" />
-            <figcaption>
-              <b>{items[preview].cap}</b>
-              <p>{t.stripPreviewText}</p>
-              <Link href="/realizacie">{t.stripPreviewCta}</Link>
-            </figcaption>
-          </figure>
-        </div>
-      )}
     </section>
   );
 }

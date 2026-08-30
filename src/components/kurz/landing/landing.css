@@ -898,7 +898,21 @@
   transition: transform 400ms var(--kl-ease), border-color 400ms var(--kl-ease), box-shadow 400ms var(--kl-ease);
 }
 .kl-strip__item:hover img { transform: scale(1.03); border-color: var(--kl-accent); box-shadow: 0 16px 44px rgba(0, 0, 0, 0.45); }
-.kl-strip__item span { display: block; font-size: 0.85rem; margin-top: 0.6rem; }
+.kl-strip__item span { display: block; font-size: 0.92rem; font-weight: 700; color: var(--kl-ink); margin-top: 0.6rem; }
+.kl-strip__ph {
+  aspect-ratio: 4 / 5;
+  display: grid;
+  place-items: center;
+  align-content: center;
+  gap: 0.3rem;
+  background: var(--kl-field-bg);
+  border: 1px solid var(--kl-border);
+  border-radius: calc(var(--kl-radius) - 6px);
+  color: var(--kl-faint);
+}
+.kl-strip__ph span { font-family: var(--kl-font-mono); font-size: 3rem; font-weight: 700; color: var(--kl-faint); margin: 0; }
+.kl-strip__ph small { font-size: 0.78rem; }
+.kl-strip__todo { display: block; font-size: 0.78rem; font-style: italic; color: var(--kl-faint); margin-top: 0.15rem; }
 .kl-strip__item:hover span { color: var(--kl-accent-hi); }
 @keyframes klStripMove { from { transform: translateX(-50%); } to { transform: translateX(0); } }
 
