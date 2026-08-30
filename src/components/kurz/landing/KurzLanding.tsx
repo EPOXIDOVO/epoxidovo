@@ -12,7 +12,7 @@ import { KURZ } from "@/content/kurz";
 import { COURSE_EN } from "@/content/kurz-en";
 import { COPY, type Locale } from "./copy";
 import { useAnimatedNumber } from "./KurzZisk";
-import { spocitajZisk, TYPY, BEZNA_MARZA, ABSOLVENT_MARZA, type TypSlug } from "@/lib/kurz-zisk";
+import { spocitajZisk, marzaEurM2, TYPY, BEZNA_MARZA, ABSOLVENT_MARZA, type TypSlug } from "@/lib/kurz-zisk";
 import "./landing.css";
 
 /* ------------------------------------------------------------------ */
@@ -500,7 +500,10 @@ function HeroKalkulacka({ locale }: { locale: Locale }) {
             aria-pressed={x.slug === slug}
           >
             <Image src={TYP_NAHLADY[x.slug]} alt="" width={68} height={68} sizes="34px" />
-            {x.label}
+            <span className="kl-hcalc__typ-txt">
+              {x.label}
+              <i>{new Intl.NumberFormat(locale === "sk" ? "sk-SK" : "en-GB", { minimumFractionDigits: 2, maximumFractionDigits: 2 }).format(marzaEurM2(x))} €/m²</i>
+            </span>
           </button>
         ))}
       </div>

@@ -463,6 +463,9 @@
   transition: background 180ms var(--kl-ease), border-color 180ms var(--kl-ease), color 180ms var(--kl-ease);
 }
 .kl-hcalc__typ img { width: 34px; height: 34px; border-radius: 7px; object-fit: cover; flex: none; }
+.kl-hcalc__typ-txt { display: flex; flex-direction: column; line-height: 1.2; min-width: 0; }
+.kl-hcalc__typ-txt i { font-style: normal; font-family: var(--kl-font-mono); font-size: 0.66rem; font-weight: 700; color: var(--kl-profit); font-variant-numeric: tabular-nums; white-space: nowrap; }
+.kl-hcalc__typ.is-active .kl-hcalc__typ-txt i { color: #123c2a; }
 .kl-hcalc__typ:hover { border-color: var(--kl-accent); color: var(--kl-ink); }
 .kl-hcalc__typ.is-active { background: var(--kl-accent); border-color: var(--kl-accent); color: #160d06; font-weight: 700; }
 .kl-hcalc__slider { display: flex; justify-content: space-between; align-items: baseline; font-size: 0.85rem; font-weight: 600; color: var(--kl-subtle); }
