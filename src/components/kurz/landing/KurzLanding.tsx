@@ -47,16 +47,14 @@ const V2 = {
       ["40+", "lekcií v 2 moduloch"],
       ["24/7", "prístup navždy"],
       ["100 %", "online, vlastným tempom"],
-      ["SK+EN", "podklady v oboch jazykoch"],
       ["1:1", "mentoring v balíku PRO"],
-      ["5", "miest v PRO tento rok"],
     ],
     proofs: [
       {
         text: "Liate podlahy sú jeden z najrýchlejšie rastúcich biznisov roka 2026. Konkurencia na Slovensku je malá.",
       },
       {
-        text: "Nie sme len školitelia — sme realizačná firma EPOXIDOVO s.r.o. a otvárame ti 20 rokov podlahárskych tajomstiev.",
+        text: "Nie sme len školitelia — sme realizačná firma EPOXIDOVO s.r.o. a otvárame ti roky podlahárskych tajomstiev.",
         cta: "Pozri naše realizácie →",
         href: "/realizacie",
       },
@@ -215,16 +213,14 @@ const V2 = {
       ["40+", "lessons in 2 modules"],
       ["24/7", "lifetime access"],
       ["100 %", "online, your own pace"],
-      ["SK+EN", "workbooks in both languages"],
       ["1:1", "mentoring in the PRO package"],
-      ["5", "PRO spots this year"],
     ],
     proofs: [
       {
         text: "Poured floors are one of the fastest-growing businesses of 2026. Competition in Slovakia is small.",
       },
       {
-        text: "We're not just instructors — EPOXIDOVO s.r.o. is a real installation company, opening up 20 years of installer secrets.",
+        text: "We're not just instructors — EPOXIDOVO s.r.o. is a real installation company, opening up years of installer secrets.",
         cta: "See our work →",
         href: "/realizacie",
       },
