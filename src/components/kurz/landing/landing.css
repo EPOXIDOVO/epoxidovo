@@ -149,7 +149,16 @@
 }
 .kl-nav { display: flex; align-items: center; gap: 2rem; width: 100%; }
 .kl-nav__brand { display: inline-flex; align-items: center; }
-.kl-nav__brand img { width: 3rem; height: auto; }
+/* Textové logo kurzu — zlatá + biela */
+.kl-brand-mark {
+  font-family: var(--kl-font-display);
+  font-weight: 700;
+  font-size: 1.3rem;
+  letter-spacing: 0.01em;
+  color: #fff;
+  white-space: nowrap;
+}
+.kl-brand-mark b { color: var(--kl-accent-hi); font-weight: 700; }
 .kl-nav__menu {
   display: flex;
   align-items: center;
@@ -160,16 +169,46 @@
 }
 .kl-nav__menu a { font-size: 0.95rem; font-weight: 600; color: rgba(255, 255, 255, 0.85); }
 .kl-nav__menu a:hover { color: var(--kl-accent-hi); }
+/* Pravá skupina piluliek (štýl BullVend): telefón · CTA so šípkou · jazyk */
+.kl-nav__phone a {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  border: 1px solid rgba(255, 255, 255, 0.25);
+  border-radius: 999px;
+  padding: 0.55rem 1.1rem;
+  font-size: 0.88rem;
+  background: rgba(255, 255, 255, 0.04);
+  white-space: nowrap;
+  transition: border-color 250ms var(--kl-ease);
+}
+.kl-nav__phone svg { width: 1rem; height: 1rem; color: var(--kl-accent-hi); flex: none; }
+.kl-nav__phone a:hover { border-color: var(--kl-accent-hi); color: #fff; }
 .kl-nav__cta a {
   display: inline-flex;
-  background: var(--kl-accent);
-  color: #160d06 !important;
-  padding: 0.7rem 1.25rem;
+  align-items: center;
+  gap: 0.5rem;
+  background: rgba(201, 124, 69, 0.1);
+  border: 1px solid var(--kl-accent);
+  color: #fff !important;
+  padding: 0.6rem 1.25rem;
   border-radius: 999px;
-  transition: background 250ms var(--kl-ease);
+  white-space: nowrap;
+  transition: background 250ms var(--kl-ease), color 250ms var(--kl-ease);
 }
-.kl-nav__cta a:hover { background: var(--kl-accent-hi); }
-.kl-nav__lang a { opacity: 0.65; font-weight: 500; }
+.kl-nav__cta svg { width: 0.95rem; height: 0.95rem; flex: none; }
+.kl-nav__cta a:hover { background: var(--kl-accent); color: #160d06 !important; }
+.kl-nav__lang a {
+  display: inline-flex;
+  border: 1px solid rgba(255, 255, 255, 0.22);
+  border-radius: 999px;
+  padding: 0.55rem 0.95rem;
+  font-size: 0.82rem;
+  font-weight: 600;
+  color: rgba(255, 255, 255, 0.85);
+  transition: border-color 250ms var(--kl-ease);
+}
+.kl-nav__lang a:hover { border-color: var(--kl-accent-hi); color: #fff; }
 .kl-nav__toggle { display: none; }
 
 @media (max-width: 900px) {
@@ -187,8 +226,9 @@
   .kl-nav__menu.is-active { transform: translateY(0); }
   .kl-nav__menu a { color: var(--kl-ink); font-family: var(--kl-font-display); font-size: 1.75rem; padding: 0.75rem 1.5rem; }
   .kl-nav__cta { margin-top: 1rem; }
-  .kl-nav__cta a { font-family: var(--kl-font-body); font-size: 1.05rem; padding: 1rem 2.2rem; }
-  .kl-nav__lang a { font-family: var(--kl-font-body); font-size: 1rem; }
+  .kl-nav__cta a { font-family: var(--kl-font-body); font-size: 1.05rem; padding: 1rem 2.2rem; color: #fff !important; }
+  .kl-nav__phone a { font-family: var(--kl-font-body); font-size: 1rem; color: var(--kl-ink); }
+  .kl-nav__lang a { font-family: var(--kl-font-body); font-size: 1rem; color: var(--kl-ink); }
   .kl-nav__toggle {
     position: relative;
     z-index: 70;
@@ -274,15 +314,6 @@
   background: var(--kl-profit);
   box-shadow: 0 0 0 4px var(--kl-profit-soft);
 }
-.kl-hero__kicker {
-  margin: 0.4rem 0 0.6rem;
-  font-family: var(--kl-font-mono);
-  font-size: clamp(0.85rem, 0.72rem + 0.5vw, 1rem);
-  font-weight: 700;
-  line-height: 1.4;
-  letter-spacing: 0.04em;
-  color: var(--kl-accent-hi);
-}
 /* Dva riadky na desktope: veľkosť je zvolená tak, aby sa dlhšia veta
    („Nauč sa liať podlahy.") zmestila do stĺpca na jeden riadok. */
 .kl-hero h1 {
@@ -311,7 +342,7 @@
 .kl-hero__ticker-track {
   display: flex;
   width: max-content;
-  animation: klTicker 30s linear infinite;
+  animation: klTicker 15s linear infinite;
 }
 .kl-hero__ticker:hover .kl-hero__ticker-track { animation-play-state: paused; }
 .kl-hero__tick {
@@ -549,6 +580,22 @@
 }
 .kl-pstep h3 { font-size: 1.15rem; margin: 0.85rem 0 0.4rem; }
 .kl-pstep p { color: var(--kl-subtle); font-size: 0.95rem; }
+/* hotline sľub pod krokmi spolupráce */
+.kl-support {
+  margin-top: 1rem;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: 1.5rem;
+  align-items: center;
+  background: var(--kl-accent-soft);
+  border: 1px solid var(--kl-accent);
+  border-radius: var(--kl-radius);
+  padding: clamp(1.3rem, 2.5vw, 1.9rem);
+}
+@media (max-width: 700px) { .kl-support { grid-template-columns: 1fr; } }
+.kl-support h3 { font-size: 1.3rem; }
+.kl-support p { color: var(--kl-text); font-size: 0.97rem; margin-top: 0.35rem; max-width: 60ch; }
+.kl-support .kl-btn { white-space: nowrap; }
 
 /* ---------- Intro claim ---------- */
 .kl-claim { background: var(--kl-surface); }

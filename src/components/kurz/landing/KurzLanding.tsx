@@ -22,10 +22,9 @@ import "./landing.css";
 const V2 = {
   sk: {
     badge: "Online kurz · prístup okamžite po zaplatení",
-    heroKicker: "Získaj okamžitý prístup k 20 rokom podlahárskych tajomstiev.",
     h1a: "Nauč sa liať podlahy.",
     h1em: "A postav na tom firmu.",
-    lead: "Toto nie je len kurz. Toto je celý funkčný biznis model v kocke — roky skúseností, softvér, na ktorom stojí celá firma aj bez teba, a reálne čísla. Naučíš sa remeslo aj biznis, ktorý ho predáva.",
+    lead: "Toto nie je len kurz — je to celý funkčný biznis model v kocke. Roky skúseností z reálnych zákaziek, softvér, vďaka ktorému firma beží aj bez teba, a reálne čísla, ktoré inde neuvidíš. Naučíš sa remeslo — a biznis, ktorý ho predáva.",
     ctaMain: "Chcem prístup",
     ctaProgram: "Koľko zarobím? ↓",
     facts: [
@@ -43,6 +42,9 @@ const V2 = {
       {
         text: "Na zákazku budovaný softvér, ktorý našu firmu stál desiatky tisíc €, máš v cene.",
       },
+      {
+        text: "Získaš okamžitý prístup k 20 rokom podlahárskych tajomstiev.",
+      },
     ] as { text: string; cta?: string; href?: string }[],
     partner: {
       eyebrow: "Spolupráca s našou firmou",
@@ -54,6 +56,8 @@ const V2 = {
         ["Realizuje naša partia s tebou", "Lejeme spolu — ty a tvoji ľudia ste pri každom kroku."],
         ["Zisk si rozdelíme", "Ty máš zárobok aj zaškolený tím, my podiel z realizácie."],
       ] as [string, string][],
+      supportTitle: "Zasekneš sa? Zavolaj nám.",
+      supportBody: "Keď pri zákazke nebudeš niečo vedieť, zdvihneme telefón a odpovieme ti na čokoľvek — a keď treba, vyriešime to za teba. Záleží nám na tom, aby sa ti práca podarila.",
     },
     hcalc: {
       tag: "Kalkulačka zárobku",
@@ -131,10 +135,9 @@ const V2 = {
   },
   en: {
     badge: "Online course · instant access after payment",
-    heroKicker: "Get Instant Access to 20 Years of Installer Secrets.",
     h1a: "Learn to pour floors.",
     h1em: "And build a business on it.",
-    lead: "This is not just a course. It's a complete working business model in a nutshell — years of experience, the software the whole company runs on even without you, and real numbers. You learn the craft and the business that sells it.",
+    lead: "This isn't just a course — it's a complete, working business model. Years of experience from real jobs, software that keeps the company running without you, and real numbers you won't see anywhere else. You learn the craft — and the business that sells it.",
     ctaMain: "Get access",
     ctaProgram: "How much will I earn? ↓",
     facts: [
@@ -152,6 +155,9 @@ const V2 = {
       {
         text: "Custom-built software that cost our company tens of thousands € — included in the price.",
       },
+      {
+        text: "Get instant access to 20 years of installer secrets.",
+      },
     ] as { text: string; cta?: string; href?: string }[],
     partner: {
       eyebrow: "Partnership with our company",
@@ -163,6 +169,8 @@ const V2 = {
         ["Our crew installs it with you", "We pour together — you and your people are in on every step."],
         ["We split the profit", "You get the earnings and a trained crew, we take a share of the job."],
       ] as [string, string][],
+      supportTitle: "Stuck? Call us.",
+      supportBody: "When you hit something you don't know on a job, we pick up the phone and answer anything — and when needed, we solve it for you. We care that your work turns out right.",
     },
     hcalc: {
       tag: "Earnings calculator",
@@ -280,8 +288,9 @@ function Header({ locale, onMenu }: { locale: Locale; onMenu: (open: boolean) =>
     <header className={`kl-header${fixed || open ? " is-fixed" : ""}${open ? " menu-open" : ""}`}>
       <div className="kl-container">
         <nav className="kl-nav" aria-label="Kurz">
-          <Link href="/" className="kl-nav__brand" aria-label="EPOXIDOVO">
-            <Image src="/images/site/logo_v2.png" alt="EPOXIDOVO" width={48} height={46} priority />
+          {/* Nápis namiesto maskota — kurz verzia loga v zlato-bielej (majiteľ). */}
+          <Link href="/" className="kl-nav__brand" aria-label="EPOXIDOVO.SK">
+            <span className="kl-brand-mark"><b>EPOXID</b>OVO<b>.</b>SK</span>
           </Link>
           <ul className={`kl-nav__menu${open ? " is-active" : ""}`}>
             <li><a href="#o-kurze" onClick={close}>{t.nav.about}</a></li>
@@ -289,7 +298,19 @@ function Header({ locale, onMenu }: { locale: Locale; onMenu: (open: boolean) =>
             <li><a href="#kalkulacka" onClick={close}>{t.nav.calc}</a></li>
             <li><a href="#cena" onClick={close}>{t.nav.price}</a></li>
             <li><a href="#faq" onClick={close}>{t.nav.faq}</a></li>
-            <li className="kl-nav__cta"><a href="#prihlaska" onClick={close}>{t.nav.cta}</a></li>
+            {/* Pravá skupina piluliek v štýle BullVend headera (majiteľ). */}
+            <li className="kl-nav__phone">
+              <a href={`tel:${SITE.contact.phoneRaw}`}>
+                <svg viewBox="0 0 24 24" fill="none" aria-hidden><path d="M5 4h4l2 5-2.5 1.5a11 11 0 0 0 5 5L15 13l5 2v4a2 2 0 0 1-2 2A16 16 0 0 1 3 6a2 2 0 0 1 2-2Z" stroke="currentColor" strokeWidth="1.7" strokeLinejoin="round"/></svg>
+                {SITE.contact.phone}
+              </a>
+            </li>
+            <li className="kl-nav__cta">
+              <a href="#prihlaska" onClick={close}>
+                {t.nav.cta}
+                <svg viewBox="0 0 24 24" fill="none" aria-hidden><path d="M7 17 17 7M9 7h8v8" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/></svg>
+              </a>
+            </li>
             <li className="kl-nav__lang">
               <Link href={t.otherPath} hrefLang={locale === "sk" ? "en" : "sk"} onClick={close}>
                 {t.otherLabel}
@@ -400,7 +421,6 @@ function Hero({ locale }: { locale: Locale }) {
               <i aria-hidden />
               {t.badge}
             </p>
-            <p className="kl-hero__kicker">{t.heroKicker}</p>
             {/* Dva riadky: veta + medená veta (majiteľ 2026-08-30). */}
             <h1>
               {t.h1a}
@@ -476,6 +496,17 @@ function Spolupraca({ locale }: { locale: Locale }) {
             </Reveal>
           ))}
         </div>
+        {/* Hotline sľub — záleží nám, aby sa práca podarila (majiteľ). */}
+        <Reveal className="kl-support">
+          <div>
+            <h3>{t.supportTitle}</h3>
+            <p>{t.supportBody}</p>
+          </div>
+          <a href={`tel:${SITE.contact.phoneRaw}`} className="kl-btn kl-btn--primary">
+            <svg viewBox="0 0 24 24" fill="none" aria-hidden style={{ width: "1.05em", height: "1.05em" }}><path d="M5 4h4l2 5-2.5 1.5a11 11 0 0 0 5 5L15 13l5 2v4a2 2 0 0 1-2 2A16 16 0 0 1 3 6a2 2 0 0 1 2-2Z" stroke="currentColor" strokeWidth="1.7" strokeLinejoin="round"/></svg>
+            {SITE.contact.phone}
+          </a>
+        </Reveal>
       </div>
     </section>
   );
