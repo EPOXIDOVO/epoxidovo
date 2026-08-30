@@ -11,6 +11,7 @@ import { KURZ } from "@/content/kurz";
 import { COURSE_EN } from "@/content/kurz-en";
 import { COPY, type Locale } from "./copy";
 import { KurzZisk } from "./KurzZisk";
+import { spocitajZisk, TYPY } from "@/lib/kurz-zisk";
 import "./landing.css";
 
 /* ------------------------------------------------------------------ */
@@ -22,16 +23,26 @@ const V2 = {
     badge: "Online kurz · prístup okamžite po zaplatení",
     heroKicker: "Get Instant Access to 20 Years of Installer Secrets.",
     h1a: "Nauč sa liať podlahy.",
-    h1em: " Odkiaľkoľvek.",
-    lead: "Online kurz liatych epoxidových podláh: 8+ hodín videa nakrútených na reálnych zákazkách, od diagnostiky betónu po cenovú ponuku. Pozeráš vlastným tempom, prístup ti ostáva navždy.",
-    ctaMain: "Kúpiť kurz",
-    ctaProgram: "Pozrieť obsah",
+    h1em: " A postav na tom firmu.",
+    lead: "Toto nie je len kurz. Otvoríme ti celú našu firmu — videá z reálnych zákaziek, CRM na dopyty, aplikáciu na ľudí, reálne čísla a mzdy. Naučíš sa remeslo aj biznis, ktorý ho predáva.",
+    ctaMain: "Chcem prístup",
+    ctaProgram: "Koľko zarobím? ↓",
     facts: [
       ["8+ h", "videa z reálnych zákaziek"],
       ["40+", "lekcií v 2 moduloch"],
       ["24/7", "prístup navždy"],
       ["14 dní", "garancia vrátenia peňazí"],
     ],
+    ledger: {
+      tagL: "Výkaz · metalická podlaha",
+      tagR: "30 m² garáž",
+      bigSuffix: "€ zisk",
+      sub: "hrubý zisk z jednej bežnej zákazky",
+      rowSell: "Faktúra zákazníkovi",
+      rowMat: "Materiál (veľkoobchod)",
+      rowM2: "Ostane ti na m²",
+      rowPayback: "Kurz sa ti vráti po",
+    },
     claimH2a: "Kurz nakrútený na zákazkách, ktoré nám ",
     claimH2em: "zákazníci zaplatili.",
     claimBody: "Lejeme podlahy po celom Slovensku a presne vieme, kde začiatočníci zabíjajú svoju prvú zákazku: v podklade, v miešaní a v cene. Kurz stojí na týchto troch veciach, každý záber je z reálnej realizácie, nie zo štúdia.",
@@ -58,43 +69,67 @@ const V2 = {
     stdDesc: "Kompletný online kurz s prístupom navždy.",
     stdItems: ["8+ hodín videa, 40+ lekcií", "Manuál a kalkulačka spotreby (SK + EN)", "Vzorová cenová ponuka", "Certifikát po záverečnom teste", "Otázky pod lekciami, odpovedá lektor"],
     stdCta: "Kúpiť Štandard",
-    proTag: "Najčastejšia voľba",
+    proTag: "Celý biznis model",
     proTitle: "PRO s mentoringom",
-    proDesc: "Kurz a k tomu tri mesiace vedenia pri prvých zákazkách.",
-    proItems: ["Všetko zo Štandardu", "3 mesiace osobného mentoringu: telefón, fotky z realizácie, cenové ponuky", "Kontrola tvojej prvej realizácie krok po kroku", "Partnerské ceny materiálu v e-shope natrvalo"],
+    proDesc: "Kurz + systémy našej firmy a tri mesiace vedenia pri prvých zákazkách.",
+    proItems: ["Všetko zo Štandardu", "3 mesiace osobného mentoringu: telefón, fotky z realizácie, cenové ponuky", "CRM na dopyty + aplikácia na zamestnancov", "Reálne čísla: mzdy, marže, škálovanie", "Kontrola tvojej prvej realizácie krok po kroku"],
     proCta: "Kúpiť PRO",
     perPerson: "na osobu",
     firmaNote: "Chceš prístup pre celú partiu? Pri troch a viac ľuďoch z jednej firmy dáme skupinovú cenu.",
     firmaLink: "Napíš nám cez objednávku",
     faqH2: "Časté otázky",
     formTitle: "Objednávka a platba",
-    bizBadge: "Nie je to len kurz",
-    bizH2a: "Toto nie je len kurz. Je to celý ",
-    bizH2em: "biznis model v kocke.",
-    bizBody: "Nedostaneš len videá o liatí. Otvorím ti celú firmu — systémy, na ktorých EPOXIDOVO reálne beží — a naučím ťa postaviť rovnakú epoxidovú firmu v tvojej lokalite.",
-    bizItems: [
-      ["Reálne dáta z našej firmy", "Žiadna teória — ukazujem ti čísla, ktoré nám naozaj bežia."],
-      ["Firemné systémy na spracovanie dopytov (CRM)", "Ako dopyt zachytiť, roztriediť a uzavrieť tak, aby ti ani jeden neprepadol."],
-      ["Aplikácia na sledovanie zamestnancov", "Prehľad, kto čo robí a v akom stave je každá zákazka."],
-      ["Koľko reálne platiť ľuďom", "Konkrétne mzdy a odmeny podľa toho, čo funguje — nie odhady."],
-      ["Ako škálovať biznis na milióny", "Cesta od prvej zákazky po firmu, ktorá rastie aj bez teba pri každom liatí."],
-      ["Ako vybudovať firmu v tvojej lokalite", "Krok za krokom postavíš epoxidovú firmu tam, kde bývaš."],
-    ] as [string, string][],
+    vrstvyEyebrow: "Prečo Akadémia, nie kurz",
+    vrstvyH2a: "Firma sa stavia ako podlaha. ",
+    vrstvyH2em: "Vo vrstvách.",
+    vrstvyBody: "Videokurz je len prvá vrstva. Nad ňou dostaneš systémy, na ktorých EPOXIDOVO reálne beží — od prvého dopytu po firmu, ktorá rastie aj bez teba pri každom liatí.",
+    vrstvyItems: [
+      {
+        title: "Remeslo",
+        body: "8+ hodín videa nakrútených na zákazkách, ktoré nám zákazníci zaplatili. Od diagnostiky betónu po finálny lak — každý krok zblízka, žiadne štúdio.",
+        chips: [{ label: "40+ lekcií" }, { label: "manuál so spotrebami" }, { label: "certifikát" }],
+      },
+      {
+        title: "Zákazky",
+        body: "Firemný systém na spracovanie dopytov (CRM), vzorová cenová ponuka a cenotvorba, s ktorou ti neprepadne ani jeden dopyt.",
+        chips: [{ label: "CRM systém", hot: true }, { label: "vzorová CP" }, { label: "cenotvorba €/m²" }],
+      },
+      {
+        title: "Ľudia",
+        body: "Aplikácia na sledovanie zamestnancov a reálne čísla, koľko komu platiť — mzdy a odmeny podľa toho, čo nám naozaj funguje. Žiadne odhady.",
+        chips: [{ label: "aplikácia na ľudí", hot: true }, { label: "reálne mzdy" }],
+      },
+      {
+        title: "Škálovanie",
+        body: "Reálne dáta z našej firmy a plán, ako z prvej garáže vybudovať epoxidovú firmu v tvojej lokalite — a škálovať ju na milióny.",
+        chips: [{ label: "čísla z našej firmy" }, { label: "firma v tvojej lokalite", hot: true }],
+      },
+    ] as { title: string; body: string; chips: { label: string; hot?: boolean }[] }[],
   },
   en: {
     badge: "Online course · instant access after payment",
     heroKicker: "Get Instant Access to 20 Years of Installer Secrets.",
     h1a: "Learn to pour floors.",
-    h1em: " From anywhere.",
-    lead: "An online poured epoxy flooring course: 8+ hours of video filmed on real client jobs, from concrete diagnostics to the final quote. Watch at your own pace, access never expires.",
-    ctaMain: "Buy the course",
-    ctaProgram: "See the curriculum",
+    h1em: " And build a business on it.",
+    lead: "This is not just a course. We open up our whole company — video from real jobs, a CRM for leads, an app for your crew, real numbers and wages. You learn the craft and the business that sells it.",
+    ctaMain: "Get access",
+    ctaProgram: "How much will I earn? ↓",
     facts: [
       ["8+ h", "of video from real jobs"],
       ["40+", "lessons in 2 modules"],
       ["24/7", "lifetime access"],
       ["14 days", "money-back guarantee"],
     ],
+    ledger: {
+      tagL: "Ledger · metallic floor",
+      tagR: "30 m² garage",
+      bigSuffix: "€ profit",
+      sub: "gross profit from one typical job",
+      rowSell: "Client invoice",
+      rowMat: "Material (wholesale)",
+      rowM2: "You keep per m²",
+      rowPayback: "Course pays back after",
+    },
     claimH2a: "A course filmed on jobs our ",
     claimH2em: "clients paid for.",
     claimBody: "We install floors across Slovakia and we know exactly where beginners lose their first job: the substrate, the mixing and the price. The course is built on those three things, and every shot comes from a real installation, not a studio.",
@@ -121,28 +156,42 @@ const V2 = {
     stdDesc: "The complete online course with lifetime access.",
     stdItems: ["8+ hours of video, 40+ lessons", "Manual and consumption calculator (EN + SK)", "Sample quote for your clients", "Certificate after the final test", "Questions under each lesson, answered by the instructor"],
     stdCta: "Buy Standard",
-    proTag: "Most popular",
+    proTag: "The whole business model",
     proTitle: "PRO with mentoring",
-    proDesc: "The course plus three months of guidance on your first jobs.",
-    proItems: ["Everything in Standard", "3 months of personal mentoring: phone, site photos, quotes", "Step-by-step review of your first installation", "Partner material prices in our e-shop, permanently"],
+    proDesc: "The course + our company systems and three months of guidance on your first jobs.",
+    proItems: ["Everything in Standard", "3 months of personal mentoring: phone, site photos, quotes", "Lead CRM + employee tracking app", "Real numbers: wages, margins, scaling", "Step-by-step review of your first installation"],
     proCta: "Buy PRO",
     perPerson: "per person",
     firmaNote: "Access for the whole crew? Three or more people from one company get a group price.",
     firmaLink: "Tell us in the order form",
     faqH2: "Frequently asked",
     formTitle: "Order and payment",
-    bizBadge: "Not just a course",
-    bizH2a: "This isn't just a course. It's a whole ",
-    bizH2em: "business model in a nutshell.",
-    bizBody: "You don't just get how-to-pour videos. I open up the entire company — the systems EPOXIDOVO actually runs on — and teach you to build the same epoxy business in your area.",
-    bizItems: [
-      ["Real data from our company", "No theory — I show you the numbers we actually run on."],
-      ["Company systems for handling leads (CRM)", "How to capture, sort and close a lead so not one slips through."],
-      ["Employee tracking app", "See who does what and the status of every job."],
-      ["How much to really pay people", "Concrete wages and bonuses based on what works — not guesses."],
-      ["How to scale the business to millions", "From your first job to a company that grows without you on every pour."],
-      ["How to build a company in your area", "Step by step you build an epoxy business where you live."],
-    ] as [string, string][],
+    vrstvyEyebrow: "Why an Academy, not a course",
+    vrstvyH2a: "A business is built like a floor. ",
+    vrstvyH2em: "In layers.",
+    vrstvyBody: "The video course is only the first layer. On top of it you get the systems EPOXIDOVO actually runs on — from the first lead to a company that grows without you on every pour.",
+    vrstvyItems: [
+      {
+        title: "The craft",
+        body: "8+ hours of video filmed on jobs our clients paid for. From concrete diagnostics to the final coat — every step up close, no studio.",
+        chips: [{ label: "40+ lessons" }, { label: "manual with consumption rates" }, { label: "certificate" }],
+      },
+      {
+        title: "The jobs",
+        body: "Our lead-handling system (CRM), a sample quote and the pricing that makes sure not a single lead slips through.",
+        chips: [{ label: "CRM system", hot: true }, { label: "sample quote" }, { label: "pricing €/m²" }],
+      },
+      {
+        title: "The people",
+        body: "An employee tracking app and real numbers on what to pay people — wages and bonuses based on what actually works for us. No guesses.",
+        chips: [{ label: "crew app", hot: true }, { label: "real wages" }],
+      },
+      {
+        title: "The scaling",
+        body: "Real data from our company and the plan to go from your first garage to an epoxy business in your area — and scale it to millions.",
+        chips: [{ label: "our company numbers" }, { label: "a business in your area", hot: true }],
+      },
+    ] as { title: string; body: string; chips: { label: string; hot?: boolean }[] }[],
   },
 } as const;
 
@@ -224,6 +273,14 @@ function Header({ locale, onMenu }: { locale: Locale; onMenu: (open: boolean) =>
 
 function Hero({ locale }: { locale: Locale }) {
   const t = V2[locale];
+  const fmt = (n: number) =>
+    new Intl.NumberFormat(locale === "sk" ? "sk-SK" : "en-GB", { maximumFractionDigits: 0 }).format(n);
+  const fmt2 = (n: number) =>
+    new Intl.NumberFormat(locale === "sk" ? "sk-SK" : "en-GB", { minimumFractionDigits: 2, maximumFractionDigits: 2 }).format(n);
+  // Výkaz počíta z tej istej cenotvorby ako kalkulačka — keď sa zmenia ceny,
+  // zmení sa aj hero. Nič natvrdo.
+  const metalicka = TYPY.find((x) => x.slug === "metalicke");
+  const r = metalicka ? spocitajZisk(30, metalicka) : null;
   return (
     <section className="kl-hero" id="hello">
       <div className="kl-hero__media" aria-hidden>
@@ -236,26 +293,41 @@ function Hero({ locale }: { locale: Locale }) {
         />
       </div>
       <div className="kl-hero__inner">
-        <div className="kl-container">
-          <p className="kl-hero__badge">
-            <i aria-hidden />
-            {t.badge}
-          </p>
-          <p className="kl-hero__kicker">{t.heroKicker}</p>
-          <h1>
-            {t.h1a}
-            <em>{t.h1em}</em>
-          </h1>
-          <p className="kl-hero__lead">{t.lead}</p>
-          <div className="kl-hero__actions">
-            <a href="#prihlaska" className="kl-btn kl-btn--primary">{t.ctaMain}</a>
-            <a href="#program" className="kl-btn kl-btn--ghost">{t.ctaProgram}</a>
+        <div className="kl-container kl-hero__grid">
+          <div>
+            <p className="kl-hero__badge">
+              <i aria-hidden />
+              {t.badge}
+            </p>
+            <p className="kl-hero__kicker">{t.heroKicker}</p>
+            <h1>
+              {t.h1a}
+              <em>{t.h1em}</em>
+            </h1>
+            <p className="kl-hero__lead">{t.lead}</p>
+            <div className="kl-hero__actions">
+              <a href="#prihlaska" className="kl-btn kl-btn--primary">{t.ctaMain}</a>
+              <a href="#kalkulacka" className="kl-btn kl-btn--ghost">{t.ctaProgram}</a>
+            </div>
+            <dl className="kl-hero__facts">
+              {t.facts.map(([v, l]) => (
+                <div key={l}><strong>{v}</strong>{l}</div>
+              ))}
+            </dl>
           </div>
-          <dl className="kl-hero__facts">
-            {t.facts.map(([v, l]) => (
-              <div key={l}><strong>{v}</strong>{l}</div>
-            ))}
-          </dl>
+          {r && (
+            <aside className="kl-ledger" aria-label={t.ledger.sub}>
+              <div className="kl-ledger__tag"><span>{t.ledger.tagL}</span><span>{t.ledger.tagR}</span></div>
+              <div className="kl-ledger__big">+{fmt(r.hrubaMarzaEur)} <small>{t.ledger.bigSuffix}</small></div>
+              <p className="kl-ledger__sub">{t.ledger.sub}</p>
+              <dl>
+                <div><dt>{t.ledger.rowSell}</dt><dd>{fmt(r.predajEur)} €</dd></div>
+                <div><dt>{t.ledger.rowMat}</dt><dd>−{fmt(r.materialEur)} €</dd></div>
+                <div><dt>{t.ledger.rowM2}</dt><dd className="is-profit">{fmt2(r.marzaM2)} €</dd></div>
+                <div><dt>{t.ledger.rowPayback}</dt><dd className="is-profit">~{r.navratnostM2} m²</dd></div>
+              </dl>
+            </aside>
+          )}
         </div>
       </div>
     </section>
@@ -300,32 +372,71 @@ function Claim({ locale }: { locale: Locale }) {
 }
 
 /* ------------------------------------------------------------------ */
-/*  Biznis model                                                       */
+/*  Vrstvy — biznis model podaný ako prierez podlahy                   */
 /* ------------------------------------------------------------------ */
 
-function BiznisModel({ locale }: { locale: Locale }) {
+function Vrstvy({ locale }: { locale: Locale }) {
   const t = V2[locale];
+  const rootRef = React.useRef<HTMLDivElement>(null);
+
+  /*
+    Prierez podlahy vľavo sa rozsvecuje podľa toho, ktorá vrstva je práve
+    v strede obrazovky — podlaha "rastie" spolu s čítaním. Čisto vizuálny
+    doplnok: bez JS ostane stack stáť a nič nechýba.
+  */
+  React.useEffect(() => {
+    const root = rootRef.current;
+    if (!root) return;
+    const rows = Array.from(root.querySelectorAll<HTMLElement>("[data-vrow]"));
+    const io = new IntersectionObserver(
+      (entries) => {
+        for (const e of entries) {
+          const slab = root.querySelector(`[data-slab="${(e.target as HTMLElement).dataset.vrow}"]`);
+          slab?.classList.toggle("is-on", e.isIntersecting);
+        }
+      },
+      { rootMargin: "-30% 0px -50% 0px" },
+    );
+    rows.forEach((r) => io.observe(r));
+    return () => io.disconnect();
+  }, []);
+
   return (
-    <section id="biznis-model" className="kl-section kl-biz">
-      <div className="kl-container">
-        <div className="kl-biz__head">
+    <section id="biznis-model" className="kl-section kl-vrstvy">
+      <div className="kl-container" ref={rootRef}>
+        <div className="kl-vrstvy__head">
           <Reveal>
-            <span className="kl-biz__badge">{t.bizBadge}</span>
+            <span className="kl-eyebrow">{t.vrstvyEyebrow}</span>
             <h2>
-              {t.bizH2a}
-              <em>{t.bizH2em}</em>
+              {t.vrstvyH2a}
+              <em>{t.vrstvyH2em}</em>
             </h2>
-            <p>{t.bizBody}</p>
+            <p>{t.vrstvyBody}</p>
           </Reveal>
         </div>
-        <div className="kl-biz__grid">
-          {t.bizItems.map(([title, desc], i) => (
-            <Reveal as="article" className="kl-biz-card" key={title} delay={i * 70}>
-              <span className="kl-biz-card__num">{String(i + 1).padStart(2, "0")}</span>
-              <h3>{title}</h3>
-              <p>{desc}</p>
-            </Reveal>
-          ))}
+        <div className="kl-vrstvy__stack">
+          <div className="kl-slabs" aria-hidden>
+            <div className="kl-slab kl-slab--1" data-slab="0" />
+            <div className="kl-slab kl-slab--2" data-slab="1" />
+            <div className="kl-slab kl-slab--3" data-slab="2" />
+            <div className="kl-slab kl-slab--4" data-slab="3" />
+          </div>
+          <div className="kl-vrstvy__rows">
+            {t.vrstvyItems.map((v, i) => (
+              <Reveal as="article" className="kl-vrow" key={v.title} delay={i * 60}>
+                <span className="kl-vrow__n" data-vrow={i}>{locale === "sk" ? "VRSTVA" : "LAYER"} 0{i + 1}</span>
+                <div>
+                  <h3>{v.title}</h3>
+                  <p>{v.body}</p>
+                  <div className="kl-vrow__chips">
+                    {v.chips.map((c) => (
+                      <span key={c.label} className={`kl-tagchip${c.hot ? " is-hot" : ""}`}>{c.label}</span>
+                    ))}
+                  </div>
+                </div>
+              </Reveal>
+            ))}
+          </div>
         </div>
       </div>
     </section>
@@ -353,20 +464,20 @@ function Days({ locale }: { locale: Locale }) {
           <p>{t.daysIntro}</p>
         </div>
         {days.map((d, i) => (
-          <Reveal key={d.title} delay={i * 80}>
-            <article className="kl-day">
-              <div className="kl-day__media">
-                <Image src={d.img} alt="" fill sizes="(max-width: 900px) 100vw, 40vw" />
-              </div>
-              <div className="kl-day__body">
-                <span className="kl-day__label">{d.label}</span>
-                <h3>{d.title}</h3>
-                <ul>
-                  {d.items.map((it) => <li key={it}>{it}</li>)}
-                </ul>
-                <p className="kl-day__meta">{d.meta}</p>
-              </div>
-            </article>
+          /* Reveal renderuje article priamo — obalový div by zabil súrodenecké
+             selektory (.kl-day + .kl-day, :nth-of-type) v CSS. */
+          <Reveal as="article" className="kl-day" key={d.title} delay={i * 80}>
+            <div className="kl-day__media">
+              <Image src={d.img} alt="" fill sizes="(max-width: 900px) 100vw, 40vw" />
+            </div>
+            <div className="kl-day__body">
+              <span className="kl-day__label">{d.label}</span>
+              <h3>{d.title}</h3>
+              <ul>
+                {d.items.map((it) => <li key={it}>{it}</li>)}
+              </ul>
+              <p className="kl-day__meta">{d.meta}</p>
+            </div>
           </Reveal>
         ))}
       </div>
@@ -406,6 +517,14 @@ function Pricing({ locale }: { locale: Locale }) {
   const std = locale === "sk" ? KURZ.priceStandard : COURSE_EN.priceStandard;
   const pro = locale === "sk" ? KURZ.pricePro : COURSE_EN.pricePro;
   const eur = (n: number) => (locale === "sk" ? `${n} €` : `€${n}`);
+  /*
+    Hash "#prihlaska?balik=pro" predvyplní balík (hashchange vo formulári),
+    ale prehliadač naň neposcrolluje — element s takým id neexistuje.
+    Scroll preto spravíme sami; default klik nechávame, nech sa hash zmení.
+  */
+  const goForm = () => {
+    document.getElementById("prihlaska")?.scrollIntoView({ behavior: "smooth", block: "start" });
+  };
   const check = (
     <svg viewBox="0 0 24 24" fill="none" aria-hidden>
       <path d="M5 12.5 10 17.5 19 7" stroke="currentColor" strokeWidth="2.4" strokeLinecap="round" strokeLinejoin="round" />
@@ -427,7 +546,7 @@ function Pricing({ locale }: { locale: Locale }) {
               <ul>
                 {t.stdItems.map((it) => <li key={it}>{check}{it}</li>)}
               </ul>
-              <a href="#prihlaska?balik=standard" className="kl-btn kl-btn--line">{t.stdCta}</a>
+              <a href="#prihlaska?balik=standard" onClick={goForm} className="kl-btn kl-btn--line">{t.stdCta}</a>
             </article>
           </Reveal>
           <Reveal delay={100}>
@@ -439,12 +558,12 @@ function Pricing({ locale }: { locale: Locale }) {
               <ul>
                 {t.proItems.map((it) => <li key={it}>{check}{it}</li>)}
               </ul>
-              <a href="#prihlaska?balik=pro" className="kl-btn kl-btn--primary">{t.proCta}</a>
+              <a href="#prihlaska?balik=pro" onClick={goForm} className="kl-btn kl-btn--primary">{t.proCta}</a>
             </article>
           </Reveal>
         </div>
         <p className="kl-pricing__note">
-          {t.firmaNote} <a href="#prihlaska?balik=firma">{t.firmaLink}</a>
+          {t.firmaNote} <a href="#prihlaska?balik=firma" onClick={goForm}>{t.firmaLink}</a>
         </p>
       </div>
     </section>
@@ -728,7 +847,7 @@ function ContactForm({ locale }: { locale: Locale }) {
         <p style={{ fontSize: "0.95rem", color: "var(--kl-subtle)", margin: "0 0 1.4rem" }}>{P.firmaNote}</p>
       )}
 
-      <TurnstileWidget onVerify={setToken} onExpire={() => setToken(null)} />
+      <TurnstileWidget theme="dark" onVerify={setToken} onExpire={() => setToken(null)} />
 
       <div className="kl-form__footer">
         <label className="kl-check">
@@ -825,12 +944,13 @@ export function KurzLanding({ locale }: { locale: Locale }) {
     <div className="kl" lang={t.htmlLang}>
       <Header locale={locale} onMenu={setMenu} />
       <main>
+        {/* Poradie predáva výsledok: peniaze (hero+kalkulačka) → dôkaz → obsah → cena. */}
         <Hero locale={locale} />
+        <Vrstvy locale={locale} />
+        <KurzZisk locale={locale} />
         <Claim locale={locale} />
-        <BiznisModel locale={locale} />
         <Days locale={locale} />
         <Strip locale={locale} />
-        <KurzZisk locale={locale} />
         <Pricing locale={locale} />
         <Faq locale={locale} />
         <Contact locale={locale} />

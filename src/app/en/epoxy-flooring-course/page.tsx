@@ -42,7 +42,7 @@ export const metadata: Metadata = {
     alternateLocale: ["sk_SK"],
     title: "Online Epoxy Flooring Course",
     description:
-      "Hands-on epoxy resin flooring training in Slovakia. Max. 6 people per group, 80 % of the time with tools in hand, 12 m² you pour yourself. From €499.",
+      "Online epoxy resin flooring course: 8+ hours of video filmed on real client jobs, manual, consumption calculator and certificate. Instant lifetime access. From €499.",
     url: PATH,
     images: [
       {
@@ -56,7 +56,7 @@ export const metadata: Metadata = {
   twitter: {
     card: "summary_large_image",
     title: "Epoxy Flooring Course — EPOXIDOVO Academy",
-    description: "2 days of practice, max. 6 people, 12 m² you pour yourself. From €499.",
+    description: "8+ hours of video from real jobs, 40+ lessons, lifetime access. From €499.",
     images: ["/og-home.jpg?v=3"],
   },
 };

@@ -6,6 +6,7 @@ import {
   absolventMaterialEurM2,
   TYPY,
   ABSOLVENT_MARZA,
+  BEZNA_MARZA,
   type TypPodlahy,
 } from "@/lib/kurz-zisk";
 import { KURZ } from "@/content/kurz";
@@ -16,7 +17,7 @@ const T = {
     label: "Kalkulačka zárobku",
     h2: "Koľko zarobíš z jednej zákazky",
     intro:
-      "Vyber si typ podlahy a plochu — koláčový graf aj čísla sa napĺňajú naživo. Počítame s reálnou trhovou cenou a s materiálom za naše veľkoobchodné ceny (kupuješ ho u nás lacnejšie než bežný zákazník). Zvyšok je tvoja práca.",
+      "Vyber si typ podlahy a potiahni plochu — čísla sa nalievajú naživo. Počítame s reálnou trhovou cenou a s materiálom za naše veľkoobchodné ceny (kupuješ ho u nás lacnejšie než bežný zákazník). Zvyšok je tvoja práca.",
     typLabel: "Typ podlahy",
     coskoro: "čoskoro",
     od: "od",
@@ -28,9 +29,12 @@ const T = {
     marza: "Ostane ti",
     marzaSub: "hrubý zisk pred tvojou prácou a réžiou",
     perM2: "na m²",
-    donutMaterial: "Materiál",
-    donutZisk: "Tvoj zisk",
-    donutStred: "z toho tvoj zisk",
+    pourZisk: "tvoj zisk",
+    pourMaterial: "materiál",
+    pourSub: "tvoj zisk —",
+    pourSub2: "z faktúry",
+    wholesaleTitle: "Veľkoobchodné ceny materiálu.",
+    wholesaleBody: "Ako absolvent kupuješ materiál u nás výrazne lacnejšie než bežný zákazník v e-shope.",
     navrat: (m2: number) => `Kurz Štandard (${KURZ.priceStandard} €) sa ti vráti po prvých ~${m2} m².`,
     dni: (d: number, tvar: string) => `Realizácia aj s technologickými prestávkami: približne ${d} ${tvar}.`,
     vyhodaTitle: "Materiál: tvoja výhoda ako absolventa",
@@ -48,7 +52,7 @@ const T = {
     label: "Earnings calculator",
     h2: "How much you make on one job",
     intro:
-      "Pick a floor type and area — the pie chart and the numbers fill in live. We use the real market price and material at our wholesale prices (you buy it from us cheaper than a regular customer). The rest is your labour.",
+      "Pick a floor type and drag the area — the numbers pour in live. We use the real market price and material at our wholesale prices (you buy it from us cheaper than a regular customer). The rest is your labour.",
     typLabel: "Floor type",
     coskoro: "soon",
     od: "from",
@@ -60,9 +64,12 @@ const T = {
     marza: "You keep",
     marzaSub: "gross profit before labour and overheads",
     perM2: "per m²",
-    donutMaterial: "Material",
-    donutZisk: "Your profit",
-    donutStred: "of it your profit",
+    pourZisk: "your profit",
+    pourMaterial: "material",
+    pourSub: "your profit —",
+    pourSub2: "of the invoice",
+    wholesaleTitle: "Wholesale material prices.",
+    wholesaleBody: "As a graduate you buy material from us for much less than a regular e-shop customer.",
     navrat: (m2: number) => `The Standard course (€${KURZ.priceStandard}) pays back after your first ~${m2} m².`,
     dni: (d: number, tvar: string) => `Installation incl. curing breaks: about ${d} ${tvar}.`,
     vyhodaTitle: "Material: your graduate advantage",
@@ -124,9 +131,9 @@ export function KurzZisk({ locale }: { locale: Locale }) {
   const ziskFrac = r && r.predajEur > 0 ? r.hrubaMarzaEur / r.predajEur : 0;
   const aFrac = useAnimatedNumber(Math.round(ziskFrac * 1000) / 1000, 650);
 
-  // donut
-  const R = 78, C = 2 * Math.PI * R;
-  const ziskDash = Math.max(0, Math.min(1, aFrac)) * C;
+  /* Úspora veľkoobchodu vs. e-shopu je konštantný pomer marží — rovnaká
+     pre každý typ podlahy, preto sa počíta raz z konštánt. */
+  const usporaPct = Math.round((1 - (1 - BEZNA_MARZA) / (1 - ABSOLVENT_MARZA)) * 100);
 
   if (!r) return null;
 
@@ -215,36 +222,27 @@ export function KurzZisk({ locale }: { locale: Locale }) {
             </p>
           </div>
 
-          {/* --- koláčový (donut) graf, plní sa naživo --- */}
-          <div className="kl-box kl-zisk__donut-box">
-            <div className="kl-donut">
-              <svg viewBox="0 0 200 200" role="img" aria-label={`${t.donutZisk}: ${fmt(r.hrubaMarzaEur, locale)} €`}>
-                <circle cx="100" cy="100" r={R} fill="none" stroke="rgba(255,255,255,0.16)" strokeWidth="26" />
-                <circle
-                  className="kl-donut__arc"
-                  cx="100" cy="100" r={R} fill="none"
-                  stroke="oklch(0.78 0.14 150)" strokeWidth="26" strokeLinecap="round"
-                  strokeDasharray={`${ziskDash} ${C}`}
-                  transform="rotate(-90 100 100)"
-                />
-              </svg>
-              <div className="kl-donut__center">
-                <span className="kl-donut__val">{fmt(aMarza, locale)} €</span>
-                <span className="kl-donut__pct">{Math.round(aFrac * 100)} % {t.donutStred}</span>
+          {/* --- naliata trubica: podiel zisku z faktúry, plní sa naživo --- */}
+          <div className="kl-box kl-pour">
+            <div>
+              <div className="kl-pour__big">
+                {fmt(aMarza, locale)} €
+                <small>{t.pourSub} <b>{Math.round(aFrac * 100)} %</b> {t.pourSub2}</small>
               </div>
             </div>
-            <ul className="kl-donut__legend">
-              <li>
-                <i style={{ background: "oklch(0.78 0.14 150)" }} />
-                <span>{t.donutZisk}</span>
-                <b>{fmt(aMarza, locale)} €</b>
-              </li>
-              <li>
-                <i style={{ background: "rgba(255,255,255,0.32)" }} />
-                <span>{t.donutMaterial}</span>
-                <b>{fmt(aMaterial, locale)} €</b>
-              </li>
-            </ul>
+            <div>
+              <div className="kl-tube" role="img" aria-label={`${t.pourZisk}: ${Math.round(ziskFrac * 100)} %`}>
+                <div className="kl-tube__fill" style={{ width: `${Math.max(0, Math.min(1, aFrac)) * 100}%` }} />
+              </div>
+              <div className="kl-tube__legend">
+                <b>■ {t.pourZisk} · {fmt(aMarza, locale)} €</b>
+                <span>■ {t.pourMaterial} · {fmt(aMaterial, locale)} €</span>
+              </div>
+            </div>
+            <div className="kl-wholesale">
+              <span className="kl-wholesale__pct">−{usporaPct} %</span>
+              <p><b>{t.wholesaleTitle}</b> {t.wholesaleBody}</p>
+            </div>
           </div>
         </div>
 

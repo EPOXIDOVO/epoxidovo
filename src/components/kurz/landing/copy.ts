@@ -191,7 +191,7 @@ export const COPY: Record<Locale, LandingCopy> = {
         term: "Termín", variant: "Balík", experience: "Skúsenosti", message: "Správa",
         termOther: "Zatiaľ neviem / iný termín", seatsLeft: "voľné",
         consent: "Súhlasím so", consentLink: "spracovaním osobných údajov", submit: "Odoslať prihlášku", sending: "Odosielam…",
-        okTitle: "Miesto ti držíme", okText: "Ozveme sa do 24 hodín, potvrdíme termín a pošleme faktúru. Nič vopred neplatíš.",
+        okTitle: "Dopyt máme", okText: "Ozveme sa do 24 hodín s cenou pre tím a pošleme faktúru. Nič vopred neplatíš.",
       },
       variants: {
         standard: `Štandard (${KURZ.priceStandard} €)`,
@@ -277,7 +277,7 @@ export const COPY: Record<Locale, LandingCopy> = {
         term: "Date", variant: "Package", experience: "Experience", message: "Message",
         termOther: "Not sure yet / another date", seatsLeft: "seats left:",
         consent: "I agree to the", consentLink: "processing of personal data", submit: "Send application", sending: "Sending…",
-        okTitle: "Your seat is on hold", okText: "We call you within 24 hours, confirm the date and send the invoice. Nothing is paid upfront.",
+        okTitle: "Inquiry received", okText: "We call you within 24 hours with a team price and send the invoice. Nothing is paid upfront.",
       },
       variants: {
         standard: `Standard (€${COURSE_EN.priceStandard})`,
