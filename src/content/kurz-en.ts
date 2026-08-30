@@ -83,7 +83,7 @@ export const COURSE_EN_INCLUDED = [
 export const COURSE_EN_FAQ = [
   {
     q: "How does the course work?",
-    a: "After payment you receive an e-mail with access to the member area. You watch the video lessons at your own pace, anytime, on any device. Access never expires and includes all future updates.",
+    a: "After payment you receive an e-mail with access to the member area. You watch the video lessons at your own pace, anytime, on any device — everything is interactive and intuitive. Throughout the whole process you are in touch with our installation technician, who you can ask whenever something is unclear. You learn everything about founding, running and scaling a successful epoxy business. Access never expires and includes all future updates.",
   },
   {
     q: "Do I need any previous experience?",
@@ -95,19 +95,15 @@ export const COURSE_EN_FAQ = [
   },
   {
     q: "Can I take on paid jobs after the course?",
-    a: "The course covers the full process including pricing, so garages, workshops and smaller interiors are within reach. The PRO package adds mentoring for your first real installations.",
+    a: "The course covers the full process including pricing, so garages, workshops and smaller interiors are within reach. The PRO package adds mentoring for your first real installations. So the answer is yes — after finishing you can start working and earning on your own.",
   },
   {
     q: "Where do I buy the material?",
-    a: "The course includes a list of vetted suppliers and exact consumption rates. Graduates buy TopStone and Sika material in our e-shop at partner prices.",
+    a: "The course includes a list of vetted suppliers and exact consumption rates. We give you the best wholesale prices, because our installation company buys in large volumes — graduates buy material in our e-shop at those prices.",
   },
   {
     q: "Can the course be invoiced to a company?",
     a: "Yes. Enter your company ID at checkout and we issue an invoice. We are not VAT registered, the price is final.",
-  },
-  {
-    q: "What if the course is not for me?",
-    a: "You can withdraw within 14 days of purchase, no questions asked, and we refund the full amount. Just write to obchod@epoxidovo.sk.",
   },
 ];
 

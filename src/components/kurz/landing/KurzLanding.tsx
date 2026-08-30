@@ -68,11 +68,12 @@ const V2 = {
       rowMat: "Materiál (veľkoobchod)",
       rowKeep: "Zarobíš",
       note: (m2: number) => `Kurz Štandard (${KURZ.priceStandard} €) sa ti vráti po ~${m2} m².`,
+      ctx: "Priemerná garáž má ~50 m², priemerný rodinný dom ~120 m².",
       more: "Celá kalkulačka s detailmi ↓",
     },
     claimH2a: "Kurz nakrútený na zákazkách, ktoré nám ",
     claimH2em: "zákazníci zaplatili.",
-    claimBody: "Lejeme podlahy po celom Slovensku a presne vieme, kde začiatočníci zabíjajú svoju prvú zákazku: v podklade, v miešaní a v cene. Kurz stojí na týchto troch veciach, každý záber je z reálnej realizácie, nie zo štúdia.",
+    claimBody: "Lejeme podlahy po celom Slovensku a presne vieme, kde začiatočníci zabíjajú svoju prvú zákazku: v podklade, v miešaní a v cene. Kurz stojí na týchto troch veciach, každý záber je z reálnej realizácie, nie zo štúdia. Jedna chyba ťa pritom môže stáť tisíce eur len v materiáli, ktorý rozleješ — s nami ideš na isto. Žiadne lúštenie technických listov: ľudskou rečou ti povieme, čo naozaj funguje.",
     claimPoints: [
       "Každý krok vidíš zblízka a v reálnom čase, od brúsenia po finálny lak",
       "Manuál so spotrebami a vzorová cenová ponuka pre tvojich zákazníkov",
@@ -85,11 +86,29 @@ const V2 = {
     day1Label: "Modul 1 · 20+ lekcií",
     day2Label: "Modul 2 · 20+ lekcií",
     day1Title: "Podklad a materiály",
-    day2Title: "Liatie, dekor a cenotvorba",
+    day2Title: "Liatie, dekor a biznis",
+    day1Items: [
+      "Aké materiály existujú a kedy ktorý použiť",
+      "Ako spoznať, či je betón pripravený",
+      "Príprava podkladu a brúsenie zblízka",
+      "Penetrácia, vysprávky a opravy prasklín",
+      "Miešanie dvoch zložiek bez chýb",
+    ],
+    day2Items: [
+      "Liatie jednofarebnej podlahy krok za krokom",
+      "Chipsy a metalický efekt — dekor, ktorý predáva",
+      "Sokle, prechody a detaily",
+      "Cenotvorba — koľko si vypýtať a čo dať do ponuky",
+      "Škálovanie firmy — ľudia, systémy, viac zákaziek naraz",
+      "Ako získať prvé zákazky vo svojom okolí",
+    ],
     dayMeta1: "Každá lekcia má pod videom priestor na otázky.",
     dayMeta2: "Na konci záverečný test a certifikát.",
-    stripH2: "Podlahy z našej dielne",
-    stripCaptions: ["Metalická garáž", "Obývačka, jednofarebná liata", "Priemyselná hala", "Chipsová prevádzka", "Metalický efekt zblízka", "Kancelárie"],
+    stripH2: "Naše realizácie",
+    stripCaptions: ["Metalická garáž", "Obývačka, jednofarebná liata", "Priemyselná hala", "Chipsová prevádzka", "Metalický efekt zblízka", "Kancelárie", "Mistral — vzorkovník Arturo", "Concrete Look — vzorkovník Arturo"],
+    stripPreviewText: "Presne toto sa na kurze naučíš liať — reálna práca našej realizačnej firmy.",
+    stripPreviewCta: "Pozri všetky realizácie →",
+    stripClose: "Zavrieť",
     pricingH2: "Cena a balíky",
     pricingIntro: "Nie sme platcami DPH, ceny sú konečné. Kúpiš raz, prístup máš navždy.",
     stdTitle: "Štandard",
@@ -181,11 +200,12 @@ const V2 = {
       rowMat: "Material (wholesale)",
       rowKeep: "You earn",
       note: (m2: number) => `The Standard course (€${KURZ.priceStandard}) pays back after ~${m2} m².`,
+      ctx: "An average garage is ~50 m², an average family house ~120 m².",
       more: "Full calculator with details ↓",
     },
     claimH2a: "A course filmed on jobs our ",
     claimH2em: "clients paid for.",
-    claimBody: "We install floors across Slovakia and we know exactly where beginners lose their first job: the substrate, the mixing and the price. The course is built on those three things, and every shot comes from a real installation, not a studio.",
+    claimBody: "We install floors across Slovakia and we know exactly where beginners lose their first job: the substrate, the mixing and the price. The course is built on those three things, and every shot comes from a real installation, not a studio. One mistake can cost you thousands of euros in spilled material alone — with us you play it safe. No deciphering technical data sheets: we tell you in plain language what actually works.",
     claimPoints: [
       "You see every step up close and in real time, from grinding to the final coat",
       "A manual with consumption rates and a sample quote for your clients",
@@ -198,11 +218,29 @@ const V2 = {
     day1Label: "Module 1 · 20+ lessons",
     day2Label: "Module 2 · 20+ lessons",
     day1Title: "Substrate and materials",
-    day2Title: "Pouring, decoration and pricing",
+    day2Title: "Pouring, decoration and business",
+    day1Items: [
+      "Which materials exist and when to use each",
+      "How to tell the concrete is ready",
+      "Substrate prep and grinding up close",
+      "Priming, patching and crack repair",
+      "Mixing two components without mistakes",
+    ],
+    day2Items: [
+      "Pouring a single-colour floor step by step",
+      "Flakes and the metallic effect — decor that sells",
+      "Skirtings, transitions and details",
+      "Pricing — what to charge and what goes in the quote",
+      "Scaling the company — people, systems, more jobs at once",
+      "How to win your first jobs in your area",
+    ],
     dayMeta1: "Every lesson has a question thread under the video.",
     dayMeta2: "Final test and certificate at the end.",
-    stripH2: "Floors from our workshop",
-    stripCaptions: ["Metallic garage", "Living room, single colour", "Industrial hall", "Flake commercial floor", "Metallic effect up close", "Offices"],
+    stripH2: "Our installations",
+    stripCaptions: ["Metallic garage", "Living room, single colour", "Industrial hall", "Flake commercial floor", "Metallic effect up close", "Offices", "Mistral — Arturo sample book", "Concrete Look — Arturo sample book"],
+    stripPreviewText: "This is exactly what you learn to pour — real work by our installation company.",
+    stripPreviewCta: "See all our work →",
+    stripClose: "Close",
     pricingH2: "Price and packages",
     pricingIntro: "We are not VAT registered, prices are final. Buy once, keep access forever.",
     stdTitle: "Standard",
@@ -255,6 +293,10 @@ const STRIP_IMAGES = [
   "/images/realizacie/r-07.jpg",
   "/images/realizacie/r-12.jpg",
   "/images/realizacie/r-03.jpg",
+  // Mistral a Concrete Look zatiaľ nemáme odfotené z realizácie — oficiálne
+  // textúry z Arturo vzorkovníka (už ich používa aj /vzorkovnik).
+  "/images/vzorkovnik/arturo/mistral-calm-breeze.webp",
+  "/images/vzorkovnik/arturo/concrete-look-soft-stone.webp",
 ];
 
 /* ------------------------------------------------------------------ */
@@ -396,6 +438,7 @@ function HeroKalkulacka({ locale }: { locale: Locale }) {
       </dl>
       {/* Klik na návratnosť vedie rovno na ponuku kurzov (majiteľ). */}
       <a href="#cena" className="kl-hcalc__note">{t.note(r.navratnostM2)}</a>
+      <p className="kl-hcalc__ctx">{t.ctx}</p>
       <a href="#kalkulacka" className="kl-hcalc__more">{t.more}</a>
     </aside>
   );
@@ -627,12 +670,11 @@ function Vrstvy({ locale }: { locale: Locale }) {
 
 function Days({ locale }: { locale: Locale }) {
   const t = V2[locale];
-  const copyT = COPY[locale];
-  const day1 = [...copyT.events.cards[0].items, ...copyT.events.cards[1].items];
-  const day2 = [...copyT.events.cards[2].items, ...copyT.events.cards[3].items];
   const days = [
-    { label: t.day1Label, title: t.day1Title, items: day1, img: "/images/hero/hala.webp", meta: t.dayMeta1 },
-    { label: t.day2Label, title: t.day2Title, items: day2, img: "/images/process/step-03-liatie.webp", meta: t.dayMeta2 },
+    // Modul 1 nemá fotku — abstraktný prierez vrstiev (majiteľ: fotka haly
+    // tam nesedela, chcel „niečo zaujímavé ako tie vrstvy").
+    { label: t.day1Label, title: t.day1Title, items: t.day1Items, img: null, meta: t.dayMeta1 },
+    { label: t.day2Label, title: t.day2Title, items: t.day2Items, img: "/images/process/step-03-liatie.webp", meta: t.dayMeta2 },
   ];
   return (
     <section id="program" className="kl-section kl-days">
@@ -646,7 +688,13 @@ function Days({ locale }: { locale: Locale }) {
              selektory (.kl-day + .kl-day, :nth-of-type) v CSS. */
           <Reveal as="article" className="kl-day" key={d.title} delay={i * 80}>
             <div className="kl-day__media">
-              <Image src={d.img} alt="" fill sizes="(max-width: 900px) 100vw, 40vw" />
+              {d.img ? (
+                <Image src={d.img} alt="" fill sizes="(max-width: 900px) 100vw, 40vw" />
+              ) : (
+                <div className="kl-day__art" aria-hidden>
+                  <div className="kl-artstack"><i /><i /><i /><i /></div>
+                </div>
+              )}
             </div>
             <div className="kl-day__body">
               <span className="kl-day__label">{d.label}</span>
@@ -669,19 +717,53 @@ function Days({ locale }: { locale: Locale }) {
 
 function Strip({ locale }: { locale: Locale }) {
   const t = V2[locale];
+  const [preview, setPreview] = React.useState<number | null>(null);
+  const items = STRIP_IMAGES.map((src, i) => ({ src, cap: t.stripCaptions[i] }));
+
+  // ESC zavrie preview
+  React.useEffect(() => {
+    if (preview == null) return;
+    const onKey = (e: KeyboardEvent) => { if (e.key === "Escape") setPreview(null); };
+    window.addEventListener("keydown", onKey);
+    return () => window.removeEventListener("keydown", onKey);
+  }, [preview]);
+
   return (
     <section className="kl-strip" aria-label={t.stripH2}>
       <div className="kl-container">
         <h2 style={{ fontSize: "clamp(1.6rem, 1.1rem + 2vw, 2.4rem)", marginBottom: "1.6rem" }}>{t.stripH2}</h2>
       </div>
-      <div className="kl-strip__row">
-        {STRIP_IMAGES.map((src, i) => (
-          <figure key={src}>
-            <Image src={src} alt={t.stripCaptions[i]} width={640} height={800} sizes="(max-width: 768px) 70vw, 24rem" />
-            <figcaption>{t.stripCaptions[i]}</figcaption>
-          </figure>
-        ))}
+      {/* Marquee zľava doprava, na hover sa zastaví; klik otvorí preview. */}
+      <div className="kl-strip__marquee">
+        <div className="kl-strip__track">
+          {[...items, ...items].map((it, i) => (
+            <button
+              type="button"
+              className="kl-strip__item"
+              key={`${it.src}-${i}`}
+              aria-hidden={i >= items.length}
+              tabIndex={i >= items.length ? -1 : 0}
+              onClick={() => setPreview(i % items.length)}
+            >
+              <Image src={it.src} alt={it.cap} width={640} height={800} sizes="24rem" />
+              <span>{it.cap}</span>
+            </button>
+          ))}
+        </div>
       </div>
+      {preview != null && (
+        <div className="kl-lightbox" role="dialog" aria-modal="true" aria-label={items[preview].cap} onClick={() => setPreview(null)}>
+          <figure onClick={(e) => e.stopPropagation()}>
+            <button type="button" className="kl-lightbox__close" aria-label={t.stripClose} onClick={() => setPreview(null)}>×</button>
+            <Image src={items[preview].src} alt={items[preview].cap} width={1280} height={1600} sizes="90vw" />
+            <figcaption>
+              <b>{items[preview].cap}</b>
+              <p>{t.stripPreviewText}</p>
+              <Link href="/realizacie">{t.stripPreviewCta}</Link>
+            </figcaption>
+          </figure>
+        </div>
+      )}
     </section>
   );
 }

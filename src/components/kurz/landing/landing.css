@@ -447,6 +447,7 @@
 .kl-hcalc__note:hover { background: rgba(85, 196, 143, 0.24); transform: translateY(-1px); }
 .kl-hcalc__more { display: inline-block; margin-top: 0.7rem; font-size: 0.85rem; font-weight: 700; color: var(--kl-accent-hi); }
 .kl-hcalc__more:hover { text-decoration: underline; }
+.kl-hcalc__ctx { font-size: 0.76rem; color: var(--kl-faint); margin-top: 0.5rem; }
 
 /* ---------- Sekcie ---------- */
 .kl-section { padding-block: clamp(4rem, 9vw, 7.5rem); }
@@ -651,6 +652,28 @@
 }
 .kl-day__media { position: relative; min-height: 16rem; }
 .kl-day__media img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
+/* abstraktný prierez vrstiev namiesto fotky (Modul 1) */
+.kl-day__art {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  background: radial-gradient(80% 90% at 30% 20%, rgba(201, 124, 69, 0.16), transparent 60%), var(--kl-field-bg);
+}
+.kl-artstack { display: flex; flex-direction: column; gap: 8px; width: min(68%, 280px); transform: skewY(-6deg); }
+.kl-artstack i {
+  display: block;
+  height: 46px;
+  border-radius: 10px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  transition: transform 250ms var(--kl-ease), border-color 250ms var(--kl-ease);
+}
+.kl-artstack i:nth-child(1) { background: radial-gradient(120px 40px at 20% 30%, rgba(255, 255, 255, 0.35), transparent 60%), linear-gradient(120deg, #3f6484, #20374e 55%, #4a2e1c); }
+.kl-artstack i:nth-child(2) { background: conic-gradient(from 210deg at 60% 40%, #2a4763, #c97c45 22%, #20364c 45%, #b06a38 70%, #2a4763); }
+.kl-artstack i:nth-child(3) { background: linear-gradient(100deg, #38434f, #242e39); }
+.kl-artstack i:nth-child(4) { background: linear-gradient(100deg, #191f27, #10151c); }
+.kl-day:hover .kl-artstack i { border-color: rgba(232, 155, 99, 0.4); }
+.kl-day:hover .kl-artstack i:nth-child(2) { transform: translateX(10px); }
 .kl-day__body { padding: clamp(1.6rem, 3.5vw, 3rem); }
 .kl-day__label {
   display: inline-block;
@@ -679,28 +702,86 @@
 
 /* ---------- Fotopás ---------- */
 .kl-strip { padding-block: clamp(3rem, 6vw, 5rem); background: var(--kl-surface); }
-.kl-strip__row {
-  display: grid;
-  grid-auto-flow: column;
-  grid-auto-columns: clamp(16rem, 30vw, 24rem);
-  gap: 1rem;
-  overflow-x: auto;
-  overscroll-behavior-x: contain;
-  scroll-snap-type: x proximity;
-  padding: 0.5rem clamp(1.25rem, 50vw - 36rem, 50vw - 36rem);
-  scrollbar-width: none;
+/* marquee realizácií — beží zľava doprava, hover zastaví, klik = preview */
+.kl-strip__marquee {
+  overflow: hidden;
+  -webkit-mask-image: linear-gradient(90deg, transparent, #000 5%, #000 95%, transparent);
+  mask-image: linear-gradient(90deg, transparent, #000 5%, #000 95%, transparent);
 }
-.kl-strip__row::-webkit-scrollbar { display: none; }
-.kl-strip__row figure { margin: 0; scroll-snap-align: center; }
-.kl-strip__row img {
+.kl-strip__track {
+  display: flex;
+  width: max-content;
+  animation: klStripMove 45s linear infinite;
+}
+.kl-strip__marquee:hover .kl-strip__track { animation-play-state: paused; }
+.kl-strip__item {
+  display: block;
+  width: clamp(15rem, 26vw, 21rem);
+  margin-right: 1rem;
+  background: none;
+  border: 0;
+  padding: 0;
+  cursor: pointer;
+  text-align: left;
+  font: inherit;
+  color: var(--kl-subtle);
+}
+.kl-strip__item img {
   width: 100%;
   aspect-ratio: 4 / 5;
   object-fit: cover;
   border-radius: calc(var(--kl-radius) - 6px);
-  transition: transform 500ms var(--kl-ease);
+  border: 1px solid transparent;
+  transition: transform 400ms var(--kl-ease), border-color 400ms var(--kl-ease), box-shadow 400ms var(--kl-ease);
 }
-.kl-strip__row figure:hover img { transform: scale(1.02); }
-.kl-strip__row figcaption { font-size: 0.85rem; color: var(--kl-subtle); margin-top: 0.6rem; }
+.kl-strip__item:hover img { transform: scale(1.03); border-color: var(--kl-accent); box-shadow: 0 16px 44px rgba(0, 0, 0, 0.45); }
+.kl-strip__item span { display: block; font-size: 0.85rem; margin-top: 0.6rem; }
+.kl-strip__item:hover span { color: var(--kl-accent-hi); }
+@keyframes klStripMove { from { transform: translateX(-50%); } to { transform: translateX(0); } }
+
+/* preview okno */
+.kl-lightbox {
+  position: fixed;
+  inset: 0;
+  z-index: 90;
+  display: grid;
+  place-items: center;
+  padding: 1.5rem;
+  background: rgba(13, 18, 24, 0.9);
+  -webkit-backdrop-filter: blur(10px);
+  backdrop-filter: blur(10px);
+}
+.kl-lightbox figure {
+  position: relative;
+  margin: 0;
+  max-width: min(92vw, 56rem);
+  background: var(--kl-panel);
+  border: 1px solid var(--kl-border-strong);
+  border-radius: var(--kl-radius);
+  overflow: hidden;
+  box-shadow: var(--kl-shadow);
+}
+.kl-lightbox img { width: 100%; height: auto; max-height: 62vh; object-fit: cover; display: block; }
+.kl-lightbox figcaption { padding: 1.1rem 1.4rem 1.3rem; display: grid; gap: 0.3rem; }
+.kl-lightbox figcaption b { color: var(--kl-ink); font-size: 1.1rem; }
+.kl-lightbox figcaption p { color: var(--kl-subtle); font-size: 0.92rem; }
+.kl-lightbox figcaption a { color: var(--kl-accent-hi); font-weight: 700; font-size: 0.92rem; margin-top: 0.3rem; }
+.kl-lightbox figcaption a:hover { text-decoration: underline; }
+.kl-lightbox__close {
+  position: absolute;
+  top: 0.7rem;
+  right: 0.7rem;
+  width: 2.4rem;
+  height: 2.4rem;
+  border-radius: 50%;
+  border: 1px solid var(--kl-border-strong);
+  background: rgba(13, 18, 24, 0.7);
+  color: #fff;
+  font-size: 1.4rem;
+  line-height: 1;
+  cursor: pointer;
+}
+.kl-lightbox__close:hover { border-color: var(--kl-accent-hi); color: var(--kl-accent-hi); }
 
 /* ---------- Kalkulačka ---------- */
 .kl-zisk { background: linear-gradient(180deg, var(--kl-surface) 0%, var(--kl-bg) 100%); border-block: 1px solid var(--kl-border); color: var(--kl-text); }
@@ -770,6 +851,8 @@
 .kl-zisk__row--total dd { font-size: 2.1rem; color: var(--kl-profit); }
 /* Návratnosť kurzu je predajný argument — nesmie byť sivá poznámka
    (majiteľ 2026-08-30: „nezvýraznené"). Rovnaký zelený chip ako v hero. */
+/* zvyšok materiálu v sudoch — poctivá veta pod riadkami */
+.kl-zisk__zvysok { font-size: 0.85rem; color: var(--kl-subtle); margin-top: 0.9rem; }
 .kl-zisk__note {
   display: inline-block;
   font-size: 0.9rem;

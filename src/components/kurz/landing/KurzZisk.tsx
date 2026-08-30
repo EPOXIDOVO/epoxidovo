@@ -3,7 +3,7 @@
 import * as React from "react";
 import {
   spocitajZisk,
-  absolventMaterialEurM2,
+  marzaEurM2,
   TYPY,
   ABSOLVENT_MARZA,
   BEZNA_MARZA,
@@ -26,6 +26,10 @@ const T = {
     predaj: "Vyfakturuješ zákazníkovi",
     material: "Materiál za veľkoobchodné ceny",
     materialSub: "naša veľkoobchodná cena pre absolventov, nie e-shopová",
+    zaBalenia: "príplatok za celé balenia",
+    baleniaTvar: (n: number) => (n === 1 ? "balenie" : n < 5 ? "balenia" : "balení"),
+    zvysok: (kg: number) =>
+      `V sudoch ti ostane ~${kg} kg — materiál sa kupuje na celé balenia a tie platí zákazník. Presne tak to robíme aj my.`,
     marza: "Zarobíš",
     marzaSub: "hrubý zisk pred tvojou prácou a réžiou",
     perM2: "na m²",
@@ -61,6 +65,10 @@ const T = {
     predaj: "You invoice the client",
     material: "Material at wholesale prices",
     materialSub: "our wholesale price for graduates, not the e-shop one",
+    zaBalenia: "surcharge for whole packages",
+    baleniaTvar: () => "packages",
+    zvysok: (kg: number) =>
+      `~${kg} kg stays in the drums — material is bought in whole packages and the client pays for them. Exactly how we do it.`,
     marza: "You earn",
     marzaSub: "gross profit before labour and overheads",
     perM2: "per m²",
@@ -149,9 +157,9 @@ export function KurzZisk({ locale }: { locale: Locale }) {
         {/* --- prepínač typu: klik = výber, na karte hneď zárobok €/m² --- */}
         <div className="kl-zisk__types" role="group" aria-label={t.typLabel}>
           {TYPY.map((x) => {
-            const ready = x.nakupMaterialEurM2 != null;
+            const ready = true;
             const active = x.slug === typSlug;
-            const marzaM2 = ready ? Math.round((x.predajEurM2 - absolventMaterialEurM2(x.nakupMaterialEurM2!)) * 100) / 100 : null;
+            const marzaM2 = marzaEurM2(x);
             return (
               <button
                 key={x.slug}
@@ -206,11 +214,13 @@ export function KurzZisk({ locale }: { locale: Locale }) {
 
             <dl className="kl-zisk__rows">
               <div className="kl-zisk__row">
-                <dt>{t.predaj}<small>{typ.label} · {r.predajM2} € {t.perM2}</small></dt>
+                {/* Tržba viditeľne rozdelená: m² × cena + príplatok za sudy —
+                    schovaný príplatok by vyzeral ako trik. */}
+                <dt>{t.predaj}<small>{r.predajM2} € × {r.plochaM2} m² + {fmt(r.priplatokEur, locale)} € {t.zaBalenia}</small></dt>
                 <dd>{fmt(aPredaj, locale)} €</dd>
               </div>
               <div className="kl-zisk__row">
-                <dt>{t.material}<small>{t.materialSub}</small></dt>
+                <dt>{t.material}<small>{r.baleniaSpolu} {t.baleniaTvar(r.baleniaSpolu)} · {t.materialSub}</small></dt>
                 <dd>− {fmt(aMaterial, locale)} €</dd>
               </div>
               <div className="kl-zisk__row kl-zisk__row--total">
@@ -218,6 +228,7 @@ export function KurzZisk({ locale }: { locale: Locale }) {
                 <dd>{fmt(aMarza, locale)} €</dd>
               </div>
             </dl>
+            {r.zvysokKg > 0 && <p className="kl-zisk__zvysok">{t.zvysok(r.zvysokKg)}</p>}
             <p className="kl-zisk__note">
               {t.navrat(r.navratnostM2)} {t.dni(r.dniRealizacie, t.dniTvar(r.dniRealizacie))}
             </p>

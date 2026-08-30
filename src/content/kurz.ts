@@ -83,7 +83,7 @@ export const KURZ_INCLUDED = [
 export const KURZ_FAQ = [
   {
     q: "Ako kurz prebieha?",
-    a: "Po zaplatení ti príde e-mail s prístupom do členskej sekcie. Pozeráš video lekcie vlastným tempom, kedykoľvek a na čomkoľvek. Prístup nemá časové obmedzenie a dostávaš aj všetky budúce aktualizácie.",
+    a: "Po zaplatení ti príde e-mail s prístupom do členskej sekcie. Pozeráš video lekcie vlastným tempom, kedykoľvek a na čomkoľvek — všetko je interaktívne a intuitívne. Počas celého procesu si v kontakte s naším realizačným technikom, ktorého sa môžeš pýtať, keď niečomu nerozumieš. Dozvieš sa všetko o tom, ako založiť, riadiť a škálovať úspešnú epoxidovú firmu. Prístup nemá časové obmedzenie a dostávaš aj všetky budúce aktualizácie.",
   },
   {
     q: "Potrebujem nejakú skúsenosť?",
@@ -95,19 +95,15 @@ export const KURZ_FAQ = [
   },
   {
     q: "Viem po kurze rovno robiť zákazky?",
-    a: "Kurz ťa prevedie celým postupom vrátane cenotvorby, takže garáže, dielne a menšie interiéry zvládneš. V balíku PRO ti pri prvých realizáciách pomáha lektor cez mentoring.",
+    a: "Kurz ťa prevedie celým postupom vrátane cenotvorby, takže garáže, dielne a menšie interiéry zvládneš. V balíku PRO ti pri prvých realizáciách pomáha lektor cez mentoring. Takže odpoveď je áno — po absolvovaní môžeš rovno robiť a začať zarábať sám.",
   },
   {
     q: "Kde nakúpim materiál?",
-    a: "V kurze je zoznam overených dodávateľov a presné spotreby. Absolventi nakupujú materiál TopStone a Sika v našom e-shope za partnerské ceny.",
+    a: "V kurze je zoznam overených dodávateľov a presné spotreby. My ti dáme najlepšie veľkoobchodné ceny, pretože cez našu realizačnú firmu máme veľké odbery — absolventi nakupujú materiál v našom e-shope za tieto ceny.",
   },
   {
     q: "Dá sa kurz kúpiť na firmu / na faktúru?",
     a: "Áno. Pri objednávke vyplníš IČO a vystavíme faktúru, kurz je bežne uznateľný náklad. Nie sme platcami DPH, cena je konečná.",
-  },
-  {
-    q: "Čo ak mi kurz nesadne?",
-    a: "Do 14 dní od nákupu môžeš bez udania dôvodu odstúpiť a vrátime ti celú sumu. Stačí napísať na obchod@epoxidovo.sk.",
   },
 ];
 
