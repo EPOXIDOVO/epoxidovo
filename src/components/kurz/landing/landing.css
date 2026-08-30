@@ -295,17 +295,34 @@
   margin-top: 1.3rem;
 }
 .kl-hero__actions { display: flex; flex-wrap: wrap; gap: 0.9rem; margin-top: 2rem; }
-.kl-hero__facts {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(9.5rem, max-content));
-  gap: 0.7rem 2.2rem;
-  margin: 2.4rem 0 0;
-  padding-top: 1.4rem;
+/* trust ticker — fakty bežia sprava doľava, na hover sa zastaví */
+.kl-hero__ticker {
+  margin-top: 2.2rem;
+  padding-top: 1.3rem;
   border-top: 1px solid rgba(255, 255, 255, 0.2);
+  overflow: hidden;
+  -webkit-mask-image: linear-gradient(90deg, transparent, #000 7%, #000 93%, transparent);
+  mask-image: linear-gradient(90deg, transparent, #000 7%, #000 93%, transparent);
+}
+.kl-hero__ticker-track {
+  display: flex;
+  width: max-content;
+  animation: klTicker 30s linear infinite;
+}
+.kl-hero__ticker:hover .kl-hero__ticker-track { animation-play-state: paused; }
+.kl-hero__tick {
+  display: inline-flex;
+  align-items: baseline;
+  gap: 0.45rem;
+  white-space: nowrap;
+  margin-right: 2.6rem;
   font-size: 0.92rem;
   color: rgba(255, 255, 255, 0.72);
 }
-.kl-hero__facts strong { font-family: var(--kl-font-mono); font-variant-numeric: tabular-nums; color: #fff; font-weight: 700; margin-right: 0.35rem; }
+.kl-hero__tick strong { font-family: var(--kl-font-mono); font-variant-numeric: tabular-nums; color: #fff; font-weight: 700; }
+.kl-hero__proof { margin-top: 1.1rem; font-size: 0.92rem; color: rgba(255, 255, 255, 0.78); max-width: 36rem; }
+.kl-hero__proof a { color: var(--kl-accent-hi); font-weight: 700; }
+.kl-hero__proof a:hover { text-decoration: underline; }
 .kl-hero__inner .kl-hero__grid > * { animation: klRise 900ms var(--kl-ease) both; }
 .kl-hero__inner .kl-hero__grid > :nth-child(2) { animation-delay: 160ms; }
 
@@ -374,7 +391,19 @@
 .kl-hcalc__rows dd { margin: 0; font-family: var(--kl-font-mono); font-weight: 700; color: var(--kl-ink); font-variant-numeric: tabular-nums; white-space: nowrap; }
 .kl-hcalc__rows .is-total { border-top: 1px solid var(--kl-profit); }
 .kl-hcalc__rows .is-total dd { color: var(--kl-profit); font-size: 1.5rem; }
-.kl-hcalc__note { font-size: 0.78rem; color: var(--kl-faint); margin-top: 0.6rem; }
+/* Návratnosť kurzu — hlavný predajný argument, svieti (majiteľ: „toto
+   zvýrazniť veľmi"). */
+.kl-hcalc__note {
+  margin-top: 0.8rem;
+  padding: 0.65rem 0.9rem;
+  border-radius: 10px;
+  background: var(--kl-profit-soft);
+  border: 1px solid var(--kl-profit);
+  box-shadow: 0 0 0 3px var(--kl-profit-soft);
+  color: var(--kl-ink);
+  font-size: 0.9rem;
+  font-weight: 700;
+}
 .kl-hcalc__more { display: inline-block; margin-top: 0.7rem; font-size: 0.85rem; font-weight: 700; color: var(--kl-accent-hi); }
 .kl-hcalc__more:hover { text-decoration: underline; }
 
@@ -955,6 +984,7 @@
 /* ---------- Keyframes ---------- */
 @keyframes klRise { from { opacity: 0; transform: translateY(26px); } to { opacity: 1; transform: none; } }
 @keyframes klHeroZoom { from { transform: scale(1.06); } to { transform: scale(1); } }
+@keyframes klTicker { to { transform: translateX(-50%); } }
 
 @media (prefers-reduced-motion: reduce) {
   .kl *, .kl *::before, .kl *::after {

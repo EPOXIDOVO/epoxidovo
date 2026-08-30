@@ -21,10 +21,10 @@ import "./landing.css";
 const V2 = {
   sk: {
     badge: "Online kurz · prístup okamžite po zaplatení",
-    heroKicker: "Get Instant Access to 20 Years of Installer Secrets.",
+    heroKicker: "Získaj okamžitý prístup k 20 rokom podlahárskych tajomstiev.",
     h1a: "Nauč sa liať podlahy.",
     h1em: "A postav na tom firmu.",
-    lead: "Toto nie je len kurz. Otvoríme ti celú našu firmu — videá z reálnych zákaziek, CRM na dopyty, aplikáciu na ľudí, reálne čísla a mzdy. Naučíš sa remeslo aj biznis, ktorý ho predáva.",
+    lead: "Toto nie je len kurz. Toto je celý funkčný biznis model v kocke — roky skúseností, softvér, na ktorom stojí celá firma aj bez teba, a reálne čísla. Naučíš sa remeslo aj biznis, ktorý ho predáva.",
     ctaMain: "Chcem prístup",
     ctaProgram: "Koľko zarobím? ↓",
     facts: [
@@ -32,7 +32,12 @@ const V2 = {
       ["40+", "lekcií v 2 moduloch"],
       ["24/7", "prístup navždy"],
       ["14 dní", "garancia vrátenia peňazí"],
+      ["Desiatky tisíc €", "stál na zákazku budovaný softvér našej firmy — máš ho v cene"],
     ],
+    proof: {
+      text: "Nie sme len školitelia — sme realizačná firma EPOXIDOVO s.r.o., ktorá podlahy reálne leje.",
+      cta: "Pozri naše realizácie →",
+    },
     hcalc: {
       tag: "Kalkulačka zárobku",
       live: "naživo",
@@ -40,7 +45,7 @@ const V2 = {
       plocha: "Plocha zákazky",
       rowSell: "Vyfakturuješ zákazníkovi",
       rowMat: "Materiál (veľkoobchod)",
-      rowKeep: "Ostane ti",
+      rowKeep: "Zarobíš",
       note: (m2: number) => `Kurz Štandard (${KURZ.priceStandard} €) sa ti vráti po ~${m2} m².`,
       more: "Celá kalkulačka s detailmi ↓",
     },
@@ -112,7 +117,7 @@ const V2 = {
     heroKicker: "Get Instant Access to 20 Years of Installer Secrets.",
     h1a: "Learn to pour floors.",
     h1em: "And build a business on it.",
-    lead: "This is not just a course. We open up our whole company — video from real jobs, a CRM for leads, an app for your crew, real numbers and wages. You learn the craft and the business that sells it.",
+    lead: "This is not just a course. It's a complete working business model in a nutshell — years of experience, the software the whole company runs on even without you, and real numbers. You learn the craft and the business that sells it.",
     ctaMain: "Get access",
     ctaProgram: "How much will I earn? ↓",
     facts: [
@@ -120,7 +125,12 @@ const V2 = {
       ["40+", "lessons in 2 modules"],
       ["24/7", "lifetime access"],
       ["14 days", "money-back guarantee"],
+      ["Tens of thousands €", "worth of custom-built company software — included"],
     ],
+    proof: {
+      text: "We're not just instructors — EPOXIDOVO s.r.o. is a real installation company that actually pours floors.",
+      cta: "See our work →",
+    },
     hcalc: {
       tag: "Earnings calculator",
       live: "live",
@@ -128,7 +138,7 @@ const V2 = {
       plocha: "Job area",
       rowSell: "You invoice the client",
       rowMat: "Material (wholesale)",
-      rowKeep: "You keep",
+      rowKeep: "You earn",
       note: (m2: number) => `The Standard course (€${KURZ.priceStandard}) pays back after ~${m2} m².`,
       more: "Full calculator with details ↓",
     },
@@ -368,11 +378,21 @@ function Hero({ locale }: { locale: Locale }) {
               <a href="#prihlaska" className="kl-btn kl-btn--primary">{t.ctaMain}</a>
               <a href="#kalkulacka" className="kl-btn kl-btn--ghost">{t.ctaProgram}</a>
             </div>
-            <dl className="kl-hero__facts">
-              {t.facts.map(([v, l]) => (
-                <div key={l}><strong>{v}</strong>{l}</div>
-              ))}
-            </dl>
+            {/* Trust ticker — fakty bežia sprava doľava (majiteľ 2026-08-30);
+                dve kópie sady + posun o −50 % = plynulá slučka. */}
+            <div className="kl-hero__ticker">
+              <div className="kl-hero__ticker-track">
+                {[...t.facts, ...t.facts].map(([v, l], i) => (
+                  <span className="kl-hero__tick" key={`${l}-${i}`} aria-hidden={i >= t.facts.length}>
+                    <strong>{v}</strong>{l}
+                  </span>
+                ))}
+              </div>
+            </div>
+            <p className="kl-hero__proof">
+              {t.proof.text}{" "}
+              <Link href="/realizacie">{t.proof.cta}</Link>
+            </p>
           </div>
           <HeroKalkulacka locale={locale} />
         </div>
