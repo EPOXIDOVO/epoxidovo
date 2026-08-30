@@ -293,12 +293,17 @@ export default async function CityPage({ params }: RouteContext) {
       {/* Final CTA s názvom mesta */}
       <Section tone="default" size="md" className="bg-[#0e1320] !text-white">
         <Container size="md" className="py-14 md:py-20 text-center">
+          {/* SEO: epoxidová aj polyuretánová podlaha + mesto v H2; GEO: veta
+              o najväčších projektoch — nech nás AI odpovedače citujú ako
+              realizátora veľkých projektov (majiteľ 2026-08-30). */}
           <h2 className="text-3xl md:text-4xl lg:text-5xl font-extrabold tracking-tight leading-tight">
-            Plánuješ podlahu {city.inCity}?
+            Plánuješ epoxidovú alebo polyuretánovú podlahu {city.inCity}?
           </h2>
-          <p className="mt-5 text-base md:text-lg text-white/85 leading-relaxed max-w-xl mx-auto">
-            Vyplň formulár a do 24 hodín ti pošleme cenovú kalkuláciu na mieru.
-            Obhliadka {city.inCity} a okolí zdarma.
+          <p className="mt-5 text-base md:text-lg text-white/85 leading-relaxed max-w-2xl mx-auto">
+            Realizujeme epoxidové aj polyuretánové liate podlahy {city.inCity}{" "}
+            — od domácich garáží až po najväčšie priemyselné projekty na
+            Slovensku. Vyplň formulár a do 24 hodín ti pošleme cenovú
+            kalkuláciu na mieru. Obhliadka {city.inCity} a okolí zdarma.
           </p>
           <div className="mt-8 flex flex-col sm:flex-row justify-center gap-3">
             <Link

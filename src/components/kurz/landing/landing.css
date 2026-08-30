@@ -470,14 +470,19 @@
 .kl-hcalc__note:hover { background: rgba(85, 196, 143, 0.24); transform: translateY(-1px); }
 .kl-hcalc__more { display: inline-block; margin-top: 0.7rem; font-size: 0.85rem; font-weight: 700; color: var(--kl-accent-hi); }
 .kl-hcalc__more:hover { text-decoration: underline; }
-/* typické plochy — klikacie pilulky s ikonami (garáž / dom) */
-.kl-hcalc__ctx { display: flex; flex-wrap: wrap; gap: 0.5rem; margin-top: 0.7rem; }
+/* typické plochy — klikacie pilulky s ikonami (garáž / dom), jeden riadok */
+.kl-hcalc__ctx { display: flex; flex-wrap: nowrap; gap: 0.5rem; margin-top: 0.7rem; }
+@media (max-width: 380px) { .kl-hcalc__ctx { flex-wrap: wrap; } }
 .kl-hcalc__ctx button {
   display: inline-flex;
   align-items: center;
-  gap: 0.45rem;
+  justify-content: center;
+  flex: 1 1 0;
+  min-width: 0;
+  white-space: nowrap;
+  gap: 0.4rem;
   font: inherit;
-  font-size: 0.8rem;
+  font-size: 0.76rem;
   font-weight: 600;
   color: var(--kl-subtle);
   background: var(--kl-field-bg);

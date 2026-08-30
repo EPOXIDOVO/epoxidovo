@@ -39,6 +39,9 @@ const V2 = {
     ],
     proofs: [
       {
+        text: "Liate podlahy sú jeden z najrýchlejšie rastúcich biznisov roka 2026 — a konkurencia na Slovensku je stále malá.",
+      },
+      {
         text: "Nie sme len školitelia — sme realizačná firma EPOXIDOVO s.r.o., ktorá podlahy reálne leje.",
         cta: "Pozri naše realizácie →",
         href: "/realizacie",
@@ -198,6 +201,9 @@ const V2 = {
       ["14 days", "money-back guarantee"],
     ],
     proofs: [
+      {
+        text: "Poured floors are one of the fastest-growing businesses of 2026 — and competition in Slovakia is still small.",
+      },
       {
         text: "We're not just instructors — EPOXIDOVO s.r.o. is a real installation company that actually pours floors.",
         cta: "See our work →",
