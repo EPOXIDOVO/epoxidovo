@@ -1,31 +1,42 @@
 import { describe, it, expect } from "vitest";
-import { spocitajZisk, materialEurM2, seriaZisku, PREDAJ_EUR_M2 } from "@/lib/kurz-zisk";
+import {
+  spocitajZisk,
+  seriaZisku,
+  TYPY,
+  absolventMaterialEurM2,
+  beznaMaterialEurM2,
+} from "@/lib/kurz-zisk";
 
-describe("kurz-zisk — model zárobku z metalickej podlahy", () => {
-  it("materiál na m² vychádza z e-shop cien a skladby konfigurátora", () => {
-    const m = materialEurM2();
-    expect(m.riadky.length).toBe(3);
-    for (const r of m.riadky) {
-      expect(r.cenaBalenie).not.toBeNull();
-      expect(r.eurM2).toBeGreaterThan(0);
-    }
-    expect(m.spolu).toBeGreaterThan(30);
-    expect(m.spolu).toBeLessThan(PREDAJ_EUR_M2);
+const metalicka = TYPY.find((t) => t.slug === "metalicke")!;
+const mistral = TYPY.find((t) => t.slug === "mistral")!;
+
+describe("kurz-zisk — model zárobku z jednej zákazky", () => {
+  it("absolventská cena je lacnejšia než bežná e-shop cena", () => {
+    const nakup = 49.36;
+    const abs = absolventMaterialEurM2(nakup);
+    const bezna = beznaMaterialEurM2(nakup);
+    expect(abs).toBeGreaterThan(nakup); // stále je tam naša marža
+    expect(abs).toBeLessThan(bezna); // ale menej než bežných 45 %
+    expect(abs).toBeCloseTo(60.2, 1); // 49.36 / 0.82
+    expect(bezna).toBeCloseTo(89.75, 1); // 49.36 / 0.55
   });
-  it("30 m² garáž: predaj 4470 €, marža kladná, balenia ≥ spojitá spotreba", () => {
-    const r = spocitajZisk(30);
-    expect(r.predajEur).toBe(4470);
-    expect(r.materialBaleniaEur).toBeGreaterThanOrEqual(r.materialSpojiteEur);
+
+  it("30 m² metalická: predaj 3870 €, marža kladná, návratnosť kladná", () => {
+    const r = spocitajZisk(30, metalicka)!;
+    expect(r.predajEur).toBe(3870); // 30 × 129
+    expect(r.materialM2).toBeCloseTo(60.2, 1);
+    expect(r.marzaM2).toBeCloseTo(68.8, 1); // 129 − 60.20
     expect(r.hrubaMarzaEur).toBeGreaterThan(0);
+    expect(r.usporaMaterialM2).toBeGreaterThan(0);
     expect(r.navratnostM2).toBeGreaterThan(0);
   });
-  it("séria rastie monotónne", () => {
-    const s = seriaZisku();
-    for (let i = 1; i < s.length; i++) expect(s[i].marza).toBeGreaterThan(s[i - 1].marza);
+
+  it("typ bez doplneného nákupu (Mistral) vráti null", () => {
+    expect(spocitajZisk(30, mistral)).toBeNull();
   });
-  it("debug print", () => {
-    console.log("m2:", JSON.stringify(materialEurM2()));
-    console.log("30m2:", JSON.stringify(spocitajZisk(30)));
-    console.log("seria:", JSON.stringify(seriaZisku()));
+
+  it("séria rastie monotónne", () => {
+    const s = seriaZisku(metalicka);
+    for (let i = 1; i < s.length; i++) expect(s[i].marza).toBeGreaterThan(s[i - 1].marza);
   });
 });

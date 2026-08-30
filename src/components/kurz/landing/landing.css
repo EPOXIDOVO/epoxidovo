@@ -435,6 +435,60 @@
 .kl-zisk__disclaimer { font-size: 0.82rem; margin-top: 1.2rem; color: rgba(255, 255, 255, 0.55); }
 .kl-zisk .kl-table-scroll { overflow-x: auto; }
 
+/* prepínač typu podlahy */
+.kl-zisk__types {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 9.5rem), 1fr));
+  gap: 0.6rem;
+  margin-bottom: 1.6rem;
+}
+.kl-typ {
+  display: flex;
+  flex-direction: column;
+  gap: 0.2rem;
+  text-align: left;
+  font: inherit;
+  color: #fff;
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  border-radius: var(--kl-radius);
+  padding: 0.85rem 1rem;
+  cursor: pointer;
+  transition: background 220ms var(--kl-ease), border-color 220ms var(--kl-ease), transform 220ms var(--kl-ease);
+}
+.kl-typ:hover:not(:disabled) { background: rgba(176, 81, 29, 0.32); border-color: rgba(230, 140, 80, 0.55); }
+.kl-typ.is-active { background: var(--kl-accent); border-color: var(--kl-accent); box-shadow: 0 12px 30px rgba(176, 81, 29, 0.32); }
+.kl-typ__name { font-weight: 600; font-size: 1rem; }
+.kl-typ__price { font-size: 0.82rem; color: rgba(255, 255, 255, 0.66); font-variant-numeric: tabular-nums; }
+.kl-typ.is-active .kl-typ__price { color: rgba(255, 255, 255, 0.85); }
+.kl-typ.is-soon { opacity: 0.45; cursor: not-allowed; }
+.kl-typ.is-soon .kl-typ__price { text-transform: uppercase; letter-spacing: 0.06em; font-size: 0.72rem; }
+
+/* absolventská výhoda na materiáli */
+.kl-zisk__vyhoda { margin-top: 1.5rem; }
+.kl-zisk__vyhoda-head h3 { font-size: 1.25rem; margin-bottom: 0.4rem; }
+.kl-zisk__vyhoda-head p { color: rgba(255, 255, 255, 0.72); font-size: 0.95rem; margin: 0 0 1.4rem; }
+.kl-zisk__vyhoda-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 12rem), 1fr));
+  gap: 0.8rem;
+}
+.kl-vyhoda-cell {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+  padding: 1.1rem 1.2rem;
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  border-radius: var(--kl-radius);
+  background: rgba(255, 255, 255, 0.04);
+}
+.kl-vyhoda-cell__label { font-size: 0.82rem; color: rgba(255, 255, 255, 0.62); }
+.kl-vyhoda-cell__val { font-family: var(--kl-font-display); font-size: 1.6rem; color: #fff; font-variant-numeric: tabular-nums; }
+.kl-vyhoda-cell__val--strike { color: rgba(255, 255, 255, 0.55); text-decoration: line-through; text-decoration-thickness: 2px; }
+.kl-vyhoda-cell--accent { background: rgba(176, 81, 29, 0.22); border-color: rgba(230, 140, 80, 0.5); }
+.kl-vyhoda-cell--accent .kl-vyhoda-cell__val { color: oklch(0.82 0.13 55); }
+.kl-vyhoda-cell--save .kl-vyhoda-cell__val { color: oklch(0.82 0.13 155); }
+
 /* ---------- Ceny ---------- */
 .kl-pricing__grid {
   display: grid;

@@ -1,118 +1,130 @@
 /**
- * Model zárobku pre landing kurzu — „koľko zarobíš z jednej metalickej podlahy".
+ * Model zárobku pre landing kurzu — „koľko zarobíš z jednej zákazky".
  *
- * Predaj: 149 €/m² (metalická podlaha, cena zákazníkovi).
- * Nákup materiálu: VŽDY z reálnej skladby konfigurátora (SYSTEMY → metalik-premium:
- * TopStone EP02 2×, EP11 Metallic, EP22 Plus 2×) a z AKTUÁLNYCH cien v našom
- * e-shope (getMaterial → cena_eur_s_dph). Keď sa zmení cena v e-shope, zmení
- * sa aj kalkulačka — nič nie je natvrdo.
+ * Pre každý typ podlahy počítame tri čísla:
+ *  - PREDAJ: reálna trhová cena €/m², za ktorú EPOXIDOVO podlahu predáva
+ *    (rovnaké „od" ceny ako na webe) — toľko vyfakturuje aj absolvent.
+ *  - MATERIÁL: absolventská cena = náš nákup + ABSOLVENT_MARZA. Absolvent kupuje
+ *    materiál u nás lacnejšie než bežný zákazník (ten platí BEZNA_MARZA), a my aj
+ *    tak zarobíme na každom balení. Nákupné ceny €/m² sú z CRM cenotvorby.
+ *  - ZOSTANE: predaj − materiál = jeho hrubý zisk (jeho práca a réžia).
  *
- * Balenia sa počítajú cez prepocitaj() (zaokrúhlenie nahor + 10 % rezerva)
- * — rovnako ako v konfigurátore, aby si absolvent videl to isté číslo, aké
- * mu vyjde pri reálnom nákupe.
+ * Marže sú počítané ako podiel z predajnej ceny (nie prirážka na nákup) —
+ * rovnako ako v CRM: predaj = nákup / (1 − marža).
+ *
+ * Mistral a Concrete Look zatiaľ nemajú doplnenú nákupnú cenu materiálu
+ * (`nakupMaterialEurM2: null`) — v kalkulačke sa nedajú zvoliť a čakajú na dáta.
  */
-import { getSystem } from "@/lib/konfigurator/systemy";
-import { postavSkladbu, PREDVOLENA_VOLBA, type Volba } from "@/lib/konfigurator/rules";
-import { prepocitaj } from "@/lib/konfigurator/vypocet";
-import { getMaterial } from "@/lib/materialy";
 import { KURZ } from "@/content/kurz";
 
-export const PREDAJ_EUR_M2 = 149;
-export const SYSTEM_ID = "metalik-premium";
+/** Naša marža na materiáli, ktorý absolvent kúpi u nás (strop majiteľa: 19 %). */
+export const ABSOLVENT_MARZA = 0.18;
+/** Bežná e-shop marža na čistom materiáli (bez realizácie) — na porovnanie. */
+export const BEZNA_MARZA = 0.45;
 
-export interface MaterialRiadok {
-  nazov: string;
-  produkt: string;
-  sku: string;
-  spotrebaKgM2: number | null;
-  cenaBalenie: number | null;
-  balenieKg: number;
-  /** €/m² pri spojitej spotrebe (bez zaokrúhlenia na balenia) */
-  eurM2: number | null;
+export type TypSlug =
+  | "metalicke"
+  | "mramorove"
+  | "jednofarebne"
+  | "chipsove"
+  | "mistral"
+  | "beton-look";
+
+export interface TypPodlahy {
+  slug: TypSlug;
+  label: string;
+  /** Predajná cena zákazníkovi €/m² (trhová „od" cena z webu). */
+  predajEurM2: number;
+  /** Náš nákup materiálu €/m² s DPH (z CRM). null = zatiaľ nedoplnené. */
+  nakupMaterialEurM2: number | null;
+}
+
+/** Poradie = poradie v prepínači. Popredné typy sú pripravené, posledné dva čakajú. */
+export const TYPY: TypPodlahy[] = [
+  { slug: "metalicke", label: "Metalická", predajEurM2: 129, nakupMaterialEurM2: 49.36 },
+  { slug: "mramorove", label: "Mramorová", predajEurM2: 139, nakupMaterialEurM2: 49.36 },
+  { slug: "jednofarebne", label: "Jednofarebná", predajEurM2: 59, nakupMaterialEurM2: 14.29 },
+  { slug: "chipsove", label: "Chipsová", predajEurM2: 49, nakupMaterialEurM2: 15.1 },
+  { slug: "mistral", label: "Mistral", predajEurM2: 104, nakupMaterialEurM2: null },
+  { slug: "beton-look", label: "Concrete Look", predajEurM2: 99, nakupMaterialEurM2: null },
+];
+
+const r2 = (n: number) => Math.round(n * 100) / 100;
+
+/** Absolventská cena materiálu €/m² = nákup s maržou ABSOLVENT_MARZA. */
+export function absolventMaterialEurM2(nakup: number): number {
+  return r2(nakup / (1 - ABSOLVENT_MARZA));
+}
+
+/** Bežná e-shop cena materiálu €/m² (marža BEZNA_MARZA) — na porovnanie úspory. */
+export function beznaMaterialEurM2(nakup: number): number {
+  return r2(nakup / (1 - BEZNA_MARZA));
 }
 
 export interface ZiskVysledok {
   plochaM2: number;
   predajEur: number;
-  /** materiál presne na plochu (spojite, bez balení) — pre grafy */
-  materialSpojiteEur: number;
-  /** materiál pri reálnom nákupe (celé balenia + 10 % rezerva) */
-  materialBaleniaEur: number;
+  materialEur: number;
   hrubaMarzaEur: number;
   hrubaMarzaPercent: number;
-  eurNaM2Material: number;
-  eurNaM2Marza: number;
-  riadky: MaterialRiadok[];
+  /** Na 1 m² — pre porovnania a rozpad. */
+  predajM2: number;
+  materialM2: number;
+  marzaM2: number;
+  /** Bežná (45 %) cena materiálu a úspora oproti absolventskej — na 1 m². */
+  beznaMaterialM2: number;
+  usporaMaterialM2: number;
   dniRealizacie: number;
-  /** po koľkých m² sa vráti kurz Štandard */
+  /** Po koľkých m² sa vráti kurz Štandard. */
   navratnostM2: number;
 }
 
-/** Spojitá cena materiálu na 1 m² podľa skladby a e-shop cien. */
-export function materialEurM2(): { spolu: number; riadky: MaterialRiadok[] } {
-  const system = getSystem(SYSTEM_ID);
-  if (!system) return { spolu: 0, riadky: [] };
-  const riadky: MaterialRiadok[] = system.vrstvy.map((v) => {
-    const m = getMaterial(v.produktSku);
-    const cena = m?.cena_eur_s_dph ?? null;
-    const eurM2 =
-      cena != null && v.spotrebaKgM2 != null && v.velkostBaleniaKg > 0
-        ? (cena / v.velkostBaleniaKg) * v.spotrebaKgM2
-        : null;
-    return {
-      nazov: v.nazov,
-      produkt: v.produktNazov,
-      sku: v.produktSku,
-      spotrebaKgM2: v.spotrebaKgM2,
-      cenaBalenie: cena,
-      balenieKg: v.velkostBaleniaKg,
-      eurM2: eurM2 != null ? Math.round(eurM2 * 100) / 100 : null,
-    };
-  });
-  const spolu = Math.round(riadky.reduce((s, r) => s + (r.eurM2 ?? 0), 0) * 100) / 100;
-  return { spolu, riadky };
+/** Odhad dní realizácie — technologické prestávky dominujú (2 dni + 1 deň / 60 m²). */
+function odhadDni(plocha: number): number {
+  return Math.max(2, 2 + Math.ceil(plocha / 60));
 }
 
-export function spocitajZisk(plochaM2: number): ZiskVysledok {
+/** Zisk pre daný typ a plochu. Vráti null, ak typ nemá doplnený nákup materiálu. */
+export function spocitajZisk(plochaM2: number, typ: TypPodlahy): ZiskVysledok | null {
+  if (typ.nakupMaterialEurM2 == null) return null;
   const plocha = Math.max(1, Math.round(plochaM2));
-  const system = getSystem(SYSTEM_ID)!;
-  const volba: Volba = {
-    ...PREDVOLENA_VOLBA,
-    co: "podlaha",
-    kde: "interier",
-    priestor: "byt_dom",
-    podklad: "beton",
-    stav: "rovny",
-    vzhlad: "metalik",
-    plochaM2: plocha,
-  };
-  const skladba = postavSkladbu(volba, system);
-  const vysledok = prepocitaj(skladba, volba);
-  const { spolu: m2Material, riadky } = materialEurM2();
-
-  const predaj = plocha * PREDAJ_EUR_M2;
-  const materialSpojite = Math.round(plocha * m2Material * 100) / 100;
-  const materialBalenia = vysledok.cenaMaterialu;
-  const marza = Math.round((predaj - materialBalenia) * 100) / 100;
+  const predajM2 = typ.predajEurM2;
+  const materialM2 = absolventMaterialEurM2(typ.nakupMaterialEurM2);
+  const beznaM2 = beznaMaterialEurM2(typ.nakupMaterialEurM2);
+  const marzaM2 = r2(predajM2 - materialM2);
+  const predaj = r2(plocha * predajM2);
+  const material = r2(plocha * materialM2);
+  const marza = r2(predaj - material);
   return {
     plochaM2: plocha,
     predajEur: predaj,
-    materialSpojiteEur: materialSpojite,
-    materialBaleniaEur: materialBalenia,
+    materialEur: material,
     hrubaMarzaEur: marza,
     hrubaMarzaPercent: predaj > 0 ? Math.round((marza / predaj) * 1000) / 10 : 0,
-    eurNaM2Material: m2Material,
-    eurNaM2Marza: Math.round((PREDAJ_EUR_M2 - m2Material) * 100) / 100,
-    riadky,
-    dniRealizacie: vysledok.dniRealizacie,
-    navratnostM2: Math.ceil(KURZ.priceStandard / Math.max(1, PREDAJ_EUR_M2 - m2Material)),
+    predajM2,
+    materialM2,
+    marzaM2,
+    beznaMaterialM2: beznaM2,
+    usporaMaterialM2: r2(beznaM2 - materialM2),
+    dniRealizacie: odhadDni(plocha),
+    navratnostM2: Math.ceil(KURZ.priceStandard / Math.max(1, marzaM2)),
   };
 }
 
 /** Dáta pre graf „zisk podľa počtu podláh" — typická garáž/izba 30 m². */
-export function seriaZisku(plochaJednejPodlahyM2 = 30, pocty: number[] = [1, 2, 3, 5, 8, 12]) {
+export function seriaZisku(
+  typ: TypPodlahy,
+  plochaJednejPodlahyM2 = 30,
+  pocty: number[] = [1, 2, 3, 5, 8, 12],
+) {
   return pocty.map((n) => {
-    const r = spocitajZisk(n * plochaJednejPodlahyM2);
-    return { pocet: n, plocha: r.plochaM2, predaj: r.predajEur, material: r.materialBaleniaEur, marza: r.hrubaMarzaEur };
+    const r = spocitajZisk(n * plochaJednejPodlahyM2, typ);
+    return {
+      pocet: n,
+      plocha: n * plochaJednejPodlahyM2,
+      predaj: r?.predajEur ?? 0,
+      material: r?.materialEur ?? 0,
+      marza: r?.hrubaMarzaEur ?? 0,
+    };
   });
 }
