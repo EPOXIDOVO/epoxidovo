@@ -480,6 +480,60 @@
 }
 .kl-tagchip.is-hot { border-color: var(--kl-accent); color: var(--kl-accent-hi); background: var(--kl-accent-soft); }
 
+/* ---------- Spolupráca (ruky) ---------- */
+.kl-partner { background: var(--kl-surface); border-block: 1px solid var(--kl-border); }
+.kl-partner__card {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
+  gap: clamp(1.4rem, 3vw, 2.6rem);
+  align-items: start;
+  margin-bottom: clamp(2rem, 4vw, 3rem);
+}
+@media (max-width: 700px) { .kl-partner__card { grid-template-columns: 1fr; } }
+.kl-partner__icon {
+  width: clamp(4.5rem, 7vw, 6rem);
+  aspect-ratio: 1;
+  border-radius: 24px;
+  background: var(--kl-accent-soft);
+  border: 1px solid var(--kl-accent);
+  display: grid;
+  place-items: center;
+  color: var(--kl-accent-hi);
+  box-shadow: 0 18px 44px rgba(201, 124, 69, 0.18);
+}
+.kl-partner__icon svg { width: 58%; height: 58%; }
+.kl-partner h2 { font-size: clamp(1.8rem, 1.1rem + 2.6vw, 2.7rem); margin-top: 0.8rem; }
+.kl-partner h2 em { font-style: normal; color: var(--kl-accent-hi); }
+.kl-partner__body { margin-top: 1rem; font-size: 1.05rem; color: var(--kl-text); max-width: 62ch; }
+.kl-partner__steps {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 16rem), 1fr));
+  gap: 1rem;
+}
+.kl-partner__steps > * { min-width: 0; }
+.kl-pstep {
+  height: 100%;
+  background: var(--kl-panel);
+  border: 1px solid var(--kl-border);
+  border-radius: var(--kl-radius);
+  padding: clamp(1.3rem, 2.4vw, 1.8rem);
+}
+.kl-pstep__n {
+  display: inline-grid;
+  place-items: center;
+  width: 2.1rem;
+  height: 2.1rem;
+  border-radius: 50%;
+  background: var(--kl-accent-soft);
+  border: 1px solid var(--kl-accent);
+  color: var(--kl-accent-hi);
+  font-family: var(--kl-font-mono);
+  font-weight: 700;
+  font-size: 0.95rem;
+}
+.kl-pstep h3 { font-size: 1.15rem; margin: 0.85rem 0 0.4rem; }
+.kl-pstep p { color: var(--kl-subtle); font-size: 0.95rem; }
+
 /* ---------- Intro claim ---------- */
 .kl-claim { background: var(--kl-surface); }
 .kl-claim__grid {

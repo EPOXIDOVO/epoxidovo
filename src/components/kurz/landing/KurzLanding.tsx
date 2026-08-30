@@ -3,6 +3,7 @@
 import * as React from "react";
 import Image from "next/image";
 import Link from "next/link";
+import { Handshake } from "lucide-react";
 import { trackEvent } from "@/components/analytics/Analytics";
 import { TurnstileWidget } from "@/components/turnstile/TurnstileWidget";
 import { Reveal } from "@/components/ui/Reveal";
@@ -37,6 +38,17 @@ const V2 = {
     proof: {
       text: "Nie sme len školitelia — sme realizačná firma EPOXIDOVO s.r.o., ktorá podlahy reálne leje.",
       cta: "Pozri naše realizácie →",
+    },
+    partner: {
+      eyebrow: "Spolupráca s našou firmou",
+      h2a: "Netrúfaš si ešte na veľkú zákazku? ",
+      h2em: "Urobíme ju spolu.",
+      body: "Keď sa dostaneš k zákazke, na ktorú si ešte netrúfaš, nemusíš ju nechať konkurencii. Naša realizačná firma EPOXIDOVO ju urobí — zisk si rozdelíme a ty si pri tom zadarmo zaškolíš seba aj svojich ľudí. Na reálnej zákazke, nie na tréningovej ploche.",
+      steps: [
+        ["Zákazku prinesieš ty", "Pomôžeme ti nastaviť cenovú ponuku tak, aby si zarobil."],
+        ["Realizuje naša partia s tebou", "Lejeme spolu — ty a tvoji ľudia ste pri každom kroku."],
+        ["Zisk si rozdelíme", "Ty máš zárobok aj zaškolený tím, my podiel z realizácie."],
+      ] as [string, string][],
     },
     hcalc: {
       tag: "Kalkulačka zárobku",
@@ -130,6 +142,17 @@ const V2 = {
     proof: {
       text: "We're not just instructors — EPOXIDOVO s.r.o. is a real installation company that actually pours floors.",
       cta: "See our work →",
+    },
+    partner: {
+      eyebrow: "Partnership with our company",
+      h2a: "Not ready for a big job yet? ",
+      h2em: "We'll do it together.",
+      body: "When you land a job you're not ready for, you don't have to leave it to the competition. Our installation company EPOXIDOVO does it — we split the profit and you train yourself and your crew for free. On a real job, not a practice slab.",
+      steps: [
+        ["You bring the job", "We help you set the quote so you make money."],
+        ["Our crew installs it with you", "We pour together — you and your people are in on every step."],
+        ["We split the profit", "You get the earnings and a trained crew, we take a share of the job."],
+      ] as [string, string][],
     },
     hcalc: {
       tag: "Earnings calculator",
@@ -395,6 +418,42 @@ function Hero({ locale }: { locale: Locale }) {
             </p>
           </div>
           <HeroKalkulacka locale={locale} />
+        </div>
+      </div>
+    </section>
+  );
+}
+
+/* ------------------------------------------------------------------ */
+/*  Spolupráca — veľké zákazky robíme spolu, zisk sa delí              */
+/* ------------------------------------------------------------------ */
+
+function Spolupraca({ locale }: { locale: Locale }) {
+  const t = V2[locale].partner;
+  return (
+    <section id="spolupraca" className="kl-section kl-partner">
+      <div className="kl-container">
+        <Reveal className="kl-partner__card">
+          <div className="kl-partner__icon" aria-hidden>
+            <Handshake strokeWidth={1.6} />
+          </div>
+          <div>
+            <span className="kl-eyebrow">{t.eyebrow}</span>
+            <h2>
+              {t.h2a}
+              <em>{t.h2em}</em>
+            </h2>
+            <p className="kl-partner__body">{t.body}</p>
+          </div>
+        </Reveal>
+        <div className="kl-partner__steps">
+          {t.steps.map(([title, desc], i) => (
+            <Reveal as="article" className="kl-pstep" key={title} delay={i * 80}>
+              <span className="kl-pstep__n">{i + 1}</span>
+              <h3>{title}</h3>
+              <p>{desc}</p>
+            </Reveal>
+          ))}
         </div>
       </div>
     </section>
@@ -1011,14 +1070,16 @@ export function KurzLanding({ locale }: { locale: Locale }) {
     <div className="kl" lang={t.htmlLang}>
       <Header locale={locale} onMenu={setMenu} />
       <main>
-        {/* Poradie predáva výsledok: peniaze (hero+kalkulačka) → dôkaz → obsah → cena. */}
+        {/* Poradie: peniaze (hero) → čo dostaneš → CENA hneď (majiteľ
+            2026-08-30) → kalkulačka → spolupráca → dôkaz → obsah. */}
         <Hero locale={locale} />
         <Vrstvy locale={locale} />
+        <Pricing locale={locale} />
         <KurzZisk locale={locale} />
+        <Spolupraca locale={locale} />
         <Claim locale={locale} />
         <Days locale={locale} />
         <Strip locale={locale} />
-        <Pricing locale={locale} />
         <Faq locale={locale} />
         <Contact locale={locale} />
       </main>
