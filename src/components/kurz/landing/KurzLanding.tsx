@@ -90,7 +90,7 @@ const V2 = {
       h2: "Prvá podlaha našich klientov. A ich prvá faktúra.",
       fotoTodo: "foto doplníme",
       prva: "Prvá zákazka:",
-      countLine: (n: number) => `Už ${n} absolventov lialo svoju prvú podlahu.`,
+      countPrefix: "Už ", countSuffix: " absolventov lialo svoju prvú podlahu.",
       // TODO: nahradiť reálnymi referenciami (fotky /images/absolvent-1.jpg až -3.jpg)
       data: [
         { img: "/images/realizacie/r-05.jpg", meno: "Marek · Trnava", citat: "Prvú garáž som lial tri týždne po kurze. Klepal som sa, ale vyšla na jednotku.", suma: 1240 },
@@ -256,7 +256,7 @@ const V2 = {
       h2: "Our clients' first floor. And their first invoice.",
       fotoTodo: "photo coming",
       prva: "First job:",
-      countLine: (n: number) => `${n} graduates have already poured their first floor.`,
+      countPrefix: "", countSuffix: " graduates have already poured their first floor.",
       // TODO: replace with real references (photos /images/absolvent-1.jpg to -3.jpg)
       data: [
         { img: "/images/realizacie/r-05.jpg", meno: "Marek · Trnava", citat: "I poured my first garage three weeks after the course. Hands shaking, but it came out great.", suma: 1240 },
@@ -655,6 +655,33 @@ function Absolventi({ locale }: { locale: Locale }) {
   const t = V2[locale].absolventi;
   const fmt = (n: number) =>
     new Intl.NumberFormat(locale === "sk" ? "sk-SK" : "en-GB", { maximumFractionDigits: 0 }).format(n);
+
+  /* Počítadlo absolventov — naráta sa, keď ho doskroluješ do záberu. */
+  const countRef = React.useRef<HTMLParagraphElement>(null);
+  const [count, setCount] = React.useState(0);
+  React.useEffect(() => {
+    const el = countRef.current;
+    if (!el) return;
+    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+      const raf = requestAnimationFrame(() => setCount(ABSOLVENTI_COUNT));
+      return () => cancelAnimationFrame(raf);
+    }
+    const io = new IntersectionObserver((es) => {
+      if (!es.some((e) => e.isIntersecting)) return;
+      io.disconnect();
+      const t0 = performance.now(), dur = 1200;
+      const step = (now: number) => {
+        const k = Math.min(1, (now - t0) / dur);
+        setCount(Math.round(ABSOLVENTI_COUNT * (1 - Math.pow(1 - k, 3))));
+        if (k < 1) requestAnimationFrame(step);
+      };
+      requestAnimationFrame(step);
+    }, { threshold: 0.4 });
+    io.observe(el);
+    return () => io.disconnect();
+  }, []);
+
+  const karty = t.data;
   return (
     <section id="absolventi" className="kl-section kl-abs">
       <div className="kl-container">
@@ -662,23 +689,29 @@ function Absolventi({ locale }: { locale: Locale }) {
           <span className="kl-eyebrow">{t.eyebrow}</span>
           <h2>{t.h2}</h2>
         </div>
-        <div className="kl-abs__grid">
-          {t.data.map((a, i) => (
-            <Reveal as="article" className="kl-abs-card" key={a.meno} delay={i * 80}>
-              {/* Dummy placeholder — NIE reálna fotka (majiteľ: doplniť neskôr). */}
+      </div>
+      {/* Pás ako pri realizáciách — beží, na hover sa zastaví. */}
+      <div className="kl-strip__marquee">
+        <div className="kl-strip__track kl-abs__track">
+          {[...karty, ...karty].map((a, i) => (
+            <article className="kl-abs-card kl-abs-card--strip" key={`${a.meno}-${i}`} aria-hidden={i >= karty.length}>
               <div className="kl-abs-card__ph" aria-hidden>
                 <span>?</span>
                 <small>{t.fotoTodo}</small>
               </div>
               <div className="kl-abs-card__body">
                 <p className="kl-abs-card__meno">{a.meno}</p>
-                <p className="kl-abs-card__citat">„{a.citat}&ldquo;</p>
+                <p className="kl-abs-card__citat">„{a.citat}“</p>
                 <p className="kl-abs-card__suma">{t.prva} {fmt(a.suma)} €</p>
               </div>
-            </Reveal>
+            </article>
           ))}
         </div>
-        <p className="kl-abs__count">{t.countLine(ABSOLVENTI_COUNT)}</p>
+      </div>
+      <div className="kl-container">
+        <p className="kl-abs__count" ref={countRef}>
+          {t.countPrefix}<b>{count}</b>{t.countSuffix}
+        </p>
       </div>
     </section>
   );

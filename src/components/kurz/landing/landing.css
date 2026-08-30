@@ -544,8 +544,9 @@
 .kl-hcalc__note {
   display: block;
   margin-top: 0.8rem;
-  padding: 1.1rem 1rem;
-  font-size: 1.22rem;
+  padding: 1rem 0.7rem;
+  font-size: 1.02rem;
+  white-space: nowrap;
   text-align: center;
   line-height: 1.4;
   border-radius: 10px;
@@ -773,7 +774,10 @@
 .kl-abs-card__meno { font-weight: 700; color: var(--kl-ink); }
 .kl-abs-card__citat { font-size: 0.93rem; color: var(--kl-text); margin-top: 0.4rem; }
 .kl-abs-card__suma { margin-top: 0.85rem; font-family: var(--kl-font-mono); font-weight: 700; font-size: 0.95rem; color: var(--kl-accent-hi); font-variant-numeric: tabular-nums; }
-.kl-abs__count { text-align: center; margin: 2rem auto 0; color: var(--kl-subtle); font-size: 0.98rem; }
+.kl-abs__count { text-align: center; margin: 2.2rem auto 0; color: var(--kl-subtle); font-size: 1.05rem; }
+.kl-abs__count b { font-family: var(--kl-font-mono); font-weight: 700; font-size: 1.5em; color: var(--kl-profit); font-variant-numeric: tabular-nums; }
+.kl-abs-card--strip { width: clamp(17rem, 26vw, 21rem); margin-right: 1rem; flex: none; }
+.kl-abs__track { animation-duration: 38s; }
 
 /* ---------- Pre koho to nie je (striezlivé, bez akcentu) ---------- */
 .kl-prekoho { background: var(--kl-bg); }
@@ -1168,6 +1172,9 @@
 .kl-vyhoda-cell--save .kl-vyhoda-cell__val { color: var(--kl-profit); }
 
 /* ---------- Ceny ---------- */
+.kl .kl-pricing__grid .reveal-init { opacity: 0; transform: translateY(48px) scale(0.94); }
+.kl-price { transition: transform 250ms var(--kl-ease), box-shadow 250ms var(--kl-ease), border-color 250ms var(--kl-ease); }
+.kl-price:hover { transform: translateY(-5px); box-shadow: inset 0 1px 0 rgba(255,255,255,0.12), 0 18px 44px rgba(0, 0, 0, 0.5); }
 .kl-pricing { background: var(--kl-bg); }
 .kl-pricing__grid {
   display: grid;
