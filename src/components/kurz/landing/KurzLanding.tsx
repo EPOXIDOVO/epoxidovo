@@ -106,7 +106,7 @@ const V2 = {
       typAria: "Typ podlahy",
       plocha: "Plocha zákazky",
       rowSell: "Vyfakturuješ zákazníkovi",
-      rowMat: "Materiál (veľkoobchod)",
+      rowMat: "Materiál — veľkoobchod pre kurzistov",
       rowKeep: "Zarobíš",
       zaBalenia: "za celé balenia",
       balenia: (n: number) => `${n} ${n === 1 ? "balenie" : n < 5 ? "balenia" : "balení"}`,
@@ -274,7 +274,7 @@ const V2 = {
       typAria: "Floor type",
       plocha: "Job area",
       rowSell: "You invoice the client",
-      rowMat: "Material (wholesale)",
+      rowMat: "Material — wholesale for course members",
       rowKeep: "You earn",
       zaBalenia: "for whole packages",
       balenia: (n: number) => `${n} package${n === 1 ? "" : "s"}`,
@@ -525,7 +525,7 @@ function HeroKalkulacka({ locale }: { locale: Locale }) {
           <dd>{fmt(aSell)} €</dd>
         </div>
         <div>
-          <dt>{t.rowMat}<small>{t.balenia(r.baleniaSpolu)}</small></dt>
+          <dt>{t.rowMat}</dt>
           <dd>−{fmt(aMat)} €</dd>
         </div>
         <div className="is-total"><dt>{t.rowKeep}</dt><dd>{fmt(aKeep)} €</dd></div>
