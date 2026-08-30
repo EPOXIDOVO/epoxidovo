@@ -107,7 +107,7 @@ const V2 = {
       rowKeep: "Zarobíš",
       zaBalenia: "za celé balenia",
       balenia: (n: number) => `${n} ${n === 1 ? "balenie" : n < 5 ? "balenia" : "balení"}`,
-      vyhoda: (bezna: string, moja: string) => `Materiál máš za ${moja} €/m² namiesto ${bezna} €/m² v e-shope — vďaka veľkým odberom našej realizačnej firmy.`,
+      vyhoda: (bezna: string, moja: string) => `Materiál pre kurzistov: ${moja} €/m² namiesto ${bezna} €/m².`,
       uspora: (eur: string, m2: number) => `Na zákazke ${m2} m² ušetríš na materiáli ${eur} € oproti bežnej cene.`,
       note: (m2: number) => `Kurz Štandard (${KURZ.priceStandard} €) sa ti vráti po ~${m2} m².`,
       ctxLabel: "Typické plochy",
@@ -272,7 +272,7 @@ const V2 = {
       rowKeep: "You earn",
       zaBalenia: "for whole packages",
       balenia: (n: number) => `${n} package${n === 1 ? "" : "s"}`,
-      vyhoda: (bezna: string, moja: string) => `You get material at €${moja}/m² instead of €${bezna}/m² in the e-shop — thanks to our installation company's volumes.`,
+      vyhoda: (bezna: string, moja: string) => `Course-member material: €${moja}/m² instead of €${bezna}/m².`,
       uspora: (eur: string, m2: number) => `On a ${m2} m² job you save €${eur} on material vs the regular price.`,
       note: (m2: number) => `The Standard course (€${KURZ.priceStandard}) pays back after ~${m2} m².`,
       ctxLabel: "Typical areas",
@@ -539,8 +539,7 @@ function HeroKalkulacka({ locale }: { locale: Locale }) {
       </dl>
       {/* Veľkoobchodná výhoda — stiahnutá zo zrušenej veľkej sekcie. */}
       <p className="kl-hcalc__vyhoda">
-        <b>−{usporaPct} %</b> {t.vyhoda(fmt2(r.beznaMaterialM2), fmt2(r.materialM2))}{" "}
-        <em>{t.uspora(fmt(r.usporaMaterialM2 * r.plochaM2), r.plochaM2)}</em>
+        <b>−{usporaPct} %</b> {t.vyhoda(fmt2(r.beznaMaterialM2), fmt2(r.materialM2))}
       </p>
       {/* Klik na návratnosť vedie rovno na ponuku kurzov (majiteľ). */}
       <a href="#baliky" className="kl-hcalc__note">{t.note(r.navratnostM2)}</a>

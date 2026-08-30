@@ -522,22 +522,23 @@
 .kl-hcalc__note {
   display: block;
   margin-top: 0.8rem;
-  padding: 0.65rem 0.9rem;
+  padding: 0.95rem 1rem;
+  font-size: 1.02rem;
+  text-align: center;
+  line-height: 1.4;
   border-radius: 10px;
   background: var(--kl-profit-soft);
   border: 1px solid var(--kl-profit);
   box-shadow: 0 0 0 3px var(--kl-profit-soft);
   color: var(--kl-ink);
-  font-size: 0.9rem;
   font-weight: 700;
   cursor: pointer;
   transition: background 200ms var(--kl-ease), transform 200ms var(--kl-ease);
 }
 .kl-hcalc__note:hover { background: rgba(85, 196, 143, 0.24); transform: translateY(-1px); }
 /* veľkoobchodná výhoda — stiahnutá zo zrušenej veľkej kalkulačky */
-.kl-hcalc__vyhoda { margin-top: 0.6rem; font-size: 0.78rem; color: var(--kl-subtle); }
+.kl-hcalc__vyhoda { margin-top: 0.6rem; font-size: 0.74rem; color: var(--kl-subtle); white-space: nowrap; }
 .kl-hcalc__vyhoda b { font-family: var(--kl-font-mono); font-weight: 700; color: var(--kl-profit); margin-right: 0.25rem; }
-.kl-hcalc__vyhoda em { display: block; font-style: normal; font-weight: 700; color: var(--kl-profit); margin-top: 0.25rem; }
 /* typické plochy — klikacie pilulky s ikonami (garáž / dom), jeden riadok */
 .kl-hcalc__ctx { display: flex; flex-wrap: nowrap; gap: 0.5rem; margin-top: 0.7rem; }
 @media (max-width: 380px) { .kl-hcalc__ctx { flex-wrap: wrap; } }
