@@ -697,7 +697,19 @@
 .kl-zisk__row dd { margin: 0; font-family: var(--kl-font-mono); font-weight: 700; font-size: 1.35rem; color: var(--kl-ink); white-space: nowrap; font-variant-numeric: tabular-nums; }
 .kl-zisk__row--total { border-top-color: var(--kl-profit); }
 .kl-zisk__row--total dd { font-size: 2.1rem; color: var(--kl-profit); }
-.kl-zisk__note { font-size: 0.9rem; margin-top: 1.1rem; color: var(--kl-subtle); }
+/* Návratnosť kurzu je predajný argument — nesmie byť sivá poznámka
+   (majiteľ 2026-08-30: „nezvýraznené"). Rovnaký zelený chip ako v hero. */
+.kl-zisk__note {
+  display: inline-block;
+  font-size: 0.9rem;
+  margin-top: 1.1rem;
+  padding: 0.65rem 0.9rem;
+  border-radius: 10px;
+  background: var(--kl-profit-soft);
+  border: 1px solid var(--kl-profit);
+  color: var(--kl-ink);
+  font-weight: 700;
+}
 .kl-zisk__disclaimer { font-size: 0.82rem; margin-top: 1.2rem; color: var(--kl-faint); }
 
 /* prepínač typu podlahy */
