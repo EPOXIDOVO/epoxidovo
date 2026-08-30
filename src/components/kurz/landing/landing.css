@@ -447,7 +447,27 @@
 .kl-hcalc__note:hover { background: rgba(85, 196, 143, 0.24); transform: translateY(-1px); }
 .kl-hcalc__more { display: inline-block; margin-top: 0.7rem; font-size: 0.85rem; font-weight: 700; color: var(--kl-accent-hi); }
 .kl-hcalc__more:hover { text-decoration: underline; }
-.kl-hcalc__ctx { font-size: 0.76rem; color: var(--kl-faint); margin-top: 0.5rem; }
+/* typické plochy — klikacie pilulky s ikonami (garáž / dom) */
+.kl-hcalc__ctx { display: flex; flex-wrap: wrap; gap: 0.5rem; margin-top: 0.7rem; }
+.kl-hcalc__ctx button {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  font: inherit;
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: var(--kl-subtle);
+  background: var(--kl-field-bg);
+  border: 1px solid var(--kl-border-strong);
+  border-radius: 999px;
+  padding: 0.45rem 0.85rem;
+  cursor: pointer;
+  transition: border-color 180ms var(--kl-ease), color 180ms var(--kl-ease), background 180ms var(--kl-ease);
+}
+.kl-hcalc__ctx svg { width: 1.05rem; height: 1.05rem; color: var(--kl-accent-hi); flex: none; }
+.kl-hcalc__ctx b { font-family: var(--kl-font-mono); font-weight: 700; color: var(--kl-ink); font-variant-numeric: tabular-nums; }
+.kl-hcalc__ctx button:hover { border-color: var(--kl-accent); color: var(--kl-ink); }
+.kl-hcalc__ctx button.is-active { background: var(--kl-accent-soft); border-color: var(--kl-accent); color: var(--kl-ink); }
 
 /* ---------- Sekcie ---------- */
 .kl-section { padding-block: clamp(4rem, 9vw, 7.5rem); }

@@ -26,7 +26,7 @@ const V2 = {
     h1em: "A postav na tom firmu.",
     lead: "Toto nie je len kurz — je to celý funkčný biznis model v kocke. Roky skúseností z reálnych zákaziek, softvér, vďaka ktorému firma beží aj bez teba, a reálne čísla, ktoré inde neuvidíš. Naučíš sa remeslo — a biznis, ktorý ho predáva.",
     ctaMain: "Chcem prístup",
-    ctaProgram: "Koľko zarobím? ↓",
+    ctaProgram: "Koľko môžem zarobiť? ↓",
     facts: [
       ["8+ h", "videa z reálnych zákaziek"],
       ["40+", "lekcií v 2 moduloch"],
@@ -68,7 +68,9 @@ const V2 = {
       rowMat: "Materiál (veľkoobchod)",
       rowKeep: "Zarobíš",
       note: (m2: number) => `Kurz Štandard (${KURZ.priceStandard} €) sa ti vráti po ~${m2} m².`,
-      ctx: "Priemerná garáž má ~50 m², priemerný rodinný dom ~120 m².",
+      ctxLabel: "Typické plochy",
+      ctxGaraz: "Priemerná garáž",
+      ctxDom: "Rodinný dom",
       more: "Celá kalkulačka s detailmi ↓",
     },
     claimH2a: "Kurz nakrútený na zákazkách, ktoré nám ",
@@ -158,7 +160,7 @@ const V2 = {
     h1em: "And build a business on it.",
     lead: "This isn't just a course — it's a complete, working business model. Years of experience from real jobs, software that keeps the company running without you, and real numbers you won't see anywhere else. You learn the craft — and the business that sells it.",
     ctaMain: "Get access",
-    ctaProgram: "How much will I earn? ↓",
+    ctaProgram: "How much can I earn? ↓",
     facts: [
       ["8+ h", "of video from real jobs"],
       ["40+", "lessons in 2 modules"],
@@ -200,7 +202,9 @@ const V2 = {
       rowMat: "Material (wholesale)",
       rowKeep: "You earn",
       note: (m2: number) => `The Standard course (€${KURZ.priceStandard}) pays back after ~${m2} m².`,
-      ctx: "An average garage is ~50 m², an average family house ~120 m².",
+      ctxLabel: "Typical areas",
+      ctxGaraz: "Average garage",
+      ctxDom: "Family house",
       more: "Full calculator with details ↓",
     },
     claimH2a: "A course filmed on jobs our ",
@@ -438,7 +442,17 @@ function HeroKalkulacka({ locale }: { locale: Locale }) {
       </dl>
       {/* Klik na návratnosť vedie rovno na ponuku kurzov (majiteľ). */}
       <a href="#cena" className="kl-hcalc__note">{t.note(r.navratnostM2)}</a>
-      <p className="kl-hcalc__ctx">{t.ctx}</p>
+      {/* Typické plochy — klik rovno nastaví slider (garáž 50, dom 120). */}
+      <div className="kl-hcalc__ctx" role="group" aria-label={t.ctxLabel}>
+        <button type="button" className={m2 === 50 ? "is-active" : ""} onClick={() => setM2(50)}>
+          <svg viewBox="0 0 24 24" fill="none" aria-hidden><path d="M3 11 12 4l9 7" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"/><path d="M5 10v10h14V10M8 20v-5h8v5M8 17.5h8" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"/></svg>
+          {t.ctxGaraz} <b>~50 m²</b>
+        </button>
+        <button type="button" className={m2 === 120 ? "is-active" : ""} onClick={() => setM2(120)}>
+          <svg viewBox="0 0 24 24" fill="none" aria-hidden><path d="M3 11 12 4l9 7" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"/><path d="M5 10v10h14V10M10 20v-6h4v6" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"/></svg>
+          {t.ctxDom} <b>~120 m²</b>
+        </button>
+      </div>
       <a href="#kalkulacka" className="kl-hcalc__more">{t.more}</a>
     </aside>
   );
