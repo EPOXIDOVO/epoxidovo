@@ -671,9 +671,23 @@
 .kl-zisk__slider-label { display: flex; justify-content: space-between; align-items: baseline; color: var(--kl-ink); margin-bottom: 1rem; font-weight: 600; }
 .kl-zisk__slider-label strong { font-family: var(--kl-font-mono); font-size: 2rem; font-weight: 700; font-variant-numeric: tabular-nums; }
 .kl-range { width: 100%; appearance: none; height: 5px; border-radius: 5px; background: linear-gradient(90deg, var(--kl-accent) var(--p, 10%), var(--kl-border) var(--p, 10%)); outline: none; margin: 0.4rem 0 1.2rem; cursor: pointer; }
-.kl-range::-webkit-slider-thumb { appearance: none; width: 26px; height: 26px; border-radius: 50%; background: #fff; border: 7px solid var(--kl-accent); cursor: pointer; transition: transform 150ms var(--kl-ease); }
-.kl-range::-webkit-slider-thumb:hover { transform: scale(1.08); }
-.kl-range::-moz-range-thumb { width: 26px; height: 26px; border-radius: 50%; background: #fff; border: 7px solid var(--kl-accent); cursor: pointer; }
+.kl-range::-webkit-slider-thumb { appearance: none; width: 26px; height: 26px; border-radius: 50%; background: #fff; border: 7px solid var(--kl-accent); cursor: grab; transition: transform 180ms var(--kl-ease), box-shadow 180ms var(--kl-ease), border-color 180ms var(--kl-ease); }
+/* Hover na guličke: zväčšenie + medená žiara (majiteľ 2026-08-30). */
+.kl-range:hover::-webkit-slider-thumb,
+.kl-range:focus-visible::-webkit-slider-thumb {
+  transform: scale(1.22);
+  border-color: var(--kl-accent-hi);
+  box-shadow: 0 0 0 8px rgba(201, 124, 69, 0.22), 0 0 22px rgba(232, 155, 99, 0.55);
+}
+.kl-range:active::-webkit-slider-thumb { cursor: grabbing; transform: scale(1.32); box-shadow: 0 0 0 11px rgba(201, 124, 69, 0.28), 0 0 28px rgba(232, 155, 99, 0.7); }
+.kl-range::-moz-range-thumb { width: 26px; height: 26px; border-radius: 50%; background: #fff; border: 7px solid var(--kl-accent); cursor: grab; transition: transform 180ms var(--kl-ease), box-shadow 180ms var(--kl-ease), border-color 180ms var(--kl-ease); }
+.kl-range:hover::-moz-range-thumb,
+.kl-range:focus-visible::-moz-range-thumb {
+  transform: scale(1.22);
+  border-color: var(--kl-accent-hi);
+  box-shadow: 0 0 0 8px rgba(201, 124, 69, 0.22), 0 0 22px rgba(232, 155, 99, 0.55);
+}
+.kl-range:active::-moz-range-thumb { transform: scale(1.32); box-shadow: 0 0 0 11px rgba(201, 124, 69, 0.28), 0 0 28px rgba(232, 155, 99, 0.7); }
 .kl-range::-moz-range-track { height: 5px; border-radius: 5px; background: var(--kl-border); }
 .kl-zisk__quick { display: flex; flex-wrap: wrap; gap: 0.5rem; margin-bottom: 1.6rem; }
 .kl-chip {
