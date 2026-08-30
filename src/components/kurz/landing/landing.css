@@ -421,18 +421,23 @@
 }
 .kl-hcalc__types { display: grid; grid-template-columns: 1fr 1fr; gap: 0.45rem; margin-bottom: 1rem; }
 .kl-hcalc__typ {
+  display: flex;
+  align-items: center;
+  gap: 0.55rem;
+  text-align: left;
   font: inherit;
-  font-size: 0.85rem;
+  font-size: 0.84rem;
   font-weight: 600;
   color: var(--kl-text);
   background: var(--kl-field-bg);
   border: 1px solid var(--kl-border-strong);
   border-radius: 10px;
-  padding: 0.5rem 0.6rem;
+  padding: 0.35rem 0.55rem 0.35rem 0.35rem;
   cursor: pointer;
   transition: background 180ms var(--kl-ease), border-color 180ms var(--kl-ease), color 180ms var(--kl-ease);
 }
-.kl-hcalc__typ:hover { border-color: var(--kl-accent); }
+.kl-hcalc__typ img { width: 34px; height: 34px; border-radius: 7px; object-fit: cover; flex: none; }
+.kl-hcalc__typ:hover { border-color: var(--kl-accent); color: var(--kl-ink); }
 .kl-hcalc__typ.is-active { background: var(--kl-accent); border-color: var(--kl-accent); color: #160d06; font-weight: 700; }
 .kl-hcalc__slider { display: flex; justify-content: space-between; align-items: baseline; font-size: 0.85rem; font-weight: 600; color: var(--kl-subtle); }
 .kl-hcalc__slider strong { font-family: var(--kl-font-mono); font-size: 1.25rem; color: var(--kl-ink); font-variant-numeric: tabular-nums; }

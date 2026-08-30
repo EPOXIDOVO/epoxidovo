@@ -22,6 +22,16 @@ import "./landing.css";
 /** Počet absolventov v referenčnej sekcii — meniť tu. */
 const ABSOLVENTI_COUNT = 47;
 
+/** Náhľady typov v hero kalkulačke — rovnaké fotky ako kategórie na webe. */
+const TYP_NAHLADY: Record<TypSlug, string> = {
+  metalicke: "/images/categories/metalicke.jpg",
+  mramorove: "/images/categories/mramorove.jpg",
+  jednofarebne: "/images/categories/jednofarebne.jpg",
+  chipsove: "/images/categories/chipsove.jpg",
+  mistral: "/images/vzorkovnik/arturo/mistral-endless-beach.webp",
+  "beton-look": "/images/vzorkovnik/arturo/concrete-look-downtown-mix.webp",
+};
+
 const V2 = {
   sk: {
     badge: "Online kurz · prístup okamžite po zaplatení",
@@ -471,7 +481,7 @@ function HeroKalkulacka({ locale }: { locale: Locale }) {
         <span className="kl-hcalc__live"><i aria-hidden />{t.live}</span>
       </div>
       <div className="kl-hcalc__types" role="group" aria-label={t.typAria}>
-        {TYPY.filter((x) => x.nakupMaterialEurM2 != null).map((x) => (
+        {TYPY.map((x) => (
           <button
             key={x.slug}
             type="button"
@@ -479,6 +489,7 @@ function HeroKalkulacka({ locale }: { locale: Locale }) {
             onClick={() => setSlug(x.slug)}
             aria-pressed={x.slug === slug}
           >
+            <Image src={TYP_NAHLADY[x.slug]} alt="" width={68} height={68} sizes="34px" />
             {x.label}
           </button>
         ))}
