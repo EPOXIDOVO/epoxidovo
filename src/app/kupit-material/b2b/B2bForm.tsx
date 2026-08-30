@@ -3,6 +3,7 @@
 import * as React from "react";
 import { Check, Building2 } from "lucide-react";
 import { TurnstileWidget } from "@/components/turnstile/TurnstileWidget";
+import { ChybajuceUdaje } from "@/components/ui/ChybajuceUdaje";
 
 const inputCls =
   "block w-full appearance-none px-4 py-3 rounded-xl border border-zinc-300 bg-white focus:outline-none focus:ring-2 focus:ring-[#3db6e8] focus:border-transparent text-sm text-zinc-900 placeholder:text-zinc-400";
@@ -82,11 +83,20 @@ export function B2bForm() {
 
   // Firma a IČO voliteľné — aj súkromná osoba, čo si robí dom sama
   const icoCiste = ico.replace(/\s/g, "");
-  const valid =
-    (firma.trim() === "" || firma.trim().length >= 2) &&
-    (icoCiste === "" || /^\d{6,8}$/.test(icoCiste)) &&
-    /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email.trim()) &&
-    /^[+\d\s\-/()]{9,30}$/.test(phone.trim());
+  const firmaOk = firma.trim() === "" || firma.trim().length >= 2;
+  const icoOk = icoCiste === "" || /^\d{6,8}$/.test(icoCiste);
+  const emailOk = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email.trim());
+  const telefonOk = /^[+\d\s\-/()]{9,30}$/.test(phone.trim());
+
+  const valid = firmaOk && icoOk && emailOk && telefonOk;
+
+  // Čo drží tlačidlo zamknuté — bez toho je to len šedý gombík bez dôvodu.
+  const chybaju: string[] = [];
+  if (!firmaOk) chybaju.push("názov firmy (aspoň 2 znaky)");
+  if (!icoOk) chybaju.push("IČO ako 6–8 číslic");
+  if (!emailOk) chybaju.push("platný e-mail");
+  if (!telefonOk) chybaju.push("telefónne číslo");
+  if (!token) chybaju.push("overenie, že nie si robot");
 
   const submit = async () => {
     setState("sending");
@@ -216,6 +226,10 @@ export function B2bForm() {
       >
         {state === "sending" ? "Odosielam…" : "Požiadať o B2B účet"}
       </button>
+
+      {state !== "sending" && (
+        <ChybajuceUdaje polozky={chybaju} className="mt-2 text-center" />
+      )}
     </div>
   );
 }

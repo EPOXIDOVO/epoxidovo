@@ -22,6 +22,10 @@ export type SkladbaPolozka = {
   krok: string; // "1. Penetrácia" | "2. Hlavná vrstva" | "3. Vrchný lak"
 };
 
+/** Oranžová pilulka — rovnaká pre „Pridať do košíka" aj pre „V košíku". */
+const ctaCls =
+  "inline-flex items-center gap-2 px-6 py-3.5 rounded-full bg-[#ea580c] text-white font-extrabold hover:bg-[#c2410c] shadow-[0_10px_28px_rgba(249,115,22,0.4)] transition-colors whitespace-nowrap";
+
 const fmt = new Intl.NumberFormat("sk-SK", {
   minimumFractionDigits: 2,
   maximumFractionDigits: 2,
@@ -41,6 +45,17 @@ export function PridatDoKosika({
     () => new Set(skladba.map((s) => s.sku)),
   );
 
+  // PREČO ref: stav „pridané" drží časovač 4 s. Bez uloženia by druhý klik
+  // nechal bežať aj prvý časovač a hláška by zhasla skôr, než má; a pri
+  // odchode na košík by tikal do odmontovaného komponentu.
+  const casovacRef = React.useRef<number | null>(null);
+  React.useEffect(
+    () => () => {
+      if (casovacRef.current) window.clearTimeout(casovacRef.current);
+    },
+    [],
+  );
+
   const pridaj = (polozky: SkladbaPolozka[]) => {
     add(
       polozky.map((p) => ({
@@ -57,7 +72,8 @@ export function PridatDoKosika({
     );
     setPridane(true);
     setOpen(false);
-    setTimeout(() => setPridane(false), 4000);
+    if (casovacRef.current) window.clearTimeout(casovacRef.current);
+    casovacRef.current = window.setTimeout(() => setPridane(false), 4000);
   };
 
   const sumaVybranych = skladba
@@ -66,24 +82,28 @@ export function PridatDoKosika({
 
   return (
     <>
-      <button
-        type="button"
-        onClick={() => (skladba.length > 1 ? setOpen(true) : pridaj([produkt]))}
-        className="inline-flex items-center gap-2 px-6 py-3.5 rounded-full bg-[#ea580c] text-white font-extrabold hover:bg-[#c2410c] shadow-[0_10px_28px_rgba(249,115,22,0.4)] transition-colors whitespace-nowrap"
-      >
-        {pridane ? (
-          <>
-            <Check className="w-5 h-5" aria-hidden /> V košíku —{" "}
-            <Link href="/kupit-material/kosik" className="underline">
-              zobraziť
-            </Link>
-          </>
-        ) : (
-          <>
-            <ShoppingCart className="w-5 h-5" aria-hidden /> Pridať do košíka
-          </>
-        )}
-      </button>
+      {/*
+        PREČO dva samostatné prvky a nie <Link> vnorený v <button>: predtým
+        bol odkaz „zobraziť" vnútri tlačidla s onClick={pridaj}, takže klik
+        naň najprv pridal produkt DRUHÝKRÁT (ďalšie vedro za stovky eur) a
+        až potom navigoval. Vnorený interaktívny prvok je aj neplatné HTML.
+        Počas 4 s po pridaní je celá pilulka odkaz do košíka — nedá sa tak
+        omylom pridať to isté dvakrát za sebou.
+      */}
+      {pridane ? (
+        <Link href="/kupit-material/kosik" className={ctaCls}>
+          <Check className="w-5 h-5" aria-hidden /> V košíku —{" "}
+          <span className="underline">zobraziť</span>
+        </Link>
+      ) : (
+        <button
+          type="button"
+          onClick={() => (skladba.length > 1 ? setOpen(true) : pridaj([produkt]))}
+          className={ctaCls}
+        >
+          <ShoppingCart className="w-5 h-5" aria-hidden /> Pridať do košíka
+        </button>
+      )}
 
       {open && (
         <div

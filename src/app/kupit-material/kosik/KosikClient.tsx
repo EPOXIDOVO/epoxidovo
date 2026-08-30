@@ -5,8 +5,16 @@ import Link from "next/link";
 import { Minus, Plus, Trash2, ShoppingCart, Check, Phone, FileText, ShieldCheck, Truck, RotateCcw, Lock } from "lucide-react";
 import { useCart } from "@/lib/cart";
 import { calcWeightKg } from "@/lib/calculator";
-import { getShippingOptions, FREE_SHIPPING_MIN_EUR, type PaymentMethod } from "@/lib/payments";
+import {
+  getShippingOptions,
+  FREE_SHIPPING_MIN_EUR,
+  FREE_SHIPPING_MAX_KG,
+  DOPRAVA_ZADARMO,
+  PALETA_INFO,
+  type PaymentMethod,
+} from "@/lib/payments";
 import { TurnstileWidget } from "@/components/turnstile/TurnstileWidget";
+import { ChybajuceUdaje } from "@/components/ui/ChybajuceUdaje";
 import { trackEvent } from "@/components/analytics/Analytics";
 import { SITE } from "@/lib/site";
 
@@ -22,6 +30,7 @@ interface ShippingOptionDto {
   label: string;
   description: string;
   priceEur: number | null;
+  paleta?: boolean;
 }
 
 function fmt(n: number): string {
@@ -48,6 +57,9 @@ export function KosikClient({ paymentMethods }: { paymentMethods: PaymentMethod[
   const [errMsg, setErrMsg] = React.useState<string | null>(null);
   const [done, setDone] = React.useState<string | null>(null);
   const [paid, setPaid] = React.useState(false);
+  // Zapamätáme si to pri odoslaní — po clear() je košík prázdny a z dopravy
+  // sa už nedá vyčítať, či sme cenu potvrdzovali e-mailom.
+  const [dopravaNaPotvrdenie, setDopravaNaPotvrdenie] = React.useState(false);
   const [platbaZrusena, setPlatbaZrusena] = React.useState(false);
 
   // Návrat zo Stripe Checkout (user 2026-08-27) — success/cancel URL nesie
@@ -81,7 +93,27 @@ export function KosikClient({ paymentMethods }: { paymentMethods: PaymentMethod[
   // Doprava — JEDEN zdroj so serverom (payments.ts), ceny sedia s /api/order.
   const shippingOptions: ShippingOptionDto[] = getShippingOptions(weightKg, subtotal);
   const shipping = shippingOptions.find((s) => s.id === shippingId)!;
-  const selectedPayment = paymentMethods.find((m) => m.id === paymentId);
+
+  const hm = Math.round(weightKg * 10) / 10;
+  // Paleta bez ceny — objednávku dokončiť VIEME, len sumu doladíme e-mailom.
+  const paletaBezCeny =
+    shippingId === "kurier" && shipping.paleta === true && shipping.priceEur == null;
+  const kartaDisabled = hasOnRequest || (shippingId === "kurier" && shipping.priceEur == null);
+  // Karta mohla ostať vybratá z času, keď bola doprava známa (user pridal
+  // ťažké balenie a zrazu je z toho paleta). Bez tohto by objednávka prešla
+  // validáciou v prehliadači a padla až na serveri.
+  const platbaId = kartaDisabled && paymentId === "karta"
+    ? (paymentMethods.find((m) => m.id !== "karta")?.id ?? "prevod")
+    : paymentId;
+  // Prečo karta nejde — zákazník to musí vidieť pri výbere, nie až po odoslaní
+  // (server takú objednávku odmieta v /api/order).
+  const kartaDovod = hasOnRequest
+    ? "Kartou sa platí konečná suma. V košíku máš položku „na dopyt“ — nacenime ju e-mailom a pošleme platobné údaje."
+    : paletaBezCeny
+      ? "Kartou sa platí celá suma naraz, a cenu paletovej dopravy poznáme až po potvrdení dopravcom. Vyber bankový prevod alebo osobný odber — údaje aj s dopravou ti pošleme e-mailom."
+      : "Kartou sa platí konečná suma — tú pri tejto objednávke potvrdzujeme e-mailom.";
+
+  const selectedPayment = paymentMethods.find((m) => m.id === platbaId);
   const surcharge = selectedPayment?.surchargeEur ?? 0;
   // Reálny súčet vieme ukázať len keď nič nie je „na dopyt".
   const totalKnown = !hasOnRequest && shipping.priceEur != null;
@@ -89,15 +121,26 @@ export function KosikClient({ paymentMethods }: { paymentMethods: PaymentMethod[
     ? Math.round((subtotal + (shipping.priceEur ?? 0) + surcharge) * 100) / 100
     : null;
 
-  const kartaDisabled = hasOnRequest || (shippingId === "kurier" && shipping.priceEur == null);
+  // Rozbité na pomenované kúsky — z jedného veľkého && sa nedá povedať,
+  // čo presne drží tlačidlo zamknuté (viď `chybaju` nižšie).
+  // Meno musí obsahovať medzeru: rovnakú podmienku má aj /api/order, takže
+  // zmierniť ju tu by odmietnutie len posunulo o krok ďalej — radšej to
+  // človeku povieme nahlas.
+  const menoOk = name.trim().length >= 3 && name.trim().includes(" ");
+  const emailOk = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email.trim());
+  const telefonOk = /^[+\d\s\-/()]{9,30}$/.test(phone.trim());
+  const adresaOk = shippingId === "pickup" || address.trim().length >= 8;
 
-  const valid =
-    name.trim().length >= 3 &&
-    name.trim().includes(" ") &&
-    /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email.trim()) &&
-    /^[+\d\s\-/()]{9,30}$/.test(phone.trim()) &&
-    (shippingId === "pickup" || address.trim().length >= 8) &&
-    consent;
+  const valid = menoOk && emailOk && telefonOk && adresaOk && consent;
+
+  // Čo ešte chýba — v poradí polí vo formulári, nech oko ide zhora nadol.
+  const chybaju: string[] = [];
+  if (!menoOk) chybaju.push("meno aj priezvisko");
+  if (!emailOk) chybaju.push("platný e-mail");
+  if (!telefonOk) chybaju.push("telefónne číslo");
+  if (!adresaOk) chybaju.push("doručovaciu adresu");
+  if (!consent) chybaju.push("súhlas s podmienkami");
+  if (!token) chybaju.push("overenie, že nie si robot");
 
   const submit = async () => {
     setState("sending");
@@ -113,7 +156,7 @@ export function KosikClient({ paymentMethods }: { paymentMethods: PaymentMethod[
           address: address.trim(),
           note: note.trim(),
           shippingId,
-          paymentId,
+          paymentId: platbaId,
           consent,
           website,
           turnstileToken: token,
@@ -141,6 +184,7 @@ export function KosikClient({ paymentMethods }: { paymentMethods: PaymentMethod[
         window.location.href = json.redirectUrl; // Stripe Checkout
         return;
       }
+      setDopravaNaPotvrdenie(shippingId === "kurier" && shipping.priceEur == null);
       clear();
       setDone(json.orderId ?? "OK");
     } catch {
@@ -161,8 +205,13 @@ export function KosikClient({ paymentMethods }: { paymentMethods: PaymentMethod[
         <p className="mt-3 text-zinc-600">
           {paid ? "Platba kartou prebehla úspešne. " : ""}Potvrdenie s celým
           rozpisom letí na e-mail. Ozveme sa s termínom expedície
-          {shippingId === "kurier" ? " a cenou dopravy" : ""}.
+          {dopravaNaPotvrdenie ? " a cenou dopravy na odsúhlasenie" : ""}.
         </p>
+        {dopravaNaPotvrdenie && (
+          <p className="mt-3 text-sm text-amber-900 bg-amber-50 border-2 border-amber-200 rounded-xl p-3 text-left">
+            {PALETA_INFO}
+          </p>
+        )}
         <p className="mt-4 text-sm text-zinc-500 bg-blue-50 rounded-xl p-3">
           <strong>Nejde to podľa predstáv? Zavolajte nám, dokončíme to za vás.</strong>
           <br />
@@ -293,6 +342,12 @@ export function KosikClient({ paymentMethods }: { paymentMethods: PaymentMethod[
             </label>
           ))}
         </div>
+        {paletaBezCeny && (
+          <p className="mt-2 rounded-xl border-2 border-amber-300 bg-amber-50 px-3 py-2.5 text-xs leading-relaxed text-amber-900">
+            <strong>Zásielka {hm} kg ide na palete.</strong> {PALETA_INFO}{" "}
+            Objednávku pokojne dokonči — dopravu zaplatíš až keď ju odsúhlasíš.
+          </p>
+        )}
         {shippingId === "kurier" && (
           <input placeholder="Doručovacia adresa *" value={address} onChange={(e) => setAddress(e.target.value)} className={`${inputCls} mt-2`} aria-label="Adresa" autoComplete="street-address" />
         )}
@@ -301,15 +356,21 @@ export function KosikClient({ paymentMethods }: { paymentMethods: PaymentMethod[
         <div className="mt-2 space-y-2">
           {paymentMethods.map((m) => {
             const disabled = m.id === "karta" && kartaDisabled;
+            // Nedostupnú metódu nefadeujeme na 50 % — dôvod musí ostať čitateľný.
             return (
-              <label key={m.id} className={`block p-3 rounded-xl border-2 transition-colors ${disabled ? "opacity-50 cursor-not-allowed border-zinc-100" : paymentId === m.id ? "border-[#3db6e8] bg-[#3db6e8]/5 cursor-pointer" : "border-zinc-200 hover:border-zinc-300 cursor-pointer"}`}>
+              <label key={m.id} className={`block p-3 rounded-xl border-2 transition-colors ${disabled ? "cursor-not-allowed border-amber-200 bg-amber-50/60" : platbaId === m.id ? "border-[#3db6e8] bg-[#3db6e8]/5 cursor-pointer" : "border-zinc-200 hover:border-zinc-300 cursor-pointer"}`}>
                 <span className="flex items-center gap-2">
-                  <input type="radio" name="payment" checked={paymentId === m.id} disabled={disabled}
+                  <input type="radio" name="payment" checked={platbaId === m.id} disabled={disabled}
                     onChange={() => setPaymentId(m.id)} className="accent-[#3db6e8]" />
-                  <span className="font-semibold text-sm">{m.label}</span>
+                  <span className={`font-semibold text-sm ${disabled ? "text-zinc-500" : ""}`}>{m.label}</span>
+                  {disabled && (
+                    <span className="ml-auto shrink-0 whitespace-nowrap rounded-full bg-amber-100 px-2 py-0.5 text-[10px] font-bold text-amber-800">
+                      teraz nedostupné
+                    </span>
+                  )}
                 </span>
-                <span className="block mt-1 text-xs text-zinc-500 pl-6">
-                  {disabled ? "Nedostupné pri položkách „na dopyt“ / nepotvrdenej doprave." : m.description}
+                <span className={`block mt-1 text-xs pl-6 ${disabled ? "text-amber-800" : "text-zinc-500"}`}>
+                  {disabled ? kartaDovod : m.description}
                 </span>
               </label>
             );
@@ -319,7 +380,14 @@ export function KosikClient({ paymentMethods }: { paymentMethods: PaymentMethod[
         <textarea placeholder="Poznámka k objednávke" value={note} onChange={(e) => setNote(e.target.value)} rows={2} className={`${inputCls} mt-3 resize-none`} aria-label="Poznámka" />
 
         <div className="mt-4 rounded-xl bg-[#0e1a3b] text-white p-4">
-          {!hasOnRequest && subtotal < FREE_SHIPPING_MIN_EUR && (
+          {/* Doprava zdarma platí cena AJ hmotnosť — nad 30 kg by prúžok klamal. */}
+          {!hasOnRequest && weightKg > FREE_SHIPPING_MAX_KG && (
+            <p className="mb-3 pb-3 border-b border-white/15 text-xs text-white/85">
+              Zásielka váži <strong>{hm} kg</strong> — doprava zdarma platí do{" "}
+              {FREE_SHIPPING_MAX_KG} kg, túto účtujeme podľa hmotnosti.
+            </p>
+          )}
+          {!hasOnRequest && weightKg <= FREE_SHIPPING_MAX_KG && subtotal < FREE_SHIPPING_MIN_EUR && (
             <div className="mb-3 pb-3 border-b border-white/15">
               <p className="text-xs text-white/85">
                 Do <strong className="text-[#3db6e8]">dopravy zdarma</strong> ti chýba{" "}
@@ -333,9 +401,9 @@ export function KosikClient({ paymentMethods }: { paymentMethods: PaymentMethod[
               </div>
             </div>
           )}
-          {!hasOnRequest && subtotal >= FREE_SHIPPING_MIN_EUR && (
+          {!hasOnRequest && weightKg <= FREE_SHIPPING_MAX_KG && subtotal >= FREE_SHIPPING_MIN_EUR && (
             <p className="mb-3 pb-3 border-b border-white/15 text-xs text-emerald-300 font-semibold">
-              ✓ Máš nárok na dopravu zdarma (do 30 kg)
+              ✓ Máš nárok na dopravu zdarma (do {FREE_SHIPPING_MAX_KG} kg)
             </p>
           )}
           <div className="flex items-baseline justify-between text-sm text-white/80">
@@ -405,10 +473,14 @@ export function KosikClient({ paymentMethods }: { paymentMethods: PaymentMethod[
         >
           {state === "sending"
             ? "Odosielam…"
-            : paymentId === "karta"
+            : platbaId === "karta"
               ? "Objednať a zaplatiť kartou"
               : "Odoslať objednávku"}
         </button>
+
+        {state !== "sending" && (
+          <ChybajuceUdaje polozky={chybaju} className="mt-2 text-center" />
+        )}
 
         <p className="mt-3 text-center text-xs text-zinc-500">
           <Phone className="inline w-3 h-3" aria-hidden /> Nejde to podľa predstáv?{" "}
@@ -426,7 +498,7 @@ export function KosikClient({ paymentMethods }: { paymentMethods: PaymentMethod[
           </div>
           <div className="flex items-center gap-2 rounded-xl bg-zinc-50 border border-zinc-100 px-3 py-2.5">
             <Truck className="w-4 h-4 shrink-0 text-[#3db6e8]" aria-hidden />
-            <span className="text-zinc-700 leading-tight font-semibold">Doprava zdarma<br /><span className="font-normal text-zinc-500">nad {FREE_SHIPPING_MIN_EUR} € (do 30 kg)</span></span>
+            <span className="text-zinc-700 leading-tight font-semibold">Doprava zdarma<br /><span className="font-normal text-zinc-500">nad {DOPRAVA_ZADARMO.minEur} € do {DOPRAVA_ZADARMO.maxKg} kg</span></span>
           </div>
           <div className="flex items-center gap-2 rounded-xl bg-zinc-50 border border-zinc-100 px-3 py-2.5">
             <RotateCcw className="w-4 h-4 shrink-0 text-[#ea580c]" aria-hidden />

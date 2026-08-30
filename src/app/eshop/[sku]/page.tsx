@@ -7,6 +7,7 @@ import { Container } from "@/components/ui/Container";
 import { BreadcrumbsJsonLd } from "@/components/seo/BreadcrumbsJsonLd";
 import { SITE } from "@/lib/site";
 import { safeJsonLd } from "@/lib/json-ld-safe";
+import { DOPRAVA_ZADARMO } from "@/lib/payments";
 import {
   MATERIALY,
   getMaterial,
@@ -327,7 +328,7 @@ export default async function ProduktPage({ params }: PageProps) {
                   <Lock className="w-3.5 h-3.5 text-emerald-600" aria-hidden /> Bezpečná platba
                 </span>
                 <span className="inline-flex items-center gap-1.5">
-                  <Truck className="w-3.5 h-3.5 text-[#3db6e8]" aria-hidden /> Doprava zdarma nad 100 €
+                  <Truck className="w-3.5 h-3.5 shrink-0 text-[#3db6e8]" aria-hidden /> {DOPRAVA_ZADARMO.kratko}
                 </span>
                 <span className="inline-flex items-center gap-1.5">
                   <RotateCcw className="w-3.5 h-3.5 text-[#ea580c]" aria-hidden /> 14 dní na vrátenie

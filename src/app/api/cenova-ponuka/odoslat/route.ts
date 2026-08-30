@@ -17,6 +17,12 @@ import { getClientIp } from "@/lib/rate-limit";
  * do stavu „vyplnil som formulár a nič sa nestalo".
  */
 
+/** Orezaný string, prázdny → undefined (prázdny kľúč nikam neposielame). */
+function orez(v: unknown, max: number): string | undefined {
+  const t = String(v ?? "").trim();
+  return t ? t.slice(0, max) : undefined;
+}
+
 /** Záložná cesta — bežný lead formulár webu (e-mail + DB + pôvodný webhook). */
 async function zalozneOdoslanie(
   request: NextRequest,
@@ -32,6 +38,11 @@ async function zalozneOdoslanie(
     b.chce_kontakt === false
       ? `Telefonát: NECHCE${b.dovod_nechce ? ` (${String(b.dovod_nechce)})` : ""}`
       : "Telefonát: chce",
+    // Schéma /api/lead pozná iba utmSource/Medium/Campaign — referrer a gclid
+    // by Zod ticho zahodil, tak ich píšeme do správy, nech obchodník aspoň
+    // vidí, odkiaľ človek prišiel.
+    b.referrer ? `Referrer: ${orez(b.referrer, 300)}` : null,
+    b.gclid ? `gclid: ${orez(b.gclid, 200)}` : null,
   ]
     .filter(Boolean)
     .join("\n");
@@ -53,6 +64,11 @@ async function zalozneOdoslanie(
       termin: b.termin ?? "",
       message: popis,
       source: "konfigurator_cp",
+      // Limity sú z leadSchema (100/100/150) — dlhší string by zhodil
+      // validáciu a s ňou celý dopyt.
+      utmSource: orez(b.utmSource, 100),
+      utmMedium: orez(b.utmMedium, 100),
+      utmCampaign: orez(b.utmCampaign, 150),
     }),
   });
   if (!res.ok) {
@@ -110,6 +126,14 @@ export async function POST(request: NextRequest) {
         hrubka: String(body.hrubka ?? "").trim() || undefined,
         chce_kontakt: body.chce_kontakt !== false,
         dovod_nechce: String(body.dovod_nechce ?? "").trim() || undefined,
+        // Pôvod návštevy — webhook landing-cp má na to vlastné kľúče a ukladá
+        // ich do leads.data. Prázdne posielať nesmieme: utmCampaign slúži CRM
+        // ako source_campaign a prázdny string by prepísal jeho default.
+        utmSource: orez(body.utmSource, 200),
+        utmMedium: orez(body.utmMedium, 200),
+        utmCampaign: orez(body.utmCampaign, 200),
+        gclid: orez(body.gclid, 200),
+        referrer: orez(body.referrer, 300),
       }),
     });
     const data = await res.json().catch(() => ({}));

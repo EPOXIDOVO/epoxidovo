@@ -1,5 +1,6 @@
 import { Resend } from "resend";
 import { SITE } from "./site";
+import { PALETA_INFO } from "./payments";
 import type { Product } from "@/data/products";
 
 /**
@@ -90,6 +91,7 @@ function summaryHtml(o: OrderEmailInput): string {
           <td style="padding-top:10px;text-align:right;font-size:16px"><strong>${fmt(o.subtotal)}</strong></td></tr>
     </table>
     ${o.hasOnRequest ? `<p style="font-family:Arial;font-size:13px;color:#b45309">Objednávka obsahuje položky bez potvrdenej ceny — finálnu sumu potvrdíme e-mailom pred expedíciou.</p>` : ""}
+    ${o.shippingPrice == null ? `<p style="font-family:Arial;font-size:13px;color:#b45309">${esc(PALETA_INFO)}</p>` : ""}
     <p style="font-family:Arial;font-size:12px;color:#888">${VAT_NOTE}</p>
   `;
 }

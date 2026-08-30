@@ -40,6 +40,7 @@ import type { Co, Kde, System } from "@/lib/konfigurator/systemy";
 import { efektivnaPlocha, fmtEur, plochaSchodov, prepocitaj } from "@/lib/konfigurator/vypocet";
 import { SITE } from "@/lib/site";
 import { TurnstileWidget } from "@/components/turnstile/TurnstileWidget";
+import { ChybajuceUdaje } from "@/components/ui/ChybajuceUdaje";
 import { EFEKTY, FOTO_PRIESTOR, FOTO_VZHLAD, GALERIA_VZHLAD, RAL_ZAKLADNE } from "./fotky";
 
 /**
@@ -902,6 +903,16 @@ function OdfotPodklad({ volba }: { volba: Volba }) {
     !!turnstileToken &&
     !posiela;
 
+  // Šedé tlačidlo musí povedať prečo — inak človek doplní pole, nič sa
+  // nezmení a odíde.
+  const chybaju: string[] = [];
+  if (meno.trim().length <= 1) chybaju.push("meno");
+  if (priezvisko.trim().length <= 1) chybaju.push("priezvisko");
+  if (telefon.trim().length <= 8) chybaju.push("telefónne číslo");
+  if (!email.includes("@")) chybaju.push("e-mail");
+  if (!suhlas) chybaju.push("súhlas so spracovaním údajov");
+  if (!turnstileToken) chybaju.push("overenie, že nie si robot");
+
   const posli = async () => {
     setPosiela(true);
     setChyba(null);
@@ -1080,6 +1091,8 @@ function OdfotPodklad({ volba }: { volba: Volba }) {
         Poslať a ozvite sa mi
         <ArrowRight className="w-4 h-4" aria-hidden />
       </button>
+
+      {!posiela && <ChybajuceUdaje polozky={chybaju} className="mt-2" />}
     </div>
   );
 }
@@ -1117,6 +1130,16 @@ function ZaujemOTelefonat({
     suhlas &&
     !!turnstileToken &&
     !posiela;
+
+  // Šedé tlačidlo musí povedať prečo — inak človek doplní pole, nič sa
+  // nezmení a odíde.
+  const chybaju: string[] = [];
+  if (meno.trim().length <= 1) chybaju.push("meno");
+  if (priezvisko.trim().length <= 1) chybaju.push("priezvisko");
+  if (telefon.trim().length <= 8) chybaju.push("telefónne číslo");
+  if (!email.includes("@")) chybaju.push("e-mail");
+  if (!suhlas) chybaju.push("súhlas so spracovaním údajov");
+  if (!turnstileToken) chybaju.push("overenie, že nie si robot");
 
   const posli = async () => {
     setPosiela(true);
@@ -1234,6 +1257,8 @@ function ZaujemOTelefonat({
             <Phone className="w-4 h-4 shrink-0" aria-hidden />
             Zavolajte mi s ponukou
           </button>
+
+          {!posiela && <ChybajuceUdaje polozky={chybaju} className="text-center" />}
         </div>
       )}
     </div>

@@ -66,7 +66,9 @@ export const SERVICE_DETAILS: Record<string, ServiceDetail> = {
       "Kancelárie",
       "Bytové priestory",
     ],
-    priceRange: "od 35 €/m²",
+    // 59 €/m² je jediná platná „od" cena — 35 tu zostalo z prvej verzie
+    // a protirečilo categories.ts aj llms.txt (rozhodol majiteľ 2026-08-30).
+    priceRange: "od 59 €/m²",
     technicalSpecs: [
       { label: "Hrúbka", value: "1–3 mm" },
       { label: "Pochôdznosť", value: "24 h" },
@@ -159,6 +161,78 @@ export const SERVICE_DETAILS: Record<string, ServiceDetail> = {
       { label: "Pochôdznosť", value: "48 h" },
       { label: "Plne zaťažiteľné", value: "10 dní" },
       { label: "Životnosť", value: "20+ rokov" },
+    ],
+  },
+  // Mistral a Concrete Look sú v CATEGORIES aktívne od 2026-08-25, ale detail
+  // im tu chýbal → /sluzby/mistral aj /sluzby/beton-look padali na 404, hoci
+  // na ne odkazuje menu, sitemap aj kalkulačka zisku na /kurz. Sú to
+  // polyuretánové dizajnové stierky Arturo, nie epoxidy — texty to musia
+  // hovoriť rovnako ako konfigurátor, inak si web protirečí.
+  mistral: {
+    slug: "mistral",
+    intro:
+      "Mäkký oblačný ťah v polyuretánovej stierke. Pokojná plocha bez ostrých hraníc a bez jedinej škáry.",
+    longDescription: [
+      "Mistral nie je epoxid — je to dizajnová polyuretánová stierka z kolekcie Arturo. Lejeme ju v 2 mm na penetráciu Arturo EP 6200 a zatvárame 2K polyuretánovým lakom. Oproti epoxidu je pružnejšia a UV stálejšia, takže odtieň znesie aj presvetlenú miestnosť.",
+      "Kresbu ťaháme ručne hladidlom, takže na ploche nenájdeš opakujúci sa vzor — prechody sú jemné, bez ostrých hraníc. Na výber je 10 odtieňov radu Mistral — celý rad máš vo vzorkovníku. Vlastné realizačné fotky ešte dopĺňame, zatiaľ ukazujeme originálne vzorky výrobcu.",
+    ],
+    features: [
+      "Polyuretán, nie epoxid — pružnejší a UV stálejší",
+      "Liate 2 mm bez škár a prechodov",
+      "10 odtieňov z kolekcie Arturo Mistral",
+      "Ručný ťah — každá plocha vyzerá inak",
+      "Uzavreté 2K polyuretánovým lakom",
+    ],
+    // presne tie priestory, ktoré uvádza description v categories.ts
+    bestFor: [
+      "Byty a obytné priestory",
+      "Showroomy a predajne",
+      "Ordinácie a čakárne",
+    ],
+    priceRange: "od 104 €/m²",
+    technicalSpecs: [
+      { label: "Hrúbka", value: "2 mm" },
+      { label: "Systém", value: "Polyuretán (Arturo)" },
+      // hodnoty držíme krátke — riadok je flex „label vs hodnota" a na
+      // 375 px sa dlhší text zalomí na dva riadky
+      { label: "Skladba", value: "EP 6200 → Mistral → 2K lak" },
+      { label: "Odtiene", value: "10 v rade Mistral" },
+      // konfigurátor Mistral rieši ako betón look, a ten je interiérový
+      // (rules.ts, pravidlo 3b) — vonku ho mráz a vlhkosť rozrušia
+      { label: "Použitie", value: "Iba interiér" },
+    ],
+  },
+  "beton-look": {
+    slug: "beton-look",
+    intro:
+      "Pohľadový betón bez škár, pórov a prachu. Dva milimetre polyuretánu, ktoré vyzerajú ako surová doska.",
+    longDescription: [
+      "Concrete Look dá ploche charakter surového betónu bez toho, aby si musel skutočný betón brúsiť a leštiť. Nosná vrstva je Arturo PU 2030 — UV stabilná a flexibilná polyuretánová stierka. Lejeme ju v 2 mm na penetráciu Arturo EP 6200 a zatvárame 2K polyuretánovým lakom.",
+      "Odtiene berieme z dvoch radov Arturo, Concrete look a Concreta — spolu 29 variant, od pokojných až po výrazne kreslené. Ťahá sa to ručne, takže dve rovnaké plochy nevzniknú. Vlastné realizačné fotky ešte dopĺňame, zatiaľ ukazujeme originálne vzorky výrobcu.",
+    ],
+    features: [
+      "Vzhľad pohľadového betónu, ale bez škár a pórov",
+      "Arturo PU 2030 — UV stabilná a pružná stierka",
+      "29 odtieňov z radov Concrete look a Concreta",
+      "Liate 2 mm, uzavreté 2K PU lakom",
+      "Údržba mopom — žiadne škáry, kde by sa držala špina",
+    ],
+    // POZOR: pri Concrete Look nikde v repe nie je, do akých priestorov ho
+    // odporúčame (na rozdiel od Mistralu v categories.ts) — držíme sa preto
+    // len interiérov, ktoré pravidlo 3b pripúšťa. Nech to majiteľ potvrdí.
+    bestFor: [
+      "Byty a obytné priestory",
+      "Showroomy a predajne",
+      "Kancelárie a recepcie",
+    ],
+    priceRange: "od 99 €/m²",
+    technicalSpecs: [
+      { label: "Hrúbka", value: "2 mm" },
+      { label: "Systém", value: "Polyuretán (Arturo PU 2030)" },
+      { label: "Skladba", value: "EP 6200 → PU 2030 → 2K lak" },
+      { label: "Odtiene", value: "29 (Concrete look + Concreta)" },
+      // rules.ts, pravidlo 3b — vonku ho mráz a vlhkosť rozrušia
+      { label: "Použitie", value: "Iba interiér" },
     ],
   },
 };

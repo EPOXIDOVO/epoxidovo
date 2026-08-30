@@ -4,6 +4,8 @@ import * as React from "react";
 import Image from "next/image";
 import { ArrowLeft, Check, Loader2, Phone, Sparkles } from "lucide-react";
 import { TurnstileWidget } from "@/components/turnstile/TurnstileWidget";
+import { ChybajuceUdaje } from "@/components/ui/ChybajuceUdaje";
+import { trackEvent } from "@/components/analytics/Analytics";
 import { TYPY_PODLAH, nahladTypu, type TypPodlahyKarta } from "@/content/typy-podlah";
 
 /**
@@ -252,6 +254,41 @@ function euro(n: number) {
   }).format(n);
 }
 
+/** Odkiaľ človek prišiel — pre vyhodnotenie, ktorá reklama dopyt priniesla. */
+type Povod = {
+  referrer?: string;
+  utmSource?: string;
+  utmMedium?: string;
+  utmCampaign?: string;
+  gclid?: string;
+};
+
+/**
+ * Pôvod návštevy čítame až pri odoslaní priamo z window — bez useSearchParams
+ * (Suspense) a bez useEffect, rovnako ako na /ponuka.
+ *
+ * Dĺžky orezávame na limity leadSchema (utm 100/100/150), lebo keď CRM
+ * nezoberie dopyt, ide záložnou cestou cez /api/lead a dlhší string by tam
+ * spadol na Zod validácii — teda by meranie zhodilo samotný dopyt.
+ * Z toho istého dôvodu je celé čítanie v try/catch a vracia prázdno.
+ */
+function citajPovod(): Povod {
+  const orez = (v: string | null | undefined, max: number) =>
+    v ? v.slice(0, max) : undefined;
+  try {
+    const p = new URLSearchParams(window.location.search);
+    return {
+      referrer: orez(document.referrer, 300),
+      utmSource: orez(p.get("utm_source"), 100),
+      utmMedium: orez(p.get("utm_medium"), 100),
+      utmCampaign: orez(p.get("utm_campaign"), 150),
+      gclid: orez(p.get("gclid"), 200),
+    };
+  } catch {
+    return {};
+  }
+}
+
 export function KonfiguratorCP({ cenyOd }: { cenyOd?: Record<string, number> }) {
   const [krok, setKrok] = React.useState<Krok>("typ");
   const [cennik, setCennik] = React.useState<CennikSystem[] | null>(null);
@@ -400,6 +437,12 @@ export function KonfiguratorCP({ cenyOd }: { cenyOd?: Record<string, number> }) 
     if (d) void chod(d);
   };
 
+  // Čo drží „Poslať cenovú ponuku" zamknuté — inak je to šedý gombík bez dôvodu.
+  const chybajuCP: string[] = [];
+  if (!meno.trim()) chybajuCP.push("meno");
+  if (!email.trim()) chybajuCP.push("e-mail");
+  if (!turnstileToken) chybajuCP.push("overenie, že nie si robot");
+
   const odosli = async () => {
     setChyba(null);
     if (!typ || !plochaOk || !meno.trim() || !email.trim() || !turnstileToken) return;
@@ -422,6 +465,9 @@ export function KonfiguratorCP({ cenyOd }: { cenyOd?: Record<string, number> }) 
           dovod_nechce: chceKontakt ? "" : dovodNechce,
           system_code: system?.code,
           hrubka,
+          // Odkiaľ návštevník prišiel — bez toho nevieme priradiť dopyt
+          // ku kampani. Prázdne kľúče server zahodí, nič sa tým nerozbije.
+          ...citajPovod(),
           turnstileToken,
         }),
       });
@@ -430,6 +476,12 @@ export function KonfiguratorCP({ cenyOd }: { cenyOd?: Record<string, number> }) 
         setChyba("Odoslanie zlyhalo. Skús to prosím znovu alebo nám zavolaj.");
         return;
       }
+      trackEvent("lead_submit", { source: "konfigurator_cp", area: plocha });
+      // Hodnota je zámerne 1, NIE suma ponuky. Do tej istej Ads konverzie už
+      // tečú reálne tržby z kurzu — keby sem začali padať nezáväzné dopyty
+      // po tisíckach eur, hodnotovo optimalizované kampane by presunuli
+      // rozpočet z platiacich zákazníkov na dopyty.
+      trackEvent("generate_lead", { value: 1, currency: "EUR" });
       setKrok("hotovo");
       hore();
     } catch {
@@ -929,6 +981,10 @@ export function KonfiguratorCP({ cenyOd }: { cenyOd?: Record<string, number> }) 
                 Poslať cenovú ponuku
               </button>
             </div>
+
+            {!odosielam && (
+              <ChybajuceUdaje polozky={chybajuCP} className="mt-2 text-right" />
+            )}
           </>
         )}
 

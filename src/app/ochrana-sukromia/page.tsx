@@ -9,7 +9,7 @@ export const metadata: Metadata = {
   alternates: { canonical: "/ochrana-sukromia" },
 };
 
-const lastUpdated = "2026-05-09";
+const lastUpdated = "2026-08-30";
 
 export default function OchranaSukromiaPage() {
   return (
@@ -97,14 +97,63 @@ export default function OchranaSukromiaPage() {
           <p className="leading-relaxed mb-3">
             Údaje neposkytujeme tretím stranám okrem nasledujúcich spracovateľov:
           </p>
-          <ul className="list-disc list-inside space-y-1 leading-relaxed mb-6">
-            <li><strong>Vercel Inc.</strong> — hosting webu (USA, štandardné zmluvné doložky EÚ)</li>
-            <li><strong>Resend Inc.</strong> — odosielanie transakčných emailov</li>
-            <li><strong>Neon Inc.</strong> — databáza dopytov (EÚ región)</li>
-            <li><strong>Google LLC</strong> — analytika (iba s tvojím súhlasom v cookies)</li>
-            <li><strong>Meta Platforms</strong> — marketingový pixel (iba s tvojím súhlasom)</li>
-            <li><strong>Dopravca zásielky</strong> (kuriérska spoločnosť) — meno, adresa a telefón na doručenie objednávky</li>
-            <li><strong>Stripe Payments Europe, Ltd.</strong> — spracovanie platby kartou (ak zvolíš platbu kartou); údaje o karte vidí len Stripe, k nám sa nedostanú</li>
+          <ul className="list-disc list-inside space-y-2 leading-relaxed mb-6">
+            <li>
+              <strong>Cloudflare, Inc.</strong> — hosting webu a ochrana formulárov
+              proti botom (Turnstile). Vidí technické údaje každej návštevy —
+              IP adresu, prehliadač a to, ktorú stránku si otvoril. Bez toho by
+              web nebežal a formuláre by zaplavil spam. (USA, štandardné
+              zmluvné doložky EÚ)
+            </li>
+            <li>
+              <strong>Neon Inc.</strong> — databáza v EÚ (Frankfurt), kde nám
+              fyzicky ležia dopyty, objednávky z e-shopu a fotky nahraté do AI
+              vizualizéra. Je to len úložisko — Neon s údajmi sám nič nerobí.
+            </li>
+            <li>
+              <strong>Resend Inc.</strong> — odosielanie e-mailov (potvrdenie
+              dopytu, objednávky, prihlasovacie linky do administrácie). Dostane
+              tvoje meno, e-mailovú adresu a obsah správy, ktorú ti posielame.
+              (USA, štandardné zmluvné doložky EÚ)
+            </li>
+            <li>
+              <strong>NajCRM</strong> (app.najcrm.sk) — systém, v ktorom dopyty
+              vybavujeme. Ide doň celý obsah odoslaného formulára: meno, e-mail,
+              telefón, plocha, typ podlahy, priestor, termín, tvoja správa a
+              údaje o tom, odkiaľ si na web prišiel (referer, UTM parametre,
+              prehliadač). Bez toho by sa k tebe s ponukou nikto neozval.
+            </li>
+            <li>
+              <strong>Google LLC — Gemini</strong> — AI model, ktorý v AI
+              vizualizéri prekreslí podlahu na tvojej fotke. Dostane fotku,
+              ktorú nahráš, a text s vybranou farbou a povrchom. Fotku aj
+              výsledok si ukladáme aj my, aby sme vedeli skontrolovať kvalitu
+              generovania. (USA, štandardné zmluvné doložky EÚ)
+            </li>
+            <li>
+              <strong>Google LLC — Tag Manager, Analytics a Ads</strong> —
+              meranie návštevnosti a účinnosti reklamy. Načíta sa iba s tvojím
+              súhlasom v cookies. (USA, štandardné zmluvné doložky EÚ)
+            </li>
+            <li>
+              <strong>Meta Platforms</strong> — marketingový pixel pre reklamy
+              na Facebooku a Instagrame. Načíta sa iba s tvojím súhlasom v
+              cookies. (USA, štandardné zmluvné doložky EÚ)
+            </li>
+            <li>
+              <strong>Cookiebot</strong> — cookie lišta. Uloží si záznam o tom,
+              s čím si súhlasil (spolu s anonymizovanou IP), aby sme tvoju voľbu
+              vedeli preukázať a nepýtali sa ťa pri každej návšteve znova.
+            </li>
+            <li>
+              <strong>Dopravca zásielky</strong> (kuriérska spoločnosť) — meno,
+              adresa a telefón, aby ti mal kto doručiť objednávku
+            </li>
+            <li>
+              <strong>Stripe Payments Europe, Ltd.</strong> — spracovanie platby
+              kartou (ak zvolíš platbu kartou); údaje o karte vidí len Stripe,
+              k nám sa nedostanú
+            </li>
           </ul>
 
           <h2 className="text-2xl font-bold mt-10 mb-4">7. Tvoje práva</h2>

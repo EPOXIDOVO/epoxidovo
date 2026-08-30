@@ -10,6 +10,7 @@ import { showToast } from "@/components/ui/Toast";
 import { getMaterial } from "@/lib/materialy";
 import { SITE } from "@/lib/site";
 import { RAL_CLASSIC_FULL, RAL_GROUPS, type RalSwatch } from "@/content/ral-classic";
+import { DOPRAVA_ZADARMO, DODANIE_LEHOTA } from "@/lib/payments";
 
 /**
  * Objednávka materiálu — jedna stránka, šesť krokov zhora nadol
@@ -367,7 +368,10 @@ export function ObjednavkaMaterialu() {
               <span className="text-3xl font-extrabold tabular-nums">{fmt(celkom)} €</span>
             </div>
             <p className="mt-1 text-[11px] text-white/55">Konečné ceny. Nie sme platiteľmi DPH.</p>
-            <p className="mt-2 inline-flex items-center gap-1.5 text-xs font-semibold text-[#9fdcf5]"><Truck className="w-4 h-4" aria-hidden /> Doprava v cene, dodanie do 10 dní</p>
+            {/* Jediný zdroj pravdy o doprave — payments.ts. Predtým tu bolo
+                „doprava v cene", čo neplatilo ani pri ťažkom sete. */}
+            <p className="mt-2 flex items-start gap-1.5 text-xs font-semibold text-[#9fdcf5]"><Truck className="w-4 h-4 shrink-0" aria-hidden /> <span>{DOPRAVA_ZADARMO.kratko} · {DODANIE_LEHOTA}</span></p>
+            <p className="mt-1 pl-[22px] text-[11px] text-white/55">{DOPRAVA_ZADARMO.tazsie}</p>
             <button type="button" onClick={doKosika} disabled={m2 <= 0}
               className="mt-5 w-full inline-flex items-center justify-center gap-2 px-6 py-4 rounded-full bg-[#ea580c] text-white font-extrabold hover:bg-[#c2410c] disabled:opacity-50 shadow-[0_10px_28px_rgba(234,88,12,0.45)] transition-colors">
               {pridane ? <><Check className="w-5 h-5" aria-hidden /> V košíku</> : <><ShoppingCart className="w-5 h-5" aria-hidden /> Objednať materiál</>}
