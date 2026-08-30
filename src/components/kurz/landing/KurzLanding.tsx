@@ -91,16 +91,6 @@ const V2 = {
         { img: "/images/realizacie/r-12.jpg", meno: "Tomáš · Nitra", citat: "Technik mi cez telefón vyriešil miešanie priamo na zákazke.", suma: 890 },
       ] as { img: string; meno: string; citat: string; suma: number }[],
     },
-    prekoho: {
-      eyebrow: "Úprimne",
-      h2: "Pre koho tento kurz nie je.",
-      items: [
-        "Ak hľadáš pasívny príjem bez fyzickej práce. Liatie podláh je remeslo.",
-        "Ak čakáš, že prvá zákazka príde sama. Marketing ťa naučíme, ale volať musíš ty.",
-        "Ak nemáš ~2 000 € na základné náradie a prvý materiál.",
-      ],
-      outro: "Ak ti ani jedno nevadí, si presne ten, koho hľadáme.",
-    },
     hcalc: {
       tag: "Kalkulačka zárobku",
       live: "naživo",
@@ -123,7 +113,7 @@ const V2 = {
     claimPoints: [
       "Každý krok vidíš zblízka a v reálnom čase, od brúsenia po finálny lak",
       "Manuál so spotrebami a vzorová cenová ponuka pre tvojich zákazníkov",
-      "Otázky píšeš priamo pod lekciu, odpovedá lektor",
+      "Otázky píšeš priamo pod lekciu, odpovedá realizačný technik",
       "Certifikát po záverečnom teste a partnerské ceny materiálu v našom e-shope",
     ],
     claimCaption: "Metalická podlaha, práca absolventa",
@@ -156,17 +146,16 @@ const V2 = {
     stripPreviewCta: "Pozri všetky realizácie →",
     stripClose: "Zavrieť",
     pricingH2: "Cena a balíky",
-    pricingIntro: "Cena je konečná. Žiadne DPH navrch. Kúpiš raz, prístup máš navždy.",
-    garancia: "14 dní garancia vrátenia peňazí — bez otázok.",
-    proLimit: "Beriem max 5 ľudí mesačne",
+    pricingIntro: "Cena je konečná. Kúpiš raz, prístup máš navždy.",
+    proLimit: "Berieme už iba 5 ľudí tento rok",
     stdTitle: "Štandard",
     stdDesc: "Kompletný online kurz s prístupom navždy.",
-    stdItems: ["8+ hodín videa, 40+ lekcií", "Manuál a kalkulačka spotreby (SK + EN)", "Vzorová cenová ponuka", "Certifikát po záverečnom teste", "Otázky pod lekciami, odpovedá lektor"],
+    stdItems: ["Celý epoxidový biznis model v kocke", "8+ hodín videa, 40+ lekcií", "Manuál a kalkulačka spotreby (SK + EN)", "Vzorová cenová ponuka", "Certifikát po záverečnom teste", "Otázky pod lekciami, odpovedá realizačný technik", "Zákazkový celofiremný softvér za desiatky tisíc €, budovaný pre našu realizačnú firmu — v cene"],
     stdCta: "Kúpiť Štandard",
     proTag: "Celý biznis model",
     proTitle: "PRO s mentoringom",
-    proDesc: "Kurz + systémy našej firmy a tri mesiace vedenia pri prvých zákazkách.",
-    proItems: ["Všetko zo Štandardu", "3 mesiace osobného mentoringu: telefón, fotky z realizácie, cenové ponuky", "CRM na dopyty + aplikácia na zamestnancov", "Reálne čísla: mzdy, marže, škálovanie", "Kontrola tvojej prvej realizácie krok po kroku"],
+    proDesc: "Kurz + systémy našej firmy a tri mesiace mentoringu — zavoláš hocikedy a poradíme ti pri prvých zákazkách.",
+    proItems: ["Všetko zo Štandardu", "3 mesiace osobného mentoringu: telefón, fotky z realizácie, cenové ponuky", "CRM na dopyty + aplikácia na zamestnancov", "Reálne čísla: mzdy, marže, škálovanie", "Návod, ako založiť firmu a škálovať ju tak, aby bežala na iných ľuďoch — ty máš voľno, firma zarába", "Kontrola tvojej prvej realizácie krok po kroku"],
     proCta: "Kúpiť PRO",
     perPerson: "na osobu",
     firmaNote: "Chceš prístup pre celú partiu? Pri troch a viac ľuďoch z jednej firmy dáme skupinovú cenu.",
@@ -258,16 +247,6 @@ const V2 = {
         { img: "/images/realizacie/r-12.jpg", meno: "Tomáš · Nitra", citat: "The technician solved my mixing issue over the phone, right on the job.", suma: 890 },
       ] as { img: string; meno: string; citat: string; suma: number }[],
     },
-    prekoho: {
-      eyebrow: "Honestly",
-      h2: "Who this course is not for.",
-      items: [
-        "If you're looking for passive income without physical work. Pouring floors is a craft.",
-        "If you expect the first job to come by itself. We teach you marketing, but you make the calls.",
-        "If you don't have ~€2,000 for basic tools and your first material.",
-      ],
-      outro: "If none of that puts you off, you're exactly who we're looking for.",
-    },
     hcalc: {
       tag: "Earnings calculator",
       live: "live",
@@ -290,7 +269,7 @@ const V2 = {
     claimPoints: [
       "You see every step up close and in real time, from grinding to the final coat",
       "A manual with consumption rates and a sample quote for your clients",
-      "Ask questions under each lesson, the instructor answers",
+      "Ask questions under each lesson, our installation technician answers",
       "Certificate after the final test and partner material prices in our e-shop",
     ],
     claimCaption: "Metallic floor, graduate work",
@@ -323,17 +302,16 @@ const V2 = {
     stripPreviewCta: "See all our work →",
     stripClose: "Close",
     pricingH2: "Price and packages",
-    pricingIntro: "The price is final. No VAT on top. Buy once, keep access forever.",
-    garancia: "14-day money-back guarantee — no questions asked.",
-    proLimit: "I take max 5 people a month",
+    pricingIntro: "The price is final. Buy once, keep access forever.",
+    proLimit: "We are taking only 5 people this year",
     stdTitle: "Standard",
     stdDesc: "The complete online course with lifetime access.",
-    stdItems: ["8+ hours of video, 40+ lessons", "Manual and consumption calculator (EN + SK)", "Sample quote for your clients", "Certificate after the final test", "Questions under each lesson, answered by the instructor"],
+    stdItems: ["The complete epoxy business model in a nutshell", "8+ hours of video, 40+ lessons", "Manual and consumption calculator (EN + SK)", "Sample quote for your clients", "Certificate after the final test", "Questions under each lesson, answered by our installation technician", "Custom company-wide software worth tens of thousands €, built for our installation company — included"],
     stdCta: "Buy Standard",
     proTag: "The whole business model",
     proTitle: "PRO with mentoring",
-    proDesc: "The course + our company systems and three months of guidance on your first jobs.",
-    proItems: ["Everything in Standard", "3 months of personal mentoring: phone, site photos, quotes", "Lead CRM + employee tracking app", "Real numbers: wages, margins, scaling", "Step-by-step review of your first installation"],
+    proDesc: "The course + our company systems and three months of mentoring — call anytime and we guide you through your first jobs.",
+    proItems: ["Everything in Standard", "3 months of personal mentoring: phone, site photos, quotes", "Lead CRM + employee tracking app", "Real numbers: wages, margins, scaling", "A guide to starting the company and scaling it to run on other people — you take time off while it earns", "Step-by-step review of your first installation"],
     proCta: "Buy PRO",
     perPerson: "per person",
     firmaNote: "Access for the whole crew? Three or more people from one company get a group price.",
@@ -712,30 +690,6 @@ function Absolventi({ locale }: { locale: Locale }) {
   );
 }
 
-/* ------------------------------------------------------------------ */
-/*  Pre koho to nie je — striezlivý filter, žiadny predaj              */
-/* ------------------------------------------------------------------ */
-
-function PreKoho({ locale }: { locale: Locale }) {
-  const t = V2[locale].prekoho;
-  return (
-    <section className="kl-section kl-prekoho">
-      <div className="kl-container">
-        <span className="kl-eyebrow kl-eyebrow--muted">{t.eyebrow}</span>
-        <h2>{t.h2}</h2>
-        <ul className="kl-prekoho__list">
-          {t.items.map((it) => (
-            <li key={it}>
-              <svg viewBox="0 0 24 24" fill="none" aria-hidden><path d="M6 6l12 12M18 6 6 18" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round"/></svg>
-              {it}
-            </li>
-          ))}
-        </ul>
-        <p className="kl-prekoho__outro">{t.outro}</p>
-      </div>
-    </section>
-  );
-}
 
 /* ------------------------------------------------------------------ */
 /*  Prísľub                                                            */
@@ -989,7 +943,6 @@ function Pricing({ locale }: { locale: Locale }) {
                 {t.stdItems.map((it) => <li key={it}>{check}{it}</li>)}
               </ul>
               <a href="#prihlaska?balik=standard" onClick={goForm} className="kl-btn kl-btn--line">{t.stdCta}</a>
-              <p className="kl-price__garancia">{t.garancia}</p>
             </article>
           </Reveal>
           <Reveal delay={100}>
@@ -1003,7 +956,6 @@ function Pricing({ locale }: { locale: Locale }) {
               </ul>
               <p className="kl-price__limit">{t.proLimit}</p>
               <a href="#prihlaska?balik=pro" onClick={goForm} className="kl-btn kl-btn--primary">{t.proCta}</a>
-              <p className="kl-price__garancia">{t.garancia}</p>
             </article>
           </Reveal>
         </div>
@@ -1393,10 +1345,10 @@ export function KurzLanding({ locale }: { locale: Locale }) {
             absolventi → spolupráca → CENA → úprimný filter → dôkaz → obsah. */}
         <Hero locale={locale} />
         <Vrstvy locale={locale} />
-        <Absolventi locale={locale} />
         <Spolupraca locale={locale} />
+        {/* Prvé podlahy klientov rovno nad cenníkom — dôkaz pri rozhodovaní. */}
+        <Absolventi locale={locale} />
         <Pricing locale={locale} />
-        <PreKoho locale={locale} />
         <Claim locale={locale} />
         <Days locale={locale} />
         <Strip locale={locale} />

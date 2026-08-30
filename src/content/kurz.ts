@@ -77,7 +77,7 @@ export const KURZ_INCLUDED = [
   "Kalkulačka spotreby a vzorová cenová ponuka pre tvojich zákazníkov",
   "Certifikát o absolvovaní EPOXIDOVO Akadémie po záverečnom teste",
   "Zoznam overených dodávateľov materiálu a náradia",
-  "Otázky k lekciám priamo pod videom, odpovedá lektor",
+  "Otázky k lekciám priamo pod videom, odpovedá realizačný technik",
 ];
 
 export const KURZ_FAQ = [
@@ -95,7 +95,7 @@ export const KURZ_FAQ = [
   },
   {
     q: "Viem po kurze rovno robiť zákazky?",
-    a: "Kurz ťa prevedie celým postupom vrátane cenotvorby, takže garáže, dielne a menšie interiéry zvládneš. V balíku PRO ti pri prvých realizáciách pomáha lektor cez mentoring. Takže odpoveď je áno — po absolvovaní môžeš rovno robiť a začať zarábať sám.",
+    a: "Kurz ťa prevedie celým postupom vrátane cenotvorby, takže garáže, dielne a menšie interiéry zvládneš. V balíku PRO ti pri prvých realizáciách pomáha realizačný technik cez mentoring. Takže odpoveď je áno — po absolvovaní môžeš rovno robiť a začať zarábať sám.",
   },
   {
     q: "Kde nakúpim materiál?",

@@ -77,7 +77,7 @@ export const COURSE_EN_INCLUDED = [
   "Consumption calculator and a sample quote for your own clients",
   "EPOXIDOVO Academy certificate after the final test",
   "A list of vetted material and tool suppliers",
-  "Questions under each lesson, answered by the instructor",
+  "Questions under each lesson, answered by our installation technician",
 ];
 
 export const COURSE_EN_FAQ = [

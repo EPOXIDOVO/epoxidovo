@@ -1147,8 +1147,8 @@
 .kl-price li svg { width: 1.2rem; height: 1.2rem; flex-shrink: 0; margin-top: 0.15rem; color: var(--kl-profit); }
 .kl-price .kl-btn { width: 100%; }
 .kl-price__limit { font-family: var(--kl-font-mono); font-size: 0.78rem; font-weight: 700; color: var(--kl-accent-hi); margin-bottom: 0.7rem; text-align: center; }
-.kl-price__garancia { font-size: 0.8rem; color: var(--kl-subtle); text-align: center; margin-top: 0.8rem; }
-.kl-pricing__note { margin-top: 1.6rem; font-size: 0.95rem; color: var(--kl-subtle); }
+.kl-pricing__note { margin-top: 1.6rem; font-size: 0.92rem; color: var(--kl-subtle); }
+@media (min-width: 900px) { .kl-pricing__note { white-space: nowrap; } }
 .kl-pricing__note a { color: var(--kl-accent-hi); font-weight: 600; }
 .kl-pricing__note a:hover { text-decoration: underline; }
 
