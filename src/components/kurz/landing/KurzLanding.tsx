@@ -19,6 +19,9 @@ import "./landing.css";
 /*  Texty nových sekcií (SK/EN)                                        */
 /* ------------------------------------------------------------------ */
 
+/** Počet absolventov v referenčnej sekcii — meniť tu. */
+const ABSOLVENTI_COUNT = 47;
+
 const V2 = {
   sk: {
     badge: "Online kurz · prístup okamžite po zaplatení",
@@ -27,6 +30,7 @@ const V2 = {
     lead: "Toto nie je len kurz — je to celý funkčný biznis model v kocke. Roky skúseností z reálnych zákaziek, softvér, vďaka ktorému firma beží aj bez teba, a reálne čísla, ktoré inde neuvidíš. Naučíš sa remeslo — a biznis, ktorý ho predáva.",
     ctaMain: "Chcem prístup",
     ctaProgram: "Koľko môžem zarobiť? ↓",
+    navCta: "Chcem prístup",
     facts: [
       ["8+ h", "videa z reálnych zákaziek"],
       ["40+", "lekcií v 2 moduloch"],
@@ -58,6 +62,29 @@ const V2 = {
       ] as [string, string][],
       supportTitle: "Zasekneš sa? Zavolaj nám.",
       supportBody: "Keď pri zákazke nebudeš niečo vedieť, zdvihneme telefón a odpovieme ti na čokoľvek — a keď treba, vyriešime to za teba. Záleží nám na tom, aby sa ti práca podarila.",
+      cta: "Chcem to skúsiť s vami →",
+    },
+    absolventi: {
+      eyebrow: "Absolventi",
+      h2: "Ich prvá podlaha. A prvá faktúra.",
+      prva: "Prvá zákazka:",
+      countLine: (n: number) => `Už ${n} absolventov lialo svoju prvú podlahu.`,
+      // TODO: nahradiť reálnymi referenciami (fotky /images/absolvent-1.jpg až -3.jpg)
+      data: [
+        { img: "/images/realizacie/r-05.jpg", meno: "Marek · Trnava", citat: "Prvú garáž som lial tri týždne po kurze. Klepal som sa, ale vyšla na jednotku.", suma: 1240 },
+        { img: "/images/realizacie/r-07.jpg", meno: "Jozef · Žilina", citat: "Najviac mi dal modul o cenotvorbe — konečne viem, čo si mám vypýtať.", suma: 1980 },
+        { img: "/images/realizacie/r-12.jpg", meno: "Tomáš · Nitra", citat: "Technik mi cez telefón vyriešil miešanie priamo na zákazke.", suma: 890 },
+      ] as { img: string; meno: string; citat: string; suma: number }[],
+    },
+    prekoho: {
+      eyebrow: "Úprimne",
+      h2: "Pre koho tento kurz nie je.",
+      items: [
+        "Ak hľadáš pasívny príjem bez fyzickej práce. Liatie podláh je remeslo.",
+        "Ak čakáš, že prvá zákazka príde sama. Marketing ťa naučíme, ale volať musíš ty.",
+        "Ak nemáš ~2 000 € na základné náradie a prvý materiál.",
+      ],
+      outro: "Ak ti ani jedno nevadí, si presne ten, koho hľadáme.",
     },
     hcalc: {
       tag: "Kalkulačka zárobku",
@@ -112,7 +139,9 @@ const V2 = {
     stripPreviewCta: "Pozri všetky realizácie →",
     stripClose: "Zavrieť",
     pricingH2: "Cena a balíky",
-    pricingIntro: "Nie sme platcami DPH, ceny sú konečné. Kúpiš raz, prístup máš navždy.",
+    pricingIntro: "Cena je konečná. Žiadne DPH navrch. Kúpiš raz, prístup máš navždy.",
+    garancia: "14 dní garancia vrátenia peňazí — bez otázok.",
+    proLimit: "Beriem max 5 ľudí mesačne",
     stdTitle: "Štandard",
     stdDesc: "Kompletný online kurz s prístupom navždy.",
     stdItems: ["8+ hodín videa, 40+ lekcií", "Manuál a kalkulačka spotreby (SK + EN)", "Vzorová cenová ponuka", "Certifikát po záverečnom teste", "Otázky pod lekciami, odpovedá lektor"],
@@ -161,6 +190,7 @@ const V2 = {
     lead: "This isn't just a course — it's a complete, working business model. Years of experience from real jobs, software that keeps the company running without you, and real numbers you won't see anywhere else. You learn the craft — and the business that sells it.",
     ctaMain: "Get access",
     ctaProgram: "How much can I earn? ↓",
+    navCta: "Get access",
     facts: [
       ["8+ h", "of video from real jobs"],
       ["40+", "lessons in 2 modules"],
@@ -192,6 +222,29 @@ const V2 = {
       ] as [string, string][],
       supportTitle: "Stuck? Call us.",
       supportBody: "When you hit something you don't know on a job, we pick up the phone and answer anything — and when needed, we solve it for you. We care that your work turns out right.",
+      cta: "I want to try it with you →",
+    },
+    absolventi: {
+      eyebrow: "Graduates",
+      h2: "Their first floor. And first invoice.",
+      prva: "First job:",
+      countLine: (n: number) => `${n} graduates have already poured their first floor.`,
+      // TODO: replace with real references (photos /images/absolvent-1.jpg to -3.jpg)
+      data: [
+        { img: "/images/realizacie/r-05.jpg", meno: "Marek · Trnava", citat: "I poured my first garage three weeks after the course. Hands shaking, but it came out great.", suma: 1240 },
+        { img: "/images/realizacie/r-07.jpg", meno: "Jozef · Žilina", citat: "The pricing module gave me the most — I finally know what to charge.", suma: 1980 },
+        { img: "/images/realizacie/r-12.jpg", meno: "Tomáš · Nitra", citat: "The technician solved my mixing issue over the phone, right on the job.", suma: 890 },
+      ] as { img: string; meno: string; citat: string; suma: number }[],
+    },
+    prekoho: {
+      eyebrow: "Honestly",
+      h2: "Who this course is not for.",
+      items: [
+        "If you're looking for passive income without physical work. Pouring floors is a craft.",
+        "If you expect the first job to come by itself. We teach you marketing, but you make the calls.",
+        "If you don't have ~€2,000 for basic tools and your first material.",
+      ],
+      outro: "If none of that puts you off, you're exactly who we're looking for.",
     },
     hcalc: {
       tag: "Earnings calculator",
@@ -246,7 +299,9 @@ const V2 = {
     stripPreviewCta: "See all our work →",
     stripClose: "Close",
     pricingH2: "Price and packages",
-    pricingIntro: "We are not VAT registered, prices are final. Buy once, keep access forever.",
+    pricingIntro: "The price is final. No VAT on top. Buy once, keep access forever.",
+    garancia: "14-day money-back guarantee — no questions asked.",
+    proLimit: "I take max 5 people a month",
     stdTitle: "Standard",
     stdDesc: "The complete online course with lifetime access.",
     stdItems: ["8+ hours of video, 40+ lessons", "Manual and consumption calculator (EN + SK)", "Sample quote for your clients", "Certificate after the final test", "Questions under each lesson, answered by the instructor"],
@@ -352,11 +407,13 @@ function Header({ locale, onMenu }: { locale: Locale; onMenu: (open: boolean) =>
               </a>
             </li>
             <li className="kl-nav__cta">
-              <a href="#prihlaska" onClick={close}>
-                {t.nav.cta}
+              <a href="#cena" onClick={close}>
+                {V2[locale].navCta}
                 <svg viewBox="0 0 24 24" fill="none" aria-hidden><path d="M7 17 17 7M9 7h8v8" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/></svg>
               </a>
             </li>
+            {/* Prihlásenie ustúpilo do textového odkazu — primárne CTA je nákup. */}
+            <li className="kl-nav__login"><a href="#prihlaska" onClick={close}>{t.nav.cta}</a></li>
             <li className="kl-nav__lang">
               <Link href={t.otherPath} hrefLang={locale === "sk" ? "en" : "sk"} onClick={close}>
                 {t.otherLabel}
@@ -564,6 +621,67 @@ function Spolupraca({ locale }: { locale: Locale }) {
             {SITE.contact.phone}
           </a>
         </Reveal>
+        <div className="kl-partner__cta">
+          <a href="#cena" className="kl-btn kl-btn--line">{t.cta}</a>
+        </div>
+      </div>
+    </section>
+  );
+}
+
+/* ------------------------------------------------------------------ */
+/*  Referencie absolventov                                             */
+/* ------------------------------------------------------------------ */
+
+function Absolventi({ locale }: { locale: Locale }) {
+  const t = V2[locale].absolventi;
+  const fmt = (n: number) =>
+    new Intl.NumberFormat(locale === "sk" ? "sk-SK" : "en-GB", { maximumFractionDigits: 0 }).format(n);
+  return (
+    <section id="absolventi" className="kl-section kl-abs">
+      <div className="kl-container">
+        <div className="kl-section__head">
+          <span className="kl-eyebrow">{t.eyebrow}</span>
+          <h2>{t.h2}</h2>
+        </div>
+        <div className="kl-abs__grid">
+          {t.data.map((a, i) => (
+            <Reveal as="article" className="kl-abs-card" key={a.meno} delay={i * 80}>
+              <Image src={a.img} alt={a.meno} width={640} height={480} sizes="(max-width: 700px) 100vw, 24rem" />
+              <div className="kl-abs-card__body">
+                <p className="kl-abs-card__meno">{a.meno}</p>
+                <p className="kl-abs-card__citat">„{a.citat}&ldquo;</p>
+                <p className="kl-abs-card__suma">{t.prva} {fmt(a.suma)} €</p>
+              </div>
+            </Reveal>
+          ))}
+        </div>
+        <p className="kl-abs__count">{t.countLine(ABSOLVENTI_COUNT)}</p>
+      </div>
+    </section>
+  );
+}
+
+/* ------------------------------------------------------------------ */
+/*  Pre koho to nie je — striezlivý filter, žiadny predaj              */
+/* ------------------------------------------------------------------ */
+
+function PreKoho({ locale }: { locale: Locale }) {
+  const t = V2[locale].prekoho;
+  return (
+    <section className="kl-section kl-prekoho">
+      <div className="kl-container">
+        <span className="kl-eyebrow kl-eyebrow--muted">{t.eyebrow}</span>
+        <h2>{t.h2}</h2>
+        <ul className="kl-prekoho__list">
+          {t.items.map((it) => (
+            <li key={it}>
+              <svg viewBox="0 0 24 24" fill="none" aria-hidden><path d="M6 6l12 12M18 6 6 18" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round"/></svg>
+              {it}
+            </li>
+          ))}
+        </ul>
+        <p className="kl-prekoho__outro">{t.outro}</p>
       </div>
     </section>
   );
@@ -821,6 +939,7 @@ function Pricing({ locale }: { locale: Locale }) {
                 {t.stdItems.map((it) => <li key={it}>{check}{it}</li>)}
               </ul>
               <a href="#prihlaska?balik=standard" onClick={goForm} className="kl-btn kl-btn--line">{t.stdCta}</a>
+              <p className="kl-price__garancia">{t.garancia}</p>
             </article>
           </Reveal>
           <Reveal delay={100}>
@@ -832,7 +951,9 @@ function Pricing({ locale }: { locale: Locale }) {
               <ul>
                 {t.proItems.map((it) => <li key={it}>{check}{it}</li>)}
               </ul>
+              <p className="kl-price__limit">{t.proLimit}</p>
               <a href="#prihlaska?balik=pro" onClick={goForm} className="kl-btn kl-btn--primary">{t.proCta}</a>
+              <p className="kl-price__garancia">{t.garancia}</p>
             </article>
           </Reveal>
         </div>
@@ -1218,13 +1339,15 @@ export function KurzLanding({ locale }: { locale: Locale }) {
     <div className="kl" lang={t.htmlLang}>
       <Header locale={locale} onMenu={setMenu} />
       <main>
-        {/* Poradie: peniaze (hero) → čo dostaneš → CENA hneď (majiteľ
-            2026-08-30) → kalkulačka → spolupráca → dôkaz → obsah. */}
+        {/* Poradie podľa briefu 2026-08-30: hero → vrstvy → kalkulačka →
+            absolventi → spolupráca → CENA → úprimný filter → dôkaz → obsah. */}
         <Hero locale={locale} />
         <Vrstvy locale={locale} />
-        <Pricing locale={locale} />
         <KurzZisk locale={locale} />
+        <Absolventi locale={locale} />
         <Spolupraca locale={locale} />
+        <Pricing locale={locale} />
+        <PreKoho locale={locale} />
         <Claim locale={locale} />
         <Days locale={locale} />
         <Strip locale={locale} />

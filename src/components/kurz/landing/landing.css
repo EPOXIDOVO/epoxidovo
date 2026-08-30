@@ -184,20 +184,24 @@
 }
 .kl-nav__phone svg { width: 1rem; height: 1rem; color: var(--kl-accent-hi); flex: none; }
 .kl-nav__phone a:hover { border-color: var(--kl-accent-hi); color: #fff; }
+/* Primárne CTA = nákup: plná medená (brief 2026-08-30) */
 .kl-nav__cta a {
   display: inline-flex;
   align-items: center;
   gap: 0.5rem;
-  background: rgba(201, 124, 69, 0.1);
+  background: var(--kl-accent);
   border: 1px solid var(--kl-accent);
-  color: #fff !important;
+  color: #160d06 !important;
   padding: 0.6rem 1.25rem;
   border-radius: 999px;
   white-space: nowrap;
-  transition: background 250ms var(--kl-ease), color 250ms var(--kl-ease);
+  transition: background 250ms var(--kl-ease);
 }
 .kl-nav__cta svg { width: 0.95rem; height: 0.95rem; flex: none; }
-.kl-nav__cta a:hover { background: var(--kl-accent); color: #160d06 !important; }
+.kl-nav__cta a:hover { background: var(--kl-accent-hi); }
+/* Prihlásenie — nenápadný textový odkaz vľavo od jazyka */
+.kl-nav__login a { font-size: 0.85rem; font-weight: 500; color: rgba(255, 255, 255, 0.55); }
+.kl-nav__login a:hover { color: #fff; }
 .kl-nav__lang a {
   display: inline-flex;
   border: 1px solid rgba(255, 255, 255, 0.22);
@@ -228,6 +232,7 @@
   .kl-nav__cta { margin-top: 1rem; }
   .kl-nav__cta a { font-family: var(--kl-font-body); font-size: 1.05rem; padding: 1rem 2.2rem; color: #fff !important; }
   .kl-nav__phone a { font-family: var(--kl-font-body); font-size: 1rem; color: var(--kl-ink); }
+  .kl-nav__login a { font-family: var(--kl-font-body); font-size: 1rem; color: var(--kl-subtle); }
   .kl-nav__lang a { font-family: var(--kl-font-body); font-size: 1rem; color: var(--kl-ink); }
   .kl-nav__toggle {
     position: relative;
@@ -617,6 +622,40 @@
 .kl-support h3 { font-size: 1.3rem; }
 .kl-support p { color: var(--kl-text); font-size: 0.97rem; margin-top: 0.35rem; max-width: 60ch; }
 .kl-support .kl-btn { white-space: nowrap; }
+.kl-partner__cta { margin-top: 1.6rem; text-align: center; }
+
+/* ---------- Referencie absolventov ---------- */
+.kl-abs { background: var(--kl-bg); }
+.kl-abs__grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 17rem), 1fr));
+  gap: 1.1rem;
+}
+.kl-abs__grid > * { min-width: 0; }
+.kl-abs-card {
+  height: 100%;
+  background: var(--kl-surface);
+  border: 1px solid var(--kl-border);
+  border-radius: var(--kl-radius);
+  overflow: hidden;
+  transition: border-color 250ms var(--kl-ease), transform 250ms var(--kl-ease);
+}
+.kl-abs-card:hover { border-color: var(--kl-accent); transform: translateY(-3px); }
+.kl-abs-card img { width: 100%; aspect-ratio: 4 / 3; object-fit: cover; }
+.kl-abs-card__body { padding: 1.15rem 1.3rem 1.3rem; }
+.kl-abs-card__meno { font-weight: 700; color: var(--kl-ink); }
+.kl-abs-card__citat { font-size: 0.93rem; color: var(--kl-text); margin-top: 0.4rem; }
+.kl-abs-card__suma { margin-top: 0.85rem; font-family: var(--kl-font-mono); font-weight: 700; font-size: 0.95rem; color: var(--kl-accent-hi); font-variant-numeric: tabular-nums; }
+.kl-abs__count { text-align: center; margin: 2rem auto 0; color: var(--kl-subtle); font-size: 0.98rem; }
+
+/* ---------- Pre koho to nie je (striezlivé, bez akcentu) ---------- */
+.kl-prekoho { background: var(--kl-bg); }
+.kl-eyebrow--muted { color: var(--kl-subtle); }
+.kl-prekoho h2 { margin-top: 0.9rem; font-size: clamp(1.7rem, 1rem + 2.4vw, 2.4rem); }
+.kl-prekoho__list { list-style: none; margin: 1.6rem 0 0; padding: 0; display: grid; gap: 0.9rem; max-width: 46rem; }
+.kl-prekoho__list li { display: flex; gap: 0.8rem; align-items: flex-start; color: var(--kl-text); font-size: 1rem; }
+.kl-prekoho__list svg { width: 1.15rem; height: 1.15rem; flex: none; margin-top: 0.2rem; color: var(--kl-faint); }
+.kl-prekoho__outro { margin-top: 1.4rem; color: var(--kl-subtle); font-size: 0.95rem; }
 
 /* ---------- Intro claim ---------- */
 .kl-claim { background: var(--kl-surface); }
@@ -873,6 +912,8 @@
    (majiteľ 2026-08-30: „nezvýraznené"). Rovnaký zelený chip ako v hero. */
 /* zvyšok materiálu v sudoch — poctivá veta pod riadkami */
 .kl-zisk__zvysok { font-size: 0.85rem; color: var(--kl-subtle); margin-top: 0.9rem; }
+/* skrátený disclaimer priamo pod zelenou sumou */
+.kl-zisk__mini-disc { font-size: 0.78rem; color: var(--kl-faint); margin-top: 0.7rem; max-width: 34ch; }
 .kl-zisk__note {
   display: inline-block;
   font-size: 0.9rem;
@@ -1036,6 +1077,8 @@
 .kl-price li { display: flex; gap: 0.7rem; align-items: flex-start; font-size: 0.97rem; color: var(--kl-text); }
 .kl-price li svg { width: 1.2rem; height: 1.2rem; flex-shrink: 0; margin-top: 0.15rem; color: var(--kl-profit); }
 .kl-price .kl-btn { width: 100%; }
+.kl-price__limit { font-family: var(--kl-font-mono); font-size: 0.78rem; font-weight: 700; color: var(--kl-accent-hi); margin-bottom: 0.7rem; text-align: center; }
+.kl-price__garancia { font-size: 0.8rem; color: var(--kl-subtle); text-align: center; margin-top: 0.8rem; }
 .kl-pricing__note { margin-top: 1.6rem; font-size: 0.95rem; color: var(--kl-subtle); }
 .kl-pricing__note a { color: var(--kl-accent-hi); font-weight: 600; }
 .kl-pricing__note a:hover { text-decoration: underline; }

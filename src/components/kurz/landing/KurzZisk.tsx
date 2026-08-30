@@ -49,7 +49,7 @@ const T = {
     vyhodaNote: (usporaJob: string, m2: number) =>
       `Na zákazke ${m2} m² ušetríš na materiáli ${usporaJob} € oproti bežnej cene.`,
     disclaimer:
-      "Orientačný výpočet z reálnych cien. Predajná cena je trhová východisková cena, materiál za veľkoobchodnú cenu. Nepočíta tvoju prácu, dopravu, náradie ani dane — tie závisia od tvojho podnikania.",
+      "Orientačný výpočet z reálnych trhových cien. Nepočíta tvoju prácu, dopravu ani dane.",
     dniTvar: (d: number) => (d === 1 ? "deň" : d < 5 ? "dni" : "dní"),
   },
   en: {
@@ -88,7 +88,7 @@ const T = {
     vyhodaNote: (usporaJob: string, m2: number) =>
       `On a ${m2} m² job you save €${usporaJob} on material vs the regular price.`,
     disclaimer:
-      "Indicative calculation from real prices. Sale price is the market entry price, material at the wholesale price. Labour, transport, tools and taxes are not included — they depend on your business.",
+      "Indicative calculation from real market prices. Doesn't include your labour, transport or taxes.",
     dniTvar: () => "days",
   },
 } as const;
@@ -241,6 +241,8 @@ export function KurzZisk({ locale }: { locale: Locale }) {
                 {fmt(aMarza, locale)} €
                 <small>{t.pourSub} <b>{Math.round(aFrac * 100)} %</b> {t.pourSub2}</small>
               </div>
+              {/* Disclaimer priamo pod sumou (brief 2026-08-30), nie na dne sekcie. */}
+              <p className="kl-zisk__mini-disc">{t.disclaimer}</p>
             </div>
             <div>
               <div className="kl-tube" role="img" aria-label={`${t.pourZisk}: ${Math.round(ziskFrac * 100)} %`}>
@@ -281,7 +283,6 @@ export function KurzZisk({ locale }: { locale: Locale }) {
           <p className="kl-zisk__note">{t.vyhodaNote(fmt(r.usporaMaterialM2 * r.plochaM2, locale), r.plochaM2)}</p>
         </div>
 
-        <p className="kl-zisk__disclaimer">{t.disclaimer}</p>
       </div>
     </section>
   );
