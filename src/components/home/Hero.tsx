@@ -322,7 +322,7 @@ export function Hero() {
               {/* Kurzy — živý link, vedľa Kúpiť materiál (majiteľ 2026-08-30) */}
               <Link
                 href="/kurz"
-                className="btn btn-outline btn-lg !w-full max-md:!px-4 max-md:!py-2.5 max-md:!text-[13px]"
+                className="inline-flex items-center justify-center gap-2 w-full px-4 md:px-7 py-2.5 md:py-3.5 rounded-full bg-gradient-to-r from-[#f0b35b] to-[#c97c45] text-white font-semibold text-[13px] md:text-[15px] tracking-tight shadow-[0_8px_24px_rgba(201,124,69,0.55)] hover:shadow-[0_12px_36px_rgba(201,124,69,0.7)] hover:brightness-110 transition-all duration-300"
               >
                 <GraduationCap className="w-3.5 h-3.5 md:w-4 md:h-4" aria-hidden />
                 Kurzy
@@ -330,7 +330,7 @@ export function Hero() {
               {/* Kúpiť materiál — čoskoro, NEklikateľné kým e-shop nespustíme */}
               <div
                 aria-disabled
-                className="relative inline-flex items-center justify-center gap-2 w-full px-4 md:px-7 py-2.5 md:py-3.5 rounded-full border-2 border-white/25 bg-white/5 text-white/60 font-semibold text-[13px] md:text-[15px] tracking-tight select-none cursor-default"
+                className="relative inline-flex items-center justify-center gap-2 w-full px-4 md:px-7 py-2.5 md:py-3.5 rounded-full border-2 border-emerald-400/40 bg-emerald-400/10 text-emerald-100/70 font-semibold text-[13px] md:text-[15px] tracking-tight select-none cursor-default"
               >
                 <ShoppingBag className="w-3.5 h-3.5 md:w-4 md:h-4" aria-hidden />
                 Kúpiť materiál
