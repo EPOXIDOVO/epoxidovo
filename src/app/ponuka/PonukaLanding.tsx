@@ -95,7 +95,7 @@ const KROKY = [
 const FAQ = [
   {
     q: "Koľko stojí epoxidová podlaha?",
-    a: "Závisí od typu, plochy a stavu podkladu. Jednofarebná do garáže začína okolo 35 €/m², metalická do interiéru sa pohybuje od 129 €/m². Presnú cenu ti pošleme po vyplnení formulára — je konečná, sme neplatca DPH.",
+    a: "Závisí od typu, plochy a stavu podkladu. Chipsová do garáže začína na 49 €/m², jednofarebná na 59 €/m², metalická do interiéru sa pohybuje od 129 €/m². Presnú cenu ti pošleme po vyplnení formulára — je konečná, sme neplatca DPH.",
   },
   {
     q: "Ako dlho to trvá?",

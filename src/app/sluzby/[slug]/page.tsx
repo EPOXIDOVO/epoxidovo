@@ -26,21 +26,24 @@ export async function generateMetadata({
   const cat = CATEGORIES.find((c) => c.slug === slug);
   const detail = SERVICE_DETAILS[slug];
   if (!cat || !detail) return {};
+  // Mistral a Concrete Look sú polyuretány — titulka nesmie tvrdiť „epoxidové",
+  // keď text na stránke hovorí opak (viď ServiceDetail.seoTyp).
+  const typ = detail.seoTyp ?? "epoxidové podlahy";
   return {
-    title: `${cat.name} epoxidové podlahy`,
+    title: `${cat.name} ${typ}`,
     description: detail.intro,
     alternates: { canonical: `/sluzby/${slug}` },
     openGraph: {
       type: "website",
       url: `${SITE.url}/sluzby/${slug}`,
-      title: `${cat.name} epoxidové podlahy — EPOXIDOVO`,
+      title: `${cat.name} ${typ} — EPOXIDOVO`,
       description: detail.intro,
       images: [
         {
           url: "/og-home.jpg?v=3",
           width: 1200,
           height: 630,
-          alt: `${cat.name} epoxidové podlahy — EPOXIDOVO`,
+          alt: `${cat.name} ${typ} — EPOXIDOVO`,
         },
       ],
     },
@@ -63,8 +66,8 @@ export default async function SluzbaDetailPage({ params }: PageProps) {
     "@context": "https://schema.org",
     "@type": "Service",
     "@id": `${SITE.url}/sluzby/${slug}/#service`,
-    serviceType: `${cat.name} epoxidová podlaha`,
-    name: `${cat.name} epoxidové podlahy`,
+    serviceType: `${cat.name} ${(detail.seoTyp ?? "epoxidové podlahy").replace(/é podlahy$/, "á podlaha")}`,
+    name: `${cat.name} ${detail.seoTyp ?? "epoxidové podlahy"}`,
     description: detail.intro,
     provider: {
       "@type": "LocalBusiness",

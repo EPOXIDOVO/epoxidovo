@@ -11,6 +11,13 @@ export interface ServiceDetail {
   bestFor: string[];
   priceRange: string; // orientačná cena za m²
   technicalSpecs: { label: string; value: string }[];
+  /**
+   * Ako sa má tento povrch volať v titulke a v štruktúrovaných dátach.
+   * Default je „epoxidové podlahy" — lenže Mistral aj Concrete Look sú
+   * polyuretánové stierky, takže by titulka tvrdila opak toho, čo píše
+   * text na stránke. Vyplň len tam, kde „epoxidové" nesedí.
+   */
+  seoTyp?: string;
 }
 
 export const SERVICE_DETAILS: Record<string, ServiceDetail> = {
@@ -170,6 +177,7 @@ export const SERVICE_DETAILS: Record<string, ServiceDetail> = {
   // hovoriť rovnako ako konfigurátor, inak si web protirečí.
   mistral: {
     slug: "mistral",
+    seoTyp: "polyuretánové podlahy",
     intro:
       "Mäkký oblačný ťah v polyuretánovej stierke. Pokojná plocha bez ostrých hraníc a bez jedinej škáry.",
     longDescription: [
@@ -204,6 +212,7 @@ export const SERVICE_DETAILS: Record<string, ServiceDetail> = {
   },
   "beton-look": {
     slug: "beton-look",
+    seoTyp: "polyuretánové podlahy",
     intro:
       "Pohľadový betón bez škár, pórov a prachu. Dva milimetre polyuretánu, ktoré vyzerajú ako surová doska.",
     longDescription: [

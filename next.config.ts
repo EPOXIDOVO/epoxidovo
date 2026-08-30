@@ -23,6 +23,17 @@ const nextConfig: NextConfig = {
         destination: "/epoxidove-podlahy/:mesto",
         permanent: true,
       },
+      // Mramorová je dočasne mimo ponuky (kategória je zakomentovaná
+      // v categories.ts), ale odkazy na ňu ostali — v recenziách aj
+      // v kalkulačke kurzu. Bez tohto vracala stránka 404 v tele
+      // a pritom stav 200 (mäkké 404, Google to hodnotí ako chybu).
+      // Dočasné 307: keď sa mramorová vráti do ponuky, presmerovanie
+      // sa zmaže a URL je znova voľná.
+      {
+        source: "/sluzby/mramorove",
+        destination: "/sluzby",
+        permanent: false,
+      },
     ];
   },
   // TS errors ENABLED v build pipeline — kód je čistý.

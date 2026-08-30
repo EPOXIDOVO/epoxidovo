@@ -11,6 +11,13 @@
   --color-bg-soft: #fafafa;
   --color-fg: #0e1a3b; /* tmavomodrá pre nadpisy na bielom */
   --color-fg-muted: #4a5478;
+  /* INK — tmavé pozadie sekcií (Section tone="ink") a primárneho tlačidla.
+     Chýbalo tu, hoci to Section.tsx aj Button.tsx používali: hero na každej
+     /sluzby/[slug] a /podlahy/[cert] preto vykresľoval biely text na bielej
+     a nadpis aj cena boli neviditeľné. Odtieň je tá istá tmavomodrá ako
+     --color-fg, soft je jej svetlejší variant na hover a jemnejšie sekcie. */
+  --color-ink: #0e1a3b;
+  --color-ink-soft: #1b2c57;
   --color-fg-subtle: #6b7390;
   --color-border: #e4e4e7;
   --color-border-strong: #d4d4d8;
