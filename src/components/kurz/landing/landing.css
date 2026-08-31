@@ -902,8 +902,11 @@
   display: flex;
   width: max-content;
   animation: klStripMove 45s linear infinite;
+  /* stojí zarovnaný, kým pás nie je vo viewporte (.is-run pridá JS) */
+  animation-play-state: paused;
 }
-.kl-strip__marquee:hover .kl-strip__track { animation-play-state: paused; }
+.kl-strip__marquee.is-run .kl-strip__track { animation-play-state: running; }
+.kl-strip__marquee.is-run:hover .kl-strip__track { animation-play-state: paused; }
 .kl-strip__item {
   display: block;
   width: clamp(15rem, 26vw, 21rem);

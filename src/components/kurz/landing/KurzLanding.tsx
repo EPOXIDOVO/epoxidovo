@@ -1372,6 +1372,24 @@ export function KurzLanding({ locale }: { locale: Locale }) {
   const [menu, setMenu] = React.useState(false);
   const t = COPY[locale];
 
+  /*
+    Bežiace pásy (ticker, realizácie, absolventi) štartujú AŽ keď ich user
+    doskroluje — inak by k nim prišiel uprostred cyklu s odrezanou kartou
+    (majiteľ 2026-08-31: „vždy musí začínať načítané celé a celý pásik").
+    V pokoji stoja zarovnané na celej karte.
+  */
+  React.useEffect(() => {
+    const pasy = document.querySelectorAll(".kl-strip__marquee, .kl-tickerband");
+    if (!pasy.length) return;
+    const io = new IntersectionObserver((es) => {
+      for (const e of es) {
+        if (e.isIntersecting) { e.target.classList.add("is-run"); io.unobserve(e.target); }
+      }
+    }, { threshold: 0.25 });
+    pasy.forEach((el) => io.observe(el));
+    return () => io.disconnect();
+  }, []);
+
   React.useEffect(() => {
     document.documentElement.lang = t.htmlLang;
     document.body.style.overflow = menu ? "hidden" : "";
