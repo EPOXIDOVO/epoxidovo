@@ -547,19 +547,115 @@ function HeroKalkulacka({ locale }: { locale: Locale }) {
   );
 }
 
+/**
+ * Efekty v hero. Zamerne nic neprekresluju a nic neposuvaju nizsie — obsah
+ * ostava presne tam, kde je, efekty idu POD neho a nad fotku:
+ *   1. fotka sa pri skrolovani posuva pomalsie ako text (parallax),
+ *   2. karty typov sa naklonia k mysi a odlesk ide za kurzorom,
+ *   3. CTA tlacidla su magneticke.
+ * Pri prefers-reduced-motion sa nespusti nic a hero je staticke.
+ */
+function useHeroEfekty(ref: React.RefObject<HTMLElement | null>) {
+  React.useEffect(() => {
+    const hero = ref.current;
+    if (!hero) return;
+    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+
+    const cleanup: Array<() => void> = [];
+
+    /* 1. parallax fotky — max 3,5 % vysky hero, aby sa nikdy neodhalil okraj */
+    const par = hero.querySelector<HTMLElement>(".kl-hero__par");
+    if (par) {
+      let raf = 0;
+      const onScroll = () => {
+        if (raf) return;
+        raf = requestAnimationFrame(() => {
+          raf = 0;
+          const max = hero.offsetHeight * 0.035;
+          const y = Math.min(Math.max(window.scrollY, 0) * 0.14, max);
+          par.style.setProperty("--kl-hy", `${y.toFixed(1)}px`);
+        });
+      };
+      window.addEventListener("scroll", onScroll, { passive: true });
+      onScroll();
+      cleanup.push(() => {
+        window.removeEventListener("scroll", onScroll);
+        if (raf) cancelAnimationFrame(raf);
+      });
+    }
+
+    /* 2. + 3. iba na mysi — na dotyku by naklonenie len prekazalo */
+    if (window.matchMedia("(hover: hover) and (pointer: fine)").matches) {
+      const bind = (
+        el: HTMLElement,
+        move: (px: number, py: number) => void,
+        leave: () => void,
+      ) => {
+        const onMove = (e: PointerEvent) => {
+          const r = el.getBoundingClientRect();
+          move((e.clientX - r.left) / r.width, (e.clientY - r.top) / r.height);
+        };
+        el.addEventListener("pointermove", onMove);
+        el.addEventListener("pointerleave", leave);
+        cleanup.push(() => {
+          el.removeEventListener("pointermove", onMove);
+          el.removeEventListener("pointerleave", leave);
+        });
+      };
+
+      hero.querySelectorAll<HTMLElement>(".kl-hcalc__typ").forEach((card) => {
+        bind(
+          card,
+          (px, py) => {
+            card.style.setProperty("--ty", `${((px - 0.5) * 13).toFixed(2)}deg`);
+            card.style.setProperty("--tx", `${((0.5 - py) * 11).toFixed(2)}deg`);
+            card.style.setProperty("--gx", `${(px * 100).toFixed(1)}%`);
+            card.style.setProperty("--gy", `${(py * 100).toFixed(1)}%`);
+          },
+          () => {
+            card.style.setProperty("--ty", "0deg");
+            card.style.setProperty("--tx", "0deg");
+          },
+        );
+      });
+
+      hero.querySelectorAll<HTMLElement>(".kl-hero__actions .kl-btn").forEach((b) => {
+        bind(
+          b,
+          (px, py) => {
+            b.style.setProperty("--mx", `${((px - 0.5) * 14).toFixed(1)}px`);
+            b.style.setProperty("--my", `${((py - 0.5) * 8).toFixed(1)}px`);
+          },
+          () => {
+            b.style.setProperty("--mx", "0px");
+            b.style.setProperty("--my", "0px");
+          },
+        );
+      });
+    }
+
+    return () => cleanup.forEach((f) => f());
+  }, [ref]);
+}
+
 function Hero({ locale }: { locale: Locale }) {
   const t = V2[locale];
+  const ref = React.useRef<HTMLElement>(null);
+  useHeroEfekty(ref);
   return (
-    <section className="kl-hero" id="hello">
+    <section className="kl-hero" id="hello" ref={ref}>
       <div className="kl-hero__media" aria-hidden>
-        <Image
-          src="/images/eshop/topstone-metallic/midnight-blue.jpg"
-          alt=""
-          fill
-          priority
-          sizes="100vw"
-        />
+        <div className="kl-hero__par">
+          <Image
+            src="/images/eshop/topstone-metallic/midnight-blue.jpg"
+            alt=""
+            fill
+            priority
+            sizes="100vw"
+          />
+        </div>
       </div>
+      <i className="kl-hero__sheen" aria-hidden />
       <div className="kl-hero__inner">
         <div className="kl-container kl-hero__grid">
           <div>

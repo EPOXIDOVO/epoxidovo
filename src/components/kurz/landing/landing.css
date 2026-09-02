@@ -314,6 +314,15 @@
   overflow: hidden;
 }
 .kl-hero__media { position: absolute; inset: 0; }
+/* Parallax vrstva: fotka sa pri skrolovani posuva pomalsie ako obsah.
+   Zoom konci na 1.08, takze hore aj dole je 4 % rezerva na posun a v hero
+   sa nikdy neukaze prazdny okraj. */
+.kl-hero__par {
+  position: absolute;
+  inset: 0;
+  transform: translate3d(0, var(--kl-hy, 0px), 0);
+  will-change: transform;
+}
 .kl-hero__media img {
   width: 100%;
   height: 100%;
@@ -331,6 +340,40 @@
     linear-gradient(0deg, var(--kl-bg) 0%, rgba(13, 18, 24, 0) 46%),
     linear-gradient(180deg, rgba(13, 18, 24, 0.62) 0%, rgba(13, 18, 24, 0) 26%);
 }
+/* Svetlo prechadzajuce po vyliatej ploche. Sirokopasmovy odlesk, ktory
+   raz za 14 s prejde cez hero — presne tak, ako sa svetlo hyba po
+   zaschnutej metalickej podlahe. Nad fotkou, pod textom. */
+.kl-hero__sheen {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  overflow: hidden;
+  pointer-events: none;
+}
+.kl-hero__sheen::before {
+  content: "";
+  position: absolute;
+  top: -25%;
+  bottom: -25%;
+  left: -58%;
+  width: 52%;
+  background: linear-gradient(
+    100deg,
+    rgba(255, 255, 255, 0) 0%,
+    rgba(255, 255, 255, 0.05) 32%,
+    rgba(242, 205, 172, 0.16) 50%,
+    rgba(255, 255, 255, 0.05) 68%,
+    rgba(255, 255, 255, 0) 100%
+  );
+  filter: blur(7px);
+  mix-blend-mode: screen;
+  animation: klSheen 14s linear 1.4s infinite;
+}
+@keyframes klSheen {
+  0% { transform: translateX(0); animation-timing-function: cubic-bezier(0.45, 0.05, 0.35, 1); }
+  32%, 100% { transform: translateX(300%); }
+}
+
 .kl-hero__inner {
   position: relative;
   z-index: 1;
@@ -384,7 +427,17 @@
 }
 /* tri tlačidlá v jednom riadku (na mobile sa zalomia) */
 .kl-hero__actions { display: flex; flex-wrap: wrap; gap: 0.6rem; margin-top: 2rem; }
-.kl-hero__actions .kl-btn { padding: 0.85rem 1.15rem; font-size: 0.9rem; }
+/* Magneticke CTA: tlacidlo sa nakloni k mysi. --mx/--my nastavuje JS. */
+.kl-hero__actions .kl-btn {
+  padding: 0.85rem 1.15rem;
+  font-size: 0.9rem;
+  transform: translate3d(var(--mx, 0px), var(--my, 0px), 0);
+  transition: background 250ms var(--kl-ease), color 250ms var(--kl-ease),
+    box-shadow 250ms var(--kl-ease), border-color 250ms var(--kl-ease),
+    transform 200ms cubic-bezier(0.22, 0.61, 0.36, 1);
+}
+.kl-hero__actions .kl-btn:hover { transform: translate3d(var(--mx, 0px), calc(var(--my, 0px) - 2px), 0); }
+.kl-hero__actions .kl-btn:active { transform: translate3d(var(--mx, 0px), var(--my, 0px), 0) scale(0.98); }
 @media (min-width: 992px) { .kl-hero__actions { flex-wrap: nowrap; } }
 /* trust ticker — plnoširoký pás medzi hero a Vrstvami, beží doľava */
 .kl-tickerband {
@@ -512,13 +565,38 @@
   border-radius: 10px;
   padding: 0.35rem 0.55rem 0.35rem 0.35rem;
   cursor: pointer;
-  transition: background 180ms var(--kl-ease), border-color 180ms var(--kl-ease), color 180ms var(--kl-ease);
+  position: relative;
+  transform: perspective(620px) rotateX(var(--tx, 0deg)) rotateY(var(--ty, 0deg));
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.07);
+  transition: background 180ms var(--kl-ease), border-color 180ms var(--kl-ease),
+    color 180ms var(--kl-ease), box-shadow 260ms var(--kl-ease),
+    transform 160ms cubic-bezier(0.22, 0.61, 0.36, 1);
 }
+/* Odlesk sleduje kurzor — karta posobi ako vypukla dlazdica, nie ploche pole. */
+.kl-hcalc__typ::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  pointer-events: none;
+  background: radial-gradient(
+    150px circle at var(--gx, 50%) var(--gy, 50%),
+    rgba(255, 255, 255, 0.2),
+    rgba(255, 255, 255, 0) 62%
+  );
+  opacity: 0;
+  transition: opacity 220ms var(--kl-ease);
+}
+.kl-hcalc__typ:hover::after { opacity: 1; }
 .kl-hcalc__typ img { width: 34px; height: 34px; border-radius: 7px; object-fit: cover; flex: none; }
 .kl-hcalc__typ-txt { display: flex; flex-direction: column; line-height: 1.2; min-width: 0; }
 .kl-hcalc__typ-txt i { font-style: normal; font-family: var(--kl-font-mono); font-size: 0.66rem; font-weight: 700; color: var(--kl-profit); font-variant-numeric: tabular-nums; white-space: nowrap; }
 .kl-hcalc__typ.is-active .kl-hcalc__typ-txt i { color: #123c2a; }
-.kl-hcalc__typ:hover { border-color: var(--kl-accent); color: var(--kl-ink); }
+.kl-hcalc__typ:hover {
+  border-color: var(--kl-accent);
+  color: var(--kl-ink);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.14), 0 12px 26px rgba(0, 0, 0, 0.45);
+}
 .kl-hcalc__typ.is-active { background: var(--kl-accent); border-color: var(--kl-accent); color: #160d06; font-weight: 700; }
 .kl-hcalc__slider { display: flex; justify-content: space-between; align-items: baseline; font-size: 0.9rem; font-weight: 700; color: #e7ecf1; }
 .kl-hcalc__slider strong { font-family: var(--kl-font-mono); font-size: 1.25rem; color: var(--kl-ink); font-variant-numeric: tabular-nums; }
@@ -1471,7 +1549,7 @@
 
 /* ---------- Keyframes ---------- */
 @keyframes klRise { from { opacity: 0; transform: translateY(26px); } to { opacity: 1; transform: none; } }
-@keyframes klHeroZoom { from { transform: scale(1.06); } to { transform: scale(1); } }
+@keyframes klHeroZoom { from { transform: scale(1.16); } to { transform: scale(1.08); } }
 @keyframes klTicker { to { transform: translateX(-50%); } }
 
 @media (prefers-reduced-motion: reduce) {
