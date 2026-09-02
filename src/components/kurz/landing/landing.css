@@ -428,15 +428,21 @@
 }
 /* tri tlačidlá v jednom riadku (na mobile sa zalomia) */
 .kl-hero__actions { display: flex; flex-wrap: wrap; gap: 0.6rem; margin-top: 2rem; }
-/* Magneticke CTA: tlacidlo sa nakloni k mysi. --mx/--my nastavuje JS. */
+/* Magneticke CTA. Kym je kurzor na tlacidle, --mag-t je 0s -> tlacidlo je
+   nalepene na kurzore a ide s nim okamzite. Ked kurzor odide, trieda .is-mag
+   zmizne, --mag-t sa vrati na 520 ms expo -> tlacidlo sa pomaly odtrhne spat.
+   --mx/--my nastavuje JS. */
 .kl-hero__actions .kl-btn {
+  --mag-t: 520ms;
   padding: 0.85rem 1.15rem;
   font-size: 0.9rem;
   transform: translate3d(var(--mx, 0px), var(--my, 0px), 0);
+  will-change: transform;
   transition: background 250ms var(--kl-ease), color 250ms var(--kl-ease),
     box-shadow 250ms var(--kl-ease), border-color 250ms var(--kl-ease),
-    transform 200ms cubic-bezier(0.22, 0.61, 0.36, 1);
+    transform var(--mag-t) var(--kl-ease);
 }
+.kl-hero__actions .kl-btn.is-mag { --mag-t: 0s; }
 .kl-hero__actions .kl-btn:hover { transform: translate3d(var(--mx, 0px), calc(var(--my, 0px) - 2px), 0); }
 .kl-hero__actions .kl-btn:active { transform: translate3d(var(--mx, 0px), var(--my, 0px), 0) scale(0.98); }
 @media (min-width: 992px) { .kl-hero__actions { flex-wrap: nowrap; } }
@@ -551,7 +557,15 @@
   background: var(--kl-profit);
   box-shadow: 0 0 0 3px var(--kl-profit-soft);
 }
-.kl-hcalc__types { display: grid; grid-template-columns: 1fr 1fr; gap: 0.45rem; margin-bottom: 1rem; }
+/* Spolocna perspektiva pre vsetkych 6 kariet — naklonaju sa k jednemu
+   uberniku, takze cely blok posobi ako vypukle dlazdice, nie ploche polia. */
+.kl-hcalc__types {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.45rem;
+  margin-bottom: 1rem;
+  perspective: 800px;
+}
 .kl-hcalc__typ {
   display: flex;
   align-items: center;
@@ -567,11 +581,14 @@
   padding: 0.35rem 0.55rem 0.35rem 0.35rem;
   cursor: pointer;
   position: relative;
-  transform: perspective(620px) rotateX(var(--tx, 0deg)) rotateY(var(--ty, 0deg));
+  transform-style: preserve-3d;
+  will-change: transform;
+  /* --tz vysunie kartu smerom k divakovi: v perspektive to citas ako zvacsenie */
+  transform: rotateX(var(--tx, 0deg)) rotateY(var(--ty, 0deg)) translateZ(var(--tz, 0px));
   box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.07);
-  transition: background 180ms var(--kl-ease), border-color 180ms var(--kl-ease),
-    color 180ms var(--kl-ease), box-shadow 260ms var(--kl-ease),
-    transform 160ms cubic-bezier(0.22, 0.61, 0.36, 1);
+  transition: background 200ms var(--kl-ease), border-color 200ms var(--kl-ease),
+    color 200ms var(--kl-ease), box-shadow 300ms var(--kl-ease),
+    transform 400ms var(--kl-ease);
 }
 /* Odlesk sleduje kurzor — karta posobi ako vypukla dlazdica, nie ploche pole. */
 .kl-hcalc__typ::after {
@@ -594,11 +611,52 @@
 .kl-hcalc__typ-txt i { font-style: normal; font-family: var(--kl-font-mono); font-size: 0.66rem; font-weight: 700; color: var(--kl-profit); font-variant-numeric: tabular-nums; white-space: nowrap; }
 .kl-hcalc__typ.is-active .kl-hcalc__typ-txt i { color: #123c2a; }
 .kl-hcalc__typ:hover {
-  border-color: var(--kl-accent);
-  color: var(--kl-ink);
-  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.14), 0 12px 26px rgba(0, 0, 0, 0.45);
+  --tz: 14px;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.16), 0 16px 32px rgba(0, 0, 0, 0.5);
 }
+.kl-hcalc__typ:hover:not(.is-active) {
+  border-color: var(--kl-accent);
+  color: var(--kl-accent-hi);
+}
+.kl-hcalc__typ:hover:not(.is-active) .kl-hcalc__typ-txt i { color: #7ee0ac; }
 .kl-hcalc__typ.is-active { background: var(--kl-accent); border-color: var(--kl-accent); color: #160d06; font-weight: 700; }
+/* Nabeh pri nacitani: karta dosadne a potom po jednom pribehnu polia.
+   fill-mode `backwards` (nie `both`) je dolezity — po dobehnuti sa transform
+   vrati na zakladnu hodnotu, takze 3D naklonenie kariet dalej funguje. */
+@keyframes klField {
+  from { opacity: 0; transform: translateY(15px) scale(0.98); }
+  to { opacity: 1; transform: none; }
+}
+.kl-hcalc__typ,
+.kl-hcalc__slider,
+.kl-hcalc .kl-range,
+.kl-hcalc__rows > div,
+.kl-hcalc__vyhoda,
+.kl-hcalc__note,
+.kl-hcalc__ctx { animation: klField 620ms var(--kl-ease) backwards; }
+.kl-hcalc__typ:nth-child(1) { animation-delay: 260ms; }
+.kl-hcalc__typ:nth-child(2) { animation-delay: 305ms; }
+.kl-hcalc__typ:nth-child(3) { animation-delay: 350ms; }
+.kl-hcalc__typ:nth-child(4) { animation-delay: 395ms; }
+.kl-hcalc__typ:nth-child(5) { animation-delay: 440ms; }
+.kl-hcalc__typ:nth-child(6) { animation-delay: 485ms; }
+.kl-hcalc__slider { animation-delay: 530ms; }
+.kl-hcalc .kl-range { animation-delay: 565ms; }
+.kl-hcalc__rows > div:nth-child(1) { animation-delay: 605ms; }
+.kl-hcalc__rows > div:nth-child(2) { animation-delay: 650ms; }
+.kl-hcalc__rows > div:nth-child(3) { animation-delay: 695ms; }
+.kl-hcalc__vyhoda { animation-delay: 740ms; }
+.kl-hcalc__note { animation-delay: 775ms; }
+.kl-hcalc__ctx { animation-delay: 810ms; }
+/* dokazy pod textom pribehnu v rovnakom rytme */
+.kl-hero__proofs li { animation: klField 620ms var(--kl-ease) backwards; }
+.kl-hero__proofs li:nth-child(1) { animation-delay: 300ms; }
+.kl-hero__proofs li:nth-child(2) { animation-delay: 350ms; }
+.kl-hero__proofs li:nth-child(3) { animation-delay: 400ms; }
+.kl-hero__proofs li:nth-child(4) { animation-delay: 450ms; }
+.kl-hero__proofs li:nth-child(5) { animation-delay: 500ms; }
+.kl-hero__proofs li:nth-child(6) { animation-delay: 550ms; }
+
 .kl-hcalc__slider { display: flex; justify-content: space-between; align-items: baseline; font-size: 0.9rem; font-weight: 700; color: #e7ecf1; }
 .kl-hcalc__slider strong { font-family: var(--kl-font-mono); font-size: 1.25rem; color: var(--kl-ink); font-variant-numeric: tabular-nums; }
 .kl-hcalc .kl-range { margin-bottom: 0.7rem; }

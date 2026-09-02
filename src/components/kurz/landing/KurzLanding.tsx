@@ -588,12 +588,12 @@ function useHeroEfekty(ref: React.RefObject<HTMLElement | null>) {
     if (window.matchMedia("(hover: hover) and (pointer: fine)").matches) {
       const bind = (
         el: HTMLElement,
-        move: (px: number, py: number) => void,
+        move: (px: number, py: number, r: DOMRect) => void,
         leave: () => void,
       ) => {
         const onMove = (e: PointerEvent) => {
           const r = el.getBoundingClientRect();
-          move((e.clientX - r.left) / r.width, (e.clientY - r.top) / r.height);
+          move((e.clientX - r.left) / r.width, (e.clientY - r.top) / r.height, r);
         };
         el.addEventListener("pointermove", onMove);
         el.addEventListener("pointerleave", leave);
@@ -608,25 +608,32 @@ function useHeroEfekty(ref: React.RefObject<HTMLElement | null>) {
           card,
           (px, py) => {
             card.style.setProperty("--ty", `${((px - 0.5) * 13).toFixed(2)}deg`);
-            card.style.setProperty("--tx", `${((0.5 - py) * 11).toFixed(2)}deg`);
+            card.style.setProperty("--tx", `${((0.5 - py) * 13).toFixed(2)}deg`);
+            card.style.setProperty("--tz", "10px");
             card.style.setProperty("--gx", `${(px * 100).toFixed(1)}%`);
             card.style.setProperty("--gy", `${(py * 100).toFixed(1)}%`);
           },
           () => {
             card.style.setProperty("--ty", "0deg");
             card.style.setProperty("--tx", "0deg");
+            card.style.removeProperty("--tz");
           },
         );
       });
 
+      /* Magnet: posun sa rata od STREDU tlacidla, takze cim dalej od stredu
+         mysou ides, tym viac sa tlacidlo tiahne za tebou — az kym kurzor
+         neopusti plochu a tlacidlo sa pomaly odtrhne spat (.is-mag dole). */
       hero.querySelectorAll<HTMLElement>(".kl-hero__actions .kl-btn").forEach((b) => {
         bind(
           b,
-          (px, py) => {
-            b.style.setProperty("--mx", `${((px - 0.5) * 14).toFixed(1)}px`);
-            b.style.setProperty("--my", `${((py - 0.5) * 8).toFixed(1)}px`);
+          (px, py, r) => {
+            b.classList.add("is-mag");
+            b.style.setProperty("--mx", `${((px - 0.5) * r.width * 0.25).toFixed(1)}px`);
+            b.style.setProperty("--my", `${((py - 0.5) * r.height * 0.5).toFixed(1)}px`);
           },
           () => {
+            b.classList.remove("is-mag");
             b.style.setProperty("--mx", "0px");
             b.style.setProperty("--my", "0px");
           },
@@ -1501,7 +1508,8 @@ export function KurzLanding({ locale }: { locale: Locale }) {
         <Hero locale={locale} />
         <TickerBand locale={locale} />
         <Vrstvy locale={locale} />
-        <Spolupraca locale={locale} />
+        {/* Spolupraca zatial vypnuta (majitel 2026-09-02: „toto dajme prec zatial“).
+            Komponent Spolupraca nizsie ostava — staci odkomentovat riadok. */}
         {/* Prvé podlahy klientov rovno nad cenníkom — dôkaz pri rozhodovaní. */}
         <Absolventi locale={locale} />
         <Pricing locale={locale} />
