@@ -312,6 +312,8 @@
   align-items: center;
   color: #fff;
   overflow: hidden;
+  /* aby sa odlesk (mix-blend-mode) miesal s fotkou a nie so zvyskom stranky */
+  isolation: isolate;
 }
 .kl-hero__media { position: absolute; inset: 0; }
 /* Parallax vrstva: fotka sa pri skrolovani posuva pomalsie ako obsah.
@@ -346,7 +348,6 @@
 .kl-hero__sheen {
   position: absolute;
   inset: 0;
-  z-index: 0;
   overflow: hidden;
   pointer-events: none;
 }
