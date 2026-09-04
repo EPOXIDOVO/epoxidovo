@@ -11,17 +11,26 @@ export async function GET(req: NextRequest) {
     return NextResponse.json({ ok: false }, { status: 401 });
   }
 
+  // Objednávky kurzu žijú v tej istej tabuľke (shippingId "digital"), ale do
+  // štatistík e-shopu nepatria — inak by tržbu dvíhali nezaplatené kurzy po
+  // 499 a 1499 € a ich SKU by sa miešali do rebríčka materiálov.
+  const lenEshop = { NOT: { shippingId: "digital" } };
+  const lenEshopPolozky = { order: { NOT: { shippingId: "digital" } } };
+
   const [orders, perSku, posledne] = await Promise.all([
     prisma.eshopOrder.aggregate({
+      where: lenEshop,
       _count: { id: true },
       _sum: { subtotalEur: true },
     }),
     prisma.eshopOrderItem.groupBy({
       by: ["sku"],
+      where: lenEshopPolozky,
       _sum: { qty: true },
       _count: { orderId: true },
     }),
     prisma.eshopOrder.findMany({
+      where: lenEshop,
       orderBy: { createdAt: "desc" },
       take: 10,
       select: {
@@ -37,6 +46,7 @@ export async function GET(req: NextRequest) {
 
   // tržba per SKU (qty × cena v čase objednávky)
   const trzbaRows = await prisma.eshopOrderItem.findMany({
+    where: lenEshopPolozky,
     select: { sku: true, qty: true, cenaEur: true },
   });
   const trzba = new Map<string, number>();

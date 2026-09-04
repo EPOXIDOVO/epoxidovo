@@ -72,10 +72,18 @@ const LABEL: Record<"standard" | "pro" | "firma", string> = {
 };
 
 function orderNumber(): string {
-  // KURZ-YYMMDD-XXXX — čitateľné, unikátne dosť na objem kurzov
+  // KURZ-YYMMDD-NNNN — prípona je zámerne ČÍSELNÁ, aby sa z čísla objednávky
+  // dal odvodiť variabilný symbol (variabilnySymbol() berie len číslice a VS
+  // musí byť numerický, max 10 znakov: YYMMDD + NNNN presne sedí).
   const d = new Date();
   const ymd = d.toISOString().slice(2, 10).replace(/-/g, "");
-  const rnd = Math.random().toString(36).slice(2, 6).toUpperCase();
+  //
+  // Priestor je len 10 000 čísel na deň, takže na to, že kolízia nenastane,
+  // sa NESPOLIEHAME — rieši ju retry na P2002 pri zápise nižšie. crypto je
+  // tu preto, aby čísla neboli predvídateľné (WebCrypto, na edge natívne).
+  const buf = new Uint32Array(1);
+  crypto.getRandomValues(buf);
+  const rnd = String(buf[0] % 10000).padStart(4, "0");
   return `KURZ-${ymd}-${rnd}`;
 }
 
@@ -137,7 +145,7 @@ export async function POST(req: NextRequest) {
     const email = d.email.trim().toLowerCase();
     const isPurchase = d.variant !== "firma";
     const amount = isPurchase ? PRICE[d.variant as "standard" | "pro"] : 0;
-    const order = isPurchase ? orderNumber() : null;
+    let order = isPurchase ? orderNumber() : null;
     const payment = isPurchase ? d.payment : null;
 
     // Platba kartou vyžaduje bránu — ak nie je, povieme klientovi, nech ponúkne prevod.
@@ -178,21 +186,96 @@ export async function POST(req: NextRequest) {
     };
 
     // 1) DB
+    //    Lead ostáva pre CRM (majiteľ v ňom vidí všetky dopyty na jednom mieste),
+    //    ale pri KÚPE vzniká navyše skutočná objednávka v EshopOrder. Bez nej
+    //    nikde neexistuje záznam, že niekto kúpil — číslo objednávky, balík aj
+    //    suma boli doteraz len voľný text v Lead.message a Lead nemá pole
+    //    o platbe. EshopOrder ho má (paidAt) a nastavuje ho Stripe webhook,
+    //    ktorý hľadá riadok presne podľa client_reference_id = číslo objednávky.
     let leadId: string | null = null;
+    let orderSaved = false;
     if (process.env.DATABASE_URL && !process.env.DATABASE_URL.includes("placeholder")) {
+      // Import vo vlastnom try: keby zlyhal modul Prismy, nesmie to zhodiť
+      // celú objednávku — e-mail aj CRM forward majú bežať ďalej.
+      let prisma: typeof import("@/lib/prisma").prisma | null = null;
       try {
-        const { prisma } = await import("@/lib/prisma");
-        const lead = await prisma.lead.create({ data: leadData });
-        leadId = lead.id;
+        ({ prisma } = await import("@/lib/prisma"));
       } catch (e) {
-        console.error("[kurz] DB save failed:", e);
+        console.error("[kurz] prisma import failed:", e);
+      }
+      if (prisma) {
+        try {
+          const lead = await prisma.lead.create({ data: leadData });
+          leadId = lead.id;
+        } catch (e) {
+          console.error("[kurz] DB save failed:", e);
+        }
+        if (isPurchase && order) {
+          // Objednávka sa zapisuje PRED odoslaním e-mailu, lebo z jej čísla sa
+          // odvodzuje variabilný symbol. Keby e-mail odišiel s číslom, ktoré
+          // v DB neskončilo, dvaja ľudia by mohli platiť na rovnaký VS a
+          // v systéme by existovala len jedna z tých dvoch objednávok.
+          for (let pokus = 0; pokus < 3 && !orderSaved; pokus++) {
+            if (pokus > 0) order = orderNumber();
+            try {
+              await prisma.eshopOrder.create({
+                data: {
+                  id: order,
+                  name: fullName,
+                  email,
+                  phone: d.phone.trim(),
+                  subtotalEur: amount,
+                  shippingId: "digital", // online kurz — nič sa nikam nevezie
+                  paymentId: payment === "karta" ? "karta" : "prevod",
+                  hasOnRequest: false,
+                  note: lines,
+                  items: {
+                    create: [{ sku: `KURZ-${d.variant.toUpperCase()}`, nazov: LABEL[d.variant], qty: 1, cenaEur: amount }],
+                  },
+                },
+              });
+              orderSaved = true;
+            } catch (e) {
+              if ((e as { code?: string }).code === "P2002") {
+                console.warn("[kurz] kolízia čísla objednávky", order, "— skúšam znova");
+                continue;
+              }
+              console.error("[kurz] EshopOrder save failed for", order, e);
+              break;
+            }
+          }
+        }
       }
     }
-    // 2) E-maily (obchod@ + zákazník)
+    // 2) E-maily
+    //    Kúpa dostane potvrdenie objednávky s platobnými pokynmi; firemný dopyt
+    //    ostáva na pôvodnom lead e-maili. Predtým chodila aj za 1 499 € generická
+    //    odpoveď „Ďakujeme za dopyt — ozveme sa do 24h“.
+    let emailOk = false;
     if (process.env.RESEND_API_KEY) {
       try {
-        const { sendLeadEmails } = await import("@/lib/email");
-        await sendLeadEmails({ ...leadData, source: leadData.source });
+        if (isPurchase) {
+          const { sendKurzOrderEmails } = await import("@/lib/kurz-order-email");
+          const r = await sendKurzOrderEmails({
+            orderId: order!,
+            name: fullName,
+            email,
+            phone: d.phone.trim(),
+            label: LABEL[d.variant],
+            amount,
+            payment: payment === "karta" ? "karta" : "prevod",
+            paid: false, // kartu potvrdzuje až Stripe webhook
+            company: d.company?.trim() || null,
+            ico: d.ico?.trim() || null,
+            note: d.message?.trim() || null,
+            locale: d.locale === "en" ? "en" : "sk",
+          });
+          emailOk = r.customerSent;
+        } else {
+          const { sendLeadEmails } = await import("@/lib/email");
+          await sendLeadEmails({ ...leadData, source: leadData.source });
+          emailOk = true;
+        }
       } catch (e) {
         console.error("[kurz] email failed:", e);
       }
@@ -223,6 +306,21 @@ export async function POST(req: NextRequest) {
       }
     }
 
+    // Poistka ako v e-shope (/api/order): keď sa objednávka nezaznamenala
+    // NIKDE — ani v DB, ani e-mailom — nesmieme hlásiť úspech. Zákazník by
+    // čakal na platobné údaje, ktoré nemá kto poslať, a jediná stopa by bol
+    // riadok v console.error, ktorý nikto nesleduje.
+    if (isPurchase && !orderSaved && !emailOk) {
+      console.error("[kurz] objednávka nezaznamenaná nikde:", order, email);
+      return NextResponse.json(
+        {
+          error: "not_recorded",
+          message: `Objednávku sa nepodarilo zaznamenať. Skús to prosím znova alebo zavolaj na ${SITE.contact.phone}.`,
+        },
+        { status: 500 },
+      );
+    }
+
     if (!isPurchase) {
       return NextResponse.json({ ok: true, mode: "inquiry", id: leadId });
     }
@@ -231,6 +329,19 @@ export async function POST(req: NextRequest) {
     const thanksPath = d.locale === "sk" ? "/kurz/dakujeme" : "/en/epoxy-flooring-course/thank-you";
 
     if (payment === "karta") {
+      // Bez záznamu v DB by Stripe webhook nemal čo označiť ako zaplatené —
+      // platba by prešla a v systéme by po nej neostalo nič. Radšej človeka
+      // pošleme skúsiť znova, než mu vziať peniaze naslepo.
+      if (!orderSaved) {
+        console.error("[kurz] karta zastavená — objednávka sa nezapísala:", order, email);
+        return NextResponse.json(
+          {
+            error: "not_recorded",
+            message: `Objednávku sa nepodarilo zaznamenať, platbu sme preto nespustili. Skús to znova alebo zavolaj na ${SITE.contact.phone}.`,
+          },
+          { status: 500 },
+        );
+      }
       const origin = req.headers.get("origin") ?? base;
       const session = await createStripeCheckoutSession({
         orderId: order!,
@@ -249,6 +360,7 @@ export async function POST(req: NextRequest) {
       mode: "prevod",
       order,
       amount,
+      saved: orderSaved,
       redirect: `${thanksPath}?o=${order}&p=prevod&a=${amount}`,
     });
   } catch (e) {
