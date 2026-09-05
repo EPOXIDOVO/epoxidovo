@@ -319,14 +319,19 @@ export function Hero() {
                 <Images className="w-3.5 h-3.5 md:w-4 md:h-4" aria-hidden />
                 Ukážky realizácií
               </button>
-              {/* Kurzy — živý link, vedľa Kúpiť materiál (majiteľ 2026-08-30) */}
-              <Link
-                href="/kurz"
-                className="inline-flex items-center justify-center gap-2 w-full px-4 md:px-7 py-2.5 md:py-3.5 rounded-full bg-gradient-to-r from-[#f0b35b] to-[#c97c45] text-white font-semibold text-[13px] md:text-[15px] tracking-tight shadow-[0_8px_24px_rgba(201,124,69,0.55)] hover:shadow-[0_12px_36px_rgba(201,124,69,0.7)] hover:brightness-110 transition-all duration-300"
+              {/* Kurzy — čoskoro, NEklikateľné (majiteľ 2026-09-05). Hlavička to
+                  tak má už dlhšie, hero bol jediné miesto na webe, odkiaľ sa
+                  dalo na /kurz dostať. Medená identita ostáva, len stlmená. */}
+              <div
+                aria-disabled
+                className="relative inline-flex items-center justify-center gap-2 w-full px-4 md:px-7 py-2.5 md:py-3.5 rounded-full border-2 border-[#c97c45]/40 bg-[#c97c45]/10 text-[#f0b35b]/70 font-semibold text-[13px] md:text-[15px] tracking-tight select-none cursor-default"
               >
                 <GraduationCap className="w-3.5 h-3.5 md:w-4 md:h-4" aria-hidden />
                 Kurzy
-              </Link>
+                <span className="absolute -top-2 -right-1 md:-right-2 px-2 py-0.5 rounded-full bg-[#f97316] text-white text-[10px] font-bold uppercase tracking-wide whitespace-nowrap shadow-[0_2px_8px_rgba(249,115,22,0.5)]">
+                  Čoskoro
+                </span>
+              </div>
               {/* Kúpiť materiál — čoskoro, NEklikateľné kým e-shop nespustíme */}
               <div
                 aria-disabled

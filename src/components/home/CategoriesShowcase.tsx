@@ -234,13 +234,22 @@ function CategoriesShowcaseInner({ cenyOd }: { cenyOd?: Record<string, number> }
                 >
                   Čoskoro
                 </div>
+              ) : cat.slug === "priemyselne" ? (
+                /* Špeciálne systémy — čoskoro, NEklikateľné (majiteľ 2026-09-05).
+                   Vzorkovník farieb ostatných kategórií ostáva živý. */
+                <div
+                  aria-disabled
+                  className="inline-flex items-center justify-center px-3 py-2.5 md:py-3 rounded-full border-2 border-dashed border-white/25 bg-[#5c2c18]/70 text-white/50 font-bold text-[12px] md:text-sm whitespace-nowrap uppercase tracking-wide select-none cursor-default"
+                >
+                  Čoskoro
+                </div>
               ) : VZORKOVNIK_TYP[cat.slug] ? (
                 <Link
                   href={VZORKOVNIK_TYP[cat.slug]}
                   aria-label={`Vzorkovník farieb — ${cat.name}`}
                   className="inline-flex items-center justify-center px-3 py-2.5 md:py-3 rounded-full bg-[#3db6e8] text-white font-semibold text-[12px] md:text-sm whitespace-nowrap hover:bg-[#1a8cc4] shadow-[0_6px_20px_rgba(61,182,232,0.35)] hover:-translate-y-0.5 transition-all duration-300"
                 >
-                  {cat.slug === "priemyselne" ? "Špeciálne systémy" : "Vzorkovník farieb"}
+                  Vzorkovník farieb
                 </Link>
               ) : (
                 <div
