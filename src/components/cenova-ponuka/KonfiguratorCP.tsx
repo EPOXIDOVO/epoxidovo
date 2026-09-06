@@ -6,7 +6,7 @@ import { ArrowLeft, Check, Loader2, Phone, Sparkles } from "lucide-react";
 import { TurnstileWidget } from "@/components/turnstile/TurnstileWidget";
 import { ChybajuceUdaje } from "@/components/ui/ChybajuceUdaje";
 import { trackEvent } from "@/components/analytics/Analytics";
-import { TYPY_PODLAH, nahladTypu, type TypPodlahyKarta } from "@/content/typy-podlah";
+import { TYPY_PODLAH, nahladTypu, typPodlahyZTextury, type TypPodlahyKarta } from "@/content/typy-podlah";
 
 /**
  * Konfigurátor cenovej ponuky — user 2026-08-24: „chcem urobit automaticke
@@ -397,6 +397,36 @@ export function KonfiguratorCP({ cenyOd }: { cenyOd?: Record<string, number> }) 
   const vrch = React.useRef<HTMLDivElement | null>(null);
 
   const hore = () => vrch.current?.scrollIntoView({ behavior: "smooth", block: "start" });
+
+  /**
+   * Predvýber typu podľa AI vizualizéra.
+   *
+   * Vizualizátor posiela ?texture=metalicka&color=…&finish=…, ale konfigurátor
+   * pozná ten istý typ pod iným slugom ("metalicke"), takže sa doteraz nič
+   * nepredvyplnilo a človek začínal od prvého kroku — hoci si podlahu práve
+   * vybral. Preskakujeme rovno na plochu, presne ako keby na typ klikol.
+   *
+   * Čakáme na cenník: prevedenie aj hrúbka sa počítajú z neho, takže spustiť
+   * to skôr by nechalo systém prázdny. Ref stráži, aby to bežalo raz — inak
+   * by zmena cenníka vrátila človeka späť na krok „plocha“.
+   */
+  const predvyberSpraveny = React.useRef(false);
+  React.useEffect(() => {
+    if (predvyberSpraveny.current || !cennik) return;
+    let t: TypPodlahyKarta | null = null;
+    try {
+      t = typPodlahyZTextury(new URLSearchParams(window.location.search).get("texture"));
+    } catch {
+      return;
+    }
+    if (!t) return;
+    predvyberSpraveny.current = true;
+    setTyp(t);
+    const prvy = prevedeniaPreTyp(t, cennik, defaultSystem)[0] ?? null;
+    setSystem(prvy);
+    setHrubka(predvolenaHrubka(prvy));
+    setKrok("plocha");
+  }, [cennik, defaultSystem]);
 
   /** Cenu ťaháme z CRM hneď ako poznáme typ + plochu (lokalita ju spresní). */
   const nacitajCenu = React.useCallback(async () => {

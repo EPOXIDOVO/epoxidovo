@@ -2,6 +2,7 @@
 
 import * as React from "react";
 import Link from "next/link";
+import { ESHOP_SPUSTENY } from "@/lib/flags";
 import { Search, ShoppingCart, Building2, Phone, Mail } from "lucide-react";
 import { SITE } from "@/lib/site";
 
@@ -75,13 +76,17 @@ export function EshopHeader({ bezVyhladavania = false }: { bezVyhladavania?: boo
       </div>
       {/* logo + search + košík */}
       <div className="max-w-7xl mx-auto px-4 py-3 flex items-center gap-4 md:gap-8">
-        <Link href="/eshop" aria-label="E-shop EPOXIDOVO" className="shrink-0">
+        <Link href={ESHOP_SPUSTENY ? "/eshop" : "/"} aria-label="EPOXIDOVO" className="shrink-0">
           <span className="text-xl md:text-2xl font-extrabold tracking-tight text-[#0e1a3b] whitespace-nowrap">
             EPOXID<span className="text-[#12729f]">OVO</span>.SK
           </span>
         </Link>
 
-        {bezVyhladavania ? (
+        {!ESHOP_SPUSTENY ? (
+          /* E-shop ešte nebeží — žiadne vyhľadávanie ani cesta späť do obchodu,
+             lebo obe vedú na /eshop. Ostáva len prázdne miesto v hlavičke. */
+          <span className="flex-1" />
+        ) : bezVyhladavania ? (
           <Link
             href="/eshop"
             className="flex-1 text-sm font-bold text-zinc-500 hover:text-[#1a8cc4] transition-colors whitespace-nowrap"
@@ -110,6 +115,7 @@ export function EshopHeader({ bezVyhladavania = false }: { bezVyhladavania?: boo
         )}
 
         <div className="shrink-0 flex items-center gap-2">
+          {ESHOP_SPUSTENY && (
           <Link
             href="/kupit-material/b2b"
             className="hidden md:inline-flex items-center gap-1.5 px-4 py-2.5 rounded-full text-sm font-bold text-zinc-700 hover:bg-zinc-100 transition-colors whitespace-nowrap"
@@ -117,6 +123,8 @@ export function EshopHeader({ bezVyhladavania = false }: { bezVyhladavania?: boo
             <Building2 className="w-4 h-4" aria-hidden />
             B2B účet
           </Link>
+          )}
+          {ESHOP_SPUSTENY && (
           <Link
             href="/kupit-material/kosik"
             aria-label={`Košík, ${pocet} položiek`}
@@ -129,6 +137,7 @@ export function EshopHeader({ bezVyhladavania = false }: { bezVyhladavania?: boo
               </span>
             )}
           </Link>
+          )}
         </div>
       </div>
     </header>

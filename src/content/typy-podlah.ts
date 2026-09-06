@@ -164,3 +164,26 @@ export const nahladTypu = (t: TypPodlahyKarta) => t.thumb ?? t.image;
 
 export const getTypPodlahy = (slug: string) =>
   TYPY_PODLAH.find((t) => t.slug === slug) ?? null;
+
+/**
+ * Textúra z AI vizualizéra → typ podlahy v cenovej ponuke.
+ *
+ * Slugy si medzi tými dvoma svetmi NESEDIA (visualizer-presets.ts používa
+ * "metalicka", tu je "metalicke"; "chips" vs "chipsove"; "beton" vs
+ * "beton-look"), preto sa človek po prechode z vizualizéra na cenovku vracal
+ * na prvý krok a musel typ klikať znova, hoci ho práve vybral.
+ */
+const TYP_Z_TEXTURY: Record<string, string> = {
+  hladka: "jednofarebne",
+  metalicka: "metalicke",
+  chips: "chipsove",
+  mramor: "mramorove",
+  mistral: "mistral",
+  beton: "beton-look",
+};
+
+export const typPodlahyZTextury = (textura: string | null | undefined) => {
+  if (!textura) return null;
+  const slug = TYP_Z_TEXTURY[textura.trim().toLowerCase()];
+  return slug ? getTypPodlahy(slug) : null;
+};

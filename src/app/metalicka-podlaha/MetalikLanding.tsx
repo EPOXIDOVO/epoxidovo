@@ -8,6 +8,7 @@ import { Container } from "@/components/ui/Container";
 import { useCart } from "@/lib/cart";
 import { showToast } from "@/components/ui/Toast";
 import { getMaterial } from "@/lib/materialy";
+import { ESHOP_SPUSTENY } from "@/lib/flags";
 import { SITE } from "@/lib/site";
 import { REVIEWS } from "@/content/reviews";
 
@@ -207,16 +208,29 @@ export function MetalikLanding() {
                 <p className="mt-1.5 text-[11px] text-white/55">Konečné ceny. Nie sme platiteľmi DPH.</p>
               </div>
 
-              <button
-                type="button"
-                onClick={doKosika}
-                disabled={m2 <= 0}
-                className="mt-5 w-full inline-flex items-center justify-center gap-2 px-6 py-4 rounded-full bg-[#ea580c] text-white font-extrabold hover:bg-[#c2410c] disabled:opacity-50 shadow-[0_10px_28px_rgba(234,88,12,0.45)] transition-colors"
-              >
-                {pridane ? <><Check className="w-5 h-5" aria-hidden /> V košíku</> : <><ShoppingCart className="w-5 h-5" aria-hidden /> Vložiť set do košíka</>}
-              </button>
-              {pridane && (
-                <Link href="/kupit-material/kosik" className="mt-2 block text-center text-sm font-bold text-[#9fdcf5] hover:underline">Prejsť do košíka →</Link>
+              {ESHOP_SPUSTENY ? (
+                <>
+                  <button
+                    type="button"
+                    onClick={doKosika}
+                    disabled={m2 <= 0}
+                    className="mt-5 w-full inline-flex items-center justify-center gap-2 px-6 py-4 rounded-full bg-[#ea580c] text-white font-extrabold hover:bg-[#c2410c] disabled:opacity-50 shadow-[0_10px_28px_rgba(234,88,12,0.45)] transition-colors"
+                  >
+                    {pridane ? <><Check className="w-5 h-5" aria-hidden /> V košíku</> : <><ShoppingCart className="w-5 h-5" aria-hidden /> Vložiť set do košíka</>}
+                  </button>
+                  {pridane && (
+                    <Link href="/kupit-material/kosik" className="mt-2 block text-center text-sm font-bold text-[#9fdcf5] hover:underline">Prejsť do košíka →</Link>
+                  )}
+                </>
+              ) : (
+                /* E-shop ešte nebeží — kalkulácia setu ostáva, objednávka ide
+                   telefónom. Mŕtve tlačidlo do košíka by bolo horšie než žiadne. */
+                <div
+                  aria-disabled
+                  className="mt-5 w-full inline-flex items-center justify-center gap-2 px-6 py-4 rounded-full border-2 border-dashed border-white/30 bg-white/5 text-white/60 font-extrabold select-none cursor-default"
+                >
+                  Objednávka online — čoskoro
+                </div>
               )}
               <a href={`tel:${SITE.contact.phoneRaw}`} className="mt-3 w-full inline-flex items-center justify-center gap-2 px-6 py-3 rounded-full border-2 border-white/30 text-white font-bold hover:bg-white/10 transition-colors">
                 <Phone className="w-4 h-4" aria-hidden /> Poradiť sa: {SITE.contact.phone}
