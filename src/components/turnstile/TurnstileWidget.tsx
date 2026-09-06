@@ -4,6 +4,7 @@ import * as React from "react";
 import { Turnstile, type TurnstileInstance } from "@marsidev/react-turnstile";
 import { AlertTriangle, RotateCcw, Phone } from "lucide-react";
 import { SITE } from "@/lib/site";
+import { trackEvent } from "@/components/analytics/Analytics";
 
 /**
  * Reusable Turnstile widget — Cloudflare CAPTCHA replacement.
@@ -30,13 +31,22 @@ interface Props {
 
 /** Ako dlho čakáme na vykreslenie widgetu, kým to vyhlásime za nenačítané. */
 const WATCHDOG_MS = 12_000;
+/**
+ * Ako dlho po vykreslení kontajnera čakáme na samotnú výzvu (iframe).
+ * Kontajner totiž vznikne aj vtedy, keď sa výzva nikdy nevykreslí — vtedy
+ * ostane vnútri prázdny <div> a token nepríde. Bez tejto kontroly by človek
+ * videl len navždy šedé tlačidlo bez jediného vysvetlenia.
+ */
+const IFRAME_WATCHDOG_MS = 8_000;
 
-type Stav = "cakam" | "ok" | "nenacitalo" | "zlyhalo" | "nepodporovane";
+type Stav = "cakam" | "nacitane" | "ok" | "nenacitalo" | "zlyhalo" | "nepodporovane";
 
 export function TurnstileWidget({ onVerify, onExpire, theme = "light" }: Props) {
   const ref = React.useRef<TurnstileInstance>(null);
   const siteKey = process.env.NEXT_PUBLIC_TURNSTILE_SITE_KEY;
   const [stav, setStav] = React.useState<Stav>("cakam");
+  /** Obal okolo widgetu — hľadáme v ňom iframe s výzvou. */
+  const obal = React.useRef<HTMLDivElement>(null);
   // Zmena kľúča = remount widgetu; „skúsiť znova" musí zabrať aj vtedy,
   // keď sa nenačítal ani samotný CF skript (vtedy reset() nemá čo resetovať).
   const [pokus, setPokus] = React.useState(0);
@@ -57,6 +67,30 @@ export function TurnstileWidget({ onVerify, onExpire, theme = "light" }: Props) 
     return () => window.clearTimeout(t);
   }, [siteKey, stav, pokus]);
 
+  /**
+   * Druhý watchdog — kontajner sa vykreslil, ale výzva v ňom nie je.
+   * Prítomnosť iframe je presný rozlišovač: keď tam je, výzva len čaká na
+   * kliknutie človeka a nesmieme mu podsúvať chybu. Keď tam nie je ani po
+   * ôsmich sekundách, widget je rozbitý a treba ponúknuť náhradnú cestu.
+   */
+  React.useEffect(() => {
+    if (!siteKey || stav !== "nacitane") return;
+    const t = window.setTimeout(() => {
+      if (!obal.current?.querySelector("iframe")) setStav("zlyhalo");
+    }, IFRAME_WATCHDOG_MS);
+    return () => window.clearTimeout(t);
+  }, [siteKey, stav, pokus]);
+
+  /* Zlyhanie overenia meriame — inak je to neviditeľný problém, ktorý sa
+     prejaví len tým, že sa človek nedovolá a odíde. */
+  const zlyhaloRef = React.useRef<string | null>(null);
+  React.useEffect(() => {
+    if (stav !== "nenacitalo" && stav !== "zlyhalo" && stav !== "nepodporovane") return;
+    if (zlyhaloRef.current === stav) return;
+    zlyhaloRef.current = stav;
+    trackEvent("turnstile_failed", { reason: stav });
+  }, [stav]);
+
   const skusZnova = () => {
     setStav("cakam");
     setPokus((p) => p + 1);
@@ -75,6 +109,7 @@ export function TurnstileWidget({ onVerify, onExpire, theme = "light" }: Props) 
 
   return (
     <div className="w-full">
+      <div ref={obal}>
       <Turnstile
         key={pokus}
         ref={ref}
@@ -85,13 +120,18 @@ export function TurnstileWidget({ onVerify, onExpire, theme = "light" }: Props) 
           language: "sk",
         }}
         scriptOptions={{ onError: () => setStav("nenacitalo") }}
-        onWidgetLoad={() => setStav("ok")}
+        /* Vykreslený kontajner NIE JE úspech — úspech je až token.
+           Kým ho nemáme, ostávame v "nacitane" a beží druhý watchdog. */
+        onWidgetLoad={() => setStav((s) => (s === "cakam" ? "nacitane" : s))}
         onSuccess={(token) => {
           setStav("ok");
           onVerify(token);
         }}
         onExpire={() => {
           onExpire?.();
+          // Späť do "nacitane", nech sa watchdog znova ozbrojí — inak by
+          // vypršaný token, ktorý sa už neobnoví, nechal tlačidlo navždy šedé.
+          setStav("nacitane");
           ref.current?.reset();
         }}
         onTimeout={() => {
@@ -107,6 +147,7 @@ export function TurnstileWidget({ onVerify, onExpire, theme = "light" }: Props) 
           setStav("zlyhalo");
         }}
       />
+      </div>
 
       {jeChyba && (
         <div
