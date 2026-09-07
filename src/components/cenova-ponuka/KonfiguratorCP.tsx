@@ -814,7 +814,9 @@ export function KonfiguratorCP({ cenyOd }: { cenyOd?: Record<string, number> }) 
                       posun(1);
                     }
                   }}
-                  placeholder="napr. 45"
+                  /* Priemyselná hala nie je garáž — 45 m² by tam vyzeralo
+                     ako preklep a človeka to navádza na zlý rád veľkosti. */
+                  placeholder={typ?.slug === "priemyselne" ? "napr. 450" : "napr. 45"}
                   className="w-full rounded-2xl border-2 border-[#1B2430]/12 bg-white px-4 py-3 pr-14 text-base font-bold text-[#1B2430] outline-none transition-colors focus:border-[#2EA3DC]"
                 />
                 <span className="pointer-events-none absolute right-4 top-1/2 -translate-y-1/2 text-sm font-bold text-[#1B2430]/45">
@@ -842,7 +844,20 @@ export function KonfiguratorCP({ cenyOd }: { cenyOd?: Record<string, number> }) 
               Podľa mesta dorátame dopravu, podľa podkladu prípravu.
             </p>
             <MestoPole hodnota={lokalita} zmen={setLokalita} onEnter={() => posun(1)} />
-            <Vyber label="Priestor" moznosti={PRIESTORY} hodnota={priestor} zmen={setPriestor} />
+            {typ?.slug === "priemyselne" ? (
+              /* Priemysel sa nedá vtesnať do šiestich dlaždíc — mlyn, mraziareň,
+                 lakovňa, sklad chémie. Nech si to napíšu vlastnými slovami,
+                 obchodník z toho vyčíta viac než z „Hala, sklad". */
+              <Pole
+                label="Priestor"
+                hodnota={priestor}
+                zmen={setPriestor}
+                placeholder="napr. výrobná hala, sklad chémie, mraziareň"
+                onEnter={() => posun(1)}
+              />
+            ) : (
+              <Vyber label="Priestor" moznosti={PRIESTORY} hodnota={priestor} zmen={setPriestor} />
+            )}
             <Vyber label="Podklad" moznosti={PODKLAD} hodnota={stavPodkladu} zmen={setStavPodkladu} />
             <Vyber label="Kedy to riešiš" moznosti={TERMINY} hodnota={termin} zmen={setTermin} />
             <Navigacia spat={() => posun(-1)} dalej={() => posun(1)} dalejOk />

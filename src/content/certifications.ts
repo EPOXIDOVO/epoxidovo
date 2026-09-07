@@ -217,7 +217,7 @@ export const CERTIFICATIONS: Record<CertSlug, CertificationContent> = {
     whatIs: [
       "HACCP (Hazard Analysis and Critical Control Points) je medzinárodný systém riadenia bezpečnosti potravín zakotvený v Nariadení EÚ 852/2004 o hygiene potravín. Vyžaduje aby všetky povrchy v priestoroch spracovania potravín boli **hladké, nenasiakavé, umývateľné a netoxické**.",
       "Klasická dlažba s fugami je pre HACCP problematická — fugy sú miesta kde sa hromadia zvyšky, baktérie a plesne. Betón absorbuje tekutiny. Epoxidová podlaha s antibakteriálnou úpravou eliminuje obidva problémy: je úplne uzavretá (bezšpárová), nenasiakavá, chemicky inertná a znáša agresívne čistiace prostriedky.",
-      "Náš HACCP systém zahŕňa: **bezšpárový epoxid v hrúbke 3–5 mm**, **koveto zaoblenie ku stenám** (fabión — nesmie byť pravouhlý roh kde sa hromadí špina), **antibakteriálne aditíva** (najčastejšie striebro alebo trikloxán) v topovej vrstve, a **odtokové žľaby integrované do plochy**.",
+      "Náš HACCP systém zahŕňa: **bezšpárový epoxid v hrúbke podľa prevádzky**, **koveto zaoblenie ku stenám** (fabión — nesmie byť pravouhlý roh kde sa hromadí špina), **antibakteriálne aditíva** (najčastejšie striebro alebo trikloxán) v topovej vrstve, a **odtokové žľaby integrované do plochy**.",
     ],
     applicationsTitle: "Kde je HACCP podlaha povinná",
     applications: [
@@ -284,7 +284,7 @@ export const CERTIFICATIONS: Record<CertSlug, CertificationContent> = {
     priceLabel: "Cena na dopyt",
     priceFrom: 0, // 0 = cena na dopyt (majiteľ 2026-09-07)
     priceNote:
-      "Cena zahŕňa dodávku aj montáž bezšpárového HACCP systému 3–5 mm hrúbky s antibakteriálnou úpravou, zaoblenie ku stenám (fabión) a integráciu odtokov. Certifikát o použitých materiáloch (potvrdenie súladu s EÚ 852/2004) odovzdávame zákazníkovi. Presná cena podľa plochy, členitosti a agresivity prevádzky (kuchyňa vs mäsokombinát).",
+      "Cena zahŕňa dodávku aj montáž bezšpárového HACCP systému s antibakteriálnou úpravou, zaoblenie ku stenám (fabión) a integráciu odtokov. Certifikát o použitých materiáloch (potvrdenie súladu s EÚ 852/2004) odovzdávame zákazníkovi. Presná cena podľa plochy, členitosti a agresivity prevádzky (kuchyňa vs mäsokombinát).",
     benefits: [
       {
         title: "100% bezšpárový",
@@ -316,7 +316,7 @@ export const CERTIFICATIONS: Record<CertSlug, CertificationContent> = {
       {
         question: "Ako dlho vydrží antibakteriálna úprava?",
         answer:
-          "Antibakteriálne aditíva (striebro alebo trikloxán) sú súčasťou topovej vrstvy s hrúbkou 0,5–1 mm. Pri bežnej údržbe funkčnosť vydrží 8–12 rokov. Ak podlaha stráca lesk kvôli abrázii, doporučujeme obnoviť topovú vrstvu — ostáva zachovaná pôvodná HACCP štruktúra pod ňou.",
+          "Antibakteriálne aditíva (striebro alebo trikloxán) sú súčasťou topovej vrstvy. Pri bežnej údržbe funkčnosť vydrží 8–12 rokov. Ak podlaha stráca lesk kvôli abrázii, doporučujeme obnoviť topovú vrstvu — ostáva zachovaná pôvodná HACCP štruktúra pod ňou.",
       },
       {
         question: "Znesie CIP čistenie a horúcu vodu?",
