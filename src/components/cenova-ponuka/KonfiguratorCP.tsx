@@ -7,6 +7,7 @@ import { TurnstileWidget } from "@/components/turnstile/TurnstileWidget";
 import { ChybajuceUdaje } from "@/components/ui/ChybajuceUdaje";
 import { trackEvent } from "@/components/analytics/Analytics";
 import { TYPY_PODLAH, nahladTypu, typPodlahyZTextury, type TypPodlahyKarta } from "@/content/typy-podlah";
+import { jeEmail } from "@/lib/utils";
 
 /**
  * Konfigurátor cenovej ponuky — user 2026-08-24: „chcem urobit automaticke
@@ -471,11 +472,12 @@ export function KonfiguratorCP({ cenyOd }: { cenyOd?: Record<string, number> }) 
   const chybajuCP: string[] = [];
   if (!meno.trim()) chybajuCP.push("meno");
   if (!email.trim()) chybajuCP.push("e-mail");
+  else if (!jeEmail(email)) chybajuCP.push("platný e-mail (aj so zavináčom a doménou)");
   if (!turnstileToken) chybajuCP.push("overenie, že nie si robot");
 
   const odosli = async () => {
     setChyba(null);
-    if (!typ || !plochaOk || !meno.trim() || !email.trim() || !turnstileToken) return;
+    if (!typ || !plochaOk || !meno.trim() || !jeEmail(email) || !turnstileToken) return;
     setOdosielam(true);
     try {
       const r = await fetch("/api/cenova-ponuka/odoslat", {
@@ -1015,7 +1017,7 @@ export function KonfiguratorCP({ cenyOd }: { cenyOd?: Record<string, number> }) 
               <button
                 type="button"
                 onClick={odosli}
-                disabled={odosielam || !meno.trim() || !email.trim() || !turnstileToken}
+                disabled={odosielam || !meno.trim() || !jeEmail(email) || !turnstileToken}
                 className="inline-flex items-center gap-2 rounded-full bg-[#ea580c] px-6 py-3 font-extrabold text-white transition-all hover:-translate-y-0.5 disabled:opacity-45 disabled:hover:translate-y-0 whitespace-nowrap"
               >
                 {odosielam ? (

@@ -4,6 +4,7 @@ import { NextResponse, type NextRequest } from "next/server";
 
 import { verifyTurnstileToken } from "@/lib/turnstile";
 import { getClientIp } from "@/lib/rate-limit";
+import { jeEmail } from "@/lib/utils";
 
 /**
  * POST /api/cenova-ponuka/odoslat — odošle vyplnený konfigurátor do NajCRM.
@@ -93,6 +94,15 @@ export async function POST(request: NextRequest) {
   const m2 = Number(body.m2);
   if (!name || !email || !floorType || !isFinite(m2) || m2 <= 0) {
     return NextResponse.json({ ok: false, error: "chybaju_polia" }, { status: 400 });
+  }
+  // Bez platnej adresy je dopyt mŕtvy — celý prísľub formulára znie, že
+  // ponuku pošleme e-mailom. Radšej to povedzme hneď, než vyrobiť lead,
+  // ktorému sa nedá odpovedať.
+  if (!jeEmail(email)) {
+    return NextResponse.json(
+      { ok: false, error: "neplatny_email", message: "Zadaj platnú e-mailovú adresu." },
+      { status: 400 },
+    );
   }
 
   // Anti-bot PRED odoslaním kamkoľvek — inak by sa dal endpoint použiť
