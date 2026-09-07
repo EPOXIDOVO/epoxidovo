@@ -58,7 +58,7 @@ export const CERTIFICATIONS: Record<CertSlug, CertificationContent> = {
     h1: "ESD antistatické epoxidové podlahy",
     metaTitle: "ESD antistatické epoxidové podlahy | EPOXIDOVO",
     metaDescription:
-      "ESD podlahy zvádzajú statickú elektrinu — pre elektroniku, serverovne a laboratóriá. Podľa DIN EN 61340, od 85 €/m², realizácia po celom Slovensku.",
+      "ESD podlahy zvádzajú statickú elektrinu — pre elektroniku, serverovne a laboratóriá. Podľa DIN EN 61340, realizácia po celom Slovensku. Cenu pripravíme na mieru.",
     heroTagline:
       "Nulové riziko iskry, ochrana citlivej elektroniky, súlad s DIN EN 61340.",
     accent: "#3DB6E8",
@@ -134,8 +134,8 @@ export const CERTIFICATIONS: Record<CertSlug, CertificationContent> = {
           "Ak sa ESD podlaha kombinuje s výbušným prostredím — vyžaduje sa aj ATEX certifikát.",
       },
     ],
-    priceLabel: "Orientačná cena",
-    priceFrom: 85,
+    priceLabel: "Cena na dopyt",
+    priceFrom: 0, // 0 = cena na dopyt (majiteľ 2026-09-07)
     priceNote:
       "Cena zahŕňa dodávku aj montáž vrátane vodivého systému (medené pásky + uzemnenie). Meranie elektrického odporu po realizácii je súčasťou dodávky, protokol o meraní odovzdáme zákazníkovi. Presná cena podľa plochy, členitosti a požadovanej vodivosti (dissipatívna vs vodivá).",
     benefits: [
@@ -205,7 +205,7 @@ export const CERTIFICATIONS: Record<CertSlug, CertificationContent> = {
     h1: "HACCP epoxidové podlahy pre potravinárstvo",
     metaTitle: "HACCP podlahy do potravinárstva | EPOXIDOVO",
     metaDescription:
-      "HACCP-vhodné bezšpárové podlahy s antibakteriálnou úpravou. Súlad s Nariadením EÚ 852/2004. Pre kuchyne, cukrárne, mliekarne, mäsokombináty. Cena od 75 €/m².",
+      "HACCP-vhodné bezšpárové podlahy s antibakteriálnou úpravou. Súlad s Nariadením EÚ 852/2004. Pre kuchyne, cukrárne, mliekarne, mäsokombináty. Cenu pripravíme na mieru.",
     heroTagline:
       "Bezšpárový hygienický povrch v súlade s Nariadením EÚ 852/2004.",
     accent: "#6ABF4B",
@@ -281,8 +281,8 @@ export const CERTIFICATIONS: Record<CertSlug, CertificationContent> = {
           "Medzinárodná norma pre systémy manažérstva bezpečnosti potravín. HACCP podlaha je jedna z požiadaviek certifikácie.",
       },
     ],
-    priceLabel: "Orientačná cena",
-    priceFrom: 75,
+    priceLabel: "Cena na dopyt",
+    priceFrom: 0, // 0 = cena na dopyt (majiteľ 2026-09-07)
     priceNote:
       "Cena zahŕňa dodávku aj montáž bezšpárového HACCP systému 3–5 mm hrúbky s antibakteriálnou úpravou, zaoblenie ku stenám (fabión) a integráciu odtokov. Certifikát o použitých materiáloch (potvrdenie súladu s EÚ 852/2004) odovzdávame zákazníkovi. Presná cena podľa plochy, členitosti a agresivity prevádzky (kuchyňa vs mäsokombinát).",
     benefits: [
@@ -352,7 +352,7 @@ export const CERTIFICATIONS: Record<CertSlug, CertificationContent> = {
     h1: "ATEX podlahy pre výbušné prostredia",
     metaTitle: "ATEX podlahy do výbušných prostredí | EPOXIDOVO",
     metaDescription:
-      "ATEX certifikované vodivé podlahy pre zóny 20/21/22 a 0/1/2. Súlad so smernicou 2014/34/EU. Sklady rozpúšťadiel, mlyny, chemické prevádzky. Cena od 95 €/m².",
+      "ATEX certifikované vodivé podlahy pre zóny 20/21/22 a 0/1/2. Súlad so smernicou 2014/34/EU. Sklady rozpúšťadiel, mlyny, chemické prevádzky. Cenu pripravíme na mieru.",
     heroTagline:
       "Vodivá podlaha pre zóny 0/1/2 a 20/21/22 — bezpečnosť v prítomnosti výbušných zmesí.",
     accent: "#E85D3D",
@@ -434,8 +434,8 @@ export const CERTIFICATIONS: Record<CertSlug, CertificationContent> = {
           "Meranie elektrického odporu voči zemi — konkrétna testovacia metóda pre ATEX podlahy.",
       },
     ],
-    priceLabel: "Orientačná cena",
-    priceFrom: 95,
+    priceLabel: "Cena na dopyt",
+    priceFrom: 0, // 0 = cena na dopyt (majiteľ 2026-09-07)
     priceNote:
       "Cena zahŕňa dodávku, montáž vodivého systému, medené uzemňovacie pásky, prepojenie s uzemňovacím bodom a **certifikát o meraní elektrického odporu** po realizácii (nevyhnutný pre revíznu správu). ATEX systém je zložitejší než ESD a vyžaduje precíznu prípravu podkladu — cena rastie s prísnosťou zóny a nutnosťou dodatočnej dokumentácie.",
     benefits: [
@@ -489,7 +489,7 @@ export const CERTIFICATIONS: Record<CertSlug, CertificationContent> = {
       {
         question: "Môžeme kombinovať ATEX s HACCP?",
         answer:
-          "Áno, časté v potravinárskych mlynoch (múka, cukor, korenie) — kde je prach výbušný (ATEX) A zároveň platia hygienické požiadavky (HACCP). Riešime to špecifickým systémom, ktorý spĺňa obidve normy súčasne. Cena je vyššia (~120 €/m²+), ale je to jediná legálne dovolená cesta.",
+          "Áno, časté v potravinárskych mlynoch (múka, cukor, korenie) — kde je prach výbušný (ATEX) A zároveň platia hygienické požiadavky (HACCP). Riešime to špecifickým systémom, ktorý spĺňa obidve normy súčasne. Cena je vyššia než pri samostatnom systéme, ale je to jediná legálne dovolená cesta.",
       },
     ],
     relatedCerts: ["esd", "haccp", "protismyk"],
@@ -505,7 +505,7 @@ export const CERTIFICATIONS: Record<CertSlug, CertificationContent> = {
     h1: "Protišmykové epoxidové podlahy R9–R13",
     metaTitle: "Protišmykové epoxidové podlahy R9-R13 | EPOXIDOVO",
     metaDescription:
-      "Protišmykové podlahy s klasifikáciou R9/R10/R11/R12/R13 podľa DIN 51130. Pre kuchyne, nemocnice, rampy, mokré prevádzky. Znížené riziko úrazov. Cena od 72 €/m².",
+      "Protišmykové podlahy s klasifikáciou R9/R10/R11/R12/R13 podľa DIN 51130. Pre kuchyne, nemocnice, rampy, mokré prevádzky. Znížené riziko úrazov. Cenu pripravíme na mieru.",
     heroTagline:
       "Kontrolovaný súčiniteľ trenia podľa DIN 51130 — R9 až R13 podľa prostredia.",
     accent: "#F5A623",
@@ -590,10 +590,10 @@ export const CERTIFICATIONS: Record<CertSlug, CertificationContent> = {
           "Podrobnosti o hygienických požiadavkách pre zariadenia verejného stravovania — implicitne vyžaduje protišmyk pre kuchyne.",
       },
     ],
-    priceLabel: "Orientačná cena",
-    priceFrom: 72,
+    priceLabel: "Cena na dopyt",
+    priceFrom: 0, // 0 = cena na dopyt (majiteľ 2026-09-07)
     priceNote:
-      "Cena zahŕňa dodávku a montáž protišmykového systému s kremennými plnivami. Trieda protišmyku sa volí podľa prevádzky — R10 je najlacnejší (~72 €/m²), R13 najdrahší (~110 €/m²) kvôli väčšej spotrebe hrubých plniv a náročnejšej pokládke. Kombinácia s HACCP alebo ESD zvyšuje cenu o 15–25 %.",
+      "Cena zahŕňa dodávku a montáž protišmykového systému s kremennými plnivami. Trieda protišmyku sa volí podľa prevádzky — R10 je najlacnejší, R13 najdrahší kvôli väčšej spotrebe hrubých plnív a náročnejšej pokládke. Kombinácia s HACCP alebo ESD zvyšuje cenu o 15–25 %.",
     benefits: [
       {
         title: "Certifikovaná trieda R",

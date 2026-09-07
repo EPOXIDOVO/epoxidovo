@@ -87,16 +87,22 @@ export default async function CertificationPage({ params }: PageProps) {
     areaServed: { "@type": "Country", name: "Slovensko" },
     url: `${SITE.url}/podlahy/${cert}`,
     category: "Priemyselné epoxidové podlahy — certifikované systémy",
+    // Keď je cena na dopyt, do štruktúrovaných dát NESMIE ísť žiadne číslo —
+    // inak by Google ukazoval vo výsledkoch cenu, ktorú web sám neuvádza.
     offers: {
       "@type": "Offer",
       availability: "https://schema.org/InStock",
       priceCurrency: "EUR",
-      priceSpecification: {
-        "@type": "PriceSpecification",
-        priceCurrency: "EUR",
-        price: data.priceFrom,
-        description: `Cena od ${data.priceFrom} €/m². ${data.priceNote}`,
-      },
+      ...(data.priceFrom > 0
+        ? {
+            priceSpecification: {
+              "@type": "PriceSpecification",
+              priceCurrency: "EUR",
+              price: data.priceFrom,
+              description: `Cena od ${data.priceFrom} €/m². ${data.priceNote}`,
+            },
+          }
+        : { description: data.priceNote }),
     },
   };
 
@@ -172,15 +178,21 @@ export default async function CertificationPage({ params }: PageProps) {
               </a>
             </div>
 
-            {/* Price card */}
+            {/* Price card — priceFrom 0 znamená cenu na dopyt, vtedy žiadne číslo */}
             <div className="mt-8 inline-flex items-baseline gap-3 rounded-2xl bg-white/10 backdrop-blur-sm border border-white/20 px-5 py-3">
-              <span className="text-sm text-white/70">
-                {data.priceLabel}:
-              </span>
-              <span className="text-2xl md:text-3xl font-bold text-white">
-                od {data.priceFrom} €
-              </span>
-              <span className="text-sm text-white/70">/m²</span>
+              {data.priceFrom > 0 ? (
+                <>
+                  <span className="text-sm text-white/70">{data.priceLabel}:</span>
+                  <span className="text-2xl md:text-3xl font-bold text-white">
+                    od {data.priceFrom} €
+                  </span>
+                  <span className="text-sm text-white/70">/m²</span>
+                </>
+              ) : (
+                <span className="text-xl md:text-2xl font-bold text-white">
+                  {data.priceLabel}
+                </span>
+              )}
             </div>
           </div>
         </Container>
@@ -321,15 +333,23 @@ export default async function CertificationPage({ params }: PageProps) {
                 background: `linear-gradient(135deg, ${data.accent} 0%, ${data.accent}CC 100%)`,
               }}
             >
-              <div className="text-sm font-semibold uppercase tracking-wider opacity-90">
-                {data.priceLabel}
-              </div>
-              <div className="mt-2 flex items-baseline gap-2">
-                <span className="text-5xl md:text-6xl font-extrabold">
-                  od {data.priceFrom} €
-                </span>
-                <span className="text-lg opacity-90">/m²</span>
-              </div>
+              {data.priceFrom > 0 ? (
+                <>
+                  <div className="text-sm font-semibold uppercase tracking-wider opacity-90">
+                    {data.priceLabel}
+                  </div>
+                  <div className="mt-2 flex items-baseline gap-2">
+                    <span className="text-5xl md:text-6xl font-extrabold">
+                      od {data.priceFrom} €
+                    </span>
+                    <span className="text-lg opacity-90">/m²</span>
+                  </div>
+                </>
+              ) : (
+                <div className="text-3xl md:text-4xl font-extrabold leading-tight">
+                  {data.priceLabel}
+                </div>
+              )}
               <p className="mt-4 text-sm leading-relaxed opacity-95">
                 {data.priceNote}
               </p>
