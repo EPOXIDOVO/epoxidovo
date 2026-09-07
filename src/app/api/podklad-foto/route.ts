@@ -2,6 +2,7 @@ export const runtime = "edge";
 
 import { NextRequest, NextResponse } from "next/server";
 import { sendPodkladFotoEmail } from "@/lib/email";
+import { jeEmail } from "@/lib/utils";
 
 /**
  * POST /api/podklad-foto — fotka podkladu z konfigurátora.
@@ -71,7 +72,9 @@ export async function POST(req: NextRequest) {
   const priezvisko = str("priezvisko", 80);
   const email = str("email", 200);
   const telefon = str("telefon", 30);
-  if (meno.length < 2 || priezvisko.length < 2 || !email.includes("@") || telefon.length < 9) {
+  // includes("@") prepustilo aj "novak@" — fotky podkladu posudzuje technik
+  // a odpoveď ide e-mailom, takže neplatná adresa znamená stratenú zákazku.
+  if (meno.length < 2 || priezvisko.length < 2 || !jeEmail(email) || telefon.length < 9) {
     return NextResponse.json({ error: "invalid_contact" }, { status: 400 });
   }
 
