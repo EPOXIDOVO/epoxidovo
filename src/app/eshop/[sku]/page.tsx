@@ -27,6 +27,14 @@ import { RalNahlad } from "./RalNahlad";
 import { KombinujSystem } from "./KombinujSystem";
 import { PorovnanieCien } from "./PorovnanieCien";
 import { PridatDoKosika, type SkladbaPolozka } from "./PridatDoKosika";
+import { ESHOP_SPUSTENY } from "@/lib/flags";
+
+// Kým e-shop nebeží, jeho stránky nesmú byť v indexe: objednávka sa nedá
+// dokončiť, no Product schéma sľubuje InStock a cenu. Zo sitemapy sú už
+// vonku, to ale nedeindexuje nič — na to treba noindex. follow ostáva,
+// nech sa interná linková sila nestratí. Spustením e-shopu to zmizne samo.
+const ROBOTS_ESHOP = ESHOP_SPUSTENY ? undefined : { index: false, follow: true };
+
 
 interface PageProps {
   params: Promise<{ sku: string }>;
@@ -54,6 +62,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   return {
     title: titul,
     description: desc,
+    robots: ROBOTS_ESHOP,
     alternates: { canonical: `/eshop/${m.sku}` },
     openGraph: {
       type: "website",

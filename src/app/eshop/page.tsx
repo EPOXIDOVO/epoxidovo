@@ -11,8 +11,17 @@ import { SITE } from "@/lib/site";
 import eshopLayout from "@/content/eshop-layout.json";
 import { REVIEWS } from "@/content/reviews";
 import { RecenzieRotator } from "./RecenzieRotator";
+import { ESHOP_SPUSTENY } from "@/lib/flags";
+
+// Kým e-shop nebeží, jeho stránky nesmú byť v indexe: objednávka sa nedá
+// dokončiť, no Product schéma sľubuje InStock a cenu. Zo sitemapy sú už
+// vonku, to ale nedeindexuje nič — na to treba noindex. follow ostáva,
+// nech sa interná linková sila nestratí. Spustením e-shopu to zmizne samo.
+const ROBOTS_ESHOP = ESHOP_SPUSTENY ? undefined : { index: false, follow: true };
+
 
 export const metadata: Metadata = {
+    robots: ROBOTS_ESHOP,
   title: "E-shop — epoxidové materiály Sika a TopStone",
   description:
     "Profesionálne epoxidové materiály z našich realizácií — penetrácie, hlavné vrstvy, laky, nivelačky, pigmenty, chipsy a piesky. Sika, TopStone, Arturo, UZIN.",

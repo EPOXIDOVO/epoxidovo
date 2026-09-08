@@ -4,8 +4,17 @@ import { Container } from "@/components/ui/Container";
 import { BreadcrumbsJsonLd } from "@/components/seo/BreadcrumbsJsonLd";
 import { EshopClient } from "../EshopClient";
 import { MATERIALY } from "@/lib/materialy";
+import { ESHOP_SPUSTENY } from "@/lib/flags";
+
+// Kým e-shop nebeží, jeho stránky nesmú byť v indexe: objednávka sa nedá
+// dokončiť, no Product schéma sľubuje InStock a cenu. Zo sitemapy sú už
+// vonku, to ale nedeindexuje nič — na to treba noindex. follow ostáva,
+// nech sa interná linková sila nestratí. Spustením e-shopu to zmizne samo.
+const ROBOTS_ESHOP = ESHOP_SPUSTENY ? undefined : { index: false, follow: true };
+
 
 export const metadata: Metadata = {
+    robots: ROBOTS_ESHOP,
   title: "Katalóg podľa výrobcu — Sika, TopStone, Arturo a UZIN",
   description:
     "Celý katalóg materiálov s filtrom podľa výrobcu aj účelu — penetrácie, hlavné vrstvy, laky, nivelácie, náradie. Sika, TopStone, Arturo a UZIN.",

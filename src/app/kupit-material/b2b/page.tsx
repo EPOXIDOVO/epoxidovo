@@ -2,8 +2,17 @@ import type { Metadata } from "next";
 import { Container } from "@/components/ui/Container";
 import { BreadcrumbsJsonLd } from "@/components/seo/BreadcrumbsJsonLd";
 import { B2bForm } from "./B2bForm";
+import { ESHOP_SPUSTENY } from "@/lib/flags";
+
+// Kým e-shop nebeží, jeho stránky nesmú byť v indexe: objednávka sa nedá
+// dokončiť, no Product schéma sľubuje InStock a cenu. Zo sitemapy sú už
+// vonku, to ale nedeindexuje nič — na to treba noindex. follow ostáva,
+// nech sa interná linková sila nestratí. Spustením e-shopu to zmizne samo.
+const ROBOTS_ESHOP = ESHOP_SPUSTENY ? undefined : { index: false, follow: true };
+
 
 export const metadata: Metadata = {
+    robots: ROBOTS_ESHOP,
   title: "B2B — veľkoobchodné ceny",
   description:
     "Registrácia firmy cez IČO — pre realizačné firmy aj každého, kto nakupuje viac. Po schválení získate veľkoobchodné ceny materiálov Sika a TopStone.",

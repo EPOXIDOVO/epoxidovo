@@ -9,6 +9,14 @@ import { OBSAH_KATEGORIE, SKUPINY, obsahKategoria } from "@/lib/obsah-kategorie"
 import { VYROBCA_LOGO } from "@/lib/vyrobca-logo";
 import { SITE } from "@/lib/site";
 import { safeJsonLd } from "@/lib/json-ld-safe";
+import { ESHOP_SPUSTENY } from "@/lib/flags";
+
+// Kým e-shop nebeží, jeho stránky nesmú byť v indexe: objednávka sa nedá
+// dokončiť, no Product schéma sľubuje InStock a cenu. Zo sitemapy sú už
+// vonku, to ale nedeindexuje nič — na to treba noindex. follow ostáva,
+// nech sa interná linková sila nestratí. Spustením e-shopu to zmizne samo.
+const ROBOTS_ESHOP = ESHOP_SPUSTENY ? undefined : { index: false, follow: true };
+
 
 /**
  * Statické SEO stránky kategórií — /eshop/kategoria/nivelacie atď.
@@ -78,6 +86,7 @@ export async function generateMetadata({
   return {
     title: titul,
     description: popis,
+    robots: ROBOTS_ESHOP,
     alternates: { canonical: `/eshop/kategoria/${slug}` },
     openGraph: {
       type: "website",
