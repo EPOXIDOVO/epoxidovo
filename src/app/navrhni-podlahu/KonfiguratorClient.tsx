@@ -30,7 +30,8 @@ import {
   upozorneniePriestor,
   dostupneSystemy,
   postavSkladbu,
-  protismykVynuteny,
+  protismykMozny,
+  protismykOdporucany,
   varovania,
   type Volba,
   type Priznak,
@@ -54,6 +55,19 @@ import { EFEKTY, FOTO_PRIESTOR, FOTO_VZHLAD, GALERIA_VZHLAD, RAL_ZAKLADNE } from
  * odkazom, a zálohuje do sessionStorage (nie localStorage — po zavretí
  * karty už nie je relevantný).
  */
+
+/**
+ * Prechod pre dlaždicu bez fotky. Odtieň sa odvodí od id, takže susedné
+ * dlaždice nie sú rovnaké a zoznam nepôsobí ako chyba načítania.
+ * Nahradiť skutočnou fotkou, len čo ju budeme mať.
+ */
+function PRECHOD_BEZ_FOTKY(id: string): string {
+  let h = 0;
+  for (let i = 0; i < id.length; i++) h = (h * 31 + id.charCodeAt(i)) % 360;
+  const a = 190 + (h % 40); // modrozelený až modrý pás, drží sa značky
+  const b = (a + 28) % 360;
+  return `linear-gradient(150deg, hsl(${a} 42% 32%), hsl(${b} 38% 20%))`;
+}
 
 /** Kocka s bodkami — rovnaká ikona ako v sekcii „Čo všetko vieme vyčarovať". */
 function DiceIcon({ pips }: { pips: 1 | 2 | 3 | 4 | 5 }) {
@@ -174,12 +188,25 @@ export function KonfiguratorClient() {
   const uprav = (patch: Partial<Volba>) => setVolba((v) => ({ ...v, ...patch }));
 
   /** Auto-advance po jednovýberovom kroku (~250 ms). */
+  /**
+   * Po každej zmene kroku skoč na začiatok otázky. Bez toho ostal človek
+   * tam, kde práve scrolloval — pri krátkom kroku až v pätičke
+   * (majiteľ 2026-09-08: „niekedy ma random hodí dole").
+   */
+  const naOtazku = () => {
+    if (typeof window === "undefined") return;
+    const el = document.getElementById("konfigurator-krok");
+    if (el) el.scrollIntoView({ behavior: "smooth", block: "start" });
+    else window.scrollTo({ top: 0, behavior: "smooth" });
+  };
+
   const vyberADalej = (patch: Partial<Volba>) => {
     uprav(patch);
     window.setTimeout(() => {
       const dalsi = Math.min(krokIndex + 1, kroky.length - 1);
       setKrokIndex(dalsi);
       window.history.pushState({ epxKrok: dalsi }, "");
+      naOtazku();
     }, 250);
   };
 
@@ -188,6 +215,7 @@ export function KonfiguratorClient() {
   const chodNaKrok = (n: number) => {
     setKrokIndex(n);
     window.history.pushState({ epxKrok: n }, "");
+    naOtazku();
   };
 
   /** Späť necháme na prehliadač, aby sedeli obe cesty (tlačidlo aj myš). */
@@ -397,7 +425,7 @@ export function KonfiguratorClient() {
             </span>
           </div>
 
-          <div key={krok} className="mt-6 motion-safe:animate-[fadeIn_180ms_ease-out]">
+          <div id="konfigurator-krok" className="mt-6 scroll-mt-24 motion-safe:animate-[fadeIn_180ms_ease-out]" key={krok}>
             {/* ── KROK 1: čo riešiš ── */}
 
             {/* ── KROK 2: interiér / exteriér ── */}
@@ -511,6 +539,15 @@ export function KonfiguratorClient() {
                         key={m.id}
                         type="button"
                         onClick={() => vyberADalej({ priestor: m.id, priestorPopis: null })}
+                        style={
+                          foto?.src
+                            ? undefined
+                            : // Fotku k tomuto priestoru ešte nemáme (terasa, rampa,
+                              // vonkajšia garáž — v realizáciách nie je ani jedna
+                              // exteriérová). Namiesto šedej diery dáme značkový
+                              // prechod, nech dlaždica vyzerá zámerne, nie rozbito.
+                              { background: PRECHOD_BEZ_FOTKY(m.id) }
+                        }
                         className={`group relative h-[132px] rounded-2xl overflow-hidden text-left transition-all duration-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-[#3db6e8] ring-2 hover:-translate-y-0.5 ${
                           vybraty
                             ? "ring-[#3db6e8] shadow-[0_10px_28px_rgba(61,182,232,0.3)]"
@@ -1266,11 +1303,26 @@ function ZaujemOTelefonat({
 function Finis({ volba, uprav }: { volba: Volba; uprav: (p: Partial<Volba>) => void }) {
   const jeRal = volba.vzhlad === "jednofarebna" || volba.vzhlad === "epoxidovy_nater";
   const jeMramor = volba.vzhlad === "marble";
-  const vynuteny = protismykVynuteny(volba);
+  const odporucany = protismykOdporucany(volba);
+  const mozny = protismykMozny(volba);
+  /** Sadne na true, keď zákazník protišmyk sám prepne — vtedy ho už
+   *  nepredvyplňujeme späť. */
+  const protismykDotknuty = React.useRef(false);
 
   React.useEffect(() => {
-    if (vynuteny && !volba.protismyk) uprav({ protismyk: true });
-  }, [vynuteny, volba.protismyk, uprav]);
+    // Kde sa protišmyk nedá (metalika, mramor), zhasni ho — inak by ostal
+    // zaškrtnutý z predchádzajúceho vzhľadu a ticho pridal vsyp do skladby.
+    if (!mozny && volba.protismyk) {
+      uprav({ protismyk: false });
+      return;
+    }
+    // Kde ho odporúčame, zapni ho — ale LEN kým sa ho zákazník nedotkol.
+    // `protismyk` je boolean, nie nullable, takže „ešte nerozhodnuté" sa
+    // nedá odčítať z hodnoty; drží to ref, ktorý sa nastaví pri prvom kliku.
+    if (mozny && odporucany && !volba.protismyk && !protismykDotknuty.current) {
+      uprav({ protismyk: true });
+    }
+  }, [mozny, odporucany, volba.protismyk, uprav]);
 
   return (
     <>
@@ -1394,24 +1446,35 @@ function Finis({ volba, uprav }: { volba: Volba; uprav: (p: Partial<Volba>) => v
 
       <label
         className={`mt-6 flex items-start gap-3 rounded-xl border-2 p-4 ${
-          vynuteny ? "border-amber-300 bg-amber-50 cursor-default" : "border-zinc-200 bg-white cursor-pointer"
+          !mozny
+            ? "border-zinc-200 bg-zinc-50 cursor-not-allowed"
+            : odporucany
+              ? "border-amber-300 bg-amber-50 cursor-pointer"
+              : "border-zinc-200 bg-white cursor-pointer"
         }`}
       >
         <input
           type="checkbox"
-          checked={volba.protismyk || vynuteny}
-          disabled={vynuteny}
-          onChange={(e) => uprav({ protismyk: e.target.checked })}
+          checked={mozny && !!volba.protismyk}
+          disabled={!mozny}
+          onChange={(e) => {
+            protismykDotknuty.current = true;
+            uprav({ protismyk: e.target.checked });
+          }}
           className="mt-0.5 w-4 h-4 accent-[#3db6e8]"
         />
         <span>
-          <span className="block font-bold text-[#0e1a3b]">Protišmykový povrch</span>
-          <span className="block text-sm text-[#4a5478]">
-            {vynuteny
-              ? volba.co === "schody"
-                ? "Na schodoch povinný — mokrý hladký nášľap je nebezpečný, preto sa nedá odobrať."
-                : "V exteriéri povinný — mokrý hladký povrch je klzký, preto sa nedá odobrať."
-              : "Posyp kremičitým pieskom do vrchnej vrstvy. Zabezpečí silný protišmyk — vhodné do parkingov, garáží, kuchýň, umyvární a všade, kde býva na podlahe mokro."}
+          <span className={`block font-bold ${mozny ? "text-[#0e1a3b]" : "text-zinc-400"}`}>
+            Protišmykový povrch
+          </span>
+          <span className={`block text-sm ${mozny ? "text-[#4a5478]" : "text-zinc-400"}`}>
+            {!mozny
+              ? "Pri metalickom a mramorovom efekte sa nedá — kremičitý vsyp by kresbu zniesol a povrch by zmatnel."
+              : odporucany
+                ? volba.co === "schody"
+                  ? "Na schodoch to dôrazne odporúčame — mokrý hladký nášľap je nebezpečný. Odobrať sa dá, ale robíš to na vlastnú zodpovednosť."
+                  : "V exteriéri to dôrazne odporúčame — mokrý hladký povrch je klzký. Odobrať sa dá, ale robíš to na vlastnú zodpovednosť."
+                : "Posyp kremičitým pieskom do vrchnej vrstvy. Zabezpečí silný protišmyk — vhodné do parkingov, garáží, kuchýň, umyvární a všade, kde býva na podlahe mokro."}
           </span>
         </span>
       </label>

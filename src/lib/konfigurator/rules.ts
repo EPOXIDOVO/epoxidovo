@@ -118,7 +118,9 @@ export const VZHLADY_PODLAHA = [
   { id: "jednofarebna", label: "Jednofarebné" },
   { id: "chipsy", label: "Chipsové" },
   { id: "priemyselna", label: "Priemyselné" },
-  { id: "kamenny_koberec", label: "Kamenný koberec" },
+  // Kamenný koberec sa predáva len ako materiál v e-shope, nerealizujeme ho
+  // (majiteľ 2026-09-08). V konfigurátore vzhľadov preto nemá čo hľadať —
+  // končil aj tak na obrazovke „túto skladbu navrhneme osobne".
 ];
 
 export const VZHLADY_STENA = [
@@ -248,7 +250,20 @@ export function dostupneSystemy(volba: Volba): System[] {
 }
 
 /** Pravidlo 2 + protišmyk na schodoch — vynútený, needitovateľný. */
-export function protismykVynuteny(volba: Volba): boolean {
+/**
+ * Protišmyk sa NEDÁ spraviť — kremičitý vsyp by dekoratívny efekt zničil
+ * (majiteľ 2026-09-08: „protišmykový povrch na metalike nie je možný").
+ */
+export function protismykMozny(volba: Volba): boolean {
+  return volba.vzhlad !== "metalik" && volba.vzhlad !== "marble";
+}
+
+/**
+ * Kde protišmyk DÔRAZNE odporúčame. Predtým sa volalo `protismykVynuteny`
+ * a voľbu natvrdo zamklo; majiteľ 2026-09-08 chcel, aby nebola povinná.
+ * Ostáva predvolene zapnutá, ale zákazník ju vie odobrať.
+ */
+export function protismykOdporucany(volba: Volba): boolean {
   return volba.kde === "exterier" || volba.co === "schody";
 }
 
@@ -433,7 +448,7 @@ export function postavSkladbu(volba: Volba, system: System): SkladbaPolozka[] {
 
   // 2 — protišmykový posyp (ak ho systém ešte nemá)
   const uzMaPosyp = out.some((v) => v.produktSku === PRODUKT.piesok.sku);
-  if ((protismykVynuteny(volba) || volba.protismyk) && !uzMaPosyp) {
+  if (volba.protismyk && protismykMozny(volba) && !uzMaPosyp) {
     pridaj({
       nazov: "Protišmykový posyp",
       produktSku: PRODUKT.piesok.sku,
@@ -442,7 +457,7 @@ export function postavSkladbu(volba: Volba, system: System): SkladbaPolozka[] {
       velkostBaleniaKg: PRODUKT.piesok.balenie,
       prestavkaHodiny: 12,
       auto: true,
-      poznamka: protismykVynuteny(volba)
+      poznamka: protismykOdporucany(volba)
         ? volba.co === "schody"
           ? "Na schodoch povinný"
           : "V exteriéri povinný"
