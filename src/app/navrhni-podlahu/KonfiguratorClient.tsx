@@ -27,7 +27,7 @@ import {
   dostupnePodklady,
   dostupnostVzhladov,
   dostupnostKde,
-  nevhodnyPriestor,
+  upozorneniePriestor,
   dostupneSystemy,
   postavSkladbu,
   protismykVynuteny,
@@ -501,26 +501,25 @@ export function KonfiguratorClient() {
                       );
                     }
 
-                    const dovod = nevhodnyPriestor(volba, m.id);
+                    // Upozornenie, nie zákaz — dlaždica sa dá zvoliť, len
+                    // pod ňou svieti, s čím zákazník ide do toho.
+                    const upozornenie = upozorneniePriestor(volba, m.id);
                     const vybraty = volba.priestor === m.id;
                     const foto = FOTO_PRIESTOR[m.id];
                     return (
                       <button
                         key={m.id}
                         type="button"
-                        disabled={!!dovod}
-                        onClick={() => !dovod && vyberADalej({ priestor: m.id, priestorPopis: null })}
-                        className={`group relative h-[132px] rounded-2xl overflow-hidden text-left transition-all duration-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-[#3db6e8] ${
-                          dovod
-                            ? "cursor-not-allowed bg-zinc-100 border-2 border-zinc-200"
-                            : `ring-2 hover:-translate-y-0.5 ${
-                                vybraty
-                                  ? "ring-[#3db6e8] shadow-[0_10px_28px_rgba(61,182,232,0.3)]"
-                                  : "ring-transparent hover:ring-[#3db6e8]"
-                              }`
+                        onClick={() => vyberADalej({ priestor: m.id, priestorPopis: null })}
+                        className={`group relative h-[132px] rounded-2xl overflow-hidden text-left transition-all duration-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-[#3db6e8] ring-2 hover:-translate-y-0.5 ${
+                          vybraty
+                            ? "ring-[#3db6e8] shadow-[0_10px_28px_rgba(61,182,232,0.3)]"
+                            : upozornenie
+                              ? "ring-amber-300 hover:ring-[#3db6e8]"
+                              : "ring-transparent hover:ring-[#3db6e8]"
                         }`}
                       >
-                        {!dovod && foto?.src && (
+                        {foto?.src && (
                           <Image
                             src={foto.src}
                             alt=""
@@ -530,27 +529,24 @@ export function KonfiguratorClient() {
                             className="object-cover transition-transform duration-500 group-hover:scale-105"
                           />
                         )}
-                        {!dovod && (
-                          <span
-                            aria-hidden
-                            className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/25 to-transparent"
-                          />
-                        )}
+                        <span
+                          aria-hidden
+                          className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/25 to-transparent"
+                        />
                         {vybraty && (
                           <span className="absolute top-2 right-2 z-10 inline-flex items-center justify-center w-6 h-6 rounded-full bg-[#3db6e8] text-[#0e1a3b] shadow">
                             <Check className="w-4 h-4" aria-hidden />
                           </span>
                         )}
-                        <span
-                          className={`absolute inset-x-0 bottom-0 p-3 ${
-                            dovod ? "text-zinc-500" : "text-white"
-                          }`}
-                        >
+                        <span className="absolute inset-x-0 bottom-0 p-3 text-white">
                           <span className="block font-extrabold leading-tight drop-shadow-[0_1px_6px_rgba(0,0,0,0.6)]">
                             {m.label}
                           </span>
-                          {dovod && (
-                            <span className="block text-[11px] leading-snug mt-1">{dovod}</span>
+                          {upozornenie && (
+                            <span className="mt-1 flex items-start gap-1 text-[11px] leading-snug text-amber-200 drop-shadow-[0_1px_6px_rgba(0,0,0,0.9)]">
+                              <AlertTriangle className="w-3 h-3 mt-[1px] shrink-0" aria-hidden />
+                              <span>{upozornenie}</span>
+                            </span>
                           )}
                         </span>
                       </button>
@@ -739,7 +735,7 @@ export function KonfiguratorClient() {
                           <button
                             type="button"
                             disabled={!m.dostupny}
-                            title={m.dovod}
+                            title={m.dovod ?? m.upozornenie}
                             onClick={() => m.dostupny && vyberVzhlad(m.id)}
                             className={`group relative flex flex-col gap-2 md:gap-2.5 rounded-2xl p-1.5 -m-1.5 text-left transition-all duration-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-[#3db6e8] ${
                               m.dostupny

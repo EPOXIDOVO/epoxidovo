@@ -154,11 +154,17 @@ export function blokujePodklad(volba: Volba): string | null {
  * Dostupnosť vzhľadov. Nedostupné NEMIZNÚ — vraciame ich s dôvodom,
  * UI ich zošedne a ukáže tooltip (pravidlá 3, 5, 9).
  */
+/** Metalika v garáži — nie zákaz, ale kompromis, o ktorom má zákazník vedieť. */
+const METALIK_GARAZ =
+  "Do garáže sa dá, ale metalika je mäkšia než jednofarebný epoxid — po pneumatikách na nej ostávajú šmuhy.";
+
 export function dostupnostVzhladov(volba: Volba): {
   id: string;
   label: string;
   dostupny: boolean;
   dovod?: string;
+  /** Dá sa vybrať, ale zákazník má vedieť o kompromise. */
+  upozornenie?: string;
 }[] {
   const zoznam = volba.co === "stena" ? VZHLADY_STENA : VZHLADY_PODLAHA;
   return zoznam.map((vz) => {
@@ -169,9 +175,12 @@ export function dostupnostVzhladov(volba: Volba): {
     if ((vz.id === "metalik" || vz.id === "marble") && volba.co === "schody") {
       return { ...vz, dostupny: false, dovod: "Na schodoch nie — potrebujú protišmykový povrch, efekt by sa zaliaty stratil." };
     }
-    // 5 — v garáži neponúkaj metalik (pneumatiky, mechanická záťaž)
+    // 5 — metalik v garáži sa DÁ, len treba povedať pravdu (majiteľ 2026-09-08:
+    // „daj aj garáž ako možnosť, iba upozornenie"). Zákazník, ktorý chce
+    // metaliku do garáže, ju predtým nemal ako zvoliť a odišiel — teraz
+    // rozhoduje on, keď vie o kompromise.
     if (vz.id === "metalik" && volba.priestor === "garaz") {
-      return { ...vz, dostupny: false, dovod: "Do garáže neodporúčame — pneumatiky a bodové zaťaženie efekt poškodia." };
+      return { ...vz, dostupny: true, upozornenie: METALIK_GARAZ };
     }
     // 3b — dekoratívny betón look je interiérový, vonku nevydrží mráz
     if (vz.id === "beton_look" && volba.kde === "exterier") {
@@ -208,11 +217,14 @@ export function dostupnostKde(volba: Volba): {
   });
 }
 
-/** Priestory, ktoré sa k zvolenému vzhľadu hodia (pravidlo 5 naopak). */
-export function nevhodnyPriestor(volba: Volba, priestor: string): string | null {
-  if (volba.vzhlad === "metalik" && priestor === "garaz") {
-    return "Metalický efekt do garáže neodporúčame — pneumatiky a bodové zaťaženie ho poškodia.";
-  }
+/**
+ * Upozornenie k priestoru pri zvolenom vzhľade (pravidlo 5 naopak).
+ *
+ * Vracia TEXT, nie zákaz — dlaždica sa dá zvoliť aj s ním. Predtým sa
+ * volalo `nevhodnyPriestor` a garáž pri metalike blokovalo úplne.
+ */
+export function upozorneniePriestor(volba: Volba, priestor: string): string | null {
+  if (volba.vzhlad === "metalik" && priestor === "garaz") return METALIK_GARAZ;
   return null;
 }
 
@@ -250,6 +262,15 @@ export type Varovanie = {
 /** Pravidlá 7, 8, 14 — varovania, ktoré idú k výsledku. */
 export function varovania(volba: Volba): Varovanie[] {
   const out: Varovanie[] = [];
+  // Metalika do garáže sa smie zvoliť (majiteľ 2026-09-08), ale kompromis
+  // musí prežiť až do výsledku — nielen blikať na dlaždici v kroku 3.
+  if (volba.vzhlad === "metalik" && volba.priestor === "garaz") {
+    out.push({
+      typ: "vystraha",
+      nadpis: "Metalika do garáže — počítaj so šmuhami",
+      text: "Metalický systém je mäkší než jednofarebný epoxid, takže po pneumatikách na ňom ostávajú tmavé šmuhy a bodové zaťaženie (zdvihák, stojan) ho vie potlačiť. Vyliať sa dá a vyzerá to skvele — len to nie je povrch, ktorý ostane ako nový. Ak chceš do garáže niečo, čo znesie viac, jednofarebný epoxid je odolnejší.",
+    });
+  }
   if (volba.podklad === "dlazba") {
     out.push({
       typ: "vystraha",
