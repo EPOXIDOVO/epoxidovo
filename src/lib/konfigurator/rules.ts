@@ -457,10 +457,12 @@ export function postavSkladbu(volba: Volba, system: System): SkladbaPolozka[] {
       velkostBaleniaKg: PRODUKT.piesok.balenie,
       prestavkaHodiny: 12,
       auto: true,
+      // Už nie „povinný" — voľba sa dá odobrať, tak nech si to poznámka
+      // v skladbe s odškrtávacím poľom neprotirečí.
       poznamka: protismykOdporucany(volba)
         ? volba.co === "schody"
-          ? "Na schodoch povinný"
-          : "V exteriéri povinný"
+          ? "Na schodoch dôrazne odporúčame"
+          : "V exteriéri dôrazne odporúčame"
         : undefined,
     });
   }

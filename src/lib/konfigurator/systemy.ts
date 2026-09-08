@@ -233,7 +233,7 @@ export const SYSTEMY: System[] = [
       v(2, "Hlavná vrstva (UV stála)", PRODUKT.sf3310, { prestavkaHodiny: 2 }),
       v(3, "Protišmykový posyp", PRODUKT.piesok, {
         prestavkaHodiny: 12,
-        poznamka: "V exteriéri povinný — bez neho je mokrý povrch klzký",
+        poznamka: "V exteriéri dôrazne odporúčame — bez neho je mokrý povrch klzký",
       }),
     ],
   },
