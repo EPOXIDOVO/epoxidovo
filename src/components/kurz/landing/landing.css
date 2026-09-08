@@ -1618,3 +1618,24 @@
     transition-duration: 0.01ms !important;
   }
 }
+
+/* ---------- Právne stránky kurzu ---------- */
+.kl-legal h2 {
+  font-size: 1.35rem;
+  margin: 2.2rem 0 0.8rem;
+}
+.kl-legal p { margin-bottom: 1rem; }
+.kl-legal ul { margin: 0 0 1rem; padding-left: 1.3rem; display: grid; gap: 0.55rem; }
+.kl-legal li { line-height: 1.6; }
+.kl-legal li::marker { color: var(--kl-accent); }
+.kl-legal a:not(.kl-btn) { color: var(--kl-accent-deep); font-weight: 600; }
+.kl-legal a:not(.kl-btn):hover { text-decoration: underline; }
+.kl-legal__card {
+  background: var(--kl-surface);
+  border: 1px solid var(--kl-border);
+  border-radius: 16px;
+  padding: 1.2rem 1.4rem;
+  font-size: 0.95rem;
+  line-height: 1.7;
+  margin-bottom: 1rem;
+}

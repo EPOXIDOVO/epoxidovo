@@ -214,7 +214,7 @@ export const COPY: Record<Locale, LandingCopy> = {
       links: [
         { label: "epoxidovo.sk", href: "/" },
         { label: "Ochrana súkromia", href: "/ochrana-sukromia" },
-        { label: "Obchodné podmienky", href: "/obchodne-podmienky" },
+        { label: "Obchodné podmienky kurzu", href: "/kurz/obchodne-podmienky" },
       ],
     },
   },
@@ -300,7 +300,7 @@ export const COPY: Record<Locale, LandingCopy> = {
       links: [
         { label: "epoxidovo.sk", href: "/" },
         { label: "Privacy policy", href: "/ochrana-sukromia" },
-        { label: "Terms", href: "/obchodne-podmienky" },
+        { label: "Course terms", href: "/kurz/obchodne-podmienky" },
       ],
     },
   },

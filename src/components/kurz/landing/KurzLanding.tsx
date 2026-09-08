@@ -1390,7 +1390,12 @@ function ContactForm({ locale }: { locale: Locale }) {
               <span>
                 {L.consent}{" "}
                 <a href="/ochrana-sukromia" target="_blank" rel="noopener">{L.consentLink}</a>
-                {isPurchase && (<> · <a href="/obchodne-podmienky" target="_blank" rel="noopener">{locale === "sk" ? "obchodné podmienky" : "terms"}</a></>)}.
+                {isPurchase && (<> {locale === "sk" ? "a s" : "and the"}{" "}
+                  <a href="/kurz/obchodne-podmienky" target="_blank" rel="noopener">{locale === "sk" ? "obchodnými podmienkami kurzu" : "course terms"}</a>.{" "}
+                  {locale === "sk"
+                    ? "Žiadam o sprístupnenie kurzu hneď po zaplatení a beriem na vedomie, že tým strácam zákonné právo na odstúpenie; naďalej platí 14-dňová garancia vrátenia peňazí."
+                    : "I request access to the course right after payment and acknowledge losing the statutory withdrawal right; the 14-day money-back guarantee still applies."}</>)}
+                {!isPurchase && "."}
               </span>
             </label>
             <button type="submit" className="kl-btn kl-btn--primary" disabled={sending}>

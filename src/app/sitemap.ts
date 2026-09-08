@@ -58,6 +58,13 @@ export default function sitemap(): MetadataRoute.Sitemap {
     },
   ];
 
+  coursePages.push({
+    url: `${SITE.url}/kurz/obchodne-podmienky`,
+    lastModified: now,
+    changeFrequency: "yearly" as const,
+    priority: 0.3,
+  });
+
   const servicePages: MetadataRoute.Sitemap = CATEGORIES.map((cat) => ({
     url: `${SITE.url}/sluzby/${cat.slug}`,
     lastModified: now,
