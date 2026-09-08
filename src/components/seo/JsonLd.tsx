@@ -62,15 +62,13 @@ export function JsonLd() {
     image: `${SITE.url}/images/site/logo_v2.png`,
     logo: `${SITE.url}/images/site/logo.png`,
     priceRange: "€€",
-    aggregateRating: {
-      "@type": "AggregateRating",
-      // rovnaké čísla ako na webe (4,87 z 1 638) — rozdiel medzi schémou
-      // a stránkou Google trestá ako zavádzajúce štruktúrované dáta
-      ratingValue: "4.87",
-      reviewCount: "1638",
-      bestRating: "5",
-      worstRating: "1",
-    },
+    // aggregateRating zámerne CHÝBA. Bolo tu natvrdo 4,87 z 1 638 hodnotení,
+    // emitované z layoutu na KAŽDEJ URL webu, pričom firma vznikla 13. 5. 2025
+    // a tie čísla neboli na viditeľnom obsahu nikde okrem /eshop, ktorý je
+    // neindexovaný a nedostupný. Hodnotenie bez overiteľného zdroja je
+    // zavádzajúci markup a riskuje manuálnu akciu. Ak firma má hodnotenia
+    // v Google Business Profile, Google si ich do výsledkov ťahá sám a
+    // vlastný markup je zbytočný — dopĺňať ho ručne netreba.
     knowsLanguage: ["sk", "cs", "en"],
     subOrganization: { "@id": `${SITE.url}/#academy` },
     sameAs: [
