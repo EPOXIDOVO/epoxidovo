@@ -7,7 +7,7 @@
  */
 
 import { getMaterial } from "@/lib/materialy";
-import { type SkladbaPolozka, type Volba } from "./rules";
+import { vsetkyOdtiene, type SkladbaPolozka, type Volba } from "./rules";
 
 export type Riadok = {
   poradie: number;
@@ -77,7 +77,24 @@ export function prepocitaj(skladba: SkladbaPolozka[], volba: Volba): {
     // nivelácia: spotreba je kg/m²/mm → prenásob hrúbkou
     const spotreba = v.naMm ? v.spotrebaKgM2 * volba.hrubkaNivelacieMm : v.spotrebaKgM2;
     const potrebaKg = Math.round(spotreba * plochaSRezervou * 10) / 10;
-    const pocetBaleni = v.velkostBaleniaKg > 0 ? Math.ceil(potrebaKg / v.velkostBaleniaKg) : 0;
+    /*
+     * Sudy pri viacerých odtieňoch. Z jedného suda sa druhá farba namiešať
+     * nedá, takže KAŽDÝ odtieň potrebuje aspoň jedno celé balenie.
+     *
+     * Majiteľ 2026-09-09: „ak to je na 20 m², musíš doplácať sud… ak vieme,
+     * že 1 sud je na 25 m² a je to 70, musíme vziať 3 a ide to teda o sud
+     * hore. Pokiaľ je to 100 m² a dávam tam 5 sudov, problém nie je —
+     * viem z každého zobrať."
+     *
+     * Preto: počet balení = max(spotreba zaokrúhlená nahor, počet odtieňov).
+     * Na 100 m² pri 5 sudoch sa teda nič nepripočíta, na 20 m² pri dvoch
+     * odtieňoch pribudne jeden. Cena ide nákupná, marža sa nepridáva —
+     * tento konfigurátor ju nepočíta vôbec.
+     */
+    const zakladBaleni = v.velkostBaleniaKg > 0 ? Math.ceil(potrebaKg / v.velkostBaleniaKg) : 0;
+    const pocetOdtienov = v.farebna ? Math.max(1, vsetkyOdtiene(volba).length) : 1;
+    const pocetBaleni = Math.max(zakladBaleni, v.farebna ? pocetOdtienov : 0);
+    const baleniNavyseZaOdtiene = Math.max(0, pocetBaleni - zakladBaleni);
     const kupenychKg = Math.round(pocetBaleni * v.velkostBaleniaKg * 10) / 10;
     const cenaZaBalenie = getMaterial(v.produktSku)?.cena_eur_s_dph ?? null;
     return {
@@ -93,7 +110,10 @@ export function prepocitaj(skladba: SkladbaPolozka[], volba: Volba): {
       zvysiKg: Math.round((kupenychKg - potrebaKg) * 10) / 10,
       cenaZaBalenie,
       cenaSpolu: cenaZaBalenie != null ? Math.round(cenaZaBalenie * pocetBaleni * 100) / 100 : null,
-      poznamka: v.poznamka,
+      poznamka:
+        baleniNavyseZaOdtiene > 0
+          ? `${baleniNavyseZaOdtiene === 1 ? "Jedno balenie navyše" : `${baleniNavyseZaOdtiene} balenia navyše`} — každý odtieň sa musí kúpiť celý${v.poznamka ? ` · ${v.poznamka}` : ""}`
+          : v.poznamka,
       auto: v.auto,
       prestavkaHodiny: v.prestavkaHodiny,
     };

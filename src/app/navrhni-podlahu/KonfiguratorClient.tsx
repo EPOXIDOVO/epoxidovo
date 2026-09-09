@@ -30,6 +30,10 @@ import {
   upozorneniePriestor,
   dostupneSystemy,
   postavSkladbu,
+  leskMozny,
+  MAX_ODTIENOV,
+  odtieneMoznoKombinovat,
+  vsetkyOdtiene,
   protismykMozny,
   protismykOdporucany,
   varovania,
@@ -1301,6 +1305,8 @@ function ZaujemOTelefonat({
 /* ── Pomocné komponenty ─────────────────────────────────────────── */
 
 function Finis({ volba, uprav }: { volba: Volba; uprav: (p: Partial<Volba>) => void }) {
+  /** Otvorený panel na dobratie ďalšieho odtieňa. */
+  const [pridavamOdtien, setPridavamOdtien] = React.useState(false);
   const jeRal = volba.vzhlad === "jednofarebna" || volba.vzhlad === "epoxidovy_nater";
   const jeMramor = volba.vzhlad === "marble";
   const odporucany = protismykOdporucany(volba);
@@ -1312,6 +1318,12 @@ function Finis({ volba, uprav }: { volba: Volba; uprav: (p: Partial<Volba>) => v
   React.useEffect(() => {
     // Kde sa protišmyk nedá (metalika, mramor), zhasni ho — inak by ostal
     // zaškrtnutý z predchádzajúceho vzhľadu a ticho pridal vsyp do skladby.
+    // Lesk pri metalike/mramore neexistuje — keby ostal z predchádzajúceho
+    // vzhľadu, išla by do dopytu voľba, ktorá sa nedá dodať.
+    if (!leskMozny(volba) && volba.povrch === "lesk") {
+      uprav({ povrch: "mat" });
+      return;
+    }
     if (!mozny && volba.protismyk) {
       uprav({ protismyk: false });
       return;
@@ -1322,7 +1334,7 @@ function Finis({ volba, uprav }: { volba: Volba; uprav: (p: Partial<Volba>) => v
     if (mozny && odporucany && !volba.protismyk && !protismykDotknuty.current) {
       uprav({ protismyk: true });
     }
-  }, [mozny, odporucany, volba.protismyk, uprav]);
+  }, [mozny, odporucany, volba.protismyk, volba.povrch, volba.vzhlad, uprav]);
 
   return (
     <>
@@ -1421,13 +1433,92 @@ function Finis({ volba, uprav }: { volba: Volba; uprav: (p: Partial<Volba>) => v
               </button>
             ))}
           </div>
+
+          {odtieneMoznoKombinovat(volba) && (
+            <div className="mt-4 rounded-xl border-2 border-zinc-200 bg-zinc-50/70 p-3.5">
+              <div className="flex items-center justify-between gap-3 flex-wrap">
+                <div>
+                  <div className="text-sm font-extrabold text-[#0e1a3b]">
+                    Odtiene sa dajú kombinovať
+                  </div>
+                  <div className="text-xs text-[#4a5478] mt-0.5">
+                    Do jednej liatej plochy sa zlejú až {MAX_ODTIENOV} pigmenty. Zvolené:{" "}
+                    <b>{vsetkyOdtiene(volba).length || 0}</b> z {MAX_ODTIENOV}
+                  </div>
+                </div>
+                {vsetkyOdtiene(volba).length < MAX_ODTIENOV && !!volba.odtien && (
+                  <button
+                    type="button"
+                    onClick={() => setPridavamOdtien(true)}
+                    className="inline-flex items-center gap-1.5 rounded-full border-2 border-[#3db6e8] bg-white px-4 py-2 text-sm font-extrabold text-[#12729f] hover:bg-[#e3f3fb] transition-colors whitespace-nowrap"
+                  >
+                    <span className="text-lg leading-none">+</span> Pridať odtieň
+                  </button>
+                )}
+              </div>
+
+              {vsetkyOdtiene(volba).length > 1 && (
+                <div className="mt-3 flex flex-wrap gap-2">
+                  {volba.odtieneNavyse.map((o, i) => (
+                    <span
+                      key={`${o}-${i}`}
+                      className="inline-flex items-center gap-2 rounded-full bg-white border-2 border-zinc-200 pl-3 pr-2 py-1.5 text-sm font-bold text-[#0e1a3b]"
+                    >
+                      {o}
+                      <button
+                        type="button"
+                        aria-label={`Odobrať ${o}`}
+                        onClick={() =>
+                          uprav({ odtieneNavyse: volba.odtieneNavyse.filter((_, k) => k !== i) })
+                        }
+                        className="w-5 h-5 rounded-full bg-zinc-100 text-zinc-500 hover:bg-rose-100 hover:text-rose-700 transition-colors leading-none"
+                      >
+                        ×
+                      </button>
+                    </span>
+                  ))}
+                </div>
+              )}
+
+              {pridavamOdtien && (
+                <div className="mt-3">
+                  <div className="text-xs font-bold text-[#4a5478] mb-1.5">
+                    Vyber ďalší odtieň
+                  </div>
+                  <div className="grid grid-cols-4 md:grid-cols-9 gap-1.5">
+                    {EFEKTY.filter((e) => !vsetkyOdtiene(volba).includes(e.label)).map((e) => (
+                      <button
+                        key={e.id}
+                        type="button"
+                        title={e.label}
+                        onClick={() => {
+                          uprav({ odtieneNavyse: [...volba.odtieneNavyse, e.label] });
+                          setPridavamOdtien(false);
+                        }}
+                        className="relative aspect-square rounded-lg overflow-hidden border-2 border-transparent hover:border-[#3db6e8] transition-all"
+                      >
+                        <Image src={e.src} alt={e.label} fill sizes="70px" quality={70} className="object-cover" />
+                      </button>
+                    ))}
+                  </div>
+                </div>
+              )}
+
+              <p className="mt-3 text-[11px] leading-snug text-[#4a5478]">
+                Každý odtieň sa kupuje v celom balení — z jedného suda sa druhá
+                farba namiešať nedá. Pri väčších plochách sa odtiene zmestia do
+                sudov, ktoré aj tak potrebuješ; pri malých môže pribudnúť jeden
+                navyše. V skladbe nižšie to uvidíš presne.
+              </p>
+            </div>
+          )}
         </div>
       )}
 
       <div className="mt-6">
         <div className="text-sm font-bold text-[#4a5478] mb-2">Lak</div>
         <div className="flex gap-2">
-          {(["mat", "lesk"] as const).map((p) => (
+          {(leskMozny(volba) ? (["mat", "lesk"] as const) : (["mat"] as const)).map((p) => (
             <button
               key={p}
               type="button"
@@ -1442,6 +1533,11 @@ function Finis({ volba, uprav }: { volba: Volba; uprav: (p: Partial<Volba>) => v
             </button>
           ))}
         </div>
+        {!leskMozny(volba) && (
+          <p className="mt-2 text-xs text-[#4a5478]">
+            Metalika aj mramor sa uzatvárajú lakom TopStone EP22, ktorý je len matný.
+          </p>
+        )}
       </div>
 
       <label

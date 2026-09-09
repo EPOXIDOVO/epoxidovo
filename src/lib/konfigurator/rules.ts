@@ -27,6 +27,11 @@ export type Volba = {
   sirkaSchodovCm: number | null;
   vzhlad: string | null;
   odtien: string | null;
+  /**
+   * Ďalšie odtiene do tej istej liatej plochy (max 2 navyše k `odtien`,
+   * spolu teda 3 — majiteľ 2026-09-09). Miešajú sa priamo pri liatí.
+   */
+  odtieneNavyse: string[];
   povrch: "mat" | "lesk";
   protismyk: boolean;
   /** Rezerva na strihy a dorovnanie — fixných 10 %, zákazník ju nenastavuje. */
@@ -49,6 +54,7 @@ export const PREDVOLENA_VOLBA: Volba = {
   sirkaSchodovCm: null,
   vzhlad: null,
   odtien: null,
+  odtieneNavyse: [],
   povrch: "mat",
   protismyk: false,
   rezervaPercent: 10,
@@ -250,6 +256,31 @@ export function dostupneSystemy(volba: Volba): System[] {
 }
 
 /** Pravidlo 2 + protišmyk na schodoch — vynútený, needitovateľný. */
+/**
+ * Lesklý lak sa NEDÁ. TopStone EP22, ktorým sa metalika aj mramor
+ * uzatvárajú, je len v matnom prevedení (majiteľ 2026-09-09: „lak je len
+ * matný"). Ponúkať pri nich lesk znamenalo sľubovať povrch, ktorý sa
+ * nedodá.
+ */
+/** Koľko odtieňov sa dá zliať do jednej plochy. */
+export const MAX_ODTIENOV = 3;
+
+/** Odtiene sa kombinujú len pri metalike a mramore. */
+export function odtieneMoznoKombinovat(volba: Volba): boolean {
+  return volba.vzhlad === "metalik" || volba.vzhlad === "marble";
+}
+
+/** Všetky zvolené odtiene v poradí, bez prázdnych. */
+export function vsetkyOdtiene(volba: Volba): string[] {
+  return [volba.odtien, ...volba.odtieneNavyse].filter(
+    (x): x is string => !!x && x.trim().length > 0,
+  );
+}
+
+export function leskMozny(volba: Volba): boolean {
+  return volba.vzhlad !== "metalik" && volba.vzhlad !== "marble";
+}
+
 /**
  * Protišmyk sa NEDÁ spraviť — kremičitý vsyp by dekoratívny efekt zničil
  * (majiteľ 2026-09-08: „protišmykový povrch na metalike nie je možný").

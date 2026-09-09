@@ -30,6 +30,12 @@ export type Vrstva = {
   prestavkaHodiny?: number;
   poznamka?: string;
   volitelna?: boolean;
+  /**
+   * Vrstva, ktorá nesie farbu. Pri viacerých odtieňoch treba KAŽDÝ kúpiť
+   * v celom balení — z jedného suda sa druhá farba namiešať nedá. Počet
+   * balení sa preto zdvihne na počet odtieňov, ak ich je viac než balení.
+   */
+  farebna?: boolean;
 };
 
 export type System = {
@@ -154,13 +160,15 @@ export const SYSTEMY: System[] = [
     podmienky: {
       co: ["podlaha"],
       kde: ["interier"],
-      priestor: ["byt_dom", "priemysel", "ine"],
+      // garáž pribudla 2026-09-08 — majiteľ ju povolil s upozornením na šmuhy
+      // od pneumatík; bez nej sa dlaždica dala kliknúť, ale skladba nesadla
+      priestor: ["byt_dom", "priemysel", "ine", "garaz"],
       podklad: ["beton", "cem_poter", "anhydrit", "neviem"],
       vzhlad: ["metalik"],
     },
     vrstvy: [
       v(1, "Penetrácia", PRODUKT.tsEp02, { prestavkaHodiny: 12, poznamka: "2 vrstvy" }),
-      v(2, "Metalická báza", PRODUKT.tsEp11, { prestavkaHodiny: 24 }),
+      v(2, "Metalická báza", PRODUKT.tsEp11, { prestavkaHodiny: 24, farebna: true }),
       v(3, "Vrchný lak", PRODUKT.tsEp22, { prestavkaHodiny: 24, poznamka: "2 vrstvy" }),
     ],
   },
@@ -182,7 +190,7 @@ export const SYSTEMY: System[] = [
     },
     vrstvy: [
       v(1, "Penetrácia", PRODUKT.tsEp02, { prestavkaHodiny: 12, poznamka: "2 vrstvy" }),
-      v(2, "Mramorová báza", PRODUKT.tsEp11, { prestavkaHodiny: 24, poznamka: "viacfarebné ťahanie" }),
+      v(2, "Mramorová báza", PRODUKT.tsEp11, { prestavkaHodiny: 24, poznamka: "viacfarebné ťahanie", farebna: true }),
       v(3, "Vrchný lak", PRODUKT.tsEp22, { prestavkaHodiny: 24, poznamka: "2 vrstvy" }),
     ],
   },
